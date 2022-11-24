@@ -269,7 +269,7 @@ inline void initLine(Line1*	pLine,
 }
 
 // d = the number of steps from pt 1 to pt 2...
-inline void initLine(Line2*	pLine, UCHAR*	 pBase, S32	lPitch,
+inline void initLine(Line2*	pLine, UCHAR*   pBase, S32	lPitch,
                      S32 x1, S32 y1, S32 x2, S32 y2, S32 d)
 {
    S32 lDelX = x2 - x1, lDelY = y2 - y1;
@@ -288,7 +288,7 @@ inline void initLine(Line2*	pLine, UCHAR*	 pBase, S32	lPitch,
 
 // Increments aS32 the line
 // Overload the init function for each type of line:
-inline void	 incLine(Line1& Line)
+inline void  incLine(Line1& Line)
 {
    Line.lCurX += Line.lDelX;
    Line.lCurY += Line.lDelY;
@@ -298,7 +298,7 @@ inline void	 incLine(Line1& Line)
    if (Line.lNumY > Line.lDen) {Line.lNumY -= Line.lDen; Line.lCurY += Line.lPitchY;}
 }
 
-inline void	 incLine(Line2& Line)
+inline void  incLine(Line2& Line)
 {
    Line.pCur += Line.lDel;
    Line.lNumX += Line.lIncX;

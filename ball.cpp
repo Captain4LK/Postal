@@ -295,12 +295,12 @@ void CBall::Update(void)
 {
    if (!m_sSuspend)
    {
-      S32 lCurTime			 = m_pRealm->m_time.GetGameTime();
+      S32 lCurTime          = m_pRealm->m_time.GetGameTime();
       double dDeltaSeconds		= (lCurTime - m_lPrevTime) / 1000.0;
 
       // Adjust vertical velocity and calculate new position.
-      double dNewY	 = m_dY;
-      double dNewDY	 = m_dDY;
+      double dNewY    = m_dY;
+      double dNewDY   = m_dDY;
       AdjustPosVel(&dNewY, &dNewDY, dDeltaSeconds);
 
       // Calculate new position.

@@ -108,7 +108,7 @@ short RPalFile::LoadNoVersion(   // Returns SUCCESS on success or FAILURE on
    short	sRes	= SUCCESS;  // Assume success.
 
    // No RFile support for RPal::Type, so we used a U32.
-   U32 u32Temp	 = 0;
+   U32 u32Temp  = 0;
    pfile->Read(&u32Temp);
    ppal->m_type	= (RPal::Type)u32Temp;
    pfile->Read(&ppal->m_ulSize);
@@ -184,7 +184,7 @@ short RPalFile::LoadVersion3( // Returns SUCCESS on success or FAILURE on
    short	sRes	= SUCCESS;  // Assume success.
 
    // No RFile support for RPal::Type, so we used a U32.
-   U32 u32Temp	 = 0;
+   U32 u32Temp  = 0;
    pfile->Read(&u32Temp);
    ppal->m_type	= (RPal::Type)u32Temp;
    pfile->Read(&ppal->m_ulSize);
@@ -192,7 +192,7 @@ short RPalFile::LoadVersion3( // Returns SUCCESS on success or FAILURE on
    pfile->Read(&ppal->m_sNumEntries);
    pfile->Read(&ppal->m_sPalEntrySize);
 
-   USHORT usFlag	 = 2;
+   USHORT usFlag   = 2;
    pfile->Read(&usFlag);
    if (usFlag == 1)
    {

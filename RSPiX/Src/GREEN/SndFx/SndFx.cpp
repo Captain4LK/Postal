@@ -109,11 +109,11 @@ S16*	RSndFx::ms_ps16Fade	= NULL;  // Signed 16 bit output
 
 short	RSndFx::ms_sNumFadeSteps	= 0;  // Number of fade steps.
 
-S32 RSndFx::ms_lSamplesPerSec	 = 0;    // Samples per second.
-S32 RSndFx::ms_lBitsPerSample	 = 0;    // Bits per sample.
-S32 RSndFx::ms_lNumChannels	 = 0;    // Number of channels.
+S32 RSndFx::ms_lSamplesPerSec  = 0;    // Samples per second.
+S32 RSndFx::ms_lBitsPerSample  = 0;    // Bits per sample.
+S32 RSndFx::ms_lNumChannels    = 0;    // Number of channels.
 
-S32 RSndFx::ms_lBitsPerSec	 = 0;    // Number of bits per second.
+S32 RSndFx::ms_lBitsPerSec  = 0;    // Number of bits per second.
 // Can be used to convert bytes to milliseconds
 // and convert milliseconds into bytes.  See
 // macros BYTES2MS and MS2BYTES in SndFx.CPP.

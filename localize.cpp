@@ -758,7 +758,7 @@ extern char g_pszStartGameMenu_Demo[]						= "DEMO";
 extern char g_pszStartSinglePlayerMenu_Title[]			= "EINZELSPIELER";
 extern char g_pszStartSinglePlayerMenu_New[]				= "ORIGINAL SPIEL";     // Mike's lame translation
 extern char g_pszStartSinglePlayerMenu_AddOn[]			= "ADD-ON SPIEL"        // Mike's lame translation
-                                                        extern char g_pszStartSinglePlayerMenu_LoadLevel[]	  = "EBENE LADEN";
+                                                        extern char g_pszStartSinglePlayerMenu_LoadLevel[]    = "EBENE LADEN";
 extern char g_pszStartSinglePlayerMenu_LoadGame[]		= "SPIEL LADEN";
 extern char g_pszStartSinglePlayerMenu_Challenge[]		= "HERAUSFORDERUNG";
 

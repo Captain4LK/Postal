@@ -467,7 +467,7 @@ short		ConvertFromFSPR1(RImage* pImage)
 //
 short		LoadFSPR1(RImage* pImage, RFile* pcf)
 {
-   S32 lBogus1	 = pcf->Tell();
+   S32 lBogus1  = pcf->Tell();
 
    //------------------
    // Initial Security:

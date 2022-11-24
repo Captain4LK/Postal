@@ -54,7 +54,7 @@ extern short ToolBarInit(CHood* pHood);
 
 // This does a FULL regeneration of the toolbar and draws it in yout area.
 // It returns false if it isn't time to render.
-extern bool	 ToolBarRender(
+extern bool  ToolBarRender(
    CHood* pHood,
    RImage* pimDst,
    short sDstX,

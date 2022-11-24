@@ -518,11 +518,11 @@ S32 RSnd::GetTime(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 void* RSnd::StreamCall(RMix::Msg	msg,
-                       void*	  pData,
+                       void*    pData,
                        U32*  pulBufSize,
                        uintptr_t ulUser,
-                       UCHAR*		  pucVolume,
-                       UCHAR*		  pucVol2)
+                       UCHAR*      pucVolume,
+                       UCHAR*      pucVol2)
 {
    switch (msg)
    {

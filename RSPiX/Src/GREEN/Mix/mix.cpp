@@ -188,9 +188,9 @@ short	RMix::ms_sSetMode	= FALSE;                   // TRUE if we set Blue's
 
 RMix::State	RMix::ms_sState	= Idle;              // Current state for all
                                                    // RMixes.
-S32 RMix::ms_lCurPos	 = 0L;                        // Current play position
+S32 RMix::ms_lCurPos  = 0L;                        // Current play position
                                                    // based on absolute start.
-U32 RMix::ms_ulBufSize	 = 0xFFFFFFFF;             // The size to use when al-
+U32 RMix::ms_ulBufSize   = 0xFFFFFFFF;             // The size to use when al-
                                                    // locating RMixBufs.
 
 short	RMix::ms_sReset	= FALSE;                   // If TRUE, current user
@@ -309,7 +309,7 @@ short RMix::BlueCall(   // Returns FALSE when done.
       }
 
       U32 ulTotalMixedIn	= 0L;
-      U32 ulMixBufSize	 = pmb->GetMixSize();
+      U32 ulMixBufSize   = pmb->GetMixSize();
       U32 ulCurMix;
 
       // If we were recently reset . . .

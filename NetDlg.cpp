@@ -559,7 +559,7 @@ static RListBox*	ms_plbHostBrowse	= NULL;     // Browse for host listbox.
 static S32 ms_lWatchdogTime = 0;                // Watchdog timer
 static bool	ms_bNetBlockingAbort = false;       // Net blocking abort flag
 
-static S32 ms_lNumConsoleEntries		  = 0;               // Track number of chat items.
+static S32 ms_lNumConsoleEntries      = 0;               // Track number of chat items.
 
 static bool	ms_bGotSetupMsg = false;
 static short ms_sSetupRealmNum = 0;
@@ -1405,7 +1405,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
    rspNameBuffers(&g_pimScreenBuf);
 
    // Process GUI through an iteration.
-   S32 lPressedId	 = ms_pgDoGui.DoModeless(pguiRoot, &ie, g_pimScreenBuf);
+   S32 lPressedId  = ms_pgDoGui.DoModeless(pguiRoot, &ie, g_pimScreenBuf);
 
    // If OK chosen or enter pressed . . .
    if (lPressedId == GUI_ID_OK || (ie.type == RInputEvent::Key && (ie.lKey & 0x0000FFFF) == '\r') )
@@ -1668,7 +1668,7 @@ static void AddConsoleMsg( // Returns nothing.
       vsprintf(szOutput, pszFrmt, varp);
       va_end(varp);
 
-      U32 u32TextColor	 = ms_plbNetConsole->m_u32TextColor;
+      U32 u32TextColor   = ms_plbNetConsole->m_u32TextColor;
 
       char szMsg[MAX_STATUS_STR];
       // If it's a chat message . . .
@@ -1864,7 +1864,7 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
       short	sRealmNum	= 1;
       char szRealmTitle[512];
       char szSection[512];
-      bool bFound	  = false;
+      bool bFound   = false;
       do
       {
          // Form section name.

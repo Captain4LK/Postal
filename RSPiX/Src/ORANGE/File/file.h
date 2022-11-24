@@ -877,8 +877,8 @@ short RFileEZSave(
 #define RFILE_INSTANTIATE_ANYLOAD(type)   \
    inline                                                                     \
    short rspAnyLoad( /* Returns 0 on success.*/                            \
-      type *	 ptype,/* Ptr to type to load.*/                             \
-      RFile *	 pfile)/* Open RFile to load from.  Must have read access.*/ \
+      type *    ptype,/* Ptr to type to load.*/                             \
+      RFile *   pfile)/* Open RFile to load from.  Must have read access.*/ \
    {                                                                       \
       return (pfile->Read(ptype) == 1) ? 0 : 1;                               \
    }
@@ -889,8 +889,8 @@ short RFileEZSave(
 #define RFILE_INSTANTIATE_ANYSAVE(type)   \
    inline                                                                     \
    short rspAnySave( /* Returns 0 on success.*/                            \
-      type *	 ptype,/* Ptr to float to load.*/                            \
-      RFile *	 pfile)/* Open RFile to save to.  Must have write access.*/  \
+      type *    ptype,/* Ptr to float to load.*/                            \
+      RFile *   pfile)/* Open RFile to save to.  Must have write access.*/  \
    {                                                                       \
       return (pfile->Write(ptype) == 1) ? 0 : 1;                              \
    }

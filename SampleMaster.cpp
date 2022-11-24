@@ -535,7 +535,7 @@ short	DistanceToVolume(float fX,    // in Postal 3d coordinates
 
       float fDist2 = ABS2(fX - fSoundX,
                           fY - fSoundY,
-                          fZ - fSoundZ	  );
+                          fZ - fSoundZ   );
 
       if (fDist2 < 1.0) return 255; // Dead epicenter
 

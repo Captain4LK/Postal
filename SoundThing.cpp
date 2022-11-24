@@ -136,7 +136,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 short	CSoundThing::ms_sFileCount			= 0;  // File count.
-S32 CSoundThing::ms_lGetRandomSeed	 = 0;    // Seed for get random.
+S32 CSoundThing::ms_lGetRandomSeed   = 0;    // Seed for get random.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -340,9 +340,9 @@ void CSoundThing::Update(void)
          // If current time hits next starting time (or if we're in the init state)
          if ((lCurTime >= m_lNextStartTime) || (m_sWhichTime < 0))
          {
-            S32 lSampleDuration	 = 0;
+            S32 lSampleDuration   = 0;
             S32 lLoopStartTime;
-            S32 lLoopEndTime	 = m_lLoopBackFrom;
+            S32 lLoopEndTime   = m_lLoopBackFrom;
             if (m_sUseLooping)
             {
                lLoopStartTime	= m_lLoopBackTo;
@@ -445,7 +445,7 @@ void CSoundThing::Update(void)
             // Pick random time between 0 and specified random time
             S32 lRnd = (S32)(((float)GetRand() / (float)RAND_MAX) * (float)m_lRndTime[m_sWhichTime]);
             // Make sure this at least the length of the sample.
-            S32 lWaitDuration	 = MAX(S32(m_lMinTime[m_sWhichTime] + lRnd), lSampleDuration);
+            S32 lWaitDuration  = MAX(S32(m_lMinTime[m_sWhichTime] + lRnd), lSampleDuration);
             // Calculate next starting time
             m_lNextStartTime = m_lLastStartTime + lWaitDuration;
          }

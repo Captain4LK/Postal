@@ -1464,7 +1464,7 @@ short ConvertFromBMP8RLE(RImage* pImage)
       // We must flip the image during decompression.
       // This should work for both negative and positive
       // pitch buffers (i.e., upside down and right side up).
-      S32 lPitch	 = -pImage->m_lPitch;
+      S32 lPitch   = -pImage->m_lPitch;
       pu8Uncomp		= pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
       U8*	pu8Row	= pu8Uncomp;
 
@@ -1574,7 +1574,7 @@ short ConvertToBMP8RLE(RImage* pImage)
       // We must flip the image during compression.
       // This should work for both negative and positive
       // pitch buffers (i.e., upside down and right side up).
-      S32 lPitch	 = -pImage->m_lPitch;
+      S32 lPitch   = -pImage->m_lPitch;
       pu8Uncomp		= pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
 
       // Detach the 8-bit uncompressed buffer from the Image
@@ -1686,7 +1686,7 @@ short ConvertToBMP8RLE(RImage* pImage)
 
 
          // Get size of compressed buffer.
-         U32 ulSize	 = (pu8Comp - pImage->m_pData);
+         U32 ulSize   = (pu8Comp - pImage->m_pData);
 
          // Deallocate old buffer.
          RImage::DestroyDetachedData(&pvDetachedMem);
@@ -1756,7 +1756,7 @@ short ConvertFromBMP1(RImage* pImage)
    pImage->m_sDepth	= 8;
 
    // Remember old pitch.
-   S32 lSrcPitch	 = pImage->m_lPitch;
+   S32 lSrcPitch   = pImage->m_lPitch;
 
    // Compute the new pitch.  Preserve sign.
    if (pImage->m_lPitch > 0)
@@ -1850,7 +1850,7 @@ short ConvertToBMP1(RImage* pImage)
       pImage->m_sDepth	= 1;
 
       // Remember old pitch.
-      S32 lSrcPitch	 = pImage->m_lPitch;
+      S32 lSrcPitch   = pImage->m_lPitch;
 
       // If there is a partial byte . . .
       if ((pImage->m_lPitch % 8) != 0)

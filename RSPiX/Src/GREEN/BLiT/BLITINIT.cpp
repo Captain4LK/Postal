@@ -84,9 +84,9 @@ RInitBLiT();
 ~RInitBLiT();
 short sLastDitchEffortToTellWhatIsHappening;
 
-static RImage*	 pimScreenBuffer;
+static RImage*  pimScreenBuffer;
 static RImage*  pimScreenVisible;
-static RImage*	 pimScreenBackPlane;       // Only used with double buffering
+static RImage*  pimScreenBackPlane;       // Only used with double buffering
 };
 
 extern RInitBLiT RStartBlitting;    // only included once, of course!

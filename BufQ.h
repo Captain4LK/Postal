@@ -244,7 +244,7 @@ S32 Put(                // Returns number of items that were put into queue
    U8* pu8Buf,             // In:  Data to enqueue in buffer.
    S32 lNum = 1)           // In:  Number of bytes to put.
 {
-   S32 lNumPut	 = -1;
+   S32 lNumPut  = -1;
    while (++lNumPut < lNum)
    {
       if (!Put(*pu8Buf++))
@@ -277,7 +277,7 @@ S32 Put(                // Returns number of items that were put into queue
    U16* pu16Buf,           // In:  Data to enqueue in buffer.
    S32 lNum = 1)           // In:  Number of U16s to put.
 {
-   S32 lNumPut	 = -1;
+   S32 lNumPut  = -1;
    U8*	pu8Buf	= (U8*)pu16Buf;
 
          #ifdef SYS_ENDIAN_BIG
@@ -323,7 +323,7 @@ S32 Put(                // Returns number of items that were put into queue
    U32* pu32Buf,           // In:  Data to enqueue in buffer.
    S32 lNum = 1)           // In:  Number of U32s to put.
 {
-   S32 lNumPut	 = -1;
+   S32 lNumPut  = -1;
    U8*	pu8Buf	= (U8*)pu32Buf;
 
          #ifdef SYS_ENDIAN_BIG
@@ -389,7 +389,7 @@ S32 Get(                // Returns number of items dequeued.
    U8* pu8Buf,             // Out: Where to dequeue from buffer.
    S32 lNum)               // In:  Number of bytes to get.
 {
-   S32 lNumGot	 = -1;
+   S32 lNumGot  = -1;
    while (++lNumGot < lNum)
    {
       if (!Get(pu8Buf++))
@@ -416,7 +416,7 @@ S32 Get(                // Returns number of items dequeued.
    U16* pu16Buf,           // Out: Where to dequeue from buffer.
    S32 lNum = 1)           // In:  Number of U16s to get.
 {
-   S32 lNumGot	 = -1;
+   S32 lNumGot  = -1;
    U8*	pu8Buf	= (U8*)pu16Buf;
 
          #ifdef SYS_ENDIAN_BIG
@@ -450,7 +450,7 @@ S32 Get(                // Returns number of items dequeued.
    U32* pu32Buf,           // Out: Where to dequeue from buffer.
    S32 lNum = 1)           // In:  Number of U32s to get.
 {
-   S32 lNumGot	 = -1;
+   S32 lNumGot  = -1;
    U8*	pu8Buf	= (U8*)pu32Buf;
 
          #ifdef SYS_ENDIAN_BIG

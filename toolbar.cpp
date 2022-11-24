@@ -203,15 +203,15 @@ CDude::WeaponType	m_eStockPile;        // Postal app equivalent from Dude.h
 //----------------------------------------------------------------------
 static CToolItem* ms_aWeapons;    // [NumberOfWeapons];
 static CToolItem* ms_aAmmo;    //[NumberOfAmmos];
-static RFont*	 ms_pfntTool;           // General font and print
+static RFont*   ms_pfntTool;           // General font and print
 static RPrint ms_pntTool;
 static short ms_sSmallFontColor;          // color index
 static short ms_sLargeFontColor;
 static short ms_sWarningColor;
 static short ms_sAmmoGoneColor;
 static short ms_sAttentionColor;
-static RImage*	 ms_pimCompositeBuffer;
-static RImage*	 ms_pimCompositeBufferScaled;
+static RImage*  ms_pimCompositeBuffer;
+static RImage*  ms_pimCompositeBufferScaled;
 static S32 ms_lLastTime;
 //----------------------------------------------------------------------
 CToolItem()

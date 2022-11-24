@@ -131,7 +131,7 @@ RHot(
    short sH,                                 // Height of new hotbox.
    REventCall fnEventCall = NULL,            // Callback on mouse event.
    short	sActive	= FALSE,                   // Initially active, if TRUE.
-   U32 ulUser	 = 0,                         // User value.
+   U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
 // Constructura Especial el Segundario or something that sets some
@@ -143,7 +143,7 @@ RHot(
    short sH,                                 // Height of new hotbox.
    REventPosCall fnEventPosCall,             // Callback on mouse event.
    short	sActive	= FALSE,                   // Initially active, if TRUE.
-   U32 ulUser	 = 0,                         // User value.
+   U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
 // Constructura Especial el Tres or something that sets some
@@ -155,7 +155,7 @@ RHot(
    short sH,                                 // Height of new hotbox.
    InputEventCall fnInputEventCall,          // Callback on mouse event.
    short	sActive	= FALSE,                   // Initially active, if TRUE.
-   U32 ulUser	 = 0,                         // User value.
+   U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
 // Destructor.

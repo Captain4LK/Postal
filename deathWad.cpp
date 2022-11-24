@@ -88,27 +88,27 @@
 // These are constant values!
 
 // Internal acceleration.
-const double CDeathWad::ms_dAccInternal				 = 350.0;
+const double CDeathWad::ms_dAccInternal             = 350.0;
 // Maximum forward velocity
-const double CDeathWad::ms_dMaxVelFore					 = 350.0;
+const double CDeathWad::ms_dMaxVelFore              = 350.0;
 // Maximum backward velocity
-const double CDeathWad::ms_dMaxVelBack					 = -350.0;
+const double CDeathWad::ms_dMaxVelBack              = -350.0;
 // Units moved each iteration while traversing the weapon path.
-const double CDeathWad::ms_dTraversalRate				 = 3.0;
+const double CDeathWad::ms_dTraversalRate           = 3.0;
 // Distance between thrust feedbacks.
-const double CDeathWad::ms_dThrustDelta				 = 9.0;
+const double CDeathWad::ms_dThrustDelta             = 9.0;
 // Go off screen this far before blowing up
 const short	CDeathWad::ms_sOffScreenDist				= 200;
 // Time for smoke to stick around.
-const S32 CDeathWad::ms_lSmokeTimeToLive			 = 500;
+const S32 CDeathWad::ms_lSmokeTimeToLive         = 500;
 // Time for fireball to stick around.
-const S32 CDeathWad::ms_lFireBallTimeToLive		 = 500;
+const S32 CDeathWad::ms_lFireBallTimeToLive      = 500;
 // Amount to stagger final explosions.
 const short	CDeathWad::ms_sFinalExplosionStagger	= 5;
 // Radius of collision area (whether sphere or cylinder).
 const short	CDeathWad::ms_sCollisionRadius			= 30;
 // Velocity for kick from launch.
-const double CDeathWad::ms_dKickVelocity				 = 350.0;
+const double CDeathWad::ms_dKickVelocity            = 350.0;
 // Max a WAD can hold.
 const CStockPile CDeathWad::ms_stockpileMax				=
 {
@@ -660,14 +660,14 @@ bool CDeathWad::TraversePath( // Returns true, when destination reached; false,
    ASSERT(m_dRot < 360);
 
    // Determine distance on X/Z plane to destination.
-   double dDistance	 = rspSqrt(ABS2(float(sSrcX - sDstX), float(sSrcZ - sDstZ) ) );
+   double dDistance   = rspSqrt(ABS2(float(sSrcX - sDstX), float(sSrcZ - sDstZ) ) );
 
    // Set starting position.
    double dX = sSrcX;
    double dZ = sSrcZ;
    // Determine iteration rate on X and Z.
-   double dRateX	 = COSQ[(short)m_dRot] * ms_dTraversalRate;
-   double dRateZ	 = -SINQ[(short)m_dRot] * ms_dTraversalRate;
+   double dRateX   = COSQ[(short)m_dRot] * ms_dTraversalRate;
+   double dRateZ   = -SINQ[(short)m_dRot] * ms_dTraversalRate;
    // Store original status.
    bool bInitiallyInTerrain  = *pbInTerrain;
 

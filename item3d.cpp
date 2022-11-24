@@ -328,7 +328,7 @@ void CItem3d::Update(void)
       S32 lThisTime = m_pRealm->m_time.GetGameTime();
 
       // Advance the animation timer.
-      S32 lDifTime	 = lThisTime - m_lAnimPrevUpdateTime;
+      S32 lDifTime    = lThisTime - m_lAnimPrevUpdateTime;
       m_lAnimTime			+= lDifTime;
 
       // Update prev time.

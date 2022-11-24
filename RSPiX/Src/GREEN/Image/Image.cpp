@@ -1250,7 +1250,7 @@ RImage::Type RImage::Convert(Type type)
       if (m_type > SCREEN32_ARGB)
       {
          // Verify function exists . . .
-         CONVFROMFUNC cft	 = GETFROMFUNC(m_type);
+         CONVFROMFUNC cft   = GETFROMFUNC(m_type);
          if (cft != NULL)
          {
             // Convert to a standard type.
@@ -1272,7 +1272,7 @@ RImage::Type RImage::Convert(Type type)
          if (m_type	!= type)
          {
             // Verify function exists . . .
-            CONVTOFUNC ctt	  = GETTOFUNC(type);
+            CONVTOFUNC ctt   = GETTOFUNC(type);
             if (ctt != NULL)
             {
                typeRes = (Type)(*ctt)(this);
@@ -1372,7 +1372,7 @@ short RImage::LoadDib(RFile* pcf)
       // Get the beginning of the DIB portion of this file.
       // In some cases, this DIB file may be embedded in a larger
       // collection of files.
-      S32 lDibFileStartPos	 = pcf->Tell();
+      S32 lDibFileStartPos  = pcf->Tell();
 
       //  Read BITMAPFILEHEADER
       if (pcf->Read(&(dfh.usType), 1) == 1)
@@ -1801,10 +1801,10 @@ short RImage::SaveDib(RFile* pcf)
                      dh.ulClrImportant	= 0L;
                      if (pcf->Write(&dh.ulSize) == 1L)
                      {
-                        S32 lWidth	 = (S32)m_sWidth;
+                        S32 lWidth   = (S32)m_sWidth;
                         if (pcf->Write(&lWidth) == 1L)
                         {
-                           S32 lHeight	 = (S32)m_sHeight;
+                           S32 lHeight  = (S32)m_sHeight;
                            if (pcf->Write(&lHeight) == 1L)
                            {
                               if (pcf->Write(&dh.usPlanes) == 1L)
@@ -2068,7 +2068,7 @@ short RImage::Save(RFile* pcf) const
       pcf->Write(&ulFileType);
       pcf->Write(&ulCurrentVersion);
       // No RFile support for RImage::Type, so we use a U32.
-      U32 u32Temp	 = (U32)m_type;
+      U32 u32Temp  = (U32)m_type;
       pcf->Write(&u32Temp);
       u32Temp			= (U32)m_typeDestination;
       pcf->Write(&u32Temp);
@@ -2196,10 +2196,10 @@ short RImage::WritePixelData(RFile* pcf) const
    }
    else
    {
-      S32 lYPos	 = (S32)m_sWinY;
-      S32 lXPos	 = (S32)m_sWinX;
-      S32 lHeight	 = (S32)m_sWinHeight;
-      S32 lDepth	 = (S32)m_sDepth;
+      S32 lYPos    = (S32)m_sWinY;
+      S32 lXPos    = (S32)m_sWinX;
+      S32 lHeight  = (S32)m_sWinHeight;
+      S32 lDepth   = (S32)m_sDepth;
 
       S32 l;
       S32 lBytesPerLine;
@@ -2410,10 +2410,10 @@ short RImage::ReadPixelData(RFile* pcf)
    }
    else
    {
-      S32 lYPos	 = (S32)m_sWinY;
-      S32 lXPos	 = (S32)m_sWinX;
-      S32 lHeight	 = (S32)m_sWinHeight;
-      S32 lDepth	 = (S32)m_sDepth;
+      S32 lYPos    = (S32)m_sWinY;
+      S32 lXPos    = (S32)m_sWinX;
+      S32 lHeight  = (S32)m_sWinHeight;
+      S32 lDepth   = (S32)m_sDepth;
 
       S32 l;
       S32 lBytesPerLine;

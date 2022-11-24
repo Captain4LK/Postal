@@ -206,14 +206,14 @@ char*	CGrenade::ms_apszResNames[CGrenade::NumStyles]	= // Res names indexed Styl
 };
 
 // Dimishes velocities once it hits the ground.
-double CGrenade::ms_adGroundDimisher[NumStyles]	 =
+double CGrenade::ms_adGroundDimisher[NumStyles]  =
 {
    0.66, // Grenade.
    0.66, // Dynamite.
 };
 
 // Dimishes velocities when bouncing.
-double CGrenade::ms_adBounceDimisher[NumStyles]	 =
+double CGrenade::ms_adBounceDimisher[NumStyles]  =
 {
    0.33, // Grenade.
    0.66, // Dynamite.
@@ -575,7 +575,7 @@ void CGrenade::Update(void)
 void CGrenade::Render(void)
 {
    // Animate.
-   S32 lCurTime		 = m_pRealm->m_time.GetGameTime();
+   S32 lCurTime       = m_pRealm->m_time.GetGameTime();
 
    m_sprite.m_pmesh		= (RMesh*)		m_anim.m_pmeshes->GetAtTime(		lCurTime % m_anim.m_pmeshes->TotalTime());
    m_sprite.m_psop		= (RSop*)		m_anim.m_psops->GetAtTime(			lCurTime % m_anim.m_psops->TotalTime());

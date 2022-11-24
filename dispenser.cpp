@@ -177,7 +177,7 @@ short CDispenser::ms_sFileCount;
 short CDispenser::ms_sDispenseeFileCount;
 
 // Descriptions of logic types and their parameters.
-CDispenser::LogicInfo CDispenser::ms_aliLogics[NumLogicTypes]	 =
+CDispenser::LogicInfo CDispenser::ms_aliLogics[NumLogicTypes]   =
 {
    ////////////////////////// Timed ////////////////////////////////////////
    {
@@ -518,7 +518,7 @@ void CDispenser::Suspend(void)
    if (m_sSuspend == 0)
    {
       // Store current delta so we can restore it.
-      S32 lCurTime			 = m_pRealm->m_time.GetGameTime();
+      S32 lCurTime          = m_pRealm->m_time.GetGameTime();
       m_lNextUpdate				= lCurTime - m_lNextUpdate;
    }
 
@@ -537,7 +537,7 @@ void CDispenser::Resume(void)
    // This method is far from precise, but I'm hoping it's good enough.
    if (m_sSuspend == 0)
    {
-      S32 lCurTime			 = m_pRealm->m_time.GetGameTime();
+      S32 lCurTime          = m_pRealm->m_time.GetGameTime();
       m_lNextUpdate				= lCurTime - m_lNextUpdate;
    }
 }
@@ -1513,7 +1513,7 @@ short CDispenser::GetClosestDudeDistance( // Returns 0 on success.  Fails, if no
    short	sRes	= 1;  // Assume no dude found.
 
    U32 ulSqrDistance;
-   U32 ulCurSqrDistance	 = 0xFFFFFFFF;
+   U32 ulCurSqrDistance  = 0xFFFFFFFF;
    U32 ulDistX;
    U32 ulDistZ;
    CDude*	pdude;

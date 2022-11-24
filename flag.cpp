@@ -746,7 +746,7 @@ void CFlag::OnExplosionMsg(Explosion_Message* pMessage)
 {
    if (
       m_state != State_BlownUp  &&
-      m_state != State_Die		  &&
+      m_state != State_Die      &&
       m_state != State_Dead)
    {
       CThing3d::OnExplosionMsg(pMessage);

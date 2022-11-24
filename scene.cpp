@@ -357,8 +357,8 @@ bool g_bSceneDontBlit;
 #define FONT_BACK_COLOR				0
 #define FONT_SHADOW_COLOR			0
 
-const double c_dMaxScale	 = 10.0;
-const double c_dMinScale	 = 0.2;
+const double c_dMaxScale    = 10.0;
+const double c_dMinScale    = 0.2;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data

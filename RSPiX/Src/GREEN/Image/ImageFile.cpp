@@ -133,7 +133,7 @@ short RImageFile::LoadVersion2(  // Returns SUCCESS on success or FAILURE on
    short	sRes	= SUCCESS;  // Assume success.
 
    // No RFile support for RImage::Type, so we used a U32.
-   U32 u32Temp				 = 0;
+   U32 u32Temp           = 0;
 
    pfile->Read(&u32Temp);
    pim->m_type					= (RImage::Type)u32Temp;
@@ -259,7 +259,7 @@ short RImageFile::LoadVersion5(  // Returns SUCCESS on success or FAILURE on
    short	sRes	= SUCCESS;  // Assume success.
 
    // No RFile support for RImage::Type, so we used a U32.
-   U32 u32Temp				 = 0;
+   U32 u32Temp           = 0;
    pfile->Read(&u32Temp);
    pim->m_type					= (RImage::Type)u32Temp;
    pfile->Read(&u32Temp);
@@ -379,6 +379,10 @@ short RImageFile::Load(       // Returns SUCCESS on success or FAILURE on failur
 {
    short	sRes	= SUCCESS;  // Assume success.
 
+   //File is shell.sak
+   //Readed ulFinger seems to be offset by 4 bytes
+   //printf("Size: %d\n",pfile->GetSize()); //7329667
+   //printf("Tell: %d\n",pfile->Tell()); //1691455
    // Get finger print . . .
    U32 ulFinger;
    if (pfile->Read(&ulFinger) == 1)
@@ -461,6 +465,7 @@ short RImageFile::Load(       // Returns SUCCESS on success or FAILURE on failur
          }
          else
          {
+            //volatile int _f = 1/0;
             TRACE("RImage::Load - Error: Wrong filetype, Image files should start with 'IM  ' and "
                   "DIB files should start with 'BM'.\n");
             sRes	= FAILURE;

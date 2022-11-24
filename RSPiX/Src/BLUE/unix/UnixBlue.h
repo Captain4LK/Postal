@@ -582,7 +582,7 @@ typedef short (*RSP_SND_CALLBACK)(UCHAR*	pucBuffer,  // Data buffer to be filled
                                                       // silence if necessary)
                                   S32 lDataPos,       // Data's starting position
                                                       // in sound out data stream
-                                  U32*	 pulUser);  // For use by user (can be
+                                  U32*  pulUser);  // For use by user (can be
                                                    // changed as desired)
 
 extern short rspSetSoundOutMode(          // Returns 0 if successfull, non-zero otherwise

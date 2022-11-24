@@ -473,7 +473,7 @@ extern void SetGammaLevel(
 // curve.  Valid input is from -1 to 1.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void	 SetBrightnessContrast(
+extern void  SetBrightnessContrast(
    double dBrightness,                 // -1.0 = dim, 0.0 = normal, 1.0 = bright
    double dContrast                    // -1.0 = low contrast, 0.0 = normal, 1.0 = high
    );

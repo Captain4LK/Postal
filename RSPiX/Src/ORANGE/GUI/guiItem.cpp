@@ -2221,7 +2221,10 @@ short RGuiItem::ReadMembers(  // Returns 0 on success.
       pfile->Read(&m_sInvertedBorder);
       pfile->Read(&m_sTransparent);
       pfile->Read(&m_u32TransparentColor);
-      pfile->Read(&m_lId);
+      //Captain4LK: read into 32bit int temporarily to be independent of intptr size
+      U32 mlid;
+      pfile->Read(&mlid);
+      m_lId = mlid;
 
       // Used to load m_sCanBeFocused (TRUE, FALSE); now load
       // m_targetFocus.

@@ -170,7 +170,7 @@ short RDirtyRects::Add(RDRect* pdr)
    short	sRes	= 0;  // Assume success.
 
    short	sClippedOut	= FALSE;
-   RDRect drTemp		 = *pdr;
+   RDRect drTemp      = *pdr;
 
    if (m_sClipX >= 0)
    {

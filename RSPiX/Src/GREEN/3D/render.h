@@ -45,7 +45,7 @@
 // Note that a unique fog table is needed for each
 // triangle color!
 //
-extern void	 DrawTri_ZColorFog(UCHAR* pDst, S32 lDstP,
+extern void  DrawTri_ZColorFog(UCHAR* pDst, S32 lDstP,
                                RP3d* p1, RP3d* p2, RP3d* p3,
                                RZBuffer* pZB, UCHAR* pFog,
                                short sOffsetX = 0, // In: 2D offset for pZB.
@@ -53,10 +53,10 @@ extern void	 DrawTri_ZColorFog(UCHAR* pDst, S32 lDstP,
 
 //==================================================
 // For debugging:
-extern void	 DrawTri_wire(RImage* pimDst, short sX, short sY,
+extern void  DrawTri_wire(RImage* pimDst, short sX, short sY,
                           RP3d* p1, RP3d* p2, RP3d* p3, UCHAR ucColor);
 
-extern void	 DrawTri_ZColor(UCHAR* pDst, S32 lDstP,
+extern void  DrawTri_ZColor(UCHAR* pDst, S32 lDstP,
                             RP3d* p1, RP3d* p2, RP3d* p3,
                             RZBuffer* pZB, UCHAR pFlatColor,
                             short sOffsetX = 0, // In: 2D offset for pZB.
@@ -67,7 +67,7 @@ extern void	 DrawTri_ZColor(UCHAR* pDst, S32 lDstP,
 // sX and sY are additional offsets into pimDst
 // There is NO Z_BUFFER here!  It is JUST a polygon drawer
 //
-extern void	 DrawTri(UCHAR* pDstOffset, S32 lDstP,
+extern void  DrawTri(UCHAR* pDstOffset, S32 lDstP,
                      RP3d* p1, RP3d* p2, RP3d* p3,
                      UCHAR ucFlatColor);
 

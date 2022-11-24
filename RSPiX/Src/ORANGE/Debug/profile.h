@@ -335,11 +335,11 @@ void ProfilingOff()
 
    // Deactivate all ranges (shouldn't really be needed!)
    /*
-	for (short i=0; i < m_sNumTracked;i++)
-		{
-		if (m_aList[i].m_eState != InError) m_aList[i].m_eState = Inactive;
-		}
-		*/
+   for (short i=0; i < m_sNumTracked;i++)
+      {
+      if (m_aList[i].m_eState != InError) m_aList[i].m_eState = Inactive;
+      }
+      */
 }
 
 //S64	DetermineTimeError();

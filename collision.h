@@ -86,7 +86,7 @@ bool GetNextCollision(  // Returns true if a collision is found, false otherwise
 {
    bool bCollision  = false;  // Assume no collision.
 
-   CThing::Things::iterator i	 = pthings->begin();
+   CThing::Things::iterator i  = pthings->begin();
 
    // If a beginning was specified . . .
    if (*ppthing != NULL)

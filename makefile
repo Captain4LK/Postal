@@ -231,7 +231,7 @@ OBJS := $(foreach f,$(OBJS4),$(BINDIR)/$(f))
 SRCS := $(foreach f,$(SRCS),$(SRCDIR)/$(f))
 
 # !!! FIXME: Get -Wall in here, some day.
-CFLAGS += -fsigned-char -g -DPLATFORM_UNIX -w
+CFLAGS += -fsigned-char -g -DPLATFORM_UNIX -w -Wall
 
 ifeq ($(strip $(macosx)),true)
   CFLAGS += -DPLATFORM_MACOSX

@@ -970,6 +970,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                      }
 
                      // Load each object that was written to the file (could be 0!)
+                     //Captain4LK: TODO fix the loading error here!
                      for (short s = 0; (s < sCount) /*&& !sResult*/; s++)
                      {
 
@@ -1874,7 +1875,7 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
 
    short	sCurH;
 
-   bool bInsurmountableHeight	  = false;
+   bool bInsurmountableHeight   = false;
 
    // Scan while in realm.
    while (
@@ -2208,7 +2209,7 @@ short CRealm::GetHeightAndNoWalk(   // Returns height at new location.
    // Scale the Z based on the view angle.
    ::MapZ3DtoY2D(sZ, &sZ, sRotX);
 
-   U16 u16Attrib	 = m_pTerrainMap->GetVal(sX, sZ, REALM_ATTR_NOT_WALKABLE);
+   U16 u16Attrib   = m_pTerrainMap->GetVal(sX, sZ, REALM_ATTR_NOT_WALKABLE);
 
    short	sH = 4 * (u16Attrib & REALM_ATTR_HEIGHT_MASK);
 

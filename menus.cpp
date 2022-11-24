@@ -709,7 +709,7 @@ static RScrollBar*	ms_psbMouseSensitivityY	= NULL;
 
 static RTxt*			ms_ptxtBandwidth	= NULL;
 
-static SampleMaster::SoundInstance ms_siLastSamplePlayed	  = 0;      // Last sample played.
+static SampleMaster::SoundInstance ms_siLastSamplePlayed   = 0;      // Last sample played.
 
 static SampleMasterID*	ms_apsmidVolumeTesters[SampleMaster::MAX_NUM_SOUND_CATEGORIES]	=
 {
@@ -817,29 +817,29 @@ extern Menu	menuMain =
    // Menu items.
 #if defined(SPAWN)
    {     // pszText,						sEnabled,	pmenu,				pgui
-      { g_pszStartMultiplayerMenu_Join, TRUE, &menuJoinMulti,	 NULL,		 },
+      { g_pszStartMultiplayerMenu_Join, TRUE, &menuJoinMulti,   NULL,       },
       { g_pszMainMenu_Options,	TRUE,			&menuOptions,		NULL,			},
       { g_pszMainMenu_Exit,		TRUE,			&menuVerifyExit,	NULL,			},
       NULL                       // Terminates list.
    },
 #else
    {     // pszText,						sEnabled,	pmenu,				pgui
-      { g_pszMainMenu_Start,		TRUE,			&menuStartSingle /*menuStart*/,			 NULL,		 },
+      { g_pszMainMenu_Start,		TRUE,			&menuStartSingle /*menuStart*/,         NULL,       },
       { g_pszMainMenu_Options,	TRUE,			&menuOptions,		NULL,			},
 
          #ifndef EDITOR_REMOVED
       {
-         g_pszMainMenu_Editor,	 TRUE,		 NULL,				 NULL,
+         g_pszMainMenu_Editor,    TRUE,       NULL,             NULL,
       },
          #endif
 
    #if defined(DEMO)
       {
-         g_pszMainMenu_Buy,		 TRUE,		 NULL,				 NULL,
+         g_pszMainMenu_Buy,       TRUE,       NULL,             NULL,
       },
    #endif
       {
-         g_pszMainMenu_Exit,		 TRUE,		 &menuVerifyExit,	 NULL,
+         g_pszMainMenu_Exit,      TRUE,       &menuVerifyExit,  NULL,
       },
       NULL                       // Terminates list.
    },
@@ -1252,20 +1252,20 @@ extern Menu	menuOptions =
    {     // pszText,								sEnabled,	pmenu,					pgui
 #if 0
       {
-         g_pszOptionsMenu_Video,			 TRUE,		 &menuVideoOptions,	 NULL,
+         g_pszOptionsMenu_Video,        TRUE,       &menuVideoOptions,   NULL,
       },
 #endif
       {
-         g_pszOptionsMenu_Audio,			 TRUE,		 &menuAudioOptions,	 NULL,
+         g_pszOptionsMenu_Audio,        TRUE,       &menuAudioOptions,   NULL,
       },
       { g_pszOptionsMenu_Controls,		TRUE,			&menuControls,			NULL,	},
             #ifndef MULTIPLAYER_REMOVED
       {
-         g_pszOptionsMenu_Multiplayer,	 TRUE,		 &menuMultiOptions,	 NULL,
+         g_pszOptionsMenu_Multiplayer,  TRUE,       &menuMultiOptions,   NULL,
       },
             #endif
       {
-         g_pszOptionsMenu_Performance,	 TRUE,		 &menuFeatures,		 NULL,
+         g_pszOptionsMenu_Performance,  TRUE,       &menuFeatures,       NULL,
       },
       { g_pszOptionsMenu_Difficulty,	TRUE,			&menuPlayOptions,		NULL,	},
       { g_pszOptionsMenu_Crosshair,	TRUE,			NULL,		NULL,	},
@@ -1684,19 +1684,19 @@ extern Menu	menuControls =
       { g_pszControlsMenu_MouseSetup,					TRUE,			&menuMouse,				NULL,				},
 #if defined(ALLOW_JOYSTICK)
       {
-         g_pszControlsMenu_JoystickSetup,				 TRUE,		 &menuJoystick,		 NULL,
+         g_pszControlsMenu_JoystickSetup,           TRUE,       &menuJoystick,       NULL,
       },
 #endif // defined(ALLOW_JOYSTICK)
       {
-         g_pszControlsMenu_TurningSpeeds,				 TRUE,		 &menuRotation,		 NULL,
+         g_pszControlsMenu_TurningSpeeds,           TRUE,       &menuRotation,       NULL,
       },
 #if defined(ALLOW_JOYSTICK)
       {
-         g_pszControlsMenu_UseJoystick,				 TRUE,		 NULL,					 NULL,
+         g_pszControlsMenu_UseJoystick,             TRUE,       NULL,                NULL,
       },
 #endif // defined(ALLOW_JOYSTICK)
       {
-         g_pszControlsMenu_UseMouse,					 TRUE,		 NULL,					 NULL,
+         g_pszControlsMenu_UseMouse,                TRUE,       NULL,                NULL,
       },
       { g_pszControlsMenu_HorizMouseSensitivity,	TRUE,			NULL,						NULL,				},
       { g_pszControlsMenu_VertMouseSensitivity,		TRUE,			NULL,						NULL,				},
@@ -2448,11 +2448,11 @@ extern Menu	menuStart =
       { g_pszStartGameMenu_SinglePlayer,			TRUE,			&menuStartSingle,	NULL,	},
             #ifndef MULTIPLAYER_REMOVED
       {
-         g_pszStartGameMenu_Multiplayer,			 TRUE,		 &menuStartMulti,	 NULL,
+         g_pszStartGameMenu_Multiplayer,         TRUE,       &menuStartMulti,  NULL,
       },
             #endif
       {
-         g_pszStartGameMenu_Demo,					 TRUE,		 &menuStartDemo,	 NULL,
+         g_pszStartGameMenu_Demo,                TRUE,       &menuStartDemo,   NULL,
       },
       { "",													FALSE,		NULL,					NULL, },
       NULL                       // Terminates list.
@@ -2537,18 +2537,18 @@ extern Menu	menuStartSingle =
       { g_pszStartSinglePlayerMenu_New,			TRUE,			NULL,					NULL,	},
 #if defined(START_MENU_ADDON_ITEM)
       {
-         g_pszStartSinglePlayerMenu_AddOn,		 TRUE,		 NULL,				 NULL,
+         g_pszStartSinglePlayerMenu_AddOn,       TRUE,       NULL,             NULL,
       },
 #endif
             #ifndef LOADLEVEL_REMOVED
       {
-         g_pszStartSinglePlayerMenu_LoadLevel,	 TRUE,		 NULL,				 NULL,
+         g_pszStartSinglePlayerMenu_LoadLevel,   TRUE,       NULL,             NULL,
       },
             #endif
       {
-         g_pszStartSinglePlayerMenu_LoadGame,	 TRUE,		 NULL,				 NULL,
+         g_pszStartSinglePlayerMenu_LoadGame,    TRUE,       NULL,             NULL,
       },
-      { g_pszStartSinglePlayerMenu_Challenge,	TRUE,       /*&menuChallenge,*/ NULL,	 NULL, },
+      { g_pszStartSinglePlayerMenu_Challenge,	TRUE,       /*&menuChallenge,*/ NULL,   NULL, },
       { "",													FALSE,		NULL,					NULL, },
       NULL                       // Terminates list.
    },
@@ -3719,11 +3719,11 @@ static short VideoOptionsInit(   // Returns 0 on success, non-zero to cancel men
          ms_psbGamma->GetRange(&lMin, &lMax);
 
          // Determine range of values.
-         S32 lRange	 = lMax - lMin;
+         S32 lRange   = lMax - lMin;
 
          // Set the initial position.  Gamma value indicator will get set via callback.
          // Convert to gamma value by ratio.
-         S32 lVal	 = S32(float(lRange) / GAMMA_RANGE * (GetGammaLevel() - MIN_GAMMA_VAL) + 0.5) + lMin;
+         S32 lVal  = S32(float(lRange) / GAMMA_RANGE * (GetGammaLevel() - MIN_GAMMA_VAL) + 0.5) + lMin;
          ms_psbGamma->SetPos(lVal);
 
          // Let menu know about it.
@@ -4797,10 +4797,10 @@ static void GammaScrollUpdate(   // Returns nothing.
    psb->GetRange(&lMin, &lMax);
 
    // Determine range of values.
-   S32 lRange	 = lMax - lMin;
+   S32 lRange   = lMax - lMin;
 
    // Set via scroll position.
-   S32 lVal	 = psb->GetPos();
+   S32 lVal  = psb->GetPos();
 
    // Convert to gamma value by ratio.
    short	sVal	= short(GAMMA_RANGE / float(lRange) * (lVal - lMin) + 0.5) + MIN_GAMMA_VAL;
@@ -4865,7 +4865,7 @@ static void VolumesScrollUpdate( // Returns nothing.
 {
    ASSERT(psb != NULL);
 
-   SampleMaster::SoundCategory sc	 = (SampleMaster::SoundCategory)psb->m_ulUserData;
+   SampleMaster::SoundCategory sc    = (SampleMaster::SoundCategory)psb->m_ulUserData;
    S32 lMin, lMax, lRange;
    psb->GetRange(&lMin, &lMax);
    lRange	= lMax - lMin;

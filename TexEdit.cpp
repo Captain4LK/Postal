@@ -61,31 +61,31 @@
 // Macros.
 //------------------------------------------------------------------------------
 
-const RString c_strGuiFile	  = "res/editor/TexEdit.gui";
+const RString c_strGuiFile   = "res/editor/TexEdit.gui";
 
-const S32 c_lIdAnim			 = 100;
-const S32 c_lIdPal			 = 200;
-const	S32 c_lIdSpotLight	 = 601;
-const	S32 c_lIdBrightness	 = 602;
-const	S32 c_lIdAdjust		 = 701;
-const	S32 c_lIdFrequency	 = 702;
-const	S32 c_lIdAmount		 = 703;
-const S32 c_lIdCurColor		 = 201;
-const S32 c_lIdStatus		 = 500;
-const	S32 c_lIdApply			 = 301;
-const	S32 c_lIdSave			 = 302;
-const	S32 c_lIdRevert		 = 303;
-const S32 c_lIdQuit			 = 399;
-const S32 c_lIdTrans			 = 401;
-const S32 c_lIdScale			 = 402;
-const S32 c_lIdRotate		 = 403;
-const S32 c_lIdPaint			 = 404;
+const S32 c_lIdAnim         = 100;
+const S32 c_lIdPal          = 200;
+const	S32 c_lIdSpotLight    = 601;
+const	S32 c_lIdBrightness   = 602;
+const	S32 c_lIdAdjust       = 701;
+const	S32 c_lIdFrequency    = 702;
+const	S32 c_lIdAmount       = 703;
+const S32 c_lIdCurColor     = 201;
+const S32 c_lIdStatus       = 500;
+const	S32 c_lIdApply        = 301;
+const	S32 c_lIdSave         = 302;
+const	S32 c_lIdRevert       = 303;
+const S32 c_lIdQuit         = 399;
+const S32 c_lIdTrans        = 401;
+const S32 c_lIdScale        = 402;
+const S32 c_lIdRotate       = 403;
+const S32 c_lIdPaint        = 404;
 
-const double c_dScale		 = 8.0;
+const double c_dScale       = 8.0;
 
-const double c_fTransRate	 = 0.25f / c_dScale;
-const double c_fScaleRate	 = 0.1f / c_dScale;
-const double c_fRotRate		 = 1.0f;
+const double c_fTransRate   = 0.25f / c_dScale;
+const double c_fScaleRate   = 0.1f / c_dScale;
+const double c_fRotRate     = 1.0f;
 
 const short	c_sPalStart		= 106;
 const short	c_sPalEnd		= 201;
@@ -893,7 +893,7 @@ CTexEdit::DoOutput(
 
          if (m_lTriIndex < pmesh->m_sNum)
          {
-            S32 lVertexIndex	 = m_lTriIndex * 3;
+            S32 lVertexIndex   = m_lTriIndex * 3;
 
             const RP3d&	v1	= psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
             const RP3d&	v2	= psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];

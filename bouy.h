@@ -81,7 +81,7 @@ CTreeListNode()
 public:
 CTreeListNode(Owner* powner)
 {
-   m_powner	 = powner;
+   m_powner  = powner;
    m_pnNext = m_pnPrev = m_pnRight = m_pnLeft = NULL;
 }
 

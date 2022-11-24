@@ -213,7 +213,7 @@
 #define IS_INPUT(input)                                                                                        \
    (	(pu8KeyStatus[g_InputSettings.m_asPlayKeys[input]]	& 1)                                                  \
       ||	((sButtons & g_InputSettings.m_asPlayMouseButtons[input]) == g_InputSettings.m_asPlayMouseButtons[input] \
-          && g_InputSettings.m_asPlayMouseButtons[input]	 != 0)IS_JOY_INPUT(input) )
+          && g_InputSettings.m_asPlayMouseButtons[input]  != 0)IS_JOY_INPUT(input) )
 
 // This equates to:  was the key for this input pressed or, IF there are mouse
 // buttons for this input, are the mouse buttons in that combination?
@@ -221,7 +221,7 @@
 #define WAS_INPUT(input)                                                                                       \
    (	pu8KeyStatus[g_InputSettings.m_asPlayKeys[input]]                                                        \
       ||	((sButtons & g_InputSettings.m_asPlayMouseButtons[input]) == g_InputSettings.m_asPlayMouseButtons[input] \
-          && g_InputSettings.m_asPlayMouseButtons[input]	 != 0)IS_JOY_INPUT(input) )
+          && g_InputSettings.m_asPlayMouseButtons[input]  != 0)IS_JOY_INPUT(input) )
 
 // Clear the specified input.
 #define CLEAR_INPUT(input)                                                                                     \
@@ -308,7 +308,7 @@ S32 m_lBufEntries;            // Total entries in buffer
 // Add one plus the index of each string item so it's not recognizable when
 // searching/viewing the exe.  The chars will be untweaked when the cheat is
 // evaluated at runtime.
-static Cheat ms_acheats[]	 =
+static Cheat ms_acheats[]   =
 {
 #if defined(USE_LA_PALOMA_CHEATS)
 
@@ -320,7 +320,7 @@ static Cheat ms_acheats[]	 =
    { STR_TWEAK('S', 'T', 'U', 'F', 'F', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'), INPUT_CHEAT_14 },
    { STR_TWEAK('R', 'E', 'V', 'I', 'V', 'E', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'), INPUT_CHEAT_15 },
    { { 'D' + 1, 'A' + 2, 'W' + 3, 'H' + 4, 'O' + 5, 'L' + 6, 'E' + 7, 'E' + 8, 'N' + 9, 'C' + 10, 'H' + 11, 'I' + 12, 'L' + 13, 'A' + 14, 'D' + 15, 'A' + 16, }, INPUT_CHEAT_16, },
-   { { 'B' + 1, 'R' + 2, 'E' + 3, 'A' + 4, 'K' + 5, 'Y' + 6, 'O' + 7, 'S' + 8, 'A' + 9, 'K' + 10,			  }, INPUT_CHEAT_17, },
+   { { 'B' + 1, 'R' + 2, 'E' + 3, 'A' + 4, 'K' + 5, 'Y' + 6, 'O' + 7, 'S' + 8, 'A' + 9, 'K' + 10,          }, INPUT_CHEAT_17, },
    { STR_TWEAK('M', 'Y', 'T', 'E', 'A', 'M', 'O', 'U', 'S', 'E', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'), INPUT_CHEAT_18 },
    { STR_TWEAK('S', 'H', 'E', 'L', 'L', 'S', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'), INPUT_CHEAT_19 },
    { STR_TWEAK('B', 'O', 'O', 'M', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0'), INPUT_CHEAT_20 },
@@ -341,27 +341,27 @@ static Cheat ms_acheats[]	 =
    { { 'T' + 1, 'H' + 2, 'I' + 3, 'C' + 4, 'K' + 5, 'S' + 6, 'K' + 7, 'I' + 8, 'N' + 9,						},	INPUT_CHEAT_12, },
    { { 'C' + 1, 'A' + 2, 'R' + 3, 'R' + 4, 'Y' + 5, 'M' + 6, 'O' + 7, 'R' + 8, 'E' + 9,						},	INPUT_CHEAT_13, },
    #if defined(USE_NEW_CHEATS)
-   { { 'G' + 1, 'I' + 2, 'M' + 3, 'M' + 4, 'E' + 5, 'D' + 6, 'A' + 7, 'T' + 8,								 }, INPUT_CHEAT_14, },
+   { { 'G' + 1, 'I' + 2, 'M' + 3, 'M' + 4, 'E' + 5, 'D' + 6, 'A' + 7, 'T' + 8,                         }, INPUT_CHEAT_14, },
    { { 'H' + 1, 'E' + 2, 'S' + 3, 'S' + 4, 'T' + 5, 'I' + 6, 'L' + 7, 'L' + 8, 'G' + 9, 'O' + 10, 'O' + 11, 'D' + 12,	},	INPUT_CHEAT_15, },
    #else
    { { 'M' + 1, 'E' + 2, 'G' + 3, 'A' + 4, 'S' + 5, 'T' + 6, 'U' + 7, 'F' + 8, 'F' + 9,						},	INPUT_CHEAT_14, },
-   { { 'G' + 1, 'E' + 2, 'T' + 3, 'U' + 4, 'P' + 5, 'R' + 6, 'O' + 7, 'G' + 8, 'U' + 9, 'E' + 10,			  }, INPUT_CHEAT_15, },
+   { { 'G' + 1, 'E' + 2, 'T' + 3, 'U' + 4, 'P' + 5, 'R' + 6, 'O' + 7, 'G' + 8, 'U' + 9, 'E' + 10,          }, INPUT_CHEAT_15, },
    #endif
    { { 'D' + 1, 'A' + 2, 'W' + 3, 'H' + 4, 'O' + 5, 'L' + 6, 'E' + 7, 'E' + 8, 'N' + 9, 'C' + 10, 'H' + 11, 'I' + 12, 'L' + 13, 'A' + 14, 'D' + 15, 'A' + 16, }, INPUT_CHEAT_16, },
-   { { 'B' + 1, 'R' + 2, 'E' + 3, 'A' + 4, 'K' + 5, 'Y' + 6, 'O' + 7, 'S' + 8, 'A' + 9, 'K' + 10,			  }, INPUT_CHEAT_17, },
-   { { 'M' + 1, 'Y' + 2, 'T' + 3, 'E' + 4, 'A' + 5, 'M' + 6, 'O' + 7, 'U' + 8, 'S' + 9, 'E' + 10,			  }, INPUT_CHEAT_18, },
+   { { 'B' + 1, 'R' + 2, 'E' + 3, 'A' + 4, 'K' + 5, 'Y' + 6, 'O' + 7, 'S' + 8, 'A' + 9, 'K' + 10,          }, INPUT_CHEAT_17, },
+   { { 'M' + 1, 'Y' + 2, 'T' + 3, 'E' + 4, 'A' + 5, 'M' + 6, 'O' + 7, 'U' + 8, 'S' + 9, 'E' + 10,          }, INPUT_CHEAT_18, },
    { { 'S' + 1, 'H' + 2, 'E' + 3, 'L' + 4, 'L' + 5, 'F' + 6, 'E' + 7, 'S' + 8, 'T' + 9,						}, INPUT_CHEAT_19, },
-   { { 'E' + 1, 'X' + 2, 'P' + 3, 'L' + 4, 'O' + 5, 'D' + 6, 'A' + 7, 'R' + 8, 'A' + 9, 'M' + 10, 'A' + 11,	 }, INPUT_CHEAT_20, },
-   { { 'F' + 1, 'L' + 2, 'A' + 3, 'M' + 4, 'E' + 5, 'N' + 6, 'S' + 7, 'T' + 8, 'E' + 9, 'I' + 10, 'N' + 11,	 }, INPUT_CHEAT_21, },
-   { { 'S' + 1, 'H' + 2, 'O' + 3, 'T' + 4, 'G' + 5, 'U' + 6, 'N' + 7,										  }, INPUT_CHEAT_22, },
-   { { 'T' + 1, 'H' + 2, 'E' + 3, 'B' + 4, 'E' + 5, 'S' + 6, 'T' + 7, 'G' + 8, 'U' + 9, 'N' + 10,			  }, INPUT_CHEAT_23, },
-   { { 'L' + 1, 'O' + 2, 'B' + 3, 'I' + 4, 'T' + 5, 'F' + 6, 'A' + 7, 'R' + 8,								 }, INPUT_CHEAT_24, },
-   { { 'T' + 1, 'I' + 2, 'T' + 3, 'A' + 4, 'N' + 5, 'I' + 6, 'I' + 7, 'I' + 8,								 }, INPUT_CHEAT_25, },
+   { { 'E' + 1, 'X' + 2, 'P' + 3, 'L' + 4, 'O' + 5, 'D' + 6, 'A' + 7, 'R' + 8, 'A' + 9, 'M' + 10, 'A' + 11,  }, INPUT_CHEAT_20, },
+   { { 'F' + 1, 'L' + 2, 'A' + 3, 'M' + 4, 'E' + 5, 'N' + 6, 'S' + 7, 'T' + 8, 'E' + 9, 'I' + 10, 'N' + 11,  }, INPUT_CHEAT_21, },
+   { { 'S' + 1, 'H' + 2, 'O' + 3, 'T' + 4, 'G' + 5, 'U' + 6, 'N' + 7,                                }, INPUT_CHEAT_22, },
+   { { 'T' + 1, 'H' + 2, 'E' + 3, 'B' + 4, 'E' + 5, 'S' + 6, 'T' + 7, 'G' + 8, 'U' + 9, 'N' + 10,          }, INPUT_CHEAT_23, },
+   { { 'L' + 1, 'O' + 2, 'B' + 3, 'I' + 4, 'T' + 5, 'F' + 6, 'A' + 7, 'R' + 8,                         }, INPUT_CHEAT_24, },
+   { { 'T' + 1, 'I' + 2, 'T' + 3, 'A' + 4, 'N' + 5, 'I' + 6, 'I' + 7, 'I' + 8,                         }, INPUT_CHEAT_25, },
    { { 'S' + 1, 'T' + 2, 'E' + 3, 'R' + 4, 'N' + 5, 'O' + 6, 'M' + 7, 'A' + 8, 'T' + 9,						}, INPUT_CHEAT_26, },
-   { { 'F' + 1, 'I' + 2, 'R' + 3, 'E' + 4, 'H' + 5, 'U' + 6, 'R' + 7, 'L' + 8, 'E' + 9, 'R' + 10,			  }, INPUT_CHEAT_27, },
-   { { 'C' + 1, 'R' + 2, 'O' + 3, 'T' + 4, 'C' + 5, 'H' + 6, 'B' + 7, 'O' + 8, 'M' + 9, 'B' + 10,			  }, INPUT_CHEAT_28, },
+   { { 'F' + 1, 'I' + 2, 'R' + 3, 'E' + 4, 'H' + 5, 'U' + 6, 'R' + 7, 'L' + 8, 'E' + 9, 'R' + 10,          }, INPUT_CHEAT_27, },
+   { { 'C' + 1, 'R' + 2, 'O' + 3, 'T' + 4, 'C' + 5, 'H' + 6, 'B' + 7, 'O' + 8, 'M' + 9, 'B' + 10,          }, INPUT_CHEAT_28, },
    #ifdef SALES_DEMO
-   { { 'S' + 1, 'E' + 2, 'L' + 3, 'L' + 4,																	  }, INPUT_CHEAT_29, }, // Only used when SALES_DEMO defined
+   { { 'S' + 1, 'E' + 2, 'L' + 3, 'L' + 4,                                                     }, INPUT_CHEAT_29, }, // Only used when SALES_DEMO defined
    #else
    { { 'T' + 1, 'H' + 2, 'E' + 3, 'R' + 4, 'E' + 5, 'S' + 6, 'N' + 7, 'O' + 8, 'P' + 9, 'L' + 10, 'A' + 11, 'C' + 12, 'E' + 13, 'L' + 14, 'I' + 15, 'K' + 16,  'E' + 17, 'O' + 18, 'Z' + 19, }, INPUT_CHEAT_29, },
    #endif
@@ -597,14 +597,14 @@ static void FindCheatCombos(  // Returns nothing.
                               // Out: Input with cheats.
    RInputEvent* pie)          // In:  Latest input event or NULL.
 {
-   S32 lNow		 = rspGetMilliseconds();
+   S32 lNow     = rspGetMilliseconds();
    short	i;
 
    if (pie)
    {
       if (pie->type == RInputEvent::Key)
       {
-         S32 lKey	 = (pie->lKey & 0x00FF);
+         S32 lKey  = (pie->lKey & 0x00FF);
          // Force alpha lower keys to upper keys
          if (islower(lKey))
             lKey	= toupper(lKey);
@@ -731,8 +731,8 @@ extern UINPUT GetLocalInput(           // Returns local input.
    {
 // Set this to 0 to disable all possibility of any user input during the game
 #if 1
-      S32 lCurTime		 = prealm->m_time.GetGameTime();
-      static S32 lPrevTime		  = lCurTime;
+      S32 lCurTime       = prealm->m_time.GetGameTime();
+      static S32 lPrevTime      = lCurTime;
       // Get ptr to Blue's key status array.  Only need to do this
       // once.
       static U8*		pu8KeyStatus	= rspGetKeyStatusArray();
@@ -750,7 +750,7 @@ extern UINPUT GetLocalInput(           // Returns local input.
 
          // Tweak input values.  We reduce the sensitivity by a factor of 3 to make
          // up for increased frame rates.
-         double dDeltaRot	 = (MOUSE_RESET_X - sPosX) * (g_InputSettings.m_dMouseSensitivityX / 3.0);
+         double dDeltaRot   = (MOUSE_RESET_X - sPosX) * (g_InputSettings.m_dMouseSensitivityX / 3.0);
 #if 1
          // If positive round up . . .
          if (dDeltaRot >= 0.0)
@@ -794,7 +794,7 @@ extern UINPUT GetLocalInput(           // Returns local input.
       }
 
 #if defined(ALLOW_JOYSTICK)
-      U32 u32Buttons	 = 0;
+      U32 u32Buttons  = 0;
 
       // If utilizing joystick input . . .
       if (g_InputSettings.m_sUseJoy)
@@ -802,7 +802,7 @@ extern UINPUT GetLocalInput(           // Returns local input.
          // Only need to update joystick 1.
          rspUpdateJoy(0);
 
-         U32 u32Axes	 = 0;
+         U32 u32Axes  = 0;
          rspGetJoyState(0, &u32Buttons, &u32Axes);
 
 #if defined(ALLOW_TWINSTICK)

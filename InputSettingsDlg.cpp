@@ -161,7 +161,7 @@ static S32 ms_lFlashTimer;
 // inaccessible to the user when it comes to mapping the input keys.
 // If you are adding a key to this array, PLEASE ADD THE _SK_ VERSION (not
 // the _GK_ version).
-static U8 ms_au8UnmappableKeys[]	 =
+static U8 ms_au8UnmappableKeys[]  =
 {
    RSP_SK_F1,           // Next level.
    RSP_SK_F2,           // Toggle targeting.
@@ -450,7 +450,7 @@ void InputSettingsDlg_Choice( // Returns nothing.
 static bool IsMappable( // Returns true, if mappable, false otherwise.
    U8	u8Key)            // In:  Key to check mappable status on.
 {
-   bool bMappable	  = true;
+   bool bMappable   = true;
 
    short	sIndex;
    for (sIndex = 0; sIndex < NUM_ELEMENTS(ms_au8UnmappableKeys); sIndex++)

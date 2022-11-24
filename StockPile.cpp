@@ -146,7 +146,7 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-CStockPile CStockPile::ms_stockpileMax	  =         // Maximum one can carry
+CStockPile CStockPile::ms_stockpileMax   =         // Maximum one can carry
                                                    // w/o a backpack.
 {
    1000,       // m_sHitPoints
@@ -760,7 +760,7 @@ bool CStockPile::IsEmpty(void)      // Returns true, if the stockpile is
 {
    // Inventory.
    short	sTypeIndex;
-   bool bEmpty	  = true;
+   bool bEmpty   = true;
    for (sTypeIndex = 0; sTypeIndex < NumStockPileItems; sTypeIndex++)
    {
       if (GetItem(sTypeIndex) > 0)

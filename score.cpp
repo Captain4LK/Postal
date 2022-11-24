@@ -345,7 +345,7 @@ static S32 SysUpdate(         // Returns a non-zero ID to abort or zero
                               // to continue.
    RInputEvent*	pie)        // Out: Next input event to process.
 {
-   S32 lIdRes	 = 0;    // Assume no GUI ID pressed (i.e., continue).
+   S32 lIdRes   = 0;    // Assume no GUI ID pressed (i.e., continue).
 
    UpdateSystem();
    rspGetNextInputEvent(pie);
@@ -902,7 +902,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
    {
       // Determine player's score and note how we determined it in a string
       // for the user.
-      S32 lPlayerScore	 = 0;
+      S32 lPlayerScore   = 0;
       switch (pRealm->m_ScoringMode)
       {
       case CRealm::Standard:

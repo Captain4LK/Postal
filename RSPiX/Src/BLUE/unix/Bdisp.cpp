@@ -396,9 +396,9 @@ extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero oth
          {
             // If this mode is closer than a previous one . . .
             float	fFactorOld	= ((float)sBestModeWidth	* (float)sBestModeHeight)
-                                / ((float)sWidth			  * (float)sHeight);
+                                / ((float)sWidth           * (float)sHeight);
             float	fFactorNew	= ((float)sModeWidth			* (float)sModeHeight)
-                                / ((float)sWidth			  * (float)sHeight);
+                                / ((float)sWidth           * (float)sHeight);
             if (fFactorNew < fFactorOld)
             {
                sBestModeWidth		= sModeWidth;

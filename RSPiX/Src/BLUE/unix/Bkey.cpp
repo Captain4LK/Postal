@@ -154,7 +154,7 @@ extern void Key_Event(SDL_Event *event)
       {
          // If key is odd . . .
          if ( ( (*pu8KeyStatus) & 1) == 1)
-            *pu8KeyStatus	 += 1;
+            *pu8KeyStatus   += 1;
 
          // Note that there is intentionally no else condition even though there
          // is one in the key down case.
@@ -454,7 +454,7 @@ extern void rspSetQuitStatusFlags(  // Returns nothing.
 
 extern S32 rspGetToggleKeyStates(void) // Returns toggle key state flags.
 {
-   S32 lKeyStates	 = 0;
+   S32 lKeyStates  = 0;
 #if 0  // !!! FIXME
    Uint8 *states = SDL_GetKeyState(NULL);
    if (states[SDLK_CAPSLOCK]) lKeyStates |= RSP_CAPS_LOCK_ON;

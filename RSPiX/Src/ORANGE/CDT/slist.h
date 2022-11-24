@@ -452,8 +452,8 @@ short Compare(PNODE pn1, PNODE pn2)
    ASSERT(pn1->psk != NULL);
    ASSERT(pn2->psk != NULL);
 
-   return ((*pn1->psk) < (*pn2->psk))	 ? -1	 :
-          ((*pn1->psk) > (*pn2->psk))	 ?  1	 : 0;
+   return ((*pn1->psk) < (*pn2->psk))   ? -1  :
+          ((*pn1->psk) > (*pn2->psk))   ?  1  : 0;
 }
 
 // Set or clear the compare function used to compare nodes.

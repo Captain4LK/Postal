@@ -2492,7 +2492,7 @@ void CoreLoopRenderOnTop(
          // No need for this unless we're going to draw . . .
          if (pinfo->m_bDrawFrame)
          {
-            bool bUpdateRealm	  = false;
+            bool bUpdateRealm   = false;
             // If its the last level then don't draw the top and bottom, for
             // a letterbox look that lets the player know they don't have
             // control for this demo
@@ -4754,7 +4754,7 @@ inline void SynchronousSampleAbortion(void)
    // scenario where a shitty sound driver causes us to think a sound is always
    // playing.
    // Wait for all samples to finish.
-   S32 lTimeOutTime	 = rspGetMilliseconds() + TIME_OUT_FOR_ABORT_SOUNDS;
+   S32 lTimeOutTime   = rspGetMilliseconds() + TIME_OUT_FOR_ABORT_SOUNDS;
    // Wait for them to stop.
    while (IsSamplePlaying() == true && rspGetMilliseconds() < lTimeOutTime)
    {
@@ -5331,7 +5331,7 @@ extern void Play_SnapPicture(void)
          palPicture.m_sPalEntrySize);  // Number of bytes by which to increment pointers after each copy
 
       // Store screen buffer's actual type and palette
-      RImage::Type typeOrig	 = g_pimScreenBuf->m_type;
+      RImage::Type typeOrig    = g_pimScreenBuf->m_type;
       RPal*				ppalOrig		= g_pimScreenBuf->m_pPalette;
 
       // Temporarily change its type and palette

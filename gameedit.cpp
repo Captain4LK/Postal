@@ -1129,18 +1129,18 @@ static S32 ms_lPressedId  = 0;
 // Realm filename.  Assuming only one Realm loaded at once.
 static char	ms_szFileName[RSP_MAX_PATH]	= "";
 
-static short ms_sMoving		 = FALSE;   // TRUE, if moving/placing a thing (ms_pthingSel).
+static short ms_sMoving     = FALSE;   // TRUE, if moving/placing a thing (ms_pthingSel).
 
 static CThing*	ms_pthingSel	= NULL;  // CThing* to thing currently selected.
 static RHot*	ms_photSel		= NULL;  // RHot* to hotbox associated with selected thing.
 
 // Initial width and height of display so we can
 // restore video mode when done editting.
-static short ms_sInitialDisplayWidth	 = 0;
-static short ms_sInitialDisplayHeight	 = 0;
-static short ms_sInitialDeviceDepth		 = 0;
-static short ms_sInitialDeviceWidth		 = 0;
-static short ms_sInitialDeviceHeight	 = 0;
+static short ms_sInitialDisplayWidth    = 0;
+static short ms_sInitialDisplayHeight   = 0;
+static short ms_sInitialDeviceDepth     = 0;
+static short ms_sInitialDeviceWidth     = 0;
+static short ms_sInitialDeviceHeight    = 0;
 
 // The current camera.
 // Scrollbars' callback update camera pointed to by this.
@@ -1156,7 +1156,7 @@ static RHot*	ms_photHood	= NULL;
 
 // This is the hotbox priority of the farthest item from the user.
 // Start out as close to front as possible.
-static short ms_sBackPriority	 = FRONTMOST_HOT_PRIORITY;
+static short ms_sBackPriority  = FRONTMOST_HOT_PRIORITY;
 
 // Made this global (was static in GetCursor()) for temp.
 static short ms_sDragState = 0;
@@ -1180,7 +1180,7 @@ static RGuiItem*	ms_pguiInfoYPos	= NULL;
 static RGuiItem*	ms_pguiInfoZPos	= NULL;
 
 // The current ratio being used for the map.
-static double ms_dMapRatio		  = 0.0;
+static double ms_dMapRatio      = 0.0;
 
 // The current CGameEditThing.
 static CGameEditThing*	ms_pgething	= NULL;
@@ -1208,7 +1208,7 @@ static RFile ms_filePaste;
 
 // File count used for items in the paste buffer (always decremented so we
 // can guarantee that statics are saved).
-static short ms_sFileCount		 = -1;
+static short ms_sFileCount     = -1;
 
 // Type of item to paste.
 static CThing::ClassIDType	ms_idPaste;
@@ -2930,7 +2930,7 @@ static bool DoInput(    // Returns true when done.
                       sCursorY,                             // y
                       sCursorZ,                             // z
                       &pthingNew,                           // New thing.
-                      &photNew)	 == 0)                     // New hotbox for thing.
+                      &photNew)   == 0)                     // New hotbox for thing.
                {
                   // Select the new item.
                   SetSel(pthingNew, photNew);
@@ -3079,7 +3079,7 @@ static void DoOutput(   // Returns nothing.
       if (ms_pthingSel != NULL)
       {
          static RRect rc;
-         static short sColorSwap	 = 0;
+         static short sColorSwap  = 0;
          sColorSwap	= (sColorSwap + 1) % 2;
 
          ms_pthingSel->EditRect(&rc);
@@ -4232,11 +4232,11 @@ static void PlayRealm(
                grip.ResetTarget(0, 0, 30);
 
                // Default to tracking the track ID.
-               bool bTracking	  = true;
+               bool bTracking   = true;
 
                // Get thing to track . . .
                CThing*	pthingTrack	= NULL;
-               U16 u16IdTrack	 = CIdBank::IdNil;
+               U16 u16IdTrack  = CIdBank::IdNil;
                if (ms_pgething != NULL)
                {
                   u16IdTrack = ms_pgething->m_u16CameraTrackId;
@@ -4343,10 +4343,10 @@ static void PlayRealm(
                   INFO_STATUS_RECT_W,
                   INFO_STATUS_RECT_H);
 
-               S32 lLastDispTime			 = 0;
-               S32 lFramesTime			 = 0;
-               S32 lUpdateDisplayTime	 = 0;
-               S32 lNumFrames				 = 0;
+               S32 lLastDispTime        = 0;
+               S32 lFramesTime          = 0;
+               S32 lUpdateDisplayTime   = 0;
+               S32 lNumFrames           = 0;
 
                RPrint printDisp;
                printDisp.SetFont(DISP_INFO_FONT_H, &g_fontBig);
@@ -4359,9 +4359,9 @@ static void PlayRealm(
                // Reset time again so that the first time update doesn't show (much) elapsed time
                prealm->m_time.Reset();
 
-               bool bDone			  = false;
-               bool bExitRequest	  = false;
-               bool bSuspended	  = false;
+               bool bDone          = false;
+               bool bExitRequest   = false;
+               bool bSuspended     = false;
 
                // Do the loop
                while (bDone == false)
@@ -4810,7 +4810,7 @@ static short CreateNewThing(     // Returns 0 on success.
                if (pfile != NULL)
                {
                   // Remember its ID.
-                  U16 idInstance	 = (*ppthing)->GetInstanceID();
+                  U16 idInstance  = (*ppthing)->GetInstanceID();
                   // Release its ID.
                   (*ppthing)->SetInstanceID(CIdBank::IdNil);
 
@@ -5143,8 +5143,8 @@ static short AdjustDisplaySize(  // Returns 0 on success.
    // New area.
    if (SetDisplayArea(
           sDeviceD,
-          sDisplayW	 + sAdjustX,
-          sDisplayH	 + sAdjustY) == 0)
+          sDisplayW   + sAdjustX,
+          sDisplayH   + sAdjustY) == 0)
    {
       SizeUpdate(pcamera, prealm);
    }
@@ -5963,7 +5963,7 @@ static void DrawNetwork(   // Returns nothing.
 static short AddView(      // Returns 0 on success.
    CRealm*	prealm)        // In:  Realm in which to setup camera.
 {
-   static short sNum	 = 0;
+   static short sNum  = 0;
    short	sRes	= 0;  // Assume success.
    RListBox*	plb	= (RListBox*)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
    if (plb != NULL)
@@ -6296,8 +6296,8 @@ static void RefreshMap(                // Returns nothing.
             0);                     // In:  View's upper left y (in film coords)
 
          // Stretch it as necessary to the map view.
-         double dRatioX	 = (double)sClientW / (double)sViewW;
-         double dRatioY	 = (double)sClientH / (double)sViewH;
+         double dRatioX  = (double)sClientW / (double)sViewW;
+         double dRatioY  = (double)sClientH / (double)sViewH;
          ms_dMapRatio		= MIN(dRatioX, dRatioY);
          RRect	rcClip(sClientX, sClientY, sClientW, sClientH);
          rspBlitT(
@@ -7625,7 +7625,7 @@ static short ShowRealmStatistics(   // Returns 0 on success.
          char szY[256];
          char szZ[256];
          double dX, dY, dZ;
-         S32 lNum	 = 0;
+         S32 lNum  = 0;
          CListNode<CThing>*	pthingnode	= prealm->m_everythingHead.m_pnNext;
          CThing*	pthing;
          while (pthingnode != &(prealm->m_everythingTail))
@@ -7727,7 +7727,7 @@ static bool RealmOpProgress(        // Returns true to continue; false to
    // Just need to get the key status array once.
    U8*	pau8KeyStatus	= rspGetKeyStatusArray();
 
-   bool bContinue	  = true;   // Assume we want to continue.
+   bool bContinue   = true;   // Assume we want to continue.
 
    // If new operation . . .
    if (sLastItemProcessed == 0)

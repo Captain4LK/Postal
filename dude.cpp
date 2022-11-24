@@ -1825,7 +1825,7 @@ void CDude::Suspend(void)
    if (m_sSuspend == 0)
    {
       // Store current delta so we can restore it.
-      S32 lCurTime	 = m_pRealm->m_time.GetGameTime();
+      S32 lCurTime    = m_pRealm->m_time.GetGameTime();
       m_lNextBulletTime	= lCurTime - m_lNextBulletTime;
    }
 
@@ -1841,7 +1841,7 @@ void CDude::Resume(void)
 
    if (m_sSuspend == 0)
    {
-      S32 lCurTime	 = m_pRealm->m_time.GetGameTime();
+      S32 lCurTime    = m_pRealm->m_time.GetGameTime();
       m_lNextBulletTime	= lCurTime - m_lNextBulletTime;
    }
 }
@@ -1858,7 +1858,7 @@ void CDude::Update(void)
       S32 lThisTime = m_pRealm->m_time.GetGameTime();
 
       // Advance the animation timer.
-      S32 lDifTime	 = lThisTime - m_lAnimPrevUpdateTime;
+      S32 lDifTime    = lThisTime - m_lAnimPrevUpdateTime;
       m_lAnimTime			+= lDifTime;
 
       // Update prev time.
@@ -2139,7 +2139,7 @@ void CDude::Update(void)
          m_lAnimTime	-= lDifTime;
          // Tune the time.  Note that this is automathematically negative when
          // velocity is negative.
-         S32 lDifAnimTime	 = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
+         S32 lDifAnimTime   = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
 
          m_lAnimTime	+= lDifAnimTime;
 
@@ -2154,7 +2154,7 @@ void CDude::Update(void)
          m_lAnimTime	-= lDifTime;
          // Tune the time.  Note that this is automathematically negative when
          // velocity is negative.
-         S32 lDifAnimTime	 = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
+         S32 lDifAnimTime   = lDifTime * (m_dVel / RUN_ANIM_VELOCITY);
 
          m_lAnimTime	+= lDifAnimTime;
 
@@ -2664,7 +2664,7 @@ void CDude::Update(void)
       }
 
       // Change weapon . . .
-      WeaponType wtNew				  = m_weapontypeCur;
+      WeaponType wtNew             = m_weapontypeCur;
       switch (input & INPUT_WEAPONS_MASK)
       {
       case INPUT_WEAPON_1:
@@ -2734,7 +2734,7 @@ void CDude::Update(void)
 
       case INPUT_CHEAT_11: // Restore health.
       {
-         CStockPile stockpile	  = { 0, };
+         CStockPile stockpile   = { 0, };
          stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
          CreateCheat(&stockpile);
@@ -2742,7 +2742,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_12: // Full kevlar.
       {
-         CStockPile stockpile		  = { 0, };
+         CStockPile stockpile      = { 0, };
          stockpile.m_sKevlarLayers	= CStockPile::ms_stockpileBackPackMax.m_sKevlarLayers;
 
          CreateCheat(&stockpile);
@@ -2750,7 +2750,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_13: // Backpack.
       {
-         CStockPile stockpile	  = { 0, };
+         CStockPile stockpile   = { 0, };
          stockpile.m_sBackpack	= 1;
 
          CreateCheat(&stockpile);
@@ -2758,7 +2758,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_14: // Full weaponry, full ammo, backpack, and full kevlar.
       {
-         CStockPile stockpile	  = { 0, };
+         CStockPile stockpile   = { 0, };
          stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
          stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
@@ -2802,7 +2802,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_16: // DeathWadLauncher and ammo.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
          stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
          stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
@@ -2817,7 +2817,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_17: // DoubleBarrel and shells.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
          stockpile.m_sDoubleBarrel		= 1;
 
@@ -2842,7 +2842,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_19: // Shell weapons and ammo.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
          stockpile.m_sShotGun				= 1;
          stockpile.m_sSprayCannon		= 1;
@@ -2853,7 +2853,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_20: // Explosive weapons and ammo.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
          stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
          stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
@@ -2865,7 +2865,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_21: // Flame weapons and ammo.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
          stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
          stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
@@ -2878,7 +2878,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_22: // Shotgun and shells.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
          stockpile.m_sShotGun				= 1;
 
@@ -2888,7 +2888,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_23: // Spray cannon and shells.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumShells			= CStockPile::ms_stockpileBackPackMax.m_sNumShells;
          stockpile.m_sSprayCannon		= 1;
 
@@ -2898,7 +2898,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_24: // Grenades and cocktails.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
          stockpile.m_sNumFireBombs		= CStockPile::ms_stockpileBackPackMax.m_sNumFireBombs;
 
@@ -2908,7 +2908,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_25: // Missile launcher and missiles (including heatseekers).
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumMissiles		= CStockPile::ms_stockpileBackPackMax.m_sNumMissiles;
          stockpile.m_sNumHeatseekers	= CStockPile::ms_stockpileBackPackMax.m_sNumHeatseekers;
          stockpile.m_sMissileLauncher	= 1;
@@ -2919,7 +2919,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_26: // Napalm launcher and napalm canisters.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumNapalms			= CStockPile::ms_stockpileBackPackMax.m_sNumNapalms;
          stockpile.m_sNapalmLauncher	= 1;
 
@@ -2929,7 +2929,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_27: // Flame thrower and fuel canisters.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumFuel				= CStockPile::ms_stockpileBackPackMax.m_sNumFuel;
          stockpile.m_sFlameThrower		= 1;
 
@@ -2939,7 +2939,7 @@ void CDude::Update(void)
       }
       case INPUT_CHEAT_28: // Mines.
       {
-         CStockPile stockpile			  = { 0, };
+         CStockPile stockpile         = { 0, };
          stockpile.m_sNumMines			= CStockPile::ms_stockpileBackPackMax.m_sNumMines;
 
          CreateCheat(&stockpile);
@@ -2949,7 +2949,7 @@ void CDude::Update(void)
       case INPUT_CHEAT_29: // Unused except for SALES demo.
       {
 #ifdef SALES_DEMO
-         CStockPile stockpile	  = { 0, };
+         CStockPile stockpile   = { 0, };
          stockpile.m_sHitPoints	= MAX(0, m_sOrigHitPoints - m_stockpile.m_sHitPoints);
 
          stockpile.m_sNumGrenades		= CStockPile::ms_stockpileBackPackMax.m_sNumGrenades;
@@ -3435,7 +3435,7 @@ void CDude::Update(void)
       {
          // Add strafe.
          sStrafeAngle	= rspMod360(sStrafeAngle);
-         double dStrafeDistance	 = (STRAFE_VEL * dSeconds);
+         double dStrafeDistance   = (STRAFE_VEL * dSeconds);
          dNewX	+= COSQ[sStrafeAngle] * dStrafeDistance;
          dNewZ	-=	SINQ[sStrafeAngle] * dStrafeDistance;
       }
@@ -4687,7 +4687,7 @@ void CDude::Update(void)
       CSmash::Bits bitsDontcare /*= ms_u32CollideBitsDontcare*/,
       CSmash::Bits bitsExclude /*= ms_u32CollideBitsExclude*/)
    {
-      bool bShootWeapon	  = true;// Assume we should shoot the weapon.
+      bool bShootWeapon   = true;// Assume we should shoot the weapon.
       CWeapon*	pweapon		= NULL;// Assume nothing.
 
       // If the weapon is in an invalid position . . .
@@ -5765,7 +5765,7 @@ void CDude::ShowTarget(void)
 ////////////////////////////////////////////////////////////////////////////////
    bool CDude::FindExecutee(void)   // Returns true, if we found one; false, otherwise.
    {
-      bool bFoundOne	  = false;// Assume not found.
+      bool bFoundOne   = false;// Assume not found.
 
       CSmash*	psmashee	= NULL;// Safety.
 
@@ -5833,9 +5833,9 @@ void CDude::ShowTarget(void)
          double dSqrDistanceXZ = ABS2(sDistX, sDistZ);
 
          // Determine angle to target.
-         double dRot		 = rspATan(sDistZ, sDistX);
+         double dRot     = rspATan(sDistZ, sDistX);
          // Determine which rotation direction to target is smaller.
-         double dDelta	 = rspDegDelta(m_dRot, dRot);
+         double dDelta   = rspDegDelta(m_dRot, dRot);
 
          // If turning counter clockwise . . .
          if (dDelta > 0.0)
@@ -5912,7 +5912,7 @@ void CDude::ShowTarget(void)
          (*pppowerup)->PickUpFeedback();
 
          // Store its ID so we can attempt to get it if it does persist.
-         U16 idInstance	 = (*pppowerup)->GetInstanceID();
+         U16 idInstance  = (*pppowerup)->GetInstanceID();
 
          // Let powerup decide if it should persist.
          (*pppowerup)->RepaginateNow();
@@ -5945,7 +5945,7 @@ void CDude::ShowTarget(void)
       if (*pppowerup)
       {
          // Store its ID so we can attempt to get it if it does persist.
-         U16 idInstance	 = (*pppowerup)->GetInstanceID();
+         U16 idInstance  = (*pppowerup)->GetInstanceID();
 
          // Toss it.
          TossPowerUp(*pppowerup, 130);
@@ -6125,7 +6125,7 @@ void CDude::ShowTarget(void)
          // Get the next now b/c this won't be a sibling after we detach it.
          pflagNext	= GetNextFlag(pflag);
 
-         U16 u16IdFlag	 = pflag->GetInstanceID();
+         U16 u16IdFlag   = pflag->GetInstanceID();
 
          // Detach the flag.
          DetachChild(

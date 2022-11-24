@@ -174,7 +174,7 @@ inline UCHAR ScaleByte(UCHAR ucByte, UCHAR ucLevel)
 }
 
 // More efficient for a block of data scaled the same:
-inline void	 ScaleBytes(short sNumBytes, UCHAR* pucBytesIn,
+inline void  ScaleBytes(short sNumBytes, UCHAR* pucBytesIn,
                         UCHAR* pucBytesOut, UCHAR ucLevel)
 {
    ASSERT(pucBytesIn);

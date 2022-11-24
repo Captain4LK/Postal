@@ -70,7 +70,7 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-static RInputEvent ms_ieMouse		 =          // Next mouse input event.
+static RInputEvent ms_ieMouse     =          // Next mouse input event.
 {
    RInputEvent::Mouse,
 };
@@ -78,12 +78,12 @@ static RInputEvent ms_ieMouse		 =          // Next mouse input event.
 static short ms_sMouseEvent = FALSE;         // TRUE, if ms_ieMouse contains
                                              // a valid input event.
 
-static RInputEvent ms_ieKey		 =          // Next key input event.
+static RInputEvent ms_ieKey       =          // Next key input event.
 {
    RInputEvent::Key,
 };
 
-static short ms_sKeyEvent	 = FALSE;         // TRUE, if ms_ieKey contains
+static short ms_sKeyEvent   = FALSE;         // TRUE, if ms_ieKey contains
                                              // a valid input event.
 
 static XInputState ms_XInputState = {};      // CURRENT XInput state.

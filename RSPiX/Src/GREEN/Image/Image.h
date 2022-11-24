@@ -373,7 +373,7 @@ short CreateImage(               // Returns 0 if successful.
    short	sWidth,                 // Width of new buffer.
    short	sHeight,                // Height of new buffer.
    Type type,              // Type of new buffer.
-   S32 lPitch	 = 0L,            // Pitch of new buffer or 0 to calculate.
+   S32 lPitch   = 0L,            // Pitch of new buffer or 0 to calculate.
    short	sDepth	= 8);          // Color depth of new buffer.
 
 // Detach the data from the Image.  This function returns a pointer

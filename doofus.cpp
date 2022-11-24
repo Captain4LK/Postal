@@ -499,7 +499,7 @@ short CDoofus::ms_sStuckLimit = 3;                 // Number of times to retry b
 // Weapon animations.
 CAnim3D CDoofus::ms_aanimWeapons[NumWeaponTypes];
 // Current ref count on ms_aanimWeapons[].
-S32 CDoofus::ms_lWeaponResRefCount	 = 0;
+S32 CDoofus::ms_lWeaponResRefCount   = 0;
 
 // Weapon details (descriptions, res names, etc.).
 CDoofus::WeaponDetails CDoofus::ms_awdWeapons[NumWeaponTypes] =
@@ -1232,7 +1232,7 @@ short CDoofus::SelectDude(void)
 
    m_idDude = CIdBank::IdNil;
    U32 ulSqrDistance;
-   U32 ulCurSqrDistance	 = 0xFFFFFFFF;
+   U32 ulCurSqrDistance  = 0xFFFFFFFF;
    U32 ulDistX;
    U32 ulDistZ;
 //	pDudes = m_pRealm->m_apthings[CThing::CDudeID];
@@ -3556,7 +3556,7 @@ void CDoofus::OnExplosionMsg(Explosion_Message* pMessage)
 {
    if (
       m_state != State_BlownUp  &&
-      m_state != State_Die		  &&
+      m_state != State_Die      &&
       m_state != State_Dead)
    {
       CCharacter::OnExplosionMsg(pMessage);

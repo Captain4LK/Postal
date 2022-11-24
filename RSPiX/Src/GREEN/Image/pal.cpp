@@ -547,7 +547,7 @@ short RPal::Save(RFile* pcf)
       pcf->Write(&ulFileType);
       pcf->Write(&ulCurrentVersion);
       // No RFile support for RImage::Type, so we used a U32.
-      U32 u32Temp	 = (U32)m_type;
+      U32 u32Temp  = (U32)m_type;
       pcf->Write(&u32Temp);
       pcf->Write(&m_ulSize);
       pcf->Write(&m_sStartIndex);

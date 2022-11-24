@@ -345,7 +345,7 @@ bool UpdateVelocity(    // Returns true if velocity reaches zero because of the
    double dAcc,         // In:  Acceleration.
    double dSeconds)     // In:  Elapsed time in seconds.
 {
-   bool bAcceleratedToZero	  = false;
+   bool bAcceleratedToZero   = false;
 
    double dVelPrev = *pdVel;
    *pdDeltaVel			= dAcc * dSeconds;

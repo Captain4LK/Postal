@@ -448,7 +448,7 @@ bool CLadder::GetOn(    // Returns true, if able to get on,
                         // false otherwise.
    CCharacter* pchar)   // In:  Character attempting to get onto ladder.
 {
-   bool bGotOn	  = true;   // Assume success.
+   bool bGotOn   = true;   // Assume success.
 
    if (m_pcharLadderBoy == NULL)
    {

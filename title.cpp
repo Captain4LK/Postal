@@ -212,12 +212,12 @@
 S32 m_lTotalUnits;
 S32 m_lCummUnits;    // I will brace myself for an onslaught of jokes.
 double m_adTitlePercent[MAX_TITLES + 1];
-static short m_sValid		 = FALSE;
+static short m_sValid       = FALSE;
 
 static S32 ms_lTitleRFileCallbackTime = 0;
 
 // Indicates the currently displayed image.
-static short ms_sImageNum		 = 0;
+static short ms_sImageNum      = 0;
 
 // The instance of the title musak sample.
 static SampleMaster::SoundInstance ms_siMusak;
@@ -272,7 +272,7 @@ static bool IsInList(   // Returns true if in list.  false otherwise.
    char*	pszSearchIn)   // In:  Comma delimited list of strings to search in for
                         // pszSearchFor.
 {
-   bool bFound	  = false;  // Assume not found.
+   bool bFound   = false;  // Assume not found.
 
    // Copy to temp so strtok can tokenize leaving full of NULLs.
    char szTokenize[512];

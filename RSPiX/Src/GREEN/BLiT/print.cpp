@@ -327,7 +327,7 @@ short	RFontOld::Save(RFile* /*pFile*/)
 }
 
 // Backwards?
-short	RFontOld::Load(char*	pszPath, char*	 pszName)
+short	RFontOld::Load(char*	pszPath, char*  pszName)
 {
    char fname[255];
 

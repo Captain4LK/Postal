@@ -304,7 +304,7 @@ short CPerson::ms_sFileCount;
 
 // This is the one CPerson that can log its AI table transitions or
 // CIdBank::IdNil.
-U16 CPerson::ms_u16IdLogAI	 = CIdBank::IdNil;
+U16 CPerson::ms_u16IdLogAI  = CIdBank::IdNil;
 
 // The max amount a guy and step up while writhing.
 #define WRITHING_VERTICAL_TOLERANCE		(MaxStepUpThreshold / 2)
@@ -928,7 +928,7 @@ void CPerson::Logic_Writhing(void)
       short	sPseudoHeadX	= m_dX + COSQ[sRot] * sRadius;
       short	sPseudoHeadY	= m_dZ - SINQ[sRot] * sRadius;
       // Check pseudo-head point.
-      U16 u16Attrib	 = 0;    // Safety.
+      U16 u16Attrib   = 0;    // Safety.
       short	sHeight		= 0;  // Safety.
       GetFloorAttributes(sPseudoHeadX, sPseudoHeadY, &u16Attrib, &sHeight);
       if ( (u16Attrib & REALM_ATTR_NOT_WALKABLE) || sHeight > m_dY + WRITHING_VERTICAL_TOLERANCE
@@ -1061,7 +1061,7 @@ static void LogicUserBrowse(  // Returns nothing
       if (rspStrnicmp(szLogicFile, szHDPath, strlen(szHDPath) ) == 0)
       {
          // Determine amount of path to ignore.
-         S32 lSubPathBegin	 = strlen(szHDPath);
+         S32 lSubPathBegin  = strlen(szHDPath);
 
          // Update the GUI that shows the filename.
          pguiLogicFileName->SetText("%s", rspPathFromSystem(szLogicFile + lSubPathBegin) );
@@ -1748,7 +1748,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
    m_siPlaying = 0;
    SampleMasterID*	psmid	= &g_smidNil;
    S32 lThisTime = m_pRealm->m_time.GetGameTime();
-   S32 lSampleDuration	 = 0;    // Safety.
+   S32 lSampleDuration   = 0;    // Safety.
 
    if (lThisTime > m_lSampleTimeIsPlaying)
    {

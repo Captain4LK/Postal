@@ -168,7 +168,7 @@ extern short rspSetWindowColors();   // restore system colors
 extern void	rspWaitForClick(short sButton = 3);
 
 // For your convenience...
-extern void	 rspSetBMPColors(RImage* pim, short sStartIndex, short sNum);
+extern void  rspSetBMPColors(RImage* pim, short sStartIndex, short sNum);
 
 extern short rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sDstX,
                      short sDstY, short sW, short sH, const RRect* prDst = NULL, const RRect* prSrc = NULL);
@@ -524,9 +524,9 @@ extern	Strafe*	BLT_RotStrafe(RImage* pimSrc,short sHotX,short sHotY,short sNumIn
 
 //extern	void	BLT_FreeStrafe(Strafe* pKill);
 
-extern void	 rspSetConvertToROTBUF(short sCenterX, short sCenterY);
+extern void  rspSetConvertToROTBUF(short sCenterX, short sCenterY);
 
-extern void	 _RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
+extern void  _RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
                            short sDstX, short sDstY, short sDstW, short sDstH,
                            short sFlipCode = 0);
 extern short rspStrafeRotate(void *pReturnArray,   // Output

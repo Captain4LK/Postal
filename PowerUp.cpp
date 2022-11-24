@@ -359,7 +359,7 @@ void CPowerUp::Update(void)
       S32 lThisTime = m_pRealm->m_time.GetGameTime();
 
       // Advance the animation timer.
-      S32 lDifTime	 = lThisTime - m_lAnimPrevUpdateTime;
+      S32 lDifTime    = lThisTime - m_lAnimPrevUpdateTime;
       m_lAnimTime			+= lDifTime;
 
       // Update prev time.
@@ -706,7 +706,7 @@ void CPowerUp::OnExplosionMsg(         // Returns nothing.
    // Break into smaller pieces and pass the message on . . .
    // Inventory.
    short	sTypeIndex;
-   bool bFirst	  = true;
+   bool bFirst   = true;
    short	sNumGenerated	= 0;
    for (sTypeIndex = 0; sTypeIndex < CStockPile::NumStockPileItems; sTypeIndex++)
    {

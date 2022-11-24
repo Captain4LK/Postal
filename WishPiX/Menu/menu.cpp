@@ -142,6 +142,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "Blue.h"
 #include "input.h"
+#include <assert.h>
+#include <signal.h>
 #ifdef PATHS_IN_INCLUDES
    #include "ORANGE/color/colormatch.h"
    #include "ORANGE/MsgBox/MsgBox.h"
@@ -214,7 +216,7 @@ static Menu*		ms_pmenu	= NULL;        // Pointer to current menu.
 
 static RMsgBox	ms_msgbox;                 // Menu container.
 
-static short ms_sNumMenuItems	 = 0;       // Current number of menu items.
+static short ms_sNumMenuItems  = 0;       // Current number of menu items.
 
 static RFont*		ms_pfontItems	= NULL;  // Font for menu items.
 static RFont*		ms_pfontHeader	= NULL;  // Font for menu header.
@@ -228,8 +230,8 @@ static RGuiItem ms_guiIndicator;          // Current menu item indicator.
 
 static RTxt	ms_txtHeader;                 // Header text item.
 
-static short ms_sCurItem		 = 0;       // Current menu item index.
-static short ms_sNextMenuItem	 = INVALID_MENU_ITEM;      // Item to select on next
+static short ms_sCurItem       = 0;       // Current menu item index.
+static short ms_sNextMenuItem  = INVALID_MENU_ITEM;      // Item to select on next
                                                          // StartMenu().
 
 static short ms_asMenuItemPosX[MAX_MENU_ITEMS];       // Array of item X positions.
@@ -241,10 +243,10 @@ static short ms_asMenuItemMouseHeight[MAX_MENU_ITEMS];      // Array of item hei
 
 static short ms_sItemsPerColumn;             // Number of items per column
 
-static short ms_sCancel			 = FALSE;      // TRUE to cancel current menu.
+static short ms_sCancel        = FALSE;      // TRUE to cancel current menu.
 
-static short ms_sItemsX			 = 0;          // X position of menu items.
-static short ms_sItemsY			 = 0;          // Y position of menu items.
+static short ms_sItemsX        = 0;          // X position of menu items.
+static short ms_sItemsY        = 0;          // Y position of menu items.
 
 static RResMgr*	ms_presmgr			= NULL;
 

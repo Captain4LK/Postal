@@ -83,7 +83,7 @@
 // Note that this is never reseeded b/c this is just an 'effect'
 // that does not and SHOULD not affect game play as it can be
 // turned off.
-S32 CChunk::ms_lGetRandomSeed	 = 0;       // Seed for GetRand[om]().
+S32 CChunk::ms_lGetRandomSeed  = 0;       // Seed for GetRand[om]().
 
 // Chunk info for each type.
 CChunk::TypeInfo CChunk::ms_atiChunks[CChunk::NumTypes] =
@@ -116,12 +116,12 @@ void CChunk::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 void CChunk::Update(void)
 {
-   S32 lCurTime	 = m_pRealm->m_time.GetGameTime();
+   S32 lCurTime    = m_pRealm->m_time.GetGameTime();
 
    double dSeconds = (lCurTime - m_lPrevTime) / 1000.0;
    m_lPrevTime			= lCurTime;
 
-   double dDist	 = m_dVel * dSeconds;
+   double dDist    = m_dVel * dSeconds;
 
    m_dX					+= COSQ[(short)m_dRot] * dDist;
    m_dZ					-= SINQ[(short)m_dRot] * dDist;

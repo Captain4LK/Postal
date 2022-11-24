@@ -386,8 +386,8 @@ static short GetFileType(RIff* piff)
 
    // Read some info to determine file type.
    static char acHeader[128];
-   S32 lBeginPos	 = piff->Tell();
-   S32 lNumRead	 = piff->Read(acHeader, sizeof(acHeader));
+   S32 lBeginPos   = piff->Tell();
+   S32 lNumRead    = piff->Read(acHeader, sizeof(acHeader));
    // Seek back to beginning.
    if (piff->Seek(lBeginPos, SEEK_SET) == 0)
    {
@@ -511,7 +511,7 @@ S32 RSample::Open(char* pszSampleName, S32 lReadBufSize)
 ///////////////////////////////////////////////////////////////////////////////
 S32 RSample::Read(S32 lAmount)
 {
-   S32 lRes	 = 0L;
+   S32 lRes  = 0L;
 
    ASSERT(m_iff.IsOpen() != FALSE);
 

@@ -765,7 +765,7 @@ static S32 m_lRandom = 1;
 static RFile* m_pfileRandom = 0;
 
 // Used by if-logging schtuff.
-static S32 ms_lSynchLogSeq	  = 0;
+static S32 ms_lSynchLogSeq   = 0;
 
 static RFile ms_fileSynchLog;
 
@@ -1120,7 +1120,7 @@ extern void TheGame(void)
 #if defined(CHECK_FOR_COOKIE)
             if (file.Seek(COOKIE_FILE_POSITION, SEEK_SET) == 0)
             {
-               U32 u32Cookie	 = 0;
+               U32 u32Cookie   = 0;
                if (file.Read(&u32Cookie) == 1)
                {
                   if (u32Cookie == ms_u32Cookie)
@@ -1275,7 +1275,7 @@ extern void TheGame(void)
          // scenario where a shitty sound driver causes us to think a sound is always
          // playing.
          // Wait for all samples to finish.
-         S32 lTimeOutTime	 = rspGetMilliseconds() + TIME_OUT_FOR_ABORT_SOUNDS;
+         S32 lTimeOutTime   = rspGetMilliseconds() + TIME_OUT_FOR_ABORT_SOUNDS;
          // Wait for them to stop.
          while (IsSamplePlaying() == true && rspGetMilliseconds() < lTimeOutTime)
          {
@@ -1400,10 +1400,10 @@ static short GameCore(void)      // Returns 0 on success.
 
    // Flag indicates whether or not menu is active
    bool bMenuActive = false;
-   ACTION actionNext	 = ACTION_NOTHING;   // Initialized for safety.
+   ACTION actionNext  = ACTION_NOTHING;   // Initialized for safety.
 
    Menu*	pmenuStart	= NULL;           // Next menu to start if not NULL.
-   bool bPalTran	  = true;            // true to PalTranOn() before next
+   bool bPalTran    = true;            // true to PalTranOn() before next
                                        // menu.
    bool bTitleImage = true;            // true to display title image before
                                        // next menu.
@@ -2266,7 +2266,7 @@ extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 i
    short	sResult;
 
    char szBasePath[RSP_MAX_PATH];
-   S32 lBasePathLen	 = strlen(pszFullPath);
+   S32 lBasePathLen   = strlen(pszFullPath);
    if (lBasePathLen < sizeof(szBasePath) )
    {
       strcpy(szBasePath, pszFullPath);
@@ -2304,7 +2304,7 @@ extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 i
       if (sResult == 0)
       {
          // Attempt to remove path from the specified name
-         S32 lFullPathLen	 = strlen(szBasePath);
+         S32 lFullPathLen   = strlen(szBasePath);
          if (rspStrnicmp(szChosenFileName, szBasePath, lFullPathLen) == 0)
          {
             // Copy sub path to destination.
@@ -2564,7 +2564,7 @@ static short OpenSaks(void)
          };
 
          short	sModeIndex;
-         bool bSakFound	  = false;
+         bool bSakFound   = false;
 
          for (sModeIndex = 0; sModeIndex < NUM_ELEMENTS(amodes) && bSakFound == false; sModeIndex++)
          {
@@ -2669,8 +2669,8 @@ static short LoadAssets(void)
 
    // Fake lots of loading with a simple timing loop
    S32 lTime;
-   S32 lLastTime	 = rspGetMilliseconds();
-   S32 lEndTime	 = lLastTime + lTotalTime;
+   S32 lLastTime   = rspGetMilliseconds();
+   S32 lEndTime    = lLastTime + lTotalTime;
    do
    {
       lTime		= rspGetMilliseconds();
@@ -2893,7 +2893,7 @@ extern void Game_StartDemoGame(
    short sMenuItem)
 {
    char*	pszDemoFile	= NULL;
-   char szLevelDir[RSP_MAX_PATH]	  = "";
+   char szLevelDir[RSP_MAX_PATH]   = "";
    char szTitle[256] = "";
 
    switch (sMenuItem)
@@ -3050,8 +3050,8 @@ extern void Game_StartChallengeGame(   // Returns nothing.
    short sMenuItem)                    // In:  Chosen menu item.
 {
    char*	pszRealmFile	= NULL;
-   char szLevelDir[RSP_MAX_PATH]	  = "";
-   char szTitle[256]					  = "";
+   char szLevelDir[RSP_MAX_PATH]   = "";
+   char szTitle[256]               = "";
 
    switch (sMenuItem)
    {
@@ -4170,7 +4170,7 @@ extern void SetGammaLevel( // Returns nothing.
 // curve.  Valid input is from -1 to 1.
 //
 ////////////////////////////////////////////////////////////////////////////////
-extern void	 SetBrightnessContrast(
+extern void  SetBrightnessContrast(
    double dBrightness,                 // -1.0 = dim, 0.0 = normal, 1.0 = bright
    double dContrast                    // -1.0 = low contrast, 0.0 = normal, 1.0 = high
    )
