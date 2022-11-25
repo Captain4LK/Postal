@@ -22,530 +22,530 @@
 // game.
 //
 // History:
-//		11/19/96 MJR	Started.
-//		01/15/96 MJR	Added GamePath()
+//      11/19/96 MJR   Started.
+//      01/15/96 MJR   Added GamePath()
 //
-//		01/28/97	JMI	Added calls to MenuTrans API (a PalTran).
+//      01/28/97   JMI   Added calls to MenuTrans API (a PalTran).
 //
-//		01/30/97	MJR	Fixed bug in CorrectifyPath() that accidentally truncated
-//							the passed-in string.
+//      01/30/97   MJR   Fixed bug in CorrectifyPath() that accidentally truncated
+//                     the passed-in string.
 //
-//		01/31/97	JMI	Now uses FullPath() to get full path for filespecs.
+//      01/31/97   JMI   Now uses FullPath() to get full path for filespecs.
 //
-//		01/31/97	JMI	Added g_resmgrGame for specific to actual game data.
+//      01/31/97   JMI   Added g_resmgrGame for specific to actual game data.
 //
-//		01/31/97	JMI	Number of title loops done on start up is now gotten from
-//							INI file.
+//      01/31/97   JMI   Number of title loops done on start up is now gotten from
+//                     INI file.
 //
-//		02/02/97	JMI	Now calls StartTitle() and EndTitle() after launching an
-//							edit session, a user game, or a demo game.
+//      02/02/97   JMI   Now calls StartTitle() and EndTitle() after launching an
+//                     edit session, a user game, or a demo game.
 //
-//		02/02/97	JMI	Now, before exiting, makes sure all samples are done
-//							playing.
+//      02/02/97   JMI   Now, before exiting, makes sure all samples are done
+//                     playing.
 //
-//		02/03/97	JMI	Changed DoMenu() called to new DoMenuInput() and
-//							DoMenuOutput() calls.
+//      02/03/97   JMI   Changed DoMenu() called to new DoMenuInput() and
+//                     DoMenuOutput() calls.
 //
-//		02/03/97	JMI	Now sets the base path for g_resmgrGame, Shell, & Menus.
+//      02/03/97   JMI   Now sets the base path for g_resmgrGame, Shell, & Menus.
 //
-//		02/04/97	JMI	Added functions to get and set the gamma level.
+//      02/04/97   JMI   Added functions to get and set the gamma level.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/13/97	JMI	Removed game level alpha XRay stuff (now setup in CHood).
+//      02/13/97   JMI   Removed game level alpha XRay stuff (now setup in CHood).
 //
-//		02/18/97	JMI	Now opens SampleMaster's SAK file.
+//      02/18/97   JMI   Now opens SampleMaster's SAK file.
 //
-//		03/06/97	JMI	Made PalTranOn() and PalTranOff() extern instead of inline.
+//      03/06/97   JMI   Made PalTranOn() and PalTranOff() extern instead of inline.
 //
-//		03/17/97	JMI	Made PalTranOff() abortable via a keypress.  Put in the
-//							shape of the code for aborting via a key in PalTranOn() but
-//							there is currently no interface to MenuTrans to allow this
-//							type of abort (or jump).
+//      03/17/97   JMI   Made PalTranOff() abortable via a keypress.  Put in the
+//                     shape of the code for aborting via a key in PalTranOn() but
+//                     there is currently no interface to MenuTrans to allow this
+//                     type of abort (or jump).
 //
-//		03/28/97	JMI	Un#if 0'd the SavePrefs() call.
+//      03/28/97   JMI   Un#if 0'd the SavePrefs() call.
 //
-//		03/28/97	JMI	Now stores and resets the current dir.
+//      03/28/97   JMI   Now stores and resets the current dir.
 //
-//		04/11/97	JMI	Added Game_Menu_Demo() externally callable function to
-//							start the demo.
+//      04/11/97   JMI   Added Game_Menu_Demo() externally callable function to
+//                     start the demo.
 //
-//		04/14/97	JMI	Now specifies which image for StartTitle() to start with.
+//      04/14/97   JMI   Now specifies which image for StartTitle() to start with.
 //
-//		04/14/97	JMI	Missed a spot in the previous change.
+//      04/14/97   JMI   Missed a spot in the previous change.
 //
-//		04/16/97 MJR	Added simple test of file paths.  Also changed it so that
-//							preferences are always saved, even if the game encounters
-//							an error beforehand.
+//      04/16/97 MJR   Added simple test of file paths.  Also changed it so that
+//                     preferences are always saved, even if the game encounters
+//                     an error beforehand.
 //
-//							Fixed the simple test of file paths to actual use the
-//							file path!!!
+//                     Fixed the simple test of file paths to actual use the
+//                     file path!!!
 //
-//		04/17/97 MJR	Put the test for the CD path back in.
+//      04/17/97 MJR   Put the test for the CD path back in.
 //
-//		04/22/97	JMI	No S32er uses chdir().
+//      04/22/97   JMI   No S32er uses chdir().
 //
-//		04/22/97	JMI	Now sets g_GameSettings.m_sServer and
-//							g_GameSettings.m_sClient to 0 before running the demo.
+//      04/22/97   JMI   Now sets g_GameSettings.m_sServer and
+//                     g_GameSettings.m_sClient to 0 before running the demo.
 //
-//		04/24/97	JMI	Currently, aborting the PalTranOff() is a bad idea, so
-//							we don't allow it (until we support EndMenuTrans(TRUE) ).
+//      04/24/97   JMI   Currently, aborting the PalTranOff() is a bad idea, so
+//                     we don't allow it (until we support EndMenuTrans(TRUE) ).
 //
-//		05/06/97	JMI	Now uses a Gamma multiplier to define a line instead of
-//							the exponent defining the curve.
+//      05/06/97   JMI   Now uses a Gamma multiplier to define a line instead of
+//                     the exponent defining the curve.
 //
-//		05/07/97	JMI	Now uses a Gamma exponent and uses the 'Gamma Val' as a
-//							constant multiplier:
-//							MappedColorVal	= (colorVal ^ GAMMA_EXPONENT) * GammaVal
+//      05/07/97   JMI   Now uses a Gamma exponent and uses the 'Gamma Val' as a
+//                     constant multiplier:
+//                     MappedColorVal   = (colorVal ^ GAMMA_EXPONENT) * GammaVal
 //
-//		05/21/97	JMI	Added a resource manager for resources that are not SAKed.
+//      05/21/97   JMI   Added a resource manager for resources that are not SAKed.
 //
-//		05/23/97	JMI	Added a CloseSaks() which closes and purges the SAKs.
-//							This solves the problem with the ASSERTions about the logic
-//							vars (the RResmgr's were declared at file scope as were the
-//							CLogTabVars so it was just a matter of order of destruction
-//							that dictated whether the ASSERTions occurred).
+//      05/23/97   JMI   Added a CloseSaks() which closes and purges the SAKs.
+//                     This solves the problem with the ASSERTions about the logic
+//                     vars (the RResmgr's were declared at file scope as were the
+//                     CLogTabVars so it was just a matter of order of destruction
+//                     that dictated whether the ASSERTions occurred).
 //
-//		06/03/97	JMI	Commented out error message for read-only prefs file.
+//      06/03/97   JMI   Commented out error message for read-only prefs file.
 //
-//		06/03/97	JMI	Now uses g_GameSettings members for demo timeouts instead
-//							of the DEMO_TIMEOUT macro.
+//      06/03/97   JMI   Now uses g_GameSettings members for demo timeouts instead
+//                     of the DEMO_TIMEOUT macro.
 //
-//		06/04/97	JMI	Added conditionally compiled message instead of editor
-//							when editor is requested from the menu.
-//							Also, now StartTitle() calls within GameLoop() request the
-//							last title page.
+//      06/04/97   JMI   Added conditionally compiled message instead of editor
+//                     when editor is requested from the menu.
+//                     Also, now StartTitle() calls within GameLoop() request the
+//                     last title page.
 //
-//		06/04/97	JMI	Added AbortAllSamples() call when exitting.
+//      06/04/97   JMI   Added AbortAllSamples() call when exitting.
 //
-//		06/04/97	JMI	Added MUST_BE_ON_CD, EDITOR_DISABLED, and CHECK_FOR_COOKIE
-//							conditional compilation macros and added a check for a
-//							specific U32 in the COOKIE file.
+//      06/04/97   JMI   Added MUST_BE_ON_CD, EDITOR_DISABLED, and CHECK_FOR_COOKIE
+//                     conditional compilation macros and added a check for a
+//                     specific U32 in the COOKIE file.
 //
-//		06/12/97 MJR	Reworked the callbacks so that the game-specific code now
-//							resides in this module rather than the menu module.
-//							Reworked the entire core loop so it passes all the
-//							required parameters to Play() instead of using globals.
-//							Moved all the demo and network setup stuff out of play.cpp
-//							and into here.
+//      06/12/97 MJR   Reworked the callbacks so that the game-specific code now
+//                     resides in this module rather than the menu module.
+//                     Reworked the entire core loop so it passes all the
+//                     required parameters to Play() instead of using globals.
+//                     Moved all the demo and network setup stuff out of play.cpp
+//                     and into here.
 //
-//		06/15/97 MJR	More changes in terms of how Play() is called and what
-//							this module does to get ready for calling it.
-//							Also changed calls to rspDoSystem() into calls to Update().
+//      06/15/97 MJR   More changes in terms of how Play() is called and what
+//                     this module does to get ready for calling it.
+//                     Also changed calls to rspDoSystem() into calls to Update().
 //
-//							Added required calls to DeleteInputDemoData().
+//                     Added required calls to DeleteInputDemoData().
 //
-//		06/15/97 MJR	Made use of new-and-improved input demo interface.
-//							(But demo mode is still not working right...had to check
-//							it in though to go aS32 with changes in other files).
+//      06/15/97 MJR   Made use of new-and-improved input demo interface.
+//                     (But demo mode is still not working right...had to check
+//                     it in though to go aS32 with changes in other files).
 //
-//		06/16/97 MJR	Fixed stupid error that caused demo record not to work.
+//      06/16/97 MJR   Fixed stupid error that caused demo record not to work.
 //
-//		06/16/97	JMI	Now passes destination buffer in StartMenu() call.
+//      06/16/97   JMI   Now passes destination buffer in StartMenu() call.
 //
-//		06/16/97	JMI	Added g_fontSmall.
+//      06/16/97   JMI   Added g_fontSmall.
 //
-//					MJR	Added make-a-demo-movie stuff for debugging demo mode
-//							problems.
+//               MJR   Added make-a-demo-movie stuff for debugging demo mode
+//                     problems.
 //
-//					JMI	Now, based on INI setting g_GameSettings.m_sTrickySystemQuit,
-//							we en/disable system quit status flags.
+//               JMI   Now, based on INI setting g_GameSettings.m_sTrickySystemQuit,
+//                     we en/disable system quit status flags.
 //
-//					JMI	Changed "res/fonts/SmallSmash.fnt" to "res/fonts/SmSmash.fnt"
+//               JMI   Changed "res/fonts/SmallSmash.fnt" to "res/fonts/SmSmash.fnt"
 //
-//		06/17/97 MJR	Modified CorrectifyBasePath() so it will change any
-//							relative paths into absolute paths.  This, in turn, fixed
-//							a problem whereby the loading of demo files failed because
-//							it assumed the name of the demo file would begin with the
-//							HD path.  This assumption normally worked, but failed when
-//							the HD path was a relative path.
+//      06/17/97 MJR   Modified CorrectifyBasePath() so it will change any
+//                     relative paths into absolute paths.  This, in turn, fixed
+//                     a problem whereby the loading of demo files failed because
+//                     it assumed the name of the demo file would begin with the
+//                     HD path.  This assumption normally worked, but failed when
+//                     the HD path was a relative path.
 //
-//		06/18/97 MJR	Added SeedRandom() and GetRandom().
+//      06/18/97 MJR   Added SeedRandom() and GetRandom().
 //
-//					MJR	Fixed bug in CorrectifyBasePath().  Now handles empty
-//							paths (it ignores them).
+//               MJR   Fixed bug in CorrectifyBasePath().  Now handles empty
+//                     paths (it ignores them).
 //
-//		06/24/97	JMI	Added SynchLog() debug mechanism.  See function comment for
-//							functionality details.  See macros in game.h for usage via
-//							macro(s).
+//      06/24/97   JMI   Added SynchLog() debug mechanism.  See function comment for
+//                     functionality details.  See macros in game.h for usage via
+//                     macro(s).
 //
-//		06/24/97	JMI	Undefined CHECK_FOR_COOKIE.
+//      06/24/97   JMI   Undefined CHECK_FOR_COOKIE.
 //
-//					JMI	Changed usage of strcmp to rspStricmp in GetRandom() and
-//							SynchLog().
+//               JMI   Changed usage of strcmp to rspStricmp in GetRandom() and
+//                     SynchLog().
 //
-//		06/30/97 MJR	Changed client and server objects to use new/delete instead
-//							of having them live on the stack.  They are very large,
-//							and caused local (stack) data to exceed 32k on the mac.
+//      06/30/97 MJR   Changed client and server objects to use new/delete instead
+//                     of having them live on the stack.  They are very large,
+//                     and caused local (stack) data to exceed 32k on the mac.
 //
-//		07/03/97	JMI	Converted calls to rspOpen/SaveBox() to new parm
-//							conventions.
+//      07/03/97   JMI   Converted calls to rspOpen/SaveBox() to new parm
+//                     conventions.
 //
-//		07/03/97	JMI	Added Game_ControlsMenu() and actions for editting input
-//							settings for keys and mouse.
+//      07/03/97   JMI   Added Game_ControlsMenu() and actions for editting input
+//                     settings for keys and mouse.
 //
-//		07/05/97 MJR	Changed to RSP_BLACK_INDEX instead of 0.
+//      07/05/97 MJR   Changed to RSP_BLACK_INDEX instead of 0.
 //
-//		07/06/97	JMI	Changed ACTION_EDIT_MOUSE_SETTINGS and
-//							ACTION_EDIT_KEY_SETTINGS to ACTION_EDIT_INPUT_SETTINGS.
-//							Also, now only one function is called no matter which type
-//							of input settings are to be editted, EditInputSettings().
+//      07/06/97   JMI   Changed ACTION_EDIT_MOUSE_SETTINGS and
+//                     ACTION_EDIT_KEY_SETTINGS to ACTION_EDIT_INPUT_SETTINGS.
+//                     Also, now only one function is called no matter which type
+//                     of input settings are to be editted, EditInputSettings().
 //
-//		07/11/97 BRH	Finished up the expiration date checking for the
-//							Registry.  Still need to add something for the Mac
-//							version.
+//      07/11/97 BRH   Finished up the expiration date checking for the
+//                     Registry.  Still need to add something for the Mac
+//                     version.
 //
-//		07/11/97 BRH	Fixed typos causing the latest date not to be written to
-//							the registry.
+//      07/11/97 BRH   Fixed typos causing the latest date not to be written to
+//                     the registry.
 //
-//		07/13/97	JMI	Now sets the appropriate base path or opens the approriate
-//							SAK dependent on the current audio mode.
+//      07/13/97   JMI   Now sets the appropriate base path or opens the approriate
+//                     SAK dependent on the current audio mode.
 //
-//		07/13/97	JMI	Added Game_StartChallengeGame() and an action for the
-//							various challenge game types.
+//      07/13/97   JMI   Added Game_StartChallengeGame() and an action for the
+//                     various challenge game types.
 //
-//		07/14/97 BRH	Changed calls to Play() to pass the challenge mode flag.
-//							Fixed value in Get Registry in case of an error on
-//							decrypt.
+//      07/14/97 BRH   Changed calls to Play() to pass the challenge mode flag.
+//                     Fixed value in Get Registry in case of an error on
+//                     decrypt.
 //
-//		07/16/97 BRH	Made changes to the Mac expiration date code to normalize
-//							the time to 1970 like the rest of the machines so that
-//							the dates can be stored in 1 format.
+//      07/16/97 BRH   Made changes to the Mac expiration date code to normalize
+//                     the time to 1970 like the rest of the machines so that
+//                     the dates can be stored in 1 format.
 //
-//		07/16/97	JMI	Now uses real time when pausing on the titel screens (in-
-//							stead of 'Load Loops').
+//      07/16/97   JMI   Now uses real time when pausing on the titel screens (in-
+//                     stead of 'Load Loops').
 //
-//		07/17/97 BRH	Finished debugging the Mac Prefs file expiration date code.
+//      07/17/97 BRH   Finished debugging the Mac Prefs file expiration date code.
 //
-//					MJR	Fixed sample rate problem on the mac.
+//               MJR   Fixed sample rate problem on the mac.
 //
-//					BRH	Put in the real expiration date and a comment for the
-//							real release date, and updated the current release date
-//							to today so that we can still test it.
+//               BRH   Put in the real expiration date and a comment for the
+//                     real release date, and updated the current release date
+//                     to today so that we can still test it.
 //
-//		07/18/97 BRH	Added game load and save functions so that the player's
-//							game can be saved and loaded.  Also added a global
-//							stockpile object used to transfer loaded/saved info to/from
-//							the CDude's stockpile.
+//      07/18/97 BRH   Added game load and save functions so that the player's
+//                     game can be saved and loaded.  Also added a global
+//                     stockpile object used to transfer loaded/saved info to/from
+//                     the CDude's stockpile.
 //
-//		07/19/97 MJR	Fixed bug where demo mode would start if user cancelled out
-//							of a dialog after spending a S32 time there.
-//							Also changed so demo mode will not start if app is in BG.
+//      07/19/97 MJR   Fixed bug where demo mode would start if user cancelled out
+//                     of a dialog after spending a S32 time there.
+//                     Also changed so demo mode will not start if app is in BG.
 //
-//		07/23/97 BRH	Changed calls to Title functions to use the new array of
-//							title screen durations.
+//      07/23/97 BRH   Changed calls to Title functions to use the new array of
+//                     title screen durations.
 //
-//		07/23/97 BRH	Changed expiration date display for PC back to asctime(gmtime())
-//							since ctime didn't work correctly.
+//      07/23/97 BRH   Changed expiration date display for PC back to asctime(gmtime())
+//                     since ctime didn't work correctly.
 //
-//		07/26/97	JMI	Added g_fontPostal to replace g_fontSmall.  Got rid of
-//							g_fontSmall.
+//      07/26/97   JMI   Added g_fontPostal to replace g_fontSmall.  Got rid of
+//                     g_fontSmall.
 //
-//		07/28/97	JMI	Now displays a different message for non-marketing
-//							releases.
+//      07/28/97   JMI   Now displays a different message for non-marketing
+//                     releases.
 //
-//		08/01/97 BRH	Cycles through 3 demos rather than just 1. Also added
-//							open dialog for playing demos so that the user can choose
-//							which demo to play.
+//      08/01/97 BRH   Cycles through 3 demos rather than just 1. Also added
+//                     open dialog for playing demos so that the user can choose
+//                     which demo to play.
 //
-//		08/02/97	JMI	Now initializes the default RGuiItem font to g_fontBig in-
-//							stead of relying on everybody who uses it to invidually set
-//							it.
+//      08/02/97   JMI   Now initializes the default RGuiItem font to g_fontBig in-
+//                     stead of relying on everybody who uses it to invidually set
+//                     it.
 //
-//		08/05/97	JMI	Added Game_AudioOptionsChoice().
+//      08/05/97   JMI   Added Game_AudioOptionsChoice().
 //
-//		08/06/97 MJR	Added socket startup/shutdown.
+//      08/06/97 MJR   Added socket startup/shutdown.
 //
-//		08/08/97 MJR	Background and foreground callbacks are now installed here
-//							so they are in effect for the entire app.
+//      08/08/97 MJR   Background and foreground callbacks are now installed here
+//                     so they are in effect for the entire app.
 //
-//		08/08/97	JMI	Now passes parameter to start musak in title to
-//							StartTitle().
+//      08/08/97   JMI   Now passes parameter to start musak in title to
+//                     StartTitle().
 //
-//		08/12/97	JMI	m_szDemoFile was FullPath()'ed twice so the demo wouldn't
-//							load.  Fixed.
+//      08/12/97   JMI   m_szDemoFile was FullPath()'ed twice so the demo wouldn't
+//                     load.  Fixed.
 //
-//		08/12/97	JMI	Added SubPathOpenBox() (see proto for details) and
-//							FullPathCustom().
+//      08/12/97   JMI   Added SubPathOpenBox() (see proto for details) and
+//                     FullPathCustom().
 //
-//		08/13/97 MJR	We now pass difficulty level to Play().
+//      08/13/97 MJR   We now pass difficulty level to Play().
 //
-//		08/13/97	JMI	No S32er remembers the previous demo file you recorded as
-//							a patch to either improper usage or problem in
-//							SubPathOpenBox().
+//      08/13/97   JMI   No S32er remembers the previous demo file you recorded as
+//                     a patch to either improper usage or problem in
+//                     SubPathOpenBox().
 //
-//		08/14/97	JMI	Added prealm parameter to Game_Save/LoadPlayersGame() so
-//							they can query/modify realm settings/flags.
-//							Also, changed questionable access on m_action in
-//							Game_SavePlayersGame() and Game_LoadPlayersGame() which
-//							were casting &m_action to a (short*) even though ACTION is
-//							a 32 bit value.  May not have worked on the Mac although it
-//							would for values less than 32767 and greater than 0 on the
-//							little endian PC.
-//							Also, added an ACTION_LOAD_GAME so that could be part of
-//							the main loop with the intent of making the loaded
-//							difficulty a local variable but this turned out to be error
-//							prone with keeping this value up to date with the proper
-//							value (either the INI difficulty or the loaded difficulty)
-//							and it was annoying to determine which one to use on each
-//							Play() call so I made a function that returns the
-//							appropriate value (but only once...ick).  If you feel like
-//							it try it the other way, but be aware that on any iteration
-//							g_GameSettings.m_sDifficulty may change via a menu.
-//							Also, had to add a flag so one action can lead to another.
-//							The main loop used to reset the action after every action
-//							making it impossible for one action to lead to another.
+//      08/14/97   JMI   Added prealm parameter to Game_Save/LoadPlayersGame() so
+//                     they can query/modify realm settings/flags.
+//                     Also, changed questionable access on m_action in
+//                     Game_SavePlayersGame() and Game_LoadPlayersGame() which
+//                     were casting &m_action to a (short*) even though ACTION is
+//                     a 32 bit value.  May not have worked on the Mac although it
+//                     would for values less than 32767 and greater than 0 on the
+//                     little endian PC.
+//                     Also, added an ACTION_LOAD_GAME so that could be part of
+//                     the main loop with the intent of making the loaded
+//                     difficulty a local variable but this turned out to be error
+//                     prone with keeping this value up to date with the proper
+//                     value (either the INI difficulty or the loaded difficulty)
+//                     and it was annoying to determine which one to use on each
+//                     Play() call so I made a function that returns the
+//                     appropriate value (but only once...ick).  If you feel like
+//                     it try it the other way, but be aware that on any iteration
+//                     g_GameSettings.m_sDifficulty may change via a menu.
+//                     Also, had to add a flag so one action can lead to another.
+//                     The main loop used to reset the action after every action
+//                     making it impossible for one action to lead to another.
 //
-//		08/15/97	JRD	Added a function to control brightness/contrast in place
-//							of gamma.  This was because the gamma function could not
-//							recreate a "normal palette."
+//      08/15/97   JRD   Added a function to control brightness/contrast in place
+//                     of gamma.  This was because the gamma function could not
+//                     recreate a "normal palette."
 //
-//		08/15/97 JRD	Attempted to hook both brightness and contrast changes to
-//							the old gamma slider with a crude algorithm.
+//      08/15/97 JRD   Attempted to hook both brightness and contrast changes to
+//                     the old gamma slider with a crude algorithm.
 //
-//		08/18/97	JMI	Now allows ALT-F4 to drop you out of the title sequence.
+//      08/18/97   JMI   Now allows ALT-F4 to drop you out of the title sequence.
 //
-//		08/18/97	JMI	In both debug and release modes, we were setting the do
-//							system mode to sleep.  But we'd only restore it in release
-//							mode which basically left us in sleep mode in debug mode.
-//							Now restores it to TOLERATEOS in debug mode.
+//      08/18/97   JMI   In both debug and release modes, we were setting the do
+//                     system mode to sleep.  But we'd only restore it in release
+//                     mode which basically left us in sleep mode in debug mode.
+//                     Now restores it to TOLERATEOS in debug mode.
 //
-//		08/19/97 BRH	Uses the game settings m_sNumAvailableDemos to control the
-//							demo loop rather than the set macro NUM_DEMO_FILES
+//      08/19/97 BRH   Uses the game settings m_sNumAvailableDemos to control the
+//                     demo loop rather than the set macro NUM_DEMO_FILES
 //
-//					MJR	Added support for new MP flags.
+//               MJR   Added support for new MP flags.
 //
-//		08/20/97	JMI	Modified Game_LoadPlayersGame() to receive the ptr to the
-//							action to fill with the Player's saved action so the
-//							function would not have to use the global m_action.
-//							Also, Moved Game_LoadPlayersGame() proto into game.cpp b/c
-//							it now takes an ACTION* but ACTION is defined in game.cpp
-//							and since no one currently calls this function externally,
-//							what the hell.
+//      08/20/97   JMI   Modified Game_LoadPlayersGame() to receive the ptr to the
+//                     action to fill with the Player's saved action so the
+//                     function would not have to use the global m_action.
+//                     Also, Moved Game_LoadPlayersGame() proto into game.cpp b/c
+//                     it now takes an ACTION* but ACTION is defined in game.cpp
+//                     and since no one currently calls this function externally,
+//                     what the hell.
 //
-//		08/21/97 BRH	Changed the game sak to be loaded from the GAME_PATH_GAME
-//							directory, getting it ready for the installation process.
-//							Also changed the demos to HD path to make it easier for
-//							people to load their own demos.  Changed the sound res
-//							manager path to the GAME_PATH_SOUND for installation.
+//      08/21/97 BRH   Changed the game sak to be loaded from the GAME_PATH_GAME
+//                     directory, getting it ready for the installation process.
+//                     Also changed the demos to HD path to make it easier for
+//                     people to load their own demos.  Changed the sound res
+//                     manager path to the GAME_PATH_SOUND for installation.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/22/97	JMI	Changed occurrences of UpdateDisplay() back to
-//							rspUpdateDisplay().  Now that we are using the lock
-//							functions correctly, we don't need them.
-//							Also, removed rspLockBuffer() and rspUnlockBuffer() that
-//							were used to encapsulate the entire app in a lock.
+//      08/22/97   JMI   Changed occurrences of UpdateDisplay() back to
+//                     rspUpdateDisplay().  Now that we are using the lock
+//                     functions correctly, we don't need them.
+//                     Also, removed rspLockBuffer() and rspUnlockBuffer() that
+//                     were used to encapsulate the entire app in a lock.
 //
-//		08/22/97 BRH	Changed the cookie position for use with a new smaller
-//							res.sak file since we now have Direct X and more sound,
-//							we needed more space on the CD.
+//      08/22/97 BRH   Changed the cookie position for use with a new smaller
+//                     res.sak file since we now have Direct X and more sound,
+//                     we needed more space on the CD.
 //
-//		08/23/97	JMI	Now gets callbacks from the initialization and killing of
-//							the main menu and stops any playing title/main-menu musak
-//							when the main menu is killed.
+//      08/23/97   JMI   Now gets callbacks from the initialization and killing of
+//                     the main menu and stops any playing title/main-menu musak
+//                     when the main menu is killed.
 //
-//		08/24/97	JMI	Added a timeout to the abortion of playing samples just in
-//							case there's a bug or a sound driver problem (no need to
-//							to taunt infinite loopage).
+//      08/24/97   JMI   Added a timeout to the abortion of playing samples just in
+//                     case there's a bug or a sound driver problem (no need to
+//                     to taunt infinite loopage).
 //
-//		08/25/97	JMI	Now sets the sound quality based on the current mode.
-//							Also, now, if there's no sak dir and no sak for the current
-//							audio mode, complains.
+//      08/25/97   JMI   Now sets the sound quality based on the current mode.
+//                     Also, now, if there's no sak dir and no sak for the current
+//                     audio mode, complains.
 //
-//		08/26/97 BRH	Merged in changes from a branched game.cpp which has the
-//							special cases for the ending demo level of the game.
-//							Added a function GameEndingSequence which is called
-//							when the global flag that indicates the player has won is
-//							set.  It plays the demo file and then calls the
-//							Title_EndingSequence.
+//      08/26/97 BRH   Merged in changes from a branched game.cpp which has the
+//                     special cases for the ending demo level of the game.
+//                     Added a function GameEndingSequence which is called
+//                     when the global flag that indicates the player has won is
+//                     set.  It plays the demo file and then calls the
+//                     Title_EndingSequence.
 //
-//		08/26/97	JMI	Now any menu can be restore in the GameCore() loop instead
-//							of just the main menu by setting pmenuStart to point at the
-//							menu to be next started.
+//      08/26/97   JMI   Now any menu can be restore in the GameCore() loop instead
+//                     of just the main menu by setting pmenuStart to point at the
+//                     menu to be next started.
 //
-//		08/30/97 BRH	Fixed the base path for the logic table resource manager
-//							to load from the CD rather than the HD path.
+//      08/30/97 BRH   Fixed the base path for the logic table resource manager
+//                     to load from the CD rather than the HD path.
 //
-//		09/02/97	JMI	Added a new option to the demo actions which plays one of
-//							the factory preset demos.
-//							Also, in the case that there were no factory preset demos
-//							and the auto play demo kicked in, it would ASSERT that
-//							the filename was "".
+//      09/02/97   JMI   Added a new option to the demo actions which plays one of
+//                     the factory preset demos.
+//                     Also, in the case that there were no factory preset demos
+//                     and the auto play demo kicked in, it would ASSERT that
+//                     the filename was "".
 //
-//		09/02/97	JMI	Now more deluxe control for regarding the starting of the
-//							next menu after an action in GameCore().
+//      09/02/97   JMI   Now more deluxe control for regarding the starting of the
+//                     next menu after an action in GameCore().
 //
-//		09/03/97 BRH	Changed the g_resmgrRes logic table manager to load
-//							from the HD path rather than the CD path, so that it
-//							is easier to modify, add or change logics, especially
-//							if we have to patch them in the future.
+//      09/03/97 BRH   Changed the g_resmgrRes logic table manager to load
+//                     from the HD path rather than the CD path, so that it
+//                     is easier to modify, add or change logics, especially
+//                     if we have to patch them in the future.
 //
-//		09/04/97	JMI	Now Game_ControlsMenu() only sets a new action if one is
-//							not already set.  This keeps the controls menu from setting
-//							the action when it is launched from Play.cpp instead of
-//							here.
+//      09/04/97   JMI   Now Game_ControlsMenu() only sets a new action if one is
+//                     not already set.  This keeps the controls menu from setting
+//                     the action when it is launched from Play.cpp instead of
+//                     here.
 //
-//		09/05/97 PPL	In CorrectifyBasePath, made sure we allocate the buffer for the
-//							full path instead of letting getcwd allocate it for us.  It's
-//							not that we won't let it -- it's just that the Mac implementation
-//							will not do it automatically as the PC implementation would.
+//      09/05/97 PPL   In CorrectifyBasePath, made sure we allocate the buffer for the
+//                     full path instead of letting getcwd allocate it for us.  It's
+//                     not that we won't let it -- it's just that the Mac implementation
+//                     will not do it automatically as the PC implementation would.
 //
-//		09/05/97 PPL	Per Bill's directions, we will use the path from the CD for
-//							the challenge level.
+//      09/05/97 PPL   Per Bill's directions, we will use the path from the CD for
+//                     the challenge level.
 //
-//		09/05/97 MJR	A few changes to use the new network stuff.
+//      09/05/97 MJR   A few changes to use the new network stuff.
 //
-//		09/06/97 MJR	Now inits and kills the network problem GUI.
+//      09/06/97 MJR   Now inits and kills the network problem GUI.
 //
-//		09/10/97 BRH	Had to change the res.sak in order to fit the MPlayer
-//							and Heat setups on the CD, so I also had to change the
-//							cookie.
+//      09/10/97 BRH   Had to change the res.sak in order to fit the MPlayer
+//                     and Heat setups on the CD, so I also had to change the
+//                     cookie.
 //
-//		09/10/97 MJR	Now properly converts paths from system to rspix format
-//							on the start single player and start challenge level
-//							dialogs.  This bug only showed up on the Mac.
-//
-//		09/11/97 BRH	Added different cookie and file position for
-//							COMP_USA_VERSION only.
+//      09/10/97 MJR   Now properly converts paths from system to rspix format
+//                     on the start single player and start challenge level
+//                     dialogs.  This bug only showed up on the Mac.
+//
+//      09/11/97 BRH   Added different cookie and file position for
+//                     COMP_USA_VERSION only.
 //
-//		09/11/97	JMI	Removed old code for PLAY_SPECIFIC_LEVEL_ONLY macro which
-//							no S32er exists.
+//      09/11/97   JMI   Removed old code for PLAY_SPECIFIC_LEVEL_ONLY macro which
+//                     no S32er exists.
 //
-//		09/12/97 MJR	Now more code doesn't compile when the editor is disabled,
-//							in an attempt to make it harder to hack.
+//      09/12/97 MJR   Now more code doesn't compile when the editor is disabled,
+//                     in an attempt to make it harder to hack.
 //
-//		09/18/97	JMI	Added expiration message for
-//							EXPIRATION_MSG_POSTAL_LAUNCH_WEEKEND compile condition.
+//      09/18/97   JMI   Added expiration message for
+//                     EXPIRATION_MSG_POSTAL_LAUNCH_WEEKEND compile condition.
 //
-//					JMI	Changed 'will expire on' to 'expires' so it sounds better
-//							both past/future/etc tense wise and the 'on' didn't work
-//							well with the format "Mon Sep 22 23:59:00" which contains
-//							no 'at'.
+//               JMI   Changed 'will expire on' to 'expires' so it sounds better
+//                     both past/future/etc tense wise and the 'on' didn't work
+//                     well with the format "Mon Sep 22 23:59:00" which contains
+//                     no 'at'.
 //
-//		09/24/97 BRH	For LOCALE != US version, took out the school yard demo
-//							from the ending sequence.
+//      09/24/97 BRH   For LOCALE != US version, took out the school yard demo
+//                     from the ending sequence.
 //
-//		09/29/97	JMI	Now will try to load any samples SAK in the case that there
-//							is no audio mode, the specified mode's samples SAK is not
-//							present, and there's no 'NoSak' dir specification.
-//							If absolutely no samples SAK is found, a message is
-//							displayed that does not mention whether or not your
-//							hardware supports the specified mode.
+//      09/29/97   JMI   Now will try to load any samples SAK in the case that there
+//                     is no audio mode, the specified mode's samples SAK is not
+//                     present, and there's no 'NoSak' dir specification.
+//                     If absolutely no samples SAK is found, a message is
+//                     displayed that does not mention whether or not your
+//                     hardware supports the specified mode.
 //
-//		10/01/97 BRH	Changed res.sak location so it would fit on the disk.
+//      10/01/97 BRH   Changed res.sak location so it would fit on the disk.
 //
-//		10/08/97	JMI	Made the synchronization logs opened and closed via one
-//							set of two functions to make it easier to use them in
-//							different scenarios.
-//							Also, the logs should now only use the filename (excluding
-//							the path) to make it possible for Mac vs. PC logs to be
-//							compared.
+//      10/08/97   JMI   Made the synchronization logs opened and closed via one
+//                     set of two functions to make it easier to use them in
+//                     different scenarios.
+//                     Also, the logs should now only use the filename (excluding
+//                     the path) to make it possible for Mac vs. PC logs to be
+//                     compared.
 //
-//		10/10/97	JMI	Updated Game_ControlsMenu() to handle joystick option
-//							when ALLOW_JOYSTICK is defined.
+//      10/10/97   JMI   Updated Game_ControlsMenu() to handle joystick option
+//                     when ALLOW_JOYSTICK is defined.
 //
-//		10/14/97	JMI	Made SynchLog()'s expr parameter a double instead of an int
-//							for more accuracy.
+//      10/14/97   JMI   Made SynchLog()'s expr parameter a double instead of an int
+//                     for more accuracy.
 //
-//		10/15/97	JMI	Changed the %g used to fprintf() SynchLog() expr values
-//							to %0.8f b/c the Mac and PC formats differed slightly.  The
-//							Mac one often contains as many as four zeroes after the
-//							last significant decimal, sometimes less, and most of the
-//							time none.  The PC never seems to put trailing zeroes.
+//      10/15/97   JMI   Changed the %g used to fprintf() SynchLog() expr values
+//                     to %0.8f b/c the Mac and PC formats differed slightly.  The
+//                     Mac one often contains as many as four zeroes after the
+//                     last significant decimal, sometimes less, and most of the
+//                     time none.  The PC never seems to put trailing zeroes.
 //
-//		10/16/97	JMI	Now mac demo basename is mdefault.dmo (instead of
-//							default.dmo) since the game plays slightly differently on
-//							the Mac than on the PC.
+//      10/16/97   JMI   Now mac demo basename is mdefault.dmo (instead of
+//                     default.dmo) since the game plays slightly differently on
+//                     the Mac than on the PC.
 //
-//		10/22/97	JMI	In the call to Play() for recording demos, FullPathHD() was
-//							being called on the passed in path but now that
-//							CRealm::Open() tries all the deluxe path stuff we don't
-//							need that (and cannot use it b/c Open() does a conversion
-//							to system path format as does FullPathHD() ).
+//      10/22/97   JMI   In the call to Play() for recording demos, FullPathHD() was
+//                     being called on the passed in path but now that
+//                     CRealm::Open() tries all the deluxe path stuff we don't
+//                     need that (and cannot use it b/c Open() does a conversion
+//                     to system path format as does FullPathHD() ).
 //
-//		11/20/97	JMI	Added cooperative flag to Play() calls.
+//      11/20/97   JMI   Added cooperative flag to Play() calls.
 //
-//		12/01/97 BRH	Added flags for Add On levels to play calls, and
-//							added ACTION_PLAY_ADDON as one of the options.
+//      12/01/97 BRH   Added flags for Add On levels to play calls, and
+//                     added ACTION_PLAY_ADDON as one of the options.
 //
-//		12/04/97 BRH	Added Single player menu option to play add on levels
-//							or original levels.
+//      12/04/97 BRH   Added Single player menu option to play add on levels
+//                     or original levels.
 //
-//		01/05/98	JMI	Now uses RMix::GetMode() to get sound quality.  Also, now
-//							uses the source bits per sample (instead of the device
-//							setting) to determine which sample resources to use.
-//							Note that the quality is still set based on the device bits
-//							per sample though so that the volumes could be tuned
-//							accordingly in SampleMaster's ms_asQualityCategoryAdjustors.
+//      01/05/98   JMI   Now uses RMix::GetMode() to get sound quality.  Also, now
+//                     uses the source bits per sample (instead of the device
+//                     setting) to determine which sample resources to use.
+//                     Note that the quality is still set based on the device bits
+//                     per sample though so that the volumes could be tuned
+//                     accordingly in SampleMaster's ms_asQualityCategoryAdjustors.
 //
-//		01/21/98	JMI	Now the foreground and background callbacks use a value,
-//							INVALID_CURSOR_SHOW_LEVEL, to flag whether or not they're
-//							in the background so they know which callbacks to ignore
-//							and which one's to use.  I think that before (under DirectX)
-//							we were getting more than one Backcall per Forecall and/or
-//							vice-versa.
+//      01/21/98   JMI   Now the foreground and background callbacks use a value,
+//                     INVALID_CURSOR_SHOW_LEVEL, to flag whether or not they're
+//                     in the background so they know which callbacks to ignore
+//                     and which one's to use.  I think that before (under DirectX)
+//                     we were getting more than one Backcall per Forecall and/or
+//                     vice-versa.
 //
-//		03/05/98 BRH	Now attempts to identify the PostalSD disc when the game
-//							starts to clear up any confusion about which CD must be
-//							in the drive to play the Add on Pack.  The Add on Pack
-//							requires the original PostalCD in the drive, and it reads
-//							the original res.sak file from that disc.  The PostalSD
-//							disc also has a res.sak file on it, but its not the one
-//							we want, and if someone tried to play the game with the
-//							PostalSD disc in the drive rather than the PostalCD, then
-//							the copy protection would flag it as invalid.  So an
-//							additional check is now made and if the PostalSD disc
-//							is in the drive, it will display a message to tell them
-//							to put the PostalCD in the drive.
+//      03/05/98 BRH   Now attempts to identify the PostalSD disc when the game
+//                     starts to clear up any confusion about which CD must be
+//                     in the drive to play the Add on Pack.  The Add on Pack
+//                     requires the original PostalCD in the drive, and it reads
+//                     the original res.sak file from that disc.  The PostalSD
+//                     disc also has a res.sak file on it, but its not the one
+//                     we want, and if someone tried to play the game with the
+//                     PostalSD disc in the drive rather than the PostalCD, then
+//                     the copy protection would flag it as invalid.  So an
+//                     additional check is now made and if the PostalSD disc
+//                     is in the drive, it will display a message to tell them
+//                     to put the PostalCD in the drive.
 //
-//		06/04/98 BRH	Removed the demo timeout check from the SPAWN build since
-//							the spawn version doesn't have any demo files available
-//							it shouldn't try to run them when the user is idle.  It
-//							was attempting to do so, and when it can't find a demo
-//							file, a message box pops up which would cause much
-//							confusion to the user.
+//      06/04/98 BRH   Removed the demo timeout check from the SPAWN build since
+//                     the spawn version doesn't have any demo files available
+//                     it shouldn't try to run them when the user is idle.  It
+//                     was attempting to do so, and when it can't find a demo
+//                     file, a message box pops up which would cause much
+//                     confusion to the user.
 //
-//		07/08/98	JMI	Removed extra Close() in checking for add on CD.  Also,
-//							moved close that was in incorrect spot in check for add on
-//							CD.  These were only annoying in Debug mode when it is
-//							flagged.
+//      07/08/98   JMI   Removed extra Close() in checking for add on CD.  Also,
+//                     moved close that was in incorrect spot in check for add on
+//                     CD.  These were only annoying in Debug mode when it is
+//                     flagged.
 //
-//		09/27/99	JMI	Changed to allow ending sequence only in any locale
-//							satisfying the CompilerOptions macro VIOLENT_LOCALE.
+//      09/27/99   JMI   Changed to allow ending sequence only in any locale
+//                     satisfying the CompilerOptions macro VIOLENT_LOCALE.
 //
-//		10/07/99	JMI	Conditional remove Add On start menu option when in
-//							SUPER_POSTAL target.
+//      10/07/99   JMI   Conditional remove Add On start menu option when in
+//                     SUPER_POSTAL target.
 //
-//		10/11/99	JMI	Changed the audio sak name to be RATEjBITS instead of
-//							RATE_BITS to differentiate it from Orig & SD Postal sound
-//							saks.
+//      10/11/99   JMI   Changed the audio sak name to be RATEjBITS instead of
+//                     RATE_BITS to differentiate it from Orig & SD Postal sound
+//                     saks.
 //
-//		02/04/00 MJR	Added dialog box to prompt for original CD if
-//							PROMPT_FOR_ORIGINAL_CD is defined.
+//      02/04/00 MJR   Added dialog box to prompt for original CD if
+//                     PROMPT_FOR_ORIGINAL_CD is defined.
 //
-//					MJR	Changed so that it now checks the HD first and the VD
-//							second when trying to load the shell sak.  This
-//							was done to fix problems with the Japan Add On.
+//               MJR   Changed so that it now checks the HD first and the VD
+//                     second when trying to load the shell sak.  This
+//                     was done to fix problems with the Japan Add On.
 //
-//		03/30/00 MJR	Changed to new macro for controlling the test for the
-//							original Postal CD to differentiate it from the test for
-//							a CD-ROM drive.
+//      03/30/00 MJR   Changed to new macro for controlling the test for the
+//                     original Postal CD to differentiate it from the test for
+//                     a CD-ROM drive.
 //
-//							Added AUDIO_SAK_SEPARATOR_CHAR to make it easy to control
-//							the separater character in audio sak filenames.
+//                     Added AUDIO_SAK_SEPARATOR_CHAR to make it easy to control
+//                     the separater character in audio sak filenames.
 //
-//		04/01/00 MJR	Fixed bug with AUDIO_SAK_SEPARATOR_CHAR.
-//							Changed so in debug mode, it continues even if not on CD.
+//      04/01/00 MJR   Fixed bug with AUDIO_SAK_SEPARATOR_CHAR.
+//                     Changed so in debug mode, it continues even if not on CD.
 //
-//		04/03/00 MJR	Modified MUST_BE_ON_CD code so that the test is bypassed if
-//							the CD path is to our development server.  This allows
-//							for easier testing.
+//      04/03/00 MJR   Modified MUST_BE_ON_CD code so that the test is bypassed if
+//                     the CD path is to our development server.  This allows
+//                     for easier testing.
 //
-//		06/24/01 MJR	Got rid of CompUSA cookie variation.  Also cleaned up a
-//							few other macros.
+//      06/24/01 MJR   Got rid of CompUSA cookie variation.  Also cleaned up a
+//                     few other macros.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -590,86 +590,86 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Total units required for loading during title sequence (estimated)
-#define TITLE_LOAD_UNITS				5000
+#define TITLE_LOAD_UNITS            5000
 
 // TEMPORARY!  Determines how S32 the fake title sequence load will take.
 // Remove this when there's real stuff being loaded.
-#define TEMP_TITLE_LOOPS				500
-#define TEMP_TITLE_TIME_PER_LOOP		10    // 100 looks normal, 10 goes extremely quickly
+#define TEMP_TITLE_LOOPS            500
+#define TEMP_TITLE_TIME_PER_LOOP      10    // 100 looks normal, 10 goes extremely quickly
 
 // Font stuff
-#define BIG_FONT_FILE					"res/fonts/system1.fnt"
-#define POSTAL_FONT_FILE				"res/fonts/smash.fnt"
-#define FONT_HEIGHT						12                // "Best" for ComicB.
-#define FONT_FORE_INDEX					255               // White or black.
-#define FONT_BACK_INDEX					0                 // Transparent.
+#define BIG_FONT_FILE               "res/fonts/system1.fnt"
+#define POSTAL_FONT_FILE            "res/fonts/smash.fnt"
+#define FONT_HEIGHT                  12                // "Best" for ComicB.
+#define FONT_FORE_INDEX               255               // White or black.
+#define FONT_BACK_INDEX               0                 // Transparent.
 
-#define NORMAL_PAL_TRAN_TIME			750
+#define NORMAL_PAL_TRAN_TIME         750
 
-#define TEMP_ALPHA_EFFECT				"2dEffects/alpha00.bmp"
+#define TEMP_ALPHA_EFFECT            "2dEffects/alpha00.bmp"
 
-#define SHELL_SAK_FILENAME				"res/shell/shell.sak"
-#define GAME_SAK_FILENAME				"res/game/game.sak"
-#define SAMPLES_SAK_SUBDIR				"res/game/"
-#define CUTSCENE_SAK_FILENAME_FRMT	"res/cutscene/cutscene%02d.sak"
+#define SHELL_SAK_FILENAME            "res/shell/shell.sak"
+#define GAME_SAK_FILENAME            "res/game/game.sak"
+#define SAMPLES_SAK_SUBDIR            "res/game/"
+#define CUTSCENE_SAK_FILENAME_FRMT   "res/cutscene/cutscene%02d.sak"
 
 // Since the game plays slightly differently on the PC than on the Mac,
 // we'll have two different sets of demos.
-#define DEFAULT_DEMO_PREFIX			"res/demos/default"
-#define DEFAULT_DEMO_SUFFIX			".dmo"
-#define DEMO_OPEN_TITLE					"Choose a Demo File to Play Back"
-#define DEMO_LEVEL_DIR					"res/demos/."
-#define ENDING_DEMO_NAME				"res/levels/single/index.rdx" // Fake name for school.dmo
+#define DEFAULT_DEMO_PREFIX         "res/demos/default"
+#define DEFAULT_DEMO_SUFFIX         ".dmo"
+#define DEMO_OPEN_TITLE               "Choose a Demo File to Play Back"
+#define DEMO_LEVEL_DIR               "res/demos/."
+#define ENDING_DEMO_NAME            "res/levels/single/index.rdx" // Fake name for school.dmo
 
-#define DEMO_DIR							"res/demos/."
-#define DEMO_EXT							".dmo"
+#define DEMO_DIR                     "res/demos/."
+#define DEMO_EXT                     ".dmo"
 
-#define LEVEL_DIR							"res/levels/."
+#define LEVEL_DIR                     "res/levels/."
 
 #if WITH_STEAMWORKS
 extern bool EnableSteamCloud;
-#define SAVEGAME_DIR						(EnableSteamCloud ? "steamcloud" : "savegame")
+#define SAVEGAME_DIR                  (EnableSteamCloud ? "steamcloud" : "savegame")
 #else
-#define SAVEGAME_DIR						("savegame")
+#define SAVEGAME_DIR                  ("savegame")
 #endif
 
-#define CHECK_FOR_ASSETS_FILENAME	"res/res.sak"
+#define CHECK_FOR_ASSETS_FILENAME   "res/res.sak"
 #define CHECK_FOR_POSTALSD_FILENAME "res/hoods/ezmart.sak"
-#define COOKIE_VALUE						0x9504cc39 //0xb5cf76dd
-#define COOKIE_FILE_POSITION			289546856 //323290320
-#define COOKIE_XOR_MASK					0x6afb39e5 //0x66666666
+#define COOKIE_VALUE                  0x9504cc39 //0xb5cf76dd
+#define COOKIE_FILE_POSITION         289546856 //323290320
+#define COOKIE_XOR_MASK               0x6afb39e5 //0x66666666
 
 // Exponent used to define gamma curve.
-#define GAMMA_EXPONENT					1.50
+#define GAMMA_EXPONENT               1.50
 
 // The directories for each type of challenge levels.
-#define TIMED_CHALLENGE_LEVEL_DIR		"res/levels/gauntlet/timed/."
-#define CHECKPOINT_CHALLENGE_LEVEL_DIR	"res/levels/gauntlet/checkpt/."
-#define GOAL_CHALLENGE_LEVEL_DIR			"res/levels/gauntlet/goal/."
-#define FLAG_CHALLENGE_LEVEL_DIR			"res/levels/gauntlet/capflag/."
+#define TIMED_CHALLENGE_LEVEL_DIR      "res/levels/gauntlet/timed/."
+#define CHECKPOINT_CHALLENGE_LEVEL_DIR   "res/levels/gauntlet/checkpt/."
+#define GOAL_CHALLENGE_LEVEL_DIR         "res/levels/gauntlet/goal/."
+#define FLAG_CHALLENGE_LEVEL_DIR         "res/levels/gauntlet/capflag/."
 
 // The titles for the open dialog for each type of challenge levels.
 #ifdef MOBILE
-#define TIMED_CHALLENGE_OPEN_TITLE			"Timed Challenge"
+#define TIMED_CHALLENGE_OPEN_TITLE         "Timed Challenge"
 #define CHECKPOINT_CHALLENGE_OPEN_TITLE       "Checkpoint Challenge"
-#define GOAL_CHALLENGE_OPEN_TITLE			"Goal Challenge"
-#define FLAG_CHALLENGE_OPEN_TITLE			"Capture the Flag Challenge"
+#define GOAL_CHALLENGE_OPEN_TITLE         "Goal Challenge"
+#define FLAG_CHALLENGE_OPEN_TITLE         "Capture the Flag Challenge"
 #else
-#define TIMED_CHALLENGE_OPEN_TITLE			"Choose Timed Challenge"
-#define CHECKPOINT_CHALLENGE_OPEN_TITLE	"Choose Checkpoint Challenge"
-#define GOAL_CHALLENGE_OPEN_TITLE			"Choose Goal Challenge"
-#define FLAG_CHALLENGE_OPEN_TITLE			"Choose Capture the Flag Challenge"
+#define TIMED_CHALLENGE_OPEN_TITLE         "Choose Timed Challenge"
+#define CHECKPOINT_CHALLENGE_OPEN_TITLE   "Choose Checkpoint Challenge"
+#define GOAL_CHALLENGE_OPEN_TITLE         "Choose Goal Challenge"
+#define FLAG_CHALLENGE_OPEN_TITLE         "Choose Capture the Flag Challenge"
 #endif
 
-#define INVALID_DIFFICULTY						-7
+#define INVALID_DIFFICULTY                  -7
 
-#define TIME_OUT_FOR_ABORT_SOUNDS		3000  // In ms.
+#define TIME_OUT_FOR_ABORT_SOUNDS      3000  // In ms.
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)					(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)               (sizeof(a) / sizeof(a[0]) )
 
 // We use this value to flag the fact that we haven't hidden the cursor.
-#define INVALID_CURSOR_SHOW_LEVEL	( (short)0x8000)
+#define INVALID_CURSOR_SHOW_LEVEL   ( (short)0x8000)
 
 
 // Various action types
@@ -739,7 +739,7 @@ S32 g_lReleaseTime;
 // Stockpile used to transfer loaded/saved data to/from the CDude's stockpile
 CStockPile g_stockpile;
 bool g_bTransferStockpile;
-short	g_sRealmNumToSave;
+short g_sRealmNumToSave;
 
 // Flag for special end of game demo sequence which is set in Play() when
 // it has been determined that the player has won.
@@ -752,13 +752,13 @@ static U32 ms_u32Cookie = COOKIE_VALUE;
 static ACTION m_action;
 static S32 m_lDemoBaseTime;
 static S32 m_lDemoTimeOut;
-static char	m_szRealmFile[RSP_MAX_PATH + 1];
+static char m_szRealmFile[RSP_MAX_PATH + 1];
 static char m_szDemoFile[RSP_MAX_PATH + 1];
 static short m_sRealmNum;
 static bool m_bJustOneRealm;
 
 // Cursor show level before we went to the background
-static short ms_sForegroundCursorShowLevel	= INVALID_CURSOR_SHOW_LEVEL;
+static short ms_sForegroundCursorShowLevel   = INVALID_CURSOR_SHOW_LEVEL;
 
 // Used by random number stuff
 static S32 m_lRandom = 1;
@@ -770,7 +770,7 @@ static S32 ms_lSynchLogSeq   = 0;
 static RFile ms_fileSynchLog;
 
 // true to create synchronization logs, false to compare to them.
-static bool	m_bWriteLogs	= false;
+static bool m_bWriteLogs   = false;
 
 static short ms_sLoadedDifficulty = INVALID_DIFFICULTY;
 
@@ -964,7 +964,7 @@ extern void TheGame(void)
    rspSetBackgroundCallback(BackgroundCall);
    rspSetForegroundCallback(ForegroundCall);
 
-   ms_u32Cookie	= ~ms_u32Cookie;
+   ms_u32Cookie   = ~ms_u32Cookie;
    g_lRegValue = 0;
    g_lExpValue = 0;
    g_lRegTime = 0;
@@ -1017,7 +1017,7 @@ extern void TheGame(void)
 #ifdef REQUIRE_POSTAL_CD
       // Check to make sure the correct CD is in the drive.  The Postal Add On Requires
       // that the original PostalCD is in the drive.
-      short	sCorrectCD = -2;
+      short sCorrectCD = -2;
 
       while (sCorrectCD == -2)
       {
@@ -1113,7 +1113,7 @@ extern void TheGame(void)
       // Check for special file, COOKIE, and size.
       if (sResult == 0)
       {
-         ms_u32Cookie	^= COOKIE_XOR_MASK;
+         ms_u32Cookie   ^= COOKIE_XOR_MASK;
 
          if (file.Open(FullPathCD(CHECK_FOR_ASSETS_FILENAME), "rb", RFile::LittleEndian) == 0)
          {
@@ -1132,19 +1132,19 @@ extern void TheGame(void)
                   }
                   else
                   {
-                     //sResult	= -4;
+                     //sResult   = -4;
                      TRACE("Game(): Cookie value is incorrect.\n");
                   }
                }
                else
                {
-                  //sResult	= -3;
+                  //sResult   = -3;
                   TRACE("Game(): Failed to read cookie.\n");
                }
             }
             else
             {
-               //sResult	= -2;
+               //sResult   = -2;
                TRACE("Game(): Cookie file is incorrect size!\n");
             }
 #endif // defined(CHECK_FOR_COOKIE)
@@ -1293,7 +1293,7 @@ extern void TheGame(void)
       if (sResult > 0)
       {
          TRACE("Game(): Read-only prefs file!\n");
-//			rspMsgBox(RSP_MB_ICN_INFO | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefReadOnly);
+//         rspMsgBox(RSP_MB_ICN_INFO | RSP_MB_BUT_OK, g_pszCriticalErrorTitle, g_pszPrefReadOnly);
       }
       else if (sResult < 0)
       {
@@ -1339,7 +1339,7 @@ static short GameCore(void)      // Returns 0 on success.
    if (pCR != NULL)
       *pCR = 0;
       #define NEXT_LINE "\r\r"
-   #endif	// WIN32
+   #endif   // WIN32
 
    rspMsgBox(
       RSP_MB_ICN_INFO | RSP_MB_BUT_OK,
@@ -1372,7 +1372,7 @@ static short GameCore(void)      // Returns 0 on success.
       "NOT a bug -- it simply indicates that your version has expired.",
       // Time String
       acTime);
-#endif	// CHECK_EXPIRATION_DATE
+#endif   // CHECK_EXPIRATION_DATE
 
    #ifndef _WIN32
    UnlockAchievement(ACHIEVEMENT_PLAY_ON_NON_WINDOWS_PLATFORM);
@@ -1402,7 +1402,7 @@ static short GameCore(void)      // Returns 0 on success.
    bool bMenuActive = false;
    ACTION actionNext  = ACTION_NOTHING;   // Initialized for safety.
 
-   Menu*	pmenuStart	= NULL;           // Next menu to start if not NULL.
+   Menu*   pmenuStart   = NULL;           // Next menu to start if not NULL.
    bool bPalTran    = true;            // true to PalTranOn() before next
                                        // menu.
    bool bTitleImage = true;            // true to display title image before
@@ -1427,7 +1427,7 @@ static short GameCore(void)      // Returns 0 on success.
       UpdateSystem();
 
       // Get next input event
-      ie.type	= RInputEvent::None;
+      ie.type   = RInputEvent::None;
       rspGetNextInputEvent(&ie);
 
       // If there's any key or button input, or the app is in BG mode (per the OS),
@@ -1452,10 +1452,10 @@ static short GameCore(void)      // Returns 0 on success.
          {
             bMenuActive = true;
             // Restore defaults.
-            pmenuStart	= NULL;
-            bPalTran		= true;
-            bTitleImage	= true;
-            bTitleMusak	= true;
+            pmenuStart   = NULL;
+            bPalTran      = true;
+            bTitleImage   = true;
+            bTitleMusak   = true;
          }
          else
          {
@@ -1487,7 +1487,7 @@ static short GameCore(void)      // Returns 0 on success.
 #endif // SPAWN
 
       // Reset next action.
-      actionNext	= ACTION_NOTHING;
+      actionNext   = ACTION_NOTHING;
 
       // Any action to handle?
       if (m_action != ACTION_NOTHING)
@@ -1561,13 +1561,13 @@ static short GameCore(void)      // Returns 0 on success.
                InitNetProbGUI();
 
                // Set next menu to start on to the current menu.
-               pmenuStart	= GetCurrentMenu();
+               pmenuStart   = GetCurrentMenu();
                // End the menu but don't PalTranOff unless we actually join a game.
                StopMenu();
                bMenuActive = false;
-               bPalTran		= false;
-               bTitleImage	= false;
-               bTitleMusak	= false;
+               bPalTran      = false;
+               bTitleImage   = false;
+               bTitleMusak   = false;
 
                // Use the net game dialog to join a multiplayer game
                CNetClient* pnetclient = new CNetClient;
@@ -1580,10 +1580,10 @@ static short GameCore(void)      // Returns 0 on success.
                      PalTranOff();
                      // Go back to the main menu when done and do
                      // all the deluxe stuff.
-                     pmenuStart	= NULL;
-                     bPalTran		= true;
-                     bTitleImage	= true;
-                     bTitleMusak	= true;
+                     pmenuStart   = NULL;
+                     bPalTran      = true;
+                     bTitleImage   = true;
+                     bTitleMusak   = true;
 
                      ASSERT(pnetclient->GetNumPlayers() >= 1);
 
@@ -1642,13 +1642,13 @@ static short GameCore(void)      // Returns 0 on success.
                InitNetProbGUI();
 
                // Set next menu to start on to the current menu.
-               pmenuStart	= GetCurrentMenu();
+               pmenuStart   = GetCurrentMenu();
                // End the menu but don't PalTranOff unless we actually join a game.
                StopMenu();
                bMenuActive = false;
-               bPalTran		= false;
-               bTitleImage	= false;
-               bTitleMusak	= false;
+               bPalTran      = false;
+               bTitleImage   = false;
+               bTitleMusak   = false;
 
                // Use the net game dialog to host a multiplayer game
                CNetClient* pnetclient = new CNetClient;
@@ -1662,10 +1662,10 @@ static short GameCore(void)      // Returns 0 on success.
                      PalTranOff();
                      // Go back to the main menu when done and do
                      // all the deluxe stuff.
-                     pmenuStart	= NULL;
-                     bPalTran		= true;
-                     bTitleImage	= true;
-                     bTitleMusak	= true;
+                     pmenuStart   = NULL;
+                     bPalTran      = true;
+                     bTitleImage   = true;
+                     bTitleMusak   = true;
 
                      ASSERT(pnetclient->GetNumPlayers() >= 1);
 
@@ -1716,16 +1716,16 @@ static short GameCore(void)      // Returns 0 on success.
          //------------------------------------------------------------------------------
          case ACTION_PLAY_CHALLENGE:
             // Remember menu to go back to.
-            pmenuStart	= GetCurrentMenu();
+            pmenuStart   = GetCurrentMenu();
             // End the menu.
             StopMenu();
             bMenuActive = false;
             // Turn off paltran but remember to restore.
             PalTranOff();
-            bPalTran		= true;
+            bPalTran      = true;
             // Remember to show title, but no musak.
-            bTitleImage	= true;
-            bTitleMusak	= false;
+            bTitleImage   = true;
+            bTitleMusak   = false;
 
             // Note that m_sRealmNum, m_szRealmFile, and m_bJustOneRealm are
             // set via the callback, Game_StartChallengeGame().
@@ -1759,16 +1759,16 @@ static short GameCore(void)      // Returns 0 on success.
          case ACTION_PLAY_ADDON:
 #ifndef SPAWN
             // Remember menu to go back to.
-            pmenuStart	= GetCurrentMenu();
+            pmenuStart   = GetCurrentMenu();
             // End the menu.
             StopMenu();
             bMenuActive = false;
             // Turn off paltran but remember to restore.
             PalTranOff();
-            bPalTran		= true;
+            bPalTran      = true;
             // Remember to show title, but no musak.
-            bTitleImage	= true;
-            bTitleMusak	= false;
+            bTitleImage   = true;
+            bTitleMusak   = false;
 
             // Note that m_sRealmNum, m_szRealmFile, and m_bJustOneRealm are
             // set via the callback, Game_StartChallengeGame().
@@ -1839,7 +1839,7 @@ static short GameCore(void)      // Returns 0 on success.
                // If there is now a demo filename . . .
                if (m_szDemoFile[0] != '\0')
                {
-                  RFile	fileDemo;
+                  RFile fileDemo;
                   usDemoCount++;
                   if (fileDemo.Open(m_szDemoFile, "rb", RFile::LittleEndian) == 0)
                   {
@@ -1847,7 +1847,7 @@ static short GameCore(void)      // Returns 0 on success.
                      char szRealmFile[RSP_MAX_PATH];
                      fileDemo.Read(szRealmFile);
                      // Read whether it's a full path.
-                     short	sRealmFileIsFullPath;
+                     short sRealmFileIsFullPath;
                      fileDemo.Read(&sRealmFileIsFullPath);
                      if (!fileDemo.Error())
                      {
@@ -1959,7 +1959,7 @@ static short GameCore(void)      // Returns 0 on success.
 
                // Get name of realm to play
                char szRealmFile[RSP_MAX_PATH];
-               short	sGetRealmResult	= GetRealmToRecord(szRealmFile, sizeof(szRealmFile));
+               short sGetRealmResult   = GetRealmToRecord(szRealmFile, sizeof(szRealmFile));
                switch (sGetRealmResult)
                {
                case 0:        // Success.
@@ -1977,7 +1977,7 @@ static short GameCore(void)      // Returns 0 on success.
                   if (GetDemoFile(szDemoFile, sizeof(szDemoFile)) == 0)
                   {
                      // Open demo file
-                     RFile	fileDemo;
+                     RFile fileDemo;
                      if (fileDemo.Open(szDemoFile, "wb", RFile::LittleEndian) == 0)
                      {
                         // Write name of realm file
@@ -2220,10 +2220,10 @@ static short GetRealmToRecord(   // Returns 0 on success, negative on error, 1 i
    short sResult = 0;
 
    // Static so dialog will "remember" the previously-used name
-   static char	szFile[RSP_MAX_PATH]	= "";
+   static char szFile[RSP_MAX_PATH]   = "";
 
    // If not yet used, start out in appropriate directory
-//	if (szFile[0] == '\0')
+//   if (szFile[0] == '\0')
    strcpy(szFile, FullPathHD(LEVEL_DIR));
 
    // Display open dialog to let user choose a file
@@ -2231,7 +2231,7 @@ static short GetRealmToRecord(   // Returns 0 on success, negative on error, 1 i
    if (sResult >= 0)
    {
       // Convert path to RSPiX path.
-      char*	pszFullPath	= rspPathFromSystem(szFile);
+      char*   pszFullPath   = rspPathFromSystem(szFile);
       // Check if result will fit into specified buffer
       if (strlen(pszFullPath) < sMaxFileLen)
       {
@@ -2254,16 +2254,16 @@ static short GetRealmToRecord(   // Returns 0 on success, negative on error, 1 i
 ////////////////////////////////////////////////////////////////////////////////
 extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 if
                                  // not subpathable (i.e., returned path is full path).
-   char*	pszFullPath,            // In:  Full path to be relative to (system format).
+   char*   pszFullPath,            // In:  Full path to be relative to (system format).
    char* pszBoxTitle,            // In:  Title of box.
-   char*	pszDefFileName,         // In:  Default filename (system format).
+   char*   pszDefFileName,         // In:  Default filename (system format).
    char* pszChosenFileName,      // Out: User's choice (system format).
    short sStrSize,               // In:  Amount of memory pointed to by pszChosenFileName.
-   char*	pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
-                                 //	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
-                                 // Note: Cannot use '.' in filter.  Preceding '.' ignored.
+   char*   pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
+                                   //   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+                                   // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 {
-   short	sResult;
+   short sResult;
 
    char szBasePath[RSP_MAX_PATH];
    S32 lBasePathLen   = strlen(pszFullPath);
@@ -2313,7 +2313,7 @@ extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 i
          else
          {
             // Not subpathable.
-            sResult	= 1;
+            sResult   = 1;
             // Return fullpath.
             // Copy full path to destination.
             strcpy(pszChosenFileName, szChosenFileName);
@@ -2322,7 +2322,7 @@ extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 i
    }
    else
    {
-      sResult	= -2;
+      sResult   = -2;
       TRACE("SubPathOpenBox(): pszFullPath string too S32.\n");
    }
 
@@ -2414,7 +2414,7 @@ inline void GetSoundPaths(    // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 static short OpenSaks(void)
 {
-   short	sResult	= 0;  // Assume success.
+   short sResult   = 0;    // Assume success.
 
    // Set base paths.
    g_resmgrShell.SetBasePath(g_GameSettings.m_szNoSakDir);
@@ -2439,7 +2439,7 @@ static short OpenSaks(void)
    ////////////////////////////////////////////////////////////////////////////
 
    // Get the current audio mode, if any.
-   short	sInSoundMode;
+   short sInSoundMode;
    S32 lSamplesPerSec;
    S32 lDevBitsPerSample;
    S32 lSrcBitsPerSample;
@@ -2478,21 +2478,21 @@ static short OpenSaks(void)
       {
          // Set it to the mix quality.  This is a just in case as currently
          // these are always the same as set in main.cpp.
-         lSrcBitsPerSample	= lMixBitsPerSample;
+         lSrcBitsPerSample   = lMixBitsPerSample;
       }
 
       // Note that there is a real sound mode.
-      sInSoundMode	= TRUE;
+      sInSoundMode   = TRUE;
    }
    else
    {
       // In the case that there is no audio mode we still need to access one set of
       // samples so we assume Vanilla settings b/c these use less memory.
-      lSamplesPerSec	= MAIN_VANILLA_AUDIO_RATE;
-      lDevBitsPerSample	= lMixBitsPerSample = lSrcBitsPerSample = MAIN_VANILLA_AUDIO_BITS;
+      lSamplesPerSec   = MAIN_VANILLA_AUDIO_RATE;
+      lDevBitsPerSample   = lMixBitsPerSample = lSrcBitsPerSample = MAIN_VANILLA_AUDIO_BITS;
 
       // Note that there is no real sound mode.
-      sInSoundMode	= FALSE;
+      sInSoundMode   = FALSE;
    }
 
    // Actual sample rates can (and do) vary from system to system.  We need
@@ -2544,7 +2544,7 @@ static short OpenSaks(void)
             szSoundQuality);
 
          // Failure.
-         sResult	= 1;
+         sResult   = 1;
       }
       else
       {
@@ -2555,7 +2555,7 @@ static short OpenSaks(void)
          {
             S32 lSamplesPerSec;
             S32 lBitsPerSample;
-         }	amodes[]	=
+         }   amodes[]   =
          {
             // Put the smaller ones first b/c they use less memory.
             { 22050, 8 },
@@ -2563,7 +2563,7 @@ static short OpenSaks(void)
             { 22050, 16 },
          };
 
-         short	sModeIndex;
+         short sModeIndex;
          bool bSakFound   = false;
 
          for (sModeIndex = 0; sModeIndex < NUM_ELEMENTS(amodes) && bSakFound == false; sModeIndex++)
@@ -2576,10 +2576,10 @@ static short OpenSaks(void)
             {
                // Set values to determine SampleMaster quality.
                // This is probably not necessary when using no sound but let's be safe.
-               lSamplesPerSec	= amodes[sModeIndex].lSamplesPerSec;
-               lSrcBitsPerSample	= amodes[sModeIndex].lBitsPerSample;
+               lSamplesPerSec   = amodes[sModeIndex].lSamplesPerSec;
+               lSrcBitsPerSample   = amodes[sModeIndex].lBitsPerSample;
                // Got one.
-               bSakFound	= true;
+               bSakFound   = true;
             }
          }
 
@@ -2592,16 +2592,16 @@ static short OpenSaks(void)
                g_pszNoSoundFiles);
 
             // Failure.
-            sResult	= 1;
+            sResult   = 1;
          }
       }
    }
 
    // Set the appropriate quality.
-   g_GameSettings.m_eCurSoundQuality	= (SampleMaster::SoundQuality)( ( (lSamplesPerSec / 11025) - 1) * 2 + ( (lDevBitsPerSample / 8) - 1) );
+   g_GameSettings.m_eCurSoundQuality   = (SampleMaster::SoundQuality)( ( (lSamplesPerSec / 11025) - 1) * 2 + ( (lDevBitsPerSample / 8) - 1) );
 
    // Set volumes based on quality's category adjustor.
-   short	i;
+   short i;
    for (i = 0; i < SampleMaster::MAX_NUM_SOUND_CATEGORIES; i++)
    {
       SetCategoryVolume((SampleMaster::SoundCategory)i, g_GameSettings.m_asCategoryVolumes[i] );
@@ -2673,13 +2673,13 @@ static short LoadAssets(void)
    S32 lEndTime    = lLastTime + lTotalTime;
    do
    {
-      lTime		= rspGetMilliseconds();
+      lTime      = rspGetMilliseconds();
 
       UpdateSystem();
 
       DoTitle(lTime - lLastTime);
 
-      lLastTime	= lTime;
+      lLastTime   = lTime;
 
    } while (lTime < lEndTime && rspGetQuitStatus() == FALSE);
 
@@ -2731,7 +2731,7 @@ extern void Game_StartSinglePlayerGame(
       m_bJustOneRealm = false;
       break;
       #if defined(START_MENU_ADDON_ITEM)
-         #define START_MENU_ID_OFFSET	0
+         #define START_MENU_ID_OFFSET   0
    // "ADD-ON LEVELS"
    case 1:
       m_action = ACTION_PLAY_ADDON;
@@ -2740,12 +2740,12 @@ extern void Game_StartSinglePlayerGame(
       m_bJustOneRealm = false;
       break;
       #else
-         #define START_MENU_ID_OFFSET	-1
+         #define START_MENU_ID_OFFSET   -1
       #endif
 
 #ifdef MOBILE
    case 2 + START_MENU_ID_OFFSET:
-      m_action	= ACTION_CONTINUE_GAME;
+      m_action   = ACTION_CONTINUE_GAME;
       break;
    case 3 + START_MENU_ID_OFFSET:
 #else
@@ -2755,7 +2755,7 @@ extern void Game_StartSinglePlayerGame(
         #ifndef LOADLEVEL_REMOVED
    {
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
+      static char szFile[RSP_MAX_PATH]   = "";
 
       // If not yet used, start out in appropriate directory
       if (szFile[0] == '\0')
@@ -2776,10 +2776,10 @@ extern void Game_StartSinglePlayerGame(
 
    // For the final version, the LOAD above will actually be this, but
    // it is still useful for testing the way it is now, so I'll add this
-   //	as a separate option - Load Saved Game
+   //   as a separate option - Load Saved Game
    case 3 + START_MENU_ID_OFFSET:
         #endif
-      m_action	= ACTION_LOAD_GAME;
+      m_action   = ACTION_LOAD_GAME;
       break;
 #if (TARGET == POSTAL_2015)
    case 3 + START_MENU_ID_OFFSET:
@@ -2892,7 +2892,7 @@ extern void Game_HostMultiPlayerGame(
 extern void Game_StartDemoGame(
    short sMenuItem)
 {
-   char*	pszDemoFile	= NULL;
+   char*   pszDemoFile   = NULL;
    char szLevelDir[RSP_MAX_PATH]   = "";
    char szTitle[256] = "";
 
@@ -2922,7 +2922,7 @@ extern void Game_StartDemoGame(
    case 1:
       // Clear demo filename.  This signifies that we should play one of
       // the auto demos.
-      m_szDemoFile[0]	= '\0';
+      m_szDemoFile[0]   = '\0';
       m_action = ACTION_DEMO_PLAYBACK;
       break;
 
@@ -3008,8 +3008,8 @@ extern void Game_ControlsMenu(
       // Edit joystick settings.
       case 2:
 #if defined(ALLOW_JOYSTICK)
-         m_action	= ACTION_EDIT_INPUT_SETTINGS;
-#endif	// defined(ALLOW_JOYSTICK)
+         m_action   = ACTION_EDIT_INPUT_SETTINGS;
+#endif   // defined(ALLOW_JOYSTICK)
          break;
       }
 
@@ -3049,7 +3049,7 @@ extern void Game_AudioOptionsChoice(   // Returns nothing.
 extern void Game_StartChallengeGame(   // Returns nothing.
    short sMenuItem)                    // In:  Chosen menu item.
 {
-   char*	pszRealmFile	= NULL;
+   char*   pszRealmFile   = NULL;
    char szLevelDir[RSP_MAX_PATH]   = "";
    char szTitle[256]               = "";
 
@@ -3067,8 +3067,8 @@ extern void Game_StartChallengeGame(   // Returns nothing.
    case 1:
    {
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
-      pszRealmFile	= szFile;
+      static char szFile[RSP_MAX_PATH]   = "";
+      pszRealmFile   = szFile;
       strcpy(szLevelDir, TIMED_CHALLENGE_LEVEL_DIR);
       strcpy(szTitle, TIMED_CHALLENGE_OPEN_TITLE);
 
@@ -3079,8 +3079,8 @@ extern void Game_StartChallengeGame(   // Returns nothing.
    case 2:
    {
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
-      pszRealmFile	= szFile;
+      static char szFile[RSP_MAX_PATH]   = "";
+      pszRealmFile   = szFile;
       strcpy(szLevelDir, GOAL_CHALLENGE_LEVEL_DIR);
       strcpy(szTitle, GOAL_CHALLENGE_OPEN_TITLE);
 
@@ -3091,8 +3091,8 @@ extern void Game_StartChallengeGame(   // Returns nothing.
    case 3:
    {
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
-      pszRealmFile	= szFile;
+      static char szFile[RSP_MAX_PATH]   = "";
+      pszRealmFile   = szFile;
       strcpy(szLevelDir, FLAG_CHALLENGE_LEVEL_DIR);
       strcpy(szTitle, FLAG_CHALLENGE_OPEN_TITLE);
 
@@ -3103,8 +3103,8 @@ extern void Game_StartChallengeGame(   // Returns nothing.
    case 4:
    {
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
-      pszRealmFile	= szFile;
+      static char szFile[RSP_MAX_PATH]   = "";
+      pszRealmFile   = szFile;
       strcpy(szLevelDir, CHECKPOINT_CHALLENGE_LEVEL_DIR);
       strcpy(szTitle, CHECKPOINT_CHALLENGE_OPEN_TITLE);
 
@@ -3132,9 +3132,9 @@ extern void Game_StartChallengeGame(   // Returns nothing.
          char szTmp[RSP_MAX_PATH];
          strcpy(szTmp, m_szRealmFile);
          rspPathFromSystem(szTmp, m_szRealmFile);
-         m_action				= ACTION_PLAY_CHALLENGE;
-         m_sRealmNum			= -1;
-         m_bJustOneRealm	= false;
+         m_action            = ACTION_PLAY_CHALLENGE;
+         m_sRealmNum         = -1;
+         m_bJustOneRealm   = false;
       }
    }
 
@@ -3222,11 +3222,11 @@ extern short Game_LoadPlayersGame(
       rf.Read(psDifficulty);
       // Store as 16 bit value (in case Read() fails (we want to keep original
       // functionality which read directly into m_action) ).
-      short	sAction	= (short)*paction;
+      short sAction   = (short)*paction;
       // Read as 16 bit.
       rf.Read(&sAction);
       // Store as action.
-      *paction			= (ACTION)sAction;
+      *paction         = (ACTION)sAction;
 
       rf.Read(&m_sRealmNum);
       g_stockpile.Load(&rf, ulFileVersion);
@@ -3309,14 +3309,14 @@ void GameEndingSequence(void)
       // This is the special end of game demo, so set up the demo name
       sprintf(m_szDemoFile, "%s", FullPathCD(ENDING_DEMO_NAME));
 
-      RFile	fileDemo;
+      RFile fileDemo;
       if (fileDemo.Open(m_szDemoFile, "rb", RFile::LittleEndian) == 0)
       {
          // Read name of realm file
          char szRealmFile[RSP_MAX_PATH];
          fileDemo.Read(szRealmFile);
          // Read whether it's a full path.
-         short	sRealmFileIsFullPath;
+         short sRealmFileIsFullPath;
          fileDemo.Read(&sRealmFileIsFullPath);
          if (!fileDemo.Error())
          {
@@ -3324,9 +3324,9 @@ void GameEndingSequence(void)
             if (InputDemoLoad(&fileDemo) == 0)
             {
                // End menu (now that we know there were no errors)
-//					StopMenu();
-//					PalTranOff();
-//					bMenuActive = false;
+//               StopMenu();
+//               PalTranOff();
+//               bMenuActive = false;
 
                Play(
                   NULL,                         // No client (not network game)
@@ -3410,10 +3410,10 @@ void GameEndingSequence(void)
 // name (excluding the path).
 ////////////////////////////////////////////////////////////////////////////////
 static char* GetFileNameFromPath(   // Returns file name.
-   char*	pszFullPath)               // In:  File's full path.
+   char*   pszFullPath)               // In:  File's full path.
 {
    // Scan back for the separator or the beginning.
-   char*	pszIndex	= pszFullPath + (strlen(pszFullPath) - 1);
+   char*   pszIndex   = pszFullPath + (strlen(pszFullPath) - 1);
 
    while (pszIndex >= pszFullPath && *pszIndex != RSP_SYSTEM_PATH_SEPARATOR)
    {
@@ -3447,7 +3447,7 @@ static void OpenSynchLogs(       // Returns nothing.
    }
 
    #if defined(_DEBUG) || defined(TRACENASSERT)
-   ms_lSynchLogSeq	= 0;
+   ms_lSynchLogSeq   = 0;
    if (g_GameSettings.m_szSynchLogFile[0] != '\0')
    {
       if (ms_fileSynchLog.Open(
@@ -3463,9 +3463,9 @@ static void OpenSynchLogs(       // Returns nothing.
                g_GameSettings.m_szSynchLogFile);
       }
    }
-   #endif	// defined(_DEBUG) || defined(TRACENASSERT)
+   #endif   // defined(_DEBUG) || defined(TRACENASSERT)
 
-   m_bWriteLogs	= bWriteLogs;
+   m_bWriteLogs   = bWriteLogs;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3487,7 +3487,7 @@ static void CloseSynchLogs(void) // Returns nothing.
    {
       ms_fileSynchLog.Close();
    }
-   #endif	// defined(_DEBUG) || defined(TRACENASSERT)
+   #endif   // defined(_DEBUG) || defined(TRACENASSERT)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3501,9 +3501,9 @@ static void CloseSynchLogs(void) // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 extern int SynchLog( // Result of expr.
    double expr,      // In:  Expression to evaluate.
-   char*		pszFile, // In:  Calling file.
+   char*      pszFile, // In:  Calling file.
    S32 lLine,        // In:  Calling line.
-   char*		pszExpr, // In:  Original C++ source expression.
+   char*      pszExpr, // In:  Original C++ source expression.
    U32 u32User)      // In:  A user value that is intended to be consistent.
 {
    #if defined(_DEBUG) || defined(TRACENASSERT)
@@ -3541,10 +3541,10 @@ extern int SynchLog( // Result of expr.
                 &u32UserIn) == 6)
          {
             // Verify . . .
-            if (	(rspStricmp(szFileIn, GetFileNameFromPath(pszFile) ) != 0)
-                  || (lLineIn != lLine)
-                  || (exprIn != expr)
-                  || (u32UserIn != u32User) )
+            if (   (rspStricmp(szFileIn, GetFileNameFromPath(pszFile) ) != 0)
+                   || (lLineIn != lLine)
+                   || (exprIn != expr)
+                   || (u32UserIn != u32User) )
             {
                char szOut[2048];
                sprintf(
@@ -3588,7 +3588,7 @@ extern int SynchLog( // Result of expr.
       RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
       "Postal",
       "Synchronization logging is disabled for release mode for safety.\n");
-#endif	// defined(_DEBUG) || defined(TRACENASSERT)
+#endif   // defined(_DEBUG) || defined(TRACENASSERT)
 
    return expr;
 }
@@ -3684,7 +3684,7 @@ static void GameGetRegistry(void)
    Decrypt((char*) szKey, szName, sEncryptedKeyLength);
    szName[sEncryptedKeyLength - 2] = 0;
    lError = RegCreateKeyEx(HKEY_LOCAL_MACHINE, szName, 0,
-                           "",	REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
+                           "",   REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                            &hkResult, &dwDisposition);
    // Destroy the source and result.
    memset(szName, 0xeb, sEncryptedKeyLength);
@@ -3896,7 +3896,7 @@ static void GameSetRegistry(void)
    Decrypt((char*) szKey, szName, sEncryptedKeyLength);
    szName[sEncryptedKeyLength - 2] = 0;
    lError = RegCreateKeyEx(HKEY_LOCAL_MACHINE, szName, 0,
-                           "",	REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
+                           "",   REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                            &hkResult, &dwDisposition);
    memset(szName, 0xea, sEncryptedKeyLength);
 
@@ -3993,9 +3993,9 @@ extern S32 GetRandomDebug(char* FILE_MACRO, S32 LINE_MACRO)
             GetFileNameFromPath(FILE_MACRO),
             LINE_MACRO,
             lNewVal);
-//				m_pfileRandom->Write(lNewVal);
-//				m_pfileRandom->Write(LINE_MACRO);
-//				m_pfileRandom->Write(FILE_MACRO);
+//            m_pfileRandom->Write(lNewVal);
+//            m_pfileRandom->Write(LINE_MACRO);
+//            m_pfileRandom->Write(FILE_MACRO);
       }
       else
       {
@@ -4008,9 +4008,9 @@ extern S32 GetRandomDebug(char* FILE_MACRO, S32 LINE_MACRO)
             szSavedFile,
             &lSavedLine,
             &lSavedVal);
-//				m_pfileRandom->Read(&lSavedVal);
-//				m_pfileRandom->Read(&lSavedLine);
-//				m_pfileRandom->Read(szSavedFile);
+//            m_pfileRandom->Read(&lSavedVal);
+//            m_pfileRandom->Read(&lSavedLine);
+//            m_pfileRandom->Read(szSavedFile);
 
          if ((lSavedVal != lNewVal) || (lSavedLine != LINE_MACRO) || (rspStricmp(szSavedFile, GetFileNameFromPath(FILE_MACRO) ) != 0))
          {
@@ -4040,7 +4040,7 @@ extern S32 GetRandom(void)
    // Get next random number
    return (((m_lRandom = m_lRandom * 214013L + 2531011L) >> 16) & 0x7fff);
 }
-#endif	// defined(_DEBUG) || defined(TRACENASSERT).
+#endif   // defined(_DEBUG) || defined(TRACENASSERT).
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4105,7 +4105,7 @@ extern void PalTranOff(void)
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Set gamma/brighten-effect value.  Note that there is no value that results
-//	in identity.  See Brightness / contrast below:
+//   in identity.  See Brightness / contrast below:
 // RIGHT NOW THIS FUNCTION IS BEING USED TO CALL BRIGHTNESS CONTRAST:
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -4128,24 +4128,24 @@ extern void SetGammaLevel( // Returns nothing.
    // With this scheme, contrast can never be more than +1.0 or less than 0.0
    SetBrightnessContrast(dBrightness, dContrast);
    // Update settings.
-   g_GameSettings.m_sGammaVal	= sBase;
+   g_GameSettings.m_sGammaVal   = sBase;
 
    return; // don't set gamma for now
 
-   U8	au8RedMap[256];
-   U8	au8GreenMap[256];
-   U8	au8BlueMap[256];
+   U8 au8RedMap[256];
+   U8 au8GreenMap[256];
+   U8 au8BlueMap[256];
 
    short i;
-   short	sClipVal;
-   for (	i = 0;
-         i < 256;
-         i++)
+   short sClipVal;
+   for (   i = 0;
+           i < 256;
+           i++)
    {
-      sClipVal	= MAX((short)0, MIN(short(pow((double)i / 100.0, GAMMA_EXPONENT) * sBase), (short)255));
-      au8RedMap[i]	= (U8)sClipVal;
-      au8GreenMap[i]	= (U8)sClipVal;
-      au8BlueMap[i]	= (U8)sClipVal;
+      sClipVal   = MAX((short)0, MIN(short(pow((double)i / 100.0, GAMMA_EXPONENT) * sBase), (short)255));
+      au8RedMap[i]   = (U8)sClipVal;
+      au8GreenMap[i]   = (U8)sClipVal;
+      au8BlueMap[i]   = (U8)sClipVal;
    }
 
    // Update map.
@@ -4161,12 +4161,12 @@ extern void SetGammaLevel( // Returns nothing.
    rspUpdatePalette();
 
    // Update settings.
-   g_GameSettings.m_sGammaVal	= sBase;
+   g_GameSettings.m_sGammaVal   = sBase;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Set Brightness and Contrast.  Zero (neutral) values yield and identity
+//   Set Brightness and Contrast.  Zero (neutral) values yield and identity
 // curve.  Valid input is from -1 to 1.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -4175,9 +4175,9 @@ extern void  SetBrightnessContrast(
    double dContrast                    // -1.0 = low contrast, 0.0 = normal, 1.0 = high
    )
 {
-   U8	au8RedMap[256];
-   U8	au8GreenMap[256];
-   U8	au8BlueMap[256];
+   U8 au8RedMap[256];
+   U8 au8GreenMap[256];
+   U8 au8BlueMap[256];
 
    // I will scale the ranges to within reasonable limits:
    ASSERT( (dBrightness >= -1.0) || (dBrightness <= 1.0));
@@ -4197,9 +4197,9 @@ extern void  SetBrightnessContrast(
       if (sLev < 0) sLev = 0;
       if (sLev > 255) sLev = 255;
 
-      au8RedMap[i]	= (U8)sLev;
-      au8GreenMap[i]	= (U8)sLev;
-      au8BlueMap[i]	= (U8)sLev;
+      au8RedMap[i]   = (U8)sLev;
+      au8GreenMap[i]   = (U8)sLev;
+      au8BlueMap[i]   = (U8)sLev;
    }
 
    // Update map.
@@ -4437,10 +4437,10 @@ extern char* FullPathHoods(                        // Returns full path in syste
 
 
 extern char* FullPathCustom(                    // Returns full path in system format
-   char*	pszFullPath,                           // In:  Full path in in RSPiX format.
+   char*   pszFullPath,                           // In:  Full path in in RSPiX format.
    char* pszPartialPath)                        // In:  Partial path in RSPiX format.
 {
-   char*	pszFullSystemPath	= rspPathToSystem(pszFullPath);
+   char*   pszFullSystemPath   = rspPathToSystem(pszFullPath);
    // Start with proper base path
    ASSERT(strlen(pszFullSystemPath) < RSP_MAX_PATH);
    strcpy(m_acFullPath, pszFullSystemPath);
@@ -4598,7 +4598,7 @@ static void BackgroundCall(void)
    if (ms_sForegroundCursorShowLevel == INVALID_CURSOR_SHOW_LEVEL)
    {
       // Store current cursor show level and then make cursor visible
-      ms_sForegroundCursorShowLevel	= rspGetMouseCursorShowLevel();
+      ms_sForegroundCursorShowLevel   = rspGetMouseCursorShowLevel();
       rspSetMouseCursorShowLevel(1);
    }
 }
@@ -4627,7 +4627,7 @@ static void ForegroundCall(void)
    {
       // Restore previous cursor show level
       rspSetMouseCursorShowLevel(ms_sForegroundCursorShowLevel);
-      ms_sForegroundCursorShowLevel	= 0;
+      ms_sForegroundCursorShowLevel   = 0;
 
       // Reset the input.
       ClearLocalInput();
@@ -4645,13 +4645,13 @@ static void ForegroundCall(void)
 ////////////////////////////////////////////////////////////////////////////////
 static short GetGameDifficulty(void)   // Returns cached game difficulty.
 {
-   short sDifficulty	= g_GameSettings.m_sDifficulty;
+   short sDifficulty   = g_GameSettings.m_sDifficulty;
 
    // If there is a cached difficulty . . .
    if (ms_sLoadedDifficulty != INVALID_DIFFICULTY)
    {
       // Return cached difficulty.
-      sDifficulty	= ms_sLoadedDifficulty;
+      sDifficulty   = ms_sLoadedDifficulty;
 
       // Clear cache.
       ms_sLoadedDifficulty = INVALID_DIFFICULTY;

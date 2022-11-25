@@ -19,28 +19,28 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/18/97 JMI	Started.
+//      02/18/97 JMI   Started.
 //
-//		02/19/97	JMI	Now Fire() and FireDeluxe() take all 3 CSmash masks.
+//      02/19/97   JMI   Now Fire() and FireDeluxe() take all 3 CSmash masks.
 //
-//		03/10/97	JMI	Added m_u16IdTarget (last known target's ID).
+//      03/10/97   JMI   Added m_u16IdTarget (last known target's ID).
 //
-//		03/21/97	JMI	Added optional tracers.
+//      03/21/97   JMI   Added optional tracers.
 //
-//		04/02/97	JMI	Changed ms_ati to m_ati.
-//							Also, added ms_u8TracerIndex and m_sCurTracerPos.
+//      04/02/97   JMI   Changed ms_ati to m_ati.
+//                     Also, added ms_u8TracerIndex and m_sCurTracerPos.
 //
-//		04/24/97	JMI	Added smid parameter specifying type of ammo noise to
-//							FireDeluxe() and Flare().
-//							Also, added vertical bullet angle to FireDeluxe() and
-//							Fire().
+//      04/24/97   JMI   Added smid parameter specifying type of ammo noise to
+//                     FireDeluxe() and Flare().
+//                     Also, added vertical bullet angle to FireDeluxe() and
+//                     Fire().
 //
-//		06/11/97	JMI	Added Preload() for loading assets used during play.
+//      06/11/97   JMI   Added Preload() for loading assets used during play.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		09/18/97	JMI	UpdateTracerColor() now takes a realm ptr.
+//      09/18/97   JMI   UpdateTracerColor() now takes a realm ptr.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -101,10 +101,10 @@ public:
 // Macros.
 enum
 {
-   TargetHistoryTotalPeriod	= 1000,        // Target history duration in ms.
-   TargetHistoryUpdatePeriod	= 100,         // Duration between history
-                                             // updates.
-   TargetUpdatesPerPeriod	= TargetHistoryTotalPeriod / TargetHistoryUpdatePeriod
+   TargetHistoryTotalPeriod   = 1000,        // Target history duration in ms.
+   TargetHistoryUpdatePeriod   = 100,         // Duration between history
+                                              // updates.
+   TargetUpdatesPerPeriod   = TargetHistoryTotalPeriod / TargetHistoryUpdatePeriod
 };
 
 // History info.
@@ -123,8 +123,8 @@ typedef struct
 public:
 CBulletFest()
 {
-   m_u16IdTarget		= CIdBank::IdNil;
-   m_sCurTracerPos	= 0;
+   m_u16IdTarget      = CIdBank::IdNil;
+   m_sCurTracerPos   = 0;
 }
 
 ~CBulletFest()
@@ -141,9 +141,9 @@ public:
 // irratically(sp?) and more often are harder to hit.
 void UpdateTarget(         // Returns nothing.
    short sAngle,           // In:  Angle of aim in degrees (on X/Z plane).
-   short	sX,               // In:  Aim position.
-   short	sY,               // In:  Aim position.
-   short	sZ,               // In:  Aim position.
+   short sX,                 // In:  Aim position.
+   short sY,                 // In:  Aim position.
+   short sZ,                 // In:  Aim position.
    CRealm* pRealm);        // In:  Realm in which to target.
 
 // Launch a bullet, create a muzzle flare at the src (sX, sY, sZ), and,
@@ -153,34 +153,34 @@ void UpdateTarget(         // Returns nothing.
 // by calling Fire(), Flare(), Ricochet(), and Impact().
 bool FireDeluxe(                    // Returns what and as Fire() would.
    short sAngleY,                   // In:  Angle of launch in degrees (on X/Z plane).
-   short	sAngleZ,                   // In:  Angle of launch in degrees (on X/Y plane).
-   short	sX,                        // In:  Launch position.
-   short	sY,                        // In:  Launch position.
-   short	sZ,                        // In:  Launch position.
-   short	sRange,                    // In:  Maximum distance.
+   short sAngleZ,                     // In:  Angle of launch in degrees (on X/Y plane).
+   short sX,                          // In:  Launch position.
+   short sY,                          // In:  Launch position.
+   short sZ,                          // In:  Launch position.
+   short sRange,                      // In:  Maximum distance.
    CRealm* pRealm,                  // In:  Realm in which to fire.
    CSmash::Bits bitsInclude,        // In:  Mask of CSmash masks that this bullet can hit.
    CSmash::Bits bitsDontCare,       // In:  Mask of CSmash masks that this bullet does not care to hit.
    CSmash::Bits bitsExclude,        // In:  Mask of CSmash masks that this bullet cannot hit.
-   short	sMaxRicochetAngle,         // In:  Maximum angle with terrain that can cause
-                                    // a ricochet (on X/Z plane).
-   short	sMaxRicochets,             // In:  The maximum number of ricochets.
+   short sMaxRicochetAngle,           // In:  Maximum angle with terrain that can cause
+                                      // a ricochet (on X/Z plane).
+   short sMaxRicochets,               // In:  The maximum number of ricochets.
    short* psX,                      // Out: Hit position.
    short* psY,                      // Out: Hit position.
    short* psZ,                      // Out: Hit position.
    CThing** ppthing,                // Out: Ptr to thing hit or NULL.
    bool bTracer = true,             // In:  Draw a tracer at random point aS32 path.
-   SampleMasterID	smid	= g_smidBulletFire);       // In:  Use ammo sample.
+   SampleMasterID smid   = g_smidBulletFire);         // In:  Use ammo sample.
 
 
 // Launch a bullet.
 bool Fire(                          // Returns true if a hit, false otherwise.
    short sAngleY,                   // In:  Angle of launch in degrees (on X/Z plane).
-   short	sAngleZ,                   // In:  Angle of launch in degrees (on X/Y plane).
-   short	sX,                        // In:  Launch position.
-   short	sY,                        // In:  Launch position.
-   short	sZ,                        // In:  Launch position.
-   short	sRange,                    // In:  Maximum distance.
+   short sAngleZ,                     // In:  Angle of launch in degrees (on X/Y plane).
+   short sX,                          // In:  Launch position.
+   short sY,                          // In:  Launch position.
+   short sZ,                          // In:  Launch position.
+   short sRange,                      // In:  Maximum distance.
    CRealm* pRealm,                  // In:  Realm in which to fire.
    CSmash::Bits bitsInclude,        // In:  Mask of CSmash masks that this bullet can hit.
    CSmash::Bits bitsDontCare,       // In:  Mask of CSmash masks that this bullet does not care to hit.
@@ -194,26 +194,26 @@ bool Fire(                          // Returns true if a hit, false otherwise.
 // Create a muzzle flare effect.
 void Flare(                      // Returns nothing.
    short sAngle,                 // In:  Angle of launch in degrees (on X/Z plane).
-   short	sX,                     // In:  Launch position.
-   short	sY,                     // In:  Launch position.
-   short	sZ,                     // In:  Launch position.
+   short sX,                       // In:  Launch position.
+   short sY,                       // In:  Launch position.
+   short sZ,                       // In:  Launch position.
    CRealm* pRealm,               // In:  Realm in which to fire.
-   SampleMasterID	smid	= g_smidBulletFire);       // In:  Use ammo sample.
+   SampleMasterID smid   = g_smidBulletFire);         // In:  Use ammo sample.
 
 // Create a impact effect.
 void Impact(                  // Returns nothing.
    short sAngle,              // In:  Angle of launch in degrees (on X/Z plane).
-   short	sX,                  // In:  Launch position.
-   short	sY,                  // In:  Launch position.
-   short	sZ,                  // In:  Launch position.
+   short sX,                    // In:  Launch position.
+   short sY,                    // In:  Launch position.
+   short sZ,                    // In:  Launch position.
    CRealm* pRealm);           // In:  Realm in which to fire.
 
 // Create a ricochet effect.
 void Ricochet(                // Returns nothing.
    short sAngle,              // In:  Angle of launch in degrees (on X/Z plane).
-   short	sX,                  // In:  Launch position.
-   short	sY,                  // In:  Launch position.
-   short	sZ,                  // In:  Launch position.
+   short sX,                    // In:  Launch position.
+   short sY,                    // In:  Launch position.
+   short sZ,                    // In:  Launch position.
    CRealm* pRealm);           // In:  Realm in which to fire.
 
 // Updates the static tracer color.
@@ -235,16 +235,16 @@ public:
 ///////////////////////////////////////////////////////////////////////////
 public:
 
-short	m_sCurTracerPos;        // Cummulative tracer position to give the look
-                              // of 'forward' movement.
+short m_sCurTracerPos;          // Cummulative tracer position to give the look
+                                // of 'forward' movement.
 
 // Target info.  ***NYI***
 U16 m_u16IdTarget;            // Last known target or IdNil.
-short	m_sDirChanges;          // Direction changes (relative to source) over
-                              // last targeting duration.
+short m_sDirChanges;            // Direction changes (relative to source) over
+                                // last targeting duration.
 S32 m_lSqrDistance;           // Squared distance traveled (relative to
                               // source) over last targeting duration.
-RQueue<TargetInfo, TargetUpdatesPerPeriod>	m_qtiHistory;
+RQueue<TargetInfo, TargetUpdatesPerPeriod>   m_qtiHistory;
 TargetInfo m_ati;             // Array of target info used for history queue.
 
 ///////////////////////////////////////////////////////////////////////////
@@ -257,7 +257,7 @@ static U8 ms_u8TracerIndex;         // The color index to use for tracers.
 public:
 };
 
-#endif	// BULLETFEST_H
+#endif   // BULLETFEST_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

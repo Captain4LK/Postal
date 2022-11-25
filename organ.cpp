@@ -18,22 +18,22 @@
 // Organ.cpp
 //
 // History:
-//		08/05/97 JRD	Started.  Linked in with SampleMaster.h
+//      08/05/97 JRD   Started.  Linked in with SampleMaster.h
 //
-//		08/05/97	JMI	Now calls PurgeSamples() when done playing with the organ.
-//							Converted to rspGetKeyStatusArray().
+//      08/05/97   JMI   Now calls PurgeSamples() when done playing with the organ.
+//                     Converted to rspGetKeyStatusArray().
 //
-//		08/17/97	JMI	The second time you entered the organ, it would exit
-//							right away.
-//							Also, now, when you choose 'Back', it goes back.  It
-//							used to merely check for the escape key in order to
-//							exit.  Now it actually pumps the menu input so any normal
-//							means of exiting a menu will work for this menu as well.
-//							This provides a little better user feedback.
-//							Also, took out aborting of sounds on exit.  Seemed to
-//							abrupt or something.
+//      08/17/97   JMI   The second time you entered the organ, it would exit
+//                     right away.
+//                     Also, now, when you choose 'Back', it goes back.  It
+//                     used to merely check for the escape key in order to
+//                     exit.  Now it actually pumps the menu input so any normal
+//                     means of exiting a menu will work for this menu as well.
+//                     This provides a little better user feedback.
+//                     Also, took out aborting of sounds on exit.  Seemed to
+//                     abrupt or something.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -52,24 +52,24 @@
 #include "update.h"
 #include "organ.h"
 
-#define OR_BANK_KEY		RSP_SK_TAB
+#define OR_BANK_KEY      RSP_SK_TAB
 
 // Set by callback or within PlayWithMyOrgan() to quit.
 static short ms_sContinue;
 
-void	PlayWithMyOrgan()
+void   PlayWithMyOrgan()
 {
    // only allow certain keys to be active:
    char acValidKeys[] = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM";
-   short	sNumValid = strlen(acValidKeys);
+   short sNumValid = strlen(acValidKeys);
    short sNumSounds = CSoundCatalogue::NumSounds();
    short sNumBanks = (sNumSounds + sNumValid - 1) / sNumValid;
 
    short sCurBank = 0;
    ms_sContinue = 1;
 
-   U8*	pau8KeyStatus	= rspGetKeyStatusArray();
-   RInputEvent	ie;
+   U8*   pau8KeyStatus   = rspGetKeyStatusArray();
+   RInputEvent ie;
 
    // Clear status array.
    memset(pau8KeyStatus, 0, 128);
@@ -100,7 +100,7 @@ void	PlayWithMyOrgan()
             }
 
             // Clear key.
-            pau8KeyStatus[acValidKeys[i]]	= 0;
+            pau8KeyStatus[acValidKeys[i]]   = 0;
          }
       }
 
@@ -113,23 +113,23 @@ void	PlayWithMyOrgan()
          }
 
          // Clear key.
-         pau8KeyStatus[OR_BANK_KEY]	= 0;
+         pau8KeyStatus[OR_BANK_KEY]   = 0;
       }
 
 
       // Get the next input event, if any.
-      ie.type	= RInputEvent::None;
+      ie.type   = RInputEvent::None;
       rspGetNextInputEvent(&ie);
 
       // Process menu input (cancel or choice keys).
       DoMenuInput(&ie, 1);
       // Do menu output (probably none most of the time in this case).
       // ....maybe not necessary since there's
-//		DoMenuOutput(g_pimScreenBuf);
+//      DoMenuOutput(g_pimScreenBuf);
 
       // Draw newest state of menu....maybe not necessary since there's
       // only one option.
-//		rspUpdateDisplay();
+//      rspUpdateDisplay();
 
       if (rspGetQuitStatus() )
       {
@@ -138,12 +138,12 @@ void	PlayWithMyOrgan()
    }
 
    // End playing samples.
-//	AbortAllSamples();
+//   AbortAllSamples();
 
    // Loop until done (if not they won't purge).
-//	while (IsSamplePlaying() == true)
+//   while (IsSamplePlaying() == true)
    {
-//		Update();
+//      Update();
    }
 
    // Purge all samples so we increase memory overhead.
@@ -157,11 +157,11 @@ void	PlayWithMyOrgan()
 //////////////////////////////////////////////////////////////////////////////
 extern bool Organ_MenuChoice( // Returns true to accept choice, false to deny.
    Menu* /*pmenuCurrent*/,    // Current menu.
-   short	sMenuItem)           // Item chosen.
+   short sMenuItem)             // Item chosen.
 {
    if (sMenuItem >= 0)
    {
-      ms_sContinue	= FALSE;
+      ms_sContinue   = FALSE;
    }
 
    // Audible Feedback.

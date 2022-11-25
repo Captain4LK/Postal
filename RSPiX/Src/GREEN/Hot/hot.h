@@ -17,32 +17,32 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Hot.h
+//   Hot.h
 //
 // History:
-//		01/18/97 JMI	Started tracking history of this file.
-//							Added version of Do() that takes an RInputEvent*.
+//      01/18/97 JMI   Started tracking history of this file.
+//                     Added version of Do() that takes an RInputEvent*.
 //
-//		01/21/97	JMI	The main Do() now returns the priority of the RHot that
-//							got the event.  Now, Do(RInputEvent* pie) can set
-//							pie->sUsed = TRUE discriminantly.
+//      01/21/97   JMI   The main Do() now returns the priority of the RHot that
+//                     got the event.  Now, Do(RInputEvent* pie) can set
+//                     pie->sUsed = TRUE discriminantly.
 //
-//		01/22/97	JMI	Added DoChildren() to process an event for this hotbox's
-//							children with two overloads (sPosX,sPosY,sEvent & pie).
+//      01/22/97   JMI   Added DoChildren() to process an event for this hotbox's
+//                     children with two overloads (sPosX,sPosY,sEvent & pie).
 //
-//		01/23/97	JMI	Got rid of the whole implied root with the static lists.
-//							Now each hotbox can service its children via a Do() call.
-//							More of a typical child-parent relationship.  Note that
-//							this got rid of the Do(short sUseQueue) static that
-//							dequeued or polled events, but it was getting stale any-
-//							ways.
+//      01/23/97   JMI   Got rid of the whole implied root with the static lists.
+//                     Now each hotbox can service its children via a Do() call.
+//                     More of a typical child-parent relationship.  Note that
+//                     this got rid of the Do(short sUseQueue) static that
+//                     dequeued or polled events, but it was getting stale any-
+//                     ways.
 //
-//		01/26/97	JMI	Changed callbacks' first parms to RHot* instead of U32.
+//      01/26/97   JMI   Changed callbacks' first parms to RHot* instead of U32.
 //
-//		03/19/97	JMI	Added InputEventCall and made Do(pie) the main RHot
-//							interface.
-//							Also, added new constructor overload to handle new call-
-//							back type.
+//      03/19/97   JMI   Added InputEventCall and made Do(pie) the main RHot
+//                     interface.
+//                     Also, added new constructor overload to handle new call-
+//                     back type.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -76,7 +76,7 @@
 
 // This, when used in place of a priority, indicates that the item has no
 // priority (i.e., it is to be considered non-prioritized).
-#define RHOT_NO_PRIORITY	( (short)0x8000)
+#define RHOT_NO_PRIORITY   ( (short)0x8000)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Types.
@@ -85,14 +85,14 @@ class RHot
 {
 public:     // Typedefs.
 typedef void (*REventCall)(         // Returns nothing.
-   RHot*	phot,                      // Ptr to the RHot that generated the
-                                    // callback.
+   RHot*   phot,                      // Ptr to the RHot that generated the
+                                      // callback.
    short sEvent);                   // Event that occurred.
                                     // Uses blue.h macros (RSP_MB?_*).
 
 typedef void (*REventPosCall)(         // Returns nothing.
-   RHot*	phot,                         // Ptr to the RHot that generated the
-                                       // callback.
+   RHot*   phot,                         // Ptr to the RHot that generated the
+                                         // callback.
    short sEvent,                       // Event that occurred.
                                        // Uses blue.h macros (RSP_MB?_*).
    short sPosX,                        // Mouse x position at button event
@@ -105,7 +105,7 @@ typedef void (*REventPosCall)(         // Returns nothing.
 typedef void (*InputEventCall)(        // Returns nothing.
    RHot* phot,                         // In:  Ptr to RHot that generated the
                                        // callback.
-   RInputEvent*	pie);                // In:  Ptr to input event that generated
+   RInputEvent*   pie);                // In:  Ptr to input event that generated
                                        // the callback.  Note that the coordinates
                                        // of this event are relative to hotbox's
                                        // upper, left corner.
@@ -116,8 +116,8 @@ typedef void (*InputEventCall)(        // Returns nothing.
                                        // RHot callbacks and will certainly affect
                                        // the RInputEvent passed to RHot::Do().
 
-typedef RSList <RHot, short>	SListHots;        // Sorted list of RHots.
-typedef RList <RHot>				ListHots;         // List of RHots.
+typedef RSList <RHot, short>   SListHots;        // Sorted list of RHots.
+typedef RList <RHot>            ListHots;         // List of RHots.
 
 public:
 // Default constructor.
@@ -130,7 +130,7 @@ RHot(
    short sW,                                 // Width of new hotbox.
    short sH,                                 // Height of new hotbox.
    REventCall fnEventCall = NULL,            // Callback on mouse event.
-   short	sActive	= FALSE,                   // Initially active, if TRUE.
+   short sActive   = FALSE,                     // Initially active, if TRUE.
    U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
@@ -142,7 +142,7 @@ RHot(
    short sW,                                 // Width of new hotbox.
    short sH,                                 // Height of new hotbox.
    REventPosCall fnEventPosCall,             // Callback on mouse event.
-   short	sActive	= FALSE,                   // Initially active, if TRUE.
+   short sActive   = FALSE,                     // Initially active, if TRUE.
    U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
@@ -154,7 +154,7 @@ RHot(
    short sW,                                 // Width of new hotbox.
    short sH,                                 // Height of new hotbox.
    InputEventCall fnInputEventCall,          // Callback on mouse event.
-   short	sActive	= FALSE,                   // Initially active, if TRUE.
+   short sActive   = FALSE,                     // Initially active, if TRUE.
    U32 ulUser   = 0,                         // User value.
    short sPriority = RHOT_NO_PRIORITY);      // Priority.  Default == non-prioritized.
 
@@ -198,7 +198,7 @@ void SetCapture(           // Returns nothing.
 // This is called by the other Do().
 short Do(                     // Returns priority of item that used event
                               // or RHOT_NO_PRIORITY if none.
-   RInputEvent*	pie);       // In:  Most recent user input event.
+   RInputEvent*   pie);       // In:  Most recent user input event.
                               // Out: Depends on callbacks.  Generally,
                               // pie->sUsed = TRUE, if used.
 
@@ -210,27 +210,27 @@ short Do(                     // Returns priority of item that used event
 // This is purely provided for backward compatibility.
 short Do(                           // Returns priority of item that used event
                                     // or RHOT_NO_PRIORITY if none.
-   short	sPosX,                     // In:  X position for event.
-   short	sPosY,                     // In:  Y position for event.
+   short sPosX,                       // In:  X position for event.
+   short sPosY,                       // In:  Y position for event.
    short sEvent)                    // In:  A RSPiX Blue mouse button event
                                     // (see <Mac/Win/Etc>Blue.h).
 {
    // Create an event.
-   RInputEvent	ie;
-   ie.type		= RInputEvent::Mouse;
-   ie.sPosX		= sPosX;
-   ie.sPosY		= sPosY;
-   ie.sButtons	= 0;
-   ie.sEvent	= sEvent;
-   ie.lTime		= 0;
-   ie.sUsed		= FALSE;
+   RInputEvent ie;
+   ie.type      = RInputEvent::Mouse;
+   ie.sPosX      = sPosX;
+   ie.sPosY      = sPosY;
+   ie.sButtons   = 0;
+   ie.sEvent   = sEvent;
+   ie.lTime      = 0;
+   ie.sUsed      = FALSE;
 
    return Do(&ie);
 }
 
 public:     // Querries.
 
-short	IsActive(void)       // Returns TRUE if active, FALSE otherwise.
+short   IsActive(void)       // Returns TRUE if active, FALSE otherwise.
 {
    return m_sActive;
 }
@@ -255,7 +255,7 @@ void GetTopPos(         // Returns nothing.
    short* psY);         // In:  Child position.
                         // Out: Top-level position.
 
-RHot*	GetParent(void)         // Returns ptr to RHot that is parent to this Rhot.
+RHot*   GetParent(void)         // Returns ptr to RHot that is parent to this Rhot.
 {
    return m_photParent;
 }
@@ -275,39 +275,39 @@ ListHots* GetCaptureList(void);        // Returns Capture list appropriate for t
 public:     // Static members.
 
 protected:     // Instantiable members.
-short	m_sActive;              // TRUE if active, FALSE otherwise.
-short	m_sCapture;             // TRUE, if capturing events.
-short	m_sPriority;            // Priority for hotbox.  Lower value
-                              // equals closer to front (higher priority).
-                              // RHOT_NO_PRIORITY(default) indicates non-prioritized.
-                              // See CPP comment header in regards to specifics
-                              // of this value.
-RHot*		m_photParent;        // Pointer to parent RHot or NULL, if none.
+short m_sActive;                // TRUE if active, FALSE otherwise.
+short m_sCapture;               // TRUE, if capturing events.
+short m_sPriority;              // Priority for hotbox.  Lower value
+                                // equals closer to front (higher priority).
+                                // RHOT_NO_PRIORITY(default) indicates non-prioritized.
+                                // See CPP comment header in regards to specifics
+                                // of this value.
+RHot*      m_photParent;        // Pointer to parent RHot or NULL, if none.
 
 
 public:     // To be modified by the User.
-short	m_sX;                   // The x-coordinate of this hotbox relative to
-                              // its parent.
-short	m_sY;                   // The y-coordinate of this hotbox relative to
-                              // its parent.
-short	m_sW;                   // The width of this hotbox.
-short	m_sH;                   // The height of this hotbox.
+short m_sX;                     // The x-coordinate of this hotbox relative to
+                                // its parent.
+short m_sY;                     // The y-coordinate of this hotbox relative to
+                                // its parent.
+short m_sW;                     // The width of this hotbox.
+short m_sH;                     // The height of this hotbox.
 
 REventCall m_ecUser;             // User callback on button events.
                                  // All callbacks can be used simultaneously.
 REventPosCall m_epcUser;         // User callback on button events.  Includes
                                  // mouse position.
                                  // All callbacks can be used simultaneously.
-InputEventCall	m_iecUser;        // User callback on input events.  Includes
-                                 // a full RInputEvent.
-                                 // All callbacks can be used simultaneously.
+InputEventCall m_iecUser;          // User callback on input events.  Includes
+                                   // a full RInputEvent.
+                                   // All callbacks can be used simultaneously.
 uintptr_t m_ulUser;              // User value passed to callbacks.
 
 SListHots m_slistActiveChildren;          // List of active child RHots.
-ListHots	m_listChildren;                  // List of all child RHots.
+ListHots m_listChildren;                    // List of all child RHots.
 // List of hots that always receive events.
-ListHots	m_listCapturing;                 // List of all capturing child RHots
-                                          // and self, if capturing.
+ListHots m_listCapturing;                   // List of all capturing child RHots
+                                            // and self, if capturing.
 
 
 
@@ -315,7 +315,7 @@ public:     // Static members.
 
 };
 
-#endif	// HOT_H
+#endif   // HOT_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

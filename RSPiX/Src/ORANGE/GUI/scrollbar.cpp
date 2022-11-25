@@ -20,124 +20,124 @@
 // SCROLLBAR.CPP
 //
 // History:
-//		09/25/96 JMI	Started.
+//      09/25/96 JMI   Started.
 //
-//		10/31/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CScrollBar		RScrollBar
-//							CImage			RImage
-//							CGuiItem			RGuiItem
-//							ORIENTATION		Orientation
-//							HORIZONTAL		Horizontal
-//							VERTICAL			Vertical
-//							CBtn				RBtn
+//      10/31/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CScrollBar      RScrollBar
+//                     CImage         RImage
+//                     CGuiItem         RGuiItem
+//                     ORIENTATION      Orientation
+//                     HORIZONTAL      Horizontal
+//                     VERTICAL         Vertical
+//                     CBtn            RBtn
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							Rect				RRect
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     Rect            RRect
 //
-//							Also, changed all members referenced in RImage to
-//							m_ and all position/dimension members referenced in
-//							RImage to type short usage.
+//                     Also, changed all members referenced in RImage to
+//                     m_ and all position/dimension members referenced in
+//                     RImage to type short usage.
 //
-//		11/27/96	JMI	Added initialization of m_type to identify this type
-//							of GUI item.
+//      11/27/96   JMI   Added initialization of m_type to identify this type
+//                     of GUI item.
 //
-//		12/16/96	JMI	Now checks for and reports when width or height is too
-//							small in Compose().
+//      12/16/96   JMI   Now checks for and reports when width or height is too
+//                     small in Compose().
 //
-//		12/16/96	JMI	Now ASSERTs if width or height is too small in DrawArrow.
+//      12/16/96   JMI   Now ASSERTs if width or height is too small in DrawArrow.
 //
-//		12/31/96	JMI	Do() now calls base implementation in RGuiItem.
+//      12/31/96   JMI   Do() now calls base implementation in RGuiItem.
 //
-//		01/02/97	JMI	Overrode GetHot() to use tray area instead of client.
-//							GetTray() now checks for NULL pointers before assigning
-//							values.  Changed m_guiThumb to m_btnThumb.
+//      01/02/97   JMI   Overrode GetHot() to use tray area instead of client.
+//                     GetTray() now checks for NULL pointers before assigning
+//                     values.  Changed m_guiThumb to m_btnThumb.
 //
-//		01/02/97	JMI	What was the macro ARROW_BORDER_THICKNESS is now the
-//							member m_sArrowBorderDistance which is initialized to
-//							DEF_ARROW_BORDER_THICKNESS.
+//      01/02/97   JMI   What was the macro ARROW_BORDER_THICKNESS is now the
+//                     member m_sArrowBorderDistance which is initialized to
+//                     DEF_ARROW_BORDER_THICKNESS.
 //
-//		01/04/97	JMI	Upgraded HotCall() to new CursorEvent().  This upgrade
-//							is in response to RGuiItem now using relative RHots.
-//							Now m_hot.m_sX/Y is parent item relative just like
-//							m_sX/Y.  This should simplify a lot of stuff and even
-//							fix some odd features like being able to click a GUI
-//							item that exceeds the boundary of its parent.  This fix
-//							will be essential for the not-yet-existent RListBox since
-//							it will most likely scroll many children through a small
-//							client area.
-//							Now there are two regions associated with cursor events.
-//							The first is the 'hot' area.  This is the area that m_hot
-//							is set to include.  Child items can only receive cursor
-//							events through this area.  The second is the 'event' area.
-//							This is the area where the item really is actually con-
-//							cerned with cursor events.  Example:  For a Dlg, the
-//							entire window is the 'hot' area and the title bar is the
-//							'event' area.
+//      01/04/97   JMI   Upgraded HotCall() to new CursorEvent().  This upgrade
+//                     is in response to RGuiItem now using relative RHots.
+//                     Now m_hot.m_sX/Y is parent item relative just like
+//                     m_sX/Y.  This should simplify a lot of stuff and even
+//                     fix some odd features like being able to click a GUI
+//                     item that exceeds the boundary of its parent.  This fix
+//                     will be essential for the not-yet-existent RListBox since
+//                     it will most likely scroll many children through a small
+//                     client area.
+//                     Now there are two regions associated with cursor events.
+//                     The first is the 'hot' area.  This is the area that m_hot
+//                     is set to include.  Child items can only receive cursor
+//                     events through this area.  The second is the 'event' area.
+//                     This is the area where the item really is actually con-
+//                     cerned with cursor events.  Example:  For a Dlg, the
+//                     entire window is the 'hot' area and the title bar is the
+//                     'event' area.
 //
-//		01/14/97	JMI	Now initializes m_upcUser to NULL.  Also, SetRange()
-//							now allows a range of 0 size.  Still cannot have a range
-//							of negative size though.  This would be useful.
+//      01/14/97   JMI   Now initializes m_upcUser to NULL.  Also, SetRange()
+//                     now allows a range of 0 size.  Still cannot have a range
+//                     of negative size though.  This would be useful.
 //
-//		01/15/97	JMI	Added overrides of base class's Save/LoadChildren() to
-//							implement special cases for m_btnThumb, Up, & Down.
+//      01/15/97   JMI   Added overrides of base class's Save/LoadChildren() to
+//                     implement special cases for m_btnThumb, Up, & Down.
 //
-//		01/20/97	JMI	No S32er ASSERTs on odd sizes.  Just does the best it
-//							can with what you give it.  You choose a screwy size, you
-//							get it.
+//      01/20/97   JMI   No S32er ASSERTs on odd sizes.  Just does the best it
+//                     can with what you give it.  You choose a screwy size, you
+//                     get it.
 //
-//		01/21/97	JMI	Added ReadMembers() and WriteMembers() overloads to read
-//							and write members of this class.  Note that they call the
-//							base class version to read/write base class members.
-//							Support exists for versions 0 and 1.  Version 0 did not
-//							contain other than RGuiItem members.
+//      01/21/97   JMI   Added ReadMembers() and WriteMembers() overloads to read
+//                     and write members of this class.  Note that they call the
+//                     base class version to read/write base class members.
+//                     Support exists for versions 0 and 1.  Version 0 did not
+//                     contain other than RGuiItem members.
 //
-//		01/27/97	JMI	Now, if in a call to SetRange() the min is greater than
-//							the max, the range is set to 0 instead of ASSERTing.
+//      01/27/97   JMI   Now, if in a call to SetRange() the min is greater than
+//                     the max, the range is set to 0 instead of ASSERTing.
 //
-//		01/30/97	JMI	Fixed rounding error in POS2PIXEL().
+//      01/30/97   JMI   Fixed rounding error in POS2PIXEL().
 //
-//		02/05/97	JMI	Changed position of default: case in ReadMembers().
+//      02/05/97   JMI   Changed position of default: case in ReadMembers().
 //
-//		02/05/97	JMI	Now has repeatability on up/left button, down/right
-//							button, and tray presses.  To do this in a consistent
-//							way from the Do(), the up and down buttons had to be
-//							changed to being hooked at the HotCall() level (like
-//							the thumb has always been done).
-//							This removed the need for static versions of the Up/
-//							DownBtnCall()s.
-//							Also, moved instantiable Up/DownBtnCall definitions to
-//							the CPP.
+//      02/05/97   JMI   Now has repeatability on up/left button, down/right
+//                     button, and tray presses.  To do this in a consistent
+//                     way from the Do(), the up and down buttons had to be
+//                     changed to being hooked at the HotCall() level (like
+//                     the thumb has always been done).
+//                     This removed the need for static versions of the Up/
+//                     DownBtnCall()s.
+//                     Also, moved instantiable Up/DownBtnCall definitions to
+//                     the CPP.
 //
-//		02/25/97	JMI	SaveChildren() now goes through the children in reverse
-//							order so they, on load, get added back to their parent in
-//							the order they were originally added to this parent.
+//      02/25/97   JMI   SaveChildren() now goes through the children in reverse
+//                     order so they, on load, get added back to their parent in
+//                     the order they were originally added to this parent.
 //
-//		03/19/97	JMI	HotCall() now adapts sPosX,Y from hotbox coords instead
-//							of hotbox's parent's coords.
+//      03/19/97   JMI   HotCall() now adapts sPosX,Y from hotbox coords instead
+//                     of hotbox's parent's coords.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		03/20/97	JMI	Still had a reference to m_epcUser in Do().  Fixed.
+//      03/20/97   JMI   Still had a reference to m_epcUser in Do().  Fixed.
 //
-//		03/28/97	JMI	RSP_MB0_DOUBLECLICK is now treated the same as
-//							RSP_MB0_PRESSED.
+//      03/28/97   JMI   RSP_MB0_DOUBLECLICK is now treated the same as
+//                     RSP_MB0_PRESSED.
 //
-//		04/01/97	JMI	Changed short m_sCanBeFocused (TRUE, FALSE) to
-//							m_targetFocus (Self, Parent, Sibling).
+//      04/01/97   JMI   Changed short m_sCanBeFocused (TRUE, FALSE) to
+//                     m_targetFocus (Self, Parent, Sibling).
 //
-//		04/03/97	JMI	Added components for optional timed, smooth scrolling.
+//      04/03/97   JMI   Added components for optional timed, smooth scrolling.
 //
-//		04/04/97	JMI	Added reading/writing of version 3 members.
+//      04/04/97   JMI   Added reading/writing of version 3 members.
 //
-//		05/14/97	JMI	Removed possible divide by 0's in SetRange().
+//      05/14/97   JMI   Removed possible divide by 0's in SetRange().
 //
-//		06/27/97	JMI	Moved GetTray() definition to here from scrollbar.h.
+//      06/27/97   JMI   Moved GetTray() definition to here from scrollbar.h.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -180,16 +180,16 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)		((val == -1) ? def : val)
+#define DEF(val, def)      ((val == -1) ? def : val)
 
-#define DEF_MIN_THUMB_LENGTH		10
+#define DEF_MIN_THUMB_LENGTH      10
 
-#define DEF_ARROW_BORDER_THICKNESS	2
+#define DEF_ARROW_BORDER_THICKNESS   2
 
-#define REPEAT_INITIAL_TIMEOUT		500
-#define REPEAT_SEQUENTIAL_TIMEOUT	100
+#define REPEAT_INITIAL_TIMEOUT      500
+#define REPEAT_SEQUENTIAL_TIMEOUT   100
 
-#define DEF_SCROLL_RATE					100   // Positions per second.
+#define DEF_SCROLL_RATE               100   // Positions per second.
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -212,45 +212,45 @@ static S32 ms_lNextEventTime = 0;   // Time of next repeat event.
 //////////////////////////////////////////////////////////////////////////////
 RScrollBar::RScrollBar()
 {
-   m_lButtonIncDec	= 1;
-   m_lTrayIncDec		= 10;
-   m_oOrientation		= Vertical;
-   m_lMinPos			= 0;
-   m_lMaxPos			= 100;
-   m_lCurPos			= 0;
-   m_lMinThumbLength	= DEF_MIN_THUMB_LENGTH;
+   m_lButtonIncDec   = 1;
+   m_lTrayIncDec      = 10;
+   m_oOrientation      = Vertical;
+   m_lMinPos         = 0;
+   m_lMaxPos         = 100;
+   m_lCurPos         = 0;
+   m_lMinThumbLength   = DEF_MIN_THUMB_LENGTH;
 
-   m_sArrowBorderDistance	= DEF_ARROW_BORDER_THICKNESS;
+   m_sArrowBorderDistance   = DEF_ARROW_BORDER_THICKNESS;
 
-   m_sInvertedBorder	= TRUE;
+   m_sInvertedBorder   = TRUE;
 
    m_btnThumb.SetParent(this);
-   m_btnThumb.m_hot.m_iecUser	= ThumbHotCall;
-   m_btnThumb.m_hot.m_ulUser	= (uintptr_t)this;
-   m_btnThumb.m_targetFocus	= Parent;   // Passes focus to parent (this).
+   m_btnThumb.m_hot.m_iecUser   = ThumbHotCall;
+   m_btnThumb.m_hot.m_ulUser   = (uintptr_t)this;
+   m_btnThumb.m_targetFocus   = Parent;   // Passes focus to parent (this).
 
    m_btnUp.SetParent(this);
-   m_btnUp.m_hot.m_iecUser		= UpHotCall;
-   m_btnUp.m_hot.m_ulUser		= (uintptr_t)this;
-   m_btnUp.m_ulUserInstance	= (uintptr_t)this;
-   m_btnUp.m_backcall			= DrawUpArrow;
-   m_btnUp.m_targetFocus		= Parent;   // Passes focus to parent (this).
+   m_btnUp.m_hot.m_iecUser      = UpHotCall;
+   m_btnUp.m_hot.m_ulUser      = (uintptr_t)this;
+   m_btnUp.m_ulUserInstance   = (uintptr_t)this;
+   m_btnUp.m_backcall         = DrawUpArrow;
+   m_btnUp.m_targetFocus      = Parent;   // Passes focus to parent (this).
 
    m_btnDown.SetParent(this);
-   m_btnDown.m_hot.m_iecUser	= DownHotCall;
-   m_btnDown.m_hot.m_ulUser	= (uintptr_t)this;
-   m_btnDown.m_ulUserInstance	= (uintptr_t)this;
-   m_btnDown.m_backcall			= DrawDownArrow;
-   m_btnDown.m_targetFocus		= Parent;   // Passes focus to parent (this).
+   m_btnDown.m_hot.m_iecUser   = DownHotCall;
+   m_btnDown.m_hot.m_ulUser   = (uintptr_t)this;
+   m_btnDown.m_ulUserInstance   = (uintptr_t)this;
+   m_btnDown.m_backcall         = DrawDownArrow;
+   m_btnDown.m_targetFocus      = Parent;   // Passes focus to parent (this).
 
-   m_type							= ScrollBar;   // Indicates type of GUI item.
+   m_type                     = ScrollBar;   // Indicates type of GUI item.
 
-   m_upcUser						= NULL;
+   m_upcUser                  = NULL;
 
-   m_scrollage						= Instant;
-   m_lScrollToPos					= m_lCurPos;
-   m_lPosPerSecond				= DEF_SCROLL_RATE;
-   m_sInSmoothScroll				= FALSE;
+   m_scrollage                  = Instant;
+   m_lScrollToPos               = m_lCurPos;
+   m_lPosPerSecond            = DEF_SCROLL_RATE;
+   m_sInSmoothScroll            = FALSE;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ void RScrollBar::Compose(        // Returns nothing.
 {
    if (pim == NULL)
    {
-      pim	= &m_im;
+      pim   = &m_im;
    }
 
    // Call base (draws border and background).
@@ -285,7 +285,7 @@ void RScrollBar::Compose(        // Returns nothing.
 
    // Get client relative to border so we know where to
    // set up the buttons.
-   short	sX, sY, sW, sH;
+   short sX, sY, sW, sH;
    GetClient(&sX, &sY, &sW, &sH);
 
    // Set width and height for buttons.
@@ -293,13 +293,13 @@ void RScrollBar::Compose(        // Returns nothing.
    short sBtnHeight;
    if (m_oOrientation == Vertical)
    {
-      sBtnWidth	= sW;
-      sBtnHeight	= sW;
+      sBtnWidth   = sW;
+      sBtnHeight   = sW;
    }
    else  // Horizontal
    {
-      sBtnWidth	= sH;
-      sBtnHeight	= sH;
+      sBtnWidth   = sH;
+      sBtnHeight   = sH;
    }
 
    CopyBorderInfoTo(&m_btnUp);
@@ -351,7 +351,7 @@ void RScrollBar::CursorEvent( // Returns nothing.
       SetFocus();
 
       // Store time of next event.
-      ms_lNextEventTime	= rspGetMilliseconds();
+      ms_lNextEventTime   = rspGetMilliseconds();
       if (m_sPressed == FALSE)
       {
          ms_lNextEventTime += REPEAT_INITIAL_TIMEOUT;
@@ -364,18 +364,18 @@ void RScrollBar::CursorEvent( // Returns nothing.
       // If outside the thumb . . .
       // NOTE: If the m_lTrayIncDec is greater than the thickness of the
       // thumb, this will still hop around a bit.
-      if (	pie->sPosX < m_btnThumb.m_sX
-            ||	pie->sPosX >= m_btnThumb.m_sX + m_btnThumb.m_im.m_sWidth
-            ||	pie->sPosY < m_btnThumb.m_sY
-            || pie->sPosY >= m_btnThumb.m_sY + m_btnThumb.m_im.m_sHeight)
+      if (   pie->sPosX < m_btnThumb.m_sX
+             ||   pie->sPosX >= m_btnThumb.m_sX + m_btnThumb.m_im.m_sWidth
+             ||   pie->sPosY < m_btnThumb.m_sY
+             || pie->sPosY >= m_btnThumb.m_sY + m_btnThumb.m_im.m_sHeight)
       {
-         short	sTrayPosX, sTrayPosY, sTrayRelPosX, sTrayRelPosY;
+         short sTrayPosX, sTrayPosY, sTrayRelPosX, sTrayRelPosY;
          GetTray(&sTrayPosX, &sTrayPosY, NULL, NULL);
-         sTrayRelPosX	= pie->sPosX - sTrayPosX;
-         sTrayRelPosY	= pie->sPosY - sTrayPosY;
+         sTrayRelPosX   = pie->sPosX - sTrayPosX;
+         sTrayRelPosY   = pie->sPosY - sTrayPosY;
 
          // If less than existing pos . . .
-         if (PIXELS2POS(sTrayRelPosX, sTrayRelPosY)	<	m_lCurPos)
+         if (PIXELS2POS(sTrayRelPosX, sTrayRelPosY)   <   m_lCurPos)
          {
             // Set the thumb position forward.
             UserSetPos(m_lCurPos - m_lTrayIncDec);
@@ -388,7 +388,7 @@ void RScrollBar::CursorEvent( // Returns nothing.
       }
 
       // Note that we used it.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
    }
@@ -396,7 +396,7 @@ void RScrollBar::CursorEvent( // Returns nothing.
    case RSP_MB0_RELEASED:
    {
       // Note that we used it.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
    }
@@ -441,74 +441,74 @@ void RScrollBar::SetRange(
    if (lMin > lMax)
    {
       // Range is 0.
-      lMin	= lMax;
+      lMin   = lMax;
    }
 
-   m_lMinPos	= lMin;
-   m_lMaxPos	= lMax;
+   m_lMinPos   = lMin;
+   m_lMaxPos   = lMax;
 
    // Compute the range of positions.  That is, the number of positions.
    S32 lRange   = lMax - lMin;
 
    // Compute the scroll bar size that gives us that many positions.
-   short	sX;
-   short	sY;
-   short	sW;
-   short	sH;
+   short sX;
+   short sY;
+   short sW;
+   short sH;
    GetTray(&sX, &sY, &sW, &sH);
 
-   short	sThumbW;             // Width for thumb.
-   short	sThumbH;             // Height for thumb.
-   short*	psTrayLength;     // Pointer to tray length.
-   short*	psTrayThickness;  // Pointer to tray thickness.
-   short*	psThumbLength;    // Pointer to thumb length.
-   short*	psThumbThickness; // Pointer to thumb thickness.
+   short sThumbW;               // Width for thumb.
+   short sThumbH;               // Height for thumb.
+   short*   psTrayLength;     // Pointer to tray length.
+   short*   psTrayThickness;  // Pointer to tray thickness.
+   short*   psThumbLength;    // Pointer to thumb length.
+   short*   psThumbThickness; // Pointer to thumb thickness.
 
    if (m_oOrientation == Vertical)
    {
-      psTrayLength		= &sH;
-      psTrayThickness	= &sW;
-      psThumbLength		= &sThumbH;
-      psThumbThickness	= &sThumbW;
+      psTrayLength      = &sH;
+      psTrayThickness   = &sW;
+      psThumbLength      = &sThumbH;
+      psThumbThickness   = &sThumbW;
    }
    else
    {
-      psTrayLength		= &sW;
-      psTrayThickness	= &sH;
-      psThumbLength		= &sThumbW;
-      psThumbThickness	= &sThumbH;
+      psTrayLength      = &sW;
+      psTrayThickness   = &sH;
+      psThumbLength      = &sThumbW;
+      psThumbThickness   = &sThumbH;
    }
 
    // Determine length for thumb.
-   S32 lLength	= (S32)(*psTrayLength) - lRange;
+   S32 lLength   = (S32)(*psTrayLength) - lRange;
 
    // If the size is less than the minimum . . .
    if (lLength < m_lMinThumbLength)
    {
-      lLength	= MIN(m_lMinThumbLength, (S32)(*psTrayLength));
+      lLength   = MIN(m_lMinThumbLength, (S32)(*psTrayLength));
    }
 
    // Compute position to pixel ratio.
-   float	fLenDif	= (float)(*psTrayLength - lLength);
+   float fLenDif   = (float)(*psTrayLength - lLength);
    // If neither value is 0 . . .
    if (fLenDif != 0.0F && lRange != 0)
    {
       if (lRange > lLength)
       {
-         m_fPos2PixelRatio	= fLenDif / (float)lRange;
+         m_fPos2PixelRatio   = fLenDif / (float)lRange;
       }
       else
       {
-         m_fPos2PixelRatio	= (float)lRange / fLenDif;
+         m_fPos2PixelRatio   = (float)lRange / fLenDif;
       }
    }
    else
    {
-      m_fPos2PixelRatio	= 0.00001F;
+      m_fPos2PixelRatio   = 0.00001F;
    }
 
-   *psThumbLength		= (short)lLength;
-   *psThumbThickness	= *psTrayThickness;
+   *psThumbLength      = (short)lLength;
+   *psThumbThickness   = *psTrayThickness;
 
    m_btnThumb.Destroy();
 
@@ -535,7 +535,7 @@ void RScrollBar::ThumbHotCall(   // Returns nothing.
    RInputEvent* pie)             // In:  Most recent user input event.
                                  // Out: pie->sUsed = TRUE, if used.
 {
-   short	sUsed	= pie->sUsed;
+   short sUsed   = pie->sUsed;
 
    // Call base.
    m_btnThumb.HotCall(pie);
@@ -543,11 +543,11 @@ void RScrollBar::ThumbHotCall(   // Returns nothing.
    // If this is an unused mouse event . . .
    if (pie->type == RInputEvent::Mouse && sUsed == FALSE)
    {
-      short	sHotPosX	= m_btnThumb.m_hot.m_sX;
-      short	sHotPosY	= m_btnThumb.m_hot.m_sY;
+      short sHotPosX   = m_btnThumb.m_hot.m_sX;
+      short sHotPosY   = m_btnThumb.m_hot.m_sY;
       // Make relative to Thumb GUI item (rather than its hotbox).
-      pie->sPosX	-= sHotPosX;
-      pie->sPosY	-= sHotPosY;
+      pie->sPosX   -= sHotPosX;
+      pie->sPosY   -= sHotPosY;
 
       switch (pie->sEvent)
       {
@@ -555,21 +555,21 @@ void RScrollBar::ThumbHotCall(   // Returns nothing.
          // Start dragging thumb on Do().
          // Note position clicked so we know what part of bar was
          // pressed.
-         m_sClickOffsetX	= pie->sPosX;
-         m_sClickOffsetY	= pie->sPosY;
+         m_sClickOffsetX   = pie->sPosX;
+         m_sClickOffsetY   = pie->sPosY;
 
          // Note that we used the event.
-         pie->sUsed			= TRUE;
+         pie->sUsed         = TRUE;
          break;
       case RSP_MB0_RELEASED:
          // Note that we used the event.
-         pie->sUsed			= TRUE;
+         pie->sUsed         = TRUE;
          break;
       }
 
       // Put position back.
-      pie->sPosX	+= sHotPosX;
-      pie->sPosY	+= sHotPosY;
+      pie->sPosX   += sHotPosX;
+      pie->sPosY   += sHotPosY;
    }
 }
 
@@ -582,7 +582,7 @@ void RScrollBar::UpHotCall(   // Returns nothing.
    RInputEvent* pie)          // In:  Most recent user input event.
                               // Out: pie->sUsed = TRUE, if used.
 {
-   short	sUsed	= pie->sUsed;
+   short sUsed   = pie->sUsed;
 
    // Call base.
    m_btnUp.HotCall(pie);
@@ -590,17 +590,17 @@ void RScrollBar::UpHotCall(   // Returns nothing.
    // If this is an unused mouse event . . .
    if (pie->type == RInputEvent::Mouse && sUsed == FALSE)
    {
-      short	sHotPosX	= m_btnUp.m_hot.m_sX;
-      short	sHotPosY	= m_btnUp.m_hot.m_sY;
+      short sHotPosX   = m_btnUp.m_hot.m_sX;
+      short sHotPosY   = m_btnUp.m_hot.m_sY;
       // Make relative to Up GUI item (rather than its hotbox).
-      pie->sPosX	-= sHotPosX;
-      pie->sPosY	-= sHotPosY;
+      pie->sPosX   -= sHotPosX;
+      pie->sPosY   -= sHotPosY;
 
       switch (pie->sEvent)
       {
       case RSP_MB0_PRESSED:
          // Store time of next event.
-         ms_lNextEventTime	= rspGetMilliseconds();
+         ms_lNextEventTime   = rspGetMilliseconds();
          if (m_btnUp.m_sPressed == FALSE)
          {
             ms_lNextEventTime += REPEAT_INITIAL_TIMEOUT;
@@ -613,18 +613,18 @@ void RScrollBar::UpHotCall(   // Returns nothing.
          UpBtnPressed();
 
          // Note that we used the event.
-         pie->sUsed			= TRUE;
+         pie->sUsed         = TRUE;
          break;
       case RSP_MB0_RELEASED:
 
          // Note that we used the event.
-         pie->sUsed			= TRUE;
+         pie->sUsed         = TRUE;
          break;
       }
 
       // Put position back.
-      pie->sPosX	+= sHotPosX;
-      pie->sPosY	+= sHotPosY;
+      pie->sPosX   += sHotPosX;
+      pie->sPosY   += sHotPosY;
    }
 }
 
@@ -637,7 +637,7 @@ void RScrollBar::DownHotCall( // Returns nothing.
    RInputEvent* pie)          // In:  Most recent user input event.
                               // Out: pie->sUsed = TRUE, if used.
 {
-   short	sUsed	= pie->sUsed;
+   short sUsed   = pie->sUsed;
 
    // Call base.
    m_btnDown.HotCall(pie);
@@ -645,17 +645,17 @@ void RScrollBar::DownHotCall( // Returns nothing.
    // If this is an unused mouse event . . .
    if (pie->type == RInputEvent::Mouse && sUsed == FALSE)
    {
-      short	sHotPosX	= m_btnDown.m_hot.m_sX;
-      short	sHotPosY	= m_btnDown.m_hot.m_sY;
+      short sHotPosX   = m_btnDown.m_hot.m_sX;
+      short sHotPosY   = m_btnDown.m_hot.m_sY;
       // Make relative to Down GUI item (rather than its hotbox).
-      pie->sPosX	-= sHotPosX;
-      pie->sPosY	-= sHotPosY;
+      pie->sPosX   -= sHotPosX;
+      pie->sPosY   -= sHotPosY;
 
       switch (pie->sEvent)
       {
       case RSP_MB0_PRESSED:
          // Store time of next event.
-         ms_lNextEventTime	= rspGetMilliseconds();
+         ms_lNextEventTime   = rspGetMilliseconds();
          if (m_btnDown.m_sPressed == FALSE)
          {
             ms_lNextEventTime += REPEAT_INITIAL_TIMEOUT;
@@ -672,8 +672,8 @@ void RScrollBar::DownHotCall( // Returns nothing.
       }
 
       // Put position back.
-      pie->sPosX	+= sHotPosX;
-      pie->sPosY	+= sHotPosY;
+      pie->sPosX   += sHotPosX;
+      pie->sPosY   += sHotPosY;
    }
 }
 
@@ -699,30 +699,30 @@ void RScrollBar::Do( // Returns nothing.
 
       if ( pie->sButtons)
       {
-         short	sX, sY, sTrayX, sTrayY;
+         short sX, sY, sTrayX, sTrayY;
          sX =  pie->sPosX;
          sY =  pie->sPosY;
          //rspGetMouse(&sX, &sY, NULL);
          TopPosToChild(&sX, &sY);
          GetTray(&sTrayX, &sTrayY, NULL, NULL);
-         sX	-= +sTrayX;
-         //sX	+= (800-640);
-         //sY	-= m_sClickOffsetY + sTrayY;
+         sX   -= +sTrayX;
+         //sX   += (800-640);
+         //sY   -= m_sClickOffsetY + sTrayY;
 
          SetPos(PIXELS2POS(sX, sY) );
       }
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
    }
 #endif
 
    if (m_btnThumb.m_sPressed != FALSE)
    {
-      short	sX, sY, sTrayX, sTrayY;
+      short sX, sY, sTrayX, sTrayY;
       rspGetMouse(&sX, &sY, NULL);
       TopPosToChild(&sX, &sY);
       GetTray(&sTrayX, &sTrayY, NULL, NULL);
-      sX	-= m_sClickOffsetX + sTrayX;
-      sY	-= m_sClickOffsetY + sTrayY;
+      sX   -= m_sClickOffsetX + sTrayX;
+      sY   -= m_sClickOffsetY + sTrayY;
 
       SetPos(PIXELS2POS(sX, sY) );
    }
@@ -735,16 +735,16 @@ void RScrollBar::Do( // Returns nothing.
          {
          case RInputEvent::Key:
          {
-            S32*	plIncDec	= &m_lButtonIncDec;     // Amount to move thumb.
+            S32*   plIncDec   = &m_lButtonIncDec;     // Amount to move thumb.
             // If control held . . .
             if ( (pie->lKey & RSP_GKF_CONTROL) != 0)
             {
                // Use alternate amount.
-               plIncDec	= &m_lTrayIncDec;
+               plIncDec   = &m_lTrayIncDec;
             }
 
             // Assume we use it.  Easier.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             switch (pie->lKey & 0x0000FFFF)
             {
@@ -781,7 +781,7 @@ void RScrollBar::Do( // Returns nothing.
 
             default:       // Did not use.
                // Better clear flag.
-               pie->sUsed	= FALSE;
+               pie->sUsed   = FALSE;
                break;
             }
 
@@ -790,25 +790,25 @@ void RScrollBar::Do( // Returns nothing.
          }
       }
 
-      RGuiItem*	pguiPressed	= NULL;
+      RGuiItem*   pguiPressed   = NULL;
       // If tray currently pressed . . .
       if (m_sPressed != FALSE)
       {
-         pguiPressed	= this;
+         pguiPressed   = this;
       }
       else
       {
          // If up currently pressed . . .
          if (m_btnUp.m_sPressed != FALSE)
          {
-            pguiPressed	= &m_btnUp;
+            pguiPressed   = &m_btnUp;
          }
          else
          {
             // If down currently pressed . . .
             if (m_btnDown.m_sPressed != FALSE)
             {
-               pguiPressed	= &m_btnDown;
+               pguiPressed   = &m_btnDown;
             }
          }
       }
@@ -820,21 +820,21 @@ void RScrollBar::Do( // Returns nothing.
          if (lCurTime > ms_lNextEventTime)
          {
             // Get current mouse cursor position.
-            short	sPosX, sPosY;
+            short sPosX, sPosY;
             rspGetMouse(&sPosX, &sPosY, NULL);
             // Convert to our coordinate system.
             pguiPressed->TopPosToChild(&sPosX, &sPosY);
 
             // Generate event in pressed item.
-            RInputEvent	ie;
-            ie.type		= RInputEvent::Mouse;
-            ie.lTime		= lCurTime;
-            ie.sEvent	= RSP_MB0_PRESSED;
-            ie.sButtons	= 1;
-            ie.sPosX		= sPosX;
-            ie.sPosY		= sPosY;
-            ie.sUsed		= FALSE;
-            ie.lUser		= 0;
+            RInputEvent ie;
+            ie.type      = RInputEvent::Mouse;
+            ie.lTime      = lCurTime;
+            ie.sEvent   = RSP_MB0_PRESSED;
+            ie.sButtons   = 1;
+            ie.sPosX      = sPosX;
+            ie.sPosY      = sPosY;
+            ie.sUsed      = FALSE;
+            ie.lUser      = 0;
             pguiPressed->m_hot.m_iecUser(&pguiPressed->m_hot, &ie);
          }
       }
@@ -856,19 +856,19 @@ void RScrollBar::Do( // Returns nothing.
             if (lDist > 0)
             {
                // Don't scroll too far.
-               lScroll	= MIN(lScroll, lDist);
+               lScroll   = MIN(lScroll, lDist);
             }
             else
             {
                // Don't scroll too far.
-               lScroll	= MAX(-lScroll, lDist);
+               lScroll   = MAX(-lScroll, lDist);
             }
 
             // Update position (absolute).
             SetPos(m_lCurPos + lScroll);
 
             // Store time for next iteration.
-            m_lLastSmoothTime	= lCurTime;
+            m_lLastSmoothTime   = lCurTime;
          }
       }
    }
@@ -877,15 +877,15 @@ void RScrollBar::Do( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////
 //
 // Draws an arrow pointing sDirection where the directions are:
-//	  0
-//	1 + 3
-//	  2
+//     0
+//   1 + 3
+//     2
 // with color or index u32Color into pim at (sX, sY, sW, sH).
 // Very cheesy but it'll do for now.
 //
 ////////////////////////////////////////////////////////////////////////
 inline void DrawArrow(  // Returns nothing.
-   short	sDirection,    // Direction of arrow; see above.
+   short sDirection,      // Direction of arrow; see above.
    U32 u32Color,        // Color or index to draw with.
    RImage* pim,         // Destination image.
    short sX,            // Position at which to draw.
@@ -897,91 +897,91 @@ inline void DrawArrow(  // Returns nothing.
    // If there is an area . . .
    if (sW > 0 && sH > 0)
    {
-      short	sCurX	= sX;
-      short	sCurY	= sY;
-      short	sCurW	= 1;
-      short	sCurH	= 1;
+      short sCurX   = sX;
+      short sCurY   = sY;
+      short sCurW   = 1;
+      short sCurH   = 1;
       short* psCurLine;
       short* psCurLinePos;
       short* psCurLineLen;
-      short	sLineLenInc;
-      short	sLinePosDec;
+      short sLineLenInc;
+      short sLinePosDec;
       short sMaxLineLen;
-      short	sMaxLine;
-      short	sMinLinePos;
+      short sMaxLine;
+      short sMinLinePos;
 
       switch (sDirection)
       {
       case 0:     // Up.
          ASSERT(sW > 0);
 
-         sLineLenInc		= (sH * 2) / sW;
-         sLinePosDec		= sLineLenInc;
-         sCurY				= sY + sH - sLineLenInc;
-         sMaxLineLen		= sH;
-         sMaxLine			= sW;
-         sMinLinePos		= sY;
-         psCurLine		= &sCurX;
-         psCurLinePos	= &sCurY;
-         psCurLineLen	= &sCurH;
+         sLineLenInc      = (sH * 2) / sW;
+         sLinePosDec      = sLineLenInc;
+         sCurY            = sY + sH - sLineLenInc;
+         sMaxLineLen      = sH;
+         sMaxLine         = sW;
+         sMinLinePos      = sY;
+         psCurLine      = &sCurX;
+         psCurLinePos   = &sCurY;
+         psCurLineLen   = &sCurH;
          break;
       case 1:     // Left.
          ASSERT(sH > 0);
 
-         sLineLenInc		= (sW * 2) / sH;
-         sLinePosDec		= sLineLenInc;
-         sCurX				= sX + sW - sLineLenInc;
-         sMaxLineLen		= sW;
-         sMaxLine			= sH;
-         sMinLinePos		= sX;
-         psCurLine		= &sCurY;
-         psCurLinePos	= &sCurX;
-         psCurLineLen	= &sCurW;
+         sLineLenInc      = (sW * 2) / sH;
+         sLinePosDec      = sLineLenInc;
+         sCurX            = sX + sW - sLineLenInc;
+         sMaxLineLen      = sW;
+         sMaxLine         = sH;
+         sMinLinePos      = sX;
+         psCurLine      = &sCurY;
+         psCurLinePos   = &sCurX;
+         psCurLineLen   = &sCurW;
          break;
       case 2:     // Down.
          ASSERT(sW > 0);
 
-         sLineLenInc		= (sH * 2) / sW;
-         sLinePosDec		= 0;
-         sMaxLineLen		= sH;
-         sMaxLine			= sW;
-         sMinLinePos		= sY;
-         psCurLine		= &sCurX;
-         psCurLinePos	= &sCurY;
-         psCurLineLen	= &sCurH;
+         sLineLenInc      = (sH * 2) / sW;
+         sLinePosDec      = 0;
+         sMaxLineLen      = sH;
+         sMaxLine         = sW;
+         sMinLinePos      = sY;
+         psCurLine      = &sCurX;
+         psCurLinePos   = &sCurY;
+         psCurLineLen   = &sCurH;
          break;
       case 3:     // Right.
          ASSERT(sH > 0);
 
-         sLineLenInc		= (sW * 2) / sH;
-         sLinePosDec		= 0;
-         sMaxLineLen		= sW;
-         sMaxLine			= sH;
-         sMinLinePos		= sX;
-         psCurLine		= &sCurY;
-         psCurLinePos	= &sCurX;
-         psCurLineLen	= &sCurW;
+         sLineLenInc      = (sW * 2) / sH;
+         sLinePosDec      = 0;
+         sMaxLineLen      = sW;
+         sMaxLine         = sH;
+         sMinLinePos      = sX;
+         psCurLine      = &sCurY;
+         psCurLinePos   = &sCurX;
+         psCurLineLen   = &sCurW;
          break;
       }
 
-      *psCurLineLen	= sLineLenInc;
+      *psCurLineLen   = sLineLenInc;
 
       while (*psCurLineLen < sMaxLineLen)
       {
          rspRect(u32Color, pim, sCurX, sCurY, sCurW, sCurH);
-         *psCurLine		+= 1;
-         *psCurLineLen	+= sLineLenInc;
-         *psCurLinePos	-= sLinePosDec;
+         *psCurLine      += 1;
+         *psCurLineLen   += sLineLenInc;
+         *psCurLinePos   -= sLinePosDec;
       }
 
       // Store current values just in case height is odd (b/c rounding
       // errors will have occurred and we'll need restore the in-error
       // values).
-      short	sTempLineLen	= *psCurLineLen;
-      short	sTempLinePos	= *psCurLinePos;
+      short sTempLineLen   = *psCurLineLen;
+      short sTempLinePos   = *psCurLinePos;
 
-      *psCurLineLen			= sMaxLineLen;
-      *psCurLinePos			= sMinLinePos;
+      *psCurLineLen         = sMaxLineLen;
+      *psCurLinePos         = sMinLinePos;
 
       // Add tip line.
       rspRect(u32Color, pim, sCurX, sCurY, sCurW, sCurH);
@@ -990,19 +990,19 @@ inline void DrawArrow(  // Returns nothing.
       if (sMaxLine % 2 == 1)
       {
          // Restore error values so that arrow is symmetrical.
-         *psCurLineLen	= sTempLineLen - sLineLenInc;
-         *psCurLinePos	= sTempLinePos + sLinePosDec;
+         *psCurLineLen   = sTempLineLen - sLineLenInc;
+         *psCurLinePos   = sTempLinePos + sLinePosDec;
       }
 
       // Next line.
-      *psCurLine	+= 1;
+      *psCurLine   += 1;
 
       while (*psCurLineLen > 0)
       {
          rspRect(u32Color, pim, sCurX, sCurY, sCurW, sCurH);
-         *psCurLine		+= 1;
-         *psCurLineLen	-= sLineLenInc;
-         *psCurLinePos	+= sLinePosDec;
+         *psCurLine      += 1;
+         *psCurLineLen   -= sLineLenInc;
+         *psCurLinePos   += sLinePosDec;
       }
    }
 }
@@ -1059,13 +1059,13 @@ void RScrollBar::DrawDownArrow(  // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////
 short RScrollBar::LoadChildren(  // Returns 0 on success.
-   RFile*	pfile)               // File to load from.
+   RFile*   pfile)               // File to load from.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pfile->IsOpen() != FALSE);
 
-   short	sNum;
+   short sNum;
    // Read number of children.
    pfile->Read(&sNum);
 
@@ -1080,34 +1080,34 @@ short RScrollBar::LoadChildren(  // Returns 0 on success.
          if (m_btnDown.Load(pfile) == 0)
          {
             // Subtract these three children from total.
-            sNum	-= 3;
+            sNum   -= 3;
          }
          else
          {
             TRACE("LoadChildren(): m_btnDown.Load() failed.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
       }
       else
       {
          TRACE("LoadChildren(): m_btnUp.Load() failed.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
    {
       TRACE("LoadChildren(): m_btnThumb.Load() failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    // Instantiate rest of children.
    RGuiItem* pgui;
-   short	sCurChild;
-   for (	sCurChild	= 0;
-         sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE;
-         sCurChild++)
+   short sCurChild;
+   for (   sCurChild   = 0;
+           sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE;
+           sCurChild++)
    {
-      pgui	= LoadInstantiate(pfile);
+      pgui   = LoadInstantiate(pfile);
       if (pgui != NULL)
       {
          pgui->SetParent(this);
@@ -1115,7 +1115,7 @@ short RScrollBar::LoadChildren(  // Returns 0 on success.
       else
       {
          TRACE("LoadChildren(): LoadInstantiate() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
@@ -1130,29 +1130,29 @@ short RScrollBar::LoadChildren(  // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////
 short RScrollBar::SaveChildren(  // Returns 0 on success.
-   RFile*	pfile)               // File to save to.
+   RFile*   pfile)               // File to save to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pfile->IsOpen() != FALSE);
 
    // Determine number of child items.
-   short	sNum	= 0;
-   RGuiItem*	pgui = m_listguiChildren.GetHead();
+   short sNum   = 0;
+   RGuiItem*   pgui = m_listguiChildren.GetHead();
    while (pgui != NULL)
    {
       sNum++;
 
-      pgui	= m_listguiChildren.GetNext();
+      pgui   = m_listguiChildren.GetNext();
    }
 
    // Write number of children.
    pfile->Write(sNum);
 
    // These should definitely be a child of 'this' item.
-   ASSERT(m_btnThumb.GetParent()	== this);
-   ASSERT(m_btnUp.GetParent()		== this);
-   ASSERT(m_btnDown.GetParent()	== this);
+   ASSERT(m_btnThumb.GetParent()   == this);
+   ASSERT(m_btnUp.GetParent()      == this);
+   ASSERT(m_btnDown.GetParent()   == this);
 
    // Always write our 3 buttons (arrows and thumb) first so we know
    // where to get them on load.
@@ -1165,40 +1165,40 @@ short RScrollBar::SaveChildren(  // Returns 0 on success.
             // Subtract these three children from total.
             // Currently this number is not used during save,
             // but just in case it ever is.
-            sNum	-= 3;
+            sNum   -= 3;
          }
          else
          {
             TRACE("SaveChildren(): m_btnDown.Save() failed.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
       }
       else
       {
          TRACE("SaveChildren(): m_btnUp.Save() failed.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
    {
       TRACE("SaveChildren(): m_btnThumb.Save() failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    // Save children.  Note that we go through the children in reverse
    // order so they, on load, get added back to their parent in the
    // order they were originally added to this parent.
-   pgui	= m_listguiChildren.GetTail();
+   pgui   = m_listguiChildren.GetTail();
    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
    {
       // Don't write these 3 again . . .
       if (pgui != &m_btnThumb && pgui != &m_btnUp && pgui != &m_btnDown)
       {
          // Save child.
-         sRes	= pgui->Save(pfile);
+         sRes   = pgui->Save(pfile);
       }
 
-      pgui	= m_listguiChildren.GetPrev();
+      pgui   = m_listguiChildren.GetPrev();
    }
 
    return sRes;
@@ -1215,13 +1215,13 @@ short RScrollBar::SaveChildren(  // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////
 short RScrollBar::ReadMembers(   // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version)               // File format version to use.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Invoke base class to read base members.
-   sRes	= RGuiItem::ReadMembers(pfile, u32Version);
+   sRes   = RGuiItem::ReadMembers(pfile, u32Version);
 
    // If okay so far . . .
    if (sRes == 0)
@@ -1236,11 +1236,11 @@ short RScrollBar::ReadMembers(   // Returns 0 on success.
       {
       default:
       // Insert additional version numbers here!
-      // case 4:	// Version 4 stuff.
+      // case 4:   // Version 4 stuff.
       case 3:     // Version 3 stuff.  Smooth scrollage added.
-         short	sScrollage;
+         short sScrollage;
          pfile->Read(&sScrollage);
-         m_scrollage	= (Scrollage)sScrollage;
+         m_scrollage   = (Scrollage)sScrollage;
 
          pfile->Read(&m_lPosPerSecond);
 
@@ -1253,7 +1253,7 @@ short RScrollBar::ReadMembers(   // Returns 0 on success.
          pfile->Read(&m_sArrowBorderDistance);
 
          pfile->Read(&u32Temp);
-         m_oOrientation	= (Orientation)u32Temp;
+         m_oOrientation   = (Orientation)u32Temp;
 
          pfile->Read(&m_lMinThumbLength);
          pfile->Read(&m_lMinPos);
@@ -1269,7 +1269,7 @@ short RScrollBar::ReadMembers(   // Returns 0 on success.
          else
          {
             TRACE("ReadMembers(): Error reading RScrollBar members.\n");
-            sRes	= -1;
+            sRes   = -1;
          }
          break;
       }
@@ -1285,12 +1285,12 @@ short RScrollBar::ReadMembers(   // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////
 short RScrollBar::WriteMembers(  // Returns 0 on success.
-   RFile*	pfile)               // File to write to.
+   RFile*   pfile)               // File to write to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Invoke base class to read base members.
-   sRes	= RGuiItem::WriteMembers(pfile);
+   sRes   = RGuiItem::WriteMembers(pfile);
 
    // If okay so far . . .
    if (sRes == 0)
@@ -1321,7 +1321,7 @@ short RScrollBar::WriteMembers(  // Returns 0 on success.
       else
       {
          TRACE("WriteMembers(): Error writing RScrollBar members.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 

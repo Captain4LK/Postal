@@ -19,20 +19,20 @@
 // QUEUE.CPP
 //
 // History:
-//		06/12/94 MR		Added this comment block and made things safe
-//						for interrupt-driven usage.
+//      06/12/94 MR      Added this comment block and made things safe
+//                  for interrupt-driven usage.
 //
-//		06/14/94 MR		Added function to remove the item at the tail of
-//						the queue.
+//      06/14/94 MR      Added function to remove the item at the tail of
+//                  the queue.
 //
-//		06/15/94 MR		Cleaned up the overall documentation to explain
-//						how interrupt-driven usage works with the queue.
+//      06/15/94 MR      Cleaned up the overall documentation to explain
+//                  how interrupt-driven usage works with the queue.
 //
-//		06/13/95	JMI	Converted to a template in attempt to make this class
-//							more useful.  This particular file becomes unnecessary
-//							at this point.  Do not bother including this CPP file
-//							in your project (the entirity of this template class
-//							is implemented in the .H file).
+//      06/13/95   JMI   Converted to a template in attempt to make this class
+//                     more useful.  This particular file becomes unnecessary
+//                     at this point.  Do not bother including this CPP file
+//                     in your project (the entirity of this template class
+//                     is implemented in the .H file).
 //
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -20,21 +20,21 @@
 // ANIMSPRT.CPP
 //
 // History:
-//		01/23/95 BH		Constructor and Desctuctor
-//		01/24/95 BH		Skeleton code for the member functions
-//		01/06/96 BH		Changed the animation format to work with
-//							the new versions of CSprite and CImage.
-//		04/16/96 BH		Changed the NextFrame and Previous frame to check
-//							the m_sLoopToFrame value rather than checking the
-//							animation flags.
-//		10/31/96 BH		Changed the names from CAnimSprite to RAnimSprite
-//							for the new RSPiX naming convention.  Also filled
-//							in missing comments.
+//      01/23/95 BH      Constructor and Desctuctor
+//      01/24/95 BH      Skeleton code for the member functions
+//      01/06/96 BH      Changed the animation format to work with
+//                     the new versions of CSprite and CImage.
+//      04/16/96 BH      Changed the NextFrame and Previous frame to check
+//                     the m_sLoopToFrame value rather than checking the
+//                     animation flags.
+//      10/31/96 BH      Changed the names from CAnimSprite to RAnimSprite
+//                     for the new RSPiX naming convention.  Also filled
+//                     in missing comments.
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							ENDIAN_LITTLE	RFile::LittleEndian
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     ENDIAN_LITTLE   RFile::LittleEndian
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -84,14 +84,14 @@ RAnimSprite::~RAnimSprite()
 // Load
 //
 // Description:
-//		Load an animation from a .ani file with the given name
+//      Load an animation from a .ani file with the given name
 //
 // Parameters:
-//		pszFilename = name of animation file to load from
+//      pszFilename = name of animation file to load from
 //
 // Returns:
-//		SUCCESS if file was loaded correctly
-//		ERROR otherwise
+//      SUCCESS if file was loaded correctly
+//      ERROR otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -118,14 +118,14 @@ short RAnimSprite::Load(char* pszFilename)
 // Load
 //
 // Description:
-//		Load an animation from the current position in an open RFile
+//      Load an animation from the current position in an open RFile
 //
 // Parameters:
-//		pcf = pointer to an open RFile
+//      pcf = pointer to an open RFile
 //
 // Returns:
-//		SUCCESS if the file was loaded correctly
-//		ERROR otherwise
+//      SUCCESS if the file was loaded correctly
+//      ERROR otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -227,15 +227,15 @@ short RAnimSprite::Load(RFile* pcf)
 // ReadPictures:
 //
 // Description:
-//		Function called by Load to read the pictures portion of the animation
-//		file.
+//      Function called by Load to read the pictures portion of the animation
+//      file.
 //
 // Parameters:
-//		pointer to open RFile at the position for the picture data
+//      pointer to open RFile at the position for the picture data
 //
 // Returns:
-//		SUCCESS if pictures were read correctly
-//		FAILURE otherwise
+//      SUCCESS if pictures were read correctly
+//      FAILURE otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -257,15 +257,15 @@ short RAnimSprite::ReadPictures(RFile* pcf)
 // ReadFrames
 //
 // Description:
-//		Function called by Load to read the frame portion of the animation
-//		file.
+//      Function called by Load to read the frame portion of the animation
+//      file.
 //
 // Parameters:
-//		pointer to open RFile at the position for the frame data
+//      pointer to open RFile at the position for the frame data
 //
 // Returns:
-//		SUCCESS if the frame data was read correctly
-//		FAILURE otherwise - TRACE messages will describe the failure
+//      SUCCESS if the frame data was read correctly
+//      FAILURE otherwise - TRACE messages will describe the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -354,14 +354,14 @@ short RAnimSprite::ReadFrames(RFile* pcf)
 // Save
 //
 // Description:
-//		Save an animation to a .ani file with the given name
+//      Save an animation to a .ani file with the given name
 //
 // Parameters:
-//		pszFilename = the filename you wish to save
+//      pszFilename = the filename you wish to save
 //
 // Returns:
-//		SUCCESS if the file was saved correctly
-//		ERROR otherwise
+//      SUCCESS if the file was saved correctly
+//      ERROR otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -388,16 +388,16 @@ short RAnimSprite::Save(char* pszFilename)
 // Save
 //
 // Description:
-//		Save an animation to the current location in an open RFile.
-//		This version may be useful if you choose to save a set of animations
-//		in one file.
+//      Save an animation to the current location in an open RFile.
+//      This version may be useful if you choose to save a set of animations
+//      in one file.
 //
 // Parameters:
-//		pcf = pointer to open RFile
+//      pcf = pointer to open RFile
 //
 // Returns:
-//		SUCCESS if the file was saved correctly
-//		ERROR otherwise
+//      SUCCESS if the file was saved correctly
+//      ERROR otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -478,15 +478,15 @@ short RAnimSprite::Save(RFile* pcf)
 // WritePictures
 //
 // Description:
-//		Function called by Save to write the pictures portion of the animation
-//		file.
+//      Function called by Save to write the pictures portion of the animation
+//      file.
 //
 // Parameters:
-//		pointer to open RFile at the point where the pictures should be written
+//      pointer to open RFile at the point where the pictures should be written
 //
 // Returns:
-//		SUCCESS if the pictures were written
-//		FAILURE otherwise
+//      SUCCESS if the pictures were written
+//      FAILURE otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -506,15 +506,15 @@ short RAnimSprite::WritePictures(RFile* pcf)
 // WriteFrames
 //
 // Description:
-//		Function called by Save to write the frames portion of the animation
-//		file.
+//      Function called by Save to write the frames portion of the animation
+//      file.
 //
 // Parameters:
-//		pointer to open RFile at the point where the frames should be written
+//      pointer to open RFile at the point where the frames should be written
 //
 // Returns:
-//		SUCCESS if the frames were written
-//		FAILURE otherwise
+//      SUCCESS if the frames were written
+//      FAILURE otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -598,19 +598,19 @@ short RAnimSprite::WriteFrames(RFile* pcf)
 // SetFrame
 //
 // Description:
-//		Set to specified frame in current animation.
+//      Set to specified frame in current animation.
 //
-//	Parameters
-//		sFrameNum = Frame number (0 to n-1)
+//   Parameters
+//      sFrameNum = Frame number (0 to n-1)
 //
 // Return:
-//		none
+//      none
 //
 // Notes:
-//		If frame is too high then ending frame is used
-//		A sequential search for specified frame is required
-//		If ANIMSPRITE_FLAGS_NOSKIP flag is set, nearest key-frame is used
-//		(nearest before, nearest after, or just nearest?)
+//      If frame is too high then ending frame is used
+//      A sequential search for specified frame is required
+//      If ANIMSPRITE_FLAGS_NOSKIP flag is set, nearest key-frame is used
+//      (nearest before, nearest after, or just nearest?)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -658,17 +658,17 @@ short RAnimSprite::SetFrame(short sFrameNum)
 // NextFrame
 //
 // Description:
-//		Go to the next frame of the animation immediately (not using the
-//		timer).  If it is on the last frame and the ANIMSPRITE_FLAG_LOOP
-//		is set, then it will loop back to the m_sLoopToFrame number.  If
-//		the flag is not set then it will stay on the last frame.
+//      Go to the next frame of the animation immediately (not using the
+//      timer).  If it is on the last frame and the ANIMSPRITE_FLAG_LOOP
+//      is set, then it will loop back to the m_sLoopToFrame number.  If
+//      the flag is not set then it will stay on the last frame.
 //
-//	Parameters:
-//		none
+//   Parameters:
+//      none
 //
-//	Return:
-//		frame number it is on
-//		ANIMSPRITE_LAST_FRAME if it is stuck on the last frame (not looping)
+//   Return:
+//      frame number it is on
+//      ANIMSPRITE_LAST_FRAME if it is stuck on the last frame (not looping)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -677,7 +677,7 @@ short RAnimSprite::NextFrame()
    // See if it is on the last frame
    if (m_sCurrFrame == m_sNumFrames - 1)
    {
-//		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
+//      if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
       if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
          if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
             m_sCurrFrame = m_sLoopToFrame;
@@ -725,15 +725,15 @@ short RAnimSprite::NextFrame()
 // PrevFrame
 //
 // Description:
-//		Go to the previous frame, and if it is already on the first frame
-//		it will loop to the sLoopToFrame if ANIMSPRITE_FLAG_LOOP
+//      Go to the previous frame, and if it is already on the first frame
+//      it will loop to the sLoopToFrame if ANIMSPRITE_FLAG_LOOP
 //
-//	Parameters:
-//		none
+//   Parameters:
+//      none
 //
 // Returns:
-//		current frame number or ANIMSPRITE_FIRST_FRAME if looping is not
-//		on and it is stuck on the first frame.
+//      current frame number or ANIMSPRITE_FIRST_FRAME if looping is not
+//      on and it is stuck on the first frame.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -742,7 +742,7 @@ short RAnimSprite::PrevFrame()
    // See if it is on the first frame
    if (m_sCurrFrame == 0)
    {
-//		if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
+//      if (m_ulAnimFlags & ANIMSPRITE_FLAG_LOOP)
       if (m_sLoopToFrame > -1 && m_sLoopToFrame < m_sNumFrames)
          if (m_sLoopToFrame >= 0 && m_sLoopToFrame < m_sNumFrames)
             m_sCurrFrame = m_sLoopToFrame;
@@ -790,13 +790,13 @@ short RAnimSprite::PrevFrame()
 // NextKeyFrame
 //
 // Description:
-//		Go to next key frame of the animation.
+//      Go to next key frame of the animation.
 //
-//	Parameters:
-//		none
+//   Parameters:
+//      none
 //
 // Return:
-//		current frame number
+//      current frame number
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -811,16 +811,16 @@ short RAnimSprite::NextKeyFrame()      // goes to next key frame of animation
 // Animate
 //
 // Description:
-//		Go to the next frame of the animation if the time for the current
-//		frame has expired.  It will loop to the m_sLoopToFrame if the
-//		ANIMSPRITE_FLAG_LOOP is set.
+//      Go to the next frame of the animation if the time for the current
+//      frame has expired.  It will loop to the m_sLoopToFrame if the
+//      ANIMSPRITE_FLAG_LOOP is set.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		ANIMSPRITE_WAITING if it is not time yet
-//		current frame number or ANIMSPRITE_LAST_FRAME (see next frame)
+//      ANIMSPRITE_WAITING if it is not time yet
+//      current frame number or ANIMSPRITE_LAST_FRAME (see next frame)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -837,14 +837,14 @@ short RAnimSprite::Animate()
 // AllocateFrames
 //
 // Description:
-//		Allocates the given number of frames for an animation
+//      Allocates the given number of frames for an animation
 //
 // Parameters:
-//		sNumFrames = number of frames to be allocated
+//      sNumFrames = number of frames to be allocated
 //
 // Returns:
-//		SUCCESS if the memory was allocated for the frames
-//		FAILURE otherwise
+//      SUCCESS if the memory was allocated for the frames
+//      FAILURE otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -868,14 +868,14 @@ short RAnimSprite::AllocateFrames(short sNumFrames)
 // AllocatePictures
 //
 // Description:
-//		Allocates an array of RImage pointers of the given size
+//      Allocates an array of RImage pointers of the given size
 //
 // Parameters:
-//		sNumPicutures = number of picture pointers to allocate
+//      sNumPicutures = number of picture pointers to allocate
 //
 // Returns:
-//		SUCCESS if the picture pointers were allocated
-//		FAILURE otherwise
+//      SUCCESS if the picture pointers were allocated
+//      FAILURE otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -907,14 +907,14 @@ short RAnimSprite::AllocatePictures(short sNumPictures)
 // FreeFrames
 //
 // Description:
-//		Frees the frames that were allocated for this animation
+//      Frees the frames that were allocated for this animation
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		SUCCESS if the pointer was valid
-//		FAILURE if the frame pointer was NULL
+//      SUCCESS if the pointer was valid
+//      FAILURE if the frame pointer was NULL
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -935,15 +935,15 @@ short RAnimSprite::FreeFrames()
 // FreePictures
 //
 // Description:
-//		Frees the Images of each picture and then frees the array of picture
-//		pointers.
+//      Frees the Images of each picture and then frees the array of picture
+//      pointers.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		SUCCESS if there were allocated pictures to free
-//		FAILURE if there were no pictures
+//      SUCCESS if there were allocated pictures to free
+//      FAILURE if there were no pictures
 //
 ///////////////////////////////////////////////////////////////////////////////
 

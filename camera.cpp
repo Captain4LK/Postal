@@ -21,18 +21,18 @@
 // This module impliments the CCamara class
 //
 // History:
-//		01/09/96 MJR	Started.
+//      01/09/96 MJR   Started.
 //
-//		02/13/97	JMI	Now passes m_pHood to CScene::Render().
+//      02/13/97   JMI   Now passes m_pHood to CScene::Render().
 //
-//		02/28/97	JMI	The Snap that takes many parameters was not using the
-//							passed in CScene*, now it is.
-//							Snap() now accepts a CHood* as well.
+//      02/28/97   JMI   The Snap that takes many parameters was not using the
+//                     passed in CScene*, now it is.
+//                     Snap() now accepts a CHood* as well.
 //
-//		07/05/97 MJR	Changed to RSP_BLACK_INDEX instead of 0.
+//      07/05/97 MJR   Changed to RSP_BLACK_INDEX instead of 0.
 //
-//		07/31/97	JMI	Added m_bClip to allow us to disable clipping to realm
-//							edges.
+//      07/31/97   JMI   Added m_bClip to allow us to disable clipping to realm
+//                     edges.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define CAMERA_CPP
@@ -181,15 +181,15 @@ void CCamera::Snap(void)
    ASSERT(m_pimFilm != NULL);
 
 /*
-	// Init film clipping rect to view's location on the film
-	RRect rFilmClip(m_sFilmViewX, m_sFilmViewY, m_sViewW, m_sViewH);
+   // Init film clipping rect to view's location on the film
+   RRect rFilmClip(m_sFilmViewX, m_sFilmViewY, m_sViewW, m_sViewH);
 
-	// Clip the clipping rect to the film size
-	RRect rFilmSize(0, 0, m_pimFilm->m_sWidth, m_pimFilm->m_sHeight);
-	rFilmClip.ClipTo(&rFilmSize);
+   // Clip the clipping rect to the film size
+   RRect rFilmSize(0, 0, m_pimFilm->m_sWidth, m_pimFilm->m_sHeight);
+   rFilmClip.ClipTo(&rFilmSize);
 
-	// Tell scene to render itself onto film
-	m_pScene->Render(m_sScene2FilmX, m_sScene2FilmY, m_pimFilm, &rFilmClip);
+   // Tell scene to render itself onto film
+   m_pScene->Render(m_sScene2FilmX, m_sScene2FilmY, m_pimFilm, &rFilmClip);
 */
    // Tell scene to render itself onto film (scene handles clipping)
    m_pScene->Render(m_sSceneViewX, m_sSceneViewY, m_sViewW, m_sViewH, m_pimFilm, m_sFilmViewX, m_sFilmViewY, m_pHood);
@@ -212,19 +212,19 @@ void CCamera::Snap(
    short sFilmViewY)                            // In:  View's upper left y (in film coords)
 {
 /*
-	// Init film clipping rect to view's location on the film
-	RRect rFilmClip(sFilmViewX, sFilmViewY, sViewW, sViewH);
+   // Init film clipping rect to view's location on the film
+   RRect rFilmClip(sFilmViewX, sFilmViewY, sViewW, sViewH);
 
-	// Clip the clipping rect to the film size
-	RRect rFilmSize(0, 0, pimFilm->m_sWidth, pimFilm->m_sHeight);
-	rFilmClip.ClipTo(&rFilmSize);
+   // Clip the clipping rect to the film size
+   RRect rFilmSize(0, 0, pimFilm->m_sWidth, pimFilm->m_sHeight);
+   rFilmClip.ClipTo(&rFilmSize);
 
-	// Calculate mapping from scene to film coords
-	short sScene2FilmX = sSceneViewX - sFilmViewX;
-	short sScene2FilmY = sSceneViewY - sFilmViewY;
+   // Calculate mapping from scene to film coords
+   short sScene2FilmX = sSceneViewX - sFilmViewX;
+   short sScene2FilmY = sSceneViewY - sFilmViewY;
 
-	// Tell scene to render itself onto film
-	pScene->Render(sScene2FilmX, sScene2FilmY, pimFilm, &rFilmClip);
+   // Tell scene to render itself onto film
+   pScene->Render(sScene2FilmX, sScene2FilmY, pimFilm, &rFilmClip);
 */
    // Tell scene to render itself onto film (scene handles clipping)
    pScene->Render(sSceneViewX, sSceneViewY, sViewW, sViewH, pimFilm, sFilmViewX, sFilmViewY, phood);

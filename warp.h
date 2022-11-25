@@ -19,20 +19,20 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		06/02/97 JMI	Started.
+//      06/02/97 JMI   Started.
 //
-//		06/07/97	JMI	Added warp in options enum.
-//							Also, constructor now initializes static ms_stockpile
-//							to CDude defaults, if it has not yet been done.
-//							Also, added CreateWarpFromDude().
+//      06/07/97   JMI   Added warp in options enum.
+//                     Also, constructor now initializes static ms_stockpile
+//                     to CDude defaults, if it has not yet been done.
+//                     Also, added CreateWarpFromDude().
 //
-//		06/15/97	JMI	Moved initialization of ms_stockpile into warp.cpp since
-//							the stockpile is non aggregatable.
+//      06/15/97   JMI   Moved initialization of ms_stockpile into warp.cpp since
+//                     the stockpile is non aggregatable.
 //
-//		07/19/97	JMI	Added m_sRotY, the dude's initial rotation around the Y
-//							axis.
+//      07/19/97   JMI   Added m_sRotY, the dude's initial rotation around the Y
+//                     axis.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -58,16 +58,16 @@ public:
 
 enum        // Warp options.
 {
-   None				= 0x0000,
+   None            = 0x0000,
    // Only one of these options may be specified per WarpIn*().
-   CopyStockPile	= 0x0001,         // Copy warp stockpile to Dude's.
-   UnionStockPile	= 0x0002,         // Union warp stockpile with Dude's.
-   AddStockPile	= 0x0003,         // Add stockpile to dude.
+   CopyStockPile   = 0x0001,         // Copy warp stockpile to Dude's.
+   UnionStockPile   = 0x0002,         // Union warp stockpile with Dude's.
+   AddStockPile   = 0x0003,         // Add stockpile to dude.
 
    // Mask for stockpile options.
-   StockPileMask	= 0x000F
+   StockPileMask   = 0x000F
 
-                    // These options can be combined per WarpIn*() call.
+                     // These options can be combined per WarpIn*() call.
 
 };
 
@@ -78,12 +78,12 @@ public:
 double m_dX;                                    // Dude's initial position.
 double m_dY;                                    // Dude's initial position.
 double m_dZ;                                    // Dude's initial position.
-short	m_sRotY;                                  // Dude's initial rotation
-                                                // around the Y axis.
+short m_sRotY;                                    // Dude's initial rotation
+                                                  // around the Y axis.
 
 short m_sSuspend;                               // Suspend flag
 
-CSprite2	m_sprite;                              // Sprite.
+CSprite2 m_sprite;                                // Sprite.
 
 
 protected:
@@ -95,7 +95,7 @@ public:
 
 
 // The stockpile of ammo and health used by all CWarps.
-static CStockPile	ms_stockpile;
+static CStockPile ms_stockpile;
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -109,10 +109,10 @@ public:
 CWarp(CRealm* pRealm)
    : CThing(pRealm, CWarpID)
 {
-   m_sSuspend					= 0;
-   m_sRotY						= 0;
+   m_sSuspend               = 0;
+   m_sRotY                  = 0;
 
-   m_sprite.m_pthing			= this;
+   m_sprite.m_pthing         = this;
 }
 
 public:
@@ -197,14 +197,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -215,13 +215,13 @@ void EditRender(void);
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // Handy external functions
@@ -231,23 +231,23 @@ public:
 // Stocks, rejuvenates, and places a CDude.  The dude can be passed to this
 // function or allocated by this function.
 short WarpIn(              // Returns 0 on success.
-   CDude**	ppdude,        // In:  CDude to 'warp in', *ppdude = NULL to create one.
-                           // Out: Newly created CDude, if no CDude passed in.
-   short	sOptions);        // In:  Options for 'warp in'.
+   CDude**   ppdude,        // In:  CDude to 'warp in', *ppdude = NULL to create one.
+                            // Out: Newly created CDude, if no CDude passed in.
+   short sOptions);          // In:  Options for 'warp in'.
 
 // Stocks, rejuvenates, and places a CDude at a random warp.  The dude can
 // be passed to this function or allocated by this function.
 static short WarpInAnywhere(        // Returns 0 on success.
-   CRealm*	prealm,                 // In:  Realm in which to choose CWarp.
-   CDude**	ppdude,                 // In:  CDude to 'warp in', *ppdude = NULL to create one.
-                                    // Out: Newly created CDude, if no CDude passed in.
-   short	sOptions);                 // In:  Options for 'warp in'.
+   CRealm*   prealm,                 // In:  Realm in which to choose CWarp.
+   CDude**   ppdude,                 // In:  CDude to 'warp in', *ppdude = NULL to create one.
+                                     // Out: Newly created CDude, if no CDude passed in.
+   short sOptions);                   // In:  Options for 'warp in'.
 
 // Creates a warp based on a dude's settings.
 static short CreateWarpFromDude(       // Returns 0 on success.
-   CRealm*	prealm,                    // In:  Realm in which to choose CWarp.
-   CDude*	pdude,                     // In:  Dude to create warp from.
-   CWarp**	ppwarp,                    // Out: New warp on success.
+   CRealm*   prealm,                    // In:  Realm in which to choose CWarp.
+   CDude*   pdude,                     // In:  Dude to create warp from.
+   CWarp**   ppwarp,                    // Out: New warp on success.
    bool bCopyStockPile);               // In:  true to copy stockpile, false otherwise.
 
 

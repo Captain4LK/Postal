@@ -17,17 +17,17 @@
 //
 //////////////////////////////////////////////////////////////////////
 //
-//	SPECIALTYP.H
+//   SPECIALTYP.H
 //
-//	Created on     09/28/96	JRD
+//   Created on     09/28/96   JRD
 // Implemented on 09/28/96 JRD
 //
-// 09/28/96	JRD	Started this file with the defines for the extended
-//						types of images and palettes.
+// 09/28/96   JRD   Started this file with the defines for the extended
+//                  types of images and palettes.
 //
-//	10/24/96	JRD	Added FSPR1 version 5 format
+//   10/24/96   JRD   Added FSPR1 version 5 format
 //
-//	10/25/96	JRD	Adding FSPR8 version 3 (in progress)
+//   10/25/96   JRD   Adding FSPR8 version 3 (in progress)
 //
 //
 // This allows (if desired) user access to special image types,
@@ -65,29 +65,29 @@
 //*************************************************
 
 //------------- Installed RImage Plugins: -------------------------
-// ConvertTo:		YES => from any 8-bit
-// ConvertFrom:	YES => to any 8-bit
-// Load:				YES
-// Save:				YES
-// Alloc:			NO
-// Delete:			YES
-// Copy:				NO
+// ConvertTo:      YES => from any 8-bit
+// ConvertFrom:   YES => to any 8-bit
+// Load:            YES
+// Save:            YES
+// Alloc:         NO
+// Delete:         YES
+// Copy:            NO
 //-----------------------------------------------------------------
 //
 // CONVERION NOTE:  Will jettison the palette, as all color info is lost.
-//		Therefore, DO NOT use an FSPR1 as a "palette holder"
+//      Therefore, DO NOT use an FSPR1 as a "palette holder"
 //
-class	RSpecialFSPR1
+class RSpecialFSPR1
 {
 public:
-UCHAR*	m_pCode;    // actual FSPR1 data
+UCHAR*   m_pCode;    // actual FSPR1 data
 S32 m_lSize;         // actual size of FSPR1 data
 U16 m_u16ASCII;      // allow extended character sets
 S16 m_s16KernL;      // move left position
 U16 m_u16Width;      // physical width of image, SHOULD = lWidth!
 S16 m_s16KernR;      // offset from right side
 RImage::Type m_OldType;     // previous type
-S16*	m_psKernList;   // Used in printing only
+S16*   m_psKernList;   // Used in printing only
 // When you implement m_psKernList, please augment the destructor!
 
 RSpecialFSPR1()
@@ -125,7 +125,7 @@ extern void SetConvertToFSPR1
    S16 sH = -1,   // Use (-1) to use image edge
    // If you make a copy, the original RImage will NOT be
    // altered!  **pimCopy will
-   RImage**	ppimCopy = NULL // To make a copy
+   RImage**   ppimCopy = NULL // To make a copy
 );
 
 extern void SetConvertFromFSPR1
@@ -136,21 +136,21 @@ extern void SetConvertFromFSPR1
 );
 
 //*************************************************
-//******  FSPR8 => high speed color		  **********
+//******  FSPR8 => high speed color        **********
 //******  used for sprites               **********
 //*************************************************
 
 //------------- Installed RImage Plugins: -------------------------
-// ConvertTo:		YES => from any 8-bit
-// ConvertFrom:	YES => to any 8-bit
-// Load:				YES
-// Save:				YES
-// Alloc:			NO
-// Delete:			YES
-// Copy:				NO
+// ConvertTo:      YES => from any 8-bit
+// ConvertFrom:   YES => to any 8-bit
+// Load:            YES
+// Save:            YES
+// Alloc:         NO
+// Delete:         YES
+// Copy:            NO
 //-----------------------------------------------------------------
 //
-class	RSpecialFSPR8
+class RSpecialFSPR8
 {
 public:
 USHORT m_usCompType;       // = FSPR8 image type
@@ -158,11 +158,11 @@ U32 m_lBufSize;            // Size of the opaque pixel data
 U32 m_lCodeSize;           // Size of the control block (compression codes)
 USHORT m_usSourceType;     // uncompressed Image pre-compressed type
 
-UCHAR*	m_pCompBuf;       // Compressed picture data, 128bit-aligned
-UCHAR*	m_pCompMem;       // For alignment
-UCHAR*	m_pCodeBuf;       // 32-aligned compression codes
-UCHAR**	m_pBufArry;       // 32-aligned, arry of ptrs to m_pCompBuf scanlines
-UCHAR**	m_pCodeArry;      // 32-aligned, arry of ptrs into m_pCodeBuf scanlines
+UCHAR*   m_pCompBuf;       // Compressed picture data, 128bit-aligned
+UCHAR*   m_pCompMem;       // For alignment
+UCHAR*   m_pCodeBuf;       // 32-aligned compression codes
+UCHAR**   m_pBufArry;       // 32-aligned, arry of ptrs to m_pCompBuf scanlines
+UCHAR**   m_pCodeArry;      // 32-aligned, arry of ptrs into m_pCodeBuf scanlines
 
 RSpecialFSPR8()
 {

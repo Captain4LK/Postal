@@ -20,11 +20,11 @@
 // PushBtn.h
 //
 // History:
-//		02/04/97 JMI	Started.
+//      02/04/97 JMI   Started.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -103,8 +103,8 @@ void CursorEvent(             // Returns nothing.
 // Draw border.
 virtual                    // Overridden here.
 void DrawBorder(           // Returns nothing.
-   RImage* pim	= NULL,              // Dest image, uses m_im if NULL.
-   short sInvert	= FALSE);         // Inverts border if TRUE.
+   RImage* pim   = NULL,              // Dest image, uses m_im if NULL.
+   short sInvert   = FALSE);         // Inverts border if TRUE.
 
 ////////////////////////////////////////////////////////////////////////
 // Querries.
@@ -137,7 +137,7 @@ protected:     // Internal functions.
 
 public:     // Member variables.
 
-State	m_state;          // The button's current state (On or Off (see enums)).
+State m_state;            // The button's current state (On or Off (see enums)).
 
 protected:     // Internal typedefs.
 
@@ -147,5 +147,5 @@ protected:     // Protected member variables.
 
 #endif // PUSHBTN_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

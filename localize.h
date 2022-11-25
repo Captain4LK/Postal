@@ -18,90 +18,90 @@
 // localize.h
 // Project: Postal
 //
-//	History:
-//		02/03/97	JMI	Added g_pszBadNoSakDirPath[].
+//   History:
+//      02/03/97   JMI   Added g_pszBadNoSakDirPath[].
 //
-//		04/11/97	JMI	Added g_pszSaveDemoTitle and g_pszGeneralWriteError.
+//      04/11/97   JMI   Added g_pszSaveDemoTitle and g_pszGeneralWriteError.
 //
-//		04/16/97 MJR	Added a few more messages.
+//      04/16/97 MJR   Added a few more messages.
 //
-//							And then added a few more video messages, too.
+//                     And then added a few more video messages, too.
 //
-//		04/21/97 MJR	Created generic version of "bad path" message.
+//      04/21/97 MJR   Created generic version of "bad path" message.
 //
-//		05/14/97	JMI	Added g_pszPickedUpMessage_ld_s for CDude.
+//      05/14/97   JMI   Added g_pszPickedUpMessage_ld_s for CDude.
 //
-//		06/03/97	JMI	Changed g_pszAudioModeError to g_pszAudioModeGeneralError
-//							and added g_pszAudioModeInUseError,
-//							g_pszAudioModeNoDeviceError,
-//							g_pszAudioModeNotSupportedError.
+//      06/03/97   JMI   Changed g_pszAudioModeError to g_pszAudioModeGeneralError
+//                     and added g_pszAudioModeInUseError,
+//                     g_pszAudioModeNoDeviceError,
+//                     g_pszAudioModeNotSupportedError.
 //
-//		06/04/97	JMI	Added g_pszNotOnCDROM.
+//      06/04/97   JMI   Added g_pszNotOnCDROM.
 //
-//		06/06/97	JMI	Changed message for g_pszPickedUpMessage_ld_s and its name
-//							to g_pszPickedUpMessage_s.
+//      06/06/97   JMI   Changed message for g_pszPickedUpMessage_ld_s and its name
+//                     to g_pszPickedUpMessage_s.
 //
-//		06/14/97 MJR	Added/enhanced general file error messages.
+//      06/14/97 MJR   Added/enhanced general file error messages.
 //
-//		07/13/97	JMI	Changed g_pszAudioModeNotSupportedError to
-//							g_pszAudioModeNotSupportedError_s and changed to ask the
-//							user if they want to try the vanilla mode.
-//							Also, changed the other audio errors to include the
-//							sprintf format parameters in their names.
-//							Also, added g_pszAudioVanillaModeNotSupportedError_s for
-//							the case when the hardware does not support the vanilla
-//							mode.
+//      07/13/97   JMI   Changed g_pszAudioModeNotSupportedError to
+//                     g_pszAudioModeNotSupportedError_s and changed to ask the
+//                     user if they want to try the vanilla mode.
+//                     Also, changed the other audio errors to include the
+//                     sprintf format parameters in their names.
+//                     Also, added g_pszAudioVanillaModeNotSupportedError_s for
+//                     the case when the hardware does not support the vanilla
+//                     mode.
 //
-//		07/21/97	JMI	Added g_pszNoWeaponButHaveAmmo_s_s and g_pszNoWeapon_s.
+//      07/21/97   JMI   Added g_pszNoWeaponButHaveAmmo_s_s and g_pszNoWeapon_s.
 //
-//		07/28/97	JMI	Added g_pszDispenserNoDispenseeTypeChosen.
+//      07/28/97   JMI   Added g_pszDispenserNoDispenseeTypeChosen.
 //
-//		08/05/97	JMI	Added g_pszDontHaveExecuteWeapon_s and
-//							g_pszDontHaveSuicideWeapon_s.
+//      08/05/97   JMI   Added g_pszDontHaveExecuteWeapon_s and
+//                     g_pszDontHaveSuicideWeapon_s.
 //
-//		08/12/97	JMI	Added g_pszGenericBrowseFor_s_Title and
-//							g_pszGenericMustBeRelativePath_s.
+//      08/12/97   JMI   Added g_pszGenericBrowseFor_s_Title and
+//                     g_pszGenericMustBeRelativePath_s.
 //
-//		08/17/97	JMI	Got rid of m_szMessages and all message related functions
-//							and variables from CDude since we are now using the toolbar
-//							for dude status feedback to the user.  This includes:
-//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
-//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
-//							ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
-//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
-//							MessageChange(), Message(), UpdateFontColors(),
-//							CPowerUp::ms_apszPowerUpTypeNames[],
-//							CPowerUp::GetDescription(), and some strings and a string
-//							array in localize.*.
+//      08/17/97   JMI   Got rid of m_szMessages and all message related functions
+//                     and variables from CDude since we are now using the toolbar
+//                     for dude status feedback to the user.  This includes:
+//                     MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
+//                     m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
+//                     ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
+//                     ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
+//                     MessageChange(), Message(), UpdateFontColors(),
+//                     CPowerUp::ms_apszPowerUpTypeNames[],
+//                     CPowerUp::GetDescription(), and some strings and a string
+//                     array in localize.*.
 //
-//		08/20/97	JMI	Added g_pszDontDropYourselfMORON.
+//      08/20/97   JMI   Added g_pszDontDropYourselfMORON.
 //
-//		08/21/97	JMI	Added g_pszDoofusCannotFindNavNet_EditMode_hu_hu and
-//							g_pszDoofusCannotFindNavNet_PlayMode_hu_hu.
+//      08/21/97   JMI   Added g_pszDoofusCannotFindNavNet_EditMode_hu_hu and
+//                     g_pszDoofusCannotFindNavNet_PlayMode_hu_hu.
 //
-//		08/25/97	JMI	Added g_pszCannotOpenSoundFiles_s_s.
+//      08/25/97   JMI   Added g_pszCannotOpenSoundFiles_s_s.
 //
-//		09/11/97	JMI	Added g_pszPlayOneRealmOnlyMessage.
+//      09/11/97   JMI   Added g_pszPlayOneRealmOnlyMessage.
 //
-//		09/18/97	JMI	Added localization vars for menus.
+//      09/18/97   JMI   Added localization vars for menus.
 //
-//		09/18/97	JMI	Added localization vars for SampleMaster categories.
+//      09/18/97   JMI   Added localization vars for SampleMaster categories.
 //
-//		09/29/97	JMI	Added g_pszNoSoundFiles.
+//      09/29/97   JMI   Added g_pszNoSoundFiles.
 //
-//		10/07/97 BRH	Added score localizations.
+//      10/07/97 BRH   Added score localizations.
 //
-//		10/09/97	JMI	Added g_pszVideoChangeDepthErrorUnderGDI_s.
+//      10/09/97   JMI   Added g_pszVideoChangeDepthErrorUnderGDI_s.
 //
-//		10/13/97	JMI	Added g_pszControlsMenu_UseJoystick to localizable texts.
+//      10/13/97   JMI   Added g_pszControlsMenu_UseJoystick to localizable texts.
 //
-//		12/04/97 BRH	Added g_pszStartSinglePlayerMenu_AddOn.
+//      12/04/97 BRH   Added g_pszStartSinglePlayerMenu_AddOn.
 //
-//		03/05/98 BRH	Added g_pszWrongCD message that tells the player that they
-//							must have the original Postal CD in the drive in order to
-//							play the Postal Add on Pack.
+//      03/05/98 BRH   Added g_pszWrongCD message that tells the player that they
+//                     must have the original Postal CD in the drive in order to
+//                     play the Postal Add on Pack.
 //
-//		02/04/00 MJR	Added g_pszPromptForOriginalCD.
+//      02/04/00 MJR   Added g_pszPromptForOriginalCD.
 //
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ extern char g_pszVideoChangeDepthError[];
 extern char g_pszVideoDepthError[];
 extern char g_pszVideoResolutionError[];
 extern char g_pszVideoPagesError[];
-extern char	g_pszVideoChangeDepthErrorUnderGDI_s[];
+extern char g_pszVideoChangeDepthErrorUnderGDI_s[];
 
 extern char g_pszAudioModeGeneralError_s[];
 extern char g_pszAudioModeInUseError_s[];
@@ -148,9 +148,9 @@ extern char g_pszGeneralError[];
 extern char g_pszBadPath_s_s[];
 extern char g_pszBadCDPath_s_s[];
 
-extern char	g_pszAssetsMissingError[];
+extern char g_pszAssetsMissingError[];
 extern char g_pszNotOnCDROM[];
-extern char	g_pszSaveFileQuery[];
+extern char g_pszSaveFileQuery[];
 
 extern char g_pszSaveDemoTitle[];
 extern char g_pszSaveGameTitle[];
@@ -158,15 +158,15 @@ extern char g_pszSaveGameErrorTitle[];
 extern char g_pszSaveGameErrorText[];
 extern char g_pszLoadGameTitle[];
 
-extern char	g_pszFileOpenError_s[];
-extern char	g_pszFileReadError_s[];
-extern char	g_pszFileWriteError_s[];
+extern char g_pszFileOpenError_s[];
+extern char g_pszFileReadError_s[];
+extern char g_pszFileWriteError_s[];
 
 extern char g_pszDispenserNoDispenseeTypeChosen[];
 
 extern char g_pszGenericBrowseFor_s_Title[];
 
-extern char	g_pszGenericMustBeRelativePath_s[];
+extern char g_pszGenericMustBeRelativePath_s[];
 
 extern char g_pszDontDropYourselfMORON[];
 
@@ -192,7 +192,7 @@ extern char g_pszBuy[];
 ////////////////////////////////// Menus ///////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-extern char	g_pszMainMenu_Title[];
+extern char g_pszMainMenu_Title[];
 extern char g_pszMainMenu_Start[];
 extern char g_pszMainMenu_Options[];
 extern char g_pszMainMenu_Editor[];

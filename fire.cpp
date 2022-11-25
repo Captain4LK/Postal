@@ -19,178 +19,178 @@
 // Project: Postal
 //
 // This module implements the CFire weapon class which is a burning flame
-//	for several different effects and weapons.
+//   for several different effects and weapons.
 //
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		01/23/97 BRH	Updated the time to GetGameTime rather than using
-//							real time..
+//      01/23/97 BRH   Updated the time to GetGameTime rather than using
+//                     real time..
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/06/97 BRH	Added RAnimSprite animation of the explosion for now.
-//							We are going to do an Alpha effect on the explosion, so
-//							there are two animations, one of the image and one of
-//							the Alpha information stored as a BMP8 animation.  When
-//							the Alpha effect is ready, we will pass a frame from
-//							each animation to a function to draw it.
+//      02/06/97 BRH   Added RAnimSprite animation of the explosion for now.
+//                     We are going to do an Alpha effect on the explosion, so
+//                     there are two animations, one of the image and one of
+//                     the Alpha information stored as a BMP8 animation.  When
+//                     the Alpha effect is ready, we will pass a frame from
+//                     each animation to a function to draw it.
 //
-//		02/06/97 BRH	Fixed problem with timer.  Since all Explosion objects
-//							are using the same resource managed animation, they cannot
-//							use the animation timer, they have to do the timing
-//							themselves.
+//      02/06/97 BRH   Fixed problem with timer.  Since all Explosion objects
+//                     are using the same resource managed animation, they cannot
+//                     use the animation timer, they have to do the timing
+//                     themselves.
 //
-//		02/07/97 BRH	Changed the sprite from CSprite2 to CSpriteAlpha2 for
-//							the Alpha Blit effect.
+//      02/07/97 BRH   Changed the sprite from CSprite2 to CSpriteAlpha2 for
+//                     the Alpha Blit effect.
 //
-//		02/09/97 BRH	Started the Fire from Explode file since they are
-//							similar.
+//      02/09/97 BRH   Started the Fire from Explode file since they are
+//                     similar.
 //
-//		02/10/97	JMI	rspReleaseResource() now takes a ptr to a ptr.
+//      02/10/97   JMI   rspReleaseResource() now takes a ptr to a ptr.
 //
-//		02/11/97 BRH	Changed the fire to start on a random frame number
-//							so if you have many fires, they don't pulsate or all
-//							burn in sync with each other.
+//      02/11/97 BRH   Changed the fire to start on a random frame number
+//                     so if you have many fires, they don't pulsate or all
+//                     burn in sync with each other.
 //
-//		02/14/97 BRH	Changed from using the RAnimSprite to channel data.
+//      02/14/97 BRH   Changed from using the RAnimSprite to channel data.
 //
-//		02/17/97 BRH	Now uses the resource manager to get the assets and starts
-//							at a random time interval so the fire will be random again.
+//      02/17/97 BRH   Now uses the resource manager to get the assets and starts
+//                     at a random time interval so the fire will be random again.
 //
-//		02/17/97 BRH	Changed the lifetime to be time based rather than frame
-//							based which was causing the fire to live on forever
-//							since being switched from RAnimSprite to RChannel1.
+//      02/17/97 BRH   Changed the lifetime to be time based rather than frame
+//                     based which was causing the fire to live on forever
+//                     since being switched from RAnimSprite to RChannel1.
 //
-//		02/18/97 BRH	Now the fire changes to different Alpha channels as it
-//							burns out during its time to live.
+//      02/18/97 BRH   Now the fire changes to different Alpha channels as it
+//                     burns out during its time to live.
 //
-//		02/19/97 BRH	Checks for collisions and sends messages.
+//      02/19/97 BRH   Checks for collisions and sends messages.
 //
-//		02/19/97 BRH	Added the ability to run both small and large fire
-//							animations.  Change the duration on the alpha layers
-//							so that the initial alpha channel gets played for 80%
-//							of the burning time.  Also added bThick parameter to startup
-//							which will start using the 0th Alpha channel which is
-//							more opaque.  If you want more Alpha, set to false which
-//							will start on the next Alpha level down.
+//      02/19/97 BRH   Added the ability to run both small and large fire
+//                     animations.  Change the duration on the alpha layers
+//                     so that the initial alpha channel gets played for 80%
+//                     of the burning time.  Also added bThick parameter to startup
+//                     which will start using the 0th Alpha channel which is
+//                     more opaque.  If you want more Alpha, set to false which
+//                     will start on the next Alpha level down.
 //
-//		02/23/97 BRH	Added static Preload() funciton which will be called
-//							before play begins to cache a resource for this object.
+//      02/23/97 BRH   Added static Preload() funciton which will be called
+//                     before play begins to cache a resource for this object.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		02/24/97 BRH	Set the default state in ProcessMessages
+//      02/24/97 BRH   Set the default state in ProcessMessages
 //
-//		02/24/97 BRH	Added a timer for checkin collisions so it doesn't have
-//							to check each time, but it was checking only when changing
-//							alpha levels which was too S32.
+//      02/24/97 BRH   Added a timer for checkin collisions so it doesn't have
+//                     to check each time, but it was checking only when changing
+//                     alpha levels which was too S32.
 //
-//		03/05/97	JMI	Render()'s mapping from 3D to 2D had a typo (was adding m_dY
-//							instead of subtracting).  Now uses Map3Dto2D().
+//      03/05/97   JMI   Render()'s mapping from 3D to 2D had a typo (was adding m_dY
+//                     instead of subtracting).  Now uses Map3Dto2D().
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/14/97 BRH	Added CSmash::Item to the collide bits so that the fire
-//							will send messages to barrels and other items.
+//      04/14/97 BRH   Added CSmash::Item to the collide bits so that the fire
+//                     will send messages to barrels and other items.
 //
-//		04/21/97 BRH	Added Smoke animation to the fire and the ability of the
-//							fire to change to smoke.
+//      04/21/97 BRH   Added Smoke animation to the fire and the ability of the
+//                     fire to change to smoke.
 //
-//		02/22/97 BRH	Adjusted the timer for the smoke effect to eliminate some
-//							of the final frames so that the smoke wouldn't pulsate
-//							like it did.
+//      02/22/97 BRH   Adjusted the timer for the smoke effect to eliminate some
+//                     of the final frames so that the smoke wouldn't pulsate
+//                     like it did.
 //
-//		04/23/97	JMI	Changed this item's m_smash bits from CSmash::Item to
-//							CSmash::Fire.
-//							Now affects Characters, Miscs, Mines, and Barrels.
+//      04/23/97   JMI   Changed this item's m_smash bits from CSmash::Item to
+//                     CSmash::Fire.
+//                     Now affects Characters, Miscs, Mines, and Barrels.
 //
-//		04/24/97 BRH	Added static wind direction variable that will get
-//							adjusted slightly by each new creation of smoke which
-//							calls WindDirectionUpdate() to randomly vary the wind
-//							direction.
+//      04/24/97 BRH   Added static wind direction variable that will get
+//                     adjusted slightly by each new creation of smoke which
+//                     calls WindDirectionUpdate() to randomly vary the wind
+//                     direction.
 //
-//		04/25/97 BRH	Fixed problem with smoke that was created as smoke,
-//							setting people on fire.  Also fixed wall detection
-//							and added an individual direction variable to each
-//							instance of smoke that initially copies the wind
-//							direction and uses it until it hits a wall, then it
-//							rotates in one direction or the other until it is
-//							free to move again.
+//      04/25/97 BRH   Fixed problem with smoke that was created as smoke,
+//                     setting people on fire.  Also fixed wall detection
+//                     and added an individual direction variable to each
+//                     instance of smoke that initially copies the wind
+//                     direction and uses it until it hits a wall, then it
+//                     rotates in one direction or the other until it is
+//                     free to move again.
 //
-//		05/09/97	JMI	Update() now moves the smashatorium object when the CFire
-//							is not Smoke.
+//      05/09/97   JMI   Update() now moves the smashatorium object when the CFire
+//                     is not Smoke.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/11/97 BRH	Pass aS32 the m_u16ShooterID value in the Burn message.
+//      06/11/97 BRH   Pass aS32 the m_u16ShooterID value in the Burn message.
 //
-//		06/15/97 BRH	Fixed Smoke going past animation by 1 frame.
+//      06/15/97 BRH   Fixed Smoke going past animation by 1 frame.
 //
-//		06/16/97 BRH	Fixed smoke init of static wind direction.  Now it
-//							inits the wind direction on class load so that it doesn't
-//							cause problems for the demo mode.
+//      06/16/97 BRH   Fixed smoke init of static wind direction.  Now it
+//                     inits the wind direction on class load so that it doesn't
+//                     cause problems for the demo mode.
 //
-//		06/17/97 MJR	Same as previous one for wind velocity.
+//      06/17/97 MJR   Same as previous one for wind velocity.
 //
-//					MJR	Moved resetting of statics to Preload(), since in most
-//							cases, fire or smoke are not Load()'ed.
+//               MJR   Moved resetting of statics to Preload(), since in most
+//                     cases, fire or smoke are not Load()'ed.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/26/97 BRH	Added CSmash::AlmostDead to the include bits for fire so
-//							that writhing guys can be killed by fire.
+//      06/26/97 BRH   Added CSmash::AlmostDead to the include bits for fire so
+//                     that writhing guys can be killed by fire.
 //
-//		07/01/97 BRH	Added small smoke animation.
+//      07/01/97 BRH   Added small smoke animation.
 //
-//		07/04/97 BRH	Added an auto alpha blend on the small smoke for the
-//							rocket trails so they can blend into alpha based on
-//							their time to live.  May need to disable the
-//							alpha channel for it to work correctly.
+//      07/04/97 BRH   Added an auto alpha blend on the small smoke for the
+//                     rocket trails so they can blend into alpha based on
+//                     their time to live.  May need to disable the
+//                     alpha channel for it to work correctly.
 //
-//		07/08/97	JMI	Fixed Render() to distribute the homogeneous alpha level
-//							better.  Still needs tuning.
+//      07/08/97   JMI   Fixed Render() to distribute the homogeneous alpha level
+//                     better.  Still needs tuning.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/10/97	JMI	Now uses alpha mask and level for animation.
+//      07/10/97   JMI   Now uses alpha mask and level for animation.
 //
-//		07/13/97 BRH	Changed the animations to use only 1 alpha mask and change
-//							the alpha level based on time.
+//      07/13/97 BRH   Changed the animations to use only 1 alpha mask and change
+//                     the alpha level based on time.
 //
-//		07/20/97	JMI	Added some ASSERTs.
+//      07/20/97   JMI   Added some ASSERTs.
 //
-//		07/23/97 BRH	Changed small fires to create small smokes rather than
-//							large which slows down the game quite a bit.
+//      07/23/97 BRH   Changed small fires to create small smokes rather than
+//                     large which slows down the game quite a bit.
 //
-//		07/27/97	JMI	Changed to use Z position (i.e., X/Z plane) instead of
-//							Y2 position (i.e., viewing plane) position for draw
-//							priority.
+//      07/27/97   JMI   Changed to use Z position (i.e., X/Z plane) instead of
+//                     Y2 position (i.e., viewing plane) position for draw
+//                     priority.
 //
-//		08/11/97 BRH	If alpha blending is turned off, as a performance option,
-//							then don't even blit the smoke since without the alpha
-//							effect, you can't see through it at all.
+//      08/11/97 BRH   If alpha blending is turned off, as a performance option,
+//                     then don't even blit the smoke since without the alpha
+//                     effect, you can't see through it at all.
 //
-//		08/20/97	JMI	Now does a range check on m_sCurrentAlphaLevel after
-//							decrementing.
+//      08/20/97   JMI   Now does a range check on m_sCurrentAlphaLevel after
+//                     decrementing.
 //
-//		09/02/97	JMI	Added m_u16FireStarterID.  This is used for a special case
-//							when the starter of the fire is not the thing using the
-//							fire as a weapon (e.g., when a guy catches fire he can
-//							use the fire on other people by running into them causing
-//							them to catch on fire; however, if his own fire kills him
-//							it is to the creator of the fire's credit that he dies).
+//      09/02/97   JMI   Added m_u16FireStarterID.  This is used for a special case
+//                     when the starter of the fire is not the thing using the
+//                     fire as a weapon (e.g., when a guy catches fire he can
+//                     use the fire on other people by running into them causing
+//                     them to catch on fire; however, if his own fire kills him
+//                     it is to the creator of the fire's credit that he dies).
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define FIRE_CPP
@@ -207,23 +207,23 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define AA_FILE				"fire.aan"
-#define LARGE_FILE			"fire.aan"
-#define SMALL_FILE			"smallfire.aan"
-#define SMOKE_FILE			"smoke.aan"
-#define SMALL_SMOKE_FILE	"tinysmoke.aan"
+#define AA_FILE            "fire.aan"
+#define LARGE_FILE         "fire.aan"
+#define SMALL_FILE         "smallfire.aan"
+#define SMOKE_FILE         "smoke.aan"
+#define SMALL_SMOKE_FILE   "tinysmoke.aan"
 
-#define INIT_WIND_DIR		30
-#define INIT_WIND_VEL		30
+#define INIT_WIND_DIR      30
+#define INIT_WIND_VEL      30
 
-#define MAX_ALPHA				200   // Used for smoke trails
+#define MAX_ALPHA            200   // Used for smoke trails
 
-#define THICK_ALPHA			255   // Start alpha level for thick fire
-#define THIN_ALPHA			200   // Start alpha level for thin fire
-#define DIEDOWN_ALPHA		100   // Point at which it looks like its dying down
-#define SMOLDER_ALPHA		30    // Point at which it is too weak to burn anyone
+#define THICK_ALPHA         255   // Start alpha level for thick fire
+#define THIN_ALPHA         200   // Start alpha level for thin fire
+#define DIEDOWN_ALPHA      100   // Point at which it looks like its dying down
+#define SMOLDER_ALPHA      30    // Point at which it is too weak to burn anyone
 
-#define BRIGHT_PERCENT		0.80  // Amount of the time it should be more opaque
+#define BRIGHT_PERCENT      0.80  // Amount of the time it should be more opaque
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -307,7 +307,7 @@ short CFire::Save(                              // Returns 0 if successfull, non
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Save common data just once per file (not with each object)
@@ -395,9 +395,9 @@ void CFire::Update(void)
             m_sCurrentAlphaLevel--;
             // Range check.
             if (m_sCurrentAlphaLevel < 0)
-               m_sCurrentAlphaLevel	= 0;
+               m_sCurrentAlphaLevel   = 0;
             else if (m_sCurrentAlphaLevel > 255)
-               m_sCurrentAlphaLevel	= 255;
+               m_sCurrentAlphaLevel   = 255;
 
             if (m_lTimer < m_lAlphaBreakPoint)
                m_lCurrentAlphaTimeout += m_lBrightAlphaInterval;
@@ -425,7 +425,7 @@ void CFire::Update(void)
                {
                   // Default to the standard case where credit is given to the
                   // shooter.
-                  msg.msg_Burn.u16ShooterID	= m_u16ShooterID;
+                  msg.msg_Burn.u16ShooterID   = m_u16ShooterID;
 
                   if ((m_bIsBurningDude) && (pSmashed->m_pThing->GetClassID() != CDudeID))
                      UnlockAchievement(ACHIEVEMENT_TOUCH_SOMEONE_WHILE_BURNING);
@@ -438,7 +438,7 @@ void CFire::Update(void)
                      {
                         // The shooter is damaged by his own fire with credit
                         // given to the fire starter.
-                        msg.msg_Burn.u16ShooterID	= m_u16FireStarterID;
+                        msg.msg_Burn.u16ShooterID   = m_u16FireStarterID;
                      }
                   }
 
@@ -456,9 +456,9 @@ void CFire::Update(void)
             // Update position using wind direction and velocity
             dSeconds = ((double) lThisTime - (double) m_lPrevTime) / 1000.0;
             // Apply internal velocity.
-            dDistance	= ms_dWindVelocity * dSeconds;
-            dNewX	= m_dX + COSQ[(short) m_sRot] * dDistance;
-            dNewZ	= m_dZ - SINQ[(short) m_sRot] * dDistance;
+            dDistance   = ms_dWindVelocity * dSeconds;
+            dNewX   = m_dX + COSQ[(short) m_sRot] * dDistance;
+            dNewZ   = m_dZ - SINQ[(short) m_sRot] * dDistance;
 
             // Check attribute map for walls, and if you hit a wall,
             // set the timer so you will die off next time around.
@@ -538,8 +538,8 @@ void CFire::Render(void)
       // Map from 3d to 2d coords
       Map3Dto2D(m_dX, m_dY, m_dZ, &(m_sprite.m_sX2), &(m_sprite.m_sY2) );
       // Offset by animations 2D offsets.
-      m_sprite.m_sX2	+= pAnim->m_sX;
-      m_sprite.m_sY2	+= pAnim->m_sY;
+      m_sprite.m_sX2   += pAnim->m_sX;
+      m_sprite.m_sY2   += pAnim->m_sY;
 
       // Priority is based on our Z position.
       m_sprite.m_sPriority = m_dZ;
@@ -725,7 +725,7 @@ short CFire::Smokeout(void)
       m_sCurrentAlphaLevel = THICK_ALPHA;
       pAnim = (CAlphaAnim*) m_pAnimChannel->GetAtTime(0);
       ASSERT(pAnim != NULL);
-//		m_lTimeToLive = m_pAnimChannel->TotalTime();
+//      m_lTimeToLive = m_pAnimChannel->TotalTime();
       // use same time to live as the original
       m_lStartTime = m_lTimer = 0;
       m_lBurnUntil = m_lTimer + m_lTimeToLive;
@@ -854,8 +854,8 @@ short CFire::FreeResources(void)                // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources for fire
-//				 animations before play begins so that when a fire is set for
-//				 the first time, there won't be a delay while it loads.
+//             animations before play begins so that when a fire is set for
+//             the first time, there won't be a delay while it loads.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CFire::Preload(

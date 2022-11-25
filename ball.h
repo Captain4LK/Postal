@@ -18,29 +18,29 @@
 // ball.h
 // Project: Nostril (aka Postal)
 //
-//	History:
+//   History:
 //
-//		01/19/97	JMI	Added some initializations to constructor.
+//      01/19/97   JMI   Added some initializations to constructor.
 //
-//		01/27/97	JMI	Added override for EditRect() to make this object clickable.
+//      01/27/97   JMI   Added override for EditRect() to make this object clickable.
 //
-//		02/02/97	JMI	Added EditHotSpot() override.
+//      02/02/97   JMI   Added EditHotSpot() override.
 //
-//		02/07/97	JMI	Added members for 3D.
+//      02/07/97   JMI   Added members for 3D.
 //
-//		02/07/97	JMI	Removed m_pipeline and associated members and setup since
-//							the CScene now owns the pipeline.
+//      02/07/97   JMI   Removed m_pipeline and associated members and setup since
+//                     the CScene now owns the pipeline.
 //
-//		02/13/97	JMI	Changing RForm3d to RSop.
+//      02/13/97   JMI   Changing RForm3d to RSop.
 //
-//		02/23/97	JMI	Brought up to date so we can continue to use this as a
-//							test object.
+//      02/23/97   JMI   Brought up to date so we can continue to use this as a
+//                     test object.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef BALL_H
@@ -73,13 +73,13 @@ short m_sSuspend;
 
 S32 m_lPrevTime;
 
-CSprite3	m_sprite;            // Container (contains ref's to below).
+CSprite3 m_sprite;              // Container (contains ref's to below).
 
 CAnim3D m_anim;               // 3D animation.
 
 RTransform m_trans;           // Current transformation.
 
-short	m_sCurRadius;              // Objects radius (currently fudged).
+short m_sCurRadius;                // Objects radius (currently fudged).
 
 
 // Tracks file counter so we know when to load/save "common" data
@@ -93,11 +93,11 @@ protected:
 CBall(CRealm* pRealm)
    : CThing(pRealm, CBallID)
 {
-   m_sSuspend	= 0;
-   m_dDX			= 0;
-   m_dDY			= 0;
-   m_dDZ			= 0;
-   m_sprite.m_pthing	= this;
+   m_sSuspend   = 0;
+   m_dDX         = 0;
+   m_dDY         = 0;
+   m_dDZ         = 0;
+   m_sprite.m_pthing   = this;
 }
 
 public:
@@ -188,25 +188,25 @@ void EditRender(void);
 // Called by editor to get the clickable pos/area of an object.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // Internal functions

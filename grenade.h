@@ -18,51 +18,51 @@
 // grenade.h
 // Project: Postal
 //
-//	History:
-//		01/17/97 BRH	Started this weapon object.
+//   History:
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/11/97	JMI	Stripped 2D.  Added 3D and a concept of having a parent.
+//      02/11/97   JMI   Stripped 2D.  Added 3D and a concept of having a parent.
 //
-//		02/21/97	JMI	Made static constants public.
+//      02/21/97   JMI   Made static constants public.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		02/28/97 BRH	Derived this from the CWeapon base class and moved
-//							many members and some functions to the base class.
+//      02/28/97 BRH   Derived this from the CWeapon base class and moved
+//                     many members and some functions to the base class.
 //
-//		03/03/97 BRH	Moved 3D sprite to CWeapon base class.
+//      03/03/97 BRH   Moved 3D sprite to CWeapon base class.
 //
-//		03/03/97	JMI	Commented out dHorizVelocity and dVertVelocity parameters
-//							to Setup() so that this version would be a virtual over-
-//							ride of CWeapon's.
+//      03/03/97   JMI   Commented out dHorizVelocity and dVertVelocity parameters
+//                     to Setup() so that this version would be a virtual over-
+//                     ride of CWeapon's.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/29/97	JMI	Now defines m_sprite (as a CSprite3), which was previously
-//							defined in the base class CWeapon.
-//							Also, added GetSprite() virtual override to provide access
-//							to the sprite from a lower level.
+//      04/29/97   JMI   Now defines m_sprite (as a CSprite3), which was previously
+//                     defined in the base class CWeapon.
+//                     Also, added GetSprite() virtual override to provide access
+//                     to the sprite from a lower level.
 //
-//		05/09/97 BRH	Added SetRangeToTarget function to vary the velocity
-//							of the weapon before it is shot in order to hit
-//							your target.
+//      05/09/97 BRH   Added SetRangeToTarget function to vary the velocity
+//                     of the weapon before it is shot in order to hit
+//                     your target.
 //
-//		06/03/97 BRH	Tuned the SetRangeToTarget function now that the drag
-//							has changed for the grenade.
+//      06/03/97 BRH   Tuned the SetRangeToTarget function now that the drag
+//                     has changed for the grenade.
 //
-//		06/17/97 BRH	Increased Min distance in SetRangeToTarget so that enemies
-//							won't blow themselves up.  Fixed a bug in the SetRange
-//							function as well.
+//      06/17/97 BRH   Increased Min distance in SetRangeToTarget so that enemies
+//                     won't blow themselves up.  Fixed a bug in the SetRange
+//                     function as well.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		08/08/97	JMI	Added Style so this can be visually represented in multiple
-//							ways.
+//      08/08/97   JMI   Added Style so this can be visually represented in multiple
+//                     ways.
 //
-//		08/08/97	JMI	Added variables for rotating the weapon.
+//      08/08/97   JMI   Added variables for rotating the weapon.
 //
-//		08/28/97 BRH	Tuned distance for dynamite.
+//      08/28/97 BRH   Tuned distance for dynamite.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef GRENADE_H
@@ -99,8 +99,8 @@ short m_sPrevHeight;                                  // Previous height
 
 CAnim3D m_anim;                                       // 3D animation.  One should be enough, I think.
 RTransform m_trans;                                   // Transform.
-CSprite3	m_sprite;                                    // 3D sprite to render this thing.
-Style	m_style;                                        // Style of thrown weapon.
+CSprite3 m_sprite;                                      // 3D sprite to render this thing.
+Style m_style;                                          // Style of thrown weapon.
 
 double m_dAnimRotY;                                   // Apparent rotation around Y axis.
 double m_dAnimRotZ;                                   // Apparent rotation around X axis.
@@ -134,7 +134,7 @@ static double ms_dBounceTransferFract;                // Amount of velocity tran
 static double ms_adGroundDimisher[NumStyles];         // Dimishes velocities once it hits the ground.
 static double ms_adBounceDimisher[NumStyles];         // Dimishes velocities when bouncing.
 
-static char*	ms_apszResNames[NumStyles];            // Res names indexed Style.
+static char*   ms_apszResNames[NumStyles];            // Res names indexed Style.
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -144,13 +144,13 @@ protected:
 CGrenade(CRealm* pRealm)
    : CWeapon(pRealm, CGrenadeID)
 {
-   m_sprite.m_pthing	= this;
-   m_style				= Grenade;
-   m_dAnimRotY			= 0.0;
-   m_dAnimRotZ			= 0.0;
-   m_dAnimRotVelY		= 0.0;
-   m_dAnimRotVelZ		= 0.0;
-   m_lNextSmokeTime	= 0;
+   m_sprite.m_pthing   = this;
+   m_style            = Grenade;
+   m_dAnimRotY         = 0.0;
+   m_dAnimRotZ         = 0.0;
+   m_dAnimRotVelY      = 0.0;
+   m_dAnimRotVelZ      = 0.0;
+   m_lNextSmokeTime   = 0;
 }
 
 public:
@@ -188,10 +188,10 @@ static short ConstructDynamite(                       // Returns 0 if successful
    CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
-   short	sRes	= Construct(pRealm, ppNew);
+   short sRes   = Construct(pRealm, ppNew);
    if (sRes == 0)
    {
-      ( (CGrenade*)(*ppNew) )->m_style	= Dynamite;
+      ( (CGrenade*)(*ppNew) )->m_style   = Dynamite;
    }
 
    return sRes;
@@ -231,8 +231,8 @@ void Render(void);
 short Setup(
    short sX,                                          // In: New x coord
    short sY,                                          // In: New y coord
-   short sZ /*,												// In: New z coord
-         double dHorizVelocity = ms_dThrowHorizVel,	// In: Starting horiz velocity with default
+   short sZ /*,                                    // In: New z coord
+         double dHorizVelocity = ms_dThrowHorizVel,   // In: Starting horiz velocity with default
          double dVertVelocity = ms_dThrowVertVel*/);  // In: Starting vert velocity with default
 
 // Get this class's sprite.  Note that the type will vary.

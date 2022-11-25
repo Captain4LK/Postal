@@ -15,7 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-//	MixBuf.h
+//   MixBuf.h
 
 #ifndef MIXBUF_H
 #define MIXBUF_H
@@ -62,14 +62,14 @@ void SetDest(
 
 // Mix data in.
 // Returns 0 on success.
-short Mix(	U32 ulStartPos,
-            U8*		pu8Data,
-            U32 ulSize,
-            S32 lSampleRate,
-            S32 lBitsPerSample,
-            S32 lNumChannels,
-            UCHAR	ucVolume = UCHAR(255),
-            UCHAR	ucVol2 = UCHAR(255) );
+short Mix(   U32 ulStartPos,
+             U8*      pu8Data,
+             U32 ulSize,
+             S32 lSampleRate,
+             S32 lBitsPerSample,
+             S32 lNumChannels,
+             UCHAR ucVolume = UCHAR(255),
+             UCHAR ucVol2 = UCHAR(255) );
 
 // Prepare for destination.  If necessary, converts to destination format.
 void PrepareForDest(void);
@@ -77,25 +77,25 @@ void PrepareForDest(void);
 public:     // Querries.
 
 // Get ptr to destination data.
-void* GetDstData(void)	{ return m_pu8Dst; }
+void* GetDstData(void)   { return m_pu8Dst; }
 
 // Get ptr to mix data.
-void*	GetMixData(void)	{ return m_pu8Mix; }
+void*   GetMixData(void)   { return m_pu8Mix; }
 
 // Get size of destination buffer in bytes.
-U32 GetDstSize(void)	{ return m_ulDstSize; }
+U32 GetDstSize(void)   { return m_ulDstSize; }
 
 // Get size of mix buffer in bytes.
-U32 GetMixSize(void)	{ return m_ulMixSize; }
+U32 GetMixSize(void)   { return m_ulMixSize; }
 
 // Returns number of RMixBufs allocated.
-static short Num(void)		{ return ms_sNumBufs; }
+static short Num(void)      { return ms_sNumBufs; }
 
 
 public:     // Statics.
 
 // Sets the global volume for mixed sounds:
-static void	SetVolume(UCHAR ucVolume)
+static void   SetVolume(UCHAR ucVolume)
 {
    ms_ucGlobalVolume = ucVolume;
 }
@@ -122,9 +122,9 @@ void Init(void);
 void Reset(void);
 
 protected:     // Members.
-U8*			m_pu8Mix;                  // Mix buffer.
-U8*			m_pu8Dst;                  // Destination buffer.
-short	m_sOwnMixBuf;                    // TRUE if RMixBuf allocated the mix buffer.
+U8*         m_pu8Mix;                  // Mix buffer.
+U8*         m_pu8Dst;                  // Destination buffer.
+short m_sOwnMixBuf;                      // TRUE if RMixBuf allocated the mix buffer.
 U32 m_ulMixSize;                       // Size of mix buffer in bytes.
 U32 m_ulDstSize;                       // Size of dst buffer in bytes.
 
@@ -132,7 +132,7 @@ static short ms_sNumBufs;              // Number of RMixBufs allocated.
 static UCHAR ms_ucGlobalVolume;        // Scale all mixes relative to this
 
 public:     // It is safe to change these.
-short	m_sInUse;                        // TRUE if in use, FALSE otherwise.
+short m_sInUse;                          // TRUE if in use, FALSE otherwise.
 
 static S32 ms_lSampleRate;             // Sample rate for audio
                                        // playback/mix.
@@ -155,12 +155,12 @@ static short ms_sCutOffVolume;         // when to not mix samples...
 //////////////////////////////////////////////////////////////////////////////
 
 // Cutting back on the number of volume levels is strictly to save memory
-#define	DVA_RESOLUTION	1  // significant volume change in 0-255
-#define	DVA_SHIFT		0  // must match the resolution in shift bits
-#define	DVA_SIZE		(256 >> DVA_SHIFT)  // size of tables
-#define	DVA_LOW_OFFSET	(256 * DVA_SIZE * 2)
+#define   DVA_RESOLUTION   1  // significant volume change in 0-255
+#define   DVA_SHIFT      0  // must match the resolution in shift bits
+#define   DVA_SIZE      (256 >> DVA_SHIFT)  // size of tables
+#define   DVA_LOW_OFFSET   (256 * DVA_SIZE * 2)
 
-class	CDVA  // a complete dummy
+class CDVA    // a complete dummy
 {
 public:
 //////////////////////////////////////////////////////////////////////////////

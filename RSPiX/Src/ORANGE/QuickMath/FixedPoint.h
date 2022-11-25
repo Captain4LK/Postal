@@ -26,19 +26,19 @@ This header depends on the rest QuickMath, but is not necessary
 for use of Quickmath, and deals primarily with high speed fixed
 point operations.
 /*****************************************************************
-Hungarian:	fp = either generic fixed point or signed 32 (S16.U16)
-				pfp = pointer to fixed point number
-						(sorry FILE*)
-				fpS32 = S16.U16
-				type = RFixedS32, members = "frac" and "mod"
+Hungarian:   fp = either generic fixed point or signed 32 (S16.U16)
+            pfp = pointer to fixed point number
+                  (sorry FILE*)
+            fpS32 = S16.U16
+            type = RFixedS32, members = "frac" and "mod"
 
-				fpS16 = S8.U8
-				fpU16 = U8.U8, etc.
-				type = RFixedS16, same members, etc., etc.
+            fpS16 = S8.U8
+            fpU16 = U8.U8, etc.
+            type = RFixedS16, same members, etc., etc.
 
-				& = implicit pass by reference, do NOT use a pointer
-				& is used in almost all cases to prevent VC from creating
-				a local stack frame which would slow things down by 20 times.
+            & = implicit pass by reference, do NOT use a pointer
+            & is used in almost all cases to prevent VC from creating
+            a local stack frame which would slow things down by 20 times.
 
 NOTE: Some functions can take a S32 AS an fpS32.  Understand that this is
 a memory cast as a fpS32 and does NOT represent the actual S32 "value"!
@@ -74,7 +74,7 @@ typedef union
 //-----------------------------------------------
       union
       {
-         short	mod; //********* signed 16-bit integer part
+         short mod;   //********* signed 16-bit integer part
          struct
          {
             signed char upper;   // for 256v level z-coloring:
@@ -87,7 +87,7 @@ typedef union
       unsigned short frac;
       union // for 256v level z-coloring:
       {
-         short	mod;
+         short mod;
          struct
          {
             unsigned char lower;
@@ -186,7 +186,7 @@ static S32 OneOver[NUM_ONEOVER_FP32];
 //======================================= unsigned 8:8 fixed point
 typedef union
 {
-   unsigned short	val;
+   unsigned short val;
    struct
    {
 #ifdef SYS_ENDIAN_BIG // big endian
@@ -207,11 +207,11 @@ typedef union
    struct
    {
 #ifdef SYS_ENDIAN_BIG // big endian
-      signed char	mod;
+      signed char mod;
       unsigned char frac;
 #else // little endian
       unsigned char frac;
-      signed char	mod;
+      signed char mod;
 #endif
    };
 } RFixedS16;

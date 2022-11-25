@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
 
 CRSPiXBlue::CRSPiXBlue()
 {
-   m_pim	= NULL;
+   m_pim   = NULL;
 }
 
 CRSPiXBlue::~CRSPiXBlue()
@@ -76,11 +76,11 @@ void CRSPiXBlue::SetDisplayImage(CImage* pim, short sFlip /*= FALSE*/)
                      pim->sDepth,
                      sFlip);
 
-   Blu_SetRedrawBuf(	pim->pData,
-                     lWinWidth, pim->lHeight,
-                     0, 0, 0, 0,
-                     pim->lWidth, pim->lHeight, pim->sDepth,
-                     sFlip);
+   Blu_SetRedrawBuf(   pim->pData,
+                       lWinWidth, pim->lHeight,
+                       0, 0, 0, 0,
+                       pim->lWidth, pim->lHeight, pim->sDepth,
+                       sFlip);
 
    ::MoveWindow(gsi.hWnd, 0, 0, pim->lWidth, pim->lHeight, TRUE);
 
@@ -90,10 +90,10 @@ void CRSPiXBlue::SetDisplayImage(CImage* pim, short sFlip /*= FALSE*/)
    RECT rcClient;
    GetClientRect(&rcClient);
 
-   MoveWindow(0, 0,	pim->lWidth		- (rcClient.left	- rcWindow.left),
+   MoveWindow(0, 0,   pim->lWidth      - (rcClient.left   - rcWindow.left),
               pim->lHeight   - (rcClient.top   - rcWindow.top));
 
-   m_pim	= pim;
+   m_pim   = pim;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ void CRSPiXBlue::SetDisplayPalette(CPal* ppal)
 ///////////////////////////////////////////////////////////////////////////////
 void CRSPiXBlue::PreSubclassWindow()
 {
-   short	sError	= 0;  // Assume success.
+   short sError   = 0;    // Assume success.
 
    // Initialize Blue . . .
    if (Blu_Init(AfxGetApp()->m_hInstance, m_hWnd) == 0)
@@ -150,8 +150,8 @@ void CRSPiXBlue::PreSubclassWindow()
       GetClientRect(&rcClient);
 
       // Create a display that fills this window completely . . .
-      if (Blu_CreateDisplay(	rcClient.right, rcClient.bottom,
-                              (short)Blu_GetDisplayInfo(DI_MONITOR_COLORDEPTH))
+      if (Blu_CreateDisplay(   rcClient.right, rcClient.bottom,
+                               (short)Blu_GetDisplayInfo(DI_MONITOR_COLORDEPTH))
           == 0)
       {
          // Success.
@@ -241,8 +241,8 @@ void CRSPiXBlue::OnPaletteChanged(CWnd* pFocusWnd)
 
    if (gsi.hWnd != NULL)
    {
-      ::SendMessage(	gsi.hWnd, WM_PALETTECHANGED,
-                     (WPARAM)pFocusWnd->GetSafeHwnd(), 0L);
+      ::SendMessage(   gsi.hWnd, WM_PALETTECHANGED,
+                       (WPARAM)pFocusWnd->GetSafeHwnd(), 0L);
    }
 }
 
@@ -257,8 +257,8 @@ BOOL CRSPiXBlue::OnQueryNewPalette()
 
    if (gsi.hWnd != NULL)
    {
-      bRes	= ::SendMessage(	gsi.hWnd, WM_QUERYNEWPALETTE,
-                              0L, 0L);
+      bRes   = ::SendMessage(   gsi.hWnd, WM_QUERYNEWPALETTE,
+                                0L, 0L);
    }
 
    // Bah!  Who cares what the static control returns.
@@ -283,7 +283,7 @@ CWnd* CRSPiXBlue::GetPaletteWindow(void)
 // Returns a CWnd* to the RSPiX window.
 //
 ///////////////////////////////////////////////////////////////////////////////
-CWnd*	CRSPiXBlue::GetBlueWindow()
+CWnd*   CRSPiXBlue::GetBlueWindow()
 {
    return &m_wndRSPiX;
 }
@@ -304,13 +304,13 @@ LRESULT CRSPiXBlue::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
    //////////////////////////// Window Oriented ////////////////////////////
    case WM_ACTIVATEAPP:
    //////////////////////////// Mouse Oriented /////////////////////////////
-//		case WM_LBUTTONDOWN:	// Mouse messages should go straight there anyways.
-//		case WM_MBUTTONDOWN:
-//		case WM_RBUTTONDOWN:
-//		case WM_MOUSEMOVE:
-//		case WM_LBUTTONUP:
-//		case WM_MBUTTONUP:
-//		case WM_RBUTTONUP:
+//      case WM_LBUTTONDOWN:   // Mouse messages should go straight there anyways.
+//      case WM_MBUTTONDOWN:
+//      case WM_RBUTTONDOWN:
+//      case WM_MOUSEMOVE:
+//      case WM_LBUTTONUP:
+//      case WM_MBUTTONUP:
+//      case WM_RBUTTONUP:
    //////////////////////////// Key Oriented ///////////////////////////////
    case WM_KEYDOWN:
    case WM_KEYUP:

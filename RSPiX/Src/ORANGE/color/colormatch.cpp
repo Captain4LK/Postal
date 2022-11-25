@@ -42,7 +42,7 @@ U8 RAlpha::ms_a[256] = {0, };
 U8 RAlpha::ms_f[256] = {0, };
 
 short RMultiAlpha::ms_sIsInitialized = FALSE;
-UCHAR	RMultiAlpha::ms_aucLiveDimming[65536];
+UCHAR RMultiAlpha::ms_aucLiveDimming[65536];
 
 UCHAR rspMatchColorRGB(S32 r, S32 g, S32 b, short sStart, short sNum,
                        UCHAR* pr, UCHAR* pg, UCHAR* pb, S32 linc)
@@ -549,7 +549,7 @@ RMultiAlpha::RMultiAlpha()
    {
       // FILL THE TABLE!
       S32 lSrcVal, lDimVal, lCurValue, lNumerator;
-      UCHAR*	pCur = ms_aucLiveDimming;
+      UCHAR*   pCur = ms_aucLiveDimming;
       // This is DimVal major!
 
       for (lDimVal = 0; lDimVal < 256; lDimVal++)
@@ -874,7 +874,7 @@ short RMultiAlpha::Finish(short sGeneral)
 // multialpha.
 ///////////////////////////////////////////////////////////////////////////
 //  UINPUT:  the source color range (Start Index, Len) and destination
-//				range (start index and len)
+//            range (start index and len)
 ///////////////////////////////////////////////////////////////////////////
 //  OUPUT:  the actual FastMultiAlpha pointer in the form of a (UCHAR***)
 //          optional:  the size of the data in bytes.
@@ -882,7 +882,7 @@ short RMultiAlpha::Finish(short sGeneral)
 UCHAR*** RMultiAlpha::pppucCreateFastMultiAlpha(
    short sStartSrc, short sNumSrc,     // color indices
    short sStartDst, short sNumDst,
-   S32*	plAlignedSize)
+   S32*   plAlignedSize)
 {
    // Assumes a fully correct this pointer!
    S32 lTotSize = 1024 + S32(m_sNumLevels) * sNumSrc * (4L + sNumDst);
@@ -967,7 +967,7 @@ UCHAR*** RMultiAlpha::pppucCreateFastMultiAlpha(
 //  This is the ONLY way a Fast MultiAlpha can be deleted!
 //  Returns FAILURE or SUCCESS
 ///////////////////////////////////////////////////////////////////////////
-short	RMultiAlpha::DeleteFastMultiAlpha(UCHAR ****pfmaDel)
+short RMultiAlpha::DeleteFastMultiAlpha(UCHAR ****pfmaDel)
 {
    ASSERT(*pfmaDel);
 
@@ -989,14 +989,14 @@ short	RMultiAlpha::DeleteFastMultiAlpha(UCHAR ****pfmaDel)
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//  Query Fast MultiAlpha -	determines optimum alpha layers for a given
-//										cache.
+//  Query Fast MultiAlpha -   determines optimum alpha layers for a given
+//                              cache.
 //
 ///////////////////////////////////////////////////////////////////////////
 //  Input:  # of source colors, # of dest colors, desired # of total bytes
 //
 //  Ouput:  Max # of layers (= levels - 2)
-//				optional:  separate sizes for header and data
+//            optional:  separate sizes for header and data
 ///////////////////////////////////////////////////////////////////////////
 short RMultiAlpha::QueryFastMultiAlpha(short sNumSrcCol, short sNumDstCol,
                                        S32 lTotMem, S32* plHeaderSize,
@@ -1022,12 +1022,12 @@ short RMultiAlpha::QueryFastMultiAlpha(short sNumSrcCol, short sNumDstCol,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-//	Here is a class wrapper for the Fast Multi Alpha:
+//   Here is a class wrapper for the Fast Multi Alpha:
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	RFastMulitAlphaWrapper
+//   RFastMulitAlphaWrapper
 //
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1067,16 +1067,16 @@ RFastMultiAlphaWrapper::~RFastMultiAlphaWrapper()
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	Attach:  After creating an FMA, give it this wrapper:
+//   Attach:  After creating an FMA, give it this wrapper:
 // IMPORTANT:  If you ATTACH an FMA, the wrapper will NOT delete it.
-//					Only if you LOAD one will the FMA take responsibility.
+//               Only if you LOAD one will the FMA take responsibility.
 //
 // NOTE:  The information MUST MATCH the FMA, as there is no way to
-//			verify it!
+//         verify it!
 //
 ///////////////////////////////////////////////////////////////////////////
 
-short RFastMultiAlphaWrapper::Attach(UCHAR	***pppucFMA, short sStartSrc,
+short RFastMultiAlphaWrapper::Attach(UCHAR   ***pppucFMA, short sStartSrc,
                                      short sNumSrc, short sStartDst, short sNumDst,
                                      short sNumLayers)
 {
@@ -1103,14 +1103,14 @@ short RFastMultiAlphaWrapper::Attach(UCHAR	***pppucFMA, short sStartSrc,
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	pppucGetFMA:  This returns your actual FMA.  You MUST refer to it
-//						directly to get the benefits.  To avoid the temptation
-//						to refer to this wrapper INSTEAD of the true FMA, you
-//						are only permitted to grab it ONCE.
+//   pppucGetFMA:  This returns your actual FMA.  You MUST refer to it
+//                  directly to get the benefits.  To avoid the temptation
+//                  to refer to this wrapper INSTEAD of the true FMA, you
+//                  are only permitted to grab it ONCE.
 //
 ///////////////////////////////////////////////////////////////////////////
 
-UCHAR***	RFastMultiAlphaWrapper::pppucGetFMA()
+UCHAR***   RFastMultiAlphaWrapper::pppucGetFMA()
 {
    ASSERT(m_pppucFastMultiAlpha);
 
@@ -1129,7 +1129,7 @@ UCHAR***	RFastMultiAlphaWrapper::pppucGetFMA()
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	Save:  Save a File version of the FMA
+//   Save:  Save a File version of the FMA
 //
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1156,7 +1156,7 @@ short RFastMultiAlphaWrapper::Save(RFile* pf)
    pf->Write(S32(0));
 
    //======================= Write out the secret header from the FMA:
-   UCHAR	*pucHeader = (UCHAR*)m_pppucFastMultiAlpha;
+   UCHAR   *pucHeader = (UCHAR*)m_pppucFastMultiAlpha;
    pf->Write(*pucHeader); // save ucMin
 
    //========================== Write out the LAYER distribution list:
@@ -1191,7 +1191,7 @@ short RFastMultiAlphaWrapper::Save(RFile* pf)
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	Load:  Load a File version of the FMA and CREATE a memory Version!
+//   Load:  Load a File version of the FMA and CREATE a memory Version!
 // NOTE:  Only by loading an FMA will the wrapper delete it on destruction.
 //
 ///////////////////////////////////////////////////////////////////////////
@@ -1236,7 +1236,7 @@ short RFastMultiAlphaWrapper::Load(RFile* pf)
 
    //---------------------- HEADER ------------------
    // Read in the secret header from the FMA:
-   UCHAR	ucHeader;
+   UCHAR ucHeader;
    pf->Read(&ucHeader);
 
    //-------------------- LAYER INFO ----------------
@@ -1281,7 +1281,7 @@ short RFastMultiAlphaWrapper::Load(RFile* pf)
 
    //=============  Populate the source table  ===============
    short sL, sS, sD;
-   UCHAR	**ppucLayers[256]; // only need m_lNumLayers, but this way is fine
+   UCHAR   **ppucLayers[256]; // only need m_lNumLayers, but this way is fine
 
    for (sL = 0; sL < m_sNumLayers; sL++)
    {
@@ -1350,7 +1350,7 @@ short RFastMultiAlphaWrapper::Load(RFile* pf)
 
 ///////////////////////////////////////////////////////////////////////////
 //
-//	IsValid:  Check the source Image's color Range to see if it can be used
+//   IsValid:  Check the source Image's color Range to see if it can be used
 // (not a real time operation)
 //
 ///////////////////////////////////////////////////////////////////////////
@@ -1369,7 +1369,7 @@ short RFastMultiAlphaWrapper::IsSrcValid(RImage* pimSrc)
    // The ever so standard 2d memory loop:
    UCHAR* pDst, *pDstLine = pimSrc->m_pData;
    S32 lP = pimSrc->m_lPitch;
-   short	sW = pimSrc->m_sWidth;
+   short sW = pimSrc->m_sWidth;
 
    for (j = pimSrc->m_sHeight; j; j--, pDstLine += lP)
    {

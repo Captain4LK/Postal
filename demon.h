@@ -19,46 +19,46 @@
 // Project: Postal
 //
 // History:
-//		06/09/97 BRH	Started this file from SoundThing.h
+//      06/09/97 BRH   Started this file from SoundThing.h
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/17/97	JMI	Changed m_psndChannel to m_siLastPlayInstance.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
-//							Then, removed m_psndChannel b/c this class really didn't
-//							use it.
+//      07/17/97   JMI   Changed m_psndChannel to m_siLastPlayInstance.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
+//                     Then, removed m_psndChannel b/c this class really didn't
+//                     use it.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		08/01/97	JMI	Demon would set his position (m_dX, Y, Z) when first
-//							created but, since he never Save()d or Load()ed it, he
-//							was in an unitialized position when loaded into a level.
+//      08/01/97   JMI   Demon would set his position (m_dX, Y, Z) when first
+//                     created but, since he never Save()d or Load()ed it, he
+//                     was in an unitialized position when loaded into a level.
 //
-//		09/24/97	JMI	Now initializes bFemalePain member of m_id.  This member
-//							indicates whether the sample is of a female in pain which
-//							some countries (so far just UK) don't want in the game.
+//      09/24/97   JMI   Now initializes bFemalePain member of m_id.  This member
+//                     indicates whether the sample is of a female in pain which
+//                     some countries (so far just UK) don't want in the game.
 //
-//		10/07/97	JMI	Changed bFemalePain to usDescFlags.
+//      10/07/97   JMI   Changed bFemalePain to usDescFlags.
 //
-//		12/02/97	JMI	Added new m_sSoundBank member to index new static arrays
-//							of sound banks for groups of sounds (ms_apsmidExplosion,
-//							ms_apsmidBurn, ms_apsmidSuicide, ms_apsmidWrithing,
-//							ms_apsmidKillSeries).
-//							Also, removed unused vars:
-//							m_lNextStartTime, m_lLastStartTime, m_sWhichTime,
-//							m_bEnabled, m_bRepeats, m_bInitiallyEnabled,
-//							m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[],
-//							m_szResName, and m_id.
-//							Also, now saves position and defaults to position on the
-//							the screen (that way older levels that didn't save the
-//							position will have the demon on the screen).
+//      12/02/97   JMI   Added new m_sSoundBank member to index new static arrays
+//                     of sound banks for groups of sounds (ms_apsmidExplosion,
+//                     ms_apsmidBurn, ms_apsmidSuicide, ms_apsmidWrithing,
+//                     ms_apsmidKillSeries).
+//                     Also, removed unused vars:
+//                     m_lNextStartTime, m_lLastStartTime, m_sWhichTime,
+//                     m_bEnabled, m_bRepeats, m_bInitiallyEnabled,
+//                     m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[],
+//                     m_szResName, and m_id.
+//                     Also, now saves position and defaults to position on the
+//                     the screen (that way older levels that didn't save the
+//                     position will have the demon on the screen).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This CThing-derived class will get messages from other things in the game
-//	and decide what comment to make about it.
+//   and decide what comment to make about it.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -111,9 +111,9 @@ double m_dZ;                              // z coord (for editor only)
 
 short m_sSuspend;                         // Suspend flag
 
-State	m_state;                            // Current state.
+State m_state;                              // Current state.
 
-short	m_sSoundBank;                       // Sound bank index.
+short m_sSoundBank;                         // Sound bank index.
 
 protected:
 
@@ -147,15 +147,15 @@ CDemon(CRealm* pRealm)
 
    m_sSuspend = 0;
 
-   m_state	= State_Happy;
+   m_state   = State_Happy;
 
    // Default to position on the screen for old .rlms that did not
    // save their demon's position.
-   m_dX		= 100.0;
-   m_dY		= 0.0;
-   m_dZ		= 50.0;
+   m_dX      = 100.0;
+   m_dY      = 0.0;
+   m_dZ      = 50.0;
 
-   m_sSoundBank	= 0;
+   m_sSoundBank   = 0;
 }
 
 public:
@@ -241,14 +241,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -259,13 +259,13 @@ void EditRender(void);
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // Optional Static  functions

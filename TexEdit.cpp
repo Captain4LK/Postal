@@ -21,26 +21,26 @@
 // This module implements the texture editor.
 //
 // History:
-//		10/03/99 JMI	Started.
+//      10/03/99 JMI   Started.
 //
-//		10/06/99	JMI	Now DoModal() accepts two lights to use and some other
-//							stuff too.
+//      10/06/99   JMI   Now DoModal() accepts two lights to use and some other
+//                     stuff too.
 //
-//		10/07/99	JMI	Changed the default Mudify settings to that of Assets.mak.
+//      10/07/99   JMI   Changed the default Mudify settings to that of Assets.mak.
 //
-//					JMI	Replaced m_fAlt and m_fAzi with a transform so rotations
-//							can always be relative to the current orientation.
-//							Also added 'D' as an additional paint key so those keys
-//							could all be on one hand.
+//               JMI   Replaced m_fAlt and m_fAzi with a transform so rotations
+//                     can always be relative to the current orientation.
+//                     Also added 'D' as an additional paint key so those keys
+//                     could all be on one hand.
 //
-//		10/08/99	JMI	Holding down shift now causes the manips to ignore the Y
-//							input and holding control causes them to ignore the X
-//							input.
+//      10/08/99   JMI   Holding down shift now causes the manips to ignore the Y
+//                     input and holding control causes them to ignore the X
+//                     input.
 //
-//					JMI	Added ValidateTextures() to check for and fix out-of-synch
-//							texture files.
-//							In Adjust(), we now free the colors array (otherwise, the
-//							colors will get saved).  Some probably already exist.
+//               JMI   Added ValidateTextures() to check for and fix out-of-synch
+//                     texture files.
+//                     In Adjust(), we now free the colors array (otherwise, the
+//                     colors will get saved).  Some probably already exist.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -65,16 +65,16 @@ const RString c_strGuiFile   = "res/editor/TexEdit.gui";
 
 const S32 c_lIdAnim         = 100;
 const S32 c_lIdPal          = 200;
-const	S32 c_lIdSpotLight    = 601;
-const	S32 c_lIdBrightness   = 602;
-const	S32 c_lIdAdjust       = 701;
-const	S32 c_lIdFrequency    = 702;
-const	S32 c_lIdAmount       = 703;
+const S32 c_lIdSpotLight    = 601;
+const S32 c_lIdBrightness   = 602;
+const S32 c_lIdAdjust       = 701;
+const S32 c_lIdFrequency    = 702;
+const S32 c_lIdAmount       = 703;
 const S32 c_lIdCurColor     = 201;
 const S32 c_lIdStatus       = 500;
-const	S32 c_lIdApply        = 301;
-const	S32 c_lIdSave         = 302;
-const	S32 c_lIdRevert       = 303;
+const S32 c_lIdApply        = 301;
+const S32 c_lIdSave         = 302;
+const S32 c_lIdRevert       = 303;
 const S32 c_lIdQuit         = 399;
 const S32 c_lIdTrans        = 401;
 const S32 c_lIdScale        = 402;
@@ -87,27 +87,27 @@ const double c_fTransRate   = 0.25f / c_dScale;
 const double c_fScaleRate   = 0.1f / c_dScale;
 const double c_fRotRate     = 1.0f;
 
-const short	c_sPalStart		= 106;
-const short	c_sPalEnd		= 201;
-const	short	c_sPalNum		= c_sPalEnd - c_sPalStart + 1;
+const short c_sPalStart      = 106;
+const short c_sPalEnd      = 201;
+const short c_sPalNum      = c_sPalEnd - c_sPalStart + 1;
 
 #if 0 // Swatch center colors only -- to guarantee good matching.
-const short	c_sPalColorsPerSwatch	= 8;
-const short	c_sPalCols		= 2;
-#else	// All swatch colors -- to allow more flexibility when texturing guys.
-const short	c_sPalColorsPerSwatch	= 1;
-const short	c_sPalCols		= 8;
+const short c_sPalColorsPerSwatch   = 8;
+const short c_sPalCols      = 2;
+#else   // All swatch colors -- to allow more flexibility when texturing guys.
+const short c_sPalColorsPerSwatch   = 1;
+const short c_sPalCols      = 8;
 #endif
 
-const short	c_sPalDispColorOffset	= c_sPalColorsPerSwatch / 2;
-const short	g_sPalFirstColor			= c_sPalStart + c_sPalDispColorOffset;
+const short c_sPalDispColorOffset   = c_sPalColorsPerSwatch / 2;
+const short g_sPalFirstColor         = c_sPalStart + c_sPalDispColorOffset;
 
-const	short	c_sMinBrightness		= -64;
-const	short	c_sMaxBrightness		= 64;
-const short	c_sBrightnessRange	= c_sMaxBrightness - c_sMinBrightness + 1;
+const short c_sMinBrightness      = -64;
+const short c_sMaxBrightness      = 64;
+const short c_sBrightnessRange   = c_sMaxBrightness - c_sMinBrightness + 1;
 
-const	short	c_sDefAdjustFrequency	= 2;
-const	float	c_fDefAdjustment			= 0.85f;
+const short c_sDefAdjustFrequency   = 2;
+const float c_fDefAdjustment         = 0.85f;
 
 
 //------------------------------------------------------------------------------
@@ -125,10 +125,10 @@ SetPushBtnState(
    RPushBtn::State state)  // In:  New state for btn.
 {
    ASSERT(pguiRoot);
-   RPushBtn*	pbtn = (RPushBtn*)pguiRoot->GetItemFromId(lBtnId);
+   RPushBtn*   pbtn = (RPushBtn*)pguiRoot->GetItemFromId(lBtnId);
    if (pbtn)
    {
-      pbtn->m_state	= state;
+      pbtn->m_state   = state;
       pbtn->Compose();
    }
 }
@@ -156,10 +156,10 @@ SameSigns_Vector(
 
 ////////////////////////////////////////////////////////////////////////////////
 // Using the equation in comments below, this returns the value for 't' from the
-//	parametric equations of line seg 0--1 and the plane of a, b, c, and D.
+//   parametric equations of line seg 0--1 and the plane of a, b, c, and D.
 // if true, then you can use t, else, t will not have been assigned anything.
 //         -(a*x0 + b*y0 + c*z0 + D)        = t
-//	      a*(x1-x0)+b*(y1-y0)+c*(z1-z0)
+//         a*(x1-x0)+b*(y1-y0)+c*(z1-z0)
 ////////////////////////////////////////////////////////////////////////////////
 bool           // Returns: true of t valid, false otherwise
 GetIntersectSubT(
@@ -207,8 +207,8 @@ PointInsideTri(
    RP3d result_cross;
 
    //if(cheapequalsRP3d(pt0, hitpoint) || cheapequalsRP3d(pt1, hitpoint)
-   //	|| cheapequalsRP3d(pt2, hitpoint))
-   //	return true;
+   //   || cheapequalsRP3d(pt2, hitpoint))
+   //   return true;
 
 
    //rspSub(pt0, pt2);
@@ -430,13 +430,13 @@ void Transform(RSop* psopSrc, RSop* psopDst, RPipeLine* ppipe, RTransform& tObj)
    // trasnform each pt by two transforms separately!
    tFull.PreMulBy(ppipe->m_tScreen.T);
    // Add this in to get the model in the correctly offset spot.
-   const short sMisUnderstoodValueX	= -85;   // *** WTF is this not sOffsetX?  No time for that now.
-   const short sMisUnderstoodValueY	= -20;   // *** WTF is this not sOffsetY?  No time for that now.
+   const short sMisUnderstoodValueX   = -85;   // *** WTF is this not sOffsetX?  No time for that now.
+   const short sMisUnderstoodValueY   = -20;   // *** WTF is this not sOffsetY?  No time for that now.
 
 #if 0 // Find the magic offset.
    static short sOffX = 0;
    static short sOffY = 0;
-   static U8*	pau8KeyStatus = rspGetKeyStatusArray();
+   static U8*   pau8KeyStatus = rspGetKeyStatusArray();
    if (pau8KeyStatus[RSP_SK_LEFT] & 1)
       sOffX--;
    if (pau8KeyStatus[RSP_SK_RIGHT] & 1)
@@ -464,18 +464,18 @@ void
 CreatePalette(
    RGuiItem* pgui)      // In:  GUI to contain palette.
 {
-   short sCells	= c_sPalNum / c_sPalColorsPerSwatch;
-   short	sCols		= c_sPalCols;
-   short	sRows		= sCells / sCols;
+   short sCells   = c_sPalNum / c_sPalColorsPerSwatch;
+   short sCols      = c_sPalCols;
+   short sRows      = sCells / sCols;
 
-   RRect	rcClient;
+   RRect rcClient;
    pgui->GetClient(&rcClient.sX, &rcClient.sY, &rcClient.sW, &rcClient.sH);
 
-   short sCellW	= rcClient.sW / sCols;
-   short	sCellH	= rcClient.sH / sRows;
+   short sCellW   = rcClient.sW / sCols;
+   short sCellH   = rcClient.sH / sRows;
 
-   short	sRow, sCol;
-   short	sX, sY;
+   short sRow, sCol;
+   short sX, sY;
    short sColor = g_sPalFirstColor;
    for (sRow = 0, sY = rcClient.sY; sRow < sRows; sRow++, sY += sCellH)
    {
@@ -503,7 +503,7 @@ SetText(
    const char* pszFrmt,    // In:  Format specifier ala sprintf.
    ...)                    // In:  Arguments as specified by format.
 {
-   RGuiItem*	pgui = pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui = pguiRoot->GetItemFromId(lId);
    if (pgui)
    {
       va_list val;
@@ -527,12 +527,12 @@ SetText(
 ////////////////////////////////////////////////////////////////////////////////
 void
 ValidateTextures(
-   RTexture*	ptex, // In:  Texture to validate.
-   short	sNum)       // In:  Number of textures it should have.
+   RTexture*   ptex, // In:  Texture to validate.
+   short sNum)         // In:  Number of textures it should have.
 {
    if (ptex->m_sNum < sNum)
    {
-      short	sRes = rspMsgBox(
+      short sRes = rspMsgBox(
          RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO,
          "Incorrect Texture File",
          "This texture file does not have enough entries to cover the entire mesh.\n"
@@ -542,39 +542,39 @@ ValidateTextures(
       {
       case RSP_MB_RET_YES:
       {
-         short	sOrigNum	= ptex->m_sNum;
+         short sOrigNum   = ptex->m_sNum;
 
          // Create temp space for the existing colors.
-         U8*	pau8	= new U8[sOrigNum];
+         U8*   pau8   = new U8[sOrigNum];
 
          // Duplicate the existing colors.
          short sColor;
          for (sColor = 0; sColor < sOrigNum; sColor++)
          {
-            pau8[sColor]	= ptex->m_pIndices[sColor];
+            pau8[sColor]   = ptex->m_pIndices[sColor];
          }
 
          // Free the existing colors.
          ptex->FreeIndices();
 
          // Resize.
-         ptex->m_sNum	= sNum;
+         ptex->m_sNum   = sNum;
          ptex->AllocIndices();
 
          // Copy the original colors back.
          for (sColor = 0; sColor < sOrigNum; sColor++)
          {
-            ptex->m_pIndices[sColor]	= pau8[sColor];
+            ptex->m_pIndices[sColor]   = pau8[sColor];
          }
 
          // Fill the remaining colors as bright green.
          for ( ; sColor < sNum; sColor++)
          {
-            ptex->m_pIndices[sColor]	= 250;      // Part of static Postal palette.
+            ptex->m_pIndices[sColor]   = 250;      // Part of static Postal palette.
          }
 
          delete pau8;
-         pau8	= 0;
+         pau8   = 0;
 
          break;
       }
@@ -594,14 +594,14 @@ ValidateTextures(
 ////////////////////////////////////////////////////////////////////////////////
 CTexEdit::CTexEdit(void)
 {
-   m_pguiRoot			= NULL;
-   m_pguiAnim			= NULL;
-   m_pguiCurColor		= NULL;
-   m_pguiPal			= NULL;
+   m_pguiRoot         = NULL;
+   m_pguiAnim         = NULL;
+   m_pguiCurColor      = NULL;
+   m_pguiPal         = NULL;
 
    m_scene.SetupPipeline(NULL, NULL, c_dScale);
 
-   m_manip	= Trans;
+   m_manip   = Trans;
 
    m_bDragging = false;
 
@@ -610,19 +610,19 @@ CTexEdit::CTexEdit(void)
 
    ResetTransformation();
 
-   m_bQuit	= false;
+   m_bQuit   = false;
 
-   m_u8Color	= g_sPalFirstColor;
+   m_u8Color   = g_sPalFirstColor;
 
-   m_lTriIndex	= -1;
+   m_lTriIndex   = -1;
 
-   m_ptexSrc		= NULL;
-   m_ptexchanSrc	= NULL;
+   m_ptexSrc      = NULL;
+   m_ptexchanSrc   = NULL;
 
-   m_bModified	= false;
+   m_bModified   = false;
 
-   m_bSpotLight	= false;
-   m_sBrightness	= 0;
+   m_bSpotLight   = false;
+   m_sBrightness   = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -655,8 +655,8 @@ CTexEdit::DoModal(
       rspNameBuffers(&pimComposite);
 
       // Remember center.
-      m_sCursorResetX	= pimComposite->m_sWidth / 2;
-      m_sCursorResetY	= pimComposite->m_sHeight / 2;
+      m_sCursorResetX   = pimComposite->m_sWidth / 2;
+      m_sCursorResetY   = pimComposite->m_sHeight / 2;
 
       // Center.
       m_pguiRoot->Move(
@@ -678,7 +678,7 @@ CTexEdit::DoModal(
 
       SetColor(g_sPalFirstColor);
 
-      m_bSpotLight	= false;
+      m_bSpotLight   = false;
 
       // Get light to use.
       RRect rcClient;
@@ -693,37 +693,37 @@ CTexEdit::DoModal(
 
       // Even though there's many channels of many textures per person, they are all the
       // very same resource (on disk & in memory).
-      m_ptexchanSrc	= panim->m_ptextures;
-      m_ptexSrc		= m_ptexchanSrc->GetAtTime(0);
+      m_ptexchanSrc   = panim->m_ptextures;
+      m_ptexSrc      = m_ptexchanSrc->GetAtTime(0);
 
       // Validate texture thinger.
       ValidateTextures(m_ptexSrc, panim->m_pmeshes->GetAtTime(0)->m_sNum);
 
 
       // Duplicate into a care-free work area.
-      m_texWork	= *m_ptexSrc;
+      m_texWork   = *m_ptexSrc;
 
-      m_bModified	= false;
+      m_bModified   = false;
 
-      m_strFileName	= strFile;
+      m_strFileName   = strFile;
 
       // Set notifications.
-      SetToNotify(c_lIdQuit,			QuitCall_Static);
-      SetToNotify(c_lIdTrans,			ManipCall_Static);
-      SetToNotify(c_lIdScale,			ManipCall_Static);
-      SetToNotify(c_lIdRotate,		ManipCall_Static);
-      SetToNotify(c_lIdPaint,			ManipCall_Static);
-      SetToNotify(c_lIdPal,			ColorCall_Static);
-      SetToNotify(c_lIdApply,			ApplyCall_Static);
-      SetToNotify(c_lIdSave,			SaveCall_Static);
-      SetToNotify(c_lIdRevert,		RevertCall_Static);
-      SetToNotify(c_lIdSpotLight,	SpotCall_Static);
-      SetToNotify(c_lIdBrightness,	BrightnessCall_Static);
-      SetToNotify(c_lIdAdjust,		AdjustCall_Static);
-      SetToNotify(c_lIdAnim,			AnimCall_Static);
+      SetToNotify(c_lIdQuit,         QuitCall_Static);
+      SetToNotify(c_lIdTrans,         ManipCall_Static);
+      SetToNotify(c_lIdScale,         ManipCall_Static);
+      SetToNotify(c_lIdRotate,      ManipCall_Static);
+      SetToNotify(c_lIdPaint,         ManipCall_Static);
+      SetToNotify(c_lIdPal,         ColorCall_Static);
+      SetToNotify(c_lIdApply,         ApplyCall_Static);
+      SetToNotify(c_lIdSave,         SaveCall_Static);
+      SetToNotify(c_lIdRevert,      RevertCall_Static);
+      SetToNotify(c_lIdSpotLight,   SpotCall_Static);
+      SetToNotify(c_lIdBrightness,   BrightnessCall_Static);
+      SetToNotify(c_lIdAdjust,      AdjustCall_Static);
+      SetToNotify(c_lIdAnim,         AnimCall_Static);
 
       // Set initial brightness.
-      RScrollBar*	psb	= (RScrollBar*)m_pguiRoot->GetItemFromId(c_lIdBrightness);
+      RScrollBar*   psb   = (RScrollBar*)m_pguiRoot->GetItemFromId(c_lIdBrightness);
       ASSERT(psb);
       ASSERT(psb->m_type == RGuiItem::ScrollBar);
       psb->SetPos(50);
@@ -736,14 +736,14 @@ CTexEdit::DoModal(
       // Set up ptrs and erase buffer.
       gm.Prepare(m_pguiRoot, NULL, NULL);
 
-      RInputEvent	ie;
+      RInputEvent ie;
 
-      m_bQuit	= false;
+      m_bQuit   = false;
 
-      m_lTriIndex	= -1;
+      m_lTriIndex   = -1;
 
       RTransform trans;
-      CSprite3	sprite;
+      CSprite3 sprite;
       RSop sopView;
       S32 lTime = 0;
 
@@ -751,19 +751,19 @@ CTexEdit::DoModal(
       while (m_bQuit == false)
       {
          // System Update //////////////////////////////////////
-         ie.type	= RInputEvent::None;
+         ie.type   = RInputEvent::None;
 
          // Critical callage.
          UpdateSystem();
          rspGetNextInputEvent(&ie);
 
          // Setup current 3D info ///////////////////////////////
-         sprite.m_pmesh			= panim->m_pmeshes->GetAtTime(lTime);
-         sprite.m_psop			= panim->m_psops->GetAtTime(lTime);
-         sprite.m_ptrans		= &trans;
-         sprite.m_ptex			= &m_texWork;
-         sprite.m_psphere		= panim->m_pbounds->GetAtTime(lTime);
-         sprite.m_sBrightness	= m_sBrightness;
+         sprite.m_pmesh         = panim->m_pmeshes->GetAtTime(lTime);
+         sprite.m_psop         = panim->m_psops->GetAtTime(lTime);
+         sprite.m_ptrans      = &trans;
+         sprite.m_ptex         = &m_texWork;
+         sprite.m_psphere      = panim->m_pbounds->GetAtTime(lTime);
+         sprite.m_sBrightness   = m_sBrightness;
 
          // Transformation //////////////////////////////////////
          trans.Make1();
@@ -802,7 +802,7 @@ CTexEdit::DoModal(
             if (m_bModified)
             {
                // Query if user wants to apply the work textures (and not lose changes).
-               short	sRes	= rspMsgBox(
+               short sRes   = rspMsgBox(
                   RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNOCANCEL,
                   g_pszAppName,
                   "Apply changes before exiting texture editor?");
@@ -815,7 +815,7 @@ CTexEdit::DoModal(
                case RSP_MB_RET_NO:        // No - don't apply.
                   break;
                case RSP_MB_RET_CANCEL:    // Cancel - don't quit.
-                  m_bQuit	= false;
+                  m_bQuit   = false;
                   rspSetQuitStatus(FALSE);
                   break;
                }
@@ -826,8 +826,8 @@ CTexEdit::DoModal(
       // Clean up ptrs, erase buffer, and dirty rect list.
       gm.Unprepare();
 
-      m_ptexSrc		= NULL;
-      m_ptexchanSrc	= NULL;
+      m_ptexSrc      = NULL;
+      m_ptexchanSrc   = NULL;
       m_texWork.FreeIndices();
 
       delete m_pguiRoot;
@@ -869,14 +869,14 @@ CTexEdit::DoOutput(
       &rcClip);      // Dst clip rect.
 
 #if 0 // Draw wire frame.
-   RMesh*	pmesh	= psprite->m_pmesh;
+   RMesh*   pmesh   = psprite->m_pmesh;
    short sTris = pmesh->m_sNum;
-   U16* pu16Vertex	= pmesh->m_pArray;
+   U16* pu16Vertex   = pmesh->m_pArray;
    while (sTris--)
    {
-      const RP3d&	v1	= psopView->m_pArray[*pu16Vertex++];
-      const RP3d&	v2	= psopView->m_pArray[*pu16Vertex++];
-      const RP3d&	v3	= psopView->m_pArray[*pu16Vertex++];
+      const RP3d&   v1   = psopView->m_pArray[*pu16Vertex++];
+      const RP3d&   v2   = psopView->m_pArray[*pu16Vertex++];
+      const RP3d&   v3   = psopView->m_pArray[*pu16Vertex++];
       rspLine(255, pimDst, v1.x, v1.y, v2.x, v2.y, &rcClip);
       rspLine(255, pimDst, v2.x, v2.y, v3.x, v3.y, &rcClip);
       rspLine(255, pimDst, v3.x, v3.y, v1.x, v1.y, &rcClip);
@@ -888,16 +888,16 @@ CTexEdit::DoOutput(
    {
       if (m_lTriIndex >= 0)
       {
-         RMesh*	pmesh	= psprite->m_pmesh;
+         RMesh*   pmesh   = psprite->m_pmesh;
          ASSERT(m_lTriIndex < pmesh->m_sNum);
 
          if (m_lTriIndex < pmesh->m_sNum)
          {
             S32 lVertexIndex   = m_lTriIndex * 3;
 
-            const RP3d&	v1	= psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
-            const RP3d&	v2	= psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
-            const RP3d&	v3	= psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
+            const RP3d&   v1   = psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
+            const RP3d&   v2   = psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
+            const RP3d&   v3   = psopView->m_pArray[pmesh->m_pArray[lVertexIndex++] ];
             rspLine(255, pimDst, v1.x, v1.y, v2.x, v2.y, &rcClip);
             rspLine(255, pimDst, v2.x, v2.y, v3.x, v3.y, &rcClip);
             rspLine(255, pimDst, v3.x, v3.y, v1.x, v1.y, &rcClip);
@@ -934,7 +934,7 @@ CTexEdit::ProcessManip(
       short sDeltaX = sCursorX - m_sCursorResetX;
       short sDeltaY = m_sCursorResetY - sCursorY;
 
-      static U8*	pau8KeyStatus = rspGetKeyStatusArray();
+      static U8*   pau8KeyStatus = rspGetKeyStatusArray();
 
       if (pau8KeyStatus[RSP_SK_SHIFT] & 1)
          sDeltaY = 0;
@@ -950,7 +950,7 @@ CTexEdit::ProcessManip(
       case Scale:
          if (sDeltaY)
          {
-            m_fScale	+= sDeltaY * c_fScaleRate;
+            m_fScale   += sDeltaY * c_fScaleRate;
 
             if (m_fScale < 0.1f)
                m_fScale = 0.1f;
@@ -969,7 +969,7 @@ CTexEdit::ProcessManip(
       if (m_bDragging == true)
       {
          rspShowMouseCursor();
-         m_bDragging	= false;
+         m_bDragging   = false;
       }
    }
 
@@ -983,12 +983,12 @@ CTexEdit::ProcessManip(
       rspGetMouse(&sMouseX, &sMouseY, NULL);
       m_pguiAnim->TopPosToChild(&sMouseX, &sMouseY);
 
-      linept1.x	= sMouseX;
-      linept1.y	= sMouseY;
-      linept1.z	= -SHRT_MAX;
-      linept2.x	= sMouseX;
-      linept2.y	= sMouseY;
-      linept2.z	= SHRT_MAX;
+      linept1.x   = sMouseX;
+      linept1.y   = sMouseY;
+      linept1.z   = -SHRT_MAX;
+      linept2.x   = sMouseX;
+      linept2.y   = sMouseY;
+      linept2.z   = SHRT_MAX;
 
       S32 lTriIndex;
       bool bHit = TrianglesIntersectLineSegment(
@@ -1002,23 +1002,23 @@ CTexEdit::ProcessManip(
 
       if (bHit)
       {
-         m_lTriIndex	= lTriIndex;
+         m_lTriIndex   = lTriIndex;
 
          SetStatusText("Triangle %ld", m_lTriIndex);
 
          if (bButtonDown)
          {
-            RTexture*	ptex	= psprite->m_ptex;
+            RTexture*   ptex   = psprite->m_ptex;
             // Get into texture and replace current triangle index with our current color.
             if (ptex->m_pIndices)
             {
                ASSERT(m_lTriIndex < ptex->m_sNum);
 
                // Set new color for this texture.
-               ptex->m_pIndices[m_lTriIndex]	= m_u8Color;
+               ptex->m_pIndices[m_lTriIndex]   = m_u8Color;
 
                // Note modification.
-               m_bModified	= true;
+               m_bModified   = true;
             }
          }
       }
@@ -1047,7 +1047,7 @@ CTexEdit::ProcessManip(
       m_pguiPal->TopPosToChild(&sMouseX, &sMouseY);
 
       // Get color directly out of GUI.
-      U8	u8Color	= *(m_pguiPal->m_im.m_pData + (sMouseY * m_pguiPal->m_im.m_lPitch) + sMouseX);
+      U8 u8Color   = *(m_pguiPal->m_im.m_pData + (sMouseY * m_pguiPal->m_im.m_lPitch) + sMouseX);
       SetColor(u8Color);
       // Go into paint mode when a color is chosen.  Feels right somehow.
       SetManip(Paint);
@@ -1097,7 +1097,7 @@ CTexEdit::ProcessManip(
 
    if (rspGetQuitStatus() != FALSE)
    {
-      m_bQuit	= true;
+      m_bQuit   = true;
    }
 }
 
@@ -1117,8 +1117,8 @@ CTexEdit::Apply(void)
 {
    if (m_ptexSrc)
    {
-      *m_ptexSrc	= m_texWork;
-      m_bModified	= false;
+      *m_ptexSrc   = m_texWork;
+      m_bModified   = false;
       SetStatusText("Applied.");
    }
 }
@@ -1131,8 +1131,8 @@ CTexEdit::Revert(void)
 {
    if (m_ptexSrc)
    {
-      m_texWork	= *m_ptexSrc;
-      m_bModified	= false;
+      m_texWork   = *m_ptexSrc;
+      m_bModified   = false;
 
       SetStatusText("Reverted.");
    }
@@ -1171,7 +1171,7 @@ CTexEdit::SetManip(
    {
       SetPushBtnState(m_pguiRoot, m_manip + c_lIdTrans, RPushBtn::Off);
 
-      m_manip	= manip;
+      m_manip   = manip;
 
       SetPushBtnState(m_pguiRoot, m_manip + c_lIdTrans, RPushBtn::On);
    }
@@ -1182,17 +1182,17 @@ CTexEdit::SetManip(
 //////////////////////////////////////////////////////////////////////////////
 void
 CTexEdit::SetColor(
-   U8	u8Color)    // In:  New color index.
+   U8 u8Color)      // In:  New color index.
 {
    // Make sure it's in range . . .
    if (u8Color >= c_sPalStart && u8Color <= c_sPalEnd)
    {
-      m_u8Color	= u8Color;
+      m_u8Color   = u8Color;
 
       if (m_pguiCurColor)
       {
          // Show current color in this item.
-         short	sX, sY, sW, sH;
+         short sX, sY, sW, sH;
          m_pguiCurColor->GetClient(&sX, &sY, &sW, &sH);
          rspRect(
             u8Color,
@@ -1213,11 +1213,11 @@ CTexEdit::SetToNotify(
    RGuiItem::BtnUpCall pfn)   // In:  Function to notify.
 {
    ASSERT(m_pguiRoot);
-   RGuiItem*	pgui	= m_pguiRoot->GetItemFromId(lBtnId);
+   RGuiItem*   pgui   = m_pguiRoot->GetItemFromId(lBtnId);
    if (pgui)
    {
-      pgui->m_bcUser				= pfn;
-      pgui->m_ulUserInstance	= (uintptr_t)this;
+      pgui->m_bcUser            = pfn;
+      pgui->m_ulUserInstance   = (uintptr_t)this;
    }
 }
 
@@ -1230,11 +1230,11 @@ CTexEdit::SetToNotify(
    RGuiItem::InputEventCall pfn) // In:  Function to notify.
 {
    ASSERT(m_pguiRoot);
-   RGuiItem*	pgui	= m_pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = m_pguiRoot->GetItemFromId(lId);
    if (pgui)
    {
-      pgui->m_fnInputEvent		= pfn;
-      pgui->m_ulUserInstance	= (uintptr_t)this;
+      pgui->m_fnInputEvent      = pfn;
+      pgui->m_ulUserInstance   = (uintptr_t)this;
    }
 }
 
@@ -1247,13 +1247,13 @@ CTexEdit::SetToNotify(
    RScrollBar::UpdatePosCall pfn)   // In:  Function to notify.
 {
    ASSERT(m_pguiRoot);
-   RScrollBar*	psb	= (RScrollBar*)m_pguiRoot->GetItemFromId(lId);
+   RScrollBar*   psb   = (RScrollBar*)m_pguiRoot->GetItemFromId(lId);
    if (psb)
    {
       if (psb->m_type == RGuiItem::ScrollBar)
       {
-         psb->m_upcUser			= pfn;
-         psb->m_ulUserInstance	= (uintptr_t)this;
+         psb->m_upcUser         = pfn;
+         psb->m_ulUserInstance   = (uintptr_t)this;
       }
    }
 }
@@ -1266,7 +1266,7 @@ CTexEdit::SetStatusText(
    const char* pszFrmt,    // In:  Format specifier ala sprintf.
    ...)                    // In:  Arguments as specified by format.
 {
-   RGuiItem*	pguiStatus = m_pguiRoot->GetItemFromId(c_lIdStatus);
+   RGuiItem*   pguiStatus = m_pguiRoot->GetItemFromId(c_lIdStatus);
    if (pguiStatus)
    {
       va_list val;
@@ -1287,7 +1287,7 @@ void
 CTexEdit::ComposeTransform(
    RTransform& trans)      // In:  Transform to compose in.
 {
-   trans	= m_transRot;
+   trans   = m_transRot;
    trans.Scale(m_fScale, m_fScale, m_fScale);
    trans.Trans(m_fX, m_fY, 0.0f);
 }
@@ -1302,7 +1302,7 @@ CTexEdit::ComposeTransform(
 void
 CTexEdit::QuitCall(RGuiItem* pgui)
 {
-   m_bQuit	= true;
+   m_bQuit   = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1328,7 +1328,7 @@ CTexEdit::ColorCall(RGuiItem* pgui, RInputEvent* pie)
       {
 #if 0 // This is now done in ProcessManip().
          // Get color directly out of GUI.
-         U8	u8Color	= *(pgui->m_im.m_pData + (pie->sPosY * pgui->m_im.m_lPitch) + pie->sPosX);
+         U8 u8Color   = *(pgui->m_im.m_pData + (pie->sPosY * pgui->m_im.m_lPitch) + pie->sPosX);
          SetColor(u8Color);
          // Go into paint mode when a color is chosen.  Feels right somehow.
          SetManip(Paint);
@@ -1373,8 +1373,8 @@ void
 CTexEdit::SpotCall(RGuiItem* pgui)
 {
    ASSERT(pgui->m_type == RGuiItem::PushBtn);
-   RPushBtn*	pbtn	= (RPushBtn*)pgui;
-   m_bSpotLight	= (pbtn->m_state == RPushBtn::On) ? true : false;
+   RPushBtn*   pbtn   = (RPushBtn*)pgui;
+   m_bSpotLight   = (pbtn->m_state == RPushBtn::On) ? true : false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1385,10 +1385,10 @@ CTexEdit::BrightnessCall(RScrollBar* psb)
 {
    S32 lMin, lMax;
    psb->GetRange(&lMin, &lMax);
-   float	fRange	= lMax - lMin + 1;
+   float fRange   = lMax - lMin + 1;
 
    if (fRange != 0.0f)
-      m_sBrightness	= c_sMinBrightness + (psb->GetPos() / fRange) * c_sBrightnessRange;
+      m_sBrightness   = c_sMinBrightness + (psb->GetPos() / fRange) * c_sBrightnessRange;
 }
 
 
@@ -1404,12 +1404,12 @@ CTexEdit::AdjustCall(RGuiItem* pgui)
    char szText[GUI_MAX_STR];
    m_pguiRoot->GetText(c_lIdAmount, szText, sizeof(szText) );
 
-   float	fAdjust	= strtod(szText, NULL);
+   float fAdjust   = strtod(szText, NULL);
 
    // Get palette to work with.
-   U8	au8Red[256];
-   U8	au8Green[256];
-   U8	au8Blue[256];
+   U8 au8Red[256];
+   U8 au8Green[256];
+   U8 au8Blue[256];
    rspGetPaletteEntries(
       0,             // Palette entry to start copying from
       256,           // Number of palette entries to do
@@ -1459,7 +1459,7 @@ CTexEdit::AnimCall(RGuiItem* pgui, RInputEvent* pie)
          // undergone lighting effects.  Get the color from the actual texture.
          if (m_lTriIndex)
          {
-            U8	u8Color	= m_texWork.m_pIndices[m_lTriIndex];
+            U8 u8Color   = m_texWork.m_pIndices[m_lTriIndex];
             SetColor(u8Color);
          }
          break;

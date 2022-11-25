@@ -138,10 +138,10 @@ extern short rspMsgBox( // Returns RSP_MB_RET_*.  See switch statement below.
 
 extern short rspOpenBox(                        // Returns 0 if successfull, non-zero otherwise
    const char* pszBoxTitle,                     // In:  Title of box
-   const char*	pszDefaultPath,                  // In:  Default directory and file
+   const char*   pszDefaultPath,                  // In:  Default directory and file
    char* pszSelectedFile,                       // Out: File that user selected
    short sSelectedFileBufSize,                  // In:  Size of buffer pointed to by pszSelectedFile
-   const char*	pszFilter /*= NULL*/)            // In:  Filename filter or NULL for none
+   const char*   pszFilter /*= NULL*/)            // In:  Filename filter or NULL for none
 {
    fprintf(stderr, "STUBBED: %s:%d\n", __FILE__, __LINE__);
    return -1;
@@ -150,11 +150,11 @@ extern short rspOpenBox(                        // Returns 0 if successfull, non
 
 extern short rspSaveBox(         // Returns 0 on success.
    const char* pszBoxTitle,            // In:  Title of box.
-   const char*	pszDefFileName,         // In:  Default filename.
+   const char*   pszDefFileName,         // In:  Default filename.
    char* pszChosenFileName,      // Out: User's choice.
    short sStrSize,               // In:  Amount of memory pointed to by pszChosenFileName.
-   const char*	pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
-//	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+   const char*   pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
+//   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
 // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 {
    fprintf(stderr, "STUBBED: %s:%d\n", __FILE__, __LINE__);

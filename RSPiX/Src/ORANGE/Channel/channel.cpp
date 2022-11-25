@@ -23,14 +23,14 @@
 // This module impliments the channel-related classes.
 //
 // History:
-//		02/01/97 MJR	Started.
+//      02/01/97 MJR   Started.
 //
-//		06/27/97	JMI	#if 0'ed out RChannelSet which does not specify the
-//							template arguments to its base class RChannel.
+//      06/27/97   JMI   #if 0'ed out RChannelSet which does not specify the
+//                     template arguments to its base class RChannel.
 //
-//		07/13/97 MJR	Moved RChannelSet stuff out to a separate file that isn't
-//							even part of RSPiX yet.
-//							Moved a bunch of stuff from channel.h into here.
+//      07/13/97 MJR   Moved RChannelSet stuff out to a separate file that isn't
+//                     even part of RSPiX yet.
+//                     Moved a bunch of stuff from channel.h into here.
 //
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -21,14 +21,14 @@
 // This simple module contains the "update" function(s).
 //
 // History:
-//		01/13/96 MJR	Started.
+//      01/13/96 MJR   Started.
 //
-//		08/21/97	JMI	Changed Update() to UpdateSystem() and added
-//							UpdateDisplay()s (see proto for details).
+//      08/21/97   JMI   Changed Update() to UpdateSystem() and added
+//                     UpdateDisplay()s (see proto for details).
 //
-//		08/22/97	JMI	Removed UpdateDisplay()s.
+//      08/22/97   JMI   Removed UpdateDisplay()s.
 //
-//		08/31/97	JMI	Removed RTask::Do() call and commented out RHot::Do() call.
+//      08/31/97   JMI   Removed RTask::Do() call and commented out RHot::Do() call.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define UPDATE_CPP

@@ -20,51 +20,51 @@
 // ScrollBar.H
 //
 // History:
-//		01/14/97 JMI	Started tracking history of this file.
-//							Added UpdatePosCall and m_upcUser.
-//							Also, range macros now consider m_lMinPos for other than
-//							0.
+//      01/14/97 JMI   Started tracking history of this file.
+//                     Added UpdatePosCall and m_upcUser.
+//                     Also, range macros now consider m_lMinPos for other than
+//                     0.
 //
-//		01/15/97	JMI	Added overrides of base class's Save/LoadChildren() to
-//							implement special cases for m_btnThumb, Up, & Down.
+//      01/15/97   JMI   Added overrides of base class's Save/LoadChildren() to
+//                     implement special cases for m_btnThumb, Up, & Down.
 //
-//		01/18/97	JMI	Converted Do() to take an RInputEvent* instead of a
-//							S32*.
+//      01/18/97   JMI   Converted Do() to take an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/21/97	JMI	Added ReadMembers() and WriteMembers() overloads to read
-//							and write members of this class.
+//      01/21/97   JMI   Added ReadMembers() and WriteMembers() overloads to read
+//                     and write members of this class.
 //
-//		01/26/97	JMI	Altered static HotCall to accept an RHot* instead of a
-//							U32 'as per' new RHot callbacks.
+//      01/26/97   JMI   Altered static HotCall to accept an RHot* instead of a
+//                     U32 'as per' new RHot callbacks.
 //
-//		01/30/97	JMI	Took Do() out of here and put in scrollbar.cpp.
-//							Fixed rounding error in POS2PIXEL().
+//      01/30/97   JMI   Took Do() out of here and put in scrollbar.cpp.
+//                     Fixed rounding error in POS2PIXEL().
 //
-//		02/05/97	JMI	Now has repeatability on up/left button, down/right
-//							button, and tray presses.  To do this in a consistent
-//							way from the Do(), the up and down buttons had to be
-//							changed to being hooked at the HotCall() level (like
-//							the thumb has always been done).
-//							This removed the need for static versions of the Up/
-//							DownBtnCall()s.
-//							Also, moved instantiable Up/DownBtnCall definitions to
-//							the CPP.
+//      02/05/97   JMI   Now has repeatability on up/left button, down/right
+//                     button, and tray presses.  To do this in a consistent
+//                     way from the Do(), the up and down buttons had to be
+//                     changed to being hooked at the HotCall() level (like
+//                     the thumb has always been done).
+//                     This removed the need for static versions of the Up/
+//                     DownBtnCall()s.
+//                     Also, moved instantiable Up/DownBtnCall definitions to
+//                     the CPP.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		04/03/97	JMI	Added components for optional timed, smooth scrolling.
-//							This included overriding OnLoseFocus().
+//      04/03/97   JMI   Added components for optional timed, smooth scrolling.
+//                     This included overriding OnLoseFocus().
 //
-//		06/27/97	JMI	Moved GetTray() definition from here to scrollbar.cpp.
-//							SET_IF_NOT_NULL returned the expression even if the
-//							passed ptr was NULL.  This would be okay except for
-//							the usage in GetTray() included the very same ptr passed
-//							and deferenced as part of the expression.
+//      06/27/97   JMI   Moved GetTray() definition from here to scrollbar.cpp.
+//                     SET_IF_NOT_NULL returned the expression even if the
+//                     passed ptr was NULL.  This would be okay except for
+//                     the usage in GetTray() included the very same ptr passed
+//                     and deferenced as part of the expression.
 //
-//		09/22/97	JMI	Also, added friend class CScrollBarPropPage for GUI
-//							editor.
+//      09/22/97   JMI   Also, added friend class CScrollBarPropPage for GUI
+//                     editor.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -99,27 +99,27 @@
 
 // Converts a position value, lPos, to a short pixel position w/i the scroll
 // bar of orientation o.
-#define POS2PIXEL(lPos, o)	((short)((m_oOrientation == o) \
+#define POS2PIXEL(lPos, o)   ((short)((m_oOrientation == o) \
                                     ? ((float)(lPos - m_lMinPos) * m_fPos2PixelRatio + 0.5) \
                                     : 0))
 
 // Converts a position value to a pixel horizontal position w/i the scroll bar.
-#define HPOS2PIXEL(lPos)	POS2PIXEL(lPos, Horizontal)
+#define HPOS2PIXEL(lPos)   POS2PIXEL(lPos, Horizontal)
 
 // Converts a position value to a pixel vertical position w/i the scroll bar.
-#define VPOS2PIXEL(lPos)	POS2PIXEL(lPos, Vertical)
+#define VPOS2PIXEL(lPos)   POS2PIXEL(lPos, Vertical)
 
 // Converts a pixel value (relative to Tray) to a S32 position value.
-#define PIXEL2POS(sPix)		((S32)((float)(sPix) / m_fPos2PixelRatio) + m_lMinPos)
+#define PIXEL2POS(sPix)      ((S32)((float)(sPix) / m_fPos2PixelRatio) + m_lMinPos)
 
 // Converts one of two pixel values, dependent on orientation o, to a position
 // value.
-#define PIXELS2POS(sPixX, sPixY)	PIXEL2POS((m_oOrientation == Vertical) \
+#define PIXELS2POS(sPixX, sPixY)   PIXEL2POS((m_oOrientation == Vertical) \
                                        ? (sPixY) \
                                        : (sPixX) )
 
 // Sets a value pointed to if ptr is not NULL.
-#define SET_IF_NOT_NULL(pval, val)	(((pval) != NULL) \
+#define SET_IF_NOT_NULL(pval, val)   (((pval) != NULL) \
                                              ? *(pval) = (val) \
                                              : (0) )
 
@@ -235,27 +235,27 @@ void SetPos(            // Returns nothing.
 {
    if (lPos > m_lMaxPos)
    {
-      m_lCurPos	= m_lMaxPos;
+      m_lCurPos   = m_lMaxPos;
    }
    else
    {
       if (lPos < m_lMinPos)
       {
-         m_lCurPos	= m_lMinPos;
+         m_lCurPos   = m_lMinPos;
       }
       else
       {
-         m_lCurPos	= lPos;
+         m_lCurPos   = lPos;
       }
    }
 
    // If we've reached the destination of a smooth scroll . . .
    if (m_lCurPos == m_lScrollToPos)
    {
-      m_sInSmoothScroll	= FALSE;
+      m_sInSmoothScroll   = FALSE;
    }
 
-   short	sX, sY, sW, sH;
+   short sX, sY, sW, sH;
    GetTray(&sX, &sY, &sW, &sH);
 
    m_btnThumb.Move(sX + HPOS2PIXEL(m_lCurPos), sY + VPOS2PIXEL(m_lCurPos));
@@ -284,24 +284,24 @@ void ScrollToPos(          // Returns nothing.
    {
       if (lPos > m_lMaxPos)
       {
-         m_lScrollToPos	= m_lMaxPos;
+         m_lScrollToPos   = m_lMaxPos;
       }
       else
       {
          if (lPos < m_lMinPos)
          {
-            m_lScrollToPos	= m_lMinPos;
+            m_lScrollToPos   = m_lMinPos;
          }
          else
          {
-            m_lScrollToPos	= lPos;
+            m_lScrollToPos   = lPos;
          }
       }
 
       // Start.
-      m_sInSmoothScroll	= TRUE;
+      m_sInSmoothScroll   = TRUE;
       // Reset time.
-      m_lLastSmoothTime	= rspGetMilliseconds();
+      m_lLastSmoothTime   = rspGetMilliseconds();
    }
 }
 
@@ -336,14 +336,14 @@ void DownBtnPressed(void);
 void CopyBorderInfoTo(
    RGuiItem* pgui)            // In: GuiItem to copy to.
 {
-   pgui->m_u32BorderColor				= m_u32BorderColor;
-   pgui->m_u32BorderHighlightColor	= m_u32BorderHighlightColor;
-   pgui->m_u32BorderEdgeColor			= m_u32BorderEdgeColor;
-   pgui->m_u32BorderShadowColor		= m_u32BorderShadowColor;
-   pgui->m_u32TextColor					= m_u32TextColor;
-   pgui->m_u32BackColor					= m_u32BackColor;
+   pgui->m_u32BorderColor            = m_u32BorderColor;
+   pgui->m_u32BorderHighlightColor   = m_u32BorderHighlightColor;
+   pgui->m_u32BorderEdgeColor         = m_u32BorderEdgeColor;
+   pgui->m_u32BorderShadowColor      = m_u32BorderShadowColor;
+   pgui->m_u32TextColor               = m_u32TextColor;
+   pgui->m_u32BackColor               = m_u32BackColor;
 
-//			pgui->m_sBorderThickness			= m_sBorderThickness;
+//         pgui->m_sBorderThickness         = m_sBorderThickness;
 }
 
 // Does tasks that require constant update for scroll bar.
@@ -416,17 +416,17 @@ protected:     // Internal functions.
 // instance for the scroll bar and call the equivalent instantiated
 // (non-static) functions.
 static void UpHotCall(
-   RHot*	phot,             // Ptr to RHot that generated event.
+   RHot*   phot,             // Ptr to RHot that generated event.
    RInputEvent* pie)       // In:  Most recent user input event.
                            // Out: pie->sUsed = TRUE, if used.
 { ((RScrollBar*)(phot->m_ulUser))->UpHotCall(pie); }
 static void DownHotCall(
-   RHot*	phot,             // Ptr to RHot that generated event.
+   RHot*   phot,             // Ptr to RHot that generated event.
    RInputEvent* pie)       // In:  Most recent user input event.
                            // Out: pie->sUsed = TRUE, if used.
 { ((RScrollBar*)(phot->m_ulUser))->DownHotCall(pie); }
 static void ThumbHotCall(
-   RHot*	phot,             // Ptr to RHot that generated event.
+   RHot*   phot,             // Ptr to RHot that generated event.
    RInputEvent* pie)       // In:  Most recent user input event.
                            // Out: pie->sUsed = TRUE, if used.
 { ((RScrollBar*)(phot->m_ulUser))->ThumbHotCall(pie); }
@@ -446,23 +446,23 @@ static void DrawDownArrow(       // Returns nothing.
 // Save item's children to the specified file.
 virtual                    // Overridden here.
 short SaveChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to save to.
+   RFile*   pfile);        // File to save to.
 
 // Load item's children from the specified file.
 virtual                    // Overridden here.
 short LoadChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to load from.
+   RFile*   pfile);        // File to load from.
 
 // Read item's members from file.
 virtual                 // Overridden here.
 short ReadMembers(               // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version);              // File format version to use.
 
 // Write item's members to file.
 virtual                 // Overridden here.
 short WriteMembers(              // Returns 0 on success.
-   RFile*	pfile);              // File to write to.
+   RFile*   pfile);              // File to write to.
 
 // Set position, usually as requested by user, using the specified
 // type of user feedback.
@@ -497,8 +497,8 @@ S32 m_lButtonIncDec;                // Amount to increment or decrement the
 S32 m_lTrayIncDec;                  // Amount to increment or decrement the
                                     // position when the tray is pressed.
 
-short	m_sArrowBorderDistance;             // Number of pixels between arrows'
-                                          // edges and borders.
+short m_sArrowBorderDistance;               // Number of pixels between arrows'
+                                            // edges and borders.
 
 UpdatePosCall m_upcUser;            // User callback on postion change.
 
@@ -515,19 +515,19 @@ S32 m_lScrollToPos;                 // Position to smoothly scroll to.
                                     // This GUI should have the focus to get
                                     // correct operation.
 
-short	m_sInSmoothScroll;               // TRUE, if we are in a smooth scroll.
-                                       // FALSE, otherwise.
+short m_sInSmoothScroll;                 // TRUE, if we are in a smooth scroll.
+                                         // FALSE, otherwise.
 
 // These values may be querried and can be changed directly.
 // BUT, they may not affect the appearance of the scroll bar
 // until Compose() is called.
-Orientation	m_oOrientation;         // { RScrollBar::Vertical,
-                                    // RScrollBar::Horizontal }
+Orientation m_oOrientation;           // { RScrollBar::Vertical,
+                                      // RScrollBar::Horizontal }
 
 S32 m_lMinThumbLength;                 // Minimum length for thumb.
 
-short	m_sClickOffsetX;              // Position in thumb that was clicked.
-short	m_sClickOffsetY;              // Position in thumb that was clicked.
+short m_sClickOffsetX;                // Position in thumb that was clicked.
+short m_sClickOffsetY;                // Position in thumb that was clicked.
 
 protected:     // Internal typedefs.
 
@@ -538,8 +538,8 @@ S32 m_lMaxPos;                         // Maximum value.
 
 S32 m_lCurPos;                         // Current value.
 
-float	m_fPos2PixelRatio;               // Current ratio of scroll bar
-                                       // positions pixels to pixels.
+float m_fPos2PixelRatio;                 // Current ratio of scroll bar
+                                         // positions pixels to pixels.
 
 ///////////////////////////////////////////////////////////////////////////
 // Friends.
@@ -550,5 +550,5 @@ friend class CScrollBarPropPage;
 
 #endif // SCROLLBAR_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

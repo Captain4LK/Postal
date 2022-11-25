@@ -18,43 +18,43 @@
 // bouy.h
 // Project: Postal
 //
-//	History:
-//		03/07/97	JMI	Added an EditHotSpot() to make dragging smoother.
+//   History:
+//      03/07/97   JMI   Added an EditHotSpot() to make dragging smoother.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/15/97 BRH	Taking out the old routing methods in favor of the new
-//							BFS tree method.
+//      04/15/97 BRH   Taking out the old routing methods in favor of the new
+//                     BFS tree method.
 //
-//		06/06/97 BRH	Freed m_paucRouteTable in the Destructor which had
-//							previously been a source of memory leaks.
+//      06/06/97 BRH   Freed m_paucRouteTable in the Destructor which had
+//                     previously been a source of memory leaks.
 //
-//		06/25/97 BRH	Took out the STL set "linkset" because it was causing
-//							sync problems with the game.  Apparently, the set uses
-//							a tree to store its data, and when building that tree,
-//							uses some kind of random function to balance the tree, but
-//							not the standard library rand() function, but a different
-//							random function that we don't reset from realm to realm.
-//							This caused the routing tables to be build differently
-//							each time the game was played, and so the demo mode and
-//							network mode were out of sync.
+//      06/25/97 BRH   Took out the STL set "linkset" because it was causing
+//                     sync problems with the game.  Apparently, the set uses
+//                     a tree to store its data, and when building that tree,
+//                     uses some kind of random function to balance the tree, but
+//                     not the standard library rand() function, but a different
+//                     random function that we don't reset from realm to realm.
+//                     This caused the routing tables to be build differently
+//                     each time the game was played, and so the demo mode and
+//                     network mode were out of sync.
 //
-//		06/27/97 BRH	Added a CTreeListNode to the bouys which the NavNet
-//							will use to build a sorted list of nearest bouys when
-//							someone asks for a the nearest bouy.
+//      06/27/97 BRH   Added a CTreeListNode to the bouys which the NavNet
+//                     will use to build a sorted list of nearest bouys when
+//                     someone asks for a the nearest bouy.
 //
-//		06/29/97 MJR	Removed last trace of STL, replacing vector with RFList.
+//      06/29/97 MJR   Removed last trace of STL, replacing vector with RFList.
 //
-//		06/30/97	JMI	Moved definitions of EditRect() and EditHotSpot() into
-//							bouy.cpp.
+//      06/30/97   JMI   Moved definitions of EditRect() and EditHotSpot() into
+//                     bouy.cpp.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		07/30/97 BRH	Added ms_bShowBouys flag and static functions to toggle
-//							this flag.
+//      07/30/97 BRH   Added ms_bShowBouys flag and static functions to toggle
+//                     this flag.
 //
-//		08/08/97 BRH	Added a Visible() function for the gameedit to be able
-//							to determine when the bouy is hiding itself.
+//      08/08/97 BRH   Added a Visible() function for the gameedit to be able
+//                     to determine when the bouy is hiding itself.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef BOUY_H
@@ -70,7 +70,7 @@ class CTreeListNode
 typedef CTreeListNode Node;
 typedef K SORTKEY, *PSORTKEY;
 
-//	protected:
+//   protected:
 public:
 CTreeListNode()
 {
@@ -100,10 +100,10 @@ void InsertBefore(
    Node* pn)         // In:  Node to insert before.
 {
    ASSERT(m_pnNext == NULL && m_pnPrev == NULL);
-   m_pnNext					= pn;
-   m_pnPrev					= pn->m_pnPrev;
-   m_pnPrev->m_pnNext	= this;
-   pn->m_pnPrev			= this;
+   m_pnNext               = pn;
+   m_pnPrev               = pn->m_pnPrev;
+   m_pnPrev->m_pnNext   = this;
+   pn->m_pnPrev         = this;
 }
 
 // Note:  This function can only be used with a list that has
@@ -112,10 +112,10 @@ void AddAfter(
    Node* pn)         // In:  Node to add after.
 {
    ASSERT(m_pnNext == NULL && m_pnPrev == NULL);
-   m_pnNext					= pn->m_pnNext;
-   m_pnPrev					= pn;
-   m_pnNext->m_pnPrev	= this;
-   pn->m_pnNext			= this;
+   m_pnNext               = pn->m_pnNext;
+   m_pnPrev               = pn;
+   m_pnNext->m_pnPrev   = this;
+   pn->m_pnNext         = this;
 }
 
 // Note:  This function can only be used with a list that has
@@ -123,10 +123,10 @@ void AddAfter(
 // Note:  Do not call, if already removed.
 void Remove(void)
 {
-   m_pnNext->m_pnPrev		= m_pnPrev;
-   m_pnPrev->m_pnNext		= m_pnNext;
-   m_pnNext						= NULL;
-   m_pnPrev						= NULL;
+   m_pnNext->m_pnPrev      = m_pnPrev;
+   m_pnPrev->m_pnNext      = m_pnNext;
+   m_pnNext                  = NULL;
+   m_pnPrev                  = NULL;
 }
 
 // Note:  This function adds the item into the tree in its
@@ -194,11 +194,11 @@ void DeleteTree(void)
 
 
 public:
-Node*		m_pnNext;
-Node*		m_pnPrev;
-Node*		m_pnLeft;
-Node*		m_pnRight;
-Owner*	m_powner;
+Node*      m_pnNext;
+Node*      m_pnPrev;
+Node*      m_pnLeft;
+Node*      m_pnRight;
+Owner*   m_powner;
 SORTKEY m_sortkey;
 };
 
@@ -223,9 +223,9 @@ typedef RList<CBouy> linklist;
 // Variables
 //---------------------------------------------------------------------------
 public:
-UCHAR	m_ucID;                             // Bouy ID (or address)
+UCHAR m_ucID;                               // Bouy ID (or address)
 linklist m_aplDirectLinks;
-short	m_sNumDirectLinks;
+short m_sNumDirectLinks;
 TreeListNode m_TreeNode;
 
 protected:
@@ -364,20 +364,20 @@ void EditRect(RRect* pRect);
 
 // Called by editor to get the hotspot of an object in 2D.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 // Add a link to this bouy - it is directly connected, ie, 1 hop away
 short AddLink(CBouy* pBouy);

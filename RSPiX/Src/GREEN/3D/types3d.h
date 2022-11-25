@@ -176,10 +176,10 @@ void FreeIndices(void);
 void FreeColors(void);
 
 // Load from file
-short	Load(RFile* fp);
+short   Load(RFile* fp);
 
 // Save to file
-short	Save(RFile* fp);
+short   Save(RFile* fp);
 
 // Map colors onto the specified palette.  For each color, the best
 // matching color is found in the  palette, and the associated palette
@@ -312,10 +312,10 @@ void Alloc(short sNum);
 void Free(void);
 
 // Load from file
-short	Load(RFile* fp);
+short   Load(RFile* fp);
 
 // Save to file
-short	Save(RFile* fp);
+short   Save(RFile* fp);
 
 protected:
 // Init
@@ -337,7 +337,7 @@ class RSop
 //------------------------------------------------------------------------------
 public:
 S32 m_lNum;                                        // Number of points in array (only 65536 currently accessible)
-RP3d*	m_pArray;                                       // Array of points
+RP3d*   m_pArray;                                       // Array of points
 
 //------------------------------------------------------------------------------
 // Functions
@@ -416,10 +416,10 @@ void Alloc(S32 lNum);
 void Free(void);
 
 // Load from file
-short	Load(RFile* fp);
+short   Load(RFile* fp);
 
 // Save to file
-short	Save(RFile* fp);
+short   Save(RFile* fp);
 
 protected:
 // Init

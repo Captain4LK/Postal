@@ -17,20 +17,20 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	snd.cpp
+//   snd.cpp
 //
 // History:
-//		04/28/95 JMI	Started.
+//      04/28/95 JMI   Started.
 //
-//		01/29/97	JMI	Added callback on done and GetSample() query.
+//      01/29/97   JMI   Added callback on done and GetSample() query.
 //
-//		05/09/97	JMI	Added ability to loop sub samples.
+//      05/09/97   JMI   Added ability to loop sub samples.
 //
-//		06/12/97	JMI	Added user value.
+//      06/12/97   JMI   Added user value.
 //
-//		07/15097 JRD	Added members to hold sound volume information
+//      07/15097 JRD   Added members to hold sound volume information
 //
-//		08/05/97	JMI	Added Pause(), IsPaused(), and Resume().
+//      08/05/97   JMI   Added Pause(), IsPaused(), and Resume().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -94,12 +94,12 @@ typedef enum
 
 // Callback when done playing/streaming.
 typedef void (*DoneCall)(        // Returns nothing.
-   RSnd*	psnd);                  // This RSnd.
+   RSnd*   psnd);                  // This RSnd.
 
 ////////////////////////// Querries ///////////////////////////////////////
 public:
 // Returns the current state of the play/stream process.
-State GetState(void)	{ return m_sState; }
+State GetState(void)   { return m_sState; }
 
 // Gets/returns the current position of the audio in bytes.
 S32 GetPos(void);
@@ -131,16 +131,16 @@ short Stream(                       // Returns 0 on success.
    char* pszSampleName,             // In:  Name of sample file.
    S32 lPlayBufSize,             // In:  Size of play buffer in bytes.
    S32 lReadBufSize,             // In:  Size of file read buffer in bytes.
-   UCHAR	ucMainVolume = 255,        // In:  Primary Volume (0 - 255)
+   UCHAR ucMainVolume = 255,          // In:  Primary Volume (0 - 255)
    UCHAR ucVolume2 = 255);          // In:  Secondary Volume (0 - 255)
 
 // Plays RSample supplied via ptr with buffer size of lPlayBufSize
 // (this is the size of the chunks sent to RMix).
 // Note on looping:
-//	 Start																		  End
-//		1-----------------------------------------------------------4
-//				2=======================================3
-//			lLoopStartTime									lLoopEndTime
+//    Start                                                        End
+//      1-----------------------------------------------------------4
+//            2=======================================3
+//         lLoopStartTime                           lLoopEndTime
 //
 // In a looping scenario, 1..2 of the sample is played, then 2..3
 // is repeated until m_sLoop is FALSE, at which time, once 3 is reached,
@@ -148,10 +148,10 @@ short Stream(                       // Returns 0 on success.
 short Play(                         // Returns 0 on success.
    RSample* psample,                // In:  Sample to play.
    S32 lPlayBufSize,             // In:  Size of play buffer in bytes.
-   UCHAR	ucMainVolume = 255,        // In:  Primary Volume (0 - 255)
+   UCHAR ucMainVolume = 255,          // In:  Primary Volume (0 - 255)
    UCHAR ucVolume2 = 255,           // In:  Secondary Volume (0 - 255)
    S32 lLoopStartTime = -1,         // In:  Where to loop back to in milliseconds.
-                                    //	-1 indicates no looping (unless m_sLoop is
+                                    //   -1 indicates no looping (unless m_sLoop is
                                     // explicitly set).
    S32 lLoopEndTime = 0);           // In:  Where to loop back from in milliseconds.
                                     // In:  If less than 1, the end + lLoopEndTime is used.
@@ -187,12 +187,12 @@ void Init(void);
 // Called from StreamCallStatic.
 // Sends back current volume information to RMix
 // Returns pointer to next buffer to play or NULL to end.
-void* StreamCall(	RMix::Msg msg,
-                  void* pData,
-                  U32* pulNewBufSize,
-                  uintptr_t ulUser,
-                  UCHAR* pucVolume = NULL,
-                  UCHAR* pucVol2 = NULL);
+void* StreamCall(   RMix::Msg msg,
+                    void* pData,
+                    U32* pulNewBufSize,
+                    uintptr_t ulUser,
+                    UCHAR* pucVolume = NULL,
+                    UCHAR* pucVol2 = NULL);
 
 
 // Callback from blue regarding playing buffer(s).
@@ -209,8 +209,8 @@ static void* StreamCallStatic(RMix::Msg msg,
 void* PlayCall(RMix::Msg msg,
                void* pData,
                U32* pulNewBufSize,
-               UCHAR*		pucVolume = NULL,
-               UCHAR*		pucVol2 = NULL);
+               UCHAR*      pucVolume = NULL,
+               UCHAR*      pucVol2 = NULL);
 
 // Callback from blue regarding playing buffer(s).
 // Sends back current volume information to RMix
@@ -224,28 +224,28 @@ static void* PlayCallStatic(RMix::Msg msg,
 
 ////////////////////////// Member vars ////////////////////////////////////
 public:
-short	m_sLoop;                      // If TRUE, Play() will loop until FALSE.
+short m_sLoop;                        // If TRUE, Play() will loop until FALSE.
 S32 m_lLoopStartPos;                // Where to loop back to in bytes.
                                     // Play() only.
 S32 m_lLoopEndPos;                  // Where to loop back from in bytes.
                                     // Play() only.
 
-DoneCall	m_dcUser;               // User callback when done playing/streaming
-                                 // a sample.
+DoneCall m_dcUser;                 // User callback when done playing/streaming
+                                   // a sample.
 
 uintptr_t m_ulUser;           // User value -- set as you please.
 
-short	m_sChannelVolume;            // 0-255 = Primary (local) Volume
-short	m_sTypeVolume;             // 0-255	= Secondary (category) Volume
+short m_sChannelVolume;              // 0-255 = Primary (local) Volume
+short m_sTypeVolume;               // 0-255   = Secondary (category) Volume
 
 protected:
 S32 m_lBufSize;                  // Buffer unit to stream in.
-State	m_sState;                  // One of the enums above representing
-                                 // this RSnd's state.
+State m_sState;                    // One of the enums above representing
+                                   // this RSnd's state.
 RMix m_mix;                      // For playing/mixing sound data.
 PSAMPLE m_psample;               // Sample to be streamed.
-short	m_sOwnSample;              // TRUE if RSnd allocated m_psample, FALSE
-                                 // otherwise.
+short m_sOwnSample;                // TRUE if RSnd allocated m_psample, FALSE
+                                   // otherwise.
 U32 m_ulRemaining;               // Amount left of sample data to be played.
 U32 m_ulSampleSize;              // Overall sample size.
 

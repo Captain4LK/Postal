@@ -20,41 +20,41 @@
 // Pal.CPP
 //
 // History:
-// 10/30/96	JMI	Broke CPal and some of its associates out of image.cpp and
-//						imagetyp.h.
+// 10/30/96   JMI   Broke CPal and some of its associates out of image.cpp and
+//                  imagetyp.h.
 //
-//	10/30/96	JMI	Changed:
-//						Old label:			New label:
-//						=========			=========
-//						CNFile				RFile
-//						CPal					RPal
-//						U32 ulType		RPal::Type ulType
-//						m_bCanDestroyData	m_sCanDestroyData
+//   10/30/96   JMI   Changed:
+//                  Old label:         New label:
+//                  =========         =========
+//                  CNFile            RFile
+//                  CPal               RPal
+//                  U32 ulType      RPal::Type ulType
+//                  m_bCanDestroyData   m_sCanDestroyData
 //
-//						Also, Convert() contained a "lack of m_" bug where it was
-//						unintentionally doing nothing b/c it was using ulType off
-//						of the stack when it meant the one in the class.
+//                  Also, Convert() contained a "lack of m_" bug where it was
+//                  unintentionally doing nothing b/c it was using ulType off
+//                  of the stack when it meant the one in the class.
 //
-//						The thing that annoys me the most about using actual enums
-//						instead of U32s is that you have to copy it into a dummy
-//						U32 to use RFile on it.  This isn't very bad, but it's
-//						annoying.
+//                  The thing that annoys me the most about using actual enums
+//                  instead of U32s is that you have to copy it into a dummy
+//                  U32 to use RFile on it.  This isn't very bad, but it's
+//                  annoying.
 //
-//	11/01/96	JMI	Changed all members to be preceded by m_ (e.g., sDepth
-//						m_sDepth).  Changed ulType to m_type.
-//						Also, fixed bug in CreatePalette() where it was bounds
-//						checking the new passed in type against the minimum type and
-//						checking the member ulType against the maximum type.  Changed
-//						this to perform both checks with the passed in type (which
-//						was ulNewType).
+//   11/01/96   JMI   Changed all members to be preceded by m_ (e.g., sDepth
+//                  m_sDepth).  Changed ulType to m_type.
+//                  Also, fixed bug in CreatePalette() where it was bounds
+//                  checking the new passed in type against the minimum type and
+//                  checking the member ulType against the maximum type.  Changed
+//                  this to perform both checks with the passed in type (which
+//                  was ulNewType).
 //
-//	12/13/96	JMI	Now calls RPalFile::Load(...) to load images.
-//						RPalFile::Load(...) has the advantage of potentially
-//						supporting older formats.
+//   12/13/96   JMI   Now calls RPalFile::Load(...) to load images.
+//                  RPalFile::Load(...) has the advantage of potentially
+//                  supporting older formats.
 //
-//	04/16/97	JMI	Added operator= overload.
+//   04/16/97   JMI   Added operator= overload.
 //
-//	06/28/97 MJR	Added <string.h> for latest mac compatability.
+//   06/28/97 MJR   Added <string.h> for latest mac compatability.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -144,12 +144,12 @@ short RPal::ms_asPalEntrySizes[END_REG_PAL] =
    2,    //P555
    2,    //P565
    3,    //P888
-   3,    //PFLX	03/06/96	JMI
+   3,    //PFLX   03/06/96   JMI
 };
 
 //////////////////////////////////////////////////////////////////////
 //
-//	RPal Member Functions
+//   RPal Member Functions
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -158,26 +158,26 @@ short RPal::ms_asPalEntrySizes[END_REG_PAL] =
 // Constructor
 //
 // Description:
-//		Initialize member variables
+//      Initialize member variables
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
 RPal::RPal()
 {
-   //	Initialize member variables to zero
-   m_type				= NO_PALETTE;
-   m_ulSize				= 0;
-   m_sStartIndex		= 0;
-   m_sNumEntries		= 0;
-   m_sPalEntrySize	= 0;
-   m_pData				= NULL;
-   m_sCanDestroyData	= FALSE;
+   //   Initialize member variables to zero
+   m_type            = NO_PALETTE;
+   m_ulSize            = 0;
+   m_sStartIndex      = 0;
+   m_sNumEntries      = 0;
+   m_sPalEntrySize   = 0;
+   m_pData            = NULL;
+   m_sCanDestroyData   = FALSE;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -185,13 +185,13 @@ RPal::RPal()
 // Destructor
 //
 // Description:
-//		Deallocate memory for the palette buffer
+//      Deallocate memory for the palette buffer
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -208,18 +208,18 @@ RPal::~RPal()
 // CreatePalette
 //
 // Description:
-//		Creates a default palette of the specified type.  All the
+//      Creates a default palette of the specified type.  All the
 //    appropriate member variables are set to the default values for
-//		this type of palette.  The appropriate amount of data is
-//		allocated, too (but the data itself is uninitialized).
-//		All values in the newly allocated data will be zero.
+//      this type of palette.  The appropriate amount of data is
+//      allocated, too (but the data itself is uninitialized).
+//      All values in the newly allocated data will be zero.
 //
 // Parameters:
-//		(see function declaration below)
+//      (see function declaration below)
 //
 // Returns:
-//		SUCCESS if it worked
-//		FAILURE if it didn't
+//      SUCCESS if it worked
+//      FAILURE if it didn't
 //
 //////////////////////////////////////////////////////////////////////
 short RPal::CreatePalette(
@@ -258,15 +258,15 @@ short RPal::CreatePalette(
 // GetPalEntrySize
 //
 // Description:
-//		This is the static member function that will return the
-//		size in bytes of any registered palette type.
+//      This is the static member function that will return the
+//      size in bytes of any registered palette type.
 //
 // Parameters:
-//		ulType = registered palette type (see pal.h)
+//      ulType = registered palette type (see pal.h)
 //
 // Returns:
-//		number of bytes of each palette entry for ulType
-///	-1 if the type given is not a registered type
+//      number of bytes of each palette entry for ulType
+///   -1 if the type given is not a registered type
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -286,23 +286,23 @@ short RPal::GetPalEntrySize(Type type)
 // RPal::CreateData
 //
 // Description:
-//		Create a buffer for the palette data of the given size
+//      Create a buffer for the palette data of the given size
 //
 // Parameters:
-//		ulNewSize = size in bytes of the buffer
-//		---------------------------------------
-//		ulSetType = Palette type
-//		sSetPalEntrySize = number of bytes per palette entry
-//		sSetStartIndex = Where palette entries start in the palette
-//		sSetNumEntries	= Number of palette entries used after sSetStartIndex
+//      ulNewSize = size in bytes of the buffer
+//      ---------------------------------------
+//      ulSetType = Palette type
+//      sSetPalEntrySize = number of bytes per palette entry
+//      sSetStartIndex = Where palette entries start in the palette
+//      sSetNumEntries   = Number of palette entries used after sSetStartIndex
 //
 // Returns:
-//		SUCCESS if the memory was allocated
-//		FAILURE if the memory could not be allocated
+//      SUCCESS if the memory was allocated
+//      FAILURE if the memory could not be allocated
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RPal::CreateData(U32 ulNewSize)
+short RPal::CreateData(U32 ulNewSize)
 {
    if (m_sCanDestroyData && m_pData)
    {
@@ -329,10 +329,10 @@ short RPal::CreateData(U32 ulNewSize,
 
    if (sReturn == SUCCESS)
    {
-      m_type				= typeNew;
-      m_sPalEntrySize	= sSetPalEntrySize;
-      m_sStartIndex		= sSetStartIndex;
-      m_sNumEntries		= sSetNumEntries;
+      m_type            = typeNew;
+      m_sPalEntrySize   = sSetPalEntrySize;
+      m_sStartIndex      = sSetStartIndex;
+      m_sNumEntries      = sSetNumEntries;
    }
    return sReturn;
 }
@@ -343,25 +343,25 @@ short RPal::CreateData(U32 ulNewSize,
 // RPal::DestroyData
 //
 // Description:
-//		Deallocate the palette buffer created by CreateData()
+//      Deallocate the palette buffer created by CreateData()
 //
 // Paremeters:
-//		none
+//      none
 //
 // Returns:
-//		SUCCESS if the memory was deallocated
-//		FAILURE if the palette buffer was not allocated by CreateData(),
-//		        but instead set by using SetData() in which case the
-//				  user is responsible for deallocating the buffer
+//      SUCCESS if the memory was deallocated
+//      FAILURE if the palette buffer was not allocated by CreateData(),
+//              but instead set by using SetData() in which case the
+//              user is responsible for deallocating the buffer
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RPal::DestroyData()
+short RPal::DestroyData()
 {
    // Only if the data was not supplied by the user.
    if (m_sCanDestroyData)
    {
-      m_sCanDestroyData	= FALSE;
+      m_sCanDestroyData   = FALSE;
       return RImage::sDestroyMem((void**) &m_pData);
    }
    else
@@ -377,18 +377,18 @@ short	RPal::DestroyData()
 // RPal::SetData
 //
 // Description:
-//		Allows the user to give their own buffer for the palette.
-//		The user is responsible for deallocating this buffer when
-//		they are done using it.
+//      Allows the user to give their own buffer for the palette.
+//      The user is responsible for deallocating this buffer when
+//      they are done using it.
 //
 // Parameters:
-//		pUserData = pointer to the buffer that will be used as the
-//					   palette's buffer
+//      pUserData = pointer to the buffer that will be used as the
+//                  palette's buffer
 //
 // Returns:
-//		FAILURE if the buffer passed in is NULL or if there was
-//			     already a palette buffer
-//		SUCCESS if the buffer was set
+//      FAILURE if the buffer passed in is NULL or if there was
+//              already a palette buffer
+//      SUCCESS if the buffer was set
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -412,22 +412,22 @@ short RPal::SetData(void* pUserData)
 // DetachData
 //
 // Description:
-//		This function detaches the memory buffer from the RPal and
-//		returns a pointer to it.  This allows the RPal to now create
-//		a new buffer without freeing the previous one.  This is useful
-//		for palette conversion functions where you want to keep the
-//		same RPal object but just change its data.  The conversion
-//		function can create a new RPal and set its pData pointer to
-//		the detached palette buffer.  Then the original RPal can
-//		create a new buffer to accept the converted data.  When the
-//		conversion function is finished it can delete the RPal it
-//		created and aS32 with it, the data.
+//      This function detaches the memory buffer from the RPal and
+//      returns a pointer to it.  This allows the RPal to now create
+//      a new buffer without freeing the previous one.  This is useful
+//      for palette conversion functions where you want to keep the
+//      same RPal object but just change its data.  The conversion
+//      function can create a new RPal and set its pData pointer to
+//      the detached palette buffer.  Then the original RPal can
+//      create a new buffer to accept the converted data.  When the
+//      conversion function is finished it can delete the RPal it
+//      created and aS32 with it, the data.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		pointer to pData
+//      pointer to pData
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -444,16 +444,16 @@ UCHAR* RPal::DetachData(void)
 // Convert
 //
 // Description:
-//		This function creates a temporary image of the type that
-//		matches the palette type and then calls the RImage::Convert
-//		function to convert the palette to the given format
+//      This function creates a temporary image of the type that
+//      matches the palette type and then calls the RImage::Convert
+//      function to convert the palette to the given format
 //
 // Parameters:
-//		ulType = One of the enumerated palette types from ePaletteType
+//      ulType = One of the enumerated palette types from ePaletteType
 //
 // Returns:
-//		ulType if successful
-//		NO_PALETTE if there is no appropriate palette conversion
+//      ulType if successful
+//      NO_PALETTE if there is no appropriate palette conversion
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -486,14 +486,14 @@ RPal::Type RPal::Convert(Type typeNew)
 // Save
 //
 // Description:
-//		Saves the palette information to the given file.
+//      Saves the palette information to the given file.
 //
 // Parameters:
-//		pszFilename = name of the file to be opened for write
+//      pszFilename = name of the file to be opened for write
 //
 // Returns:
-//		SUCCESS if the file was written
-//		FAILURE otherwise
+//      SUCCESS if the file was written
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -520,18 +520,18 @@ short RPal::Save(char* pszFilename)
 // Save
 //
 // Description:
-//		Saves the palette to the given RFile.  It is assumed that
-//		the RFile pointer refers to an open file.  This version
-//		of the save is used by RImage::Save when it writes out the
-//		image data, it then calls this RPal::Save to write the palette
-//		data to the current location in the file.
+//      Saves the palette to the given RFile.  It is assumed that
+//      the RFile pointer refers to an open file.  This version
+//      of the save is used by RImage::Save when it writes out the
+//      image data, it then calls this RPal::Save to write the palette
+//      data to the current location in the file.
 //
 // Parameters:
-//		pcf = pointer to an open RFile
+//      pcf = pointer to an open RFile
 //
 // Returns:
-//		SUCCESS if the file was written
-//		FAILURE otherwise
+//      SUCCESS if the file was written
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -584,15 +584,15 @@ short RPal::Save(RFile* pcf)
 // Load
 //
 // Description:
-//		This version of the load takes a filename and opens the PAL file.
+//      This version of the load takes a filename and opens the PAL file.
 //
 // Parameters:
-//		pszFilename = File from which to load the palette
+//      pszFilename = File from which to load the palette
 //
 // Returns:
-//		SUCCESS if the palette was loaded
-//		FAILURE otherwise
-//				  TRACE messages will help pinpoint the failure
+//      SUCCESS if the palette was loaded
+//      FAILURE otherwise
+//              TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -619,18 +619,18 @@ short RPal::Load(char* pszFilename)
 // Load
 //
 // Description:
-//		This version of the load takes a pointer to an open RFile and loads
-//		the palette from the current position.  This version of the RPal::Load
-//		function is called by RImage::Load when it is reading a RImage that
-//		contains a palette.
+//      This version of the load takes a pointer to an open RFile and loads
+//      the palette from the current position.  This version of the RPal::Load
+//      function is called by RImage::Load when it is reading a RImage that
+//      contains a palette.
 //
 // Parameters:
-//		pszFilename = File from which to load the palette
+//      pszFilename = File from which to load the palette
 //
 // Returns:
-//		SUCCESS if the palette was loaded
-//		FAILURE otherwise
-//				  TRACE messages will help pinpoint the failure
+//      SUCCESS if the palette was loaded
+//      FAILURE otherwise
+//              TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -645,7 +645,7 @@ short RPal::Load(RFile* pcf)
    {
       pcf->ClearError();
 
-      sReturn	= RPalFile::Load(this, pcf);
+      sReturn   = RPalFile::Load(this, pcf);
    }
    else
    {
@@ -662,32 +662,32 @@ short RPal::Load(RFile* pcf)
 // GetEntries
 //
 // Description:
-//		Gets one or more entries from this palette.  This function offers a
+//      Gets one or more entries from this palette.  This function offers a
 //    standardized method for accessing the palette data, regardless of its
 //    format or type.
 //
-//		Separate pointers are used for each component (red, green, blue, and
-//		alpha) so this function can access those components regardless of what
-//		order they're stored in.  The lAddToPointers parameter specifies the
-//		value to be added to the pointers so they point to the next set of values.
+//      Separate pointers are used for each component (red, green, blue, and
+//      alpha) so this function can access those components regardless of what
+//      order they're stored in.  The lAddToPointers parameter specifies the
+//      value to be added to the pointers so they point to the next set of values.
 //
-//		All palette formats ought to be supported, but if someone gets lazy,
-//		then this will fail for unsupported types.
+//      All palette formats ought to be supported, but if someone gets lazy,
+//      then this will fail for unsupported types.
 //
-//		At some point, if alpha info becomes more prevalent, an overloaded
-//		version of this function should be created to supply alpha info aS32
-//		with red/green/blue info.  This functionality was momentarily built into
+//      At some point, if alpha info becomes more prevalent, an overloaded
+//      version of this function should be created to supply alpha info aS32
+//      with red/green/blue info.  This functionality was momentarily built into
 //    this function, but was quickly removed when it became obvious that it
-//		would slow things down in cases where there was no alpha info, or more
-//		importantly, when the user passed a NULL to indicate a lack of alpha data.
+//      would slow things down in cases where there was no alpha info, or more
+//      importantly, when the user passed a NULL to indicate a lack of alpha data.
 //
 // Parameters:
-//		(see function declaration below)
+//      (see function declaration below)
 //
 // Returns:
-//		SUCCESS if the palette was loaded
-//		FAILURE otherwise
-//				  TRACE messages will help pinpoint the failure
+//      SUCCESS if the palette was loaded
+//      FAILURE otherwise
+//              TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
 short RPal::GetEntries(
@@ -817,32 +817,32 @@ short RPal::GetEntries(
 // SettEntries
 //
 // Description:
-//		Sets one or more entries to this palette.  This function offers a
+//      Sets one or more entries to this palette.  This function offers a
 //    standardized method for accessing the palette data, regardless of its
 //    format or type.
 //
-//		Separate pointers are used for each component (red, green, blue, and
-//		alpha) so this function can access those components regardless of what
-//		order they're stored in.  The lAddToPointers parameter specifies the
-//		value to be added to the pointers so they point to the next set of values.
+//      Separate pointers are used for each component (red, green, blue, and
+//      alpha) so this function can access those components regardless of what
+//      order they're stored in.  The lAddToPointers parameter specifies the
+//      value to be added to the pointers so they point to the next set of values.
 //
-//		All palette formats ought to be supported, but if someone gets lazy,
-//		then this will fail for unsupported types.
+//      All palette formats ought to be supported, but if someone gets lazy,
+//      then this will fail for unsupported types.
 //
-//		At some point, if alpha info becomes more prevalent, an overloaded
-//		version of this function should be created to supply alpha info aS32
-//		with red/green/blue info.  This functionality was momentarily built into
+//      At some point, if alpha info becomes more prevalent, an overloaded
+//      version of this function should be created to supply alpha info aS32
+//      with red/green/blue info.  This functionality was momentarily built into
 //    this function, but was quickly removed when it became obvious that it
-//		would slow things down in cases where there was no alpha info, or more
-//		importantly, when the user passed a NULL to indicate a lack of alpha data.
+//      would slow things down in cases where there was no alpha info, or more
+//      importantly, when the user passed a NULL to indicate a lack of alpha data.
 //
 // Parameters:
-//		(see function declaration below)
+//      (see function declaration below)
 //
 // Returns:
-//		SUCCESS if the palette was loaded
-//		FAILURE otherwise
-//				  TRACE messages will help pinpoint the failure
+//      SUCCESS if the palette was loaded
+//      FAILURE otherwise
+//              TRACE messages will help pinpoint the failure
 //
 ///////////////////////////////////////////////////////////////////////////////
 short RPal::SetEntries(
@@ -968,11 +968,11 @@ short RPal::SetEntries(
 RPal& RPal::operator=(RPal &palSrc)
 {
    // Copy members.
-   m_type				= palSrc.m_type;
-   m_ulSize				= palSrc.m_ulSize;
-   m_sStartIndex		= palSrc.m_sStartIndex;
-   m_sNumEntries		= palSrc.m_sNumEntries;
-   m_sPalEntrySize	= palSrc.m_sPalEntrySize;
+   m_type            = palSrc.m_type;
+   m_ulSize            = palSrc.m_ulSize;
+   m_sStartIndex      = palSrc.m_sStartIndex;
+   m_sNumEntries      = palSrc.m_sNumEntries;
+   m_sPalEntrySize   = palSrc.m_sPalEntrySize;
    // If there is any data . . .
    if (palSrc.m_ulSize > 0)
    {

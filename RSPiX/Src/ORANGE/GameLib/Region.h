@@ -21,35 +21,35 @@
 //
 //
 // History:
-//		12/08/95	BRH	Started.
+//      12/08/95   BRH   Started.
 //
-//		06/10/96	JMI	Made all functions in CRegion pure virtual since they
-//							cannot be implemented not knowing anything about the
-//							shape of a region.  CRegion is by nature a pure virtual
-//							class when it comes to any function that requires know-
-//							ledge of that region's actual shape.  Also fixed some
-//							typos (e.g., Regtangle->Rectangle, COLLIDE->COLLISION)
-//							and added some prototypes.
+//      06/10/96   JMI   Made all functions in CRegion pure virtual since they
+//                     cannot be implemented not knowing anything about the
+//                     shape of a region.  CRegion is by nature a pure virtual
+//                     class when it comes to any function that requires know-
+//                     ledge of that region's actual shape.  Also fixed some
+//                     typos (e.g., Regtangle->Rectangle, COLLIDE->COLLISION)
+//                     and added some prototypes.
 //
-//		10/31/96 BRH	Changed the prefixes on these classes from C to R to
-//							conform to the new RSPiX naming convention.
+//      10/31/96 BRH   Changed the prefixes on these classes from C to R to
+//                     conform to the new RSPiX naming convention.
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CRectangle		RRectangle
-//							CCube				RCube
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CRectangle      RRectangle
+//                     CCube            RCube
 //
-//		02/17/97	JMI	Changed protected shape members to public and #if 0'd
-//							out pure virtuals in base class for now.
-//							Also, added Collide overload for R3DLine*.
+//      02/17/97   JMI   Changed protected shape members to public and #if 0'd
+//                     out pure virtuals in base class for now.
+//                     Also, added Collide overload for R3DLine*.
 //
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This is the base class for regions which can be used for sprite
-//	collision detection among other things.  We may provide several different
-//	types of regions to suit particular types of games.  Circular or Spherical
+//   collision detection among other things.  We may provide several different
+//   types of regions to suit particular types of games.  Circular or Spherical
 // regions make checking easier for guy based games or 3D mapped games but
 // the traditional collision box may suit other types of games better, like
 // cars for example.
@@ -79,8 +79,8 @@
 #endif // PATHS_IN_INCLUDES
 
 
-#define	NO_COLLISION	0
-#define	COLLISION		1
+#define   NO_COLLISION   0
+#define   COLLISION      1
 
 
 class RRegion
@@ -101,18 +101,18 @@ RRegion()
 { }
 
 // Query functions
-//		virtual short Collide(RPt* pPoint);
-//		virtual short Collide(RRay* pRay);
-//		virtual short Collide(RRegion* pRegion);
+//      virtual short Collide(RPt* pPoint);
+//      virtual short Collide(RRay* pRay);
+//      virtual short Collide(RRegion* pRegion);
 
 #if 0 // This seems cool and all, but if it is to be done
       // we'll need some Runtime type resolution whether
       // it be RTTI or just the ol' enums we've done
       // for other RSPiX stuff.
       // For now, these just get in the way.
-virtual short Collide(RPt* pPoint)			= 0;
-virtual short Collide(RRay* pRay)			= 0;
-virtual short Collide(RRegion* pRegion)	= 0;
+virtual short Collide(RPt* pPoint)         = 0;
+virtual short Collide(RRay* pRay)         = 0;
+virtual short Collide(RRegion* pRegion)   = 0;
 #endif
 };
 

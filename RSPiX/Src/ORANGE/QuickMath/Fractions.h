@@ -25,18 +25,18 @@ This header depends on the rest QuickMath, but is not necessary
 for use of Quickmath, and deals primarily with high speed fraction
 operations.
 /*****************************************************************
-Hungarian:	fr = either generic fraction or signed 16 (S16 + S16 [ / U16] )
-				pfr = pointer to fraction
-				frS32 = (S32 + S32 [ / U32] )
-				type = RFracS32, members = "frac" and "mod" and "set"
+Hungarian:   fr = either generic fraction or signed 16 (S16 + S16 [ / U16] )
+            pfr = pointer to fraction
+            frS32 = (S32 + S32 [ / U32] )
+            type = RFracS32, members = "frac" and "mod" and "set"
 
-				frS16 = S16 + S16 [ / U16]
-				frU16 = S16 + U16 [ / U16]
-				type = RFracU16, same members, etc., etc.
+            frS16 = S16 + S16 [ / U16]
+            frU16 = S16 + U16 [ / U16]
+            type = RFracU16, same members, etc., etc.
 
-				& = implicit pass by reference, do NOT use a pointer
-				& is used in almost all cases to prevent VC from creating
-				a local stack frame which would slow things down by 20 times.
+            & = implicit pass by reference, do NOT use a pointer
+            & is used in almost all cases to prevent VC from creating
+            a local stack frame which would slow things down by 20 times.
 
 NOTE: The integral value of the fraction is always a SIGNED quantity.
 The S/U refers to whether or not the NUMERATOR of the fraction is
@@ -76,7 +76,7 @@ typedef union
       U16 frac;
    };
    U32 set;
-}	RFracU16;      // No denominator, unsigned values...
+}   RFracU16;      // No denominator, unsigned values...
 
 //=======================================
 typedef union
@@ -84,7 +84,7 @@ typedef union
    S32 set;
    struct
    {
-      short	mod;
+      short mod;
       short frac;
    };
 } RFracS16;
@@ -152,7 +152,7 @@ inline void rspfrSetValue(RFracS16& frDst, double dVal, short sDen)
 // both fraction MUST be PROPER!
 // UNSIGNED!!!!
 //
-inline void	rspfrAdd(RFracU16& pDst, RFracU16& pAdd, short sDen)
+inline void   rspfrAdd(RFracU16& pDst, RFracU16& pAdd, short sDen)
 {
    pDst.mod += pAdd.mod;
    if ( (pDst.frac += pAdd.frac) >= sDen)

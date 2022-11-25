@@ -20,7 +20,7 @@
 //
 // History:
 //
-//		05/09/97 BRH	Started the ostrich object from the band file.
+//      05/09/97 BRH   Started the ostrich object from the band file.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef OSTRICH_H
@@ -43,7 +43,7 @@ protected:
 protected:
 CCharacter::State m_ePreviousState;       // State variable to remember what he was
                                           // Doing before he was shot, etc.
-CAnim3D*	m_pPreviousAnim;                 // Previous state's animation
+CAnim3D*   m_pPreviousAnim;                 // Previous state's animation
 
 CAnim3D m_animStand;                      // Stand animation
 CAnim3D m_animHide;                       // Hide head in sand
@@ -138,7 +138,7 @@ short EditNew(short sX, short sY, short sZ);
 // Called by editor to modify object
 short EditModify(void);                               // Returns 0 if successfull, non-zero otherwise
 // Called by editor to render object
-//		void EditRender(void);
+//      void EditRender(void);
 
 //---------------------------------------------------------------------------
 // Message handlers that are called by CCharacter ProcessMessage().  These

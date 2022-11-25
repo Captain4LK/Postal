@@ -15,23 +15,23 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-//	ANIMSPRT.H
+//   ANIMSPRT.H
 //
-//	Created on     3/15/95 BRH
+//   Created on     3/15/95 BRH
 // Implemented on 3/21/95 BRH
 //
 // The RAnimSprite class is derived from the Sprite class.  It adds
-//	animation capabilities to the basic sprite.
+//   animation capabilities to the basic sprite.
 //
-//	History:
+//   History:
 //
-//		10/31/96 BRH	Changed names from CAnimSprite to RAnimSprite for
-//							the new RSPiX naming convention.
+//      10/31/96 BRH   Changed names from CAnimSprite to RAnimSprite for
+//                     the new RSPiX naming convention.
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CImage			RImage
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CImage         RImage
 //
 //////////////////////////////////////////////////////////////////////
 #ifndef animsprt_h
@@ -61,23 +61,23 @@
 #endif
 
 // These masks are used with the animation flags
-#define ANIMSPRITE_FLAG_LOOP		0x0001   // 1=loop anim, 0=stop at end
-#define ANIMSPRITE_FLAG_NOSKIP	0x0002   // 1=can't skip frames, 0=can
-#define ANIMSPRITE_FLAG_OFFSET	0x0004   // 1=add anim offsets to sprite
-#define ANIMSPRITE_FLAG_ROTATION	0x0008   // 1=modify rotation of sprite
-#define ANIMSPRITE_FLAG_SCALE		0x0010   // 1=modify sprite's scale
-#define ANIMSPRITE_FLAG_END		0x0100   // 1=ending frame, 0=other
-#define ANIMSPRITE_FLAG_KEY		0x0200   // 1=key frame, 0=other
+#define ANIMSPRITE_FLAG_LOOP      0x0001   // 1=loop anim, 0=stop at end
+#define ANIMSPRITE_FLAG_NOSKIP   0x0002   // 1=can't skip frames, 0=can
+#define ANIMSPRITE_FLAG_OFFSET   0x0004   // 1=add anim offsets to sprite
+#define ANIMSPRITE_FLAG_ROTATION   0x0008   // 1=modify rotation of sprite
+#define ANIMSPRITE_FLAG_SCALE      0x0010   // 1=modify sprite's scale
+#define ANIMSPRITE_FLAG_END      0x0100   // 1=ending frame, 0=other
+#define ANIMSPRITE_FLAG_KEY      0x0200   // 1=key frame, 0=other
 
-#define ANIMSPRITE_LAST_FRAME		-1
-#define ANIMSPRITE_FIRST_FRAME	-2
-#define ANIMSPRITE_WAITING			-3
+#define ANIMSPRITE_LAST_FRAME      -1
+#define ANIMSPRITE_FIRST_FRAME   -2
+#define ANIMSPRITE_WAITING         -3
 
-#define ANIMSPRITE_CURRENT_VERSION	0
-#define ANIMSPRITE_COOKIE				0x4d494e41  //"ANIM" in the file
+#define ANIMSPRITE_CURRENT_VERSION   0
+#define ANIMSPRITE_COOKIE            0x4d494e41  //"ANIM" in the file
 
 // Error codes
-#define ANIM_INVALID_FRAME			1        // Current anim does not contain
+#define ANIM_INVALID_FRAME         1        // Current anim does not contain
 
 // A FRAME contains offsets that describe how the hotspot should be moved
 // in order to get to the position at which the specified IMAGE should be
@@ -88,33 +88,33 @@
 // image for this frame.  This way multiple frames can use the same picture.
 typedef struct tag_FRAME
 {
-   short	sOffsetX;      // amount to add to sprite's X position for this frame
-   short	sOffsetY;      // amount to add to sprite's Y position for this frame
-   short	sOffsetZ;      // amount to add to sprite's Z position for this frame
-   short	sRotDeg;       // Rotation in Degrees
+   short sOffsetX;        // amount to add to sprite's X position for this frame
+   short sOffsetY;        // amount to add to sprite's Y position for this frame
+   short sOffsetZ;        // amount to add to sprite's Z position for this frame
+   short sRotDeg;         // Rotation in Degrees
    S32 lScaleWidth;     // Scaled width for this frame
    S32 lScaleHeight;     //Scaled height for this frame
    U32 ulFlags;         // Flags for this frame
-   short	sHold;         // number of milliseconds to hold this frame
-   short	sPicIndex;     // Animation's picture index for this frame (used to load)
-   RImage*	pImage;     // pointer to the image for this frame
+   short sHold;           // number of milliseconds to hold this frame
+   short sPicIndex;       // Animation's picture index for this frame (used to load)
+   RImage*   pImage;     // pointer to the image for this frame
 } FRAME;
 
 
 class RAnimSprite : public RSprite
 {
 private:
-short	m_sVersion;                // Animation version number (to mark .ani files)
-short	m_sAllocatedPics;           // Keep track of number allocated (user can't change)
+short m_sVersion;                  // Animation version number (to mark .ani files)
+short m_sAllocatedPics;             // Keep track of number allocated (user can't change)
 public:                       // so Load can check the header format
-short	m_sNumFrames;              // Number of frames in this animation
-short	m_sNumPictures;            // Number of RImages in this animation
-short	m_sLoopToFrame;            // -1 if no loop, or frame number to start loop
+short m_sNumFrames;                // Number of frames in this animation
+short m_sNumPictures;              // Number of RImages in this animation
+short m_sLoopToFrame;              // -1 if no loop, or frame number to start loop
 U32 m_ulAnimFlags;               // Animation flags and status
 S32 m_lTimer;                    // timer used for animating
-short	m_sCurrFrame;              // current frame in the animation
-FRAME*	m_aFrames;              // Array of frame structures
-RImage**	m_apPictures;           // Array of RImage*
+short m_sCurrFrame;                // current frame in the animation
+FRAME*   m_aFrames;              // Array of frame structures
+RImage**   m_apPictures;           // Array of RImage*
 
 public:
 RAnimSprite();

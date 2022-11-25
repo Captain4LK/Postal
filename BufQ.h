@@ -18,22 +18,22 @@
 // BufQ.H
 //
 // History:
-//		05/24/97 JMI	Started.
+//      05/24/97 JMI   Started.
 //
-//		05/24/97	JMI	Added UnGet().
+//      05/24/97   JMI   Added UnGet().
 //
-//		08/14/97 MJR	Moved everything into this header so that it would
-//							inline, which is highly likely considering the small
-//							size of these functions.  Also reworked the endian
-//							stuff so that the basic nature of the bufQ is to store
-//							data in standard "network order", which is big endian.
+//      08/14/97 MJR   Moved everything into this header so that it would
+//                     inline, which is highly likely considering the small
+//                     size of these functions.  Also reworked the endian
+//                     stuff so that the basic nature of the bufQ is to store
+//                     data in standard "network order", which is big endian.
 //
-//		08/15/97 MJR	Changed GetFree() and GetUsed() to return non-linear
-//							values instead of linear values.
+//      08/15/97 MJR   Changed GetFree() and GetUsed() to return non-linear
+//                     values instead of linear values.
 //
-//					MJR	Lots more cleaning up and fixed several serious bugs
-//							that resulted from incorrect calculations of "linear"
-//							bytes.
+//               MJR   Lots more cleaning up and fixed several serious bugs
+//                     that resulted from incorrect calculations of "linear"
+//                     bytes.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -41,11 +41,11 @@
 // in via two types of interfaces:  { Get (deQ), Put (enQ) } and/or { LockBuf,
 // ReleaseBuf } styles.
 // Potentially bad schtuff:
-//		- Safety on bad behavior for LockBuf/ReleaseBuf pairs is low.
-//		- Since different types of data can be written w/o this class
-//			storing what type it was, reads must be done with the same care
-//			used when accessing files (i.e., either know the format of the data
-//			explicitly or 'learn' it by data context).
+//      - Safety on bad behavior for LockBuf/ReleaseBuf pairs is low.
+//      - Since different types of data can be written w/o this class
+//         storing what type it was, reads must be done with the same care
+//         used when accessing files (i.e., either know the format of the data
+//         explicitly or 'learn' it by data context).
 //
 //////////////////////////////////////////////////////////////////////////////
 #ifndef BUFQ_H
@@ -97,10 +97,10 @@ class CBufQ
 //----------------------------------------------------------------------------
 
 // Calculate the next position in the queue, relative to the specified position 'i'
-   #define BUFQ_NEXT(i)		(((i) + (short)1) >= QueueSize ? (short)0 : ((i) + (short)1))
+   #define BUFQ_NEXT(i)      (((i) + (short)1) >= QueueSize ? (short)0 : ((i) + (short)1))
 
 // Calculate the previous position in the queue, relative to the specified position 'i'
-   #define BUFQ_PREV(i)		(((i) - (short)1) >= 0 ? ((i) - (short)1) : (QueueSize - (short)1))
+   #define BUFQ_PREV(i)      (((i) - (short)1) >= 0 ? ((i) - (short)1) : (QueueSize - (short)1))
 
 //----------------------------------------------------------------------------
 // Types, enums, etc.
@@ -110,7 +110,7 @@ enum
 {
    // This is the volume of the queue.  In other words, how many bytes
    // it can actually hold before it is considered "full".
-   QueueVolume	= 4096,
+   QueueVolume   = 4096,
 
    // This is the actual size (in bytes) of the queue's memory.  It is
    // one larger than the volume so that we can tell the difference
@@ -122,9 +122,9 @@ enum
 // Variables
 //----------------------------------------------------------------------------
 public:
-U8	m_au8Buf[QueueSize];                // Buffer.
-short	m_sPutPos;                       // Current put position in buffer.
-short	m_sGetPos;                       // Current get position in buffer.
+U8 m_au8Buf[QueueSize];                  // Buffer.
+short m_sPutPos;                         // Current put position in buffer.
+short m_sGetPos;                         // Current get position in buffer.
 
 //----------------------------------------------------------------------------
 // Functions
@@ -150,8 +150,8 @@ CBufQ()
 ///////////////////////////////////////////////////////////////////////////////
 void Reset(void)                 // Returns nothing.
 {
-   m_sPutPos	= 0;
-   m_sGetPos	= 0;
+   m_sPutPos   = 0;
+   m_sGetPos   = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,7 +278,7 @@ S32 Put(                // Returns number of items that were put into queue
    S32 lNum = 1)           // In:  Number of U16s to put.
 {
    S32 lNumPut  = -1;
-   U8*	pu8Buf	= (U8*)pu16Buf;
+   U8*   pu8Buf   = (U8*)pu16Buf;
 
          #ifdef SYS_ENDIAN_BIG
    while (++lNumPut < lNum)
@@ -293,7 +293,7 @@ S32 Put(                // Returns number of items that were put into queue
       Put(*(pu8Buf + 1));
       if (!Put(*(pu8Buf + 0)))
          break;
-      pu8Buf	+= 2;
+      pu8Buf   += 2;
    }
          #endif
 
@@ -324,7 +324,7 @@ S32 Put(                // Returns number of items that were put into queue
    S32 lNum = 1)           // In:  Number of U32s to put.
 {
    S32 lNumPut  = -1;
-   U8*	pu8Buf	= (U8*)pu32Buf;
+   U8*   pu8Buf   = (U8*)pu32Buf;
 
          #ifdef SYS_ENDIAN_BIG
    while (++lNumPut < lNum)
@@ -343,7 +343,7 @@ S32 Put(                // Returns number of items that were put into queue
       Put(*(pu8Buf + 1));
       if (!Put(*(pu8Buf + 0)))
          break;
-      pu8Buf	+= 4;
+      pu8Buf   += 4;
    }
          #endif
 
@@ -417,7 +417,7 @@ S32 Get(                // Returns number of items dequeued.
    S32 lNum = 1)           // In:  Number of U16s to get.
 {
    S32 lNumGot  = -1;
-   U8*	pu8Buf	= (U8*)pu16Buf;
+   U8*   pu8Buf   = (U8*)pu16Buf;
 
          #ifdef SYS_ENDIAN_BIG
    while (++lNumGot < lNum)
@@ -432,7 +432,7 @@ S32 Get(                // Returns number of items dequeued.
       Get(pu8Buf + 1);
       if (!Get(pu8Buf + 0))
          break;
-      pu8Buf	+= 2;
+      pu8Buf   += 2;
    }
          #endif
 
@@ -451,7 +451,7 @@ S32 Get(                // Returns number of items dequeued.
    S32 lNum = 1)           // In:  Number of U32s to get.
 {
    S32 lNumGot  = -1;
-   U8*	pu8Buf	= (U8*)pu32Buf;
+   U8*   pu8Buf   = (U8*)pu32Buf;
 
          #ifdef SYS_ENDIAN_BIG
    while (++lNumGot < lNum)
@@ -470,7 +470,7 @@ S32 Get(                // Returns number of items dequeued.
       Get(pu8Buf + 1);
       if (!Get(pu8Buf + 0))
          break;
-      pu8Buf	+= 4;
+      pu8Buf   += 4;
    }
          #endif
 
@@ -573,7 +573,7 @@ void ReleaseGetPtr(
 }
 };
 
-#endif	// BUFQ_H
+#endif   // BUFQ_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

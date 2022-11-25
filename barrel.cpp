@@ -19,91 +19,91 @@
 // Project: Postal
 //
 // This module implements 55 gallon gas barrels that explode when shot or
-//	set on fire.  They first explode, and then burn a large fire for some
-//	time afterward.  We may also animate the exploding barrel.
+//   set on fire.  They first explode, and then burn a large fire for some
+//   time afterward.  We may also animate the exploding barrel.
 //
 // History:
-//		03/14/97 BRH	Started this object based on the napalm object.
+//      03/14/97 BRH   Started this object based on the napalm object.
 //
-//		03/17/97 BRH	Restarted this object based on the new CThing3D base
-//							class which will make it easier to do the motion
-//							and message processing.
+//      03/17/97 BRH   Restarted this object based on the new CThing3D base
+//                     class which will make it easier to do the motion
+//                     and message processing.
 //
-//		03/18/97 BRH	Tuned the delay on the explosion and added a
-//							multiplication factor to the standard external
-//							velocities to react to an explosion.
+//      03/18/97 BRH   Tuned the delay on the explosion and added a
+//                     multiplication factor to the standard external
+//                     velocities to react to an explosion.
 //
-//		03/21/97 BRH	Changed CSmash type to Item instead of Character
-//							so that its proximity to a mine will not set off the
-//							mine.
+//      03/21/97 BRH   Changed CSmash type to Item instead of Character
+//                     so that its proximity to a mine will not set off the
+//                     mine.
 //
-//		04/03/97	JMI	Barrel now rotates when exploded.
+//      04/03/97   JMI   Barrel now rotates when exploded.
 //
-//		04/04/97	JMI	Added barrel spin animation which has the origin at the
-//							barrel's center of gravity for better spinning.
+//      04/04/97   JMI   Added barrel spin animation which has the origin at the
+//                     barrel's center of gravity for better spinning.
 //
-//		04/04/97	JMI	In previous update, forgot to release new anim for
-//							spinning.
-//							Also, EditNew() was not checking return value from
-//							GetResources() before calling Init() and was not storing
-//							result from Init() for its return value.
+//      04/04/97   JMI   In previous update, forgot to release new anim for
+//                     spinning.
+//                     Also, EditNew() was not checking return value from
+//                     GetResources() before calling Init() and was not storing
+//                     result from Init() for its return value.
 //
-//		04/04/97	JMI	Now plays sound (not a very good one) when barrel hits
-//							the ground.
+//      04/04/97   JMI   Now plays sound (not a very good one) when barrel hits
+//                     the ground.
 //
-//		04/23/97	JMI	Now sets its m_smash's bits to Barrel instead of Item.
+//      04/23/97   JMI   Now sets its m_smash's bits to Barrel instead of Item.
 //
-//		04/24/97	JMI	Now saves and loads m_dRot and picks a random value for
-//							m_dRot when EditNew() is called.
+//      04/24/97   JMI   Now saves and loads m_dRot and picks a random value for
+//                     m_dRot when EditNew() is called.
 //
-//		05/15/97 BRH	Moved the smash sphere up so that the sphere will encircle
-//							the barrel and not the hotspot on the ground so that
-//							rockets and missiles can hit them.
+//      05/15/97 BRH   Moved the smash sphere up so that the sphere will encircle
+//                     the barrel and not the hotspot on the ground so that
+//                     rockets and missiles can hit them.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/11/97 BRH	Passes aS32 the shooter information from who set off
-//							this barrel to who it hit.
+//      06/11/97 BRH   Passes aS32 the shooter information from who set off
+//                     this barrel to who it hit.
 //
-//		06/12/97 BRH	Added shooter ID to the call to Setup for the explosion.
+//      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97 BRH	Added sprite and alpha animation for the barrel as a test.
-//							If it looks good, the shadow will probably be moved
-//							into the base class CThing3d.
+//      06/25/97 BRH   Added sprite and alpha animation for the barrel as a test.
+//                     If it looks good, the shadow will probably be moved
+//                     into the base class CThing3d.
 //
-//		06/25/97 BRH	Moved shadow sprite into CThing3D and the render code as well.
+//      06/25/97 BRH   Moved shadow sprite into CThing3D and the render code as well.
 //
-//		06/30/97 BRH	Added cache sound effects to the static part of Load
-//							so that the sound effects that the barrels use are
-//							ready on any level containing barrels.
+//      06/30/97 BRH   Added cache sound effects to the static part of Load
+//                     so that the sound effects that the barrels use are
+//                     ready on any level containing barrels.
 //
-//		07/15/97 BRH	Added sound effects when bullets hit the barrels so that
-//							you get a better indication that you are hitting them.
-//							We should probably get a better sound effect for this
-//							so that it is unique, rather than using the ricochet
-//							sounds again.
+//      07/15/97 BRH   Added sound effects when bullets hit the barrels so that
+//                     you get a better indication that you are hitting them.
+//                     We should probably get a better sound effect for this
+//                     so that it is unique, rather than using the ricochet
+//                     sounds again.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		08/15/97 BRH	Added a special barrel flag so that this type of
-//							barrel can only be destroyed by the CDude.  Added an
-//							EditModify dialog to set the option and added it to
-//							the load and save.
+//      08/15/97 BRH   Added a special barrel flag so that this type of
+//                     barrel can only be destroyed by the CDude.  Added an
+//                     EditModify dialog to set the option and added it to
+//                     the load and save.
 //
-//		08/18/97	JMI	Now plays impact animation and ricochet noise when hit by
-//							bullets.
+//      08/18/97   JMI   Now plays impact animation and ricochet noise when hit by
+//                     bullets.
 //
-//		08/20/97 BRH	Changed ricochet from destruction to weapon volume slider.
+//      08/20/97 BRH   Changed ricochet from destruction to weapon volume slider.
 //
-//		08/26/97 BRH	Changed barrel sound effects, hitting ground and getting
-//							shot.
+//      08/26/97 BRH   Changed barrel sound effects, hitting ground and getting
+//                     shot.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define BARREL_CPP
@@ -124,9 +124,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Anim for when a barrel is hit by a bullet.
-#define BARREL_HIT_RES_NAME	"Ricochet.aan"
+#define BARREL_HIT_RES_NAME   "Ricochet.aan"
 
-#define HULL_RADIUS				(m_sprite.m_sRadius / 2)
+#define HULL_RADIUS            (m_sprite.m_sRadius / 2)
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +360,7 @@ short CBarrel::Init(void)
    m_sBrightness = 0;   // Default Brightness level
 
    // Make the shadow visible
-//	m_spriteShadow.m_sInFlags &= ~CSprite::InHidden;
+//   m_spriteShadow.m_sInFlags &= ~CSprite::InHidden;
    PrepareShadow();
 
    return sResult;
@@ -378,7 +378,7 @@ short CBarrel::Startup(void)                       // Returns 0 if successfull, 
    CThing3d::Startup();
 
    // Init other stuff
-   sResult	= Init();
+   sResult   = Init();
 
    return sResult;
 }
@@ -519,10 +519,10 @@ void CBarrel::Update(void)
       }
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
+      m_smash.m_sphere.sphere.X         = m_dX;
       m_smash.m_sphere.sphere.Y        = m_dY + m_sprite.m_sRadius;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -547,7 +547,7 @@ short CBarrel::EditNew(                         // Returns 0 if successfull, non
    sResult = CThing3d::EditNew(sX, sY, sZ);
 
    // Pick a random rotation.
-   m_dRot	= (double)(GetRandom() % 360);
+   m_dRot   = (double)(GetRandom() % 360);
 
    if (sResult == SUCCESS)
    {
@@ -555,7 +555,7 @@ short CBarrel::EditNew(                         // Returns 0 if successfull, non
       sResult = GetResources();
       if (sResult == 0)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
    else
@@ -593,7 +593,7 @@ short CBarrel::EditModify(void)
          if (sResult == 1)
          {
             // Determine whether or not to display state on screen.
-            m_bSpecial	= (pmbtnSpecial->m_sState	== 2) ? true : false;
+            m_bSpecial   = (pmbtnSpecial->m_sState   == 2) ? true : false;
             if (m_bSpecial)
                m_smash.m_bits = CSmash::Barrel | CSmash::SpecialBarrel;
             else
@@ -614,8 +614,8 @@ short CBarrel::GetResources(void)                  // Returns 0 if successfull, 
 {
    short sResult = 0;
 
-   sResult	= m_animStill.Get(ms_apszStillResNames, RChannel_LoopAtStart | RChannel_LoopAtEnd);
-   sResult	|= m_animSpin.Get(ms_apszSpinResNames, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+   sResult   = m_animStill.Get(ms_apszStillResNames, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+   sResult   |= m_animSpin.Get(ms_apszSpinResNames, RChannel_LoopAtStart | RChannel_LoopAtEnd);
    if (sResult == 0)
    {
       // Add additional gets here
@@ -678,7 +678,7 @@ void CBarrel::OnShotMsg(Shot_Message* pMessage)
          // Audible and visual feedback.
          PlaySample(g_smidShotBarrel1, SampleMaster::Weapon);
          // X/Z position depends on angle of shot (it is opposite).
-         short	sDeflectionAngle	= rspMod360(pMessage->sAngle + 180);
+         short sDeflectionAngle   = rspMod360(pMessage->sAngle + 180);
          double dHitX = m_dX + COSQ[sDeflectionAngle] * HULL_RADIUS;
          double dHitZ = m_dZ - SINQ[sDeflectionAngle] * HULL_RADIUS;
          StartAnim(
@@ -717,10 +717,10 @@ void CBarrel::OnExplosionMsg(Explosion_Message* pMessage)
       m_lTimer = m_pRealm->m_time.GetGameTime() + ms_lExplosionDelay;
       m_lAnimTime = 0;
       // Send it spinning.
-      m_dExtRotVelY	= GetRandom() % 720;
-      m_dExtRotVelZ	= GetRandom() % 720;
+      m_dExtRotVelY   = GetRandom() % 720;
+      m_dExtRotVelZ   = GetRandom() % 720;
       // Spin, spin, spin.
-      m_panimCur		= &m_animSpin;
+      m_panimCur      = &m_animSpin;
       // For this animation, we need to know where the bottom of the barrel
       // is (since it's not at the origin).
       // ***FUDGE***
@@ -729,7 +729,7 @@ void CBarrel::OnExplosionMsg(Explosion_Message* pMessage)
 
       m_pRealm->m_scene.TransformPtsToRealm(&m_trans, &pt3dSrc, &pt3dDst, 1 );
 
-      m_dY	+=	pt3dDst.y;
+      m_dY   +=   pt3dDst.y;
    }
 }
 

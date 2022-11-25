@@ -21,16 +21,16 @@
 //
 // History:
 //
-//		10/18/96	JMI	Converted CQueue class to priority queue and made
-//							dynamic using CSList.
+//      10/18/96   JMI   Converted CQueue class to priority queue and made
+//                     dynamic using CSList.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CSList			RSList
-//							CPQueue			RPQueue
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CSList         RSList
+//                     CPQueue         RPQueue
 //
-//		02/18/97	JMI	Now can be used correctly with non-pointer types.
+//      02/18/97   JMI   Now can be used correctly with non-pointer types.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -69,16 +69,16 @@ template <class T, class K> class RPQueue : public RSList<RPQueueNode<T, K>, K>
 {
 public:     // Typedefs.
 
-typedef RPQueueNode<T, K>	Node;
+typedef RPQueueNode<T, K>   Node;
 
 public:
 // Default constructor.
-RPQueue(short sInitialize	= TRUE) :
+RPQueue(short sInitialize   = TRUE) :
    RSList<Node, K>(sInitialize)
 {
    if (sInitialize != FALSE)
    {
-      m_sNumItems	= 0;
+      m_sNumItems   = 0;
    }
 }
 
@@ -94,10 +94,10 @@ short EnQ(        // Returns 0 on success.
    K* pK)         // In:  Pointer to key to sort by (i.e., priority level).
 {
    // Create node.
-   Node*	pnode	= new Node;
+   Node*   pnode   = new Node;
    // Copy values.
-   pnode->t		= *pT;
-   pnode->k		= *pK;
+   pnode->t      = *pT;
+   pnode->k      = *pK;
    // Add value starting at tail of queue (which, unfortunately, is
    // head of RSList for now).
    return Insert(pnode);
@@ -106,15 +106,15 @@ short EnQ(        // Returns 0 on success.
 
 // Dequeue the next item (NULL = empty).
 bool DeQ(         // Returns true if item dequeued, false if empty.
-   T*	pT)         // Out: Item dequeued on success.
+   T*   pT)         // Out: Item dequeued on success.
 {
    // Get value at head of queue (which is, for now, the tail of
    // the list) and remove it.
-   Node* pnode	= this->GetTail();
+   Node* pnode   = this->GetTail();
    if (pnode != NULL)
    {
       // Copy it.
-      *pT	= pnode->t;
+      *pT   = pnode->t;
       // Remove it.
       Remove();
       // Delete it.
@@ -128,14 +128,14 @@ bool DeQ(         // Returns true if item dequeued, false if empty.
 
 // Remove the item at the tail of the queue (NULL = empty).
 bool RemoveTail(        // Returns true if item removed, false if empty.
-   T*	pT)               // Out: Item removed on success.
+   T*   pT)               // Out: Item removed on success.
 {
-   Node* pnode	= this->GetHead();
+   Node* pnode   = this->GetHead();
    // Check if there's anything to remove . . .
    if (pnode != NULL)
    {
       // Copy it.
-      *pT	= pnode->t;
+      *pT   = pnode->t;
       // Remove it.
       Remove();
       // Delete it.
@@ -163,15 +163,15 @@ short NumItems(void)
 
 // "Peek" at head item in the queue
 bool Peek(        // Returns true if there is an item to peek at, false otherwise.
-   T*	pT)         // Out: Item removed on success.
+   T*   pT)         // Out: Item removed on success.
 {
    // Get value at head of queue (which is, for now, the tail of
    // the list) but don't remove it.
-   Node*	pnode	= this->GetTail();
+   Node*   pnode   = this->GetTail();
    if (pnode != NULL)
    {
       // Copy it.
-      *pT	= pnode->t;
+      *pT   = pnode->t;
 
       return true;
    }
@@ -181,15 +181,15 @@ bool Peek(        // Returns true if there is an item to peek at, false otherwis
 
 // "Peek" at tail item in the queue.
 bool PeekTail(       // Returns true if there is an item to peek at, false otherwise.
-   T*	pT)            // Out: Item removed on success.
+   T*   pT)            // Out: Item removed on success.
 {
    // Get value at tail of queue (which is, for now, the head of
    // the list) but don't remove it.
-   Node*	pnode	= this->GetHead();
+   Node*   pnode   = this->GetHead();
    if (pnode != NULL)
    {
       // Copy it.
-      *pT	= pnode->t;
+      *pT   = pnode->t;
 
       return true;
    }
@@ -204,7 +204,7 @@ protected:     // The following functions should not be called by a RPQueue user
 short Insert(           // Returns 0 on success.
    Node* pnode)         // Pointer to add.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
    // If able to insert into RSList . . .
    if (RSList<Node, K>::Insert(pnode, &(pnode->k)) == 0)
    {
@@ -214,7 +214,7 @@ short Insert(           // Returns 0 on success.
    else
    {
       TRACE("Insert(): RSList()::Insert() failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -224,7 +224,7 @@ short Insert(           // Returns 0 on success.
 short Remove(                 // Returns 0 on success.
    Node* pnode = NULL)        // Item to remove or NULL to remove current.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
    // If able to remove from RSList . . .
    if (RSList<Node, K>::Remove(pnode) == 0)
    {
@@ -234,14 +234,14 @@ short Remove(                 // Returns 0 on success.
    else
    {
       TRACE("Remove(): RSList::Remove() failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
 }
 
 protected:
-short	m_sNumItems;
+short m_sNumItems;
 };
 
 #endif // PQUEUE_H

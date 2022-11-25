@@ -20,19 +20,19 @@
 // slist.h
 //
 // History:
-//		09/25/95 JMI	Started.
+//      09/25/95 JMI   Started.
 //
-//		06/14/96	JMI	Added user-definable compare function.
+//      06/14/96   JMI   Added user-definable compare function.
 //
-//		07/31/96 MJR	Removed partial path from "blue\blue.h"
+//      07/31/96 MJR   Removed partial path from "blue\blue.h"
 //
-//		10/09/96	JMI	CSList() constructor now has option to skip initialization
-//							and automatic dealloaction.
+//      10/09/96   JMI   CSList() constructor now has option to skip initialization
+//                     and automatic dealloaction.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CSList			RSList
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CSList         RSList
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -49,16 +49,16 @@
 template <class T, class K> class RSList
 {
 protected:     // Internal types.
-typedef T*	LISTDATA;
+typedef T*   LISTDATA;
 
 typedef K SORTKEY, *PSORTKEY;
 
-typedef struct	tagNODE
+typedef struct   tagNODE
 {
-   LISTDATA	ldData;
-   PSORTKEY	psk;
-   tagNODE*	pNext;
-   tagNODE*	pPrev;
+   LISTDATA ldData;
+   PSORTKEY psk;
+   tagNODE*   pNext;
+   tagNODE*   pPrev;
 } NODE, *PNODE, *NODESLIST;
 
 typedef short (*CMPCALL)(T* t1, T* t2);
@@ -67,8 +67,8 @@ public:
 // Reposition all.
 void Resort(void)
 {
-   PNODE	pnCur	= m_pnHead;       // The current insertion position.
-   PNODE	pnMin	= m_pnHead;       // The minimum from insertion position on.
+   PNODE pnCur   = m_pnHead;         // The current insertion position.
+   PNODE pnMin   = m_pnHead;         // The minimum from insertion position on.
    PNODE pnTmp;                  // The index.
 
    while (pnCur != NULL)
@@ -119,7 +119,7 @@ void Resort(void)
 // Returns 0 on success.
 short Reposition(LISTDATA ld)
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Find node.
    PNODE pn = Find(ld);
@@ -134,7 +134,7 @@ short Reposition(LISTDATA ld)
          pn->pNext->pPrev = pn->pPrev;
 
       if (pn == m_pnHead)
-         m_pnHead	= pn->pNext;
+         m_pnHead   = pn->pNext;
 
       if (pn == m_pnTail)
          m_pnTail = pn->pPrev;
@@ -153,7 +153,7 @@ short Reposition(LISTDATA ld)
 
 // Insert pnNew
 // Returns 0 on success.
-short Insert(LISTDATA ldNew, PSORTKEY psk	= NULL)
+short Insert(LISTDATA ldNew, PSORTKEY psk   = NULL)
 {
    short sRes = 0;       // Assume success.
    // Allocate new node.
@@ -162,9 +162,9 @@ short Insert(LISTDATA ldNew, PSORTKEY psk	= NULL)
    if (pnNew != NULL)
    {
       // Point to supplied data.
-      pnNew->ldData	= ldNew;
+      pnNew->ldData   = ldNew;
       // Copy sort key.
-      pnNew->psk		= psk;
+      pnNew->psk      = psk;
       // Place node.
       Place(pnNew);
    }
@@ -225,9 +225,9 @@ short Remove(LISTDATA ldRem = NULL)
          }
 
          // Update current info.
-         m_pnPrev		= pn->pPrev;
+         m_pnPrev      = pn->pPrev;
          m_pnCurrent = NULL;
-         m_pnNext		= pn->pNext;
+         m_pnNext      = pn->pNext;
 
          delete pn;
       }
@@ -295,14 +295,14 @@ LISTDATA GetNext(LISTDATA ldData)
       if (pn != NULL)
       {
          // Make global previous node found.
-         m_pnPrev		= pn;
+         m_pnPrev      = pn;
          // Make global current node's next.
          m_pnCurrent = pn->pNext;
          // If new current exists . . .
          if (m_pnCurrent != NULL)
          {
             // Make global next current's next.
-            m_pnNext	= m_pnCurrent->pNext;
+            m_pnNext   = m_pnCurrent->pNext;
             // Return current's data.
             lnRes = m_pnCurrent->ldData;
          }
@@ -349,14 +349,14 @@ LISTDATA GetPrev(LISTDATA ldData)
       if (pn != NULL)
       {
          // Make global next found node.
-         m_pnNext		= pn;
+         m_pnNext      = pn;
          // Make global current node's previous.
          m_pnCurrent = pn->pPrev;
          // If new current exists . . .
          if (m_pnCurrent)
          {
             // Make global previous current's previous.
-            m_pnPrev	= m_pnCurrent->pPrev;
+            m_pnPrev   = m_pnCurrent->pPrev;
             // Return current's data.
             lnRes = m_pnCurrent->ldData;
          }
@@ -389,17 +389,17 @@ short IsEmpty()
 
 // Find the item with the key value skFind for its key or the
 // item that would follow, if that key does not exist.
-T*	FindItem(SORTKEY skFind)
+T*   FindItem(SORTKEY skFind)
 {
    NODE nFind;
    memset(&nFind, 0, sizeof(nFind));
    T t;
    memset(&t, 0, sizeof(t));
 
-   nFind.ldData	= &t;
-   nFind.psk		= &skFind;
+   nFind.ldData   = &t;
+   nFind.psk      = &skFind;
 
-   PNODE	pn = FindKey(&nFind);
+   PNODE pn = FindKey(&nFind);
 
    return (pn != NULL ? pn->ldData : NULL);
 }
@@ -423,7 +423,7 @@ PNODE Find(LISTDATA ldFind)
 // node that would follow, if that key does not exist.
 PNODE FindKey(PNODE pnFind)
 {
-   PNODE pn		= m_pnHead;
+   PNODE pn      = m_pnHead;
 
    // Search forward.
    while (pn != NULL && Compare(pn, pnFind) < 0)
@@ -438,9 +438,9 @@ void Reset(void)
 { Free(); }
 
 // Compares two keys (uses user function if provided).
-// Returns negative	if *pn1 < *pn2.
-// Returns 0			if *pn1 == *pn2.
-// Returns positive	if *pn1 > *pn2.
+// Returns negative   if *pn1 < *pn2.
+// Returns 0         if *pn1 == *pn2.
+// Returns positive   if *pn1 > *pn2.
 short Compare(PNODE pn1, PNODE pn2)
 {
    // If user function provided . . .
@@ -458,25 +458,25 @@ short Compare(PNODE pn1, PNODE pn2)
 
 // Set or clear the compare function used to compare nodes.
 void SetCompareFunc(CMPCALL cc)
-{ m_fncmp	= cc; }
+{ m_fncmp   = cc; }
 
 public:
 RSList(
-   short sInitialize	= TRUE)        // If this flag is FALSE, no initialization
-                                    // or freeing will be done.  It will be the
-                                    // user's responsibility!
+   short sInitialize   = TRUE)        // If this flag is FALSE, no initialization
+                                      // or freeing will be done.  It will be the
+                                      // user's responsibility!
 {
    if (sInitialize != FALSE)
    {
       m_pnHead    = NULL;
-      m_pnPrev		= NULL;
+      m_pnPrev      = NULL;
       m_pnCurrent = NULL;
-      m_pnNext		= NULL;
+      m_pnNext      = NULL;
       m_pnTail    = NULL;
-      m_fncmp		= NULL;
+      m_fncmp      = NULL;
    }
 
-   m_sInitialize	= sInitialize;
+   m_sInitialize   = sInitialize;
 }
 
 ~RSList()
@@ -499,7 +499,7 @@ void Place(PNODE pnPlace)
    // Move to last of this key.
    while (pnBefore != NULL && Compare(pnBefore, pnPlace) == 0)
    {
-      pnBefore	= pnBefore->pNext;
+      pnBefore   = pnBefore->pNext;
    }
 
    // If node found . . .
@@ -539,19 +539,19 @@ void Place(PNODE pnPlace)
       else
       {
          // Make the new's previous NULL.
-         pnPlace->pPrev	= NULL;
+         pnPlace->pPrev   = NULL;
          // Make the head the tail, since, if no tail exists,
          // there is no head.
-         m_pnHead			= pnPlace;
+         m_pnHead         = pnPlace;
       }
       // Make new node the tail.
-      m_pnTail			= pnPlace;
+      m_pnTail         = pnPlace;
    }
 
    // Update current info.
-   m_pnPrev		= pnPlace->pPrev;
+   m_pnPrev      = pnPlace->pPrev;
    m_pnCurrent = pnPlace;
-   m_pnNext		= pnPlace->pNext;
+   m_pnNext      = pnPlace->pNext;
 }
 
 // Free the entire list.
@@ -571,20 +571,20 @@ void Free(void)
 
    // Clear all node pointers.
    m_pnHead    = NULL;
-   m_pnPrev		= NULL;
+   m_pnPrev      = NULL;
    m_pnCurrent = NULL;
-   m_pnNext		= NULL;
+   m_pnNext      = NULL;
    m_pnTail    = NULL;
 }
 
-PNODE	m_pnHead;
-PNODE	m_pnPrev;
-PNODE	m_pnCurrent;
-PNODE	m_pnNext;
-PNODE	m_pnTail;
+PNODE m_pnHead;
+PNODE m_pnPrev;
+PNODE m_pnCurrent;
+PNODE m_pnNext;
+PNODE m_pnTail;
 CMPCALL m_fncmp;
-short	m_sInitialize;             // TRUE if this item should handle intializing
-                                 // and freeing the list and members.
+short m_sInitialize;               // TRUE if this item should handle intializing
+                                   // and freeing the list and members.
 };
 
 #endif // H_SLIST

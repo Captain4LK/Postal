@@ -21,10 +21,10 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		(see associated .CPP file)
+//      (see associated .CPP file)
 //
-//		09/28/99	JMI	Unified operator< into one global operator that works for
-//							RString vs. char*, char* vs. char*, and RString vs. RString.
+//      09/28/99   JMI   Unified operator< into one global operator that works for
+//                     RString vs. char*, char* vs. char*, and RString vs. RString.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -51,8 +51,8 @@ class RString
 protected:
 enum
 {
-//			MaxCharLen = 4,		// "-127" (could be 255 if char is unsigned; len would still work)
-//			MaxUCharLen = 3,		// "255"
+//         MaxCharLen = 4,      // "-127" (could be 255 if char is unsigned; len would still work)
+//         MaxUCharLen = 3,      // "255"
    MaxShortLen = 6,           // "-32768"
    MaxUShortLen = 5,          // "65535"
    MaxLongLen = 11,           // "-2147483648"
@@ -587,7 +587,7 @@ public:
 // RString -vs- RString
 friend int operator==(const RString& lhs, const RString& rhs);
 friend int operator!=(const RString& lhs, const RString& rhs);
-//		friend int operator<(const RString& lhs, const RString& rhs);
+//      friend int operator<(const RString& lhs, const RString& rhs);
 friend int operator>(const RString& lhs, const RString& rhs);
 friend int operator<=(const RString& lhs, const RString& rhs);
 friend int operator>=(const RString& lhs, const RString& rhs);
@@ -626,7 +626,7 @@ inline int operator<=(const RString& lhs, const char* rhs)
 inline int operator>=(const RString& lhs, const char* rhs)
 { if (strcmp(lhs, rhs) >= 0) return 1; return 0; }
 //inline int operator<(const RString& lhs, const char* rhs)
-//	{ if (strcmp(lhs, rhs) < 0) return 1; return 0; }
+//   { if (strcmp(lhs, rhs) < 0) return 1; return 0; }
 inline int operator>(const RString& lhs, const char* rhs)
 { if (strcmp(lhs, rhs) > 0) return 1; return 0; }
 
@@ -639,7 +639,7 @@ inline int operator<=(const char* rhs, const RString& lhs)
 inline int operator>=(const char* rhs, const RString& lhs)
 { if (strcmp(lhs, rhs) >= 0) return 1; return 0; }
 //inline int operator<(const char* rhs, const RString& lhs)
-//	{ if (strcmp(lhs, rhs) < 0) return 1; return 0; }
+//   { if (strcmp(lhs, rhs) < 0) return 1; return 0; }
 inline int operator>(const char* rhs, const RString& lhs)
 { if (strcmp(lhs, rhs) > 0) return 1; return 0; }
 

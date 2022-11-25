@@ -41,8 +41,8 @@
 //========================================================
 // Instantiate the static members:
 char RPrint::ms_szInput[4096];  // temporary column buffer
-UCHAR	RPrint::ms_szLineText[1024]; // Stores a line at a time
-short	RPrint::ms_sCharPosX[1024]; // positions of each character in the line...
+UCHAR RPrint::ms_szLineText[1024];   // Stores a line at a time
+short RPrint::ms_sCharPosX[1024];   // positions of each character in the line...
 
 // CURRENTLY we are going with the unconventional
 // system of positioning text from the TOP OF THE CELL
@@ -53,16 +53,16 @@ short	RPrint::ms_sCharPosX[1024]; // positions of each character in the line...
 
 /*
 void RPrint::OffsetShadow()
-	{
-	if (m_aAbsEffect[SHADOW_X] < 0) m_sCurX -= m_aAbsEffect[SHADOW_X] ;
-	if (m_aAbsEffect[SHADOW_Y] < 0) m_sCurY -= m_aAbsEffect[SHADOW_Y] ;
-	}
-	*/
+   {
+   if (m_aAbsEffect[SHADOW_X] < 0) m_sCurX -= m_aAbsEffect[SHADOW_X] ;
+   if (m_aAbsEffect[SHADOW_Y] < 0) m_sCurY -= m_aAbsEffect[SHADOW_Y] ;
+   }
+   */
 
 // will NOT check the end of line condition!
 // return -1 if off the bottom!!!!
 //
-short	RPrint::FrameIt() // uses m_rClip, m_sCurX, m_sCurY, m_sCellH
+short RPrint::FrameIt()   // uses m_rClip, m_sCurX, m_sCurY, m_sCellH
 {
    // check for above top:
    if (m_sCurY < m_rClip.sY)
@@ -491,7 +491,7 @@ char* RPrint::printInt(char* pszInput)
 
    char* pTest = pszInput;
    short sStopped;
-   do	{
+   do   {
       sStopped = FALSE;
 
       pTest = ScanLine(pTest); // Moves cursor to EOL!
@@ -861,7 +861,7 @@ short RPrint::SetFont(short sCellH, RFont* pFont)
       return -1;
    }
 
-#ifndef	PRINT_NO_WARNING
+#ifndef   PRINT_NO_WARNING
 
    if (pFontSet->m_sCellHeight != sCellH)
    {
@@ -882,11 +882,11 @@ short RPrint::SetFont(short sCellH, RFont* pFont)
 
    for (short i = 0; i<NUM_OF_EFFECTS; i++)
    {
-      if (	m_aAbsFlag[i] == 0   // a relative value
-            &&	m_sCellH != 0)    // Don't allow divide by zero (JMI	05/09/97
-                                 // And then again on 06/12/97 when changes to
-                                 // RPrint.cpp were overwritten with a previous
-                                 // version...ya bastid :) ).
+      if (   m_aAbsFlag[i] == 0   // a relative value
+             &&   m_sCellH != 0)   // Don't allow divide by zero (JMI   05/09/97
+                                   // And then again on 06/12/97 when changes to
+                                   // RPrint.cpp were overwritten with a previous
+                                   // version...ya bastid :) ).
       {
          m_aAbsEffect[i] = short(double(sCellH) / m_sCellH * m_aAbsEffect[i]);
       }
@@ -912,7 +912,7 @@ short RPrint::SetColor(U32 ulForeColor, U32 ulBackColor, U32 ulShadowColor)
 
 void RPrint::SetWordWrap(short sOn)
 {
-   if (sOn)	m_eModes = (Mode)(m_eModes | WORD_WRAP);
+   if (sOn) m_eModes = (Mode)(m_eModes | WORD_WRAP);
    else m_eModes = (Mode)(m_eModes & (~WORD_WRAP));
 }
 

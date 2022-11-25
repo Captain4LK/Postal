@@ -23,105 +23,105 @@
 //
 //
 // History:
-//		03/19/97 BRH	Started this weapon object.
+//      03/19/97 BRH   Started this weapon object.
 //
-//		03/19/97 BRH	Added 4 types of mines to this file.  Still need to
-//							create a dialog in the gui editor to select which type
-//							of mine to place in the editor.  Also need to add motion
-//							functions to the base class and use them for the
-//							Bouncing Betty in Update.
+//      03/19/97 BRH   Added 4 types of mines to this file.  Still need to
+//                     create a dialog in the gui editor to select which type
+//                     of mine to place in the editor.  Also need to add motion
+//                     functions to the base class and use them for the
+//                     Bouncing Betty in Update.
 //
-//		03/20/97 BRH	Added dialog box for selecting mine type.  Still need to
-//							do the bouncing betty mine.
+//      03/20/97 BRH   Added dialog box for selecting mine type.  Still need to
+//                     do the bouncing betty mine.
 //
-//		03/21/97 BRH	Added the Bouncing Betty functionality.
+//      03/21/97 BRH   Added the Bouncing Betty functionality.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/15/97 BRH	Added fuse timer dialog item to edit modify to allow
-//							the timed mine fuse to be set.  Also added an overloaded
-//							Setup() function to set the time for the fuse.  Changed
-//							Load and Save to deal with this new fuse value.
+//      04/15/97 BRH   Added fuse timer dialog item to edit modify to allow
+//                     the timed mine fuse to be set.  Also added an overloaded
+//                     Setup() function to set the time for the fuse.  Changed
+//                     Load and Save to deal with this new fuse value.
 //
-//		04/23/97	JMI	Now sets its m_smash's bits to Mine instead of Item.
+//      04/23/97   JMI   Now sets its m_smash's bits to Mine instead of Item.
 //
-//		04/25/97	JMI	Added angle Z (vertical angle adjustment) of 0 to the
-//							CBulletFest::Fire(...) call.
+//      04/25/97   JMI   Added angle Z (vertical angle adjustment) of 0 to the
+//                     CBulletFest::Fire(...) call.
 //
-//		04/29/97	JMI	Changed State_Fire to merely jump to State_Idle.  The
-//							reason is that CCharacter uses State_Fire to notify things
-//							that they should arm.  Perhaps this state should be changed
-//							to 'arm', but, technically, some things don't really even
-//							arm until after that.  Perhaps it should be State_Go or
-//							something.
-//							Anyways, in order to use State_Fire as the 'arm' trigger
-//							from the placer, I had to change State_Go to do what State_Fire
-//							used to for the bouncing betty; namely, wait for the time
-//							to expire.
-//							Also, Render() now subtracts half the width and half the
-//							height from the 2D render location in an attempt to better
-//							center the image.  This should help especially when this
-//							object is the child of another to make it appear in the
-//							right spot.
+//      04/29/97   JMI   Changed State_Fire to merely jump to State_Idle.  The
+//                     reason is that CCharacter uses State_Fire to notify things
+//                     that they should arm.  Perhaps this state should be changed
+//                     to 'arm', but, technically, some things don't really even
+//                     arm until after that.  Perhaps it should be State_Go or
+//                     something.
+//                     Anyways, in order to use State_Fire as the 'arm' trigger
+//                     from the placer, I had to change State_Go to do what State_Fire
+//                     used to for the bouncing betty; namely, wait for the time
+//                     to expire.
+//                     Also, Render() now subtracts half the width and half the
+//                     height from the 2D render location in an attempt to better
+//                     center the image.  This should help especially when this
+//                     object is the child of another to make it appear in the
+//                     right spot.
 //
-//		04/30/97	JMI	Changed the Setup() override of the CWeapon's Setup() to
-//							pass the current mine type to the Setup() with eType.
-//							Changed Construct() to take an ID as a parameter and added
-//							ConstructProximity(), ConstructTimed(),
-//							ConstructBouncingBetty(), and ConstructRemoteControl() to
-//							allocate that type of mine.
-//							Removed m_eMineType (now uses Class ID instead).
-//							Removed Setup() that took an eType.
-//							Filled in PreLoad() (but it still needs to convert each
-//							RImage to whatever type is most efficient).
-//							Also, GetResources() was new'ing m_pImage and then calling
-//							rspGetResource() (which gives you an entirely new instance
-//							of an image); so it was basically wasting an RImage worth
-//							of memory.
+//      04/30/97   JMI   Changed the Setup() override of the CWeapon's Setup() to
+//                     pass the current mine type to the Setup() with eType.
+//                     Changed Construct() to take an ID as a parameter and added
+//                     ConstructProximity(), ConstructTimed(),
+//                     ConstructBouncingBetty(), and ConstructRemoteControl() to
+//                     allocate that type of mine.
+//                     Removed m_eMineType (now uses Class ID instead).
+//                     Removed Setup() that took an eType.
+//                     Filled in PreLoad() (but it still needs to convert each
+//                     RImage to whatever type is most efficient).
+//                     Also, GetResources() was new'ing m_pImage and then calling
+//                     rspGetResource() (which gives you an entirely new instance
+//                     of an image); so it was basically wasting an RImage worth
+//                     of memory.
 //
-//		05/28/97 BRH	Increased arming time for Betty and Proximity mines to make
-//							them easier to place and get away.
+//      05/28/97 BRH   Increased arming time for Betty and Proximity mines to make
+//                     them easier to place and get away.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/11/97 BRH	Added shooter ID's to the shot messages and passed it
-//							aS32 to the explosion.
+//      06/11/97 BRH   Added shooter ID's to the shot messages and passed it
+//                     aS32 to the explosion.
 //
-//		06/12/97 BRH	Added shooter ID to the call to Setup for the explosion.
+//      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.
 //
-//		06/13/97	JMI	Now obeys State_Hide.
+//      06/13/97   JMI   Now obeys State_Hide.
 //
-//		06/30/97 BRH	Added cache sound effects to Preload function.
+//      06/30/97 BRH   Added cache sound effects to Preload function.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/21/97	JMI	Now handles delete messages.
+//      07/21/97   JMI   Now handles delete messages.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/16/97 BRH	Added an arming beep sound and a click sound when the
-//							mine is armed.
+//      08/16/97 BRH   Added an arming beep sound and a click sound when the
+//                     mine is armed.
 //
-//		08/17/97	JMI	Now, instead of aborting the sample, when the mine arms,
-//							it stops the sample's loopage.
-//							Now sets the volume every iteration b/c, although the mine
-//							stays still, the distance to the local dude varies as the
-//							local dude moves.
-//							Also, changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Now, instead of aborting the sample, when the mine arms,
+//                     it stops the sample's loopage.
+//                     Now sets the volume every iteration b/c, although the mine
+//                     stays still, the distance to the local dude varies as the
+//                     local dude moves.
+//                     Also, changed m_pthingParent to m_idParent.
 //
-//		08/28/97 BRH	Added preload function to cache the sounds and images.
+//      08/28/97 BRH   Added preload function to cache the sounds and images.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define MINE_CPP
@@ -139,17 +139,17 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define TIMEDMINE_FILE				"TimeMine.img"
-#define PROXIMITYMINE_FILE			"ProxMine.img"
-#define BOUNCINGBETTYMINE_FILE	"BettyMine.img"
-#define REMOTEMINE_FILE				"RemoteMine.img"
+#define TIMEDMINE_FILE            "TimeMine.img"
+#define PROXIMITYMINE_FILE         "ProxMine.img"
+#define BOUNCINGBETTYMINE_FILE   "BettyMine.img"
+#define REMOTEMINE_FILE            "RemoteMine.img"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
 ////////////////////////////////////////////////////////////////////////////////
 
 // These are default values -- actually values are set using the editor!
-short CMine::ms_sProximityRadius	= 10;
+short CMine::ms_sProximityRadius   = 10;
 short CMine::ms_sBettyRadius = 60;
 short CMine::ms_sBettyRange = 1000;
 S32 CMine::ms_lFuseTime = 6000;
@@ -198,7 +198,7 @@ short CMine::Load(            // Returns 0 if successfull, non-zero otherwise
       }
 
       // Load object data
-      MineType	type;
+      MineType type;
       switch (ulFileVersion)
       {
       case 1:
@@ -348,8 +348,8 @@ bool UpdateVelocity(    // Returns true if velocity reaches zero because of the
    bool bAcceleratedToZero   = false;
 
    double dVelPrev = *pdVel;
-   *pdDeltaVel			= dAcc * dSeconds;
-   *pdVel				+= *pdDeltaVel;
+   *pdDeltaVel         = dAcc * dSeconds;
+   *pdVel            += *pdDeltaVel;
 
    // I think this can be consdensed into a subtraction and one or two comparisons,
    // but I'm not sure that's really faster than the max 3 comparisons here.
@@ -360,9 +360,9 @@ bool UpdateVelocity(    // Returns true if velocity reaches zero because of the
       if (*pdVel < 0.0)
       {
          // Update delta.
-         *pdDeltaVel	-= *pdVel;
+         *pdDeltaVel   -= *pdVel;
          // Zero velocity.
-         *pdVel	= 0.0;
+         *pdVel   = 0.0;
       }
    }
    else
@@ -374,9 +374,9 @@ bool UpdateVelocity(    // Returns true if velocity reaches zero because of the
          if (*pdVel > 0.0)
          {
             // Update delta.
-            *pdDeltaVel	-= *pdVel;
+            *pdDeltaVel   -= *pdVel;
             // Zero velocity.
-            *pdVel	= 0.0;
+            *pdVel   = 0.0;
          }
       }
    }
@@ -462,18 +462,18 @@ void CMine::Update(void)
          }
          else
          {
-            short	sX	= m_dX;
-            short	sY	= m_dY;
-            short	sZ	= m_dZ;
+            short sX   = m_dX;
+            short sY   = m_dY;
+            short sZ   = m_dZ;
 
             // If we have a parent . . .
-            CThing*	pthing	= NULL;     // Initialized for safety.
+            CThing*   pthing   = NULL;     // Initialized for safety.
             if (m_pRealm->m_idbank.GetThingByID(&pthing, m_idParent) == 0)
             {
                // Add in its position.
-               sX	+= pthing->GetX();
-               sY	+= pthing->GetY();
-               sZ	+= pthing->GetZ();
+               sX   += pthing->GetX();
+               sY   += pthing->GetY();
+               sZ   += pthing->GetZ();
             }
 
             // Update sound position.
@@ -483,7 +483,7 @@ void CMine::Update(void)
 
 //-----------------------------------------------------------------------
 // Armed - State for Proximity mine & bouncing betty where they check
-//			  for collisions with other characters and react.
+//           for collisions with other characters and react.
 //-----------------------------------------------------------------------
 
       case CWeapon::State_Armed:
@@ -512,12 +512,12 @@ void CMine::Update(void)
 
 //-----------------------------------------------------------------------
 // Fire - Initial triggering notification from character (if placed by
-//			 character).
+//          character).
 //-----------------------------------------------------------------------
 
       case CWeapon::State_Fire:
          // Go back to waiting to arm.
-         m_eState	= State_Idle;
+         m_eState   = State_Idle;
 
          break;
 
@@ -537,7 +537,7 @@ void CMine::Update(void)
             UpdateVelocity(&m_dVertVel, &m_dVertDeltaVel, g_dAccelerationDueToGravity, dSeconds);
 
             // Apply external vertical velocity.
-            dDistance	= (m_dVertVel - m_dVertDeltaVel / 2) * dSeconds;
+            dDistance   = (m_dVertVel - m_dVertDeltaVel / 2) * dSeconds;
             m_dY = m_dY + dDistance;
 
             // If velocity is negative, then explode and shoot in
@@ -622,10 +622,10 @@ void CMine::Update(void)
       m_lPrevTime = lThisTime;
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sCurRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sCurRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -664,8 +664,8 @@ void CMine::Render(void)
          &m_sprite.m_sY2);
 
       // Center on image.
-      m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-      m_sprite.m_sY2	-= m_pImage->m_sHeight / 2;
+      m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+      m_sprite.m_sY2   -= m_pImage->m_sHeight / 2;
 
       // Priority is based on bottom edge of sprite
       m_sprite.m_sPriority = m_dZ;
@@ -680,8 +680,8 @@ void CMine::Render(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Setup new object - called by object that created this object
-//							 This version is meant for the timed mine so that
-//							 the fuse time can be set.
+//                      This version is meant for the timed mine so that
+//                      the fuse time can be set.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CMine::Setup(                          // Returns 0 if successful, non-zero otherwise
@@ -716,10 +716,10 @@ short CMine::Setup(                          // Returns 0 if successfull, non-ze
       false);                                // In:  Call ReleaseAndPurge rather than Release at end
 
 
-   short	sResult	=  CWeapon::Setup(sX, sY, sZ);
+   short sResult   =  CWeapon::Setup(sX, sY, sZ);
    if (sResult == 0)
    {
-      sResult	= Init();
+      sResult   = Init();
    }
 
    return sResult;
@@ -773,11 +773,11 @@ short CMine::FreeResources(void)                // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void SetText(              // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId,                // In:  ID of GUI to set text.
    S32 lVal)               // In:  Value to set text to.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui != NULL)
    {
       pgui->SetText("%ld", lVal);
@@ -833,15 +833,15 @@ short CMine::EditNew(                           // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CMine::Preload(
    CRealm* prealm)            // In:  Calling realm.
 {
-   short	sResult;
-   RImage*	pim;
+   short sResult;
+   RImage*   pim;
 
    sResult = rspGetResource(&g_resmgrGame, prealm->Make2dResPath(TIMEDMINE_FILE), &pim, RFile::LittleEndian);
    if (sResult == 0)
@@ -921,7 +921,7 @@ void CMine::OnDeleteMsg(               // Returns nothing.
    ObjectDelete_Message* pdeletemsg)   // In:  Message to handle.
 {
    // Go to deleted state.  Update() will delete us.
-   m_eState	= State_Deleted;
+   m_eState   = State_Deleted;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

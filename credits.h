@@ -19,13 +19,13 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		12/04/96 MJR	Started.
+//      12/04/96 MJR   Started.
 //
-//		08/11/97	JRD	Transforming this module into a device for scolling text
-//							which is intended to be used both by credits and by story.
-//							It wil operate similar to cutscene in that all of it's
-//							assets and memory usage is assumed temporary.  It will still
-//							use the shell sak for assets.
+//      08/11/97   JRD   Transforming this module into a device for scolling text
+//                     which is intended to be used both by credits and by story.
+//                     It wil operate similar to cutscene in that all of it's
+//                     assets and memory usage is assumed temporary.  It will still
+//                     use the shell sak for assets.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CREDITS_H
@@ -35,11 +35,11 @@
 
 // Display the credits, returns SUCCESS or FAILURE
 extern short Credits(SampleMasterID* pMusic = NULL,
-                     char*	pszBackground = NULL,
+                     char*   pszBackground = NULL,
                      char* pszCredits = NULL);
 
 // For general usage
-extern short	ScrollPage(char* pszBackground, char* pszScrollScript,
+extern short   ScrollPage(char* pszBackground, char* pszScrollScript,
                           double dScrollRate = 0.0, RRect *prWindow = NULL);
 
 

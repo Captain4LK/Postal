@@ -27,9 +27,9 @@
 // ALPHABLIT.H
 //
 // Created in 1996 JRD
-// Implemented	throughout 1996 and 1997 - JRD
+// Implemented   throughout 1996 and 1997 - JRD
 //
-//		07/10/97	JRD	Finally documented this file and added history section.
+//      07/10/97   JRD   Finally documented this file and added history section.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@
 // assets, this can be a useful memory saver.
 //
 // An "alpha channel value" ranges from 255 = opaque source,
-//	to 0 = invisible source
+//   to 0 = invisible source
 //
 // Homogeneous alpha blits let you specify one alpha level for an
 // entire sprite.  Masked alpha blits let you specify a second BMP
@@ -81,14 +81,14 @@
 //
 // 1) Alpha BLiTs -> use RAlphas and RMultiAlphas
 // 2) Fast Alpha Blits -> use Fast MultiAlphas
-// 3)	General Color functions (inlines) for your pleasure
+// 3)   General Color functions (inlines) for your pleasure
 // 4) special blits designed to dynamically alter and create alpha masks!
 
 //====================================================================
-//	rspAlphaBlit - "opaque blit" which uses a single RAlpha table
-//									Note that in this BLiT, a
-//									source color of ZERO will be interpreted
-//									by it's COLOR - sheet of glass effect.
+//   rspAlphaBlit - "opaque blit" which uses a single RAlpha table
+//                           Note that in this BLiT, a
+//                           source color of ZERO will be interpreted
+//                           by it's COLOR - sheet of glass effect.
 // THIS IS NOT A MULTIALPHA BLIT.  It creates the effect of a single,
 // fixed alpha level - the alpha level is IMPLIED in the creation of
 // the given alpha table and cannot be varied. (fixed homogeneous)
@@ -97,15 +97,15 @@
 //====================================================================
 extern void rspAlphaBlit(
    RAlpha* pX,                   // Set for current palette and alpha level
-   RImage* pimSrc,               //	BMP8 source
-   RImage* pimDst,               //	BMP8 destination
+   RImage* pimSrc,               //   BMP8 source
+   RImage* pimDst,               //   BMP8 destination
    short sDstX, short sDstY);
 
 //====================================================================
-//	rspAlphaBlitT - "transparent blit" which uses a single RAlpha
-//									Note that in this BLiT, a
-//									source color of ZERO will be interpreted
-//									as fully transparent.  (useful)
+//   rspAlphaBlitT - "transparent blit" which uses a single RAlpha
+//                           Note that in this BLiT, a
+//                           source color of ZERO will be interpreted
+//                           as fully transparent.  (useful)
 //
 // THIS IS NOT A MULTIALPHA BLIT.  It creates the effect of a single,
 // fixed alpha level - the alpha level is IMPLIED in the creation of
@@ -115,15 +115,15 @@ extern void rspAlphaBlit(
 //====================================================================
 extern void rspAlphaBlitT(
    RAlpha* pX,                   // Set for current palette and alpha level
-   RImage* pimSrc,               //	BMP8 source
-   RImage* pimDst,               //	BMP8 destination
+   RImage* pimSrc,               //   BMP8 source
+   RImage* pimDst,               //   BMP8 destination
    short sDstX, short sDstY);
 
 //====================================================================
-//	rspAlphaBlitT - "transparent blit" which uses a single alpha level
-//									In this BLiT, a source color of ZERO will be
-//									interpreted as fully transparent, REGARDLESS of
-//									the alpha level (which could be useful)
+//   rspAlphaBlitT - "transparent blit" which uses a single alpha level
+//                           In this BLiT, a source color of ZERO will be
+//                           interpreted as fully transparent, REGARDLESS of
+//                           the alpha level (which could be useful)
 // This is a homogeneous blit - NO ALPHA MASK is used.  Rather, the
 // entire sprite is blit at the alphalevel specified, except for 0
 // source pixels, which are taken as 100% transparent.
@@ -141,10 +141,10 @@ extern void rspAlphaBlitT(
    RRect* prDst = NULL);
 
 //====================================================================
-//	rspGeneralAlphaBlit - "opaque blit" which uses a BMP8 per pixel
-//									alpha mask.  Note that in this BLiT, a
-//									source color of ZERO will be interpreted
-//									by it's COLOR - sheet of glass effect.
+//   rspGeneralAlphaBlit - "opaque blit" which uses a BMP8 per pixel
+//                           alpha mask.  Note that in this BLiT, a
+//                           source color of ZERO will be interpreted
+//                           by it's COLOR - sheet of glass effect.
 //====================================================================
 extern void rspGeneralAlphaBlit(
    RMultiAlpha* pX,                       // For current palette
@@ -156,12 +156,12 @@ extern void rspGeneralAlphaBlit(
    RRect &rDstClip);
 
 //====================================================================
-//	rspGeneralAlphaBlit - "opaque blit" which uses a BMP8 per pixel
-//									alpha mask.  Note that in this BLiT, a
-//									source color of ZERO will be interpreted
-//									by it's COLOR - sheet of glass effect.
+//   rspGeneralAlphaBlit - "opaque blit" which uses a BMP8 per pixel
+//                           alpha mask.  Note that in this BLiT, a
+//                           source color of ZERO will be interpreted
+//                           by it's COLOR - sheet of glass effect.
 //
-//	This variation allows real time "dimming" of the curent mask.
+//   This variation allows real time "dimming" of the curent mask.
 // If sLevel = 255, the mask will BLiT normally, but less than 255
 // and the image will fade away.
 //
@@ -177,18 +177,18 @@ extern void rspGeneralAlphaBlit(
    RRect &rDstClip);
 
 //====================================================================
-//	rspGeneralAlphaBlitT - "transparent blit" which uses a BMP8 per pixel
-//									alpha mask.
-//									In this BLiT, a source color of ZERO will be
-//									interpreted as fully transparent, REGARDLESS of
-//									the alpha mask (which could be useful)
+//   rspGeneralAlphaBlitT - "transparent blit" which uses a BMP8 per pixel
+//                           alpha mask.
+//                           In this BLiT, a source color of ZERO will be
+//                           interpreted as fully transparent, REGARDLESS of
+//                           the alpha mask (which could be useful)
 //
-//	This variation allows real time "dimming" of the curent mask.
+//   This variation allows real time "dimming" of the curent mask.
 // If sLevel = 255, the mask will BLiT normally, but less than 255
 // and the image will fade away.
 //
 // NOTE: It is better to use rspGeneralAlphaBlit and put the transparency
-//			in the alpha mask!
+//         in the alpha mask!
 //
 //====================================================================
 extern void rspGeneralAlphaBlitT(
@@ -212,10 +212,10 @@ extern void rspGeneralAlphaBlitT(
 // Not all of the regular alpha blits have been ported over to the fast format
 
 //====================================================================
-//	rspFastAlphaBlitT - "transparent blit"
-//									In this BLiT, a source color of ZERO will be
-//									interpreted as fully transparent, REGARDLESS of
-//									the alpha level (which could be useful)
+//   rspFastAlphaBlitT - "transparent blit"
+//                           In this BLiT, a source color of ZERO will be
+//                           interpreted as fully transparent, REGARDLESS of
+//                           the alpha level (which could be useful)
 // This is a homogeneous blit - NO ALPHA MASK is used.  Rather, the
 // entire sprite is blit at the alphalevel specified, except for 0
 // source pixels, which are taken as 100% transparent.
@@ -234,10 +234,10 @@ extern void rspFastAlphaBlitT(
 
 
 //====================================================================
-//	rspFastMaskAlphaBlit - "opaque blit" which uses a BMP8 per pixel
-//									alpha mask.  Note that in this BLiT, a
-//									source color of ZERO will be interpreted
-//									by it's COLOR - sheet of glass effect.
+//   rspFastMaskAlphaBlit - "opaque blit" which uses a BMP8 per pixel
+//                           alpha mask.  Note that in this BLiT, a
+//                           source color of ZERO will be interpreted
+//                           by it's COLOR - sheet of glass effect.
 //====================================================================
 extern void rspFastMaskAlphaBlit(
    UCHAR*** pfaX,                   // A fast multialpha table
@@ -249,11 +249,11 @@ extern void rspFastMaskAlphaBlit(
    RRect &rDstClip);
 
 //====================================================================
-//	rspFastMaskAlphaBlitT - "transparent blit" which uses a BMP8 per pixel
-//									alpha mask.
-//									In this BLiT, a source color of ZERO will be
-//									interpreted as fully transparent, REGARDLESS of
-//									the alpha mask (which could be useful)
+//   rspFastMaskAlphaBlitT - "transparent blit" which uses a BMP8 per pixel
+//                           alpha mask.
+//                           In this BLiT, a source color of ZERO will be
+//                           interpreted as fully transparent, REGARDLESS of
+//                           the alpha mask (which could be useful)
 //====================================================================
 extern void rspFastMaskAlphaBlitT(
    UCHAR*** pfaX,                   // A fast multialpha table
@@ -297,14 +297,14 @@ inline short rspSimpleClip(short &sSrcX, short &sSrcY, short &sDstX, short &sDst
 }
 
 //====================================================================
-//	rspScaleAlphaMask - you can adjust an existing alpha mask
+//   rspScaleAlphaMask - you can adjust an existing alpha mask
 //--------------------------------------------------------------------
-//		if dScale < 1.0, you will make the mask more transparent
-//		if dScale > 1.0, the maskwill be more opaque and will  saturate
-//				at 255.
+//      if dScale < 1.0, you will make the mask more transparent
+//      if dScale > 1.0, the maskwill be more opaque and will  saturate
+//            at 255.
 //
 // NOTE: This process is lossy, and if done repeatedly should use the
-//			original source mask each time.
+//         original source mask each time.
 //====================================================================
 extern void rspScaleAlphaMask(RImage* pimSrcMask,   // BMP8 alpha mask
                               double dScale,        // 1.0 = no change
@@ -318,13 +318,13 @@ extern void rspScaleAlphaMask(RImage* pimSrcMask,   // BMP8 alpha mask
 
 //===========================================================================
 //
-//	rspBlendColor
+//   rspBlendColor
 //
 // RETURN the new color index based on a source and destination index:
 // WARNING:  will not bounds check so be careful:
 // sLeve will range from 255 (solid) to 0 (transparent)
 //===========================================================================
-inline UCHAR	rspBlendColor(short sLevel, RMultiAlpha* pX, UCHAR ucSrc, UCHAR ucDst)
+inline UCHAR   rspBlendColor(short sLevel, RMultiAlpha* pX, UCHAR ucSrc, UCHAR ucDst)
 {
    ASSERT(pX);
 
@@ -339,14 +339,14 @@ inline UCHAR	rspBlendColor(short sLevel, RMultiAlpha* pX, UCHAR ucSrc, UCHAR ucD
 
 //===========================================================================
 //
-//	rspBlendColor
+//   rspBlendColor
 //
-//	UINPUT:	sLevel -> the alpha level (0-255) you wish to work with
-//	OUTPUT:	psOpaque -> a special case flag, is TRUE if FULLY opaque (normal BLiT)
-// RETURN:	ppuc, a short cut to the fast blend function, or NULL if you hit the
-//				extreme cases of fully opaque of fully transparent.
+//   UINPUT:   sLevel -> the alpha level (0-255) you wish to work with
+//   OUTPUT:   psOpaque -> a special case flag, is TRUE if FULLY opaque (normal BLiT)
+// RETURN:   ppuc, a short cut to the fast blend function, or NULL if you hit the
+//            extreme cases of fully opaque of fully transparent.
 //===========================================================================
-inline UCHAR**	rspFindBlend(short sLevel, RMultiAlpha* pX, short* psOpaque)
+inline UCHAR**   rspFindBlend(short sLevel, RMultiAlpha* pX, short* psOpaque)
 {
    ASSERT(pX);
    ASSERT(psOpaque);
@@ -374,7 +374,7 @@ inline UCHAR rspBlendColor(UCHAR** ppucAlpha, RMultiAlpha* pX, UCHAR ucSrc, UCHA
 //********************************************************************
 
 //====================================================================
-//	rspMaskBlit - a blit used to dynamically create an alpha mask
+//   rspMaskBlit - a blit used to dynamically create an alpha mask
 //--------------------------------------------------------------------
 // The OPPOSITE of a sprite blit, this is a blit that draws only
 // where the DESTINATION is not zero!  It was useful to draw a
@@ -389,18 +389,18 @@ extern void rspMaskBlit(
    short sDstX, short sDstY);
 
 //====================================================================
-//	rspMakeMask - a blit used to dynamically create an alpha mask
+//   rspMakeMask - a blit used to dynamically create an alpha mask
 //--------------------------------------------------------------------
-//	This takes a given sprite, and reduces it's colors to 0 and
+//   This takes a given sprite, and reduces it's colors to 0 and
 // ucVal.  This is useful for giving a given sprite a matching
 // alpha mask of a set homogeneous opacity level.
 //====================================================================
 extern void rspMakeMask(RImage* pimSrc,   // SOURCE AND DESTINATION
                         UCHAR ucVal);
 //====================================================================
-//	rspCopyAsMask - a blit used to dynamically create an alpha mask
+//   rspCopyAsMask - a blit used to dynamically create an alpha mask
 //--------------------------------------------------------------------
-//	This takes a given sprite, and reduces it's colors to 0 and
+//   This takes a given sprite, and reduces it's colors to 0 and
 // ucVal.  This is useful for giving a given sprite a matching
 // alpha mask of a set homogeneous opacity level.
 //

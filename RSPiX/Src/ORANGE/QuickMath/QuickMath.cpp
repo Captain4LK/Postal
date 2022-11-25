@@ -22,7 +22,7 @@
 double SINQ[csNumRotSteps], COSQ[csNumRotSteps];
 float fSINQ[csNumRotSteps], fCOSQ[csNumRotSteps];
 short ATANQ[60];
-short	SQRTQ[MAX_FAST_SQRT];
+short SQRTQ[MAX_FAST_SQRT];
 
 short rspATan(short sDeltaY, short sDeltaX)
 {

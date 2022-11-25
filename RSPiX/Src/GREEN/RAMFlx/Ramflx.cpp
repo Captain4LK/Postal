@@ -20,35 +20,35 @@
 // RAMFLX.CPP
 //
 // History:
-//		08/05/94 MR		Started. (10h)
+//      08/05/94 MR      Started. (10h)
 //
-//		08/07/94 MR		Got decompression working (except for SS2) and started
-//							on compression. (13h)
+//      08/07/94 MR      Got decompression working (except for SS2) and started
+//                     on compression. (13h)
 //
-//		08/08/94 MR		General cleanup of interfaces, etc. (12h)
+//      08/08/94 MR      General cleanup of interfaces, etc. (12h)
 //
-//		08/09/94 MR		Finished up basic compression.
+//      08/09/94 MR      Finished up basic compression.
 //
-//		08/12/94 MR		Added flags to FLX_BUF struct that indicate whether the
-//							pixels and/or the colors were modified by a "Read".
+//      08/12/94 MR      Added flags to FLX_BUF struct that indicate whether the
+//                     pixels and/or the colors were modified by a "Read".
 //
-//		08/15/94 MR		Fixed bug in ReadFrame() -- if the requested frame was
-//							the current frame, it was not copied to the specified buf.
+//      08/15/94 MR      Fixed bug in ReadFrame() -- if the requested frame was
+//                     the current frame, it was not copied to the specified buf.
 //
-//							Also added a function that returns the last frame that
-//							was written.
+//                     Also added a function that returns the last frame that
+//                     was written.
 //
-//	   05/02/95 JW		Added functionality for RAM buffer to store flic
+//      05/02/95 JW      Added functionality for RAM buffer to store flic
 //
-//		05/03/95 JW		Added ability to play uncompressed flics without having
-//							to seek to the first frame.
+//      05/03/95 JW      Added ability to play uncompressed flics without having
+//                     to seek to the first frame.
 //
-//		11/03/95	JMI	Converted to newest CImage and CNFile.
+//      11/03/95   JMI   Converted to newest CImage and CNFile.
 //
-//		03/04/96	JMI	ReadFrame now remembers whether the m_sColorsModified and
-//							m_sPixelsModified flags were set at all during a read that
-//							required parsing many frames and sets them to TRUE in such
-//							a case.
+//      03/04/96   JMI   ReadFrame now remembers whether the m_sColorsModified and
+//                     m_sPixelsModified flags were set at all during a read that
+//                     required parsing many frames and sets them to TRUE in such
+//                     a case.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -125,8 +125,8 @@ CRamFlx::~CRamFlx()
 // the file header and can optionally have your buf memory allocated for you.
 // Returns 0 if successfull, non-zero otherwise.
 //
-// 10/20/94, Paul Lin,	add code to reset error conditions on the fstream object
-//						so that the next time this function is called, it doesn't fail
+// 10/20/94, Paul Lin,   add code to reset error conditions on the fstream object
+//                  so that the next time this function is called, it doesn't fail
 //
 ///////////////////////////////////////////////////////////////////////////////
 short CRamFlx::Open(
@@ -333,8 +333,8 @@ short CRamFlx::ReadFrame(
       {
          if (sFrameNum != m_sFrameNum)
          {
-            short	sColorsModified	= FALSE;
-            short	sPixelsModified	= FALSE;
+            short sColorsModified   = FALSE;
+            short sPixelsModified   = FALSE;
 
             // If specified frame is before (or equal to) the current frame,
             // we need to restart the animation.
@@ -343,8 +343,8 @@ short CRamFlx::ReadFrame(
                Restart();
                // When restarting, we should set these flags for lack
                // of a way of knowing for sure.
-               sColorsModified	= TRUE;
-               sPixelsModified	= TRUE;
+               sColorsModified   = TRUE;
+               sPixelsModified   = TRUE;
             }
 
             // Go frame-by-frame to the requested frame
@@ -356,7 +356,7 @@ short CRamFlx::ReadFrame(
                {
                   // We need to store this info since the next
                   // frame may set m_sColorsModified to FALSE.
-                  sColorsModified	= TRUE;
+                  sColorsModified   = TRUE;
                }
 
                // If the pixels are modified . . .
@@ -364,14 +364,14 @@ short CRamFlx::ReadFrame(
                {
                   // We need to store this info since the next
                   // frame may set m_sPixelsModified to FALSE.
-                  sPixelsModified	= TRUE;
+                  sPixelsModified   = TRUE;
                }
             }
 
             // If flags were set at all during the loop,
             // they need to be set now.
-            m_sColorsModified	= sColorsModified;
-            m_sPixelsModified	= sPixelsModified;
+            m_sColorsModified   = sColorsModified;
+            m_sPixelsModified   = sPixelsModified;
          }
       }
    }

@@ -18,7 +18,7 @@
 // log.h
 // Project: Postal
 //
-// History:12/5/97 AJC	Started.
+// History:12/5/97 AJC   Started.
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef LOG_H
 #define LOG_H
@@ -29,8 +29,8 @@ short CloseLogFile();
 
 ////////////////////////////////////////////////////////////////////////////////
 // WriteTimeStamp()
-//			Write the network time log
-//		global variables used:		g_GameSettings
+//         Write the network time log
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 extern
 short WriteTimeStamp(char *pszCaller,                 // Name of calling routine
@@ -42,8 +42,8 @@ short WriteTimeStamp(char *pszCaller,                 // Name of calling routine
                      U16 u16PackageID = 0);           // Uniquely identifiable package id
 ////////////////////////////////////////////////////////////////////////////////
 // WriteInputData()
-//			Write the network input data to network sync log
-//		global variables used:		g_GameSettings
+//         Write the network input data to network sync log
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 extern short WriteInputData(U32 *input);
 

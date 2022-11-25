@@ -19,66 +19,66 @@
 // Project: Postal
 //
 // History:
-//		02/19/97 MJR	Started.
+//      02/19/97 MJR   Started.
 //
-//		04/08/97 MJR	Added class and function names to all TRACE() messages.
+//      04/08/97 MJR   Added class and function names to all TRACE() messages.
 //
-//							Added test for minimum number of sockets supported.
+//                     Added test for minimum number of sockets supported.
 //
-//							Fixed problem that would have occurred if an error occurred
-//							when removing the blocking hook.
+//                     Fixed problem that would have occurred if an error occurred
+//                     when removing the blocking hook.
 //
-//		04/12/97 MJR	Distilled this file out of what was gamelink.cpp in order
-//							to separate the socket stuff from the game stuff.
+//      04/12/97 MJR   Distilled this file out of what was gamelink.cpp in order
+//                     to separate the socket stuff from the game stuff.
 //
-//							Major changes to create a simplified, generic,
-//							socket-oriented interface.
+//                     Major changes to create a simplified, generic,
+//                     socket-oriented interface.
 //
-//		04/13/97 MJR	Continued a huge number of changes, including many of
-//							the outstanding issues that had been listed in the
-//							comment header of the previous incarnation of this file.
+//      04/13/97 MJR   Continued a huge number of changes, including many of
+//                     the outstanding issues that had been listed in the
+//                     comment header of the previous incarnation of this file.
 //
-//		04/14/97 MJR	Lots of testing, debugging, fixing, etc.
+//      04/14/97 MJR   Lots of testing, debugging, fixing, etc.
 //
-//		05/20/97 MJR	Minor changes.
+//      05/20/97 MJR   Minor changes.
 //
-//		05/21/97 MJR	Pulled "listen" option out of Open() and made it a
-//							separate function.
+//      05/21/97 MJR   Pulled "listen" option out of Open() and made it a
+//                     separate function.
 //
-//							Created two Open() variations, one for datagrams and one
-//							for streams, each with separate options.
+//                     Created two Open() variations, one for datagrams and one
+//                     for streams, each with separate options.
 //
-//		05/23/97 MJR	Renamed parameters to GetAddress().
+//      05/23/97 MJR   Renamed parameters to GetAddress().
 //
-//		05/25/97 MJR	Changed type in Address from int (iLen) to S32 (lLen).
+//      05/25/97 MJR   Changed type in Address from int (iLen) to S32 (lLen).
 //
-//		05/25/97 MJR	Added ability to set callback via Open().
+//      05/25/97 MJR   Added ability to set callback via Open().
 //
-//		05/26/97 MJR	Changed IsError() so it no S32er considers a closed
-//							socket to be an error.
+//      05/26/97 MJR   Changed IsError() so it no S32er considers a closed
+//                     socket to be an error.
 //
-//		08/03/97 BRH	Added IPX network support.
+//      08/03/97 BRH   Added IPX network support.
 //
-//		08/04/97 BRH	Restarted this file to use the new plugin protocols
+//      08/04/97 BRH   Restarted this file to use the new plugin protocols
 //
-//		08/08/97 MJR	Another round of cleanups, and added support for
-//							handling Win32 -vs- Mac protocols.
+//      08/08/97 MJR   Another round of cleanups, and added support for
+//                     handling Win32 -vs- Mac protocols.
 //
-//		08/09/97 MJR	Added broadcast support.
-//							Added check to be sure all addresses are the same size.
+//      08/09/97 MJR   Added broadcast support.
+//                     Added check to be sure all addresses are the same size.
 //
-//		08/12/97 MJR	Added mac protocols.
+//      08/12/97 MJR   Added mac protocols.
 //
-//		08/18/97 MJR	Now trims leading and trailing whitespace from names.
-//					MJR	Tweaked for mac.
+//      08/18/97 MJR   Now trims leading and trailing whitespace from names.
+//               MJR   Tweaked for mac.
 //
-//		08/20/97 MJR	Added support for setting whether socket blocks or not.
+//      08/20/97 MJR   Added support for setting whether socket blocks or not.
 //
-//		11/19/97	JMI	Added "MPATH" string for corresponding MPATH enum in
-//							socket.h.  Since there was no string for this protocol,
-//							when toggling through the various protocols in the
-//							multiplayer options menu, you would get random varing
-//							strings for the 3rd protocol (MPATH).
+//      11/19/97   JMI   Added "MPATH" string for corresponding MPATH enum in
+//                     socket.h.  Since there was no string for this protocol,
+//                     when toggling through the various protocols in the
+//                     multiplayer options menu, you would get random varing
+//                     strings for the 3rd protocol (MPATH).
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -100,11 +100,11 @@
 bool RSocket::ms_bDidStartup = false;
 bool RSocket::ms_bAutoShutdown = false;
 RSocket::ProtoType RSocket::ms_prototype   = RSocket::NO_PROTOCOL;
-short	RSocket::ms_sNumSockets = 0;
-char*							RSocket::ms_apszProtoNames[] =
+short RSocket::ms_sNumSockets = 0;
+char*                     RSocket::ms_apszProtoNames[] =
 {
    "",
-//									"Loopback",
+//                           "Loopback",
 
    "TCP/IP",
 };

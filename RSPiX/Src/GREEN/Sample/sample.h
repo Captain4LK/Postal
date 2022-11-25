@@ -17,18 +17,18 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	sample.cpp
+//   sample.cpp
 //
 // History:
-//		06/23/95 JMI	Started.
+//      06/23/95 JMI   Started.
 //
-//		01/28/97	JMI	Added Load(RFile*), Save(char*), and Save(RFile*).
+//      01/28/97   JMI   Added Load(RFile*), Save(char*), and Save(RFile*).
 //
-//		05/09/97	JMI	Added GetDuration(), GetTime(), and GetPos() functions.
+//      05/09/97   JMI   Added GetDuration(), GetTime(), and GetPos() functions.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	See CPP for description of this API.
+//   See CPP for description of this API.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -72,8 +72,8 @@ public:
 // Default constructor.
 RSample();
 // Constructor especial.
-RSample(	void *pData, S32 lBufSize,
-         S32 lSamplesPerSec, short sBitsPerSample, short sNumChannels);
+RSample(   void *pData, S32 lBufSize,
+           S32 lSamplesPerSec, short sBitsPerSample, short sNumChannels);
 // Destructor.
 ~RSample();
 
@@ -127,7 +127,7 @@ short Close(void);
 short Load(char* pszSampleName);
 // Same as above, but accepts an open RFile*.
 short Load(                // Returns 0 on success.
-   RFile*	pfile);        // Open RFile.
+   RFile*   pfile);        // Open RFile.
 
 // Saves entire sample to file specified in RIFF WAVE format.
 short Save(                   // Returns 0 on success.
@@ -160,15 +160,15 @@ S32 ReadWaveHeader(void);
 public:
 S32 m_lBufSize;                     // Amount of data in CSnd.
 S32 m_lSamplesPerSec;               // Rate of data in buffer.
-short	m_sNumChannels;               // Number of channels (i.e., 1==mono,
-                                    // 2==stereo).
-short	m_sBitsPerSample;             // Number of bits per sample.
-void*			m_pData;                // Buffer used for sample data.
+short m_sNumChannels;                 // Number of channels (i.e., 1==mono,
+                                      // 2==stereo).
+short m_sBitsPerSample;               // Number of bits per sample.
+void*         m_pData;                // Buffer used for sample data.
 
 protected:
-short	m_sOwnBuf;                 // TRUE if play buffer allocated by RSample.
-short	m_sRefCnt;                 // Reference count of locks on this sample's
-                                 // data.
+short m_sOwnBuf;                   // TRUE if play buffer allocated by RSample.
+short m_sRefCnt;                   // Reference count of locks on this sample's
+                                   // data.
 RIff m_iff;                         // File stream pointer for reading/streaming.
 
 /////////////////////// Static members /////////////////////////////////

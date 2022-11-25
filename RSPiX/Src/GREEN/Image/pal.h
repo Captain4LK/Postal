@@ -19,29 +19,29 @@
 #define PAL_H
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	PAL.H
+//   PAL.H
 //
 //
-// 10/30/96	JMI	Broke CPal and some of its associates out of image.h and
-//						imagetyp.h.
+// 10/30/96   JMI   Broke CPal and some of its associates out of image.h and
+//                  imagetyp.h.
 //
-//	10/30/96	JMI	Changed:
-//						Old label:			New label:
-//						=========			=========
-//						CNFile				RFile
-//						CPal					RPal
-//						U32 ulType		RPal::Type ulType
-//						m_bCanDestroyData	m_sCanDestroyData
+//   10/30/96   JMI   Changed:
+//                  Old label:         New label:
+//                  =========         =========
+//                  CNFile            RFile
+//                  CPal               RPal
+//                  U32 ulType      RPal::Type ulType
+//                  m_bCanDestroyData   m_sCanDestroyData
 //
-//	11/01/96	JMI	Changed all members to be preceded by m_ (e.g., sDepth
-//						m_sDepth).  Changed ulType to m_type.
+//   11/01/96   JMI   Changed all members to be preceded by m_ (e.g., sDepth
+//                  m_sDepth).  Changed ulType to m_type.
 //
-// 12/08/96 MJR	Added Red(), Green() and Blue() functions to give users
-//						access to those components without needed to know the palette
-//						type.  Implimented entirely in this header.  See functions
-//						for more information.
+// 12/08/96 MJR   Added Red(), Green() and Blue() functions to give users
+//                  access to those components without needed to know the palette
+//                  type.  Implimented entirely in this header.  See functions
+//                  for more information.
 //
-//	04/16/97	JMI	Added operator= overload.
+//   04/16/97   JMI   Added operator= overload.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -97,7 +97,7 @@ typedef struct
 
 //////////////////////////////////////////////////////////////////////
 //
-//	RPal class
+//   RPal class
 //
 // RPal is a simple wrapper around various types of palettes.
 // This class does not understand any particular palette types.
@@ -119,13 +119,13 @@ public:     // Typedefs and Enums.
 typedef enum ePaletteTypes
 {
    NO_PALETTE,
-   PDIB,                   // BMP8			DIB format(RGBQUAD = BGR 888 + Reserved)
-   PSYS,                   // SYSTEM8		System Palette - platform dependant
-   P555,                   // SCREEE8_555	RGB 555 palette format
-   P565,                   // SCREEN8_565	RGB 565 palette format
+   PDIB,                   // BMP8         DIB format(RGBQUAD = BGR 888 + Reserved)
+   PSYS,                   // SYSTEM8      System Palette - platform dependant
+   P555,                   // SCREEE8_555   RGB 555 palette format
+   P565,                   // SCREEN8_565   RGB 565 palette format
    P888,                   // SCREEN8_888 BGR 888 palette format - MJR 10/15/96 - "BGR" is correct order!
    PFLX,                   // FLX8_888 RGB (in that order) 888 palette
-                           // format.  03/06/96	JMI
+                           // format.  03/06/96   JMI
    END_REG_PAL             // End of registered palette types
 } Type;
 
@@ -133,15 +133,15 @@ typedef enum ePaletteTypes
 public:     // Member vars.
 Type m_type;                     // Palette type
 U32 m_ulSize;                    // Size of data
-short	m_sStartIndex;             // Starting index
-short	m_sNumEntries;             // Number of entries
-short	m_sPalEntrySize;           // Number of bytes in each palette entry
-UCHAR*	m_pData;                // Pointer to data
+short m_sStartIndex;               // Starting index
+short m_sNumEntries;               // Number of entries
+short m_sPalEntrySize;             // Number of bytes in each palette entry
+UCHAR*   m_pData;                // Pointer to data
 
 // This array of type names should correspond to the above list of
 // enumerated types.  Whenever you add an image type and an enum,
 // you need to also insert that name into the corresponding place
-//	in this array in pal.cpp.
+//   in this array in pal.cpp.
 // Note that this uses END_REG_PAL enum item to size the array.
 static char* ms_astrTypeNames[END_REG_PAL];
 
@@ -152,8 +152,8 @@ static char* ms_astrTypeNames[END_REG_PAL];
 static short ms_asPalEntrySizes[END_REG_PAL];
 
 private:
-short	m_sCanDestroyData;      // Flags whether DestroyData can destroy
-                              // the data.
+short m_sCanDestroyData;        // Flags whether DestroyData can destroy
+                                // the data.
 
 public:
 RPal();
@@ -169,7 +169,7 @@ static short GetPalEntrySize(Type type);
 
 // Will tell you the number of bytes per palette entry for the
 // this instance of the palette
-short GetPalEntrySize()	{return m_sPalEntrySize;};
+short GetPalEntrySize()   {return m_sPalEntrySize;};
 
 // Create PAL's data using the specified values.
 short CreateData(       // Returns 0 if successful

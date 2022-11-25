@@ -20,115 +20,115 @@
 //
 // This module implements the CNapalm weapon class which is a canister of
 // napalm gel that breaks apart when it hits the ground lays down a smear
-//	of fire.  The canister may be an alternate ordinate for the rocket launcher.
+//   of fire.  The canister may be an alternate ordinate for the rocket launcher.
 //
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/09/97 BRH	Started the CNapalm from the CGrenade object since their
-//							initial movement logic is similar.
+//      02/09/97 BRH   Started the CNapalm from the CGrenade object since their
+//                     initial movement logic is similar.
 //
-//		02/10/97	JMI	rspReleaseResource() now takes a ptr to a ptr.
+//      02/10/97   JMI   rspReleaseResource() now takes a ptr to a ptr.
 //
-//		02/18/97 BRH	Added a time setting to the Fire with some randomness
-//							to make it look better.
+//      02/18/97 BRH   Added a time setting to the Fire with some randomness
+//                     to make it look better.
 //
-//		02/19/97 BRH	Added message processing to check for ObjectDeleted
-//							message.
+//      02/19/97 BRH   Added message processing to check for ObjectDeleted
+//                     message.
 //
-//		02/19/97 BRH	Changed this from 2D to 3D animation.
+//      02/19/97 BRH   Changed this from 2D to 3D animation.
 //
-//		02/23/97 BRH	Updated the transform with the angle so that the canister
-//							faces the direction it is traveling.  Also changed the
-//							coordinate system to x,-z
+//      02/23/97 BRH   Updated the transform with the angle so that the canister
+//                     faces the direction it is traveling.  Also changed the
+//                     coordinate system to x,-z
 //
-//		02/23/97 BRH	Added Preload() function to cache resources for this object
-//							before play begins.
+//      02/23/97 BRH   Added Preload() function to cache resources for this object
+//                     before play begins.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		02/24/97 BRH	Changed fire to thin fire for more alpha effect since it
-//							lays down many layers of fire.  Also hides the napalm
-//							canister by skipping the render when in the hidden state.
+//      02/24/97 BRH   Changed fire to thin fire for more alpha effect since it
+//                     lays down many layers of fire.  Also hides the napalm
+//                     canister by skipping the render when in the hidden state.
 //
-//		02/24/97 BRH	Added sound effects for canister shooting, hitting things,
-//							and when it breaks open.  Used reality.h motion templates
-//							and changed the algorithm for detecting ground and
-//							walls.
+//      02/24/97 BRH   Added sound effects for canister shooting, hitting things,
+//                     and when it breaks open.  Used reality.h motion templates
+//                     and changed the algorithm for detecting ground and
+//                     walls.
 //
-//		03/03/97 BRH	Derived this from the CWeapon base class.
+//      03/03/97 BRH   Derived this from the CWeapon base class.
 //
-//		03/03/97	JMI	Commented out dHorizVelocity and dVertVelocity parameters
-//							to Setup() so that this version would be a virtual over-
-//							ride of CWeapon's.
+//      03/03/97   JMI   Commented out dHorizVelocity and dVertVelocity parameters
+//                     to Setup() so that this version would be a virtual over-
+//                     ride of CWeapon's.
 //
-//		03/06/97	JMI	Upgraded to current rspMod360 usage.
+//      03/06/97   JMI   Upgraded to current rspMod360 usage.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/19/97 BRH	Changed ProcessMessages to return a void so that it matches
-//							the new virtual function in the CWeapon base class.
+//      03/19/97 BRH   Changed ProcessMessages to return a void so that it matches
+//                     the new virtual function in the CWeapon base class.
 //
-//		03/21/97 BRH	Now ignores the ATTRIBUTE_NOT_WALKABLE so that the napalm
-//							canisters don't bounce off of the edge of the world.
+//      03/21/97 BRH   Now ignores the ATTRIBUTE_NOT_WALKABLE so that the napalm
+//                     canisters don't bounce off of the edge of the world.
 //
-//		04/10/97 BRH	Converted to using the new multi layer attribute maps and
-//							the helper functions that go with them.
+//      04/10/97 BRH   Converted to using the new multi layer attribute maps and
+//                     the helper functions that go with them.
 //
-//		05/04/97 BRH	Took out an old unused reference to an STL iterator.
+//      05/04/97 BRH   Took out an old unused reference to an STL iterator.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/11/97 BRH	Added shooter ID passing to the fire that is created.
+//      06/11/97 BRH   Added shooter ID passing to the fire that is created.
 //
-//		06/12/97	JMI	Now handles State_Hide by setting m_sprite's InHidden flag.
+//      06/12/97   JMI   Now handles State_Hide by setting m_sprite's InHidden flag.
 //
-//		06/16/97 BRH	Fixed starting condition in not walkable area.
+//      06/16/97 BRH   Fixed starting condition in not walkable area.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/25/97 BRH	Added use of base class 2D shadow on the ground, but loaded
-//							a smaller shadow resource.
+//      06/25/97 BRH   Added use of base class 2D shadow on the ground, but loaded
+//                     a smaller shadow resource.
 //
-//		06/30/97 BRH	Added sound effect cache to Preload function.
+//      06/30/97 BRH   Added sound effect cache to Preload function.
 //
-//		07/01/97	JMI	Replaced GetFloorMapValue() with GetHeight() call.
+//      07/01/97   JMI   Replaced GetFloorMapValue() with GetHeight() call.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/30/97	JMI	Same old delete error showed up on Alpha.
-//							ProcessMessages() was deleting the napalm on a delete msg
-//							but, once returned to Update(), it was checking the
-//							m_eState member to see if it should return.  Unfortunately,
-//							since 'this' had already been deallocated, it was too late
-//							to do such a thing.
-//							Also, m_dFireX and m_dFireZ were uninitialized causing
-//							floating point exceptions (due to bad values) on the Alpha.
+//      07/30/97   JMI   Same old delete error showed up on Alpha.
+//                     ProcessMessages() was deleting the napalm on a delete msg
+//                     but, once returned to Update(), it was checking the
+//                     m_eState member to see if it should return.  Unfortunately,
+//                     since 'this' had already been deallocated, it was too late
+//                     to do such a thing.
+//                     Also, m_dFireX and m_dFireZ were uninitialized causing
+//                     floating point exceptions (due to bad values) on the Alpha.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
-//		08/27/97 BRH	Added large fire sound which had not been used until now.
+//      08/27/97 BRH   Added large fire sound which had not been used until now.
 //
-//		08/28/97 BRH	Added cache of large fire sound.
+//      08/28/97 BRH   Added cache of large fire sound.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define NAPALM_CPP
@@ -322,7 +322,7 @@ void CNapalm::Update(void)
 
 //-----------------------------------------------------------------------
 // Go - fly through the air until hit the ground, change directions on
-//		  obstacle collision.
+//        obstacle collision.
 //-----------------------------------------------------------------------
       case CWeapon::State_Go:
          // Do horizontal velocity
@@ -513,7 +513,7 @@ void CNapalm::Render(void)
       // Layer should be based on info we get from attribute map
       m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-      m_sprite.m_ptrans		= &m_trans;
+      m_sprite.m_ptrans      = &m_trans;
 
       // Update sprite in scene
       m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -535,8 +535,8 @@ void CNapalm::Render(void)
 short CNapalm::Setup(                           // Returns 0 if successfull, non-zero otherwise
    short sX,                                    // In:  New x coord
    short sY,                                    // In:  New y coord
-   short sZ /*,												// In:  New z coord
-   double dHorizVel,										// In:  Starting Horizontal Velocity (has default)
+   short sZ /*,                                    // In:  New z coord
+   double dHorizVel,                              // In:  Starting Horizontal Velocity (has default)
    double dVertVel*/)                           // In:  Starting Vertical Velocity (has default)
 {
    short sResult = 0;
@@ -550,8 +550,8 @@ short CNapalm::Setup(                           // Returns 0 if successfull, non
 
    // Default these to the start position so that, when we first enter
    // the slide state, we'll create some fire right away.
-   m_dFireX	= m_dX;
-   m_dFireZ	= m_dZ;
+   m_dFireX   = m_dX;
+   m_dFireZ   = m_dZ;
 
    // Load resources
    sResult = GetResources();
@@ -607,8 +607,8 @@ short CNapalm::FreeResources(void)                 // Returns 0 if successfull, 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CNapalm::Preload(

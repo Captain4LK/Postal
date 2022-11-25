@@ -19,55 +19,55 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		05/08/97 JMI	Started.
+//      05/08/97 JMI   Started.
 //
-//		05/09/97	JMI	Added m_smash and Init().
+//      05/09/97   JMI   Added m_smash and Init().
 //
-//		05/14/97	JMI	Added Grab() and Drop().
-//							Also, made m_sprite public.
+//      05/14/97   JMI   Added Grab() and Drop().
+//                     Also, made m_sprite public.
 //
-//		06/06/97	JMI	Got rid of the whole type thing.  Now uses a CStockPile
-//							and can contain any combination of powerups w/i one
-//							instance.  Types are still used for loading old powerup
-//							files.
-//							Also, added GetDescription().
+//      06/06/97   JMI   Got rid of the whole type thing.  Now uses a CStockPile
+//                     and can contain any combination of powerups w/i one
+//                     instance.  Types are still used for loading old powerup
+//                     files.
+//                     Also, added GetDescription().
 //
-//		06/12/97	JMI	Added support for new weapon members of CStockPile.
+//      06/12/97   JMI   Added support for new weapon members of CStockPile.
 //
-//		06/12/97	JMI	Added sHitPointMax parameter to GetDescription().
+//      06/12/97   JMI   Added sHitPointMax parameter to GetDescription().
 //
-//		06/14/97	JMI	Changed to a descendant of CItem3d instead of CThing.
+//      06/14/97   JMI   Changed to a descendant of CItem3d instead of CThing.
 //
-//		06/14/97	JMI	Added KevlarVest (CStockPile::m_sArmorLayers).
+//      06/14/97   JMI   Added KevlarVest (CStockPile::m_sArmorLayers).
 //
-//		06/15/97	JMI	Added Backpack (CStockPile::m_sBackpack).
+//      06/15/97   JMI   Added Backpack (CStockPile::m_sBackpack).
 //
-//		06/16/97	JMI	Added a user (audible) feedback function, PickUpFeedback().
+//      06/16/97   JMI   Added a user (audible) feedback function, PickUpFeedback().
 //
-//		07/15/97	JMI	Made GetDescription() and TypeToStockPile() static and
-//							added stockpiles as parms so they can be used more
-//							generically.
-//							Also, added RepaginateNow().
-//							Also, added IsEmpty().
+//      07/15/97   JMI   Made GetDescription() and TypeToStockPile() static and
+//                     added stockpiles as parms so they can be used more
+//                     generically.
+//                     Also, added RepaginateNow().
+//                     Also, added IsEmpty().
 //
-//		07/15/97	JMI	Added some message handling functions.
-//							Transferred powerup index enums into CStockPile.
+//      07/15/97   JMI   Added some message handling functions.
+//                     Transferred powerup index enums into CStockPile.
 //
-//		07/16/97	JMI	Moved IsEmpty() from powerup to stockpile.
+//      07/16/97   JMI   Moved IsEmpty() from powerup to stockpile.
 //
-//		07/23/97	JMI	Added separate launcher for napalm.
+//      07/23/97   JMI   Added separate launcher for napalm.
 //
-//		08/17/97	JMI	Got rid of m_szMessages and all message related functions
-//							and variables from CDude since we are now using the toolbar
-//							for dude status feedback to the user.  This includes:
-//							MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
-//							m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
-//							ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
-//							ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
-//							MessageChange(), Message(), UpdateFontColors(),
-//							CPowerUp::ms_apszPowerUpTypeNames[],
-//							CPowerUp::GetDescription(), and some strings and a string
-//							array in localize.*.
+//      08/17/97   JMI   Got rid of m_szMessages and all message related functions
+//                     and variables from CDude since we are now using the toolbar
+//                     for dude status feedback to the user.  This includes:
+//                     MsgTypeInfo, m_lNextStatusUpdateTime, m_lMsgUpdateDoneTime,
+//                     m_print, m_bClearedStatus, m_szMessages[], m_sDeadMsgNum,
+//                     ms_amtfMessages[], ms_u8FontForeIndex, ms_u8FontBackIndex,
+//                     ms_u8FontShadowIndex, DrawStatus(), StatusChange(),
+//                     MessageChange(), Message(), UpdateFontColors(),
+//                     CPowerUp::ms_apszPowerUpTypeNames[],
+//                     CPowerUp::GetDescription(), and some strings and a string
+//                     array in localize.*.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -103,7 +103,7 @@ protected:
 //---------------------------------------------------------------------------
 public:
 // Powerup anim names.
-static char*	ms_apszPowerUpResNames[CStockPile::NumStockPileItems + 2];
+static char*   ms_apszPowerUpResNames[CStockPile::NumStockPileItems + 2];
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -113,13 +113,13 @@ public:
 CPowerUp(CRealm* pRealm)
    : CItem3d(pRealm, CPowerUpID)
 {
-   m_panimCur	= &m_anim;
+   m_panimCur   = &m_anim;
 
-   m_stockpile.m_sHitPoints	= 0;
+   m_stockpile.m_sHitPoints   = 0;
 
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
 
-   m_smash.m_pThing	= this;
+   m_smash.m_pThing   = this;
 }
 
 public:
@@ -267,7 +267,7 @@ short Init(void);                               // Returns 0 on success.
 
 // Get resource name for this item.
 void GetResName(              // Returns nothing.
-   char*	pszResName);         // Out: Resource base name.
+   char*   pszResName);         // Out: Resource base name.
 
 };
 

@@ -19,7 +19,7 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		07/30/97 JMI	Started this weapon object from the CRocket.
+//      07/30/97 JMI   Started this weapon object from the CRocket.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -36,13 +36,13 @@
 // powerload using some up with every collision.  It is for these reasons this
 // weapon requires:
 //  - exactly 1 rocket cylinder (including its original payload (solid fuel and
-//		explosive power))
+//      explosive power))
 //  - exactly 1 napalm canister (including its original payload (let's call it
-//		liquid fire) )
+//      liquid fire) )
 //  - at least 1 canister fluid fuel (e.g., from flame thrower) (more provides
-//		greater distance).
+//      greater distance).
 //  - at least 1 grenade (more provides greater explosive power over S32er
-//		distances).
+//      distances).
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef DEATHWAD_H
@@ -73,7 +73,7 @@ protected:
 CAnim3D m_anim;                        // 3D animation
 RTransform m_trans;                    // Transform
 CSmash m_smash;                        // Collision body.
-CSprite3	m_sprite;                     // 3D sprite to render this thing.
+CSprite3 m_sprite;                       // 3D sprite to render this thing.
 bool m_bInsideTerrain;                 // true if we are inside terrain.
 
 SampleMaster::SoundInstance m_siThrust;         // Looping thrust play instance.
@@ -104,16 +104,16 @@ public:
 CDeathWad(CRealm* pRealm)
    : CWeapon(pRealm, CDeathWadID)
 {
-   m_sprite.m_pthing				= this;
-   m_smash.m_pThing				= this;
-   m_siThrust						= 0;
-   m_u16ShooterID					= CIdBank::IdNil;
+   m_sprite.m_pthing            = this;
+   m_smash.m_pThing            = this;
+   m_siThrust                  = 0;
+   m_u16ShooterID               = CIdBank::IdNil;
    m_stockpile.Zero();
-   m_bInsideTerrain				= false;
-   m_u32CollideIncludeBits		= 0;
-   m_u32CollideDontcareBits	= 0;
-   m_u32CollideExcludeBits		= 0;
-   m_dUnthrustedDistance		= 0.0;
+   m_bInsideTerrain            = false;
+   m_u32CollideIncludeBits      = 0;
+   m_u32CollideDontcareBits   = 0;
+   m_u32CollideExcludeBits      = 0;
+   m_dUnthrustedDistance      = 0.0;
 }
 
 public:
@@ -202,7 +202,7 @@ CSprite* GetSprite(void)         // Returns this weapon's sprite.
 
 // Feed the WAD prior to moving its state to State_Fire.
 void FeedWad(
-   CStockPile*	pstockpile);         // In:  Src for WAD's arsenal.
+   CStockPile*   pstockpile);         // In:  Src for WAD's arsenal.
 
 
 //---------------------------------------------------------------------------
@@ -222,15 +222,15 @@ void ProcessMessages(void);
 // the destination is reached.
 bool TraversePath(               // Returns true, when destination reached; false,
                                  // if terrain change.
-   short	sSrcX,                  // In:  Starting position.
-   short	sSrcY,                  // In:  Starting position.
-   short	sSrcZ,                  // In:  Starting position.
-   bool*		pbInTerrain,         // In:  true, if starting in terrain.
-                                 // Out: true, if ending in terrain.
-   short	sDstX,                  // In:  Destination position.
-   short	sDstZ,                  // In:  Destination position.
-   double*	pdCurX,              // Out: Position of inside terrain status change.
-   double*	pdCurZ);             // Out: Position of inside terrain status change.
+   short sSrcX,                    // In:  Starting position.
+   short sSrcY,                    // In:  Starting position.
+   short sSrcZ,                    // In:  Starting position.
+   bool*      pbInTerrain,         // In:  true, if starting in terrain.
+                                   // Out: true, if ending in terrain.
+   short sDstX,                    // In:  Destination position.
+   short sDstZ,                    // In:  Destination position.
+   double*   pdCurX,              // Out: Position of inside terrain status change.
+   double*   pdCurZ);             // Out: Position of inside terrain status change.
 
 // Generate an explosion at the current position.
 void Explosion(void);

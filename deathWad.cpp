@@ -19,15 +19,15 @@
 // Project: Nostril (aka Postal)
 //
 // This module implements the CDeathWad weapon class which is an unguided
-//	projectile.
+//   projectile.
 //
 //
 // History:
-//		07/30/97 JMI	Started this weapon object from the CRocket.
+//      07/30/97 JMI   Started this weapon object from the CRocket.
 //
-//		08/07/97	JMI	Added additional parameter to CAnim3D::Get() call.
+//      08/07/97   JMI   Added additional parameter to CAnim3D::Get() call.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -44,13 +44,13 @@
 // powerload using some up with every collision.  It is for these reasons this
 // weapon requires:
 //  - exactly 1 rocket cylinder (including its original payload (solid fuel and
-//		explosive power))
+//      explosive power))
 //  - exactly 1 napalm canister (including its original payload (let's call it
-//		liquid fire) )
+//      liquid fire) )
 //  - at least 1 canister fluid fuel (e.g., from flame thrower) (more provides
-//		greater distance).
+//      greater distance).
 //  - at least 1 grenade (more provides greater explosive power over S32er
-//		distances).
+//      distances).
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define DEATHWAD_CPP
@@ -69,17 +69,17 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SMALL_SHADOW_FILE	"smallshadow.img"
+#define SMALL_SHADOW_FILE   "smallshadow.img"
 
-#define RES_BASE_NAME		"3d/missile"
+#define RES_BASE_NAME      "3d/missile"
 
 // Define this if you want the empty missile casing (when there's no final
 // explosive power) to become a powerup flung through the air from the point
 // at which it runs out of fuel.
-//#define CAN_CHANGE_TO_POWERUP	1
+//#define CAN_CHANGE_TO_POWERUP   1
 
 // Gets a random between -range / 2 and range / 2.
-#define RAND_SWAY(sway)	((GetRand() % sway) - sway / 2)
+#define RAND_SWAY(sway)   ((GetRand() % sway) - sway / 2)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -98,19 +98,19 @@ const double CDeathWad::ms_dTraversalRate           = 3.0;
 // Distance between thrust feedbacks.
 const double CDeathWad::ms_dThrustDelta             = 9.0;
 // Go off screen this far before blowing up
-const short	CDeathWad::ms_sOffScreenDist				= 200;
+const short CDeathWad::ms_sOffScreenDist            = 200;
 // Time for smoke to stick around.
 const S32 CDeathWad::ms_lSmokeTimeToLive         = 500;
 // Time for fireball to stick around.
 const S32 CDeathWad::ms_lFireBallTimeToLive      = 500;
 // Amount to stagger final explosions.
-const short	CDeathWad::ms_sFinalExplosionStagger	= 5;
+const short CDeathWad::ms_sFinalExplosionStagger   = 5;
 // Radius of collision area (whether sphere or cylinder).
-const short	CDeathWad::ms_sCollisionRadius			= 30;
+const short CDeathWad::ms_sCollisionRadius         = 30;
 // Velocity for kick from launch.
 const double CDeathWad::ms_dKickVelocity            = 350.0;
 // Max a WAD can hold.
-const CStockPile CDeathWad::ms_stockpileMax				=
+const CStockPile CDeathWad::ms_stockpileMax            =
 {
    0,          // m_sHitPoints
 
@@ -286,10 +286,10 @@ void CDeathWad::Update(void)
          dNewZ = m_dZ - SINQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
 
          // If the new position is a ways off screen
-         if (	m_dZ > ms_sOffScreenDist + m_pRealm->GetRealmHeight()
-               ||	m_dZ < -ms_sOffScreenDist
-               ||	m_dX > ms_sOffScreenDist + m_pRealm->GetRealmWidth()
-               ||	m_dX < -ms_sOffScreenDist)
+         if (   m_dZ > ms_sOffScreenDist + m_pRealm->GetRealmHeight()
+                ||   m_dZ < -ms_sOffScreenDist
+                ||   m_dX > ms_sOffScreenDist + m_pRealm->GetRealmWidth()
+                ||   m_dX < -ms_sOffScreenDist)
          {
             // Blow Up
             m_eState = CWeapon::State_Explode;
@@ -345,12 +345,12 @@ void CDeathWad::Update(void)
          }
 
          // Update sound position.
-         short	sVolumeHalfLife	= LaunchSndHalfLife;
+         short sVolumeHalfLife   = LaunchSndHalfLife;
          // If inside terrain . . .
          if (m_bInsideTerrain == true)
          {
             // Half half life.
-            sVolumeHalfLife	/= 4;
+            sVolumeHalfLife   /= 4;
          }
 
          SetInstanceVolume(m_siThrust, DistanceToVolume(m_dX, m_dY, m_dZ, sVolumeHalfLife) );
@@ -359,7 +359,7 @@ void CDeathWad::Update(void)
          if (m_stockpile.m_sNumMissiles < 0 || m_stockpile.m_sNumNapalms < 0)
          {
             // Blow Up.
-            m_eState	= CWeapon::State_Explode;
+            m_eState   = CWeapon::State_Explode;
          }
 
          break;
@@ -381,8 +381,8 @@ void CDeathWad::Update(void)
             Explosion();
 
             // Stagger.
-            m_dX	+= RAND_SWAY(ms_sFinalExplosionStagger);
-            m_dZ	+= RAND_SWAY(ms_sFinalExplosionStagger);
+            m_dX   += RAND_SWAY(ms_sFinalExplosionStagger);
+            m_dZ   += RAND_SWAY(ms_sFinalExplosionStagger);
 
             m_stockpile.m_sNumGrenades--;
             m_stockpile.m_sNumMissiles--;
@@ -392,7 +392,7 @@ void CDeathWad::Update(void)
       else
       {
          // Otherwise, persist as powerup.
-         CPowerUp*	ppowerup	= NULL;
+         CPowerUp*   ppowerup   = NULL;
          if (CThing::Construct(CPowerUpID, m_pRealm, (CThing**)&ppowerup) == 0)
          {
             // Copy whatever's left.
@@ -406,15 +406,15 @@ void CDeathWad::Update(void)
             ppowerup->Setup(m_dX, m_dY, m_dZ);
 
             // Blow it up.
-            GameMessage	msg;
-            msg.msg_Explosion.eType				= typeExplosion;
-            msg.msg_Explosion.sPriority		= 0;
-            msg.msg_Explosion.sDamage			= 0;
-            msg.msg_Explosion.sX					= m_dX;
-            msg.msg_Explosion.sY					= m_dY;
-            msg.msg_Explosion.sZ					= m_dZ;
-            msg.msg_Explosion.sVelocity		= 130;
-            msg.msg_Explosion.u16ShooterID	= m_u16ShooterID;
+            GameMessage msg;
+            msg.msg_Explosion.eType            = typeExplosion;
+            msg.msg_Explosion.sPriority      = 0;
+            msg.msg_Explosion.sDamage         = 0;
+            msg.msg_Explosion.sX               = m_dX;
+            msg.msg_Explosion.sY               = m_dY;
+            msg.msg_Explosion.sZ               = m_dZ;
+            msg.msg_Explosion.sVelocity      = 130;
+            msg.msg_Explosion.u16ShooterID   = m_u16ShooterID;
 
             SendThingMessage(&msg, msg.msg_Explosion.sPriority, ppowerup);
          }
@@ -431,10 +431,10 @@ void CDeathWad::Update(void)
       }
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -487,7 +487,7 @@ void CDeathWad::Render(void)
       // Layer should be based on info we get from the attribute map
       m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-      m_sprite.m_ptrans		= &m_trans;
+      m_sprite.m_ptrans      = &m_trans;
 
       // Update sprite in scene
       m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -577,8 +577,8 @@ short CDeathWad::FreeResources(void)                  // Returns 0 if successful
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CDeathWad::Preload(
@@ -598,7 +598,7 @@ short CDeathWad::Preload(
    }
    else
    {
-      sResult	= -1;
+      sResult   = -1;
    }
 
    CacheSample(g_smidDeathWadLaunch);
@@ -641,15 +641,15 @@ void CDeathWad::ProcessMessages(void)
 ////////////////////////////////////////////////////////////////////////////////
 bool CDeathWad::TraversePath( // Returns true, when destination reached; false,
                               // if terrain change.
-   short	sSrcX,               // In:  Starting position.
-   short	sSrcY,               // In:  Starting position.
-   short	sSrcZ,               // In:  Starting position.
-   bool*		pbInTerrain,      // In:  true, if starting in terrain.
-                              // Out: true, if ending in terrain.
-   short	sDstX,               // In:  Destination position.
-   short	sDstZ,               // In:  Destination position.
-   double*	pdCurX,           // Out: Position of inside terrain status change.
-   double*	pdCurZ)           // Out: Position of inside terrain status change.
+   short sSrcX,                 // In:  Starting position.
+   short sSrcY,                 // In:  Starting position.
+   short sSrcZ,                 // In:  Starting position.
+   bool*      pbInTerrain,      // In:  true, if starting in terrain.
+                                // Out: true, if ending in terrain.
+   short sDstX,                 // In:  Destination position.
+   short sDstZ,                 // In:  Destination position.
+   double*   pdCurX,           // Out: Position of inside terrain status change.
+   double*   pdCurZ)           // Out: Position of inside terrain status change.
 {
    bool bMadeDestination  = true;   // Assume we make it.
 
@@ -677,34 +677,34 @@ bool CDeathWad::TraversePath( // Returns true, when destination reached; false,
       *pbInTerrain == bInitiallyInTerrain)
    {
       if (m_pRealm->GetHeight(dX, dZ) > sSrcY)
-         *pbInTerrain	= true;
+         *pbInTerrain   = true;
       else
-         *pbInTerrain	= false;
+         *pbInTerrain   = false;
 
       // See if it's time to create a thrust . . .
-      m_dUnthrustedDistance	+= ms_dTraversalRate;
+      m_dUnthrustedDistance   += ms_dTraversalRate;
       if (m_dUnthrustedDistance >= ms_dThrustDelta)
       {
          // Thrustage.
          Thrust();
          // Reset for next.
-         m_dUnthrustedDistance	= 0.0;
+         m_dUnthrustedDistance   = 0.0;
       }
 
-      dX				+= dRateX;
-      dZ				+= dRateZ;
-      dDistance	-= ms_dTraversalRate;
+      dX            += dRateX;
+      dZ            += dRateZ;
+      dDistance   -= ms_dTraversalRate;
    }
 
    // If we did not make the destination . . .
    if (dDistance > 0)
    {
-      bMadeDestination	= false;
+      bMadeDestination   = false;
    }
 
    // Store new position.
-   *pdCurX	= dX;
-   *pdCurZ	= dZ;
+   *pdCurX   = dX;
+   *pdCurZ   = dZ;
 
    return bMadeDestination;
 }
@@ -720,7 +720,7 @@ void CDeathWad::Explosion(void)
    if (CThing::Construct(CThing::CExplodeID, m_pRealm, (CThing**) &pExplosion) == 0)
    {
       // Don't blow us up.
-      pExplosion->m_u16ExceptID	= m_u16ShooterID;
+      pExplosion->m_u16ExceptID   = m_u16ShooterID;
 
       pExplosion->Setup(m_dX, MAX(m_dY - 30, 0.0), m_dZ, m_u16ShooterID);
       PlaySample(                            // Returns nothing.
@@ -769,12 +769,12 @@ void CDeathWad::Thrust(void)
       }
 
       // Also, create a fire (moving at the wad's velocity?).
-      CFireball*	pfireball	= NULL;
+      CFireball*   pfireball   = NULL;
       if (CThing::Construct(CFireballID, m_pRealm, (CThing**) &pfireball) == 0)
       {
          pfireball->Setup(m_dX, m_dY, m_dZ, m_dRot, ms_lFireBallTimeToLive, m_u16ShooterID);
-         pfireball->m_dHorizVel	= m_dHorizVel / 4.0;
-         pfireball->m_eState		= State_Fire;
+         pfireball->m_dHorizVel   = m_dHorizVel / 4.0;
+         pfireball->m_eState      = State_Fire;
       }
    }
 }
@@ -800,7 +800,7 @@ void CDeathWad::Launch(void)
       &m_siThrust,                        // Out: Handle for adjusting sound volume
       NULL,                               // Out: Sample duration in ms, if not NULL.
       100,                                // In:  Where to loop back to in milliseconds.
-                                          //	-1 indicates no looping (unless m_sLoop is
+                                          //   -1 indicates no looping (unless m_sLoop is
                                           // explicitly set).
       500,                                // In:  Where to loop back from in milliseconds.
                                           // In:  If less than 1, the end + lLoopEndTime is used.
@@ -808,14 +808,14 @@ void CDeathWad::Launch(void)
 
    Explosion();
 
-   CThing*	pthing	= NULL;
+   CThing*   pthing   = NULL;
    // Get the launcher . . .
    if (m_pRealm->m_idbank.GetThingByID(&pthing, m_u16ShooterID) == 0)
    {
       // If it's a dude . . .
       if (pthing->GetClassID() == CDudeID)
       {
-         CDude*	pdude	= (CDude*)pthing;
+         CDude*   pdude   = (CDude*)pthing;
          // Add force vector for kick.  See ya.
          pdude->AddForceVector(ms_dKickVelocity, m_dRot - 180);
       }
@@ -826,13 +826,13 @@ void CDeathWad::Launch(void)
 // Feed the WAD prior to moving its state to State_Fire.
 ////////////////////////////////////////////////////////////////////////////////
 void CDeathWad::FeedWad(
-   CStockPile*	pstockpile) // In:  Src for WAD's arsenal.
+   CStockPile*   pstockpile) // In:  Src for WAD's arsenal.
 {
    // Take needed ammo.
-   m_stockpile.m_sNumMissiles	= pstockpile->m_sNumMissiles;
-   m_stockpile.m_sNumNapalms	= pstockpile->m_sNumNapalms;
-   m_stockpile.m_sNumFuel		= pstockpile->m_sNumFuel;
-   m_stockpile.m_sNumGrenades	= pstockpile->m_sNumGrenades;
+   m_stockpile.m_sNumMissiles   = pstockpile->m_sNumMissiles;
+   m_stockpile.m_sNumNapalms   = pstockpile->m_sNumNapalms;
+   m_stockpile.m_sNumFuel      = pstockpile->m_sNumFuel;
+   m_stockpile.m_sNumGrenades   = pstockpile->m_sNumGrenades;
    // Truncate to max we can hold.
    m_stockpile.Intersect(&ms_stockpileMax);
    // Subtract from provider.

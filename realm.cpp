@@ -21,317 +21,317 @@
 // This module impliments the CRealm class.
 //
 // History:
-//		12/31/96 MJR	Started.
+//      12/31/96 MJR   Started.
 //
-//		01/20/97 MJR	Changed Update loop to save a temporary iterator so
-//							objects that delete themselves during the update
-//							loop will still have a valid iterator to get the next
-//							item in the Things list.
+//      01/20/97 MJR   Changed Update loop to save a temporary iterator so
+//                     objects that delete themselves during the update
+//                     loop will still have a valid iterator to get the next
+//                     item in the Things list.
 //
-//		01/23/97	JMI	Added instantiation of static member ms_asAttribToLayer[].
+//      01/23/97   JMI   Added instantiation of static member ms_asAttribToLayer[].
 //
-//		01/27/97	JMI	Now 4 bits are used from the attribute to determine the
-//							proper layer for dudes.
+//      01/27/97   JMI   Now 4 bits are used from the attribute to determine the
+//                     proper layer for dudes.
 //
-//		01/28/97	JMI	Added ms_apszLayerNames[] to access the names of the
-//							layers.
+//      01/28/97   JMI   Added ms_apszLayerNames[] to access the names of the
+//                     layers.
 //
-//		01/29/97	JMI	Reordered ms_apszLayerNames to match the new order in the
-//							CRealm::Layers enum (fixed to the way Steve is doing it
-//							(the opaque layers are now before alpha equivalents)).
+//      01/29/97   JMI   Reordered ms_apszLayerNames to match the new order in the
+//                     CRealm::Layers enum (fixed to the way Steve is doing it
+//                     (the opaque layers are now before alpha equivalents)).
 //
-//		02/03/97	JMI	The Load(char*) will now Open a SAK with the same base name
-//							as the *.rlm file, if one exists.  If it does not exist,
-//							m_resmgr's BasePath is set to the No SAK Dir.  Once the
-//							load is complete, no more new resources are to be requested
-//							from m_resmgr.  To enfore this, m_resmgr's base path is
-//							set to a condescending message.  If you are not careful, it
-//							may taunt you a second time-a!
+//      02/03/97   JMI   The Load(char*) will now Open a SAK with the same base name
+//                     as the *.rlm file, if one exists.  If it does not exist,
+//                     m_resmgr's BasePath is set to the No SAK Dir.  Once the
+//                     load is complete, no more new resources are to be requested
+//                     from m_resmgr.  To enfore this, m_resmgr's base path is
+//                     set to a condescending message.  If you are not careful, it
+//                     may taunt you a second time-a!
 //
-//		02/04/97 BRH	Temporarily (or permanently) took out timeout check in
-//							Startup because it caused problems debugging startup
-//							code.
+//      02/04/97 BRH   Temporarily (or permanently) took out timeout check in
+//                     Startup because it caused problems debugging startup
+//                     code.
 //
-//		02/04/97 BRH	Added ms_pCurrentNavNet to the realm, moving it from
-//							its previous position in gameedit.
+//      02/04/97 BRH   Added ms_pCurrentNavNet to the realm, moving it from
+//                     its previous position in gameedit.
 //
-//		02/10/97	JMI	Now all loops iterate to the next iterator in the STL list
-//							before dooing iterative processing just in case the current
-//							iterator is invalidated during processing.
+//      02/10/97   JMI   Now all loops iterate to the next iterator in the STL list
+//                     before dooing iterative processing just in case the current
+//                     iterator is invalidated during processing.
 //
-//		02/13/97	JMI	Added hood pointer to CRealm.
+//      02/13/97   JMI   Added hood pointer to CRealm.
 //
-//		02/17/97	JMI	Added set lists to CRealm.  Now there is a list for each
-//							set of Things.  The sets are enumerated in CThing.  Now
-//							new'ed in CRealm() and delete'ed in ~CRealm().
+//      02/17/97   JMI   Added set lists to CRealm.  Now there is a list for each
+//                     set of Things.  The sets are enumerated in CThing.  Now
+//                     new'ed in CRealm() and delete'ed in ~CRealm().
 //
-//		02/18/97	JMI	Changed uses of CThing::ThingSet to CThing::Things.
+//      02/18/97   JMI   Changed uses of CThing::ThingSet to CThing::Things.
 //
-//		02/19/97	JMI	Got rid of stuff regarding old collision sets and added
-//							new CSmashitorium usage.
+//      02/19/97   JMI   Got rid of stuff regarding old collision sets and added
+//                     new CSmashitorium usage.
 //
-//		02/23/97	JMI	Added m_iNext and m_bUpdating so RemoveThing() and
-//							AddThing() can make the necessary adjustments to the next
-//							iterator processed in the Update() loop.
+//      02/23/97   JMI   Added m_iNext and m_bUpdating so RemoveThing() and
+//                     AddThing() can make the necessary adjustments to the next
+//                     iterator processed in the Update() loop.
 //
-//		02/23/97 MJR	Added call to class-based Preload() in CRealm::Load().
+//      02/23/97 MJR   Added call to class-based Preload() in CRealm::Load().
 //
-//		02/24/97	JMI	Added same protection for Render() that we implemented for
-//							Update() on 02/23/97.
+//      02/24/97   JMI   Added same protection for Render() that we implemented for
+//                     Update() on 02/23/97.
 //
-//		02/25/97	JMI	The way I had done the parens for *m_iNext++ for Render()
-//							and Update() was scaring me so I separated it out more.
+//      02/25/97   JMI   The way I had done the parens for *m_iNext++ for Render()
+//                     and Update() was scaring me so I separated it out more.
 //
-//		03/13/97	JMI	Load() now passes the file version number to the CThing
-//							Load()'s.
+//      03/13/97   JMI   Load() now passes the file version number to the CThing
+//                     Load()'s.
 //
-//		03/13/97	JMI	Now, instead of the file's version number having to
-//							exactly match FileVersion, it must just be less than or
-//							equal.  If a file's version is greater than the current
-//							version known by the code, the CThing that caused the
-//							version number to increase will have more, less, or
-//							different data to load that it cannot possibly know about.
+//      03/13/97   JMI   Now, instead of the file's version number having to
+//                     exactly match FileVersion, it must just be less than or
+//                     equal.  If a file's version is greater than the current
+//                     version known by the code, the CThing that caused the
+//                     version number to increase will have more, less, or
+//                     different data to load that it cannot possibly know about.
 //
-//		03/25/97	JMI	Load() no S32er opens a SAK with the same title as the
-//							.rlm file (This is now opened by the CHood).
+//      03/25/97   JMI   Load() no S32er opens a SAK with the same title as the
+//                     .rlm file (This is now opened by the CHood).
 //
-//		04/09/97 BRH	Added RMultiGrid for the multi layer attribute maps, but
-//							haven't taken out the RAttributeMap yet so that the
-//							game will continue to work until we completely switch over.
+//      04/09/97 BRH   Added RMultiGrid for the multi layer attribute maps, but
+//                     haven't taken out the RAttributeMap yet so that the
+//                     game will continue to work until we completely switch over.
 //
-//		04/16/97 BRH	Added Jon's template class CListNode head and tail nodes
-//							to CRealm to replace the STL containers that provided the
-//							linked lists of CThings.  Once the new methods are proven
-//							to work, we will get rid of the m_everthing and m_apthings
-//							arrays of STL lists.
+//      04/16/97 BRH   Added Jon's template class CListNode head and tail nodes
+//                     to CRealm to replace the STL containers that provided the
+//                     linked lists of CThings.  Once the new methods are proven
+//                     to work, we will get rid of the m_everthing and m_apthings
+//                     arrays of STL lists.
 //
-//		04/17/97 BRH	Took timeout check out of Shutdown and Startup (it was
-//							already commented out of Startup).  The 1 second timeout
-//							when calling shutdown caused large levels like parade
-//							to abort before saving everything.
+//      04/17/97 BRH   Took timeout check out of Shutdown and Startup (it was
+//                     already commented out of Startup).  The 1 second timeout
+//                     when calling shutdown caused large levels like parade
+//                     to abort before saving everything.
 //
-//		04/18/97	JMI	Now Suspend() suspends the game time and Resume() resumes
-//							it.  This should alleviate the need for the CThing derived
-//							objects to do their own time compensation.
+//      04/18/97   JMI   Now Suspend() suspends the game time and Resume() resumes
+//                     it.  This should alleviate the need for the CThing derived
+//                     objects to do their own time compensation.
 //
-//		04/21/97	JMI	Added m_sNumSuspends and IsSuspended().
+//      04/21/97   JMI   Added m_sNumSuspends and IsSuspended().
 //
-//		05/04/97 BRH	Removed STL references since the CListNode lists seem
-//							to be working properly.
+//      05/04/97 BRH   Removed STL references since the CListNode lists seem
+//                     to be working properly.
 //
-//		05/13/97	JMI	Added IsPathClear() map functions to determine if a path
-//							is clear of terrain that cannot be surmounted.
+//      05/13/97   JMI   Added IsPathClear() map functions to determine if a path
+//                     is clear of terrain that cannot be surmounted.
 //
-//		05/16/97	JMI	Changed layer bits to be 8 bits (instead of 4).  This
-//							caused the REALM_ATTR_EFFECT_MASK to lose 4 bits and the
-//							REALM_ATTR_LIGHT_BIT to move up 4 bits (0x0010 to 0x0100).
-//							Also, the table ms_asAttribToLayer to be increased from
-//							16 entries to 256 entries.
-//							Also, removed GetLayerFromAttrib() which was left over from
-//							the pre RMultiGrid days.
-//
-//		05/17/97	JMI	In EditUpdate() no argument list was supplied in the line:
-//							pCur->m_powner->EditUpdate;
-//							Added a set of parens.
-//
-//		05/26/97	JMI	Added DrawStatus() function.
-//
-//		05/27/97	JMI	Changed format of DrawStatus() output string.
-//
-//		05/29/97	JMI	Changed occurences of m_pHeightMap to m_pTerrainMap.
-//							Changed occurences of m_pAttrMap to m_pLayerMap.
-//							Also, removed occurences of m_pAttribMap.
-//							Also, added CreateLayerMap() that creates the attribute
-//							to layer map now that it is so huge.
-//
-//		06/04/97 BRH	Turned off drawing lines in IsPathClear function.
-//
-//		06/09/97	JMI	Changed wording of realm status.
-//							Also, Suspend() and Resume() pause and resume the sound.
-//
-//		06/10/97	JMI	Now Resume() does not let you 'over'-resume.
-//
-//		06/17/97 MJR	Moved some vars that were CPylon statics into the realm
-//							so they could be instantiated on a realm-by-realm basis.
-//
-//		06/20/97 JRD	Replaced code needed to manage allocation and deallocation
-//							for the new CSmashatorium
-//
-//		06/26/97	JMI	Moved Map2DTo3D from reality.h to here.
-//							When converting to 2D, Y is now scaled based on the view
-//							angle.  This was not applied to Z.  It could be a bug, but
-//							it just looked better this way.  I suspect it is a
-//							bug/feature of the way most of the code was written
-//							(probably a product of being more aware of the noticable
-//							difference Y coord has when mapped to 2D when comparing 45
-//							to 90 degree type levels while originally designing/coding
-//							CThings, the editor, and CScene).
-//
-//		06/28/97	JMI	Moved attribute access functions from realm.h to realm.cpp
-//							while we're getting all the conversion from 3D to the X/Z
-//							plane stuff right.  Compiling the entire project for any
-//							tweak just doesn't sound very fun.  Hopefully, though,
-//							there'll won't be many tweaks.
-//							Also, added ScaleZ() functions to scale just Z (useful
-//							for attribute map access).
-//							Changed references to GetWorldRotX() to GetRealmRotX().
-//
-//		06/29/97	JMI	Added version of ScaleZ() that takes shorts.
-//							Changed both versions of ScaleZ() to MapZ3DtoY2D()
-//							and added two versions of MapY2DtoZ3D().
-//
-//		06/30/97	JMI	Now uses CRealm's new GetRealmWidth() and *Height()
-//							for dimensions of realm's X/Z plane.
-//
-//		06/30/97	JMI	Added bCheckExtents parm to IsPathClear().  See proto for
-//							details.
-//
-//		07/01/97	JMI	Added MapY2DtoY3D() and MapY3DtoY2D().
-//							Also, GetHeight() now scales the height into realm
-//							coordinates.
-//
-//		07/01/97	JMI	IsPathClear() had 'step-up' logic (TM) for land based
-//							things (like doofuses) that did not work for hovering
-//							things (like missiles).  Fixed.
-//
-//		07/01/97	JMI	Changed the file version for the Hood so it can load and
-//							save whether to use the attribute map heights with or
-//							without scaling based on the view angle.
-//							Also, added function to scale heights that checks the
-//							hood value.
-//
-//		07/07/97 BRH	Added EditModify function to process the realm properties
-//							dialog box where you can select the scoring mode and
-//							play mode for the realm.
+//      05/16/97   JMI   Changed layer bits to be 8 bits (instead of 4).  This
+//                     caused the REALM_ATTR_EFFECT_MASK to lose 4 bits and the
+//                     REALM_ATTR_LIGHT_BIT to move up 4 bits (0x0010 to 0x0100).
+//                     Also, the table ms_asAttribToLayer to be increased from
+//                     16 entries to 256 entries.
+//                     Also, removed GetLayerFromAttrib() which was left over from
+//                     the pre RMultiGrid days.
+//
+//      05/17/97   JMI   In EditUpdate() no argument list was supplied in the line:
+//                     pCur->m_powner->EditUpdate;
+//                     Added a set of parens.
+//
+//      05/26/97   JMI   Added DrawStatus() function.
+//
+//      05/27/97   JMI   Changed format of DrawStatus() output string.
+//
+//      05/29/97   JMI   Changed occurences of m_pHeightMap to m_pTerrainMap.
+//                     Changed occurences of m_pAttrMap to m_pLayerMap.
+//                     Also, removed occurences of m_pAttribMap.
+//                     Also, added CreateLayerMap() that creates the attribute
+//                     to layer map now that it is so huge.
+//
+//      06/04/97 BRH   Turned off drawing lines in IsPathClear function.
+//
+//      06/09/97   JMI   Changed wording of realm status.
+//                     Also, Suspend() and Resume() pause and resume the sound.
+//
+//      06/10/97   JMI   Now Resume() does not let you 'over'-resume.
+//
+//      06/17/97 MJR   Moved some vars that were CPylon statics into the realm
+//                     so they could be instantiated on a realm-by-realm basis.
+//
+//      06/20/97 JRD   Replaced code needed to manage allocation and deallocation
+//                     for the new CSmashatorium
+//
+//      06/26/97   JMI   Moved Map2DTo3D from reality.h to here.
+//                     When converting to 2D, Y is now scaled based on the view
+//                     angle.  This was not applied to Z.  It could be a bug, but
+//                     it just looked better this way.  I suspect it is a
+//                     bug/feature of the way most of the code was written
+//                     (probably a product of being more aware of the noticable
+//                     difference Y coord has when mapped to 2D when comparing 45
+//                     to 90 degree type levels while originally designing/coding
+//                     CThings, the editor, and CScene).
+//
+//      06/28/97   JMI   Moved attribute access functions from realm.h to realm.cpp
+//                     while we're getting all the conversion from 3D to the X/Z
+//                     plane stuff right.  Compiling the entire project for any
+//                     tweak just doesn't sound very fun.  Hopefully, though,
+//                     there'll won't be many tweaks.
+//                     Also, added ScaleZ() functions to scale just Z (useful
+//                     for attribute map access).
+//                     Changed references to GetWorldRotX() to GetRealmRotX().
+//
+//      06/29/97   JMI   Added version of ScaleZ() that takes shorts.
+//                     Changed both versions of ScaleZ() to MapZ3DtoY2D()
+//                     and added two versions of MapY2DtoZ3D().
+//
+//      06/30/97   JMI   Now uses CRealm's new GetRealmWidth() and *Height()
+//                     for dimensions of realm's X/Z plane.
+//
+//      06/30/97   JMI   Added bCheckExtents parm to IsPathClear().  See proto for
+//                     details.
+//
+//      07/01/97   JMI   Added MapY2DtoY3D() and MapY3DtoY2D().
+//                     Also, GetHeight() now scales the height into realm
+//                     coordinates.
+//
+//      07/01/97   JMI   IsPathClear() had 'step-up' logic (TM) for land based
+//                     things (like doofuses) that did not work for hovering
+//                     things (like missiles).  Fixed.
+//
+//      07/01/97   JMI   Changed the file version for the Hood so it can load and
+//                     save whether to use the attribute map heights with or
+//                     without scaling based on the view angle.
+//                     Also, added function to scale heights that checks the
+//                     hood value.
+//
+//      07/07/97 BRH   Added EditModify function to process the realm properties
+//                     dialog box where you can select the scoring mode and
+//                     play mode for the realm.
 //
-//		07/08/97 BRH	Added loading and saving of properties as of version 27.
+//      07/08/97 BRH   Added loading and saving of properties as of version 27.
 //
-//		07/09/97	JMI	Added function to get the full path for a 2D resource
-//							based on the current hood setting for 'Use top-view 2Ds'.
-//
-//		07/09/97	JMI	Moved m_s2dResPathIndex from CHood to CRealm b/c of order
-//							issues when loading.
-//
-//		07/10/97 BRH	Added cases to IsEndOfLevelGoalMet for the different
-//							scoring modes.
-//
-//		07/11/97	JMI	Minor change in IsEndOfLevelGoalMet() to make it so, if
-//							there are zero births, the goal is considered met.  A
-//							special case for example levels that have no enemies.
-//
-//		07/11/97 BRH	Added time calculations here for expiration date.  Checked
-//							in again to update source safe with correct date.
-//
-//		07/12/97	JMI	Added m_bMultiplayer, which signifies whether this is
-//							a multi or single player game.
-//							Also, added Init().  See proto for details.
-//							Moved things that were being initialized both in CRealm()
-//							and in Clear() to Init() which is called by these two
-//							functions.
-//							Also, moved the initialization of the population statistics
-//							into Init() even though they were only being done on a
-//							Clear().  This might be bad but it did not seem like it
-//							could hurt.
-//
-//		07/12/97 BRH	Made minor change to the EditModify dialog so that the
-//							seconds always appears as two digits.
-//
-//		07/14/97	JMI	Moved initialization of Pylon stuff into Init() and also
-//							no m_ucNextPylonId is 1 instead of 0.
-//
-//		07/14/97 BRH	Fixed a bug that caused the score timer to always count up.
-//							Fixed problems with the goal stopping conditions and added
-//							m_sFlagbaseCaptured to keep track of flags that were
-//							successfully returned to their base.
-//
-//		07/15/97 BRH	Added the end of level key flag as a parameter to
-//							the end of level goal check.
-//
-//		07/16/97 BRH	Fixed a problem with standard scoring mode on levels
-//							that didn't have any enemies, they would end right
-//							away using the new method of checking the end of
-//							the level.
-//
-//		07/17/97 BRH	Added the time adjustment to the mac version.
-//
-//		07/27/97 BRH	Added m_lScoreInitialTime and set it to the same
-//							initial value as m_lScoreDisplayTimer.  This was required
-//							in order to calculate the time elapsed for the high
-//							scores.
-//
-//		07/30/97 BRH	Added a string to hold the path of the realm which will
-//							be used by the high score function to identify the
-//							current realm file.
-//
-//		08/05/97	JMI	Now pauses only active sounds so that new sounds can
-//							continue to play while the realm is suspended.
-//
-//		08/05/97	JMI	Added CRealm::Flags struct and an instance in CRealm,
-//							m_flags.
-//
-//		08/08/97	JMI	Now displays a useful message about the thing that failed
-//							to load should one do so.
-//
-//		08/09/97	JMI	Added progress callback and components.  There is now a
-//							callback member that is called (when non-zero) that passes
-//							the number of items processed so far and the total number of
-//							items to process.  The return value of the callback dictates
-//							whether to proceed with the operation.  Although, this is
-//							meant to be generic so we can use it for any type of
-//							process, it is currently only used by Load() and Save().
-//
-//		08/11/97 BRH	Changed both Capture the flag goals to flagbases captured
-//							rather than flags captured.
-//
-//		08/19/97 BRH	Fixed end of level goal for the checkpoint scoring so
-//							if a specific number of flags is not set in the realm
-//							file, it will just continue until the time runs out.
-//
-//		08/20/97	JMI	Made ms_apsz2dResPaths[] a static class member (was just
-//							defined at realm.cpp file scope) and added enum macro for
-//							number of elements.
-//
-//		08/28/97 BRH	Changed level goals for challenge scoring modes to use
-//							the population numbers rather than just the hostile numbers
-//							so that the victims count also.
-//
-//		08/30/97	JMI	IsEndOfLevelGoalMet() now allows a player to go on in
-//							Timed and Checkpoint, if they hit the 'next level' key.
-//
-//		08/30/97	JMI	Now initializes hostile deaths and population deaths in
-//							Startup().
-//
-//		09/02/97	JMI	Now resets all population statistics in Startup().
-//
-//		09/04/97 BRH	Realm::Load now attempts several paths.  It first tries
-//							the path passed in for the case where the user
-//							specified a full path using the open dialog.  Then it
-//							tries the HD path and then the CD path if those fail.
-//							This would allow us to send updated realm files
-//							that could be loaded instead of the ones on the CD
-//							just by putting them in the mirror path on the HD.
-//
-//		09/07/97 BRH	Changed end of level goal to never end the MPFrag if
-//							the kills goal is set to zero.  That will mean no
-//							frag limit.
-//
-//		09/09/97	JMI	Now checks number of flags against the actual number of
-//							flags when using CheckPoint.
-//
-//		09/11/97 MJR	Added DoesFileExist(), which uses the same logic as Load()
-//							to determine if a realm file exists.  Also added Open()
-//							as a common function for DoesFileExist() and Load() to use.
-//
-//		09/12/97	JMI	Now, if ENABLE_PLAY_SPECIFIC_REALMS_ONLY is defined, we
-//							try to load the .RLM out of memory using
-//							GetMemFileResource().
-//
-//		09/12/97 MJR	Now Open() will detect an empty filename as an error,
-//							which avoids the ASSERT() that the Microsoft Runtime
-//							library does when you pass open() and empty string.
-//
-//		11/21/97	JMI	Added bCoopMode flag indicating whether we're in cooperative
-//							or deathmatch mode when in multiplayer.
+//      07/09/97   JMI   Added function to get the full path for a 2D resource
+//                     based on the current hood setting for 'Use top-view 2Ds'.
+//
+//      07/09/97   JMI   Moved m_s2dResPathIndex from CHood to CRealm b/c of order
+//                     issues when loading.
+//
+//      07/10/97 BRH   Added cases to IsEndOfLevelGoalMet for the different
+//                     scoring modes.
+//
+//      07/11/97   JMI   Minor change in IsEndOfLevelGoalMet() to make it so, if
+//                     there are zero births, the goal is considered met.  A
+//                     special case for example levels that have no enemies.
+//
+//      07/11/97 BRH   Added time calculations here for expiration date.  Checked
+//                     in again to update source safe with correct date.
+//
+//      07/12/97   JMI   Added m_bMultiplayer, which signifies whether this is
+//                     a multi or single player game.
+//                     Also, added Init().  See proto for details.
+//                     Moved things that were being initialized both in CRealm()
+//                     and in Clear() to Init() which is called by these two
+//                     functions.
+//                     Also, moved the initialization of the population statistics
+//                     into Init() even though they were only being done on a
+//                     Clear().  This might be bad but it did not seem like it
+//                     could hurt.
+//
+//      07/12/97 BRH   Made minor change to the EditModify dialog so that the
+//                     seconds always appears as two digits.
+//
+//      07/14/97   JMI   Moved initialization of Pylon stuff into Init() and also
+//                     no m_ucNextPylonId is 1 instead of 0.
+//
+//      07/14/97 BRH   Fixed a bug that caused the score timer to always count up.
+//                     Fixed problems with the goal stopping conditions and added
+//                     m_sFlagbaseCaptured to keep track of flags that were
+//                     successfully returned to their base.
+//
+//      07/15/97 BRH   Added the end of level key flag as a parameter to
+//                     the end of level goal check.
+//
+//      07/16/97 BRH   Fixed a problem with standard scoring mode on levels
+//                     that didn't have any enemies, they would end right
+//                     away using the new method of checking the end of
+//                     the level.
+//
+//      07/17/97 BRH   Added the time adjustment to the mac version.
+//
+//      07/27/97 BRH   Added m_lScoreInitialTime and set it to the same
+//                     initial value as m_lScoreDisplayTimer.  This was required
+//                     in order to calculate the time elapsed for the high
+//                     scores.
+//
+//      07/30/97 BRH   Added a string to hold the path of the realm which will
+//                     be used by the high score function to identify the
+//                     current realm file.
+//
+//      08/05/97   JMI   Now pauses only active sounds so that new sounds can
+//                     continue to play while the realm is suspended.
+//
+//      08/05/97   JMI   Added CRealm::Flags struct and an instance in CRealm,
+//                     m_flags.
+//
+//      08/08/97   JMI   Now displays a useful message about the thing that failed
+//                     to load should one do so.
+//
+//      08/09/97   JMI   Added progress callback and components.  There is now a
+//                     callback member that is called (when non-zero) that passes
+//                     the number of items processed so far and the total number of
+//                     items to process.  The return value of the callback dictates
+//                     whether to proceed with the operation.  Although, this is
+//                     meant to be generic so we can use it for any type of
+//                     process, it is currently only used by Load() and Save().
+//
+//      08/11/97 BRH   Changed both Capture the flag goals to flagbases captured
+//                     rather than flags captured.
+//
+//      08/19/97 BRH   Fixed end of level goal for the checkpoint scoring so
+//                     if a specific number of flags is not set in the realm
+//                     file, it will just continue until the time runs out.
+//
+//      08/20/97   JMI   Made ms_apsz2dResPaths[] a static class member (was just
+//                     defined at realm.cpp file scope) and added enum macro for
+//                     number of elements.
+//
+//      08/28/97 BRH   Changed level goals for challenge scoring modes to use
+//                     the population numbers rather than just the hostile numbers
+//                     so that the victims count also.
+//
+//      08/30/97   JMI   IsEndOfLevelGoalMet() now allows a player to go on in
+//                     Timed and Checkpoint, if they hit the 'next level' key.
+//
+//      08/30/97   JMI   Now initializes hostile deaths and population deaths in
+//                     Startup().
+//
+//      09/02/97   JMI   Now resets all population statistics in Startup().
+//
+//      09/04/97 BRH   Realm::Load now attempts several paths.  It first tries
+//                     the path passed in for the case where the user
+//                     specified a full path using the open dialog.  Then it
+//                     tries the HD path and then the CD path if those fail.
+//                     This would allow us to send updated realm files
+//                     that could be loaded instead of the ones on the CD
+//                     just by putting them in the mirror path on the HD.
+//
+//      09/07/97 BRH   Changed end of level goal to never end the MPFrag if
+//                     the kills goal is set to zero.  That will mean no
+//                     frag limit.
+//
+//      09/09/97   JMI   Now checks number of flags against the actual number of
+//                     flags when using CheckPoint.
+//
+//      09/11/97 MJR   Added DoesFileExist(), which uses the same logic as Load()
+//                     to determine if a realm file exists.  Also added Open()
+//                     as a common function for DoesFileExist() and Load() to use.
+//
+//      09/12/97   JMI   Now, if ENABLE_PLAY_SPECIFIC_REALMS_ONLY is defined, we
+//                     try to load the .RLM out of memory using
+//                     GetMemFileResource().
+//
+//      09/12/97 MJR   Now Open() will detect an empty filename as an error,
+//                     which avoids the ASSERT() that the Microsoft Runtime
+//                     library does when you pass open() and empty string.
+//
+//      11/21/97   JMI   Added bCoopMode flag indicating whether we're in cooperative
+//                     or deathmatch mode when in multiplayer.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define REALM_CPP
@@ -354,33 +354,33 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Sets the specified value into the data pointed, if the ptr is not NULL.
-#define SET(ptr, val)	( (ptr != NULL) ? *ptr = val : val)
+#define SET(ptr, val)   ( (ptr != NULL) ? *ptr = val : val)
 
 // Time, in ms, between status updates.
-#define STATUS_UPDATE_INTERVAL	1000
+#define STATUS_UPDATE_INTERVAL   1000
 
-#define STATUS_PRINT_X					0
-#define STATUS_PRINT_Y					0
+#define STATUS_PRINT_X               0
+#define STATUS_PRINT_Y               0
 
-#define STATUS_FONT_SIZE				19
-#define STATUS_FONT_FORE_INDEX		2
-#define STATUS_FONT_BACK_INDEX		0
-#define STATUS_FONT_SHADOW_INDEX		0
+#define STATUS_FONT_SIZE            19
+#define STATUS_FONT_FORE_INDEX      2
+#define STATUS_FONT_BACK_INDEX      0
+#define STATUS_FONT_SHADOW_INDEX      0
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
-#define MAX_SMASH_DIAMETER				20
+#define MAX_SMASH_DIAMETER            20
 
-#define REALM_DIALOG_FILE				"res/editor/realm.gui"
+#define REALM_DIALOG_FILE            "res/editor/realm.gui"
 
-#define TIMER_MIN_EDIT_ID				201
-#define TIMER_SEC_EDIT_ID				202
-#define KILLS_NUM_EDIT_ID				203
-#define KILLS_PCT_EDIT_ID				204
-#define FLAGS_NUM_EDIT_ID				205
-#define SCORE_MODE_LB_ID				99
-#define SCORE_MODE_LIST_BASE			100
+#define TIMER_MIN_EDIT_ID            201
+#define TIMER_SEC_EDIT_ID            202
+#define KILLS_NUM_EDIT_ID            203
+#define KILLS_PCT_EDIT_ID            204
+#define FLAGS_NUM_EDIT_ID            205
+#define SCORE_MODE_LB_ID            99
+#define SCORE_MODE_LIST_BASE         100
 
 
 
@@ -398,7 +398,7 @@ short CRealm::ms_sFileCount;
 short CRealm::ms_asAttribToLayer[CRealm::LayerAttribMask + 1];
 
 // Names of layers.  Use Layer enum values to index.
-char* CRealm::ms_apszLayerNames[TotalLayers]	=
+char* CRealm::ms_apszLayerNames[TotalLayers]   =
 {
    "Background",
 
@@ -453,7 +453,7 @@ char* CRealm::ms_apszLayerNames[TotalLayers]	=
 // These are the various 2d paths that we currently support.  Eventually, if
 // there's more than two, this can be presented in listbox form (instead of
 // checkbox form).
-char*	CRealm::ms_apsz2dResPaths[Num2dPaths]	=
+char*   CRealm::ms_apsz2dResPaths[Num2dPaths]   =
 {
    "2d/Top/",
    "2d/Side/",
@@ -483,10 +483,10 @@ void Map3Dto2D(   // Returns nothing.
    TIn tZ,           // In.
    TOut* ptX,        // Out.
    TOut* ptY,        // Out.
-   short	sViewAngle) // In:  View angle in degrees.
+   short sViewAngle)   // In:  View angle in degrees.
 {
-   *ptX	= tX;
-   *ptY	= SINQ[sViewAngle] * tZ - COSQ[sViewAngle] * tY;
+   *ptX   = tX;
+   *ptY   = SINQ[sViewAngle] * tZ - COSQ[sViewAngle] * tY;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -497,11 +497,11 @@ template <class TIn, class TOut>
 void MapZ3DtoY2D(    // Returns nothing.
    TIn tZIn,         // In.
    TOut* ptYOut,     // Out.
-   short	sViewAngle) // In:  View angle in degrees.
+   short sViewAngle)   // In:  View angle in degrees.
 {
    ASSERT(sViewAngle >= 0 && sViewAngle < 360);
 
-   *ptYOut	= SINQ[sViewAngle] * tZIn;
+   *ptYOut   = SINQ[sViewAngle] * tZIn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -512,18 +512,18 @@ template <class TIn, class TOut>
 void MapY2DtoZ3D(    // Returns nothing.
    TIn tYIn,         // In.
    TOut* ptZOut,     // Out.
-   short	sViewAngle) // In:  View angle in degrees.
+   short sViewAngle)   // In:  View angle in degrees.
 {
    ASSERT(sViewAngle >= 0 && sViewAngle < 360);
 
    REAL rSin  = SINQ[sViewAngle];
    if (rSin != 0.0)
    {
-      *ptZOut	= tYIn / rSin;
+      *ptZOut   = tYIn / rSin;
    }
    else
    {
-      *ptZOut	= 0;
+      *ptZOut   = 0;
    }
 }
 
@@ -535,11 +535,11 @@ template <class TIn, class TOut>
 void MapY3DtoY2D(    // Returns nothing.
    TIn tYIn,         // In.
    TOut* ptYOut,     // Out.
-   short	sViewAngle) // In:  View angle in degrees.
+   short sViewAngle)   // In:  View angle in degrees.
 {
    ASSERT(sViewAngle >= 0 && sViewAngle < 360);
 
-   *ptYOut	= COSQ[sViewAngle] * tYIn;
+   *ptYOut   = COSQ[sViewAngle] * tYIn;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -550,18 +550,18 @@ template <class TIn, class TOut>
 void MapY2DtoY3D(    // Returns nothing.
    TIn tYIn,         // In.
    TOut* ptYOut,     // Out.
-   short	sViewAngle) // In:  View angle in degrees.
+   short sViewAngle)   // In:  View angle in degrees.
 {
    ASSERT(sViewAngle >= 0 && sViewAngle < 360);
 
    REAL rCos  = COSQ[sViewAngle];
    if (rCos != 0.0)
    {
-      *ptYOut	= tYIn / rCos;
+      *ptYOut   = tYIn / rCos;
    }
    else
    {
-      *ptYOut	= 0;
+      *ptYOut   = 0;
    }
 }
 
@@ -592,20 +592,20 @@ CRealm::CRealm()
    m_pTriggerMapHolder = 0;
 
    // Set Hood ptr to a safe (but invalid) value.
-   m_phood			= NULL;
+   m_phood         = NULL;
 
 /*
-	// Create a container of things for each element in the array
-	short	s;
-	for (s = 0; s < CThing::TotalIDs; s++)
-		m_apthings[s] = new CThing::Things;
+   // Create a container of things for each element in the array
+   short   s;
+   for (s = 0; s < CThing::TotalIDs; s++)
+      m_apthings[s] = new CThing::Things;
 */
 
    // Initialize current Navigation Net pointer
    m_pCurrentNavNet = NULL;
 
    // Not currently updating.
-   m_bUpdating		= false;
+   m_bUpdating      = false;
 
    // Initialize dummy nodes for linked lists of CThings
    m_everythingHead.m_pnNext = &m_everythingTail;
@@ -629,7 +629,7 @@ CRealm::CRealm()
 
    m_sNumThings = 0;
 
-   m_sNumSuspends	= 0;
+   m_sNumSuspends   = 0;
 
    // Setup print.
    ms_print.SetFont(STATUS_FONT_SIZE, &g_fontBig);
@@ -641,13 +641,13 @@ CRealm::CRealm()
    // Initialize flags to defaults for safety.
    // This might be a bad idea if we want to guarantee they get set in which
    // case we should maybe set them to absurd values.
-   m_flags.bMultiplayer	= false;
-   m_flags.bCoopMode		= false;
-   m_flags.bEditing		= false;
-   m_flags.bEditPlay		= false;
-   m_flags.sDifficulty	= 5;
+   m_flags.bMultiplayer   = false;
+   m_flags.bCoopMode      = false;
+   m_flags.bEditing      = false;
+   m_flags.bEditPlay      = false;
+   m_flags.sDifficulty   = 5;
 
-   m_fnProgress			= NULL;
+   m_fnProgress         = NULL;
 
    m_bPressedEndLevelKey = false;
 
@@ -698,7 +698,7 @@ void CRealm::Init(void)    // Returns nothing.  Cannot fail.
    m_s2dResPathIndex = 1;
 
    // Reset timer.
-   m_lLastStatusDrawTime	= -STATUS_UPDATE_INTERVAL;
+   m_lLastStatusDrawTime   = -STATUS_UPDATE_INTERVAL;
 
    // Pylon stuff
    short i;
@@ -797,8 +797,8 @@ short CRealm::Open(                             // Returns 0 if successfull, non
       #else
       // There's only one place it can possibly be and, if it's not there,
       // no realm for you!
-      sResult	= GetMemFileResource(pszFileName, RFile::LittleEndian, pfile);
-      #endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+      sResult   = GetMemFileResource(pszFileName, RFile::LittleEndian, pfile);
+      #endif   // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
    }
    else
    {
@@ -965,7 +965,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                         else
                         {
                            // Callback has decided to end this operation.
-                           sResult	= 1;
+                           sResult   = 1;
                         }
                      }
 
@@ -992,7 +992,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                               if (sResult == 0)
                               {
                                  // Store last thing to successfully load.
-                                 idLastThingLoaded	= id;
+                                 idLastThingLoaded   = id;
                                  // If there's a callback . . .
                                  if (m_fnProgress)
                                  {
@@ -1004,7 +1004,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                                     else
                                     {
                                        // Callback has decided to end this operation.
-                                       sResult	= 1;
+                                       sResult   = 1;
                                     }
                                  }
                               }
@@ -1084,8 +1084,8 @@ short CRealm::Load(                             // Returns 0 if successfull, non
 
       // Allocate the Smashatorium:
       // Kill old...*
-      short	sOldW = m_smashatorium.m_sWorldW;
-      short	sOldH = m_smashatorium.m_sWorldH;
+      short   sOldW = m_smashatorium.m_sWorldW;
+      short   sOldH = m_smashatorium.m_sWorldH;
       short sOldTileW = m_smashatorium.m_sTileW;
       short sOldTileH = m_smashatorium.m_sTileH;
 
@@ -1177,14 +1177,14 @@ short CRealm::Save(                             // Returns 0 if successfull, non
       else
       {
          // Callback has decided to end this operation.
-         sResult	= 1;
+         sResult   = 1;
       }
    }
 
    // Do this for all of the objects
    CListNode<CThing>* pCur;
    CListNode<CThing>* pNext = m_everythingHead.m_pnNext;
-   short	sCurItemNum	= 0;
+   short sCurItemNum   = 0;
    while (pNext->m_powner != NULL && !sResult)
    {
       pCur = pNext;
@@ -1212,7 +1212,7 @@ short CRealm::Save(                             // Returns 0 if successfull, non
             else
             {
                // Callback has decided to end this operation.
-               sResult	= 1;
+               sResult   = 1;
             }
          }
       }
@@ -1263,7 +1263,7 @@ short CRealm::Startup(void)                     // Returns 0 if successfull, non
    // calling one object may result in indirectly changing another's flag!
    short sDone;
    S32 lPassNum = 0;
-   do	{
+   do   {
       // Always assume this will be the last pass.  If it isn't, this flag will
       // be reset to 0, and we'll do the whole thing again.
       sDone = 1;
@@ -1313,7 +1313,7 @@ short CRealm::Shutdown(void)                    // Returns 0 if successfull, non
    short sDone;
    short sFirstTime = 1;
    S32 lPassNum = 0;
-   do	{
+   do   {
       // Always assume this will be the last pass.  If it isn't, this flag will
       // be reset to 0, and we'll do the whole thing again.
       sDone = 1;
@@ -1431,7 +1431,7 @@ void CRealm::Update(void)
    rspStartProfile("Realm Update");
 
    // Entering update loop.
-   m_bUpdating	= true;
+   m_bUpdating   = true;
 
    // Do this for everything.
    CThing* pthing;
@@ -1453,7 +1453,7 @@ void CRealm::Update(void)
    m_lPrevTime = m_lThisTime;
 
    // Leaving update loop.
-   m_bUpdating	= false;
+   m_bUpdating   = false;
 
    rspEndProfile("Realm Update");
 }
@@ -1465,7 +1465,7 @@ void CRealm::Update(void)
 void CRealm::Render(void)
 {
    // Entering update loop.
-   m_bUpdating	= true;
+   m_bUpdating   = true;
 
    // Do this for everything.
    CThing* pthing;
@@ -1478,7 +1478,7 @@ void CRealm::Render(void)
    }
 
    // Leaving update loop.
-   m_bUpdating	= false;
+   m_bUpdating   = false;
 }
 
 // This old way probably doesn't make sense any more since we're going to allow
@@ -1489,36 +1489,36 @@ void CRealm::Render(void)
 // S32, and needs to get done no matter what view we're talking about.
 /*
 void CRealm::Render(
-	short sViewX,											// In:  X coord of view
-	short sViewY,											// In:  Y coord of view
-	short sViewW,											// In:  Width of view
-	short sViewH,											// In:  Height of view
-	RImage* pimDst,										// In:  Image to render to
-	short sDstX,											// In:  X coord to draw to
-	short sDstY)											// In:  Y coord to draw to
-	{
-	// It may turn out that some objects want to do their own clipping to see if
-	// they need to add themselves to the scene.  I would guess this would be
-	// the exception rather than the rule, so when (or if) such a requirement
-	// comes up, we shouldn't pass the view info to each object, but instead
-	// should create a function that objects can call to get the view info, the
-	// idea being that this would be faster overall than passing all that data
-	// to each object only to have it ignored most of the time.
+   short sViewX,                                 // In:  X coord of view
+   short sViewY,                                 // In:  Y coord of view
+   short sViewW,                                 // In:  Width of view
+   short sViewH,                                 // In:  Height of view
+   RImage* pimDst,                              // In:  Image to render to
+   short sDstX,                                 // In:  X coord to draw to
+   short sDstY)                                 // In:  Y coord to draw to
+   {
+   // It may turn out that some objects want to do their own clipping to see if
+   // they need to add themselves to the scene.  I would guess this would be
+   // the exception rather than the rule, so when (or if) such a requirement
+   // comes up, we shouldn't pass the view info to each object, but instead
+   // should create a function that objects can call to get the view info, the
+   // idea being that this would be faster overall than passing all that data
+   // to each object only to have it ignored most of the time.
 
-	// Do this for everything
-	for (CThing::Things::iterator i = m_everything.begin(); i != m_everything.end(); i++)
-		(*i)->Render();
+   // Do this for everything
+   for (CThing::Things::iterator i = m_everything.begin(); i != m_everything.end(); i++)
+      (*i)->Render();
 
-	// Render specified view to specified position in specified image
-	m_scene.Render(
-		sViewX,
-		sViewY,
-		sViewW,
-		sViewH,
-		pimDst,
-		sDstX,
-		sDstY);
-	}
+   // Render specified view to specified position in specified image
+   m_scene.Render(
+      sViewX,
+      sViewY,
+      sViewW,
+      sViewH,
+      pimDst,
+      sDstX,
+      sDstY);
+   }
 */
 
 
@@ -1567,36 +1567,36 @@ void CRealm::EditRender(void)
 // S32, and needs to get done no matter what view we're talking about.
 /*
 void CRealm::EditRender(
-	short sViewX,											// In:  X coord of view
-	short sViewY,											// In:  Y coord of view
-	short sViewW,											// In:  Width of view
-	short sViewH,											// In:  Height of view
-	RImage* pimDst,										// In:  Image to render to
-	short sDstX,											// In:  X coord to draw to
-	short sDstY)											// In:  Y coord to draw to
-	{
-	// It may turn out that some objects want to do their own clipping to see if
-	// they need to add themselves to the render.  I would guess this would be
-	// the exception rather than the rule, so when (or if) such a requirement
-	// comes up, we shouldn't pass the view info to each object, but instead
-	// should create a function that objects can call to get the view info, the
-	// idea being that this would be faster overall than passing all that data
-	// to each object only to have it ignored most of the time.
+   short sViewX,                                 // In:  X coord of view
+   short sViewY,                                 // In:  Y coord of view
+   short sViewW,                                 // In:  Width of view
+   short sViewH,                                 // In:  Height of view
+   RImage* pimDst,                              // In:  Image to render to
+   short sDstX,                                 // In:  X coord to draw to
+   short sDstY)                                 // In:  Y coord to draw to
+   {
+   // It may turn out that some objects want to do their own clipping to see if
+   // they need to add themselves to the render.  I would guess this would be
+   // the exception rather than the rule, so when (or if) such a requirement
+   // comes up, we shouldn't pass the view info to each object, but instead
+   // should create a function that objects can call to get the view info, the
+   // idea being that this would be faster overall than passing all that data
+   // to each object only to have it ignored most of the time.
 
-	// Do this for everything
-	for (CThing::Things::iterator i = m_everything.begin(); i != m_everything.end(); i++)
-		(*i)->EditRender();
+   // Do this for everything
+   for (CThing::Things::iterator i = m_everything.begin(); i != m_everything.end(); i++)
+      (*i)->EditRender();
 
-	// Render specified view to specified position in specified image
-	m_scene.Render(
-		sViewX,
-		sViewY,
-		sViewW,
-		sViewH,
-		pimDst,
-		sDstX,
-		sDstY);
-	}
+   // Render specified view to specified position in specified image
+   m_scene.Render(
+      sViewX,
+      sViewY,
+      sViewW,
+      sViewH,
+      pimDst,
+      sDstX,
+      sDstY);
+   }
 */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1604,13 +1604,13 @@ void CRealm::EditRender(
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::EditModify(void)
 {
-   RGuiItem*	pguiRoot	= RGuiItem::LoadInstantiate(FullPathVD(REALM_DIALOG_FILE));
-   RProcessGui	guiDialog;
+   RGuiItem*   pguiRoot   = RGuiItem::LoadInstantiate(FullPathVD(REALM_DIALOG_FILE));
+   RProcessGui guiDialog;
 
    if (pguiRoot != NULL)
    {
-      RGuiItem*	pguiOk		= pguiRoot->GetItemFromId(1);
-      RGuiItem*	pguiCancel	= pguiRoot->GetItemFromId(2);
+      RGuiItem*   pguiOk      = pguiRoot->GetItemFromId(1);
+      RGuiItem*   pguiCancel   = pguiRoot->GetItemFromId(2);
 
       REdit* peditMinutes = (REdit*) pguiRoot->GetItemFromId(TIMER_MIN_EDIT_ID);
       REdit* peditSeconds = (REdit*) pguiRoot->GetItemFromId(TIMER_SEC_EDIT_ID);
@@ -1684,7 +1684,7 @@ extern "C"
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 // IsEndOfLevelGoalMet - check to see if level is complete based on the
-//								 scoring and game play mode.
+//                         scoring and game play mode.
 ////////////////////////////////////////////////////////////////////////////////
 bool CRealm::IsEndOfLevelGoalMet(bool bEndLevelKey)
 {
@@ -1749,7 +1749,7 @@ bool CRealm::IsEndOfLevelGoalMet(bool bEndLevelKey)
    // the goal is considered met.
    case TimedFlag:
    case MPTimedFlag:
-//			if (m_lScoreTimeDisplay > 0 && m_sFlagsCaptured < m_sFlagsGoal)
+//         if (m_lScoreTimeDisplay > 0 && m_sFlagsCaptured < m_sFlagsGoal)
       if (m_lScoreTimeDisplay > 0 && m_sFlagbaseCaptured < m_sFlagsGoal)
          bEnd = false;
       break;
@@ -1821,7 +1821,7 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
                                  // Returns false, if only a portion of the path is clear.
                                  // (see *psX, *psY, *psZ).
    short sX,                     // In:  Starting X.
-   short	sY,                     // In:  Starting Y.
+   short sY,                       // In:  Starting Y.
    short sZ,                     // In:  Starting Z.
    short sRotY,                  // In:  Rotation around y axis (direction on X/Z plane).
    double dCrawlRate,            // In:  Rate at which to scan ('crawl') path in pixels per
@@ -1831,7 +1831,7 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
                                  // at only one pixel.
                                  // NOTE: We could change this to a speed in pixels per second
                                  // where we'd assume a certain frame rate.
-   short	sDistanceXZ,            // In:  Distance on X/Z plane.
+   short sDistanceXZ,              // In:  Distance on X/Z plane.
    short sVerticalTolerance /*= 0*/,   // In:  Max traverser can step up.
    short* psX /*= NULL*/,        // Out: If not NULL, last clear point on path.
    short* psY /*= NULL*/,        // Out: If not NULL, last clear point on path.
@@ -1850,30 +1850,30 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
    // a reasonable increase in the speed of this alg.
 
    // sAngle must be between 0 and 359.
-   sRotY	= rspMod360(sRotY);
+   sRotY   = rspMod360(sRotY);
 
-   float	fRateX		= COSQ[sRotY] * dCrawlRate;
-   float	fRateZ		= -SINQ[sRotY] * dCrawlRate;
-   float	fRateY		= 0.0;   // If we ever want vertical movement . . .
+   float fRateX      = COSQ[sRotY] * dCrawlRate;
+   float fRateZ      = -SINQ[sRotY] * dCrawlRate;
+   float fRateY      = 0.0;     // If we ever want vertical movement . . .
 
    // Set initial position to first point to check (NEVER checks original position).
-   float	fPosX			= sX + fRateX;
-   float	fPosY			= sY + fRateY;
-   float	fPosZ			= sZ + fRateZ;
+   float fPosX         = sX + fRateX;
+   float fPosY         = sY + fRateY;
+   float fPosZ         = sZ + fRateZ;
 
    // Determine amount traveled per iteration on X/Z plane just once.
-   float	fIterDistXZ		= rspSqrt(ABS2(fRateX, fRateZ) );
+   float fIterDistXZ      = rspSqrt(ABS2(fRateX, fRateZ) );
 
-   float	fTotalDistXZ	= 0.0F;
+   float fTotalDistXZ   = 0.0F;
 
    // Store extents.
-   short	sMaxX			= GetRealmWidth();
-   short	sMaxZ			= GetRealmHeight();
+   short sMaxX         = GetRealmWidth();
+   short sMaxZ         = GetRealmHeight();
 
-   short	sMinX			= 0;
-   short	sMinZ			= 0;
+   short sMinX         = 0;
+   short sMinZ         = 0;
 
-   short	sCurH;
+   short sCurH;
 
    bool bInsurmountableHeight   = false;
 
@@ -1885,20 +1885,20 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
       && fPosZ < sMaxZ
       && fTotalDistXZ < sDistanceXZ)
    {
-      sCurH	= GetHeight((short)fPosX, (short)fPosZ);
+      sCurH   = GetHeight((short)fPosX, (short)fPosZ);
       // If too big a height difference . . .
       if (sCurH - fPosY > sVerticalTolerance)
       {
-         bInsurmountableHeight	= true;
+         bInsurmountableHeight   = true;
          break;
       }
 
       // Update position.
-      fPosX	+= fRateX;
-      fPosY	=	MAX(fPosY, (float)sCurH);
-      fPosZ	+= fRateZ;
+      fPosX   += fRateX;
+      fPosY   =   MAX(fPosY, (float)sCurH);
+      fPosZ   += fRateZ;
       // Update distance travelled on X/Z plane.
-      fTotalDistXZ	+= fIterDistXZ;
+      fTotalDistXZ   += fIterDistXZ;
    }
 
    // Set end pt.
@@ -1909,19 +1909,19 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
    // If we made it the whole way . . .
    if (fTotalDistXZ >= sDistanceXZ)
    {
-      bEntirelyClear	= true;
+      bEntirelyClear   = true;
    }
    // Else, if we didn't hit any terrain . . .
    else if (bInsurmountableHeight == false)
    {
       // Only clear if we are not checking extents.
-      bEntirelyClear	= !bCheckExtents;
+      bEntirelyClear   = !bCheckExtents;
    }
 
 #if 0
    // FEEDBACK.
    // Create a line sprite.
-   CSpriteLine2d*	psl2d	= new CSpriteLine2d;
+   CSpriteLine2d*   psl2d   = new CSpriteLine2d;
    if (psl2d != NULL)
    {
       Map3Dto2D(
@@ -1936,11 +1936,11 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
          fPosZ,
          &(psl2d->m_sX2End),
          &(psl2d->m_sY2End) );
-      psl2d->m_sPriority	= sZ;
-      psl2d->m_sLayer		= GetLayerViaAttrib(GetLayer(sX, sZ));
-      psl2d->m_u8Color		= (bEntirelyClear == false) ? 249 : 250;
+      psl2d->m_sPriority   = sZ;
+      psl2d->m_sLayer      = GetLayerViaAttrib(GetLayer(sX, sZ));
+      psl2d->m_u8Color      = (bEntirelyClear == false) ? 249 : 250;
       // Destroy when done.
-      psl2d->m_sInFlags	= CSprite::InDeleteOnRender;
+      psl2d->m_sInFlags   = CSprite::InDeleteOnRender;
       // Put 'er there.
       m_scene.UpdateSprite(psl2d);
    }
@@ -1956,7 +1956,7 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
                                  // Returns false, if only a portion of the path is clear.
                                  // (see *psX, *psY, *psZ).
    short sX,                     // In:  Starting X.
-   short	sY,                     // In:  Starting Y.
+   short sY,                       // In:  Starting Y.
    short sZ,                     // In:  Starting Z.
    double dCrawlRate,            // In:  Rate at which to scan ('crawl') path in pixels per
                                  // iteration.
@@ -1965,8 +1965,8 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
                                  // at only one pixel.
                                  // NOTE: We could change this to a speed in pixels per second
                                  // where we'd assume a certain frame rate.
-   short	sDstX,                  // In:  Destination X.
-   short	sDstZ,                  // In:  Destination Z.
+   short sDstX,                    // In:  Destination X.
+   short sDstZ,                    // In:  Destination Z.
    short sVerticalTolerance /*= 0*/,   // In:  Max traverser can step up.
    short* psX /*= NULL*/,        // Out: If not NULL, last clear point on path.
    short* psY /*= NULL*/,        // Out: If not NULL, last clear point on path.
@@ -1975,8 +1975,8 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
                                     // inhibitor.  If false, reaching the edge of the realm
                                     // indicates a clear path.
 {
-   short	sDistanceXZ	= rspSqrt(ABS2(sDstX - sX, sZ - sDstZ) );
-   short	sRotY			= rspATan(sZ - sDstZ, sDstX - sX);
+   short sDistanceXZ   = rspSqrt(ABS2(sDstX - sX, sZ - sDstZ) );
+   short sRotY         = rspATan(sZ - sDstZ, sDstX - sX);
 
    return IsPathClear(     // Returns true, if the entire path is clear.
                            // Returns false, if only a portion of the path is clear.
@@ -2007,18 +2007,18 @@ bool CRealm::IsPathClear(        // Returns true, if the entire path is clear.
 // current status.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::DrawStatus(   // Returns nothing.
-   RImage*	pim,           // In:  Image in which to draw status.
-   RRect*	prc)           // In:  Rectangle in which to draw status.  Clips to.
+   RImage*   pim,           // In:  Image in which to draw status.
+   RRect*   prc)           // In:  Rectangle in which to draw status.  Clips to.
 {
    S32 lCurTime = m_time.GetGameTime();
    if (lCurTime > m_lLastStatusDrawTime + STATUS_UPDATE_INTERVAL)
    {
       // Set print/clip to area.
-      RRect	rcDst;
-      rcDst.sX	= prc->sX + STATUS_PRINT_X;
+      RRect rcDst;
+      rcDst.sX   = prc->sX + STATUS_PRINT_X;
       rcDst.sY = prc->sY + STATUS_PRINT_Y;
       rcDst.sW = prc->sW - STATUS_PRINT_X;
-      rcDst.sH	= prc->sH - STATUS_PRINT_Y;
+      rcDst.sH   = prc->sH - STATUS_PRINT_Y;
       // Clear.
       rspRect(RSP_BLACK_INDEX, pim, rcDst.sX, rcDst.sY, rcDst.sW, rcDst.sH);
 
@@ -2034,7 +2034,7 @@ void CRealm::DrawStatus(   // Returns nothing.
          (short)m_dKillsPercentGoal
          );
 
-      m_lLastStatusDrawTime	= lCurTime;
+      m_lLastStatusDrawTime   = lCurTime;
    }
 }
 
@@ -2044,8 +2044,8 @@ void CRealm::DrawStatus(   // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::Map3Dto2D( // Returns nothing.
    short sX,            // In.
-   short	sY,            // In.
-   short	sZ,            // In.
+   short sY,              // In.
+   short sZ,              // In.
    short* psX,          // Out.
    short* psY)          // Out.
 {
@@ -2073,7 +2073,7 @@ void CRealm::Map3Dto2D( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapZ3DtoY2D(  // Returns nothing.
    double dZIn,            // In.
-   double*	pdYOut)        // Out.
+   double*   pdYOut)        // Out.
 {
    ::MapZ3DtoY2D(dZIn, pdYOut, m_phood->GetRealmRotX() );
 }
@@ -2083,8 +2083,8 @@ void CRealm::MapZ3DtoY2D(  // Returns nothing.
 // view angle (~angle of projection).
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapZ3DtoY2D(  // Returns nothing.
-   short	sZIn,             // In.
-   short*	psYOut)        // Out.
+   short sZIn,               // In.
+   short*   psYOut)        // Out.
 {
    ::MapZ3DtoY2D(sZIn, psYOut, m_phood->GetRealmRotX() );
 }
@@ -2095,7 +2095,7 @@ void CRealm::MapZ3DtoY2D(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY2DtoZ3D(  // Returns nothing.
    double dYIn,            // In.
-   double*	pdZOut)        // Out.
+   double*   pdZOut)        // Out.
 {
    ::MapY2DtoZ3D(dYIn, pdZOut, m_phood->GetRealmRotX() );
 }
@@ -2105,8 +2105,8 @@ void CRealm::MapY2DtoZ3D(  // Returns nothing.
 // view angle (~angle of projection).
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY2DtoZ3D(  // Returns nothing.
-   short	sYIn,             // In.
-   short*	psZOut)        // Out.
+   short sYIn,               // In.
+   short*   psZOut)        // Out.
 {
    ::MapY2DtoZ3D(sYIn, psZOut, m_phood->GetRealmRotX() );
 }
@@ -2117,7 +2117,7 @@ void CRealm::MapY2DtoZ3D(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY3DtoY2D(  // Returns nothing.
    double dYIn,            // In.
-   double*	pdYOut)        // Out.
+   double*   pdYOut)        // Out.
 {
    ::MapY3DtoY2D(dYIn, pdYOut, m_phood->GetRealmRotX() );
 }
@@ -2127,8 +2127,8 @@ void CRealm::MapY3DtoY2D(  // Returns nothing.
 // view angle (~angle of projection).
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY3DtoY2D(  // Returns nothing.
-   short	sYIn,             // In.
-   short*	psYOut)        // Out.
+   short sYIn,               // In.
+   short*   psYOut)        // Out.
 {
    ::MapY3DtoY2D(sYIn, psYOut, m_phood->GetRealmRotX() );
 }
@@ -2139,7 +2139,7 @@ void CRealm::MapY3DtoY2D(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY2DtoY3D(  // Returns nothing.
    double dYIn,            // In.
-   double*	pdYOut)        // Out.
+   double*   pdYOut)        // Out.
 {
    ::MapY2DtoY3D(dYIn, pdYOut, m_phood->GetRealmRotX() );
 }
@@ -2149,8 +2149,8 @@ void CRealm::MapY2DtoY3D(  // Returns nothing.
 // view angle (~angle of projection).
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapY2DtoY3D(  // Returns nothing.
-   short	sYIn,             // In.
-   short*	psYOut)        // Out.
+   short sYIn,               // In.
+   short*   psYOut)        // Out.
 {
    ::MapY2DtoY3D(sYIn, psYOut, m_phood->GetRealmRotX() );
 }
@@ -2159,20 +2159,20 @@ void CRealm::MapY2DtoY3D(  // Returns nothing.
 // If enabled, scales the specified height based on the view angle.
 ////////////////////////////////////////////////////////////////////////////////
 void CRealm::MapAttribHeight( // Returns nothing.
-   short	sHIn,                // In.
-   short*	psHOut)           // Out.
+   short sHIn,                  // In.
+   short*   psHOut)           // Out.
 {
    // If scaling attrib map heights . . .
    if (m_phood->m_sScaleAttribHeights != FALSE)
    {
-      short	sRotX	= m_phood->GetRealmRotX();
+      short sRotX   = m_phood->GetRealmRotX();
 
       // Scale into realm.
       ::MapY2DtoY3D(sHIn, psHOut, sRotX);
    }
    else
    {
-      *psHOut	= sHIn;
+      *psHOut   = sHIn;
    }
 }
 
@@ -2180,17 +2180,17 @@ void CRealm::MapAttribHeight( // Returns nothing.
 //// Terrrain map access functions /////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // Note these had no comments describing their function so I made some very
-// vague comments that I hope were accurate -- JMI	06/28/97.
+// vague comments that I hope were accurate -- JMI   06/28/97.
 
 // Get the terrain height at an x/z position.
 // Zero, if off map.
 short CRealm::GetHeight(short sX, short sZ)
 {
-   short	sRotX	= m_phood->GetRealmRotX();
+   short sRotX   = m_phood->GetRealmRotX();
    // Scale the Z based on the view angle.
    ::MapZ3DtoY2D(sZ, &sZ, sRotX);
 
-   short	sH = 4 * (m_pTerrainMap->GetVal(sX, sZ, 0x0000) & REALM_ATTR_HEIGHT_MASK);
+   short sH = 4 * (m_pTerrainMap->GetVal(sX, sZ, 0x0000) & REALM_ATTR_HEIGHT_MASK);
 
    // Scale into realm.
    MapAttribHeight(sH, &sH);
@@ -2202,16 +2202,16 @@ short CRealm::GetHeight(short sX, short sZ)
 // 'No walk', if off map.
 short CRealm::GetHeightAndNoWalk(   // Returns height at new location.
    short sX,                        // In:  X position to check on map.
-   short	sZ,                        // In:  Z position to check on map.
+   short sZ,                          // In:  Z position to check on map.
    bool* pbNoWalk)                  // Out: true, if 'no walk'.
 {
-   short	sRotX	= m_phood->GetRealmRotX();
+   short sRotX   = m_phood->GetRealmRotX();
    // Scale the Z based on the view angle.
    ::MapZ3DtoY2D(sZ, &sZ, sRotX);
 
    U16 u16Attrib   = m_pTerrainMap->GetVal(sX, sZ, REALM_ATTR_NOT_WALKABLE);
 
-   short	sH = 4 * (u16Attrib & REALM_ATTR_HEIGHT_MASK);
+   short sH = 4 * (u16Attrib & REALM_ATTR_HEIGHT_MASK);
 
    // Scale into realm.
    MapAttribHeight(sH, &sH);
@@ -2219,11 +2219,11 @@ short CRealm::GetHeightAndNoWalk(   // Returns height at new location.
    // Get 'no walk'.
    if (u16Attrib & REALM_ATTR_NOT_WALKABLE)
    {
-      *pbNoWalk	= true;
+      *pbNoWalk   = true;
    }
    else
    {
-      *pbNoWalk	= false;
+      *pbNoWalk   = false;
    }
 
    return sH;
@@ -2306,12 +2306,12 @@ const char* CRealm::Make2dResPath(  // Returns a ptr to an internal static buffe
                                     // on the current hood settings.
    const char* pszResName)          // In:  Resource name to prepend path to.
 {
-   static char	szFullPath[RSP_MAX_PATH];
+   static char szFullPath[RSP_MAX_PATH];
 
    ASSERT(m_s2dResPathIndex < NUM_ELEMENTS(ms_apsz2dResPaths) );
 
    // Get resource path.
-   char*	pszPath	= ms_apsz2dResPaths[m_s2dResPathIndex];
+   char*   pszPath   = ms_apsz2dResPaths[m_s2dResPathIndex];
 
    ASSERT(strlen(pszPath) + strlen(pszResName) < sizeof(szFullPath) );
 
@@ -2336,37 +2336,37 @@ void CRealm::CreateLayerMap(void)
       for (l = 0; l < NUM_ELEMENTS(ms_asAttribToLayer); l++)
       {
          if (l & 0x0001)
-            ms_asAttribToLayer[l]	= LayerSprite1;
+            ms_asAttribToLayer[l]   = LayerSprite1;
          else if (l & 0x0002)
-            ms_asAttribToLayer[l]	= LayerSprite2;
+            ms_asAttribToLayer[l]   = LayerSprite2;
          else if (l & 0x0004)
-            ms_asAttribToLayer[l]	= LayerSprite3;
+            ms_asAttribToLayer[l]   = LayerSprite3;
          else if (l & 0x0008)
-            ms_asAttribToLayer[l]	= LayerSprite4;
+            ms_asAttribToLayer[l]   = LayerSprite4;
          else if (l & 0x0010)
-            ms_asAttribToLayer[l]	= LayerSprite5;
+            ms_asAttribToLayer[l]   = LayerSprite5;
          else if (l & 0x0020)
-            ms_asAttribToLayer[l]	= LayerSprite6;
+            ms_asAttribToLayer[l]   = LayerSprite6;
          else if (l & 0x0040)
-            ms_asAttribToLayer[l]	= LayerSprite7;
+            ms_asAttribToLayer[l]   = LayerSprite7;
          else if (l & 0x0080)
-            ms_asAttribToLayer[l]	= LayerSprite8;
+            ms_asAttribToLayer[l]   = LayerSprite8;
          else if (l & 0x0100)
-            ms_asAttribToLayer[l]	= LayerSprite9;
+            ms_asAttribToLayer[l]   = LayerSprite9;
          else if (l & 0x0200)
-            ms_asAttribToLayer[l]	= LayerSprite10;
+            ms_asAttribToLayer[l]   = LayerSprite10;
          else if (l & 0x0400)
-            ms_asAttribToLayer[l]	= LayerSprite11;
+            ms_asAttribToLayer[l]   = LayerSprite11;
          else if (l & 0x0800)
-            ms_asAttribToLayer[l]	= LayerSprite12;
+            ms_asAttribToLayer[l]   = LayerSprite12;
          else if (l & 0x1000)
-            ms_asAttribToLayer[l]	= LayerSprite13;
+            ms_asAttribToLayer[l]   = LayerSprite13;
          else if (l & 0x2000)
-            ms_asAttribToLayer[l]	= LayerSprite14;
+            ms_asAttribToLayer[l]   = LayerSprite14;
          else if (l & 0x4000)
-            ms_asAttribToLayer[l]	= LayerSprite15;
+            ms_asAttribToLayer[l]   = LayerSprite15;
          else
-            ms_asAttribToLayer[l]	= LayerSprite16;
+            ms_asAttribToLayer[l]   = LayerSprite16;
       }
    }
 }

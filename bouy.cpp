@@ -19,141 +19,141 @@
 // Project: Nostril (aka Postal)
 //
 // This module implements the bouy marker for use with the network navagation
-//	system that will help the enemy guys get around the world.
+//   system that will help the enemy guys get around the world.
 //
 // History:
-//		01/28/97 BRH	Added bouy's to the editor which will help with navagation
+//      01/28/97 BRH   Added bouy's to the editor which will help with navagation
 //
-//		02/02/97 BRH	Added NextRouteNode function which will tell you which
-//							bouy you should go to next in order to get to your
-//							destination.
+//      02/02/97 BRH   Added NextRouteNode function which will tell you which
+//                     bouy you should go to next in order to get to your
+//                     destination.
 //
-//		02/03/97 BRH	Added info to the Load and Save functions to save
-//							information needed to reconnect the Bouy network after
-//							loading it.
+//      02/03/97 BRH   Added info to the Load and Save functions to save
+//                     information needed to reconnect the Bouy network after
+//                     loading it.
 //
-//		02/04/97 BRH	Added GetRouteTableEntry() function that can be called
-//							from the CNavigationNet's ping function which will safely
-//							return an entry from the routing table.  If the table
-//							was not large enough, it expands the the current
-//							number of nodes and initializes the data.
+//      02/04/97 BRH   Added GetRouteTableEntry() function that can be called
+//                     from the CNavigationNet's ping function which will safely
+//                     return an entry from the routing table.  If the table
+//                     was not large enough, it expands the the current
+//                     number of nodes and initializes the data.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/23/97 BRH	Changed bouy resource to be under Resource Manager control.
-//							Also changed Render to do nothing and moved its
-//							functionality to EditRender so that the Bouys are not
-//							drawn during game play but only in the editor.
+//      02/23/97 BRH   Changed bouy resource to be under Resource Manager control.
+//                     Also changed Render to do nothing and moved its
+//                     functionality to EditRender so that the Bouys are not
+//                     drawn during game play but only in the editor.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		03/06/97 BRH	Changed to the new calling of Ping which doesn't have the
-//							maxdepth parameter.  Also added a commented out version of
-//							saving the route table but didn't want to include it yet
-//							since it would change the format of the realm files.
+//      03/06/97 BRH   Changed to the new calling of Ping which doesn't have the
+//                     maxdepth parameter.  Also added a commented out version of
+//                     saving the route table but didn't want to include it yet
+//                     since it would change the format of the realm files.
 //
-//		03/07/97	JMI	Now draws the bouy number into it's m_pImage.
+//      03/07/97   JMI   Now draws the bouy number into it's m_pImage.
 //
-//		03/07/97	JMI	Now sets the color of the text to be safe.
+//      03/07/97   JMI   Now sets the color of the text to be safe.
 //
-//		03/07/97 BRH	Played some with the font for the bouys so it would
-//							be easier to see and so it would show 2 digits.
+//      03/07/97 BRH   Played some with the font for the bouys so it would
+//                     be easier to see and so it would show 2 digits.
 //
-//		03/13/97 BRH	Made a few changes to update the routing tables
-//							correctly.  I will also be adding a hops table
-//							in addition to the route table to cut down on the
-//							number of pings required to fill in the tables.  Then
-//							the hops tables can be freed since they aren't needed for
-//							gameplay.
+//      03/13/97 BRH   Made a few changes to update the routing tables
+//                     correctly.  I will also be adding a hops table
+//                     in addition to the route table to cut down on the
+//                     number of pings required to fill in the tables.  Then
+//                     the hops tables can be freed since they aren't needed for
+//                     gameplay.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/11/97 BRH	Adding BuildRoutingTable function which will use a
-//							a Breadth-First search of the tree to determine the
-//							shortest route to all reachable nodes, and will then
-//							use the temporary BSF tree to fill in the routing table.
+//      04/11/97 BRH   Adding BuildRoutingTable function which will use a
+//                     a Breadth-First search of the tree to determine the
+//                     shortest route to all reachable nodes, and will then
+//                     use the temporary BSF tree to fill in the routing table.
 //
-//		04/15/97 BRH	Taking out the old routing method leaving just the new
-//							which seems to be working.
+//      04/15/97 BRH   Taking out the old routing method leaving just the new
+//                     which seems to be working.
 //
-//		04/20/97 BRH	Added MessageRequest function that will send the
-//							bouy's function if it has one.  Also now loads and saves
-//							the message using the message's Load and Save functions.
+//      04/20/97 BRH   Added MessageRequest function that will send the
+//                     bouy's function if it has one.  Also now loads and saves
+//                     the message using the message's Load and Save functions.
 //
-//		04/21/97 BRH	Changed to multiple dialogs for each type of message to
-//							avoid special code to display the correct fields for each
-//							different type of message.
+//      04/21/97 BRH   Changed to multiple dialogs for each type of message to
+//                     avoid special code to display the correct fields for each
+//                     different type of message.
 //
-//		04/24/97 BRH	Fixed problem in Load with new version number.
+//      04/24/97 BRH   Fixed problem in Load with new version number.
 //
-//		05/01/97 BRH	Removed messages for logic suggestions and put those
-//							into the CPylon class instead.
+//      05/01/97 BRH   Removed messages for logic suggestions and put those
+//                     into the CPylon class instead.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/06/97 BRH	Freed three arrays used in BuildRouteTable that had
-//							previously been a source of memory leaks.
+//      06/06/97 BRH   Freed three arrays used in BuildRouteTable that had
+//                     previously been a source of memory leaks.
 //
-//		06/25/97 BRH	Took out the STL set "linkset" because it was causing
-//							sync problems with the game.  Apparently, the set uses
-//							a tree to store its data, and when building that tree,
-//							uses some kind of random function to balance the tree, but
-//							not the standard library rand() function, but a different
-//							random function that we don't reset from realm to realm.
-//							This caused the routing tables to be build differently
-//							each time the game was played, and so the demo mode and
-//							network mode were out of sync.
+//      06/25/97 BRH   Took out the STL set "linkset" because it was causing
+//                     sync problems with the game.  Apparently, the set uses
+//                     a tree to store its data, and when building that tree,
+//                     uses some kind of random function to balance the tree, but
+//                     not the standard library rand() function, but a different
+//                     random function that we don't reset from realm to realm.
+//                     This caused the routing tables to be build differently
+//                     each time the game was played, and so the demo mode and
+//                     network mode were out of sync.
 //
-//		06/29/97 MJR	Removed last trace of STL, replacing vector with RFList.
+//      06/29/97 MJR   Removed last trace of STL, replacing vector with RFList.
 //
-//		06/29/97	JMI	Converted EditRect(), EditRender(), and/or Render() to
-//							use Map3Dto2D().
-//							Also, moved definitions of EditRect() and EditHotSpot() to
-//							here from bouy.h.
+//      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to
+//                     use Map3Dto2D().
+//                     Also, moved definitions of EditRect() and EditHotSpot() to
+//                     here from bouy.h.
 //
-//		06/30/97	JMI	Now maps the Z to 3D when loading fileversions previous to
-//							24.
+//      06/30/97   JMI   Now maps the Z to 3D when loading fileversions previous to
+//                     24.
 //
-//		07/07/97 BRH	Fixed bug when saving bouy networks where bouys had been
-//							deleted.  The Unlink was not correctly decrementing the
-//							number of direct links so it was expecting more direct
-//							links when the file was reloaded.
+//      07/07/97 BRH   Fixed bug when saving bouy networks where bouys had been
+//                     deleted.  The Unlink was not correctly decrementing the
+//                     number of direct links so it was expecting more direct
+//                     links when the file was reloaded.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/25/97 BRH	Fixed the problem of bouys greater than 254 being
-//							created in the editor.
+//      07/25/97 BRH   Fixed the problem of bouys greater than 254 being
+//                     created in the editor.
 //
-//		07/30/97 BRH	Added a flag to indicate whether the bouys should be shown
-//							or not so that they can be turned off in the editor.
+//      07/30/97 BRH   Added a flag to indicate whether the bouys should be shown
+//                     or not so that they can be turned off in the editor.
 //
-//		08/02/97	JMI	Made bouy font smaller (was 22, now 15), made bouy font
-//							brighter (was 1 (dark red), now 249 (bright red) ), and
-//							widened bouy graphic in an attempt to make IDs more read-
-//							able.
+//      08/02/97   JMI   Made bouy font smaller (was 22, now 15), made bouy font
+//                     brighter (was 1 (dark red), now 249 (bright red) ), and
+//                     widened bouy graphic in an attempt to make IDs more read-
+//                     able.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/05/97 BRH	Defaulted the bouy network to ON.
+//      08/05/97 BRH   Defaulted the bouy network to ON.
 //
-//		08/08/97 BRH	Only the bouys of the current Nav Net are displayed now.
-//							(and their hots are disabled when they are not shown).
-//							This will help cut down the confusion and prevent
-//							users from joining the networks which would be bad.
+//      08/08/97 BRH   Only the bouys of the current Nav Net are displayed now.
+//                     (and their hots are disabled when they are not shown).
+//                     This will help cut down the confusion and prevent
+//                     users from joining the networks which would be bad.
 //
-//		08/08/97	JMI	Now calls GetResources() on Load() and only in edit mode.
+//      08/08/97   JMI   Now calls GetResources() on Load() and only in edit mode.
 //
-//		08/08/97	JMI	Now calls GetResources() in Startup() but checks the realm
-//							flag indicating whether we're in edit mode first to make
-//							sure we are.
+//      08/08/97   JMI   Now calls GetResources() in Startup() but checks the realm
+//                     flag indicating whether we're in edit mode first to make
+//                     sure we are.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define BOUY_CPP
@@ -168,10 +168,10 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"bouy.bmp"
+#define IMAGE_FILE         "bouy.bmp"
 
-#define BOUY_ID_FONT_HEIGHT	15
-#define BOUY_ID_FONT_COLOR		249
+#define BOUY_ID_FONT_HEIGHT   15
+#define BOUY_ID_FONT_COLOR      249
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -529,8 +529,8 @@ void CBouy::EditRender(void)
       &m_sprite.m_sY2);
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    // Priority is based on bottom edge of sprite
    m_sprite.m_sPriority = m_dZ;
@@ -557,31 +557,31 @@ void CBouy::EditRect(RRect* pRect)
       &(pRect->sX),
       &(pRect->sY) );
 
-   pRect->sW	= 10; // Safety.
-   pRect->sH	= 10; // Safety.
+   pRect->sW   = 10; // Safety.
+   pRect->sH   = 10; // Safety.
 
    if (m_pImage != NULL)
    {
-      pRect->sW	= m_pImage->m_sWidth;
-      pRect->sH	= m_pImage->m_sHeight;
+      pRect->sW   = m_pImage->m_sWidth;
+      pRect->sH   = m_pImage->m_sHeight;
    }
 
-   pRect->sX	-= pRect->sW / 2;
-   pRect->sY	-= pRect->sH;
+   pRect->sX   -= pRect->sW / 2;
+   pRect->sY   -= pRect->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
 ////////////////////////////////////////////////////////////////////////////////
 void CBouy::EditHotSpot(   // Returns nothiing.
-   short*	psX,           // Out: X coord of 2D hotspot relative to
+   short*   psX,           // Out: X coord of 2D hotspot relative to
                            // EditRect() pos.
-   short*	psY)           // Out: Y coord of 2D hotspot relative to
+   short*   psY)           // Out: Y coord of 2D hotspot relative to
                            // EditRect() pos.
 {
    // Base of bouy is hotspot.
-   *psX	= (m_pImage->m_sWidth / 2);
-   *psY	= m_pImage->m_sHeight;
+   *psX   = (m_pImage->m_sWidth / 2);
+   *psY   = m_pImage->m_sHeight;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -593,12 +593,12 @@ short CBouy::GetResources(void)                 // Returns 0 if successfull, non
 
    if (m_pImage == 0)
    {
-      RImage*	pimBouyRes;
+      RImage*   pimBouyRes;
       sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
       if (sResult == 0)
       {
          // Allocate image . . .
-         m_pImage	= new RImage;
+         m_pImage   = new RImage;
          if (m_pImage != NULL)
          {
             // Allocate image data . . .
@@ -636,7 +636,7 @@ short CBouy::GetResources(void)                 // Returns 0 if successfull, non
             }
             else
             {
-               sResult	= -2;
+               sResult   = -2;
                TRACE("CBouy::GetResource() - m_pImage->CreateImage() failed.\n");
             }
 
@@ -644,12 +644,12 @@ short CBouy::GetResources(void)                 // Returns 0 if successfull, non
             if (sResult != 0)
             {
                delete m_pImage;
-               m_pImage	= NULL;
+               m_pImage   = NULL;
             }
          }
          else
          {
-            sResult	= -1;
+            sResult   = -1;
             TRACE("CBouy::GetResource(): Failed to allocate RImage.\n");
          }
 
@@ -669,7 +669,7 @@ short CBouy::FreeResources(void)                // Returns 0 if successfull, non
    if (m_pImage != NULL)
    {
       delete m_pImage;
-      m_pImage	= NULL;
+      m_pImage   = NULL;
    }
 
    return 0;
@@ -677,7 +677,7 @@ short CBouy::FreeResources(void)                // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Unlink - Visit your direct links and unlink yourself from them, then free
-//				your own links.
+//            your own links.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CBouy::Unlink(void)
@@ -702,8 +702,8 @@ void CBouy::Unlink(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // BuildRoutingTable - Fills in the routing table by building a BSF tree and
-//							  using the hop counts and parent tree, fills in the
-//							  routing table.
+//                       using the hop counts and parent tree, fills in the
+//                       routing table.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CBouy::BuildRoutingTable(void)

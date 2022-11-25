@@ -18,12 +18,12 @@
 // s.h
 // Project: Postal
 //
-//	History:
-//		08/04/97 BRH	Started the socket over again with plugin protocols
+//   History:
+//      08/04/97 BRH   Started the socket over again with plugin protocols
 //
-//		08/12/97 MJR	Added mac protocols.
+//      08/12/97 MJR   Added mac protocols.
 //
-//		08/20/97 MJR	Added support for setting whether socket blocks or not.
+//      08/20/97 MJR   Added support for setting whether socket blocks or not.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ typedef enum
 
    FirstProtocol = 1,               // First protocol (used when iterating protocol types)
 
-   TCPIP			= 1,              // WinSock or BSD Sockets TCP/IP
+   TCPIP         = 1,              // WinSock or BSD Sockets TCP/IP
 
    NumProtocols                     // Number of protocol types
 } ProtoType;
@@ -73,17 +73,17 @@ typedef enum
 enum
 {
    // Socket types
-   typStream				= 0,                 // Stream-oriented connection
-   typDatagram				= 1,                 // Datagram-oriented connection
+   typStream            = 0,                 // Stream-oriented connection
+   typDatagram            = 1,                 // Datagram-oriented connection
 
    // Available socket options
-   optDontBlock			= 0x0001,            // Don't block
-   optDontWaitOnClose	= 0x0002,            // Don't wait on Close()	(applies to typStream only)
-   optDontCoalesce		= 0x0004,            // Dont coalesce data		(applies to typStream only)
+   optDontBlock         = 0x0001,            // Don't block
+   optDontWaitOnClose   = 0x0002,            // Don't wait on Close()   (applies to typStream only)
+   optDontCoalesce      = 0x0004,            // Dont coalesce data      (applies to typStream only)
 
    // Special error return values
-   errWouldBlock			= 1000,              // Function would have blocked, but "optDontBlock" was set
-   errNotSupported		= 1001,              // Protocol is not supported
+   errWouldBlock         = 1000,              // Function would have blocked, but "optDontBlock" was set
+   errNotSupported      = 1001,              // Protocol is not supported
 
    // This is the maximum size of any protocol's address
    MaxAddressSize = 16
@@ -269,17 +269,17 @@ virtual void Init(void)
 // Variables
 //------------------------------------------------------------------------------
 public:
-RProtocol*						m_pProtocol;               // Pointer to protocol object
+RProtocol*                  m_pProtocol;               // Pointer to protocol object
 
 //------------------------------------------------------------------------------
 // Static Variables
 //------------------------------------------------------------------------------
 protected:
-static bool	ms_bDidStartup;                           // Whether Startup() was called successfully
-static bool	ms_bAutoShutdown;                         // Whether to call Shutdown() automatically
+static bool ms_bDidStartup;                             // Whether Startup() was called successfully
+static bool ms_bAutoShutdown;                           // Whether to call Shutdown() automatically
 static short ms_sNumSockets;                          // Number of sockets in existance
 static RSocket::ProtoType ms_prototype;               // Current protocol (can only be one "current" protocol)
-static char*					ms_apszProtoNames[];       // String names corresponding to RSocket::ProtoType values
+static char*               ms_apszProtoNames[];       // String names corresponding to RSocket::ProtoType values
 
 //------------------------------------------------------------------------------
 // Functions
@@ -382,7 +382,7 @@ short Connect(                                        // Returns 0 if successful
 ////////////////////////////////////////////////////////////////////////////////
 short Send(                                           // Return 0 if successfull, non-zero otherwise
    void* pBuf,                                        // In:  Pointer to data buffer
-   S32 lNumBytes,                                  //	In:  Number of bytes to send
+   S32 lNumBytes,                                  //   In:  Number of bytes to send
    S32* plActualBytes);                            // Out: Actual number of bytes sent
 
 
@@ -392,7 +392,7 @@ short Send(                                           // Return 0 if successfull
 ////////////////////////////////////////////////////////////////////////////////
 short SendTo(                                         // Return 0 if successfull, non-zero otherwise
    void* pBuf,                                        // In:  Pointer to data buffer
-   S32 lNumBytes,                                  //	In:  Number of bytes to send
+   S32 lNumBytes,                                  //   In:  Number of bytes to send
    S32* plActualBytes,                                // Out: Actual number of bytes sent
    Address* paddress);                                // In:  Address to send to
 

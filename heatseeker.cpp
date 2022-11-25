@@ -22,126 +22,126 @@
 // guided missile which will hit people or fire.
 //
 // History:
-//		05/13/97 BRH	Started this weapon object from the CHeatseeker code
+//      05/13/97 BRH   Started this weapon object from the CHeatseeker code
 //
-//		05/14/97 BRH	Added the IsPathClear() check to help avoid walls.
+//      05/14/97 BRH   Added the IsPathClear() check to help avoid walls.
 //
-//		05/15/97 BRH	Changed the graphic for the missile.  Added different
-//							masks for seek and collide.  Changed the offscreen
-//							behavior so the missile will turn around when it has gone
-//							off of the edge of the world.
+//      05/15/97 BRH   Changed the graphic for the missile.  Added different
+//                     masks for seek and collide.  Changed the offscreen
+//                     behavior so the missile will turn around when it has gone
+//                     off of the edge of the world.
 //
-//		05/15/97 BRH	Changed seeking to QuickCheckClosest so that it picks
-//							the closest target rather than the first one in the
-//							list of collisions.
+//      05/15/97 BRH   Changed seeking to QuickCheckClosest so that it picks
+//                     the closest target rather than the first one in the
+//                     list of collisions.
 //
-//		05/15/97	JMI	In ProcessMessages(), on a delete message, the CHeatseeker
-//							was deleting itself.  Then, after ProcessMessages()
-//							returned, it was checking m_eState, and, if set to
-//							State_Delete, was returning to avoid possible problems
-//							referencing a deleted this.  The problem is that you cannot
-//							reference m_eState after the object is deleted b/c that
-//							would require utilizing the this.  Also, on Alpha (and
-//							Intel (SHMALLOC) too) the memory is altered to a certain
-//							value to try to catch such problems.  This caused m_eState
-//							to NOT be State_Delete, which resulted in writes to
-//							freed memory as well.
-//							To fix this problem, I changed ProcessMessages() to merely
-//							set the state to State_Delete and utilized the switch in
-//							Update() to delete this and return.
+//      05/15/97   JMI   In ProcessMessages(), on a delete message, the CHeatseeker
+//                     was deleting itself.  Then, after ProcessMessages()
+//                     returned, it was checking m_eState, and, if set to
+//                     State_Delete, was returning to avoid possible problems
+//                     referencing a deleted this.  The problem is that you cannot
+//                     reference m_eState after the object is deleted b/c that
+//                     would require utilizing the this.  Also, on Alpha (and
+//                     Intel (SHMALLOC) too) the memory is altered to a certain
+//                     value to try to catch such problems.  This caused m_eState
+//                     to NOT be State_Delete, which resulted in writes to
+//                     freed memory as well.
+//                     To fix this problem, I changed ProcessMessages() to merely
+//                     set the state to State_Delete and utilized the switch in
+//                     Update() to delete this and return.
 //
-//		05/26/97 BRH	Changed check for obstacles to only check for height.  It
-//							had been checking for NOT_WALKABLE which caused it to
-//							blow up in the wrong places.
+//      05/26/97 BRH   Changed check for obstacles to only check for height.  It
+//                     had been checking for NOT_WALKABLE which caused it to
+//                     blow up in the wrong places.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/10/97 BRH	Increased the rocket arming time from 200ms to 500ms to
-//							avoid killing yourself when you are moving & shooting.
+//      06/10/97 BRH   Increased the rocket arming time from 200ms to 500ms to
+//                     avoid killing yourself when you are moving & shooting.
 //
-//		06/11/97 BRH	Added shooter ID passing to the explosion that is created.
+//      06/11/97 BRH   Added shooter ID passing to the explosion that is created.
 //
-//		06/12/97 BRH	Added shooter ID to the call to Setup for the explosion.
+//      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97 BRH	Added use of base class 2D shadow on the ground, but loaded
-//							a smaller shadow resource.
+//      06/25/97 BRH   Added use of base class 2D shadow on the ground, but loaded
+//                     a smaller shadow resource.
 //
-//		06/29/97 BRH	Added an IsPathClear check during flight to make sure it
-//							doesn't go through thin fences.
+//      06/29/97 BRH   Added an IsPathClear check during flight to make sure it
+//                     doesn't go through thin fences.
 //
-//		06/30/97 BRH	Added CacheSample for the sound effects to the Preload.
+//      06/30/97 BRH   Added CacheSample for the sound effects to the Preload.
 //
-//		06/30/97	JMI	Now uses CRealm's new GetRealmWidth() and *Height()
-//							for dimensions of realm's X/Z plane.
+//      06/30/97   JMI   Now uses CRealm's new GetRealmWidth() and *Height()
+//                     for dimensions of realm's X/Z plane.
 //
-//		06/30/97	JMI	Have to check in now, now.
+//      06/30/97   JMI   Have to check in now, now.
 //
-//		06/30/97	JMI	Now uses IsPathClear()'s bCheckExtents = false to avoid
-//							having the edge of the realm count as a path obstacle.
+//      06/30/97   JMI   Now uses IsPathClear()'s bCheckExtents = false to avoid
+//                     having the edge of the realm count as a path obstacle.
 //
-//		07/01/97 BRH	Added smoke trails to the heatseeker.
+//      07/01/97 BRH   Added smoke trails to the heatseeker.
 //
-//		07/01/97	JMI	In Update(), when the weapon explodes, it didn't set dNewX
-//							and dNewZ but still created smoke at this unitialized
-//							position.  Fixed.
+//      07/01/97   JMI   In Update(), when the weapon explodes, it didn't set dNewX
+//                     and dNewZ but still created smoke at this unitialized
+//                     position.  Fixed.
 //
-//		07/04/97 BRH	Cut down the trail time to live to make the trails shorter.
+//      07/04/97 BRH   Cut down the trail time to live to make the trails shorter.
 //
-//		07/08/97 BRH	Adjusted the position of the smoke trail.
+//      07/08/97 BRH   Adjusted the position of the smoke trail.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/16/97 BRH	Retuned, or untuned the hotspot for the smoke trails.
-//							Now that the hotspot for the smoke is correct, the
-//							smoke does not need to be adjusted here.
+//      07/16/97 BRH   Retuned, or untuned the hotspot for the smoke trails.
+//                     Now that the hotspot for the smoke is correct, the
+//                     smoke does not need to be adjusted here.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		08/08/97 BRH	Changed the arming so that the missle won't arm until
-//							it stops colliding with the shooter's smash.  Also, added
-//							a special case so that missiles shot by Sentry guns won't
-//							blow up other Sentry guns.
+//      08/08/97 BRH   Changed the arming so that the missle won't arm until
+//                     it stops colliding with the shooter's smash.  Also, added
+//                     a special case so that missiles shot by Sentry guns won't
+//                     blow up other Sentry guns.
 //
-//		08/12/97 BRH	Changed collision bits to exclude any object that is
-//							ducking (which should only be the main dude when he
-//							is ducking down).
+//      08/12/97 BRH   Changed collision bits to exclude any object that is
+//                     ducking (which should only be the main dude when he
+//                     is ducking down).
 //
-//		08/14/97 BRH	Added SetCollideBits function so that the the collision
-//							bits can be set differently for the Dude and Doofus.
-//							The bits for the collision will bet set to the
-//							default values for the missile, but then can be changed
-//							by calling the SetCollideBits function.
+//      08/14/97 BRH   Added SetCollideBits function so that the the collision
+//                     bits can be set differently for the Dude and Doofus.
+//                     The bits for the collision will bet set to the
+//                     default values for the missile, but then can be changed
+//                     by calling the SetCollideBits function.
 //
-//		08/15/97 BRH	Made the smash radius larger.
+//      08/15/97 BRH   Made the smash radius larger.
 //
-//		08/17/97 BRH	Added looping thrust sound like the rocket.
+//      08/17/97 BRH   Added looping thrust sound like the rocket.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
-//		08/23/97	JMI	Changed ms_u32SeekExcludeBits to include CSmash::AlmostDead
-//							so the heatseeker wouldn't seek writhers.
+//      08/23/97   JMI   Changed ms_u32SeekExcludeBits to include CSmash::AlmostDead
+//                     so the heatseeker wouldn't seek writhers.
 //
-//		08/24/97 BRH	Added seek bits that can be changed by the shooter so that
-//							hostiles can set heatseekers that don't seek other enemies
-//							Also set heatseeker back to previous position before
-//							exploding so that it doesn't always hit the target from
-//							behind and blow him forward.
+//      08/24/97 BRH   Added seek bits that can be changed by the shooter so that
+//                     hostiles can set heatseekers that don't seek other enemies
+//                     Also set heatseeker back to previous position before
+//                     exploding so that it doesn't always hit the target from
+//                     behind and blow him forward.
 //
-//		08/26/97 BRH	Fixed problem with brackets that always set the missile
-//							back a position.
+//      08/26/97 BRH   Fixed problem with brackets that always set the missile
+//                     back a position.
 //
-//		08/27/97	JMI	No S32er sets the smash radius to m_sCurRadius during
-//							Render().
+//      08/27/97   JMI   No S32er sets the smash radius to m_sCurRadius during
+//                     Render().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define HEATSEEKER_CPP
@@ -356,8 +356,8 @@ void CHeatseeker::Update(void)
          sHeight = m_pRealm->GetHeight((short) dNewX, (short) dNewZ);
          usAttrib = m_pRealm->GetFloorAttribute((short) dNewX, (short) dNewZ);
 
-         short	sRealmH	= m_pRealm->GetRealmHeight();
-         short	sRealmW	= m_pRealm->GetRealmWidth();
+         short sRealmH   = m_pRealm->GetRealmHeight();
+         short sRealmW   = m_pRealm->GetRealmWidth();
 
          // Once a bit off screen, it should start turning back towards
          // the center of the hood.
@@ -585,10 +585,10 @@ void CHeatseeker::Update(void)
       }
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= 2 * m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = 2 * m_sprite.m_sRadius;
 
       m_smashSeeker.m_sphere.sphere.X = m_dX + (rspCos(m_dRot) * ms_lSeekRadius);
       m_smashSeeker.m_sphere.sphere.Y = m_dY;
@@ -623,7 +623,7 @@ void CHeatseeker::Render(void)
    m_trans.Ry(rspMod360(m_dRot));
 
    // Eventually this should be channel driven also
-//	m_sprite.m_sRadius = m_sCurRadius;
+//   m_sprite.m_sRadius = m_sCurRadius;
 
    if (m_eState == State_Hide)
       m_sprite.m_sInFlags = CSprite::InHidden;
@@ -642,7 +642,7 @@ void CHeatseeker::Render(void)
       // Layer should be based on info we get from the attribute map
       m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-      m_sprite.m_ptrans		= &m_trans;
+      m_sprite.m_ptrans      = &m_trans;
 
       // Update sprite in scene
       m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -653,7 +653,7 @@ void CHeatseeker::Render(void)
 #if 0
       // FEEDBACK.
       // Create a line sprite.
-      CSpriteLine2d*	psl2d	= new CSpriteLine2d;
+      CSpriteLine2d*   psl2d   = new CSpriteLine2d;
       if (psl2d != NULL)
       {
          Map3Dto2D(
@@ -668,11 +668,11 @@ void CHeatseeker::Render(void)
             m_smashSeeker.m_sphere.sphere.Z,
             &(psl2d->m_sX2End),
             &(psl2d->m_sY2End) );
-         psl2d->m_sPriority	= m_smashSeeker.m_sphere.sphere.Z;
-         psl2d->m_sLayer		= m_pRealm->GetLayerViaAttrib(m_pRealm->GetLayer(m_smashSeeker.m_sphere.sphere.X, m_smashSeeker.m_sphere.sphere.Z));
-         psl2d->m_u8Color		= 249;
+         psl2d->m_sPriority   = m_smashSeeker.m_sphere.sphere.Z;
+         psl2d->m_sLayer      = m_pRealm->GetLayerViaAttrib(m_pRealm->GetLayer(m_smashSeeker.m_sphere.sphere.X, m_smashSeeker.m_sphere.sphere.Z));
+         psl2d->m_u8Color      = 249;
          // Destroy when done.
-         psl2d->m_sInFlags	= CSprite::InDeleteOnRender;
+         psl2d->m_sInFlags   = CSprite::InDeleteOnRender;
          // Put 'er there.
          m_pRealm->m_scene.UpdateSprite(psl2d);
       }
@@ -711,9 +711,9 @@ short CHeatseeker::Setup(                          // Returns 0 if successfull, 
 
    m_bArmed = false;
 
-   m_smash.m_sphere.sphere.X			= m_dX;
-   m_smash.m_sphere.sphere.Y			= m_dY;
-   m_smash.m_sphere.sphere.Z			= m_dZ;
+   m_smash.m_sphere.sphere.X         = m_dX;
+   m_smash.m_sphere.sphere.Y         = m_dY;
+   m_smash.m_sphere.sphere.Z         = m_dZ;
    m_smash.m_bits = CSmash::Projectile;
    m_smash.m_pThing = this;
 
@@ -777,8 +777,8 @@ short CHeatseeker::FreeResources(void)                // Returns 0 if successful
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CHeatseeker::Preload(

@@ -17,7 +17,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bmain.cpp
+//   bmain.cpp
 //
 // History: 06/03/2004  RCG added.
 //
@@ -55,7 +55,7 @@ static short ms_sQuit = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Call this to init the blue library.  Calls init in the various blue modules
+//   Call this to init the blue library.  Calls init in the various blue modules
 // that needing an init call.
 //
 // Returns 0 on success.
@@ -68,7 +68,7 @@ extern void Joy_Init(void);
 
 short rspInitBlue(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
 #ifdef BETAEXPIRE
    if ( time(NULL) > (BETAEXPIRE + 30 * 24 * 60 * 60) )
@@ -95,7 +95,7 @@ short rspInitBlue(void)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Call this to kill the blue library (IF you called Blu_Init).
+//   Call this to kill the blue library (IF you called Blu_Init).
 //
 // Returns nothing.
 //
@@ -109,7 +109,7 @@ void rspKillBlue(void)
 //////////////////////////////////////////////////////////////////////////////
 //
 // Does tasks critical to Windows:
-//		- Services our Windows message queue.
+//      - Services our Windows message queue.
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////

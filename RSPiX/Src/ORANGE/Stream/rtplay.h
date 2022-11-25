@@ -32,32 +32,32 @@
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
 // Values for m_usState.
-#define RT_STATE_STOPPED	0x0000   // Currently no file is being streamed.
-#define RT_STATE_STARTING	0x0001   // Preparing to stream (building up enough
-                                    // input that we could attain stream data
-                                    // usage).
-#define RT_STATE_BEGIN		0x0002   // Internal use only!!
-#define RT_STATE_PLAYING	0x0003   // Streaming.
-#define RT_STATE_PAUSE		0x0004   // Streaming is temporarily suspended.
-#define RT_STATE_ABORTING	0x0005   // Terminating stream early.
-#define RT_STATE_ENDING		0x0006   // Ending due to end of stream data.
+#define RT_STATE_STOPPED   0x0000   // Currently no file is being streamed.
+#define RT_STATE_STARTING   0x0001   // Preparing to stream (building up enough
+                                     // input that we could attain stream data
+                                     // usage).
+#define RT_STATE_BEGIN      0x0002   // Internal use only!!
+#define RT_STATE_PLAYING   0x0003   // Streaming.
+#define RT_STATE_PAUSE      0x0004   // Streaming is temporarily suspended.
+#define RT_STATE_ABORTING   0x0005   // Terminating stream early.
+#define RT_STATE_ENDING      0x0006   // Ending due to end of stream data.
 
 // Values for messages passed to handlers.
-#define RT_MSG_STOPPED		0x0000   // The last thing a message handler will
-                                    // receive from a stream session, indicat-
-                                    // ing that streaming is done completely.
-#define RT_MSG_STARTING		0x0001   // The first thing a message handler will
-                                    // receive indicating we are preparing to
-                                    // stream.
-#define RT_MSG_BEGIN			0x0002   // This let's the handler know it's time
-                                    // to open the flood-gates.  An audio
-                                    // handler might use this as an
-                                    // opportunity to actually start playing
-                                    // data.
-#define RT_MSG_PLAYING		0x0003   // Streaming.
-#define RT_MSG_PAUSE			0x0004   // Streaming is paused.
-#define RT_MSG_ABORTING		0x0005   // Prematurely ending streaming.
-#define RT_MSG_ENDING		0x0006   // Ending streaming due to end of data.
+#define RT_MSG_STOPPED      0x0000   // The last thing a message handler will
+                                     // receive from a stream session, indicat-
+                                     // ing that streaming is done completely.
+#define RT_MSG_STARTING      0x0001   // The first thing a message handler will
+                                      // receive indicating we are preparing to
+                                      // stream.
+#define RT_MSG_BEGIN         0x0002   // This let's the handler know it's time
+                                      // to open the flood-gates.  An audio
+                                      // handler might use this as an
+                                      // opportunity to actually start playing
+                                      // data.
+#define RT_MSG_PLAYING      0x0003   // Streaming.
+#define RT_MSG_PAUSE         0x0004   // Streaming is paused.
+#define RT_MSG_ABORTING      0x0005   // Prematurely ending streaming.
+#define RT_MSG_ENDING      0x0006   // Ending streaming due to end of data.
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -101,12 +101,12 @@ void SetChannels(USHORT usFilter)
 
 // Sets the window and panes sizes for the file window (which is set
 // imeediately after opening).
-void SetSizes(	S32 lWindowSize, S32 lInputPaneSize,
-               S32 lFilterPaneSize)
+void SetSizes(   S32 lWindowSize, S32 lInputPaneSize,
+                 S32 lFilterPaneSize)
 {
-   m_lWindowSize		= lWindowSize;
-   m_lInputPaneSize	= lInputPaneSize;
-   m_lFilterPaneSize	= lFilterPaneSize;
+   m_lWindowSize      = lWindowSize;
+   m_lInputPaneSize   = lInputPaneSize;
+   m_lFilterPaneSize   = lFilterPaneSize;
 }
 
 public:        // Querries.
@@ -133,8 +133,8 @@ short CreateCmd(USHORT usCmd, S32 lTime, S32 lParm1, S32 lParm2);
 
 // Handles data callbacks from dispatch.
 // Returns RET_FREE if puc should be freed and RET_DONTFREE, otherwise.
-short RtInfoCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-                  S32 lTime);
+short RtInfoCall(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                    S32 lTime);
 // Callback dispatcher (calls the implied this version).
 // Returns RET_FREE if puc should be freed and RET_DONTFREE, otherwise.
 static short RtInfoCallStatic(UCHAR* puc, S32 lSize, USHORT usType,
@@ -151,7 +151,7 @@ public:        // Members.
 CDispatch m_dispatch;                  // Dispatches types to handlers.
 CFilter m_filter;                      // Filters channels and builds
                                        // contiguous buffers.
-CFileWin	m_filewin;                    // Window into stream file.
+CFileWin m_filewin;                      // Window into stream file.
 CRes m_res;                            // Stores types to be requested.
 CRtTime m_rttime;                      // Keeps time for us in a nice,
                                        // pausable/resumable fashion.

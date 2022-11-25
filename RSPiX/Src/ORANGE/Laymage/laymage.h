@@ -22,24 +22,24 @@
 //
 // LAYMAGE.H
 //
-// Created on	10/04/96 BRH
+// Created on   10/04/96 BRH
 // Implemented 10/04/96 BRH
 //
-// 10/04/96 BRH	Started the CLaymage (Layered CImage) class for
-//						use in several utilities for Postal which involve
-//						getting information from Photoshop files and
-//						specific layers.  Once a layered Photoshop file
-//						has been converted to CLaymage other utilities
-//						can use the image types rather than having to
-//						work with the Photoshop file.  Some of the
-//						Photoshop information will be retained such as
-//						the layer names, sizes and probably Alpha
-//						channel information.
+// 10/04/96 BRH   Started the CLaymage (Layered CImage) class for
+//                  use in several utilities for Postal which involve
+//                  getting information from Photoshop files and
+//                  specific layers.  Once a layered Photoshop file
+//                  has been converted to CLaymage other utilities
+//                  can use the image types rather than having to
+//                  work with the Photoshop file.  Some of the
+//                  Photoshop information will be retained such as
+//                  the layer names, sizes and probably Alpha
+//                  channel information.
 //
-//	11/01/96 BRH	Changed CLaymage to RLaymage to conform to new
-//						RSPiX class names.
+//   11/01/96 BRH   Changed CLaymage to RLaymage to conform to new
+//                  RSPiX class names.
 //
-//	11/12/96 MJR	Removed include of "imagecon.h", which is obsolete.
+//   11/12/96 MJR   Removed include of "imagecon.h", which is obsolete.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -59,7 +59,7 @@
 //////////////////////////////////////////////////////////////////////
 
 
-#define LAYMAGE_COOKIE	0x204c4d49  // Looks like "IML " in the file
+#define LAYMAGE_COOKIE   0x204c4d49  // Looks like "IML " in the file
 #define LAYMAGE_CURRENT_VERSION 1   // Current file version.  Change
                                     // This number and die!  No, not
                                     // really, change this number if
@@ -68,14 +68,14 @@
                                     // the version number in the file
                                     // as a check when loaded.
 #define LAYMAGE_PHOTOSHOP_SIGNATURE 0x38425053 //"8BPS"
-#define LAYMAGE_MAXCHANNELS	10
-#define LAYMAGE_MAXLAYERS		24
+#define LAYMAGE_MAXCHANNELS   10
+#define LAYMAGE_MAXLAYERS      24
 
-#define LAYMAGE_IGNORE	-1
-#define LAYMAGE_RED		0
-#define LAYMAGE_GREEN	1
-#define LAYMAGE_BLUE		2
-#define LAYMAGE_ALPHA	3
+#define LAYMAGE_IGNORE   -1
+#define LAYMAGE_RED      0
+#define LAYMAGE_GREEN   1
+#define LAYMAGE_BLUE      2
+#define LAYMAGE_ALPHA   3
 
 
 
@@ -85,9 +85,9 @@
 // RLaymage class
 //
 // Layered RImage which can read in Photoshop PSD files and convert
-//	them to several RImages which are stored together.  It preserves
-//	the layer information from the Photoshop file but makes the data
-//	easier to work with.
+//   them to several RImages which are stored together.  It preserves
+//   the layer information from the Photoshop file but makes the data
+//   easier to work with.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -156,7 +156,7 @@ void FreeLayer(short sLayer);
 void FreeAllLayers(void);
 
 // Query functions
-short GetNumLayers(void)	{return m_sNumLayers;};
+short GetNumLayers(void)   {return m_sNumLayers;};
 
 // Get the name of the specified layer
 // given the sLayer number, fill in the char buffer
@@ -168,7 +168,7 @@ private:
 RImage** m_apImages;
 // Array of strings of layer names
 char** m_apszLayerNames;
-//		char* m_apszLayerNames[LAYMAGE_MAXLAYERS];
+//      char* m_apszLayerNames[LAYMAGE_MAXLAYERS];
 
 // File position to Layer Headers
 S32 m_lTellLayers;
@@ -184,9 +184,9 @@ char m_szPhotoshopFilename[1024];
 char* m_pcChannels[LAYMAGE_MAXCHANNELS];
 
 // Read the header of the Photoshop file and set the
-//	width, height, number of layers and positions
+//   width, height, number of layers and positions
 // to the layer info and channel data.  This routine
-//	is used by LoadPSD and SavePSD to read the common info
+//   is used by LoadPSD and SavePSD to read the common info
 // that they both need.
 short ReadPSDHeader(char* pszFilename);
 

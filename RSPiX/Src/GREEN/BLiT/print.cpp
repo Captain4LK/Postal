@@ -60,7 +60,7 @@ RFontOld::RFontOld()
    m_pHead = m_pFontList = NULL;
 }
 
-RFontOld::RFontOld(char*	pszName)
+RFontOld::RFontOld(char*   pszName)
 {
    m_pszFontName = (char*)
                    calloc(1, strlen(pszName) + 1);
@@ -173,59 +173,59 @@ void RFontOld::AddLetter(RImage* pimLetter)
 //
 /*
 short RFontOld::Create(char *pszFontName,char *pszFullInputName,
-						 UCHAR ucInitialTrim,UCHAR ucBackCol,short sTrimTop,
-						short sMaxH)
-	{
-	// Create a temp FNT, and a base CImage:
-	RFontOld fTemp;
-	CImage* pimLetter = NULL;
-	FILE* fp = NULL;
-	char	szName[256];
-	char* pszName = (char*)calloc(1,256);
+                   UCHAR ucInitialTrim,UCHAR ucBackCol,short sTrimTop,
+                  short sMaxH)
+   {
+   // Create a temp FNT, and a base CImage:
+   RFontOld fTemp;
+   CImage* pimLetter = NULL;
+   FILE* fp = NULL;
+   char   szName[256];
+   char* pszName = (char*)calloc(1,256);
 
-	// ***** debugging only!
-	CImage *pimBuf, *pimScreen;
-	rspNameBuffers(&pimBuf,&pimScreen);
-	fTemp.m_sMaxCellHeight = 0;
+   // ***** debugging only!
+   CImage *pimBuf, *pimScreen;
+   rspNameBuffers(&pimBuf,&pimScreen);
+   fTemp.m_sMaxCellHeight = 0;
 
-	// Create Letters:
-	for (short i=0;i<256;i++)
-		{
-		sprintf(szName,pszFullInputName,i);
-		fp = fopen(szName,"r");
-		if (fp == NULL) continue;
-		fclose(fp);
-		TRACE("Character %02x (%03hd) found!\n",i,i);
-		pimLetter = new CImage();
+   // Create Letters:
+   for (short i=0;i<256;i++)
+      {
+      sprintf(szName,pszFullInputName,i);
+      fp = fopen(szName,"r");
+      if (fp == NULL) continue;
+      fclose(fp);
+      TRACE("Character %02x (%03hd) found!\n",i,i);
+      pimLetter = new CImage();
 
-		if (pimLetter->LoadDib(szName) != SUCCESS)
-			{
-			TRACE("-- Error Loading bmp file %s!\n",szName);
-			continue;
-			}
+      if (pimLetter->LoadDib(szName) != SUCCESS)
+         {
+         TRACE("-- Error Loading bmp file %s!\n",szName);
+         continue;
+         }
 
-		// ***** debugging only!
-		rspBlit(pimLetter,pimScreen,0,0,0,0,short(pimLetter->lWidth),
-			short(pimLetter->lHeight) );
+      // ***** debugging only!
+      rspBlit(pimLetter,pimScreen,0,0,0,0,short(pimLetter->lWidth),
+         short(pimLetter->lHeight) );
 
-		// Add it in:
-		//rspSetConvertToFSPR1((U32)ucInitialTrim,(U32)ucBackCol,sTrimTop,sMaxH,(UCHAR)i);
-		//short sX = 0,sY = 0,sW = pimLetter
-		// Need to use rsplasso with this...
-		// Will be writing a utility to do this...
-		pimLetter->Convert(FSPR1);
-		fTemp.AddLetter(pimLetter);
-		fTemp.m_sMaxCellHeight = MAX(fTemp.m_sMaxCellHeight,(short)pimLetter->lHeight);
+      // Add it in:
+      //rspSetConvertToFSPR1((U32)ucInitialTrim,(U32)ucBackCol,sTrimTop,sMaxH,(UCHAR)i);
+      //short sX = 0,sY = 0,sW = pimLetter
+      // Need to use rsplasso with this...
+      // Will be writing a utility to do this...
+      pimLetter->Convert(FSPR1);
+      fTemp.AddLetter(pimLetter);
+      fTemp.m_sMaxCellHeight = MAX(fTemp.m_sMaxCellHeight,(short)pimLetter->lHeight);
 
-		}
-	strcpy(pszName,pszFontName);
-	fTemp.m_pszFontName = pszName;
-	// Save it!
-	// Work on this a bit!
-	fTemp.Save(""); // local path
+      }
+   strcpy(pszName,pszFontName);
+   fTemp.m_pszFontName = pszName;
+   // Save it!
+   // Work on this a bit!
+   fTemp.Save(""); // local path
 
-	return 0;
-	}
+   return 0;
+   }
 */
 
 // Open my own CNFile
@@ -247,10 +247,10 @@ short RFontOld::Save(char* pszFile)
 
 // Give it an existing file
 //
-short	RFontOld::Save(RFile* /*pFile*/)
+short RFontOld::Save(RFile* /*pFile*/)
 {
    /*
-   //char	fname[255];
+   //char   fname[255];
 
    // using fprintf/fscanf with \n... hope it all works...
    // for now, assume valid input:
@@ -258,12 +258,12 @@ short	RFontOld::Save(RFile* /*pFile*/)
    // create output file name:
    //sprintf(fname,"%s/%s.fnt",pszPath,m_pszFontName);
    //TRACE("Saving font %s\n",fname);
-   //FILE*	fp = fopen(fname,"wb");
+   //FILE*   fp = fopen(fname,"wb");
 
    if (!pFile) return FAILURE;
 
    // Overall header:
-   fprintf(fp,"FONTFIL2\n");	// type id
+   fprintf(fp,"FONTFIL2\n");   // type id
    fprintf(fp,"%s\n",m_pszFontName);
    fprintf(fp,"%hd\n",m_sMaxCellHeight); // for user's conveniencs...
 
@@ -273,11 +273,11 @@ short	RFontOld::Save(RFile* /*pFile*/)
    // new font sizes...
 
    // We do not, currently, support the kerning matrix...
-   FontNode*	pCurFont = m_pFontList;
-   CImage*	pimCurLetter;
-   short	i;
+   FontNode*   pCurFont = m_pFontList;
+   CImage*   pimCurLetter;
+   short   i;
 
-   while	(pCurFont)	// loop through cached sizes:
+   while   (pCurFont)   // loop through cached sizes:
       {
       // Describe this font:
       fprintf(fp,"F%hd\n%hd\n",pCurFont->sCellHeight,pCurFont->sUnproportionalWidth);
@@ -302,8 +302,8 @@ short	RFontOld::Save(RFile* /*pFile*/)
 
             // Save the current letter!
 
-            UCHAR	ucCheckSum;
-            UCHAR*	pCode = pInfo->m_pCode;
+            UCHAR   ucCheckSum;
+            UCHAR*   pCode = pInfo->m_pCode;
             ucCheckSum = (UCHAR)0;
             for (S32 i=0;i < (S32)pInfo->m_lSize;i++,pCode++)
                ucCheckSum ^= *pCode;
@@ -327,7 +327,7 @@ short	RFontOld::Save(RFile* /*pFile*/)
 }
 
 // Backwards?
-short	RFontOld::Load(char*	pszPath, char*  pszName)
+short RFontOld::Load(char*   pszPath, char*  pszName)
 {
    char fname[255];
 
@@ -342,18 +342,18 @@ short	RFontOld::Load(char*	pszPath, char*  pszName)
 
 // Must supply correctly formatted path AND etension.
 //
-short	RFontOld::Load(char*	pszName)
+short RFontOld::Load(char*   pszName)
 {
    char pszCompare[255];
    char c;
-   short	sDone = FALSE;
-   short	i, s1;//,s2,s3,s4;
+   short sDone = FALSE;
+   short i, s1;  //,s2,s3,s4;
    S32 l1;
 
    TRACE("Loading font %s\n", pszName);
    RFile cf;
 
-   FILE*	fp = fopen(pszName, "rb");
+   FILE*   fp = fopen(pszName, "rb");
 
    if (!fp)
    {
@@ -374,11 +374,11 @@ short	RFontOld::Load(char*	pszName)
    strcpy(m_pszFontName, pszCompare);
    // get max cell height:
    fscanf(fp, "%hd\n", &s1); //m_sMaxCellHeight should be logical
-   RImage*	pimLetter = NULL;
+   RImage*   pimLetter = NULL;
    S32 lCodeLen;
-   UCHAR	ucCheckSum;
+   UCHAR ucCheckSum;
    S32 ucCheck;
-   UCHAR*	pCode;
+   UCHAR*   pCode;
    RSpecialFSPR1* pInfo = NULL;
 
    // Note: 'K' will denote a kerning table which should
@@ -495,7 +495,7 @@ RPrint::~RPrint()
    //if (m_pCurFracY != NULL) free (m_pCurFracY);
 }
 
-RPrint&	RPrint::debug()
+RPrint&   RPrint::debug()
 {
    *m_pBuf = '\0';
    TRACE("BUFFER IS:\n%s<==\n", m_buffer);
@@ -506,19 +506,19 @@ RPrint&	RPrint::debug()
 
 //===========================================
 /*
-void	RPrint::SetNarrow(float fW) // don't use this way!
-	{
-	short	sHeight;
+void   RPrint::SetNarrow(float fW) // don't use this way!
+   {
+   short   sHeight;
 
-	if (fW == 1.0)
-		{
-		m_pCurFracX = NULL;
-		return;
-		}
+   if (fW == 1.0)
+      {
+      m_pCurFracX = NULL;
+      return;
+      }
 
-	sHeight = (short) (fW * (float)m_sCellH); // use as a reference!
-	m_pCurFracX = u16fStrafe256(m_sCellH,sHeight);
-	}
+   sHeight = (short) (fW * (float)m_sCellH); // use as a reference!
+   m_pCurFracX = u16fStrafe256(m_sCellH,sHeight);
+   }
 */
 
 void RPrint::Clear()
@@ -565,8 +565,8 @@ void RPrint::SetFont(RFontOld* pFnt, short sHeight)
    m_pFontSize = NULL;
    m_fnCurrent = pFnt;
    m_sCellH = sHeight;
-   FontNode*	pSize = pFnt->m_pFontList;
-   FontNode*	pMax = NULL;
+   FontNode*   pSize = pFnt->m_pFontList;
+   FontNode*   pMax = NULL;
 
    while (pSize)
    {
@@ -783,12 +783,12 @@ void RPrint::GetCell(RImage* pimLetter, short* psH,
 
 // handle special characters, etc....
 // deals with printable characters only:
-short	RPrint::GetChar()
+short RPrint::GetChar()
 {
    if (m_pCurBuf == m_pBuf) return 0;
    short sChar;
 
-   do	sChar = *(m_pCurBuf++);
+   do sChar = *(m_pCurBuf++);
    while ( (m_pFontSize->pLetters[sChar] == NULL) && // remove non-printables
            (m_pCurBuf <= m_pBuf) );
 
@@ -804,10 +804,10 @@ void RPrint::PrintLine(short sNumChar, short /*sJustDelta*/,
                        short /*sJustFraction*/, short /*sDen*/)
 {
    short sX = m_sCurX, sFracX = 0;
-   short	sChar = 0;
+   short sChar = 0;
    RImage* pimCur;
    short sCellW, sStretchW, sH;
-   RRect	rCol;
+   RRect rCol;
 
    rCol.sX = m_sL;
    rCol.sY = m_sT;
@@ -827,8 +827,8 @@ void RPrint::PrintLine(short sNumChar, short /*sJustDelta*/,
       sW = pimCur->Draw(-1,m_sCellH,m_pimTarget,m_sCurX,m_sCurY,
          m_clrBKD,m_clrFGD,-1,m_pCurFracX,m_pCurFracY);
       */
-      //	_rspBlit((U32)m_clrFGD,(U32)m_clrBKD,pimCur,m_pimTarget,
-      //		m_sCurX,m_sCurY,sW,sH,0,m_pCurFracY);//,m_pCurFracY,m_pCurFracX);
+      //   _rspBlit((U32)m_clrFGD,(U32)m_clrBKD,pimCur,m_pimTarget,
+      //      m_sCurX,m_sCurY,sW,sH,0,m_pCurFracY);//,m_pCurFracY,m_pCurFracX);
 
       /* old...
       rspBlit((U32)m_clrFGD,(U32)m_clrBKD,pimCur,m_pimTarget,
@@ -855,8 +855,8 @@ void RPrint::PrintLine(short sNumChar, short /*sJustDelta*/,
 RPrint& RPrint::print()
 {
    *m_pBuf = '\0';
-   short	sChar = 0;
-   short	sCellW = 0, sStretchW = 0;
+   short sChar = 0;
+   short sCellW = 0, sStretchW = 0;
 
    if (m_pimTarget == NULL)
    {
@@ -881,7 +881,7 @@ RPrint& RPrint::print()
    }
 
    m_pCurBuf = m_buffer;
-   RRect	rCol;
+   RRect rCol;
 
    rCol.sX = m_sL;
    rCol.sY = m_sT;
@@ -925,7 +925,7 @@ RPrint& RPrint::print()
       // Scan ahead for line wrap:
       if ( (m_sCurX + sCellW) > (m_sL + m_sW) )
       {
-         if (	LineFeed()) return *this;
+         if (   LineFeed()) return *this;
       }
 
       if (pimCur == NULL)
@@ -936,7 +936,7 @@ RPrint& RPrint::print()
          m_clrBKD,m_clrFGD,-1,m_pCurFracX,m_pCurFracY);
          */
       //_rspBlit((U32)m_clrFGD,(U32)m_clrBKD,pimCur,m_pimTarget,
-      //	m_sCurX,m_sCurY,sW,sH,0,m_pCurFracY);//,m_pCurFracY,m_pCurFracX);
+      //   m_sCurX,m_sCurY,sW,sH,0,m_pCurFracY);//,m_pCurFracY,m_pCurFracX);
       // Pull out interspacing:
 
       /* Old style...
@@ -954,9 +954,9 @@ RPrint& RPrint::print()
    return *this;
 }
 
-RPrint&	RPrint::operator|(char* psz)
+RPrint&   RPrint::operator|(char* psz)
 {
-   char*	pIn = psz;
+   char*   pIn = psz;
 
    while (*pIn)
       *(m_pBuf++) = *(pIn++);
@@ -965,9 +965,9 @@ RPrint&	RPrint::operator|(char* psz)
    return *this;
 }
 
-RPrint&	RPrint::operator<<(char* psz)
+RPrint&   RPrint::operator<<(char* psz)
 {
-   char*	pIn = psz;
+   char*   pIn = psz;
 
    while (*pIn)
       *(m_pBuf++) = *(pIn++);
@@ -984,7 +984,7 @@ RPrint& RPrint::operator|(short in)
 };
 
 
-RPrint& RPrint::operator|(S32	in)
+RPrint& RPrint::operator|(S32 in)
 {
    sprintf(m_temp, "%ld", in);
    return (*this) | m_temp;
@@ -996,7 +996,7 @@ RPrint& RPrint::operator|(float in)
    return (*this) | m_temp;
 };
 
-RPrint& RPrint::operator|(double	in)
+RPrint& RPrint::operator|(double in)
 {
    sprintf(m_temp, "%lg", in);
    return (*this) | m_temp;
@@ -1019,7 +1019,7 @@ void RPrint::GetCell(short sASCII, short &w, short &h)
 
 // current buffer, current settings...
 //
-short	RPrint::GetWidth()
+short RPrint::GetWidth()
 {
    char* pcPos = m_buffer;
    short sW = 0;
@@ -1038,8 +1038,8 @@ short	RPrint::GetWidth()
 // dumb declarators!
 /* let's try it as not being static:
 
-char	RPrint::m_buffer[4096];
-char*	RPrint::m_pBuf; // open
-char*	RPrint::m_pCurBuf; // open
-char	RPrint::m_temp[256];
+char   RPrint::m_buffer[4096];
+char*   RPrint::m_pBuf; // open
+char*   RPrint::m_pCurBuf; // open
+char   RPrint::m_temp[256];
 */

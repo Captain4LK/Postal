@@ -44,18 +44,18 @@ S32 m_lCurrentLine;
 short m_sNumTokens;
 char m_pszTokenList[SB_MAX_TOKENS][SB_MAX_TOKEN_SIZE];
 short m_sLinePos[SB_MAX_TOKENS];
-short	m_sCurToken;    // THIS IS ONLY FOR USER TO USE => Has no meaning!
+short m_sCurToken;      // THIS IS ONLY FOR USER TO USE => Has no meaning!
 char m_pszFileName[128];     // For user convenience
 //----------- CONFIGURATION MEMBERS -------------
 char m_pszSeparators[SB_MAX_CHAR_LIST];
 char m_pszSpecialCharacters[SB_MAX_CHAR_LIST];
-short	m_sCharEOL;    // 2 for \n\r, else 1
+short m_sCharEOL;      // 2 for \n\r, else 1
 short m_sLowFilter;
 short m_sHighFilter;
 char m_cStringContext;
 char m_cComment;
 //--------------- CONSTRUCTION -------------
-void	clear()    // NOT A RESET! Will hose memory!
+void   clear()    // NOT A RESET! Will hose memory!
 {
    m_fp = NULL;
    m_sNumTokens = m_sCharEOL = m_sLowFilter = m_sHighFilter = 0;
@@ -74,7 +74,7 @@ void	clear()    // NOT A RESET! Will hose memory!
 }
 
 void init(char* pszFileName, char* pszSeparators = " \t,", char* pszSpecialCharacters = NULL,
-          char	cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
+          char cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
 {
    clear();
    if ((m_fp = fopen(pszFileName, "r")) == NULL)
@@ -113,7 +113,7 @@ RBatch()    // default, no file
 }
 
 RBatch(char* pszFileName, char* pszSeparators = " \t,", char* pszSpecialCharacters = NULL,
-       char	cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
+       char cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
 {
    init(pszFileName, pszSeparators, pszSpecialCharacters, cString, cComment, sCharEOL, sLowFilter, sHighFilter);
 }
@@ -170,7 +170,7 @@ short close()
    clear();
 }
 //--------------- STATIC SPACE -------------
-static char	ms_Error[256];
+static char ms_Error[256];
 //--------------- MEMBER FUNCTIONS -------------
 // returns the number of tokens found, or -1 for EOF
 short GetLine();

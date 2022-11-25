@@ -21,126 +21,126 @@
 // This module handles all the cut-scenes.
 //
 // History:
-//		04/18/97 MJR	Started.
+//      04/18/97 MJR   Started.
 //
-//		04/20/07 BRH	Problem compiling this file due to RPrint print being
-//							defined more than once.  It may have just been cut and
-//							pasted code.
+//      04/20/07 BRH   Problem compiling this file due to RPrint print being
+//                     defined more than once.  It may have just been cut and
+//                     pasted code.
 //
-//		04/21/97 MJR	Created real version of CutScene().
+//      04/21/97 MJR   Created real version of CutScene().
 //
-//		04/22/97 MJR	Testing and tuning.
+//      04/22/97 MJR   Testing and tuning.
 //
-//		04/26/97 JRD	Added a swirling blur effect to the cutscenes
+//      04/26/97 JRD   Added a swirling blur effect to the cutscenes
 //
-//		04/27/97 JRD	Merged CSwirl::Configure with CutScene to allow greater flxibility
+//      04/27/97 JRD   Merged CSwirl::Configure with CutScene to allow greater flxibility
 //
-//		06/08/97 MJR	Changed interface in order to properly clean everything
-//							up without memory leaks.
+//      06/08/97 MJR   Changed interface in order to properly clean everything
+//                     up without memory leaks.
 //
-//		06/11/97	JMI	Changed so CutSceneStart() does not require a prefs file
-//							and section name but instead opens and creates them using
-//							a single realm number that is now passed in.
+//      06/11/97   JMI   Changed so CutSceneStart() does not require a prefs file
+//                     and section name but instead opens and creates them using
+//                     a single realm number that is now passed in.
 //
-//		06/12/97 MJR	Renamed m_pszRealm to m_pszRealmPrefsFile.
+//      06/12/97 MJR   Renamed m_pszRealm to m_pszRealmPrefsFile.
 //
-//		06/14/97 MJR	Fixed problem regarding default multialpha name and what
-//							happens if none gets loaded (i.e. - it crashed).
+//      06/14/97 MJR   Fixed problem regarding default multialpha name and what
+//                     happens if none gets loaded (i.e. - it crashed).
 //
-//					MJR	Added support for sepearate network sections in realms
-//							prefs file.
+//               MJR   Added support for sepearate network sections in realms
+//                     prefs file.
 //
-//		06/17/97	JMI	Added NULL in call to PlaySample() corresponding to new
-//							param.
+//      06/17/97   JMI   Added NULL in call to PlaySample() corresponding to new
+//                     param.
 //
-//		07/05/97 MJR	Changed to RSP_BLACK_INDEX instead of 0.
+//      07/05/97 MJR   Changed to RSP_BLACK_INDEX instead of 0.
 //
-//		07/14/97 BRH	Added challenge mode parameter to CutSceneStart so that
-//							the proper text can be displayed for the Gauntlet.
+//      07/14/97 BRH   Added challenge mode parameter to CutSceneStart so that
+//                     the proper text can be displayed for the Gauntlet.
 //
-//		07/17/97	JMI	Changed RSnd*'s to SampleMaster::SoundInstances.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed RSnd*'s to SampleMaster::SoundInstances.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		07/18/97 MJR	Got progress bars working in a ROUGH sort of way.  They
-//							still need some tuning to look better and we need to save
-//							and load the "total bytes" (aka cumm units) for each
-//							realm to the prefs file.
+//      07/18/97 MJR   Got progress bars working in a ROUGH sort of way.  They
+//                     still need some tuning to look better and we need to save
+//                     and load the "total bytes" (aka cumm units) for each
+//                     realm to the prefs file.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/20/97	JMI	Added NUM_ELEMENTS() macro as alternative to
-//							(sizeof(a)/sizeof(a[0]) ).
-//							Changed asWavyY to be of type short (was no specific type
-//							and, therefore, int before).
-//							Fix parenthesis bug in CutScene_RFileCallback() with index
-//							that caused it to hit -1.
+//      07/20/97   JMI   Added NUM_ELEMENTS() macro as alternative to
+//                     (sizeof(a)/sizeof(a[0]) ).
+//                     Changed asWavyY to be of type short (was no specific type
+//                     and, therefore, int before).
+//                     Fix parenthesis bug in CutScene_RFileCallback() with index
+//                     that caused it to hit -1.
 //
-//		08/18/97 BRH	Changed default cutscene from cut00 to abstract.
+//      08/18/97 BRH   Changed default cutscene from cut00 to abstract.
 //
-//		08/18/97	JMI	Now works with the four different combinations of missing
-//							assets I could conceive.
+//      08/18/97   JMI   Now works with the four different combinations of missing
+//                     assets I could conceive.
 //
-//		08/20/97	JMI	Now uses source clipping when copying the progress bar
-//							area out of m_pimBGLayer for safety (normally they should
-//							be the correct size).
+//      08/20/97   JMI   Now uses source clipping when copying the progress bar
+//                     area out of m_pimBGLayer for safety (normally they should
+//                     be the correct size).
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/22/97 BRH	Added ability to load a different sound file for each
-//							cutscene, specified in the realms.ini file.
+//      08/22/97 BRH   Added ability to load a different sound file for each
+//                     cutscene, specified in the realms.ini file.
 //
-//		08/22/97	JMI	Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//							since we no S32er need UpdateDisplay() now that we are
-//							using rspLock/Unlock* functions properly.
-//							Also, now set the PlaySample() call to purge the sample
-//							when done.
+//      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
+//                     since we no S32er need UpdateDisplay() now that we are
+//                     using rspLock/Unlock* functions properly.
+//                     Also, now set the PlaySample() call to purge the sample
+//                     when done.
 //
-//		08/27/97	JRD	Adding a compact stand aS32 Martini effect for us with the
-//							end of the game called MartiniDo
+//      08/27/97   JRD   Adding a compact stand aS32 Martini effect for us with the
+//                     end of the game called MartiniDo
 //
-//		08/27/97	JRD	Made MartiniDo WAY to easy for Bill to use, by putting up
-//							with him justpassing the whole screen buffer, me doing a
-//							general lock on it, creating a temporary bmp, and copying
-//							it in.  Happy Bill?
+//      08/27/97   JRD   Made MartiniDo WAY to easy for Bill to use, by putting up
+//                     with him justpassing the whole screen buffer, me doing a
+//                     general lock on it, creating a temporary bmp, and copying
+//                     it in.  Happy Bill?
 //
-//		08/28/97 JRD	Refined martini effect and added fade out option.
+//      08/28/97 JRD   Refined martini effect and added fade out option.
 //
-//		08/30/97 BRH	Fixed path for loading the realms.ini file.  It now loads
-//							from the CD path rather thant the HD path.
+//      08/30/97 BRH   Fixed path for loading the realms.ini file.  It now loads
+//                     from the CD path rather thant the HD path.
 //
-//		09/08/97 BRH	I just learned about rspGetQuitStatus() and found it to
-//							be so much fun, that I just started adding it to every
-//							function I could find, including MartiniDo()
+//      09/08/97 BRH   I just learned about rspGetQuitStatus() and found it to
+//                     be so much fun, that I just started adding it to every
+//                     function I could find, including MartiniDo()
 //
-//		09/11/97	JMI	Added some protection for when the cutscene image is not
-//							available.  Only tested for missing cutscenes with CompUSA
-//							version though which doesn't let you get to the martini
-//							effect so that may still not work without a BMP (although,
-//							I did put in the appropriate checking, it may still have
-//							side effects of using different numbers than the real
-//							cutscene would (like say a width of 0) ).
+//      09/11/97   JMI   Added some protection for when the cutscene image is not
+//                     available.  Only tested for missing cutscenes with CompUSA
+//                     version though which doesn't let you get to the martini
+//                     effect so that may still not work without a BMP (although,
+//                     I did put in the appropriate checking, it may still have
+//                     side effects of using different numbers than the real
+//                     cutscene would (like say a width of 0) ).
 //
-//		09/24/97	JMI	Now initializes bFemalePain member of m_musicID.  This
-//							member indicates whether the sample is of a female in pain
-//							which some countries (so far just UK) don't want in the
-//							game.
+//      09/24/97   JMI   Now initializes bFemalePain member of m_musicID.  This
+//                     member indicates whether the sample is of a female in pain
+//                     which some countries (so far just UK) don't want in the
+//                     game.
 //
-//		10/07/97	JMI	Changed bFemalePain to usDescFlags.
+//      10/07/97   JMI   Changed bFemalePain to usDescFlags.
 //
-//		06/03/98 BRH	Had to change the path for the realms.ini file back to
-//							loading from the HD for the add-on pack since the
-//							new cutscenes are now only stored on the HD while the
-//							original PostalCD is in their CD drive (it only has
-//							the old cutscene images).
+//      06/03/98 BRH   Had to change the path for the realms.ini file back to
+//                     loading from the HD for the add-on pack since the
+//                     new cutscenes are now only stored on the HD while the
+//                     original PostalCD is in their CD drive (it only has
+//                     the old cutscene images).
 //
-//		02/04/00 MJR	Changed so that it now checks the HD first and the VD
-//							second when trying to load bg's and multialphas.  This
-//							was done to fix problems with the Japan Add On.
+//      02/04/00 MJR   Changed so that it now checks the HD first and the VD
+//                     second when trying to load bg's and multialphas.  This
+//                     was done to fix problems with the Japan Add On.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -156,62 +156,62 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define FONT_FILE					"res/fonts/smash.fnt"
+#define FONT_FILE               "res/fonts/smash.fnt"
 
-#define DEFAULT_TITLE			"Loading..."
-#define DEFAULT_BG				"res/cutscene/abstract.bmp"
-#define DEFAULT_TEXT				""
-#define DEFAULT_MULTIALPHA		"res/cutscene/abstract.mlp"
-#define DEFAULT_MUSIC			"psychedelic1.wav"
+#define DEFAULT_TITLE         "Loading..."
+#define DEFAULT_BG            "res/cutscene/abstract.bmp"
+#define DEFAULT_TEXT            ""
+#define DEFAULT_MULTIALPHA      "res/cutscene/abstract.mlp"
+#define DEFAULT_MUSIC         "psychedelic1.wav"
 
-#define BG_X						(ms_pCut->m_pimDst->m_sWidth / 2  - ms_pCut->m_pimBGLayer->m_sWidth / 2)
-#define BG_Y						(ms_pCut->m_pimDst->m_sHeight / 2 - ms_pCut->m_pimBGLayer->m_sHeight / 2)
+#define BG_X                  (ms_pCut->m_pimDst->m_sWidth / 2  - ms_pCut->m_pimBGLayer->m_sWidth / 2)
+#define BG_Y                  (ms_pCut->m_pimDst->m_sHeight / 2 - ms_pCut->m_pimBGLayer->m_sHeight / 2)
 
-#define NAME_Y						85
-#define TEXT_Y						(280 - 48)
+#define NAME_Y                  85
+#define TEXT_Y                  (280 - 48)
 
-#define MARGIN						24
+#define MARGIN                  24
 
-#define BLOOD_FORE_R				128 //200
-#define BLOOD_FORE_G				0 //10
-#define BLOOD_FORE_B				0 //10
+#define BLOOD_FORE_R            128 //200
+#define BLOOD_FORE_G            0 //10
+#define BLOOD_FORE_B            0 //10
 
-#define FONT_FORE_R				255 //180
-#define FONT_FORE_G				0 //10
-#define FONT_FORE_B				0 //10
+#define FONT_FORE_R            255 //180
+#define FONT_FORE_G            0 //10
+#define FONT_FORE_B            0 //10
 
-#define FONT_SHAD_R				0
-#define FONT_SHAD_G				0
-#define FONT_SHAD_B				0
+#define FONT_SHAD_R            0
+#define FONT_SHAD_G            0
+#define FONT_SHAD_B            0
 
 // Starting position for progress bar
-#define PROGRESS_BAR_START_X		165
-#define PROGRESS_BAR_START_Y		460
+#define PROGRESS_BAR_START_X      165
+#define PROGRESS_BAR_START_Y      460
 
 // Width of progress bar
-#define PROGRESS_BAR_WIDTH			310
+#define PROGRESS_BAR_WIDTH         310
 
 // Random values for creating spread of pixels (it does +/- these values!!!!)
-#define PROGRESS_BAR_RANDOM_X		7
-#define PROGRESS_BAR_RANDOM_Y		2
+#define PROGRESS_BAR_RANDOM_X      7
+#define PROGRESS_BAR_RANDOM_Y      2
 
 // Number of pixels to plot each time
-#define PROGRESS_BAR_DENSITY		10
+#define PROGRESS_BAR_DENSITY      10
 
 // How often to update the progress bar (in milliseconds)
-#define PROGRESS_BAR_UPDATE_TIME	250
+#define PROGRESS_BAR_UPDATE_TIME   250
 
 // Area of the screen that needs to be updated (keep 16-byte aligned for speed!!!)
-#define PROGRESS_BOX_X			96
-#define PROGRESS_BOX_Y			440
-#define PROGRESS_BOX_WIDTH		448
-#define PROGRESS_BOX_HEIGHT	40
+#define PROGRESS_BOX_X         96
+#define PROGRESS_BOX_Y         440
+#define PROGRESS_BOX_WIDTH      448
+#define PROGRESS_BOX_HEIGHT   40
 
 // Get a random number plus/minus the specified value
-#define RandomPlusMinus(x)		((MyRandom() % (((x) + 1) * 2)) - (x))
+#define RandomPlusMinus(x)      ((MyRandom() % (((x) + 1) * 2)) - (x))
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@ inline S32 MyRandom(void)
 //
 //
 ////////////////////////////////////////////////////////////////////////////////
-class	CCutSceneInfo
+class CCutSceneInfo
 {
 public:
 //-----------------------------------------
@@ -244,12 +244,12 @@ RFont* m_pFont;
 char m_szTitle[256];
 char m_szText[4096];
 char m_szMusic[RSP_MAX_PATH];
-UCHAR	m_ucForeText;
-UCHAR	m_ucShadowText;
-RImage*	m_pimBGLayer;
-RImage*	m_pimTextLayer;
-RImage*	m_pimDst;
-RMultiAlpha*	m_pmaAlpha;
+UCHAR m_ucForeText;
+UCHAR m_ucShadowText;
+RImage*   m_pimBGLayer;
+RImage*   m_pimTextLayer;
+RImage*   m_pimDst;
+RMultiAlpha*   m_pmaAlpha;
 bool m_bDeleteFont;
 short m_sDelW;
 short m_sDelH;
@@ -261,7 +261,7 @@ short m_sLastDistance;
 SampleMasterID m_musicID;
 //-----------------------------------------
 
-void	Clear()
+void   Clear()
 {
    m_pFont = NULL;
    m_szTitle[0] = 0;
@@ -302,25 +302,25 @@ CCutSceneInfo()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//		MartiniDo - this is a greatly simplified version of the cutscene Martini
+//      MartiniDo - this is a greatly simplified version of the cutscene Martini
 //
-//		It allows the user a few parameters and then does the effect for a set
-//		amount of time, regardless of user input.  There are no text overlays.
-//		The program will blacken the screen when done.  (g_pimScreenBuf)
+//      It allows the user a few parameters and then does the effect for a set
+//      amount of time, regardless of user input.  There are no text overlays.
+//      The program will blacken the screen when done.  (g_pimScreenBuf)
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	MartiniDo(	RImage*	pimBackground, // actually, this is the ONLY graphic
-                  short	sStartX,          // logical start position of image
-                  short	sStartY,          // NOTE: it will be clipped so won't actually hit this point!
-                  RMultiAlpha*	pAlpha,  // only need 50% - see cut scenes
-                  S32 lMilliLen,          // how S32 to do the effect
-                  short	sRadius,          // Your tuning pleasure
-                  S32 lSpinTime,          // in milliseconds
-                  S32 lSwayTime,          // in milliseconds
-                  RRect*  prCenter,       // if not NULL, use this portion of the image only!
-                  S32 lFadeTime,          // fade to black, in milliseconds.
-                  SampleMaster::SoundInstance siFade  // to make sound fade out
-                  )
+short   MartiniDo(   RImage*   pimBackground, // actually, this is the ONLY graphic
+                     short sStartX,         // logical start position of image
+                     short sStartY,         // NOTE: it will be clipped so won't actually hit this point!
+                     RMultiAlpha*   pAlpha,// only need 50% - see cut scenes
+                     S32 lMilliLen,       // how S32 to do the effect
+                     short sRadius,         // Your tuning pleasure
+                     S32 lSpinTime,       // in milliseconds
+                     S32 lSwayTime,       // in milliseconds
+                     RRect*  prCenter,    // if not NULL, use this portion of the image only!
+                     S32 lFadeTime,       // fade to black, in milliseconds.
+                     SampleMaster::SoundInstance siFade // to make sound fade out
+                     )
 {
    // In casew Bill just haphazardly passed me the screen buffer, make a dubber copy:
    RImage imSwirl;
@@ -356,7 +356,7 @@ short	MartiniDo(	RImage*	pimBackground, // actually, this is the ONLY graphic
 
    //==============================================================================
    // Set up clipping parameters based on radius:
-   RRect	rClip(sStartX, sStartY, imSwirl.m_sWidth, imSwirl.m_sHeight);
+   RRect rClip(sStartX, sStartY, imSwirl.m_sWidth, imSwirl.m_sHeight);
 
    // shrink by radius (should work! - this should hide all redrawing!)
 
@@ -448,7 +448,7 @@ short	MartiniDo(	RImage*	pimBackground, // actually, this is the ONLY graphic
 //
 //
 ////////////////////////////////////////////////////////////////////////////////
-class	CSwirlMe
+class CSwirlMe
 {
 public:
 //------------------------------------------------------------------
@@ -463,15 +463,15 @@ S32 m_lCycleTimeY;         // in milliseconds (Min, Max, Min)
 S32 m_lCycleTimeA;         //
 S32 m_lTimeSpin;
 S32 m_lBaseTime;
-RRect	m_rClip;             // To offset and limit the effect to a rect:
+RRect m_rClip;               // To offset and limit the effect to a rect:
 SampleMaster::SoundInstance m_siSound;
 CCutSceneInfo* m_pCut;
 //------------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////////////////
-//		Make next frame of effect
+//      Make next frame of effect
 ////////////////////////////////////////////////////////////////////////////
-short	MakeFrame(SampleMasterID* psmid)
+short   MakeFrame(SampleMasterID* psmid)
 {
    if (!IsSamplePlaying(*psmid))
    {
@@ -483,7 +483,7 @@ short	MakeFrame(SampleMasterID* psmid)
          &m_siSound,                               // Out: Handle for adjusting sound volume
          NULL,                                     // Out: Sample duration in ms, if not NULL.
          0,                                        // In:  Where to loop back to in milliseconds.
-                                                   //	-1 indicates no looping (unless m_sLoop is
+                                                   //   -1 indicates no looping (unless m_sLoop is
                                                    // explicitly set).
          0,                                        // In:  Where to loop back from in milliseconds.
                                                    // In:  If less than 1, the end + lLoopEndTime is used.
@@ -504,8 +504,8 @@ short	MakeFrame(SampleMasterID* psmid)
    sDegAlpha = rspMod360(sDegAlpha);
    sDegSpin = rspMod360(sDegSpin);
 
-   short	sRx = m_sCenX + short(rspSin(sDegX) * m_sRadX);
-   short	sRy = m_sCenY + short(rspSin(sDegY) * m_sRadY);
+   short sRx = m_sCenX + short(rspSin(sDegX) * m_sRadX);
+   short sRy = m_sCenY + short(rspSin(sDegY) * m_sRadY);
 
    if (sRx < 0) sRx = 0;
    if (sRy < 0) sRy = 0;
@@ -566,7 +566,7 @@ short	MakeFrame(SampleMasterID* psmid)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		Configure effect
+//      Configure effect
 ////////////////////////////////////////////////////////////////////////////
 short Configure(      //RImage* pimDst,RImage* pimSrc,RMultiAlpha* pX,
    S32 lTimeSpin,
@@ -625,7 +625,7 @@ short Configure(      //RImage* pimDst,RImage* pimSrc,RMultiAlpha* pX,
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		Erase
+//      Erase
 ////////////////////////////////////////////////////////////////////////////
 void Erase()
 {
@@ -637,7 +637,7 @@ void Erase()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		CSwirlMe
+//      CSwirlMe
 ////////////////////////////////////////////////////////////////////////////
 CSwirlMe(
    CCutSceneInfo* pCut)
@@ -647,7 +647,7 @@ CSwirlMe(
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		~CSwirlMe
+//      ~CSwirlMe
 ////////////////////////////////////////////////////////////////////////////
 ~CSwirlMe()
 {
@@ -657,17 +657,17 @@ CSwirlMe(
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		Update (optional) - from screen buffer only!
+//      Update (optional) - from screen buffer only!
 ////////////////////////////////////////////////////////////////////////////
-void	Update()
+void   Update()
 {
    rspUpdateDisplay(m_rClip.sX, m_rClip.sY, m_rClip.sW, m_rClip.sH);
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//		Clear
+//      Clear
 ////////////////////////////////////////////////////////////////////////////
-void	Clear()
+void   Clear()
 {
    //if (m_pimCopy) delete m_pimCopy;
    Erase();
@@ -776,16 +776,16 @@ extern void CutSceneStart(
    {
       TRACE("CutScene(): Error loading bg image: '%s'\n", FullPathVD(szText));
       delete ms_pCut->m_pimBGLayer;
-      ms_pCut->m_pimBGLayer	= NULL;
+      ms_pCut->m_pimBGLayer   = NULL;
    }
 
    //------------------------------------------------------------------------------
    // Get tables used for color matching
    //------------------------------------------------------------------------------
 
-   U8	au8Red[256];
-   U8	au8Green[256];
-   U8	au8Blue[256];
+   U8 au8Red[256];
+   U8 au8Green[256];
+   U8 au8Blue[256];
    rspGetPaletteEntries(0, 256, au8Red, au8Green, au8Blue, sizeof(U8));
 
    //------------------------------------------------------------------------------
@@ -869,11 +869,11 @@ extern void CutSceneStart(
    }
 
    // Set the resource name for the sample
-   ms_pCut->m_musicID.pszId			= ms_pCut->m_szMusic;
-   ms_pCut->m_musicID.usDescFlags	= SMDF_NO_DESCRIPT;
+   ms_pCut->m_musicID.pszId         = ms_pCut->m_szMusic;
+   ms_pCut->m_musicID.usDescFlags   = SMDF_NO_DESCRIPT;
 
    //------------------------------------------------------------------------------
-   //	Create the Text overlay layer (GENLOCK!)
+   //   Create the Text overlay layer (GENLOCK!)
    //------------------------------------------------------------------------------
 
    ms_pCut->m_pimTextLayer = new RImage;
@@ -906,7 +906,7 @@ extern void CutSceneStart(
    // Create cropping rectangle
    // Try to compensate by the way the POSTAL cut scene assets were hosed
 
-   RRect	rCrop;
+   RRect rCrop;
    if (ms_pCut->m_pimBGLayer)
    {
       rCrop = RRect(
@@ -917,10 +917,10 @@ extern void CutSceneStart(
    }
    else
    {
-      rCrop.sX	= 0;
-      rCrop.sY	= 0;
-      rCrop.sW	= g_pimScreenBuf->m_sWidth - (sBorderX * 2);
-      rCrop.sH	= g_pimScreenBuf->m_sHeight - (sBorderY * 2) - 80;
+      rCrop.sX   = 0;
+      rCrop.sY   = 0;
+      rCrop.sW   = g_pimScreenBuf->m_sWidth - (sBorderX * 2);
+      rCrop.sH   = g_pimScreenBuf->m_sHeight - (sBorderY * 2) - 80;
    }
 
    // Create text layer
@@ -959,7 +959,7 @@ extern void CutSceneStart(
          ms_pCut->m_pimBGLayer->m_sWidth, ms_pCut->m_pimBGLayer->m_sHeight,
          &rCrop);
 
-      RRect	rcBGClipper(
+      RRect rcBGClipper(
          0,
          0,
          ms_pCut->m_pimBGLayer->m_sWidth,
@@ -1043,7 +1043,7 @@ extern short CutSceneConfig(
          PROGRESS_BOX_X, PROGRESS_BOX_Y,
          PROGRESS_BOX_WIDTH, PROGRESS_BOX_HEIGHT);
 
-      RRect	rcBGClipper(
+      RRect rcBGClipper(
          0,
          0,
          ms_pCut->m_pimBGLayer->m_sWidth,
@@ -1171,7 +1171,7 @@ static void CutScene_RFileCallback(S32 lBytes)
 
                // Update progress bar area
 
-               RRect	rcBGClipper(
+               RRect rcBGClipper(
                   0,
                   0,
                   ms_pCut->m_pimBGLayer->m_sWidth,

@@ -21,53 +21,53 @@
 // This module deals with setting up the system for the game.
 //
 // History:
-//		11/19/96	MJR	Started.
-//		12/11/96	JPW	Implemented reading and writing of ini files,
-//							functionallity to get/set variables, and delete/create
-//							sections and variables.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
-//							should have been const's.
-//		01/03/97 JPW	Added Read() to functions that access ini file in memory
-//							to insure the file is always read once before getting
-//							and setting of ini file vars/sections
+//      11/19/96   MJR   Started.
+//      12/11/96   JPW   Implemented reading and writing of ini files,
+//                     functionallity to get/set variables, and delete/create
+//                     sections and variables.
+//      12/16/96   JPW   Fixed so it will work with the STL stuff that comes with
+//                     MSVC 4.1 or newer.  Also fixed a few psz parameters that
+//                     should have been const's.
+//      01/03/97 JPW   Added Read() to functions that access ini file in memory
+//                     to insure the file is always read once before getting
+//                     and setting of ini file vars/sections
 //
-//		03/28/97	JMI	Fixed so this'll work with MSVC 4.2.
+//      03/28/97   JMI   Fixed so this'll work with MSVC 4.2.
 //
-//		03/31/97	JMI	Changed sprintf %ud format specifiers (or something) to
-//							%u.
+//      03/31/97   JMI   Changed sprintf %ud format specifiers (or something) to
+//                     %u.
 //
-//		04/21/97 MJR	Changed inclusion of ez_stl from <ez_stl> to "ez_stl",
-//							which goes together with adding ez_stl to sourcesafe
-//							so there's a local copy in this directory.
+//      04/21/97 MJR   Changed inclusion of ez_stl from <ez_stl> to "ez_stl",
+//                     which goes together with adding ez_stl to sourcesafe
+//                     so there's a local copy in this directory.
 //
-//		05/08/97	JMI	Added conditions for compiler versions' STL
-//							differences (namely "list" vs. "list.h").
-//							Also, changed #include <rspix.h> to #include "RSPiX.h".
+//      05/08/97   JMI   Added conditions for compiler versions' STL
+//                     differences (namely "list" vs. "list.h").
+//                     Also, changed #include <rspix.h> to #include "RSPiX.h".
 //
-//		06/11/97	JMI	Commented TRACE in GetIteratorToVariable() when variable
-//							cannot be found and in GetIteratorToSection() when section
-//							cannot be found.
+//      06/11/97   JMI   Commented TRACE in GetIteratorToVariable() when variable
+//                     cannot be found and in GetIteratorToSection() when section
+//                     cannot be found.
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
-//		07/05/97 MJR	Fixed bug in printf() specifications.  Apparently, "%lf"
-//							is not a valid spec.  "%f" works fine by itself.
+//      07/05/97 MJR   Fixed bug in printf() specifications.  Apparently, "%lf"
+//                     is not a valid spec.  "%f" works fine by itself.
 //
-//		07/09/97 MJR	Changed so Close() no S32er calls Write().
-//							Added full support for CR or CR/LF files.
+//      07/09/97 MJR   Changed so Close() no S32er calls Write().
+//                     Added full support for CR or CR/LF files.
 //
-//		07/09/97 MJR	Performed an overall cleanup regarding how the error flag
-//							gets cleared and set.  Also cleaned up how files are
-//							written by close().  Also removed usage of "t" for fopen()
-//							modes because it isn't ANSI standard.  Finally, fixed
-//							the CR/LF stuff so it actually works.
+//      07/09/97 MJR   Performed an overall cleanup regarding how the error flag
+//                     gets cleared and set.  Also cleaned up how files are
+//                     written by close().  Also removed usage of "t" for fopen()
+//                     modes because it isn't ANSI standard.  Finally, fixed
+//                     the CR/LF stuff so it actually works.
 //
-//		08/08/97 MJR	Changed from using ANSI library tmpnam() to our own
-//							version that can work in a specific directory.
+//      08/08/97 MJR   Changed from using ANSI library tmpnam() to our own
+//                     version that can work in a specific directory.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -117,12 +117,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 RPrefs::RPrefs(void)
 {
-   m_pFile			= NULL;
-   m_sReadOnly		= 0;
-   m_sModified		= 0;
-   m_sDidRead		= 0;
-   m_sUseCRLF		= 0;
-   m_pszFileName	= 0;
+   m_pFile         = NULL;
+   m_sReadOnly      = 0;
+   m_sModified      = 0;
+   m_sDidRead      = 0;
+   m_sUseCRLF      = 0;
+   m_pszFileName   = 0;
    m_pszFileMode  = 0;
    m_sErrorStatus = 0;
 }
@@ -578,7 +578,7 @@ short RPrefs::DeleteSection(     // Returns 0 if successfull, non-zero otherwise
          else
          {
             // Remove everything from this section name up to next section name
-            do	{
+            do   {
                RPrefsLineList::Pointer j = m_pllLines.GetNext(i);
                m_pllLines.Remove(i);
                i = j;
@@ -617,7 +617,7 @@ short RPrefs::SetVal(            // Returns 0 if successfull, non-zero otherwise
 {
    // Iterator for section and variable in list of lines
    RPrefsLineList::Pointer iSection, iVariable;
-   RPrefsLine						*pplTemp;
+   RPrefsLine                  *pplTemp;
    char pszLine[128];
 
    ASSERT(pszSection);
@@ -798,7 +798,7 @@ short RPrefs::SetVal(            // Returns 0 if successfull, non-zero otherwise
 ////////////////////////////////////////////////////////////////////////////////
 // Get iterator to a section
 ////////////////////////////////////////////////////////////////////////////////
-short	RPrefs::GetIteratorToSection(    // Returns 0 if successfull, non-zero otherwise
+short RPrefs::GetIteratorToSection(      // Returns 0 if successfull, non-zero otherwise
    const char* pszSection,             // In:  Section name (without brackets)
    RPrefsLineList::Pointer* pi)        // Out: iterator to line in list
 {
@@ -838,7 +838,7 @@ short	RPrefs::GetIteratorToSection(    // Returns 0 if successfull, non-zero oth
 
          if (!sFoundSection)  // If we didn't find section, return non-zero
          {
-            //			TRACE("RPrefs::GetIteratorToSection(): section not found.\n");
+            //         TRACE("RPrefs::GetIteratorToSection(): section not found.\n");
             m_sErrorStatus = 2;
          }
       }
@@ -851,7 +851,7 @@ short	RPrefs::GetIteratorToSection(    // Returns 0 if successfull, non-zero oth
 ////////////////////////////////////////////////////////////////////////////////
 // Get iterator to a variable
 ////////////////////////////////////////////////////////////////////////////////
-short	RPrefs::GetIteratorToVariable(   // Returns 0 if successfull, non-zero otherwise
+short RPrefs::GetIteratorToVariable(     // Returns 0 if successfull, non-zero otherwise
    const char* pszSection,             // In:  Section name (without brackets)
    const char* pszVariable,            // In:  Variable name
    RPrefsLineList::Pointer* pi)        // Out: iterator to line in list
@@ -901,7 +901,7 @@ short	RPrefs::GetIteratorToVariable(   // Returns 0 if successfull, non-zero oth
 
             if (!sFoundVariable)
             {
-               //				TRACE("RPrefs::GetIteratorToVariable(): variable not found.\n");
+               //            TRACE("RPrefs::GetIteratorToVariable(): variable not found.\n");
                m_sErrorStatus = 2;
             }
          }

@@ -19,36 +19,36 @@
 // Project: Postal
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		03/03/97 BRH	Derived this from the CWeapon base class
+//      03/03/97 BRH   Derived this from the CWeapon base class
 //
-//		03/03/97 BRH	Moved the 3D sprite to the CWeapon base class.
+//      03/03/97 BRH   Moved the 3D sprite to the CWeapon base class.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/29/97 BRH	Added an off screen distance at which the rocket will self
-//							destruct.
+//      04/29/97 BRH   Added an off screen distance at which the rocket will self
+//                     destruct.
 //
-//		04/29/97	JMI	Now defines m_sprite (as a CSprite3), which was previously
-//							defined in the base class CWeapon.
-//							Also, added GetSprite() virtual override to provide access
-//							to the sprite from a lower level.
+//      04/29/97   JMI   Now defines m_sprite (as a CSprite3), which was previously
+//                     defined in the base class CWeapon.
+//                     Also, added GetSprite() virtual override to provide access
+//                     to the sprite from a lower level.
 //
-//		07/01/97 BRH	Added smoke timer for creating a trail of smoke.
+//      07/01/97 BRH   Added smoke timer for creating a trail of smoke.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/18/97	JMI	Added m_siThrust to track our thrust play instance so we
-//							can loop it and then terminate the looping when we explode.
+//      07/18/97   JMI   Added m_siThrust to track our thrust play instance so we
+//                     can loop it and then terminate the looping when we explode.
 //
-//		08/14/97 BRH	Added SetCollideBits function so that the Dude and Doofus
-//							could set the collision bits differently.
+//      08/14/97 BRH   Added SetCollideBits function so that the Dude and Doofus
+//                     could set the collision bits differently.
 //
-//		08/23/97	JMI	Added CSmash::AlmostDead to exclude bits.
+//      08/23/97   JMI   Added CSmash::AlmostDead to exclude bits.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef ROCKET_H
@@ -79,7 +79,7 @@ RTransform m_trans;                    // Transform
 CSmash m_smash;
 bool m_bArmed;                         // Initially missile is not armed so it doesn't
                                        // collide with the person who shot it.
-CSprite3	m_sprite;                     // 3D sprite to render this thing.
+CSprite3 m_sprite;                       // 3D sprite to render this thing.
 S32 m_lSmokeTimer;                     // Time between emitting smoke puffs
 
 SampleMaster::SoundInstance m_siThrust;         // Looping thrust play instance.
@@ -105,9 +105,9 @@ public:
 CRocket(CRealm* pRealm)
    : CWeapon(pRealm, CRocketID)
 {
-   m_sprite.m_pthing	= this;
-   m_lSmokeTimer		= 0;
-   m_siThrust			= 0;
+   m_sprite.m_pthing   = this;
+   m_lSmokeTimer      = 0;
+   m_siThrust         = 0;
 }
 
 public:
@@ -172,7 +172,7 @@ void SetCollideBits(                   // Returns nothing
 {
    m_u32CollideIncludeBits = u32CollideBitsInclude;
    m_u32CollideDontcareBits = u32CollideBitsDontCare;
-   m_u32CollideExcludeBits	= u32CollideBitsExclude | CSmash::Ducking | CSmash::AlmostDead;
+   m_u32CollideExcludeBits   = u32CollideBitsExclude | CSmash::Ducking | CSmash::AlmostDead;
 }
 
 

@@ -21,31 +21,31 @@
 //
 //
 // History:
-//		12/08/95	BRH	Started.
+//      12/08/95   BRH   Started.
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CPt				RPt
-//							C2DPoint			R2DPoint
-//							C3DPoint			R3DPoint
-//							CRay				RRay
-//							C2DRay			R2DRay
-//							C3DRay			R3dRay
-//							CRectangle		RRectangle
-//							CCube				RCube
-//							CCircle			RCircle
-//							CSphere			RSphere
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CPt            RPt
+//                     C2DPoint         R2DPoint
+//                     C3DPoint         R3DPoint
+//                     CRay            RRay
+//                     C2DRay         R2DRay
+//                     C3DRay         R3dRay
+//                     CRectangle      RRectangle
+//                     CCube            RCube
+//                     CCircle         RCircle
+//                     CSphere         RSphere
 //
-//		02/17/97	JMI	Removed ~RSphere() proto (had no body).
+//      02/17/97   JMI   Removed ~RSphere() proto (had no body).
 //
-//		02/18/97	JMI	Added empty bodies to ~RRectangle(), ~RCube(), and
-//							~RCircle().
-//							Also, added R2DLine and R3DLine.
+//      02/18/97   JMI   Added empty bodies to ~RRectangle(), ~RCube(), and
+//                     ~RCircle().
+//                     Also, added R2DLine and R3DLine.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	These shape classes were initially created to be used with the
+//   These shape classes were initially created to be used with the
 // regions and in the games.  For most of the shapes there are 2D and 3D
 // versions.  The one you choose would be based on the type of game being
 // created.

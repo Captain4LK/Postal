@@ -18,15 +18,15 @@
 // flagbase.h
 // Project: Postal
 //
-//	History:
+//   History:
 //
-//		06/30/97 BRH	Started this file to contain the base object for the
-//							capture the flag mode.  When the flag meets the base,
-//							the game is complete.
+//      06/30/97 BRH   Started this file to contain the base object for the
+//                     capture the flag mode.  When the flag meets the base,
+//                     the game is complete.
 //
-//		07/12/97 BRH	Added m_u16FlagID to match flags with bases.
+//      07/12/97 BRH   Added m_u16FlagID to match flags with bases.
 //
-//		08/11/97 BRH	Added color variable which is loaded and saved.
+//      08/11/97 BRH   Added color variable which is loaded and saved.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef FLAGBASE_H
@@ -48,7 +48,7 @@ protected:
 // Variables
 //---------------------------------------------------------------------------
 public:
-CAnim3D*		m_panimCurBase;                     // current animation for the base
+CAnim3D*      m_panimCurBase;                     // current animation for the base
 U16 m_u16FlagID;                                // ID to match flag and base
 
 protected:
@@ -74,7 +74,7 @@ CFlagbase(CRealm* pRealm)
    m_dRot = 0;
    m_dX = m_dY = m_dZ = m_dVel = m_dAcc = 0;
    m_panimCur = NULL;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_u16FlagID = 1;
    m_u16Color = 0;
 }
@@ -156,9 +156,9 @@ void EditRect(RRect* pRect);
 // Called by editor to get the hotspot of an object in 2D.
 // (virtual (Overridden here)).
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 //---------------------------------------------------------------------------

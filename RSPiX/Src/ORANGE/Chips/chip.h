@@ -49,12 +49,12 @@ void SetChipImage(RImage* pim)
 { m_pimChip = pim; }
 
 // Set background BKD for all chips.
-static void SetBackground(RImage*	pimbkd)
-{ ms_pimView	= pimbkd; }
+static void SetBackground(RImage*   pimbkd)
+{ ms_pimView   = pimbkd; }
 
 // Set stack image for all chips.
 static void SetStackImage(RImage* pim)
-{ ms_pimStack	= pim; }
+{ ms_pimStack   = pim; }
 
 // Move this chip to the new location.
 void SetPosition(S32 lX, S32 lY, S32 lZ);
@@ -88,22 +88,22 @@ short Stack(void);
 
 // Mark this chip as not stackable if sStack is FALSE.
 void SetStackable(short sStackable)
-{ m_sStackable	= sStackable; }
+{ m_sStackable   = sStackable; }
 
 // Add to this stack.
 // Returns 0 on success.
-short Add(CChip*	pchip);
+short Add(CChip*   pchip);
 
 // Remove sNum chips from this stack.
 // Returns chip/stack on success; NULL on error.
 CChip* Sub(short sNum);
 
 void SetSize(short sNum)
-{	m_sNumChips	= sNum; }
+{   m_sNumChips   = sNum; }
 
 public:     // Querries.
 // Get the sprite for this chip.
-RImage*	GetChipImage(void)
+RImage*   GetChipImage(void)
 { return m_pimChip; }
 
 // Returns pointer to background BKD for all chips.
@@ -121,7 +121,7 @@ short IsSliding(void)
 // Returns the first chip found to be colliding
 // with this chip.  If sTop is TRUE, the lowest,
 // the one with the greatest Y, is found.
-CChip* IsColliding(short sTop	= FALSE);
+CChip* IsColliding(short sTop   = FALSE);
 
 // Returns size of this stack.
 short GetSize(void)
@@ -135,27 +135,27 @@ protected:     // Internal.
 void Init(void);
 
 protected:
-RImage*	m_pimChip;           // Pointer to this image's sprite.
-float	m_fX;                      // Current x coordinate.
-float	m_fY;                      // Current y coordinate.
-float	m_fZ;                      // Current z coordinate.
-short	m_sDestX;                  // Destination x coordinate.
-short	m_sDestY;                  // Destination y coordinate.
-short	m_sDestZ;                  // Destination z coordinate.
-short	m_sRate;                   // Rate to destination.
-short	m_sSliding;                // Sliding if TRUE.
-short	m_sStackable;              // Stackable if not FALSE.
-short	m_sNumChips;               // If greater than 1, this is
-                                 // a stack.
+RImage*   m_pimChip;           // Pointer to this image's sprite.
+float m_fX;                        // Current x coordinate.
+float m_fY;                        // Current y coordinate.
+float m_fZ;                        // Current z coordinate.
+short m_sDestX;                    // Destination x coordinate.
+short m_sDestY;                    // Destination y coordinate.
+short m_sDestZ;                    // Destination z coordinate.
+short m_sRate;                     // Rate to destination.
+short m_sSliding;                  // Sliding if TRUE.
+short m_sStackable;                // Stackable if not FALSE.
+short m_sNumChips;                 // If greater than 1, this is
+                                   // a stack.
 
-static RSList<CChip, float>	ms_slistChips;       // List of all
+static RSList<CChip, float>   ms_slistChips;       // List of all
                                                    // chips sorted by
                                                    // each chip's Z
                                                    // position.
 
-static RImage*	ms_pimView;          // Background for all chips.
+static RImage*   ms_pimView;          // Background for all chips.
 
-static RImage*	ms_pimStack;         // Stack for all chips.
+static RImage*   ms_pimStack;         // Stack for all chips.
 };
 
 //////////////////////////////////////////////////////////////////////

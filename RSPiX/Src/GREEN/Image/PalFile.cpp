@@ -20,9 +20,9 @@
 // PalFile.CPP
 //
 // History:
-//		12/11/96 JMI	Started.
+//      12/11/96 JMI   Started.
 //
-//		02/04/97	JMI	Changed #include "ImageLoad.h" to "PalFile.h".
+//      02/04/97   JMI   Changed #include "ImageLoad.h" to "PalFile.h".
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -33,15 +33,15 @@
 // support.
 //
 // NOTES TO THOSE ADDING NEW FILE VERSIONS:
-//	Please follow these steps when adding a new version Load or Save:
-//	o	Define a new static short RPalFile::LoadVersion#(RPal*, RFile*)
-//	where # is the number of the new version.
+//   Please follow these steps when adding a new version Load or Save:
+//   o   Define a new static short RPalFile::LoadVersion#(RPal*, RFile*)
+//   where # is the number of the new version.
 //
-// o	Call your new LoadVersion#(...) in the switch statement in
-//	RPalFile::Load().
+// o   Call your new LoadVersion#(...) in the switch statement in
+//   RPalFile::Load().
 //
-// o	Make sure the last versions' case in the switch is surrounded by a
-//	#if defined(PAL_LOAD_num) #endif block where 'num' is the last version
+// o   Make sure the last versions' case in the switch is surrounded by a
+//   #if defined(PAL_LOAD_num) #endif block where 'num' is the last version
 // number.
 //
 //
@@ -102,15 +102,15 @@
 //////////////////////////////////////////////////////////////////////////////
 short RPalFile::LoadNoVersion(   // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RPal*		ppal,                // Pal to load into.
-   RFile*	pfile)               // File to load from.
+   RPal*      ppal,                // Pal to load into.
+   RFile*   pfile)               // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    // No RFile support for RPal::Type, so we used a U32.
    U32 u32Temp  = 0;
    pfile->Read(&u32Temp);
-   ppal->m_type	= (RPal::Type)u32Temp;
+   ppal->m_type   = (RPal::Type)u32Temp;
    pfile->Read(&ppal->m_ulSize);
    pfile->Read(&ppal->m_sStartIndex);
    pfile->Read(&ppal->m_sNumEntries);
@@ -145,10 +145,10 @@ short RPalFile::LoadVersion1( // Returns SUCCESS on success or FAILURE on
    RPal*    /*ppal*/,         // Pal to load into.
    RFile*   /*pfile*/)        // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    TRACE("LoadVersion1(): No current support for version 1 RPal.\n");
-   sRes	= FAILURE;
+   sRes   = FAILURE;
 
    return sRes;
 }
@@ -163,10 +163,10 @@ short RPalFile::LoadVersion2( // Returns SUCCESS on success or FAILURE on
    RPal*    /*ppal*/,         // Pal to load into.
    RFile*   /*pfile*/)        // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    TRACE("LoadVersion2(): No current support for version 2 RPal.\n");
-   sRes	= FAILURE;
+   sRes   = FAILURE;
 
    return sRes;
 }
@@ -178,15 +178,15 @@ short RPalFile::LoadVersion2( // Returns SUCCESS on success or FAILURE on
 //////////////////////////////////////////////////////////////////////////////
 short RPalFile::LoadVersion3( // Returns SUCCESS on success or FAILURE on
                               // failure.
-   RPal*		ppal,             // Pal to load into.
-   RFile*	pfile)            // File to load from.
+   RPal*      ppal,             // Pal to load into.
+   RFile*   pfile)            // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    // No RFile support for RPal::Type, so we used a U32.
    U32 u32Temp  = 0;
    pfile->Read(&u32Temp);
-   ppal->m_type	= (RPal::Type)u32Temp;
+   ppal->m_type   = (RPal::Type)u32Temp;
    pfile->Read(&ppal->m_ulSize);
    pfile->Read(&ppal->m_sStartIndex);
    pfile->Read(&ppal->m_sNumEntries);
@@ -226,10 +226,10 @@ short RPalFile::LoadVersion3( // Returns SUCCESS on success or FAILURE on
 //
 //////////////////////////////////////////////////////////////////////////////
 short RPalFile::Load(         // Returns SUCCESS on success or FAILURE on failure.
-   RPal*		ppal,             // Pal to load into.
-   RFile*	pfile)            // File to load from.
+   RPal*      ppal,             // Pal to load into.
+   RFile*   pfile)            // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    // Get finger print . . .
    U32 ulFinger;
@@ -244,21 +244,21 @@ short RPalFile::Load(         // Returns SUCCESS on success or FAILURE on failur
             {
                #if defined(PAL_LOAD_1) || defined(PAL_LOAD_ALL)
             case 1:
-               sRes	= LoadVersion1(ppal, pfile);
+               sRes   = LoadVersion1(ppal, pfile);
                break;
-               #endif	// PAL_LOAD_1
+               #endif   // PAL_LOAD_1
 
                #if defined(PAL_LOAD_2) || defined(PAL_LOAD_ALL)
             case 2:
-               sRes	= LoadVersion2(ppal, pfile);
+               sRes   = LoadVersion2(ppal, pfile);
                break;
-               #endif	// PAL_LOAD_2
+               #endif   // PAL_LOAD_2
 
-//					#if defined(PAL_LOAD_3) || defined(PAL_LOAD_ALL)
+//               #if defined(PAL_LOAD_3) || defined(PAL_LOAD_ALL)
             case 3:
-               sRes	= LoadVersion3(ppal, pfile);
+               sRes   = LoadVersion3(ppal, pfile);
                break;
-//					#endif	// PAL_LOAD_3
+//               #endif   // PAL_LOAD_3
 
             default:    // No current support.
                TRACE("RPal::Load - Error: Unsupported version.\n");
@@ -282,13 +282,13 @@ short RPalFile::Load(         // Returns SUCCESS on success or FAILURE on failur
                "\"CPAL\"\n");
          TRACE("RPal::Load - Note that some older RPal formats had no filetype, and,\n");
          TRACE("therefore, can no S32er be loaded unless in an RImage file.\n");
-         sRes	= FAILURE;
+         sRes   = FAILURE;
       }
    }
    else
    {
       TRACE("ImageLoad(): Error reading RPal format finger print.\n");
-      sRes	= FAILURE;
+      sRes   = FAILURE;
    }
 
    return sRes;

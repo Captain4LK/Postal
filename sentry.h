@@ -18,18 +18,18 @@
 // sentry.h
 // Project: Postal
 //
-//	History:
-//		06/02/97 BRH	Created this sentry gun from gunner.h
+//   History:
+//      06/02/97 BRH   Created this sentry gun from gunner.h
 //
-//		06/30/97	JMI	Added override for EditRect() and EditHotSpot().
-//							Also, added UpdatePosition().
+//      06/30/97   JMI   Added override for EditRect() and EditHotSpot().
+//                     Also, added UpdatePosition().
 //
-//		07/01/97 BRH	Added angular velocity for Sentry gun.
+//      07/01/97 BRH   Added angular velocity for Sentry gun.
 //
-//		08/11/97	JMI	Added transform for base, m_transBase.
-//							Also, added initialization of m_panimCurBase to NULL.
+//      08/11/97   JMI   Added transform for base, m_transBase.
+//                     Also, added initialization of m_panimCurBase to NULL.
 //
-//		08/16/97 BRH	Added weapon bits to pass to ShootWeapon.
+//      08/16/97 BRH   Added weapon bits to pass to ShootWeapon.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef SENTRY_H
@@ -51,8 +51,8 @@ protected:
 // Variables
 //---------------------------------------------------------------------------
 public:
-CSprite3	m_spriteBase;                          // Base of gun that is stationary
-CAnim3D*		m_panimCurBase;                     // current animation for the base
+CSprite3 m_spriteBase;                            // Base of gun that is stationary
+CAnim3D*      m_panimCurBase;                     // current animation for the base
 double m_dXBase;                                // Position of base
 double m_dYBase;                                // Position of base
 double m_dZBase;                                // Position of base
@@ -62,10 +62,10 @@ protected:
 CAnim3D m_animBaseStand;                        // animation for the base of the gun
 CAnim3D m_animBaseDie;                          // animation for the base of the gun
 
-CBulletFest	m_bullets;                          // Generic bullet interface.
+CBulletFest m_bullets;                            // Generic bullet interface.
 S32 m_lLastBulletTime;                          // Last time a bullet was fired.
-short	m_sNumRounds;                             // Number of rounds remaining in the gun
-short	m_sRoundsPerShot;                         // How many bullets does it fire at once
+short m_sNumRounds;                               // Number of rounds remaining in the gun
+short m_sRoundsPerShot;                           // How many bullets does it fire at once
 S32 m_lSqDistRange;                             // Range in pixels squared.
 S32 m_lShootDelay;                              // Time to wait between shots
 double m_dAngularVelocity;                      // Amount it can turn in degrees/second
@@ -106,8 +106,8 @@ CSentry(CRealm* pRealm)
    m_dRot = 0;
    m_dX = m_dY = m_dZ = m_dVel = m_dAcc = 0;
    m_panimCur = m_panimPrev = NULL;
-   m_panimCurBase	= NULL;
-   m_sprite.m_pthing	= this;
+   m_panimCurBase   = NULL;
+   m_sprite.m_pthing   = this;
    m_sNumRounds = 0;
    m_sRoundsPerShot = 0;
    m_lSqDistRange = 0;
@@ -208,9 +208,9 @@ void EditRect(RRect* pRect);
 // Called by editor to get the hotspot of an object in 2D.
 // (virtual (Overridden here)).
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 //---------------------------------------------------------------------------

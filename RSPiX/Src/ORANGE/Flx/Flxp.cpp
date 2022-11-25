@@ -19,10 +19,10 @@
 //
 // FLXP.CPP
 //
-//	??/??/??	???	Created.
+//   ??/??/??   ???   Created.
 //
-// 03/06/96	JMI	Converted references from PORTABLE.H (e.g., DWORD) to
-//						references from SYSTEM.H (e.g., U32).
+// 03/06/96   JMI   Converted references from PORTABLE.H (e.g., DWORD) to
+//                  references from SYSTEM.H (e.g., U32).
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -165,7 +165,7 @@ short CFlx::DoReadFrame(FLX_BUF* pbufRead)
             default:
                //cout << "   DATA UNKNOWN!!!! of size " << lDataSize << endl;
                //comment out the assert 10/20/94 to prevent crash
-               //assert(0);	// Should never get here!
+               //assert(0);   // Should never get here!
                sError = 1;
                break;
             }
@@ -224,9 +224,9 @@ short CFlx::DoReadFrame(FLX_BUF* pbufRead)
 // As an example, to change palette colors 2, 7, 8 and 9, the following data
 // would be used:
 //
-//				2										; word specifies 2 packets
-//				2, 1, r,g,b							; skip 2, do 1
-//				4, 3, r,g,b, r,g,b, r,g,b		; skip 4, do 3
+//            2                              ; word specifies 2 packets
+//            2, 1, r,g,b                     ; skip 2, do 1
+//            4, 3, r,g,b, r,g,b, r,g,b      ; skip 4, do 3
 //
 // The only difference between the two color-oriented data types are that
 // for FLX_DATA_COLOR256, the RGB values range from 0 to 255, while for
@@ -421,7 +421,7 @@ short CFlx::ReadDataBRun(FLX_BUF* pbufRead)
    short sError = 0;
 
    UCHAR bVal;
-   S8	cVal;
+   S8 cVal;
    short sCount;
    short x;
    short y;
@@ -446,7 +446,7 @@ short CFlx::ReadDataBRun(FLX_BUF* pbufRead)
          // are number of pixels to be copied.  If bit 7 is 0, bits 6-0 are
          // the number of times to replicate a single pixel.
          m_file.Read(&cVal);
-         //assert(cVal != 0);	// Not sure how to handle 0!
+         //assert(cVal != 0);   // Not sure how to handle 0!
          if (cVal != 0)
          {
             sCount = (short)cVal;
@@ -538,8 +538,8 @@ short CFlx::ReadDataLC(FLX_BUF* pbufRead)
    if ((pbufRead->pbPixels == NULL) || (pbufRead->sPitch <= 0))
       return 1;
 
-   UCHAR	bVal;
-   S8	cVal;
+   UCHAR bVal;
+   S8 cVal;
    short sCount;
    short y;
    short lines;
@@ -605,7 +605,7 @@ short CFlx::ReadDataLC(FLX_BUF* pbufRead)
             // are number of pixels to be copied.  If bit 7 is 1, bits 6-0 are
             // the number of times to replicate a single pixel.
             m_file.Read(&cVal);
-//				assert(cVal != 0);	// Not sure how to handle 0, so stop if it comes up!
+//            assert(cVal != 0);   // Not sure how to handle 0, so stop if it comes up!
             if (cVal == 0)
                cVal = 0;
 
@@ -667,16 +667,16 @@ short CFlx::ReadDataSS2(FLX_BUF* pbufRead)
    if ((pbufRead->pbPixels == NULL) || (pbufRead->sPitch <= 0))
       return 1;
 
-   UCHAR	bVal;
-   S8	cVal;
+   UCHAR bVal;
+   S8 cVal;
    USHORT wVal;
    short sCount;
    short y;
    short lines;
    short packets;
    UCHAR* pbPix;
-   UCHAR	byLastByte;
-   short	bLastByte = FALSE;
+   UCHAR byLastByte;
+   short bLastByte = FALSE;
 
    // The first word specifies the starting y (another way of looking at it
    // is the number of lines that are unchanged from the previous image).
@@ -773,7 +773,7 @@ short CFlx::ReadDataSS2(FLX_BUF* pbufRead)
             // are number of pixel pairs to be copied.  If bit 7 is 1, bits 6-0 are
             // the number of times to replicate a single pixel pair.
             m_file.Read(&cVal);
-//				assert(cVal != 0);	// Not sure how to handle 0, so stop if it comes up!
+//            assert(cVal != 0);   // Not sure how to handle 0, so stop if it comes up!
 #if 0 // this seems to do nothing, so I'm removing it -- Jon 9/28/94
             if (cVal == 0)
                cVal = 0;
@@ -790,7 +790,7 @@ short CFlx::ReadDataSS2(FLX_BUF* pbufRead)
             {
                sCount = (short)-sCount;
                m_file.Read(&wVal);
-//					memset(pbPix, (int)wVal, (size_t)sCount);
+//               memset(pbPix, (int)wVal, (size_t)sCount);
                USHORT* pwPix = (USHORT*)pbPix;
                for (short i = 0; i < sCount; i++)
                   *pwPix++ = wVal;
@@ -864,7 +864,7 @@ short CFlx::DoWriteFrame(FLX_BUF* pbufWrite, FLX_BUF* pbufPrev)
    // Allocate buffer into which delta data can be written.  Minumum size
    // is width times height plus an extra margin.
    // WARNING: This will only support up to 64k!!!
-//	double dSize = (double)m_filehdr.sWidth * (double)m_filehdr.sHeight * (double)1.5;
+//   double dSize = (double)m_filehdr.sWidth * (double)m_filehdr.sHeight * (double)1.5;
    UCHAR* pBuf = (UCHAR*)malloc((USHORT)m_filehdr.sWidth * (USHORT)m_filehdr.sHeight);
    if (pBuf != NULL)
    {
@@ -1058,11 +1058,11 @@ short CFlx::WriteColorDelta(FLX_BUF* pbufNext, FLX_BUF* pbufPrev, UCHAR* pBuf, S
 // only because of time constraints.  In the future, the "real" logic should
 // be implemented.
 //
-// 10/20/94, Paul Lin,	Modified this routine to write both the FLX_DATA_SS2 and
-//						FLX_DATA_LC formats; either format will automatically be
-//						selected depending on the file format (FLI/FLC) and whether
-//						the current frame written is the first frame or any other
-//						frame.
+// 10/20/94, Paul Lin,   Modified this routine to write both the FLX_DATA_SS2 and
+//                  FLX_DATA_LC formats; either format will automatically be
+//                  selected depending on the file format (FLI/FLC) and whether
+//                  the current frame written is the first frame or any other
+//                  frame.
 //
 ///////////////////////////////////////////////////////////////////////////////
 short CFlx::WritePixelDelta(FLX_BUF* pbufNext, FLX_BUF* pbufPrev, UCHAR* pBuf, S32* plChunkSize)
@@ -1259,28 +1259,28 @@ short CFlx::WritePixelDelta(FLX_BUF* pbufNext, FLX_BUF* pbufPrev, UCHAR* pBuf, S
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Name:		CompressLineDelta
+// Name:      CompressLineDelta
 //
-// Description:	This function will perform either UCHAR/USHORT oriented delta
-//				compression, given the current line.  If compression is possible,
-//				the compressed data will be written to the buffer provided.
-//				Otherwise, an error will be returned to indicate no compression.
+// Description:   This function will perform either UCHAR/USHORT oriented delta
+//            compression, given the current line.  If compression is possible,
+//            the compressed data will be written to the buffer provided.
+//            Otherwise, an error will be returned to indicate no compression.
 //
-// Input:		y =            current line to compress
-//				pbufNext =        pointer to the current flx frame
-//				pbufPrev =        pointer to the previous flx frame
-//				pbDst =        pointer to the chunk area to be written to, updated
-//				lSize =        size of the current compressed line
-//				sAlign =			specifies the data size alignment
-//				sLineSkipCount =	skip lines for word oriented delta compression for word aligned
-//									or contains number of empty lines for byte aligned
+// Input:      y =            current line to compress
+//            pbufNext =        pointer to the current flx frame
+//            pbufPrev =        pointer to the previous flx frame
+//            pbDst =        pointer to the chunk area to be written to, updated
+//            lSize =        size of the current compressed line
+//            sAlign =         specifies the data size alignment
+//            sLineSkipCount =   skip lines for word oriented delta compression for word aligned
+//                           or contains number of empty lines for byte aligned
 //
-// Output:		(short)
-//				0 =		Compression success
-//				1 =		No compression took place
-//				-1 =	A real error occurred!
+// Output:      (short)
+//            0 =      Compression success
+//            1 =      No compression took place
+//            -1 =   A real error occurred!
 //
-// History:		10/25/94, Paul Lin, original coding.
+// History:      10/25/94, Paul Lin, original coding.
 //
 /////////////////////////////////////////////////////////////////////////////
 short CFlx::CompressLineDelta(short y,
@@ -1341,8 +1341,8 @@ short CFlx::CompressLineDelta(short y,
       }
 
       // If the pitch is odd, we need to store the last byte if different.
-//		if ((pbufNext->sPitch % 2) == 1)
-//		{
+//      if ((pbufNext->sPitch % 2) == 1)
+//      {
       dwOffset = ((U32)y * (U32)pbufNext->sPitch) + (U32)(pbufNext->sPitch - 1);
       if (pbSrcNext[dwOffset] != pbSrcPrev[dwOffset])
       {
@@ -1357,8 +1357,8 @@ short CFlx::CompressLineDelta(short y,
       }
 
       // Adjust the pitch to eliminate the odd byte.  Useful for testing limits later.
-//			sAdjustedPitch--;
-//		}
+//         sAdjustedPitch--;
+//      }
    }
 
    // Save the position in the chunk for storing the packet count.
@@ -1575,7 +1575,7 @@ S32 CFlx::CompressBRUN(
    S32 lUniqueX;
    S32 lUniqueCnt;
    S32 lRepeatCnt;
-   UCHAR	bRepeatPix;
+   UCHAR bRepeatPix;
    S32 x;
    S32 y;
    S32 lOutCnt = 0;
@@ -1603,7 +1603,7 @@ S32 CFlx::CompressBRUN(
       lUniqueCnt = 0;
       lUniqueX = 0;
       x = 0;
-      do	{
+      do   {
 
          // Count how many additional pixels match current pixel
          lRepeatCnt = 0;
@@ -1627,7 +1627,7 @@ S32 CFlx::CompressBRUN(
                (*pbPackets)++;
                *pbOut++ = (UCHAR)(-lUniqueCnt); // Unique counts are negative
                lOutCnt++;
-               do	{
+               do   {
                   *pbOut++ = pbIn[lUniqueX++];
                   lOutCnt++;
                } while (--lUniqueCnt);
@@ -1661,7 +1661,7 @@ S32 CFlx::CompressBRUN(
                (*pbPackets)++;
                *pbOut++ = (UCHAR)(-lUniqueCnt); // Unique counts are negative
                lOutCnt++;
-               do	{
+               do   {
                   *pbOut++ = pbIn[lUniqueX++];
                   lOutCnt++;
                } while (--lUniqueCnt);
@@ -1675,7 +1675,7 @@ S32 CFlx::CompressBRUN(
          (*pbPackets)++;
          *pbOut++ = (UCHAR)(-lUniqueCnt); // Unique counts are negative
          lOutCnt++;
-         do	{
+         do   {
             *pbOut++ = pbIn[lUniqueX++];
             lOutCnt++;
          } while (--lUniqueCnt);

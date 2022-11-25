@@ -40,9 +40,9 @@ public:        // Construction/Destruction.
 // Default constructor.
 CRtTime()
 {
-   m_fnTime			= NULL;
-   m_lOffset		= 0L;
-   m_sSuspended	= 0;
+   m_fnTime         = NULL;
+   m_lOffset      = 0L;
+   m_sSuspended   = 0;
    // Might as well start out at 0.
    SetTime(0L);
 }
@@ -61,8 +61,8 @@ void SetTimeFunc(RTTIMEFUNC fnTime)
 void SetTime(S32 lTime)
 {
    // Zero the offset so we get the actual reported time.
-   m_lOffset	= 0;
-   m_lOffset	= lTime - GetTime();
+   m_lOffset   = 0;
+   m_lOffset   = lTime - GetTime();
 }
 
 // Suspends the timer.  Stores the current time.
@@ -73,7 +73,7 @@ void Suspend(void)
    if (m_sSuspended++ == 0)
    {
       // Get the current time.
-      m_lSuspended	= GetTime();
+      m_lSuspended   = GetTime();
    }
 }
 
@@ -119,7 +119,7 @@ protected:     // Members.
 RTTIMEFUNC m_fnTime;             // If set, used to get time.
 S32 m_lOffset;                   // Added to the time to manipulate it.
 S32 m_lSuspended;                // Time at which the timer was suspended.
-short	m_sSuspended;              // TRUE if the timer is currently suspended.
+short m_sSuspended;                // TRUE if the timer is currently suspended.
 };
 
 

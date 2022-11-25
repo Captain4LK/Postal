@@ -46,9 +46,9 @@
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
 // Number of values remembered for histogram.
-#define METER_HISTOGRAM_HISTORY	20    // Values.
+#define METER_HISTOGRAM_HISTORY   20    // Values.
 // Maximum length for the unit string.
-#define MAX_UNIT_LEN					128   // Characters.
+#define MAX_UNIT_LEN               128   // Characters.
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -98,8 +98,8 @@ public:     // Methods.
 // should probably always draw the meter.
 short Draw(                   // Returns 0 on success.
    RImage* pimDst,            // Destination image.
-   short sDstX	= 0,           // X position in destination.
-   short sDstY	= 0,           // Y position in destination.
+   short sDstX   = 0,           // X position in destination.
+   short sDstY   = 0,           // Y position in destination.
    short sSrcX = 0,           // X position in source.
    short sSrcY = 0,           // Y position in source.
    short sW = 0,              // Amount to draw.
@@ -123,20 +123,20 @@ S32 SetNewValue(        // Returns previous value.
 {
    S32 lRes  = m_lCurVal;
    // Store new val.
-   m_lCurVal	= lNewVal;
+   m_lCurVal   = lNewVal;
    // Accumulate total.
-   m_lCurTotal	+= lNewVal;
+   m_lCurTotal   += lNewVal;
    // Count updates.
    m_lNumValues++;
    // If the new value is less than the min . . .
    if (lNewVal < m_lMinValue)
    {
-      m_lMinValue	= lNewVal;
+      m_lMinValue   = lNewVal;
    }
    // If the new value is greater than the max . . .
    if (lNewVal > m_lMaxValue)
    {
-      m_lMaxValue	= lNewVal;
+      m_lMaxValue   = lNewVal;
    }
    // Return old.
    return lRes;
@@ -146,7 +146,7 @@ S32 SetNewValue(        // Returns previous value.
 // Call EndPeriod() to end the period and update the meter.
 void StartPeriod(void)
 {
-   m_lStartPeriod	= rspGetMilliseconds();
+   m_lStartPeriod   = rspGetMilliseconds();
 }
 
 // This ends a period and updates the meter with the length of
@@ -161,7 +161,7 @@ S32 EndPeriod(void)        // Returns period.
 void SetUpdateInterval(       // Returns nothing.
    S32 lDuration)          // Time in milliseconds between updates.
 {
-   m_lDuration	= lDuration;
+   m_lDuration   = lDuration;
 }
 
 // Set the type of meter you want.
@@ -171,8 +171,8 @@ void SetType(                 // Returns nothing.
    InfoType itType)           // In: Type of info display.
                               // See Enums above.
 {
-   m_dtType	= dtType;
-   m_itType	= itType;
+   m_dtType   = dtType;
+   m_itType   = itType;
 }
 
 // Set the range for the meter.
@@ -180,8 +180,8 @@ void SetRange(          // Returns nothing.
    S32 lMin,            // Minimum value.
    S32 lMax)            // Maximum value.
 {
-   m_lMin	= lMin;
-   m_lMax	= lMax;
+   m_lMin   = lMin;
+   m_lMax   = lMax;
 }
 
 // Set the unit of measurement for info display.
@@ -200,17 +200,17 @@ void SetColors(               // Returns nothing.
    U32 u32Text,               // Text foreground color.
    U32 u32Overflow)           // Needle color for over/underflow.
 {
-   m_u32BackColor		= u32Background;
-   m_u32Meter			= u32Meter;
-   m_u32Needle			= u32Needle;
-   m_u32TextColor		= u32Text;
-   m_u32Overflow		= u32Overflow;
+   m_u32BackColor      = u32Background;
+   m_u32Meter         = u32Meter;
+   m_u32Needle         = u32Needle;
+   m_u32TextColor      = u32Text;
+   m_u32Overflow      = u32Overflow;
 }
 
 // Compose the static portions.  Fills the parts of the image
 // that don't change.
 void Compose(                       // Returns 0 nothing.
-   RImage*	pimDst = NULL);         // In: Destination.  NULL == use internal m_im.
+   RImage*   pimDst = NULL);         // In: Destination.  NULL == use internal m_im.
 
 // Advance to next meter type.  Called by btn callback.
 void NextType(void)
@@ -248,8 +248,8 @@ S32 m_lStartPeriod;                                // Start period.
 char m_szUnit[MAX_UNIT_LEN + 1];                   // Unit of measurement text.
 S32 m_lMin;                                        // Minimum value on meter.
 S32 m_lMax;                                        // Maximum value on meter.
-DisplayType	m_dtType;                              // Type of meter display.
-InfoType	m_itType;                                 // Type of meter info.
+DisplayType m_dtType;                                // Type of meter display.
+InfoType m_itType;                                   // Type of meter info.
 U32 m_u32Meter;                                    // Meter color.
 U32 m_u32Needle;                                   // Needle, bar, etc. color.
 U32 m_u32Overflow;                                 // Needle color for over/underflow.
@@ -265,21 +265,21 @@ S32 m_lMaxValue;                                   // Maximum value since
                                                    // total was last cleared.
 S32 m_lMinValue;                                   // Minimum value since
                                                    // total was last cleared.
-RGuiItem	m_guiMeter;                               // Actual meter gui.
+RGuiItem m_guiMeter;                                 // Actual meter gui.
 
 // History of values for histogram.
-short	m_asQHistory[METER_HISTOGRAM_HISTORY];
+short m_asQHistory[METER_HISTOGRAM_HISTORY];
 S32 m_lQIndex;
 
 
 protected:     // Internal typedefs.
 
 protected:     // Protected member variables.
-short	m_sInfoY;
+short m_sInfoY;
 
 };
 
 #endif // METER_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

@@ -165,7 +165,7 @@ short RFont::AddLetter(RImage* pimLetter, short sASCII,
 
    // First find if a font exists:
    RFontSet* pFont = m_pFontSets;
-   RSpecialFSPR1*	pInfo = NULL;
+   RSpecialFSPR1*   pInfo = NULL;
 
    // try to handle a generic type efficiently:
    if (pimLetter->m_type == RImage::FSPR1)
@@ -482,7 +482,7 @@ RFont::RFontSet* RFont::FindSize(short sCellH, double *pdScale)
 // fontset, which would leave a degenerate font.  You supply
 // the fontset to remove.  It returns SUCCESS or FAILURE.
 //
-short	RFont::DeleteSet(RFontSet* pRemove)
+short RFont::DeleteSet(RFontSet* pRemove)
 {
    RFontSet* pFont = m_pFontSets;
    // Must not degenerate the font:

@@ -19,131 +19,131 @@
 // Project: Postal
 //
 // History:
-//		04/29/97 JMI	Started.
+//      04/29/97 JMI   Started.
 //
-//		04/29/97 BRH	Removed the verb from the structure since each action
-//							has a verb, there needed to be more than one for
-//							each person type so its better left up to the
-//							GetResources() function.  Also added 3d/ prefix
-//							to the base names.
+//      04/29/97 BRH   Removed the verb from the structure since each action
+//                     has a verb, there needed to be more than one for
+//                     each person type so its better left up to the
+//                     GetResources() function.  Also added 3d/ prefix
+//                     to the base names.
 //
-//		05/17/97 BRH	Added Kid, Swat, Protestor and Woman to the list.
+//      05/17/97 BRH   Added Kid, Swat, Protestor and Woman to the list.
 //
-//		06/13/97	JMI	Added event name for grenader, cop, gunner, rocketman,
-//							and swat.
+//      06/13/97   JMI   Added event name for grenader, cop, gunner, rocketman,
+//                     and swat.
 //
-//		06/13/97	JMI	Changed swat to use 'machinetip' instead of 'hand' for
-//							shoot link point.
+//      06/13/97   JMI   Changed swat to use 'machinetip' instead of 'hand' for
+//                     shoot link point.
 //
-//		06/14/97 BRH	Added more sound events
+//      06/14/97 BRH   Added more sound events
 //
-//		06/15/97 BRH	Picked sound effects and comments for the sound
-//							events for the different people.
+//      06/15/97 BRH   Picked sound effects and comments for the sound
+//                     events for the different people.
 //
-//		06/16/97 BRH	Added Hick Cop as a new person type with a differen
-//							sound theme.  Also changed some other sound effects
-//							now that we have some more variety.
+//      06/16/97 BRH   Added Hick Cop as a new person type with a differen
+//                     sound theme.  Also changed some other sound effects
+//                     now that we have some more variety.
 //
-//		07/01/97 BRH	Added military guy.
+//      07/01/97 BRH   Added military guy.
 //
-//		07/03/97 BRH	Added construction guy, fixed events for miner &
-//							construction worker.
+//      07/03/97 BRH   Added construction guy, fixed events for miner &
+//                     construction worker.
 //
-//		07/04/97 BRH	Added the man and woman victims.
+//      07/04/97 BRH   Added the man and woman victims.
 //
-//		07/08/97 BRH	Renamed construction, grenader, gunner, military and
-//							rocketman animations since some of the names were too
-//							S32 for the delicate MacOS.
+//      07/08/97 BRH   Renamed construction, grenader, gunner, military and
+//                     rocketman animations since some of the names were too
+//                     S32 for the delicate MacOS.
 //
-//		07/23/97 BRH	Added tunable values for timeouts for guard mode,
-//							time between shot reactions, and time between
-//							shooting in run and shoot mode.
+//      07/23/97 BRH   Added tunable values for timeouts for guard mode,
+//                     time between shot reactions, and time between
+//                     shooting in run and shoot mode.
 //
-//		07/25/97 BRH	Added initial hit points for person types.
+//      07/25/97 BRH   Added initial hit points for person types.
 //
-//		07/31/97 BRH	Fixed military and kid rigid body names and event names
-//							so that they will load again.
+//      07/31/97 BRH   Fixed military and kid rigid body names and event names
+//                     so that they will load again.
 //
-//		08/07/97	JMI	Added names for all 'hand' transform channels.
+//      08/07/97   JMI   Added names for all 'hand' transform channels.
 //
-//		08/08/97	JMI	Upgraded the rigid body weapon transforms to the correct
-//							ones for each type.
+//      08/08/97   JMI   Upgraded the rigid body weapon transforms to the correct
+//                     ones for each type.
 //
-//		08/09/97 BRH	Added more person types for more voice variety.
+//      08/09/97 BRH   Added more person types for more voice variety.
 //
-//		08/10/97 BRH	Evened out the shot talking comments so there is only
-//							1 talking comment out of the 4 when possible.  Some
-//							sound schemes are short on some sounds like the female
-//							voices, there aren't enough reactions, too many comments.
+//      08/10/97 BRH   Evened out the shot talking comments so there is only
+//                     1 talking comment out of the 4 when possible.  Some
+//                     sound schemes are short on some sounds like the female
+//                     voices, there aren't enough reactions, too many comments.
 //
-//		08/11/97	JMI	Set fallback weapon types for all people.  For those
-//							with throwing animations, set the fallback weapon type
-//							to TotalIDs which indicates none, of course.
+//      08/11/97   JMI   Set fallback weapon types for all people.  For those
+//                     with throwing animations, set the fallback weapon type
+//                     to TotalIDs which indicates none, of course.
 //
-//		08/11/97	JMI	Removed fallback weapons for victims.
+//      08/11/97   JMI   Removed fallback weapons for victims.
 //
-//		08/12/97 BRH	Added writhing motion type so that we know what they
-//							do when the are writhing, whether it be crawling,
-//							pushing themselves on their back, or just staying in
-//							place.
+//      08/12/97 BRH   Added writhing motion type so that we know what they
+//                     do when the are writhing, whether it be crawling,
+//                     pushing themselves on their back, or just staying in
+//                     place.
 //
-//		08/12/97	JMI	Removed pszShowWeaponEvent that we just added b/c we
-//							went ahead and hid the weapon if the current main event
-//							is greater than or equal to 10.
+//      08/12/97   JMI   Removed pszShowWeaponEvent that we just added b/c we
+//                     went ahead and hid the weapon if the current main event
+//                     is greater than or equal to 10.
 //
-//		08/12/97 BRH	Added a texture scheme number to the animation struct
-//							that indicates which texture file to load.  Now the
-//							people only need to load 1 .tex file rather than one
-//							for every different animation.
+//      08/12/97 BRH   Added a texture scheme number to the animation struct
+//                     that indicates which texture file to load.  Now the
+//                     people only need to load 1 .tex file rather than one
+//                     for every different animation.
 //
-//		08/12/97 BRH	Updated color schemes for the people
+//      08/12/97 BRH   Updated color schemes for the people
 //
-//		08/13/97 BRH	Added two more people for different texture variety.
-//							Also moved all shot comments to the top of the list
-//							so they won't be repeated.  Added new cop sounds.
+//      08/13/97 BRH   Added two more people for different texture variety.
+//                     Also moved all shot comments to the top of the list
+//                     so they won't be repeated.  Added new cop sounds.
 //
-//		08/14/97 BRH	Made the person description names generic.
+//      08/14/97 BRH   Made the person description names generic.
 //
-//		08/16/97 BRH	Fixed problems with the protestor trying to load
-//							rigid bodys for the sign.  Since he is not using it
-//							I made the names NULL so that all of the animations
-//							would load properly, previously some of the animations
-//							had the sign and others didn't.
+//      08/16/97 BRH   Fixed problems with the protestor trying to load
+//                     rigid bodys for the sign.  Since he is not using it
+//                     I made the names NULL so that all of the animations
+//                     would load properly, previously some of the animations
+//                     had the sign and others didn't.
 //
-//		08/18/97	JMI	Changed hitpoints as follows:
-//							Persona					new hitpoints
-//							============			==============
-//							Swat guys				170
-//							Gunner Gals				150
-//							Rocket guys				200
-//							Military guys			150
-//							Cops (except hicks)	125
+//      08/18/97   JMI   Changed hitpoints as follows:
+//                     Persona               new hitpoints
+//                     ============         ==============
+//                     Swat guys            170
+//                     Gunner Gals            150
+//                     Rocket guys            200
+//                     Military guys         150
+//                     Cops (except hicks)   125
 //
-//		08/26/97 BRH	Put back descriptive names, and changed some of the
-//							voices.  More moaning for the female characters and
-//							the addition of Verne's voice for the cop.
+//      08/26/97 BRH   Put back descriptive names, and changed some of the
+//                     voices.  More moaning for the female characters and
+//                     the addition of Verne's voice for the cop.
 //
-//		12/17/97	JMI	Added some new persons:
-//							Employee 1 & 2, Red Cross 1 & 2, Golfer 1 & 2, Lawyer,
-//							Bum 1 & 2, Vet 1 & 2, Nude 1 & 2, Gramps 1 & 2, Granny
-//							1, 2, & 3.
+//      12/17/97   JMI   Added some new persons:
+//                     Employee 1 & 2, Red Cross 1 & 2, Golfer 1 & 2, Lawyer,
+//                     Bum 1 & 2, Vet 1 & 2, Nude 1 & 2, Gramps 1 & 2, Granny
+//                     1, 2, & 3.
 //
-//		01/19/98	BRH	Added Shopper versions of Golfer, Bum and Vet so that
-///						they look different but say the normal non-level
-//							specific victim stuff.
+//      01/19/98   BRH   Added Shopper versions of Golfer, Bum and Vet so that
+///                  they look different but say the normal non-level
+//                     specific victim stuff.
 //
-//		01/26/98 BRH	Fixed the Lifestyle flags for the new people we added,
-//							a previous copy/paste error resulted in all of the new
-//							victims being counted as hostiles.
+//      01/26/98 BRH   Fixed the Lifestyle flags for the new people we added,
+//                     a previous copy/paste error resulted in all of the new
+//                     victims being counted as hostiles.
 //
-//		10/06/99 BRH	Added japanese characters for the Japan Addon Pack.
-//							Changed the texture index values for the japanese
-//							people so that we can edit their textures without
-//							changing the original textures.
+//      10/06/99 BRH   Added japanese characters for the Japan Addon Pack.
+//                     Changed the texture index values for the japanese
+//                     people so that we can edit their textures without
+//                     changing the original textures.
 //
-//		10/14/99	JMI	Changed Japanese characters' names.
+//      10/14/99   JMI   Changed Japanese characters' names.
 //
-//		03/31/00 MJR	Put conditional compilation around Japanese characters.
+//      03/31/00 MJR   Put conditional compilation around Japanese characters.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -156,7 +156,7 @@
 // To add to the Personatorium:
 // 1) Add an enum value to the Personatorium::Index typedef representing your
 // new person.  Note that it MUST be entered just before NumPersons.
-//	2) Add an entry to the end of the array of Personatoriums, g_apersons, in
+//   2) Add an entry to the end of the array of Personatoriums, g_apersons, in
 // Personatorium.cpp copying an existing entry as a template.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@
 
 // This is the master list of person descriptions that can be used to describe
 // a CPerson.  See header comment for details of adding a person description.
-extern Personatorium g_apersons[Personatorium::NumPersons]	=
+extern Personatorium g_apersons[Personatorium::NumPersons]   =
 {
 
    ///////////////////////////////Grenader////////////////////////////////////

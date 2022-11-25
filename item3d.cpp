@@ -22,81 +22,81 @@
 // 3D object.
 //
 // History:
-//		03/06/97	JMI	Started this 3D item class.
+//      03/06/97   JMI   Started this 3D item class.
 //
-//		03/06/97	JMI	EditModify() now allows you to pick or specify an anim.
+//      03/06/97   JMI   EditModify() now allows you to pick or specify an anim.
 //
-//		03/06/97	JMI	Fixed Custom selection in EditModify() dialog.
+//      03/06/97   JMI   Fixed Custom selection in EditModify() dialog.
 //
-//		03/06/97	JMI	Now loads parents instance ID and overrides Render().
+//      03/06/97   JMI   Now loads parents instance ID and overrides Render().
 //
-//		03/06/97	JMI	Added Trumpet, Horn, and Sax and descriptions for known
-//							types.
+//      03/06/97   JMI   Added Trumpet, Horn, and Sax and descriptions for known
+//                     types.
 //
-//		03/07/97	JMI	Added handy everything-to-get-started Setup().
+//      03/07/97   JMI   Added handy everything-to-get-started Setup().
 //
-//		03/12/97	JMI	Update() now calculates the duration in seconds, updates
-//							m_lPrevTime, and passes the duration to DeluxeUpdatePosVel.
+//      03/12/97   JMI   Update() now calculates the duration in seconds, updates
+//                     m_lPrevTime, and passes the duration to DeluxeUpdatePosVel.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/18/97	JMI	Now based on CThing3d instead of CCharacter.
+//      03/18/97   JMI   Now based on CThing3d instead of CCharacter.
 //
-//		03/18/97	JMI	Now processes State_BlownUp.
+//      03/18/97   JMI   Now processes State_BlownUp.
 //
-//		03/18/97	JMI	EditModify() was not selecting the current item in the
-//							listbox.
-//							Also, removed Render() override.
+//      03/18/97   JMI   EditModify() was not selecting the current item in the
+//                     listbox.
+//                     Also, removed Render() override.
 //
-//		03/18/97	JMI	Forgot to set the parent instance ID to the one passed in
-//							the Setup() function.
+//      03/18/97   JMI   Forgot to set the parent instance ID to the one passed in
+//                     the Setup() function.
 //
-//		03/19/97	JMI	m_lAnimTime was not being reset to 0 ever.  Now it is set
-//							in Init().
+//      03/19/97   JMI   m_lAnimTime was not being reset to 0 ever.  Now it is set
+//                     in Init().
 //
-//		03/19/97	JMI	Now starts object spinning around Y and Z when an explosive
-//							force affects it and stops the spinning when WhileBlownUp()
-//							returns false.
+//      03/19/97   JMI   Now starts object spinning around Y and Z when an explosive
+//                     force affects it and stops the spinning when WhileBlownUp()
+//                     returns false.
 //
-//		03/25/97	JMI	Changed EDIT_GUI_FILE to 8.3 compliant name.
+//      03/25/97   JMI   Changed EDIT_GUI_FILE to 8.3 compliant name.
 //
-//		04/23/97	JMI	Now sets its m_smash's bits to Misc instead of Item.
+//      04/23/97   JMI   Now sets its m_smash's bits to Misc instead of Item.
 //
-//		05/13/97	JMI	Now FreeResources() checks to make sure we have some
-//							some animation resources before Release()ing them.
-//							This allows GetResources() to call FreeResources()
-//							indiscriminantly before getting new resources.
+//      05/13/97   JMI   Now FreeResources() checks to make sure we have some
+//                     some animation resources before Release()ing them.
+//                     This allows GetResources() to call FreeResources()
+//                     indiscriminantly before getting new resources.
 //
-//		06/09/97	JMI	Added rotation velocities to EditModify().
-//							Now saves these values as of FileVersion 18.
+//      06/09/97   JMI   Added rotation velocities to EditModify().
+//                     Now saves these values as of FileVersion 18.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
-//							a shadow sprite.
+//      06/25/97   JMI   Now calls PrepareShadow() in Init() which loads and sets up
+//                     a shadow sprite.
 //
-//		06/25/97	JMI	Uses smaller shadow now....If we need multiple sizes later,
-//							we can make an additional array.
+//      06/25/97   JMI   Uses smaller shadow now....If we need multiple sizes later,
+//                     we can make an additional array.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		08/07/97	JMI	Added ability to optionally load a rigid body and child
-//							anim for this item3d.
+//      08/07/97   JMI   Added ability to optionally load a rigid body and child
+//                     anim for this item3d.
 //
-//		08/07/97	JMI	Added additional parameter to CAnim3D::Get() call.
+//      08/07/97   JMI   Added additional parameter to CAnim3D::Get() call.
 //
-//		08/13/97	JMI	EditModify() sets m_type to Custom if it is None.
+//      08/13/97   JMI   EditModify() sets m_type to Custom if it is None.
 //
-//		08/28/97	JMI	Now if a GetResources() fails, it removes the sprite from
-//							the scene just in case it was already there.  Also, only
-//							call base class Render(), if there's loaded anim data.
-//							The problem is that the EditModify() can fail b/c the
-//							user's anim choice failed to load.  In this case, we're
-//							forced to persist without anim data.  This will probably
-//							cause the realm not to load, though, if saved in such a
-//							state.
+//      08/28/97   JMI   Now if a GetResources() fails, it removes the sprite from
+//                     the scene just in case it was already there.  Also, only
+//                     call base class Render(), if there's loaded anim data.
+//                     The problem is that the EditModify() can fail b/c the
+//                     user's anim choice failed to load.  In this case, we're
+//                     forced to persist without anim data.  This will probably
+//                     cause the realm not to load, though, if saved in such a
+//                     state.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define ITEM3D_CPP
@@ -111,18 +111,18 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define NUM_RES_NAMES	7
+#define NUM_RES_NAMES   7
 
-#define EDIT_GUI_FILE	"res/editor/Item3d.gui"
+#define EDIT_GUI_FILE   "res/editor/Item3d.gui"
 
-#define SHADOW_RES_NAME		"SmallShadow.img"
+#define SHADOW_RES_NAME      "SmallShadow.img"
 
-#define LIST_BOX_ID				200
-#define RESNAME_EDIT_ID			100
-#define RIGID_RESNAME_EDIT_ID	101
-#define CHILD_RESNAME_EDIT_ID	102
-#define YROTVEL_EDIT_ID			300
-#define ZROTVEL_EDIT_ID			301
+#define LIST_BOX_ID            200
+#define RESNAME_EDIT_ID         100
+#define RIGID_RESNAME_EDIT_ID   101
+#define CHILD_RESNAME_EDIT_ID   102
+#define YROTVEL_EDIT_ID         300
+#define ZROTVEL_EDIT_ID         301
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -132,7 +132,7 @@
 short CItem3d::ms_sFileCount;
 
 // Array of known animation base names.
-char*	CItem3d::ms_apszKnownAnimBaseNames[CItem3d::NumTypes]	=
+char*   CItem3d::ms_apszKnownAnimBaseNames[CItem3d::NumTypes]   =
 {
    "None",           // None.
    "Custom",         // Custom.
@@ -142,7 +142,7 @@ char*	CItem3d::ms_apszKnownAnimBaseNames[CItem3d::NumTypes]	=
 };
 
 // Array of known animation descriptions.
-char*	CItem3d::ms_apszKnownAnimDescriptions[CItem3d::NumTypes]	=
+char*   CItem3d::ms_apszKnownAnimDescriptions[CItem3d::NumTypes]   =
 {
    "None",
    "Custom",
@@ -151,7 +151,7 @@ char*	CItem3d::ms_apszKnownAnimDescriptions[CItem3d::NumTypes]	=
    "Sax",
 };
 
-static char* ms_apszResExtensions[NUM_RES_NAMES]	=
+static char* ms_apszResExtensions[NUM_RES_NAMES]   =
 {
    "sop",
    "mesh",
@@ -173,7 +173,7 @@ short CItem3d::Load(                            // Returns 0 if successfull, non
    short sResult = 0;
 
    // In most cases, the base class Load() should be called.
-   sResult	= CThing3d::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CThing3d::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load common data just once per file (not with each object)
@@ -246,7 +246,7 @@ short CItem3d::Load(                            // Returns 0 if successfull, non
 
          U32 u32Temp;
          pFile->Read(&u32Temp);
-         m_type	= (ItemType)u32Temp;
+         m_type   = (ItemType)u32Temp;
 
          pFile->Read(&m_u16IdParent);
          break;
@@ -283,7 +283,7 @@ short CItem3d::Save(                            // Returns 0 if successfull, non
    short sResult = 0;
 
    // In most cases, the base class Save() should be called.
-   sResult	= CThing3d::Save(pFile, sFileCount);
+   sResult   = CThing3d::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Save common data just once per file (not with each object)
@@ -307,7 +307,7 @@ short CItem3d::Save(                            // Returns 0 if successfull, non
 
       pFile->Write(m_u16IdParent);
 
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
    else
    {
@@ -329,10 +329,10 @@ void CItem3d::Update(void)
 
       // Advance the animation timer.
       S32 lDifTime    = lThisTime - m_lAnimPrevUpdateTime;
-      m_lAnimTime			+= lDifTime;
+      m_lAnimTime         += lDifTime;
 
       // Update prev time.
-      m_lAnimPrevUpdateTime	= lThisTime;
+      m_lAnimPrevUpdateTime   = lThisTime;
 
       // Service message queue.
       ProcessMessages();
@@ -344,10 +344,10 @@ void CItem3d::Update(void)
          // Handle state.  If done . . .
          if (WhileBlownUp() == false)
          {
-            m_state	= State_Idle;
+            m_state   = State_Idle;
             // Stop the spinning.
-            m_dExtRotVelY	= 0;
-            m_dExtRotVelZ	= 0;
+            m_dExtRotVelY   = 0;
+            m_dExtRotVelZ   = 0;
          }
          break;
       default:
@@ -363,10 +363,10 @@ void CItem3d::Update(void)
       }
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -392,12 +392,12 @@ void CItem3d::Render(void)                      // Returns nothing.
    if (m_animChild.m_pmeshes && m_anim.m_ptransRigid)
    {
       // Update the child sprite.
-      m_spriteChild.m_pmesh	= m_animChild.m_pmeshes->GetAtTime(m_lAnimTime);
-      m_spriteChild.m_psop		= m_animChild.m_psops->GetAtTime(m_lAnimTime);
-      m_spriteChild.m_ptex		= m_animChild.m_ptextures->GetAtTime(m_lAnimTime);
-      m_spriteChild.m_psphere	= m_animChild.m_pbounds->GetAtTime(m_lAnimTime);
+      m_spriteChild.m_pmesh   = m_animChild.m_pmeshes->GetAtTime(m_lAnimTime);
+      m_spriteChild.m_psop      = m_animChild.m_psops->GetAtTime(m_lAnimTime);
+      m_spriteChild.m_ptex      = m_animChild.m_ptextures->GetAtTime(m_lAnimTime);
+      m_spriteChild.m_psphere   = m_animChild.m_pbounds->GetAtTime(m_lAnimTime);
       // Use parent's rigid body transform for transform.
-      m_spriteChild.m_ptrans	= m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime);
+      m_spriteChild.m_ptrans   = m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime);
    }
 }
 
@@ -412,7 +412,7 @@ short CItem3d::EditNew(                         // Returns 0 if successfull, non
    short sResult = CThing3d::EditNew(sX, sY, sZ);
    if (sResult == 0)
    {
-      sResult	= EditModify();
+      sResult   = EditModify();
    }
 
    return sResult;
@@ -423,18 +423,18 @@ short CItem3d::EditNew(                         // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 short CItem3d::EditModify(void)              // Returns 0 if successfull, non-zero otherwise
 {
-   short	sResult	= CThing3d::EditModify();
+   short sResult   = CThing3d::EditModify();
 
-   RGuiItem*	pguiRoot	= RGuiItem::LoadInstantiate(FullPathVD(EDIT_GUI_FILE));
+   RGuiItem*   pguiRoot   = RGuiItem::LoadInstantiate(FullPathVD(EDIT_GUI_FILE));
    if (pguiRoot != NULL)
    {
       // Get listbox.
-      RListBox* plb				= (RListBox*)pguiRoot->GetItemFromId(LIST_BOX_ID);
-      REdit*	peditName		= (REdit*)pguiRoot->GetItemFromId(RESNAME_EDIT_ID);
-      REdit*	peditRigidName	= (REdit*)pguiRoot->GetItemFromId(RIGID_RESNAME_EDIT_ID);
-      REdit*	peditChildName	= (REdit*)pguiRoot->GetItemFromId(CHILD_RESNAME_EDIT_ID);
-      REdit*	peditRotY		= (REdit*)pguiRoot->GetItemFromId(YROTVEL_EDIT_ID);
-      REdit*	peditRotZ		= (REdit*)pguiRoot->GetItemFromId(ZROTVEL_EDIT_ID);
+      RListBox* plb            = (RListBox*)pguiRoot->GetItemFromId(LIST_BOX_ID);
+      REdit*   peditName      = (REdit*)pguiRoot->GetItemFromId(RESNAME_EDIT_ID);
+      REdit*   peditRigidName   = (REdit*)pguiRoot->GetItemFromId(RIGID_RESNAME_EDIT_ID);
+      REdit*   peditChildName   = (REdit*)pguiRoot->GetItemFromId(CHILD_RESNAME_EDIT_ID);
+      REdit*   peditRotY      = (REdit*)pguiRoot->GetItemFromId(YROTVEL_EDIT_ID);
+      REdit*   peditRotZ      = (REdit*)pguiRoot->GetItemFromId(ZROTVEL_EDIT_ID);
       if (peditName && plb && peditRotY && peditRotZ && peditChildName && peditRigidName)
       {
          ASSERT(peditName->m_type == RGuiItem::Edit);
@@ -461,18 +461,18 @@ short CItem3d::EditModify(void)              // Returns 0 if successfull, non-ze
          if (m_type == None)
          {
             // Default to custom for ease of user interface.
-            m_type	= Custom;
+            m_type   = Custom;
          }
 
-         short	i;
-         RGuiItem*	pguiItem;
+         short i;
+         RGuiItem*   pguiItem;
          for (i = Custom; i < NumTypes; i++)
          {
-            pguiItem	= plb->AddString(ms_apszKnownAnimDescriptions[i]);
+            pguiItem   = plb->AddString(ms_apszKnownAnimDescriptions[i]);
             if (pguiItem != NULL)
             {
                // Set item number.
-               pguiItem->m_ulUserData	= i;
+               pguiItem->m_ulUserData   = i;
                // If this item is the current type . . .
                if (m_type == i)
                {
@@ -486,10 +486,10 @@ short CItem3d::EditModify(void)              // Returns 0 if successfull, non-ze
 
          if (DoGui(pguiRoot) == 1)
          {
-            RGuiItem*	pguiSel	= plb->GetSel();
+            RGuiItem*   pguiSel   = plb->GetSel();
             if (pguiSel != NULL)
             {
-               m_type	= (ItemType)pguiSel->m_ulUserData;
+               m_type   = (ItemType)pguiSel->m_ulUserData;
                if (m_type != Custom)
                {
                   strcpy(m_szAnimBaseName, ms_apszKnownAnimBaseNames[m_type]);
@@ -501,7 +501,7 @@ short CItem3d::EditModify(void)              // Returns 0 if successfull, non-ze
             }
             else
             {
-               sResult	= 1;
+               sResult   = 1;
             }
 
             // Get new rigid body name.
@@ -511,24 +511,24 @@ short CItem3d::EditModify(void)              // Returns 0 if successfull, non-ze
             strcpy(m_szChildAnimBaseName, peditChildName->m_szText);
 
             // Get new rotation velocities.
-            m_dExtRotVelY	= strtod(peditRotY->m_szText, NULL);
-            m_dExtRotVelZ	= strtod(peditRotZ->m_szText, NULL);
+            m_dExtRotVelY   = strtod(peditRotY->m_szText, NULL);
+            m_dExtRotVelZ   = strtod(peditRotZ->m_szText, NULL);
          }
          else
          {
-            sResult	= 1;
+            sResult   = 1;
          }
       }
       else
       {
          TRACE("EditModify(): Missing GUI items in  %s.\n", EDIT_GUI_FILE);
-         sResult	= -2;
+         sResult   = -2;
       }
    }
    else
    {
       TRACE("EditModify(): Failed to load %s.\n", EDIT_GUI_FILE);
-      sResult	= -1;
+      sResult   = -1;
    }
 
    // If successful so far . . .
@@ -549,18 +549,18 @@ short CItem3d::Init(void)                          // Returns 0 if successfull, 
 {
    short sResult = 0;
 
-   m_lPrevTime			= m_pRealm->m_time.GetGameTime();
+   m_lPrevTime         = m_pRealm->m_time.GetGameTime();
 
    // Get resources
    sResult = GetResources();
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	|= PrepareShadow();
+   sResult   |= PrepareShadow();
 
-   m_smash.m_bits		= CSmash::Misc;
-   m_smash.m_pThing	= this;
-   m_panimCur			= &m_anim;
-   m_lAnimTime			= 0;
+   m_smash.m_bits      = CSmash::Misc;
+   m_smash.m_pThing   = this;
+   m_panimCur         = &m_anim;
+   m_lAnimTime         = 0;
 
    // If the child sprite is functional . . .
    if (m_animChild.m_pmeshes && m_anim.m_ptransRigid)
@@ -604,17 +604,17 @@ short CItem3d::GetResources(void)                  // Returns 0 if successfull, 
    }
 
    // Load main anim.
-   sResult	= m_anim.Get(m_szAnimBaseName, m_szAnimRigidName, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+   sResult   = m_anim.Get(m_szAnimBaseName, m_szAnimRigidName, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
    // If there is a child name . . .
    if (m_szChildAnimBaseName[0])
    {
       // Load child naim.
-      sResult	|= m_animChild.Get(m_szChildAnimBaseName, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
+      sResult   |= m_animChild.Get(m_szChildAnimBaseName, NULL, NULL, NULL, RChannel_LoopAtStart | RChannel_LoopAtEnd);
    }
 
    // Get shadow.
-   sResult	|= rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(SHADOW_RES_NAME), &m_spriteShadow.m_pImage);
+   sResult   |= rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(SHADOW_RES_NAME), &m_spriteShadow.m_pImage);
 
    // If errors . . .
    if (sResult)
@@ -667,8 +667,8 @@ void CItem3d::OnExplosionMsg(             // Returns nothing.
    m_state = State_BlownUp;
 
    // Send it spinning.
-   m_dExtRotVelY	= GetRand() % 720;
-   m_dExtRotVelZ	= GetRand() % 720;
+   m_dExtRotVelY   = GetRand() % 720;
+   m_dExtRotVelZ   = GetRand() % 720;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -698,26 +698,26 @@ short CItem3d::Setup(         // Returns 0 on success.
    short sY,                  // In: Starting Y position
    short sZ,                  // In: Starting Z position
    ItemType type,             // In:  Known item type or Custom.
-   char*	pszCustomBaseName /*= NULL*/, // In:  Required if type == Custom.
-                                       // Base name for custom type resources.
+   char*   pszCustomBaseName /*= NULL*/, // In:  Required if type == Custom.
+                                         // Base name for custom type resources.
    U16 u16IdParentInstance /*= CIdBank::IdNil*/)   // In:  Parent instance ID.
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
-   m_dX	= sX;
-   m_dY	= sY;
-   m_dZ	= sZ;
+   m_dX   = sX;
+   m_dY   = sY;
+   m_dZ   = sZ;
 
-   m_type	= type;
+   m_type   = type;
 
    if (pszCustomBaseName != NULL)
    {
       strcpy(m_szAnimBaseName, pszCustomBaseName);
    }
 
-   m_u16IdParent	= u16IdParentInstance;
+   m_u16IdParent   = u16IdParentInstance;
 
-   sResult	= Init();
+   sResult   = Init();
 
    return sResult;
 }

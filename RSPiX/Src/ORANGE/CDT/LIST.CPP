@@ -18,13 +18,13 @@
 // LIST.CPP
 //
 // History:
-//		06/23/94 JMI	Started.
+//      06/23/94 JMI   Started.
 //
-//		06/14/95	JMI	Converted to a template in attempt to make this class
-//							more useful.  This particular file becomes unnecessary
-//							at this point.  Do not bother including this CPP file
-//							in your project (the entirity of this template class
-//							is implemented in the .H file).
+//      06/14/95   JMI   Converted to a template in attempt to make this class
+//                     more useful.  This particular file becomes unnecessary
+//                     at this point.  Do not bother including this CPP file
+//                     in your project (the entirity of this template class
+//                     is implemented in the .H file).
 //
 //
 //////////////////////////////////////////////////////////////////////////////

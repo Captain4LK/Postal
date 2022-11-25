@@ -21,7 +21,7 @@
 
 //#define SMASH_DEBUG
 
-#ifdef	SMASH_DEBUG
+#ifdef   SMASH_DEBUG
 
    #include "debugSmash.H"
 
@@ -32,57 +32,57 @@
 // smash.h (grid based edition)
 // Project: Postal
 //
-//	History:
-//		05/26/97	JRD	Started.
+//   History:
+//      05/26/97   JRD   Started.
 //
-//		06/04/97 JRD	Integrated with Postal for testing using NEW_SMASH project
-//							setting so dependent files could still work with old smash
+//      06/04/97 JRD   Integrated with Postal for testing using NEW_SMASH project
+//                     setting so dependent files could still work with old smash
 //
-//		06/20/97	JRD	Removed backwards smash compatibility
+//      06/20/97   JRD   Removed backwards smash compatibility
 //
-//		07/03/97	JRD	Added an incremental tagged search to eliminate redundant
-//							parts.  Implemented a system of ray tracking accross the grid.
+//      07/03/97   JRD   Added an incremental tagged search to eliminate redundant
+//                     parts.  Implemented a system of ray tracking accross the grid.
 //
-//		07/05/97	JRD	Fixed MANY bugs in the line collision algorithms.
-//							Handled special
-//							cases of near vertical lines and vertical clipping.
-//							Still can't deal with fat smash objects.
+//      07/05/97   JRD   Fixed MANY bugs in the line collision algorithms.
+//                     Handled special
+//                     cases of near vertical lines and vertical clipping.
+//                     Still can't deal with fat smash objects.
 //
-//		07/07/97 JRD	Used a new class to implement fat smash objects without impacting
-//							performance - CFatSmash.
+//      07/07/97 JRD   Used a new class to implement fat smash objects without impacting
+//                     performance - CFatSmash.
 //
-//		07/08/97	JMI	Added debug ASSERTs for "bridge's out" condition to help
-//					BRH	us catch which CThings don't remove their smash(es).
-//							Also, added release mode protection against "bridge's out"
-//							condition.
-//							Also, added bits for flags and flag bases.
-//							Also, moved definition of ~CSmash() into smash.cpp b/c
-//							of circular dependency (a Philips chain of command of
-//							sorts) between smashatorium and realm.
-//							Also, moved CSmash b/c Bill thinks it's better to keep
-//							the destructor with the constructor or ease of findage.
+//      07/08/97   JMI   Added debug ASSERTs for "bridge's out" condition to help
+//               BRH   us catch which CThings don't remove their smash(es).
+//                     Also, added release mode protection against "bridge's out"
+//                     condition.
+//                     Also, added bits for flags and flag bases.
+//                     Also, moved definition of ~CSmash() into smash.cpp b/c
+//                     of circular dependency (a Philips chain of command of
+//                     sorts) between smashatorium and realm.
+//                     Also, moved CSmash b/c Bill thinks it's better to keep
+//                     the destructor with the constructor or ease of findage.
 //
-//		07/10/97	JRD	Finally copleted and debugged ful support for Fat Smash
-//							objects.  The main criteria in determining what size is
-//							"fat", is that "fat" objects shouldn't move very often.
-//							NOTE that the n2 collision space in the new smash is
-//							equivalent to NINE smash tiles, so if the tile size is
-//							72, the collision areas will be 216 x 216!  So be careful!
+//      07/10/97   JRD   Finally copleted and debugged ful support for Fat Smash
+//                     objects.  The main criteria in determining what size is
+//                     "fat", is that "fat" objects shouldn't move very often.
+//                     NOTE that the n2 collision space in the new smash is
+//                     equivalent to NINE smash tiles, so if the tile size is
+//                     72, the collision areas will be 216 x 216!  So be careful!
 //
-//		08/09/97	JMI	CSmashatorium::Update() was checking the realm's
-//							m_flags.bEditPlay flag (which signifies that we're playing
-//							a game from the editor) instead of the m_flags.bEditing
-//							flag which indicates we're editting.  Fixed.
+//      08/09/97   JMI   CSmashatorium::Update() was checking the realm's
+//                     m_flags.bEditPlay flag (which signifies that we're playing
+//                     a game from the editor) instead of the m_flags.bEditing
+//                     flag which indicates we're editting.  Fixed.
 //
-//		08/18/97 BRH	Fixed typo that used m_pSmasher instead of pSmasher
-//							that was passed in.  Fixed CollideCyl that was checking
-//							X and Y collisions to checking X and Z collisions.
+//      08/18/97 BRH   Fixed typo that used m_pSmasher instead of pSmasher
+//                     that was passed in.  Fixed CollideCyl that was checking
+//                     X and Y collisions to checking X and Z collisions.
 //
-//		08/31/97	JMI	Added some ASSERTs to foil SmartHeap's fancy smancy bounds
-//							check padding areas and allow us to debug 'read' bounds
-//							errors in debug mode.
+//      08/31/97   JMI   Added some ASSERTs to foil SmartHeap's fancy smancy bounds
+//                     check padding areas and allow us to debug 'read' bounds
+//                     errors in debug mode.
 //
-//		09/02/97	JMI	Added some more ASSERTs for debug mode bounds checking.
+//      09/02/97   JMI   Added some more ASSERTs for debug mode bounds checking.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@
 //  sizes so static objects could be contained in a fine grid.
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	The current model demands that objects in the smashatorium exist in no more
+//   The current model demands that objects in the smashatorium exist in no more
 // than four grid locations simultaneously.  Large smash objects used to detect
 // objects-within-a-distance are hooked as a special type of smashee and use
 // different collision routines.  Similarly, line collisions need higher level
@@ -110,21 +110,21 @@
 //
 //  The current Smashatorium "HIERARCHY OF OBJECTS"  :
 //
-//	CSmashLink -> A 128-bit struct which is the manipulation block for the grid.
+//   CSmashLink -> A 128-bit struct which is the manipulation block for the grid.
 //               It currently points back to it's CSmash parent and it's old grid
-//				     location.  For efficiency, we could redundantly store the
+//                 location.  For efficiency, we could redundantly store the
 //               smash bits here.
 //
 // CSmash -> One of more of these is held by actual game objects.  It contains
-//				 a pointer back to the thing parent, a spherical collision region,
+//             a pointer back to the thing parent, a spherical collision region,
 //           the smash bits, and four SmashLinks to track the corners of the
 //           objects in the Smashatorium Grid.
 //
 // CSmashatoriumList -> manages each grid's linked list.  The grid is a 2d array
-//								of these nodes.
+//                        of these nodes.
 //
 // CSmashatorium -> Hold the grid and world clipping info.  Handles all the user
-//						 functions.  Holds the state for the sequential checking state.
+//                   functions.  Holds the state for the sequential checking state.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -159,13 +159,13 @@ CSmash::~CSmash()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//	CSmashatorium::CollideCyl - check for special collision with sphere case
+//   CSmashatorium::CollideCyl - check for special collision with sphere case
 ////////////////////////////////////////////////////////////////////////////////
 // This is a VERY special case scenario - currently, if the Smashee is a CDude,
 // and IF his sphere collides, we THEN need to check if his "cylinder" collides.
 // In this case, his cylinder is fixed at half his sphere radius.
 ////////////////////////////////////////////////////////////////////////////////
-short	CSmashatorium::CollideCyl(CSmash* pSmashee, RSphere* pSphere) // sphere of Smasher
+short CSmashatorium::CollideCyl(CSmash* pSmashee, RSphere* pSphere)   // sphere of Smasher
 {
    if (!pSmashee->m_pThing) return SUCCESS;  // not a dude
    if (pSmashee->m_pThing->GetClassID() != CThing::CDudeID) return SUCCESS;   // not a dude
@@ -180,13 +180,13 @@ short	CSmashatorium::CollideCyl(CSmash* pSmashee, RSphere* pSphere) // sphere of
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//	CSmashatorium::CollideCyl - check for special collision with line case
+//   CSmashatorium::CollideCyl - check for special collision with line case
 ////////////////////////////////////////////////////////////////////////////////
 // This is a VERY special case scenario - currently, if the Smashee is a CDude,
 // and IF his sphere collides, we THEN need to check if his "cylinder" collides.
 // In this case, his cylinder is fixed at half his sphere radius.
 ////////////////////////////////////////////////////////////////////////////////
-short	CSmashatorium::CollideCyl(CSmash* pSmashee, R3DLine* pLine) // sphere of Smasher
+short CSmashatorium::CollideCyl(CSmash* pSmashee, R3DLine* pLine)   // sphere of Smasher
 {
    if (!pSmashee->m_pThing) return SUCCESS;  // not a dude
    if (pSmashee->m_pThing->GetClassID() != CThing::CDudeID) return SUCCESS;   // not a dude
@@ -284,11 +284,11 @@ short CSmashatorium::Alloc(short sWorldW, short sWorldH, short sTileW, short sTi
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Reset -
+//   Reset -
 //
-//	Reset does NOT DEALLOCATE any portion of the Smashatorium.
-//	It is just a short cut to reset each of the grid's
-//	SmashLists.  But Each Smash must reset it's own Links!
+//   Reset does NOT DEALLOCATE any portion of the Smashatorium.
+//   It is just a short cut to reset each of the grid's
+//   SmashLists.  But Each Smash must reset it's own Links!
 //
 ////////////////////////////////////////////////////////////////////////////////
 void CSmashatorium::Reset()
@@ -303,7 +303,7 @@ void CSmashatorium::Reset()
    S32 lCur;
    for (lCur = 0; lCur < S32(m_sGridW) * m_sGridH; lCur++)
    {
-      CSmashatoriumList	*pCur = m_pGrid + lCur;
+      CSmashatoriumList   *pCur = m_pGrid + lCur;
       pCur->m_sNum = 0;
       pCur->m_slHead.Erase();
       pCur->m_slTail.Erase();
@@ -314,10 +314,10 @@ void CSmashatorium::Reset()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheckReset
+//   QuickCheckReset
 //
-//	Reset QuickCheckNext() using the specified parameters.
-//	Begin a multicall collision search based on a smashee
+//   Reset QuickCheckNext() using the specified parameters.
+//   Begin a multicall collision search based on a smashee
 // If the Smashee is in the Smashatorium, it must be small enough to fit.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -398,7 +398,7 @@ void CSmashatorium::QuickCheckReset(// Returns true if collision detected, false
    // Set up the search parameters:
    m_pCurrentSmashee = NULL; // Pending first request
    m_pCurrentList = m_ppslClipY[lY] + m_psClipX[lX];
-   m_sCurrentListX = 0; // m_psClipX[lX];	// CURRENTLY, these are used merely as iterators
+   m_sCurrentListX = 0; // m_psClipX[lX];   // CURRENTLY, these are used merely as iterators
    m_sCurrentListY = 0; //m_psClipY[lY];
 
    m_sSearchW = 1 + m_psClipX[lX2] - m_psClipX[lX];
@@ -452,9 +452,9 @@ void CSmashatorium::QuickCheckReset(            // Returns true if collision det
 // in some particular order.  The function will return false when there are no
 // more colisions.
 bool CSmashatorium::QuickCheckNext(             // Returns true if collision detected, false otherwise
-   R3DLine*	pline,                              // In:  Line segment to collide against.
+   R3DLine*   pline,                              // In:  Line segment to collide against.
    CSmash** pSmashee,                        // Out: Thing being smashed into if any (unless 0)
-   CSmash*	pSmasher)                        // Out: Smash that should be excluded from search.
+   CSmash*   pSmasher)                        // Out: Smash that should be excluded from search.
 {
    ASSERT(0);
    return false;  // NEVER USED ANYMORE!
@@ -462,7 +462,7 @@ bool CSmashatorium::QuickCheckNext(             // Returns true if collision det
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheckNext - Smasher against smashee
+//   QuickCheckNext - Smasher against smashee
 //
 // Returns true if collision detected, false otherwise
 // Out: The Next Thing being smashed into if any (unless 0)
@@ -537,7 +537,7 @@ bool CSmashatorium::QuickCheckNext(CSmash** ppSmashee)
    if (!m_pSmasher) return false; // reset at end of search
 
    // 2) The QuickCheckReset parameters can tell the size:
-   //		Look for a collision with our requirements
+   //      Look for a collision with our requirements
    pSmashee = GetNextSmash();
    while (pSmashee)  // compare this with what we want
    {
@@ -567,7 +567,7 @@ bool CSmashatorium::QuickCheckNext(CSmash** ppSmashee)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheck - Smasher against smashee
+//   QuickCheck - Smasher against smashee
 //
 // Returns true if collision detected, false otherwise
 // Sets *ppSmashee to the thing collided with.
@@ -698,7 +698,7 @@ bool CSmashatorium::QuickCheck(                 // Returns true if collision det
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheckClosest - Smasher against smashee
+//   QuickCheckClosest - Smasher against smashee
 //
 // Returns true if collision detected, false otherwise
 // Sets *ppSmashee to the thing collided with.
@@ -848,7 +848,7 @@ bool CSmashatorium::QuickCheckClosest(          // Returns true if collision det
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheck - collide a line with the smash
+//   QuickCheck - collide a line with the smash
 //
 // Determine whether specified R3DLine is colliding with anything, and
 // if so, (optionally) return the first thing it's colliding with.
@@ -860,7 +860,7 @@ bool CSmashatorium::QuickCheck(// Returns true if collision detected, false othe
    CSmash::Bits dontcare,     // In:  Bits that you don't care about
    CSmash::Bits exclude,      // In:  Bits that must be 0 to collide with a given CSmash
    CSmash** ppSmashee,        // Out: Thing being smashed into if any (unless 0)
-   CSmash*	pSmasher)         // Out: Smash that should be excluded from search.
+   CSmash*   pSmasher)         // Out: Smash that should be excluded from search.
 {
    ASSERT(0);
 
@@ -906,8 +906,8 @@ void CSmashatorium::Debug()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	QuickCheckClosest -	collide a line with the smash, excluding myself
-//								Find the closest hit to the FIRST point in the line!
+//   QuickCheckClosest -   collide a line with the smash, excluding myself
+//                        Find the closest hit to the FIRST point in the line!
 //
 // Determine whether specified R3DLine is colliding with anything, and
 // if so, (optionally) return the closet thing (to the CSmash) it's colliding with.
@@ -922,7 +922,7 @@ bool CSmashatorium::QuickCheckClosest( // Returns true if collision detected, fa
    CSmash::Bits dontcare,              // In:  Bits that you don't care about
    CSmash::Bits exclude,               // In:  Bits that must be 0 to collide with a given CSmash
    CSmash** ppSmashee,                 // Out: Thing being smashed into if any.
-   CSmash*	pSmasher)                  // Out: Smash that should be excluded from search.
+   CSmash*   pSmasher)                  // Out: Smash that should be excluded from search.
 {
    // This is a tricky line, because far from the standard 8-connect line, this must include
    // ALL regions the line even glances through!  And cliping is a nightmare!
@@ -1005,8 +1005,8 @@ bool CSmashatorium::QuickCheckClosest( // Returns true if collision detected, fa
    {
       sVerticalStrip = true;  // initial x clipping
    }
-//		}
-//	else
+//      }
+//   else
 
    if (sVerticalStrip)  // do special clipping:
    {
@@ -1169,7 +1169,7 @@ bool CSmashatorium::QuickCheckClosest( // Returns true if collision detected, fa
       // Now, a little tricky - do a bidirectional loop to cover both quadrants:
       for (j = alPointsY[i]; j != (alPointsY[i + 1] + sSignY); j += sSignY)
       {
-#ifdef	SMASH_DEBUG
+#ifdef   SMASH_DEBUG
 
          DebugSmash.DrawSmashSquare(3, 0, i - 1, j - 1);
 
@@ -1216,8 +1216,8 @@ bool CSmashatorium::QuickCheckClosest( // Returns true if collision detected, fa
                            if (lCurDist2 < lClosestDist2)
                            {
                               // Make this the closest.
-                              pClosestSmash	= pSmashee;
-                              lClosestDist2	= lCurDist2;
+                              pClosestSmash   = pSmashee;
+                              lClosestDist2   = lCurDist2;
                            }
                         }
                      }
@@ -1246,7 +1246,7 @@ bool CSmashatorium::QuickCheckClosest( // Returns true if collision detected, fa
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	AddLimb
+//   AddLimb
 //
 // Lower level function for adding each leg of the Smash into it's quadrant
 //
@@ -1271,7 +1271,7 @@ void CSmashatorium::AddLimb(CSmashatoriumList* pList, CSmashLink* pLink)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	RemoveLimb
+//   RemoveLimb
 //
 // Lower level function for removing each leg of the Smash from it's quadrant
 //
@@ -1296,7 +1296,7 @@ void CSmashatorium::RemoveLimb(CSmashatoriumList* pList, CSmashLink* pLink)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//		Update
+//      Update
 //
 // Update the specified CSmash.  If it isn't already in the smashatorium, it
 // is automatically added.  Whenever the CSmash is modified, this must be
@@ -1337,7 +1337,7 @@ void CSmashatorium::Update(CSmash* pSmash)   // In:  CSmash to be updated
    {
       //================================================================== FAT SMASH
       // Create and insert a fat smash into the smashatorium.
-      CFatSmash*	pFat = pSmash->m_pFat;
+      CFatSmash*   pFat = pSmash->m_pFat;
 
       if (!pSmash->m_pFat) // we need to create a fat for you boy!
       {
@@ -1487,7 +1487,7 @@ void CSmashatorium::Update(CSmash* pSmash)   // In:  CSmash to be updated
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//		ADD
+//      ADD
 //
 // Higher Level -> add an entire CSmash into the 'torium
 // User calls Update, which checks for clipping
@@ -1518,7 +1518,7 @@ void CSmashatorium::Add(CSmash* pSmash, CSmashatoriumList *pList)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//		AddFat
+//      AddFat
 //
 // Higher Level -> add an entire CSmash into the 'torium
 // User calls Update, which checks for clipping
@@ -1535,8 +1535,8 @@ void CSmashatorium::AddFat(CFatSmash* pFatSmash)
    //=====================================
    pFatSmash->m_pParent->m_sInGrid = TRUE;
    short i, j;
-   CSmashatoriumList*	pList = pFatSmash->m_pClippedGrid;  // assume not clipped out!
-   CSmashLink*	pLink = pFatSmash->m_pFirstLink;
+   CSmashatoriumList*   pList = pFatSmash->m_pClippedGrid;  // assume not clipped out!
+   CSmashLink*   pLink = pFatSmash->m_pFirstLink;
    //-------------------------------------
    for (j = 0; j < pFatSmash->m_sClipH; j++, pList += m_sGridW - pFatSmash->m_sClipW,
         pLink += pFatSmash->m_sW - pFatSmash->m_sClipW)
@@ -1556,7 +1556,7 @@ void CSmashatorium::AddFat(CFatSmash* pFatSmash)
 ////////////////////////////////////////////////////////////////////////////////
 //
 //
-//	Remove
+//   Remove
 //
 // This is on a per object level:
 // Remove the CSmash from the smashatorium
@@ -1592,7 +1592,7 @@ void CSmashatorium::Remove(CSmash* pSmash)
 ////////////////////////////////////////////////////////////////////////////////
 //
 //
-//	RemoveFat
+//   RemoveFat
 //
 // This is on a per object level:
 // Remove the CSmash from the smashatorium
@@ -1609,7 +1609,7 @@ void CSmashatorium::RemoveFat(CFatSmash* pFatSmash)
    short i, j;
 
    //****** HERE IS A BIG DESIGN FLAW!!!!! *****
-   CSmashLink*	pLink = pFatSmash->m_pLinks;  // do them all!
+   CSmashLink*   pLink = pFatSmash->m_pLinks;  // do them all!
    //-------------------------------------
    for (j = 0; j < pFatSmash->m_sH; j++)
    {
@@ -1633,7 +1633,7 @@ void CSmashatorium::RemoveFat(CFatSmash* pFatSmash)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	CFatSmash::Erase - clear all values but do not deallocate
+//   CFatSmash::Erase - clear all values but do not deallocate
 //
 ////////////////////////////////////////////////////////////////////////////////
 void CFatSmash::Erase()
@@ -1649,7 +1649,7 @@ void CFatSmash::Erase()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	CFatSmash::Destroy - deallocate the extra smash links...
+//   CFatSmash::Destroy - deallocate the extra smash links...
 //
 ////////////////////////////////////////////////////////////////////////////////
 void CFatSmash::Destroy()
@@ -1663,12 +1663,12 @@ void CFatSmash::Destroy()
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	CFatSmash::Alloc - This instantiates a list of extra SmashLinks
+//   CFatSmash::Alloc - This instantiates a list of extra SmashLinks
 //
-//	RETURNS:	SUCCESS OR FAILURE
+//   RETURNS:   SUCCESS OR FAILURE
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	CFatSmash::Alloc(short sNumLinks)
+short CFatSmash::Alloc(short sNumLinks)
 {
    m_pLinks = new CSmashLink[sNumLinks];
    if (m_pLinks) return SUCCESS;

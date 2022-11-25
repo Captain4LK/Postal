@@ -22,34 +22,34 @@
 //
 // History:
 //
-//		06/30/97 BRH	Started this file for the challenge levels.
+//      06/30/97 BRH   Started this file for the challenge levels.
 //
-//		07/12/97 BRH	Added FlagID so that flags can be matched with their
-//							bases.  Added loading/saving thereof.  Also added
-//							EditModify dialog so that the value can be set.
+//      07/12/97 BRH   Added FlagID so that flags can be matched with their
+//                     bases.  Added loading/saving thereof.  Also added
+//                     EditModify dialog so that the value can be set.
 //
-//		07/14/97 BRH	Changed to using the CSmash::Flagbase bits to identify
-//							the base.  Also added checking for Flags to update
-//							and incrementing the m_sFlagbaseCaptured value in realm
-//							when the proper flag meets the base.
+//      07/14/97 BRH   Changed to using the CSmash::Flagbase bits to identify
+//                     the base.  Also added checking for Flags to update
+//                     and incrementing the m_sFlagbaseCaptured value in realm
+//                     when the proper flag meets the base.
 //
-//		07/16/97 BRH	Changed to using the correct base files rather than
-//							the bandguy as a placeholder.
+//      07/16/97 BRH   Changed to using the correct base files rather than
+//                     the bandguy as a placeholder.
 //
-//		08/03/97	JMI	Init() was setting the looping parms on a phot which no
-//							S32er exists.  Now the looping parms are passed via the
-//							Get() call in GetResources() instead so they will get set
-//							via the CAnim3D which should know which ones are okay to
-//							use.
+//      08/03/97   JMI   Init() was setting the looping parms on a phot which no
+//                     S32er exists.  Now the looping parms are passed via the
+//                     Get() call in GetResources() instead so they will get set
+//                     via the CAnim3D which should know which ones are okay to
+//                     use.
 //
-//		08/11/97 BRH	Added flagbase color option as a variable that is loaded
-//							and saved and can be changed in the EditModify dialog.
+//      08/11/97 BRH   Added flagbase color option as a variable that is loaded
+//                     and saved and can be changed in the EditModify dialog.
 //
-//		08/18/97	JMI	Changed State_Dead to call DeadRender3D() (which used to be
-//							known/called as just another Render() overload).
+//      08/18/97   JMI   Changed State_Dead to call DeadRender3D() (which used to be
+//                     known/called as just another Render() overload).
 //
-//		08/28/97 BRH	Set the correct bits to detect the flag base.   Finished
-//							the code for capturing the flagbase.
+//      08/28/97 BRH   Set the correct bits to detect the flag base.   Finished
+//                     the code for capturing the flagbase.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define FLAGBASE_CPP
@@ -63,8 +63,8 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define GUI_FLAGID_EDIT_ID		103
-#define GUI_COLOR_EDIT_ID		104
+#define GUI_FLAGID_EDIT_ID      103
+#define GUI_COLOR_EDIT_ID      104
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -271,7 +271,7 @@ short CFlagbase::Init(void)
    short sResult = 0;
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	= PrepareShadow();
+   sResult   = PrepareShadow();
 
    // Init other stuff
    m_dVel = 0.0;
@@ -355,10 +355,10 @@ void CFlagbase::Update(void)
          }
 
          // Update sphere.
-         m_smash.m_sphere.sphere.X			= m_dX;
-         m_smash.m_sphere.sphere.Y			= m_dY;
-         m_smash.m_sphere.sphere.Z			= m_dZ;
-         m_smash.m_sphere.sphere.lRadius	= 20;    //m_spriteBase.m_sRadius;
+         m_smash.m_sphere.sphere.X         = m_dX;
+         m_smash.m_sphere.sphere.Y         = m_dY;
+         m_smash.m_sphere.sphere.Z         = m_dZ;
+         m_smash.m_sphere.sphere.lRadius   = 20;    //m_spriteBase.m_sRadius;
 
          // Update the smash.
          m_pRealm->m_smashatorium.Update(&m_smash);
@@ -406,7 +406,7 @@ void CFlagbase::Update(void)
 //-----------------------------------------------------------------------
 
       case CFlagbase::State_Dead:
-         CHood*	phood	= m_pRealm->m_phood;
+         CHood*   phood   = m_pRealm->m_phood;
          // Render current dead frame into background to stay.
          m_pRealm->m_scene.DeadRender3D(
             phood->m_pimBackground,          // Destination image.
@@ -422,10 +422,10 @@ void CFlagbase::Update(void)
 
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= 20;       //m_spriteBase.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = 20;       //m_spriteBase.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -456,7 +456,7 @@ short CFlagbase::EditNew(                          // Returns 0 if successfull, 
       sResult = GetResources();
       if (sResult == SUCCESS)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
    else
@@ -492,17 +492,17 @@ void CFlagbase::EditRect(RRect* pRect)
 // (virtual (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CFlagbase::EditHotSpot(        // Returns nothiing.
-   short*	psX,                 // Out: X coord of 2D hotspot relative to
+   short*   psX,                 // Out: X coord of 2D hotspot relative to
                                  // EditRect() pos.
-   short*	psY)                 // Out: Y coord of 2D hotspot relative to
+   short*   psY)                 // Out: Y coord of 2D hotspot relative to
                                  // EditRect() pos.
 {
    // Get rectangle.
-   RRect	rc;
+   RRect rc;
    EditRect(&rc);
    // Get 2D hotspot.
-   short	sX;
-   short	sY;
+   short sX;
+   short sY;
    Map3Dto2D(
       m_dX,
       m_dY,
@@ -511,8 +511,8 @@ void CFlagbase::EditHotSpot(        // Returns nothiing.
       &sY);
 
    // Get relation.
-   *psX	= sX - rc.sX;
-   *psY	= sY - rc.sY;
+   *psX   = sX - rc.sX;
+   *psY   = sY - rc.sY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -622,24 +622,24 @@ void CFlagbase::OnExplosionMsg(Explosion_Message* pMessage)
       m_state != State_Die      &&
       m_state != State_Dead)
    {
-//		CCharacter::OnExplosionMsg(pMessage);
+//      CCharacter::OnExplosionMsg(pMessage);
 
-//		PlaySample(g_smidBlownupFemaleYell);
-//		m_ePreviousState = m_state;
+//      PlaySample(g_smidBlownupFemaleYell);
+//      m_ePreviousState = m_state;
       m_state = State_BlownUp;
-//		m_panimPrev = m_panimCur;
-//		m_panimCur = &m_animDie;
+//      m_panimPrev = m_panimCur;
+//      m_panimCur = &m_animDie;
       m_lAnimTime = 0;
-//		m_stockpile.m_sHitPoints = 0;
+//      m_stockpile.m_sHitPoints = 0;
       m_lTimer = m_pRealm->m_time.GetGameTime();
 
       m_dExtHorzVel *= 1.4; //2.5;
       m_dExtVertVel *= 1.1; //1.4;
       // Send it spinning.
-      m_dExtRotVelY	= GetRandom() % 720;
-      m_dExtRotVelZ	= GetRandom() % 720;
+      m_dExtRotVelY   = GetRandom() % 720;
+      m_dExtRotVelZ   = GetRandom() % 720;
 
-//		m_panimCur = &m_animDie;
+//      m_panimCur = &m_animDie;
    }
 }
 

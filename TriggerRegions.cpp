@@ -25,9 +25,9 @@
 // and should be used sparingly.
 //
 // History:
-//		05/08/97 JRD	Started.
+//      05/08/97 JRD   Started.
 //
-//		05/14/97 BRH	Fixed the reversed Unique ID's in SpewTriggers().
+//      05/14/97 BRH   Fixed the reversed Unique ID's in SpewTriggers().
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -50,21 +50,21 @@
 //
 //  CreateRegionMap - Begin your session
 //
-//	 UINPUT: Size of map in pixels, maximum number of overlapping planes,
-//				and TILE SIZE for palettes.  (Should be as large as possible
-//				without causing greater than the maximum number of tiles to overlap.]
-//				sMaxPlanes must NOT exceed MGI_MAX_PLANES!
+//    UINPUT: Size of map in pixels, maximum number of overlapping planes,
+//            and TILE SIZE for palettes.  (Should be as large as possible
+//            without causing greater than the maximum number of tiles to overlap.]
+//            sMaxPlanes must NOT exceed MGI_MAX_PLANES!
 //
-//  OUPUT:	An allocated RMultiGridIndirect containing an uncompressed
-//				RMultiGrid within it, ready for writing to.
+//  OUPUT:   An allocated RMultiGridIndirect containing an uncompressed
+//            RMultiGrid within it, ready for writing to.
 //
-//	 RETURN VALUE:	NULL on failure, else the new grid.  Can fail due to memory
-//						alloc errors.
+//    RETURN VALUE:   NULL on failure, else the new grid.  Can fail due to memory
+//                  alloc errors.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-RMultiGridIndirect*	CreateRegionMap(short sWidth, short sHeight, short sMaxPlanes,
-                                     short sTileW, short sTileH)
+RMultiGridIndirect*   CreateRegionMap(short sWidth, short sHeight, short sMaxPlanes,
+                                      short sTileW, short sTileH)
 {
    ASSERT( (sWidth > 0) && (sHeight > 0) && (sMaxPlanes > 0)
            && (sTileW > 0) && (sTileH > 0) );
@@ -85,7 +85,7 @@ RMultiGridIndirect*	CreateRegionMap(short sWidth, short sHeight, short sMaxPlane
    }
 
    // Create and install the MultiGrid.
-   RMultiGrid*	pmg = new RMultiGrid;
+   RMultiGrid*   pmg = new RMultiGrid;
 
    if (!pmg)
    {
@@ -107,22 +107,22 @@ RMultiGridIndirect*	CreateRegionMap(short sWidth, short sHeight, short sMaxPlane
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	 StrafeAddRegion - add all members of an array of 256 FSPR1's to the map.
+//    StrafeAddRegion - add all members of an array of 256 FSPR1's to the map.
 //
 //  It is assumed that there are 255 trigger regions (1 - 255), whose address
-//		is also their "palette value"
+//      is also their "palette value"
 //
-//	 RETURN VALUE - SUCCESS or FAILURE.  Will return failure if there were too
-//		many overlapping regions in one tile.  (It still will create the map, but
+//    RETURN VALUE - SUCCESS or FAILURE.  Will return failure if there were too
+//      many overlapping regions in one tile.  (It still will create the map, but
 //    on that one tile there will be some region drop out.)  You can fix this by
 //    increasing the number of max planes or decreasing the palette tile size.
 //
-//		NOTE:  When finished, you should compress the MultiGrid as you see fit
-//				before saving.
+//      NOTE:  When finished, you should compress the MultiGrid as you see fit
+//            before saving.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-short	StrafeAddRegion(RMultiGridIndirect* pMGI, TriggerRgn regions[256])
+short   StrafeAddRegion(RMultiGridIndirect* pMGI, TriggerRgn regions[256])
 {
    ASSERT(pMGI);
    short sRet = SUCCESS;
@@ -146,8 +146,8 @@ short	StrafeAddRegion(RMultiGridIndirect* pMGI, TriggerRgn regions[256])
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	 CompressMap - currently just compresses to your specifications, but may
-//		be expanded to do some iterative testing for optimizing compression:
+//    CompressMap - currently just compresses to your specifications, but may
+//      be expanded to do some iterative testing for optimizing compression:
 //
 //  NOTE:
 //
@@ -163,21 +163,21 @@ short CompressMap(RMultiGridIndirect* pMGI, short sTileW, short sTileH)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	SpewTriggers - checks for triggers underneath a main dude and
-//					alerts all relevant pylons to his presence
+//   SpewTriggers - checks for triggers underneath a main dude and
+//               alerts all relevant pylons to his presence
 ////////////////////////////////////////////////////////////////////////////////
 //
-void	SpewTriggers(CRealm* pRealm,	USHORT usDudeUID, short sX, short sZ)
+void   SpewTriggers(CRealm* pRealm,   USHORT usDudeUID, short sX, short sZ)
 {
-   UCHAR	aucHitList[MGI_MAX_PLANES];
+   UCHAR aucHitList[MGI_MAX_PLANES];
    if (pRealm->m_pTriggerMap == NULL) return; // No triggers
 
    short sMax = pRealm->m_pTriggerMap->m_sMaxPlanes;
 
    // GET THE ATTRIBUTE MAP FOR THE TRIGGERS:
    pRealm->m_pTriggerMap->GetVal(aucHitList, sX, sZ);
-   UCHAR*	pHit = aucHitList;
-   GameMessage	msg;
+   UCHAR*   pHit = aucHitList;
+   GameMessage msg;
 
    msg.msg_DudeTrigger.eType = typeDudeTrigger;
    msg.msg_DudeTrigger.sPriority = 0;

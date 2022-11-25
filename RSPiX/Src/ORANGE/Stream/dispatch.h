@@ -29,8 +29,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define RET_FREE		0x0000
-#define RET_DONTFREE	0x0001
+#define RET_FREE      0x0000
+#define RET_DONTFREE   0x0001
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -38,21 +38,21 @@
 // This type is used to call the user to allow them to allocate space for the
 // data and return it to be filled.  Return NULL if unable to allocate the
 // space or other errror.
-typedef UCHAR* (*ALLOC_DISPATCHFUNC)(	S32 lSize, USHORT usType, UCHAR ucFlags,
-                                       S32 lUser);
+typedef UCHAR* (*ALLOC_DISPATCHFUNC)(   S32 lSize, USHORT usType, UCHAR ucFlags,
+                                        S32 lUser);
 
 // This type is used to call the user to allow them to DEallocate space al-
 // located by a previous call to their ALLOC_DISPATCHFUNC.
-typedef void (*FREE_DISPATCHFUNC)(	UCHAR* puc, USHORT usType, UCHAR ucFlags,
-                                    S32 lUser);
+typedef void (*FREE_DISPATCHFUNC)(   UCHAR* puc, USHORT usType, UCHAR ucFlags,
+                                     S32 lUser);
 
 // This type is used to pass the copied chunk to the user ready to be used.
 // Returning RET_FREE will cause puc to get freed if it meets the criteria
 // for freeing described in the dispatch.cpp header comment.  Return
 // RET_DONTFREE to avoid this.
-typedef short (*USE_DISPATCHFUNC)(	UCHAR* puc, S32 lSize, USHORT usType,
-                                    UCHAR ucFlags,
-                                    S32 lTime, S32 lUser);
+typedef short (*USE_DISPATCHFUNC)(   UCHAR* puc, S32 lSize, USHORT usType,
+                                     UCHAR ucFlags,
+                                     S32 lTime, S32 lUser);
 
 // This type is used to pass messages to the handler.
 typedef short (*MSG_DISPATCHFUNC)(USHORT usMsg);
@@ -66,10 +66,10 @@ protected:     // Local types.
 // Items waiting to be dispatched.
 typedef struct
 {
-   UCHAR*	puc;           // Data.
+   UCHAR*   puc;           // Data.
    S32 lSize;              // Size of data in bytes.
    USHORT usType;          // Type of data.
-   UCHAR	ucFlags;          // Flags for data.
+   UCHAR ucFlags;            // Flags for data.
    S32 lTime;              // Time data is to be dispatched.
 } RTITEM, *PRTITEM;
 
@@ -105,7 +105,7 @@ short Suspend(void);
 
 // Sets the time handler function.
 void SetTimeFunc(TIME_DISPATCHFUNC fnTime, S32 lTimeUser)
-{ m_fnTime	= fnTime; m_lTimeUser = lTimeUser; }
+{ m_fnTime   = fnTime; m_lTimeUser = lTimeUser; }
 
 // Sends a message to all type handlers.
 // Returns the number of handlers that returned an error.
@@ -113,8 +113,8 @@ short SendHandlerMessage(USHORT usMsg);
 
 // Adds an item to the list of items to be dispatched.
 // Returns 0 on success.
-short AddItem(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-               S32 lTime);
+short AddItem(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                 S32 lTime);
 
 public:        // Querries.
 // Returns the time from the override function if set or, if not set, from
@@ -138,24 +138,24 @@ void Set(void);
 void Reset(void);
 
 // Handles data callbacks from filter.
-void UseCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-               S32 lTime);
+void UseCall(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                S32 lTime);
 // Callback dispatcher (calls the implied this version).
-static void UseCallStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags, S32 lTime,
-                           S32 l_pDispatch);
+static void UseCallStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                             UCHAR ucFlags, S32 lTime,
+                             S32 l_pDispatch);
 
 // Handles alloc callbacks from filter.
 UCHAR* AllocCall(S32 lSize, USHORT usType, UCHAR ucFlags);
 // Callback dispatcher (calls the implied this version).
-static UCHAR* AllocCallStatic(	S32 lSize,
+static UCHAR* AllocCallStatic(   S32 lSize,
                                  USHORT usType, UCHAR ucFlags,
                                  S32 l_pDispatch);
 
 // Handles free callbacks from filter.
 void FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags);
 // Callback dispatcher (calls the implied this version).
-static void FreeCallStatic(	UCHAR* puc, USHORT usType, UCHAR ucFlags,
+static void FreeCallStatic(   UCHAR* puc, USHORT usType, UCHAR ucFlags,
                               S32 l_pDispatch);
 
 
@@ -172,8 +172,8 @@ public:        // Members.
 protected:     // Members.
 ALLOC_DISPATCHFUNC m_afnAlloc[NUM_TYPES];          // User defined allocation
                                                    // functions.
-FREE_DISPATCHFUNC	m_afnFree[NUM_TYPES];            // User defined
-                                                   // de-allocation functions.
+FREE_DISPATCHFUNC m_afnFree[NUM_TYPES];              // User defined
+                                                     // de-allocation functions.
 USE_DISPATCHFUNC m_afnUse[NUM_TYPES];              // User function to be
                                                    // passed data functions.
 MSG_DISPATCHFUNC m_afnMsg[NUM_TYPES];              // User function that
@@ -182,18 +182,18 @@ MSG_DISPATCHFUNC m_afnMsg[NUM_TYPES];              // User function that
 S32 m_alUser[NUM_TYPES];                           // User defined values.
 // To speed up the following list accesses we could use a hash table
 // of lists (like in CRes).
-CSList <RTITEM, S32>	m_slistRtItems;            // Sorted list of items
-                                                // waiting for their time
-                                                // to be dispatched.
+CSList <RTITEM, S32>   m_slistRtItems;            // Sorted list of items
+                                                  // waiting for their time
+                                                  // to be dispatched.
 
-CFilter*					m_pfilter;                    // CFilter.
+CFilter*               m_pfilter;                    // CFilter.
 
-TIME_DISPATCHFUNC	m_fnTime;                        // Time function.
+TIME_DISPATCHFUNC m_fnTime;                          // Time function.
 S32 m_lTimeUser;                                   // User time value sent to
                                                    // user time function.
 
-short	m_sActive;                                   // TRUE if critical is
-                                                   // active, FALSE otherwise.
+short m_sActive;                                     // TRUE if critical is
+                                                     // active, FALSE otherwise.
 
 };
 

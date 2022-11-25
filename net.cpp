@@ -18,10 +18,10 @@
 // net.cpp
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		08/18/97 MJR	Created this to hold some generic stuff.
+//   History:
+//      08/18/97 MJR   Created this to hold some generic stuff.
 //
-//		08/27/97 MJR	Shortened text so it would fit in the text field.
+//      08/27/97 MJR   Shortened text so it would fit in the text field.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -31,7 +31,7 @@
 #ifdef WIN32
    #define NETNAMESPACE
 #else
-   #define NETNAMESPACE		Net::
+   #define NETNAMESPACE      Net::
 #endif
 
 // Lookup tables associated with the CNetLimits::NetBandwidth enums.

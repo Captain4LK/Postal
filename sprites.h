@@ -18,19 +18,19 @@
 // sprite.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		06/27/97	JMI	Copied CSprite and derived sprite classes here from
-//							scene.h.
+//   History:
+//      06/27/97   JMI   Copied CSprite and derived sprite classes here from
+//                     scene.h.
 //
-//		07/02/97	JMI	Now AddChild() resets the m_sX2,Y2 to zero when adding
-//							a sprite that formerly had no parent.
+//      07/02/97   JMI   Now AddChild() resets the m_sX2,Y2 to zero when adding
+//                     a sprite that formerly had no parent.
 //
-//		08/04/97	JMI	Now initializes m_pthing to NULL.
+//      08/04/97   JMI   Now initializes m_pthing to NULL.
 //
-//		08/18/97	JMI	Now ASSERTs that we're not in a scene list.
+//      08/18/97   JMI   Now ASSERTs that we're not in a scene list.
 //
-//		09/28/99	JMI	Changed the m_iter member of CSprite to a non-const iter
-//							to work with VC++ 6.0.
+//      09/28/99   JMI   Changed the m_iter member of CSprite to a non-const iter
+//                     to work with VC++ 6.0.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef SPRITES_H
@@ -97,7 +97,7 @@ typedef vector<CSprite*> vSprites;
 
 
 // A CSprite is a base class for sprites designed to work with CScene.
-//class CScene;	// Forward declaration
+//class CScene;   // Forward declaration
 class CSprite
 {
 // Make CScene a friend so it can access private stuff
@@ -108,16 +108,16 @@ public:
 // Define bit usage within "m_sInFlags"
 typedef enum
 {
-   InAlpha				= 0x0001,               // Set if on alpha layer, clear otherwise
-   InOpaque				= 0x0002,               // Set if on opaque layer, clear otherwise
-   InXrayee				= 0x0004,               // Set if xray target, clear otherwise
-   InHidden				= 0x0008,               // Set if hidden, clear otherwise
-   InDeleteOnClear	= 0x0010,               // Set to delete sprite when layer is cleared
-   InHighIntensity	= 0x0020,               // Set to use higher light intensities when
+   InAlpha            = 0x0001,               // Set if on alpha layer, clear otherwise
+   InOpaque            = 0x0002,               // Set if on opaque layer, clear otherwise
+   InXrayee            = 0x0004,               // Set if xray target, clear otherwise
+   InHidden            = 0x0008,               // Set if hidden, clear otherwise
+   InDeleteOnClear   = 0x0010,               // Set to delete sprite when layer is cleared
+   InHighIntensity   = 0x0020,               // Set to use higher light intensities when
                                              // BLiT'ing/rendering (currently only supported
                                              // for 3D objects).
-   InDeleteOnRender	= 0x0040,               // After rendering object, delete it.
-   InBlitOpaque		= 0x0080                // Blit sprite opaque (currently only supported
+   InDeleteOnRender   = 0x0040,               // After rendering object, delete it.
+   InBlitOpaque      = 0x0080                // Blit sprite opaque (currently only supported
                                              // for 2D uncompressed, non-alpha objects).
 };
 
@@ -149,15 +149,15 @@ short m_sPriority;                                    // Sprite's priority
 short m_sLayer;                                       // Sprite's layer
 short m_sInFlags;                                     // Sprite's input flags
 short m_sOutFlags;                                    // Sprite's output flags
-CThing*	m_pthing;                                    // Owner of this sprite (for debugging).
+CThing*   m_pthing;                                    // Owner of this sprite (for debugging).
 
-char*	m_pszText;                                      // Point this at your text.
-                                                      // DO NOT strcpy/cat/etc to this until
-                                                      // you've pointed it at some memory!!!
+char*   m_pszText;                                      // Point this at your text.
+                                                        // DO NOT strcpy/cat/etc to this until
+                                                        // you've pointed it at some memory!!!
 
-CSprite*	m_psprHeadChild;        // First child sprite.
-CSprite*	m_psprNext;             // Next sibling sprite.
-CSprite*	m_psprParent;           // Parent sprite.
+CSprite*   m_psprHeadChild;        // First child sprite.
+CSprite*   m_psprNext;             // Next sibling sprite.
+CSprite*   m_psprParent;           // Parent sprite.
 
 protected:
 Type m_type;                                          // Sprite's type
@@ -173,16 +173,16 @@ CSprite()
    m_sOutFlags = 0;
    m_sPrivFlags = 0;
 
-   m_sX2		= 0;           // Any sprite's 2D dest x coord.
-   m_sY2		= 0;           // Any sprite's 2D dest y coord.
+   m_sX2      = 0;           // Any sprite's 2D dest x coord.
+   m_sY2      = 0;           // Any sprite's 2D dest y coord.
 
-   m_pszText			= NULL;
+   m_pszText         = NULL;
 
-   m_psprHeadChild	= NULL;
-   m_psprNext			= NULL;
-   m_psprParent		= NULL;
+   m_psprHeadChild   = NULL;
+   m_psprNext         = NULL;
+   m_psprParent      = NULL;
 
-   m_pthing				= NULL;
+   m_pthing            = NULL;
 }
 
 virtual ~CSprite()
@@ -207,7 +207,7 @@ virtual ~CSprite()
 
 // Adds a child CSprite.
 void AddChild(                   // Returns nothing.  Cannot fail.
-   CSprite*	psprNewChild)        // In:  New child.
+   CSprite*   psprNewChild)        // In:  New child.
 {
    // If we already had a parent . . .
    if (psprNewChild->m_psprParent != NULL)
@@ -220,45 +220,45 @@ void AddChild(                   // Returns nothing.  Cannot fail.
       // relative.
       // Note that if you already set a parent relative
       // position, this will override it.
-      psprNewChild->m_sX2	= 0;        // Convenient placed right
-      psprNewChild->m_sY2	= 0;        // up parent's *ss.
+      psprNewChild->m_sX2   = 0;        // Convenient placed right
+      psprNewChild->m_sY2   = 0;        // up parent's *ss.
    }
 
    // Make new sprite the head for ease of insertion.
    // Point new child's next at current head.
-   psprNewChild->m_psprNext	= m_psprHeadChild;
+   psprNewChild->m_psprNext   = m_psprHeadChild;
    // Make head the new child.
-   m_psprHeadChild	= psprNewChild;
+   m_psprHeadChild   = psprNewChild;
 
    // Let the child know who its parent is.
-   psprNewChild->m_psprParent	= this;
+   psprNewChild->m_psprParent   = this;
 }
 
 // Removes a child CSprite3.
 void RemoveChild(                   // Returns nothing.  Fails if not in list.
-   CSprite*		psprRemove)          // In:  Child to remove.
+   CSprite*      psprRemove)          // In:  Child to remove.
 {
-   CSprite*		psprCur			= m_psprHeadChild;         // Current traversal sprite.
-   CSprite**	ppsprPrevNext	= &m_psprHeadChild;        // Ptr to the previous sprite's
-                                                         // next ptr.
+   CSprite*      psprCur         = m_psprHeadChild;         // Current traversal sprite.
+   CSprite**   ppsprPrevNext   = &m_psprHeadChild;        // Ptr to the previous sprite's
+                                                          // next ptr.
    while (psprCur != NULL)
    {
       // If we found the item to remove . . .
       if (psprCur == psprRemove)
       {
          // Point the previous' next at this item's next.
-         *ppsprPrevNext	= psprCur->m_psprNext;
+         *ppsprPrevNext   = psprCur->m_psprNext;
          // Clean this item.
-         psprCur->m_psprParent	= NULL;
-         psprCur->m_psprNext		= NULL;
+         psprCur->m_psprParent   = NULL;
+         psprCur->m_psprNext      = NULL;
          // Done.
          break;
       }
 
       // Store this item's next ptr.
-      ppsprPrevNext	= &psprCur->m_psprNext;
+      ppsprPrevNext   = &psprCur->m_psprNext;
       // Get the next one.
-      psprCur			= psprCur->m_psprNext;
+      psprCur         = psprCur->m_psprNext;
    }
 
    if (psprCur == NULL)
@@ -285,17 +285,17 @@ Type GetType(void)
 class CSprite2 : public CSprite
 {
 public:
-RImage*	m_pImage;                                 // Pointer to image
-RImage*	m_pimAlpha;                               // Alpha image pointer.
-short	m_sAlphaLevel;                               // Constant alpha level to
-                                                   // use if no m_pimAlpha.
+RImage*   m_pImage;                                 // Pointer to image
+RImage*   m_pimAlpha;                               // Alpha image pointer.
+short m_sAlphaLevel;                                 // Constant alpha level to
+                                                     // use if no m_pimAlpha.
 
 CSprite2()
 {
-   m_pImage			= NULL;
-   m_pimAlpha		= NULL;
-   m_sAlphaLevel	= 255;
-   m_type			= Standard2d;
+   m_pImage         = NULL;
+   m_pimAlpha      = NULL;
+   m_sAlphaLevel   = 255;
+   m_type         = Standard2d;
 }
 
 };
@@ -304,13 +304,13 @@ CSprite2()
 class CSpriteLine2d : public CSprite
 {
 public:
-short	m_sX2End;            // 2D end point for line.
-short	m_sY2End;            // 2D end point for line.
-U8	m_u8Color;              // Color for line segment.
+short m_sX2End;              // 2D end point for line.
+short m_sY2End;              // 2D end point for line.
+U8 m_u8Color;                // Color for line segment.
 
 CSpriteLine2d()
 {
-   m_type			= Line2d;
+   m_type         = Line2d;
 }
 
 };
@@ -319,13 +319,13 @@ CSpriteLine2d()
 class CSpriteCylinder3d : public CSprite
 {
 public:
-short	m_sRadius;           // Radius of cylinder
-short	m_sHeight;           // Height of cylinder.
-U8	m_u8Color;              // Color for line segment.
+short m_sRadius;             // Radius of cylinder
+short m_sHeight;             // Height of cylinder.
+U8 m_u8Color;                // Color for line segment.
 
 CSpriteCylinder3d()
 {
-   m_type			= Cylinder3d;
+   m_type         = Cylinder3d;
 }
 
 };
@@ -342,62 +342,62 @@ CSprite3()
 public:
 void Init(void)
 {
-   m_pmesh			= NULL;        // Mesh.
-   m_psop			= NULL;        // Sea Of Points.
-   m_ptrans			= NULL;        // Transform.
-   m_ptex			= NULL;        // Texture.
-   m_psphere		= NULL;        // Bounding sphere.
+   m_pmesh         = NULL;        // Mesh.
+   m_psop         = NULL;        // Sea Of Points.
+   m_ptrans         = NULL;        // Transform.
+   m_ptex         = NULL;        // Texture.
+   m_psphere      = NULL;        // Bounding sphere.
 
-   m_sRadius		= 0;           // Radius of collision circle.
-   m_sCenX			= 0;           // Location of collision circle.
-   m_sCenY			= 0;           // Location of collision circle.
-   m_sBrightness	= 0;           // Brightness (start in the middle).
+   m_sRadius      = 0;           // Radius of collision circle.
+   m_sCenX         = 0;           // Location of collision circle.
+   m_sCenY         = 0;           // Location of collision circle.
+   m_sBrightness   = 0;           // Brightness (start in the middle).
 
-   m_sDirectRenderX		= 0;        // Location to Render() directly to composite buffer.
-   m_sDirectRenderY		= 0;        // Location to Render() directly to composite buffer.
-   m_sDirectRenderZ		= 0;        // The same z in either case.
-   m_sIndirectRenderX	= 0;        // Location to Render() indirectly to clip buffer.
-   m_sIndirectRenderY	= 0;        // Location to Render() indirectly to clip buffer.
-   m_sRenderOffX			= 0;        // Offset to Render() to account for bounding
-                                    // sphere.
-   m_sRenderOffY			= 0;        // Offset to Render() to account for bounding
-                                    // sphere.
+   m_sDirectRenderX      = 0;        // Location to Render() directly to composite buffer.
+   m_sDirectRenderY      = 0;        // Location to Render() directly to composite buffer.
+   m_sDirectRenderZ      = 0;        // The same z in either case.
+   m_sIndirectRenderX   = 0;        // Location to Render() indirectly to clip buffer.
+   m_sIndirectRenderY   = 0;        // Location to Render() indirectly to clip buffer.
+   m_sRenderOffX         = 0;        // Offset to Render() to account for bounding
+                                     // sphere.
+   m_sRenderOffY         = 0;        // Offset to Render() to account for bounding
+                                     // sphere.
 
-   m_type			= Standard3d;
+   m_type         = Standard3d;
 }
 
 public:
-RMesh*		m_pmesh;          // Mesh.
-RSop*			m_psop;           // Sea Of Points.
-RTransform*	m_ptrans;         // Transform.
-RTexture*	m_ptex;           // Texture.
-RP3d*			m_psphere;        // Bounding sphere def.
+RMesh*      m_pmesh;          // Mesh.
+RSop*         m_psop;           // Sea Of Points.
+RTransform*   m_ptrans;         // Transform.
+RTexture*   m_ptex;           // Texture.
+RP3d*         m_psphere;        // Bounding sphere def.
 
-short	m_sRadius;              // Radius for collision (with buildings for
-                              // X Ray).  Autoset by Render3D().
-short	m_sCenX;                // Position of center of collision circle.
-                              // Autoset by Render3D().
-short	m_sCenY;                // Position of center of collision circle.
-                              // Autoset by Render3D().
+short m_sRadius;                // Radius for collision (with buildings for
+                                // X Ray).  Autoset by Render3D().
+short m_sCenX;                  // Position of center of collision circle.
+                                // Autoset by Render3D().
+short m_sCenY;                  // Position of center of collision circle.
+                                // Autoset by Render3D().
 
-short	m_sBrightness;             // Indicates the brightness with which the
-                                 // object will be fogged (0 .. 255).
+short m_sBrightness;               // Indicates the brightness with which the
+                                   // object will be fogged (0 .. 255).
 
-short	m_sDirectRenderX;                // Location to Render() directly to composite buffer.
-short	m_sDirectRenderY;                // Location to Render() directly to composite buffer.
-short	m_sDirectRenderZ;                // Location to render in either case
-short	m_sIndirectRenderX;              // Location to Render() indirectly to clip buffer.
-short	m_sIndirectRenderY;              // Location to Render() indirectly to clip buffer.
-short	m_sRenderOffX;             // Offset to Render() to account for bounding
-                                 // sphere.
-short	m_sRenderOffY;             // Offset to Render() to account for bounding
-                                 // sphere.
+short m_sDirectRenderX;                  // Location to Render() directly to composite buffer.
+short m_sDirectRenderY;                  // Location to Render() directly to composite buffer.
+short m_sDirectRenderZ;                  // Location to render in either case
+short m_sIndirectRenderX;                // Location to Render() indirectly to clip buffer.
+short m_sIndirectRenderY;                // Location to Render() indirectly to clip buffer.
+short m_sRenderOffX;               // Offset to Render() to account for bounding
+                                   // sphere.
+short m_sRenderOffY;               // Offset to Render() to account for bounding
+                                   // sphere.
 bool m_bIndirect;                // Indicates an indirect Render() (into the
                                  // clip buffer).
 };
 
 
-#endif	// SPRITES_H
+#endif   // SPRITES_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

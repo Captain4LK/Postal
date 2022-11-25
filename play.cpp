@@ -22,313 +22,313 @@
 // game.
 //
 // History:
-//		11/19/96 MJR	Started.
-//
-//		A huge number of changes occurred, and then the entire module was
-//		reorganized, to the point where the previous history was no S32er
-//		relevant.  This history was was purged on 8/3/97 -- if you need to
-//		refer back to it, simply go back before this date in SourceSafe.
-//
-//		08/03/97 MJR	A total reorganization occurs.
-//
-//		08/05/97	JMI	Changed uses of CRealm::m_bMultiplayer to
-//							CRealm::m_flags.bMultiplayer.
-//
-//		08/06/97 MJR	Fixed bug when going to next level or restarting.
-//
-//		08/06/97	JMI	Now Play_VerifyQuitMenuChoice() plays the appropriate sound
-//							as to whether there was a selection change or an item was
-//							chosen.
-//							Also, changed uses of InitLocalInput() to ClearLocalInput().
-//
-//		08/08/97 MJR	Moved background/foreground callbacks to game.cpp.
+//      11/19/96 MJR   Started.
+//
+//      A huge number of changes occurred, and then the entire module was
+//      reorganized, to the point where the previous history was no S32er
+//      relevant.  This history was was purged on 8/3/97 -- if you need to
+//      refer back to it, simply go back before this date in SourceSafe.
+//
+//      08/03/97 MJR   A total reorganization occurs.
+//
+//      08/05/97   JMI   Changed uses of CRealm::m_bMultiplayer to
+//                     CRealm::m_flags.bMultiplayer.
+//
+//      08/06/97 MJR   Fixed bug when going to next level or restarting.
+//
+//      08/06/97   JMI   Now Play_VerifyQuitMenuChoice() plays the appropriate sound
+//                     as to whether there was a selection change or an item was
+//                     chosen.
+//                     Also, changed uses of InitLocalInput() to ClearLocalInput().
+//
+//      08/08/97 MJR   Moved background/foreground callbacks to game.cpp.
 //
-//		08/08/97 MJR	Fixed multiplayer go-to-next-level bug.
-//							Got the abort message working properly.
-//
-//		08/08/97	JMI	CPlayRealm::EndRealm() now only updates players stockpiles
-//							if we are not restarting the current level.  This way, in
-//							single player mode, when we restart the level, you don't
-//							get a combo of the ammo you had when you died and the warp
-//							but rather a combo of the ammo you had when you entered the
-//							level and the warp.
-//
-//		08/08/97	JMI	After a realm play when 'Just one realm' was specified,
-//							the 'Game Over' flag would get set regardless of whether
-//							the player had chosen to restart the realm.  Fixed.
-//
-//		08/09/97	JMI	CoreLoopRender() and CoreLoopUserInput() were checking
-//							m_bCheckForAbortKey without first checking if we're in
-//							network mode.  This flag is not used in non-net mode so we
-//							must check before using it.
-//
-//		08/09/97	JRD	Changed play to call the new toolbar render, and modified the
-//							score render to include the background bitmap.
-//
-//		08/11/97	JMI	Changed two occurrences of sRealNum to info.m_sRealNum.
-//							sRealmNum is the passed in start realm and info.m_sRealNum
-//							is the current realm.
-//
-//		08/11/97 MJR	Fixed a bug where time wasn't being updated properly (and
-//							thereby was at least one reason for sync problems.)
-//
-//		08/12/97	JMI	Now that cheats require an input event, we only pass it to
-//							GetLocalInput() in singel player mode.  Since the two ways
-//							of getting input for are so different, it makes it difficult
-//							to hack cheats into multiplayer mode.
-//
-//		08/13/97 MJR	Cleaned up use of info flags to try to simplify and
-//							make sure no race conditions exist.
-//
-//							Fixed bug when trying to resume paused game (wasn't
-//							filtering out modifier keys -- now it does).
-//
-//		08/13/97	JMI	Fixed positioning macros so they are nearly constant (i.e,
-//							changes in the g_pimScreenBuf could cause it to be non-
-//							constant).
-//							Fixed portions of the code that updated the realm status
-//							using the INFO_STATUS_* macros.
-//							Moved the initial drawing of the toolbar into
-//							CPlayStatus::StartRealm().
-//							Now utilizes the return value from ToolbarRender() to de-
-//							termine whether to update that area of the display.
-//
-//		08/14/97	JMI	Took 'again' out of "Hit <pause> key again to resume"
-//							paused message.
-//							Also, RespondToMenuRequest() now clears all events before
-//							starting menu.
-//							Made XRay All key a toggle.
-//							Changed name of difficulty parameter to Play() from
-//							bDifficulty to sDifficulty.
-//							Now uses sDifficulty paramter to Play().
-//							Added sDifficulty paramter to
-//							Play_GetRealmSectionAndEntry().
-//							Converted ms_bQuitVerified to ms_menuaction and added two
-//							actions:  MenuActionQuit and MenuActionSaveGame.
-//							Now passes difficulty to Game_SavePlayersGame() which is
-//							now called from RespondToMenuRequest().
-//
-//		08/14/97	JMI	Converted Play_VerifyQuitMenuChoice() to returning true to
-//							accept or false to deny.
-//
-//		08/17/97	JMI	Now disables postal organ option from within the game.
-//
-//		08/17/97 MJR	Now loads abort gui from g_resmgrShell.
-//
-//		08/18/97	JMI	Was still clearing KEY_RESTART as a left over from when we
-//							would use KEY_RESTART to flag restarting a level in single
-//							player (nowadays uses INPUT_REVIVE).
-//							Also, was able to get rid of INPUT_JUMP which was left over
-//							from when we converted to INPUT_REVIVE but play.cpp was
-//							under different construction.
-//
-//		08/18/97	JMI	Now turns on XRay all when the local dude dies.
-//
-//		08/18/97	JMI	Added variable that, when true, allows advancing to the next
-//							level without meeting the level goal.
-//							Also, now in multiplayer mode, the server can advance the
-//							level without meeting the level goal.
-//
-//		08/19/97 MJR	Added supoprt for new MP parameters.
-//
-//		08/20/97	JMI	Now responds to INPUT_CHEAT_29 by advancing the level if
-//							NOT a sales demo.
-//
-//		08/20/97 BRH	In the Play function, I used the flags passed in to
-//							determine and set the scoring mode in the realm.
-//
-//		08/21/97	JMI	Now keeps the global savable stockpile up to date.
-//
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
-//
-//		08/22/97	JMI	Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//							since we no S32er need UpdateDisplay() now that we are
-//							using rspLock/Unlock* functions properly.
-//							Also, now locks the composite buffer before accessing it
-//							and unlocks it before updating the screen.  This required
-//							breaking CoreLoopRender() into CoreLoopRender() and
-//							CoreLoopDraw().
-//
-//		08/23/97	JMI	Now 'Save' menu option is disabled in multiplayer mode.
-//
-//		08/24/97	JMI	Added a timeout to the abortion of playing samples just in
-//							case there's a bug or a sound driver problem (no need to
-//							to taunt infinite loopage).
-//
-//		08/24/97	JMI	Moved code to stop all samples into a function so we could
-//							call it in two places.
-//							Now used before starting the load b/c playing samples sound
-//							too shitty during loads.
-//
-//		08/24/97	JMI	Check for INPUT_CHEAT_29 was incorrectly using
-//							INPUT_CHEAT_29 as a mask instead of INPUT_WEAPONS_MASK so
-//							other cheats that included all the same mask bits could
-//							cause 29 to be activated (there was only one, of course,
-//							INPUT_CHEAT_30).
-//
-//		08/25/97	JMI	Now uses toolbar initialized score font colors for debug
-//							display info text.
-//
-//		08/26/97 BRH	Added special cases for the final ending demo level.
-//							Now when it is determined that the player won, it sets
-//							the global g_bLastLevelDemo so that the ending demo will
-//							be shown after the final game level which is the air
-//							force base.  Also made a few special cases so that the
-//							Cutscene shown is the one loaded from the RealmEnd section
-//							of the realms.ini file, and that the toolbars are not
-//							shown during the final level demo.
-//
-//		08/26/97	JMI	Moved m_bXRayAll to CPlayInfo so it could be accessed from
-//							anywhere.
-//							Fixed problem where, when you come back to life in MP mode
-//							or via cheat, the XRay would stay on even if the user
-//							setting was off.
-//
-//		08/27/97	JMI	Changed PAUSED_FONT_HEIGHT to 48 (was 50).  Apparently, we
-//							cannot use a size that is larger than the largest cached
-//							font size.  So all font sizes for the Smash font must be
-//							less than or equal to 48.
-//
-//		08/27/97 MJR	Updated to use new union name in NetMsg.
-//							Now sets dude ID for all players in MP mode.
-//							Now sends and receives special peer data.
-//
-//		08/28/97 MJR	Merged CPlayClient and CPlayServer into CPlayNet.
-//
-//		xx/xx/97 MJR	HUGE CHANGES to incorporate new network scheme.
-//
-//							==========================================================
-//		09/05/97 MJR	MERGED ALL THE CHANGES FROM THE SEPARATE BRANCH OF PLAY.CPP
-//							WHICH IS WHERE THE FOLLOWING CHANGES CAME FROM
-//							==========================================================
-//
-//		08/30/97 BRH	Fixed paths for installer.  The levels were still trying
-//							to load from the HD path but they should load from the CD
-//							path.
-//
-//		08/30/97	JMI	If the player hits space to restart, we check if the goal
-//							was met and, if so, show the high score dialogs.
-//
-//		09/02/97	JMI	Now Purges all resources from g_resmgrGame, Samples, and
-//							Res on certain systems.
-//
-//		09/03/97	JMI	I realized that the last change would cause an
-//							unnecessarily S32 load for restarting a realm so now it
-//							only does the purging (on the MAC) if we're not restarting
-//							the realm.
-//
-//		09/03/97	JMI	Changed the check for the end of the demo to use IsDead()
-//							instead of State_Dead for determining whether the dude is
-//							dead.  Also, now checks InputIsDemoOver().
-//
-//		09/03/97	JMI	Now checks to make sure we're in SP mode before pausing
-//							while in the background.
-//
-//		09/04/97 BRH	Play no S32er sets the full path to the realm file to
-//							load.  It is done in Realm::Load instead so that we can
-//							try several paths.  This way the realms can be loaded
-//							from the HD path, or if not there, loaded from the CD
-//							path.  Then if someone wants to insert their level, or
-//							we want to provide an updated level, they can copy it
-//							to the mirror path on their HD and it will attempt to
-//							load that one first.
-//
-//							==========================================================
-//							Finished merging separate branches of PLAY.CPP.
-//							==========================================================
-//
-//		09/06/97 MJR	Fixed bug in SetupDudes() that caused crash in single
-//							player mode.
-//
-//		09/06/97 MJR	Now allows menu to be used in MP mode.
-//							Cleaned up how local user quits are handled in MP mode.
-//							Properly uses abort gui thing.
-//
-//		09/07/97	JMI	Now displays the high scores at the end of each MP level.
-//							Also, now defaults to 99 (instead of 10) kills when neither
-//							a time or a kill limit is specified.
-//
-//		09/07/97 MJR	Fixed bug that prevented end-of-game sequence from working.
-//							Now ignores keyboard input during end-of-game sequence.
-//
-//		09/08/97 MJR	Centered net prog gui thingy.
-//
-//		09/11/97	JMI	Added support for ENABLE_PLAY_SPECIFIC_REALMS_ONLY which
-//							only allows you to play a realm whose name is jumbled in
-//							ms_szSingleRealmPostFix[].
-//
-//		09/12/97 MJR	In MP game, if a realm can't be loaded, we either abort
-//							the game if we're the server or we drop out of the game
-//							if we're a client.
-//
-//							Also removed the ASSERT() from CInfo.GameOver(), which
-//							used to not get called in MP mode, but now does due to
-//							our sudden use of "just one realm" mode in cases where
-//							the server only has one realm available.
-//
-//		09/16/97 MJR	Removed the JUMBLE stuff, which was made obsolete when we
-//							switched to embedding the realm files in the executable.
-//
-//		09/29/97	JMI	Now updates areas of the display that were blanked by
-//							ScaleFilm() (called from CPlayRealm::CoreLoopRender() ) in
-//							CPlayInfo::UpdateBlankedAreas() (called from
-//							CPlayRealm::CoreLoopDraw() ).  Since, when ScaleFilm() is
-//							called, we are inside a rspLock/UnlockBuffer() pair, we
-//							cannot call rspUpdateDisplay() there.
-//
-//		10/30/97	JMI	Used to use a flag to indicate whether CInfo::m_rc* needed
-//							to be updated.  Now we simply check whether m_rc*.sW & sH
-//							are greater than 0 so we need to make sure they're
-//							initialized to zero.  It didn't show up on the PC b/c Blue
-//							does not allow negative widths/heights to be drawn but on
-//							the Mac it seems to cause a rather bizarre mess.
-//
-//		11/19/97	JMI	The m_bDrawFrame flag was not being set to false when
-//							bDoFrame (in CPlayRealm::CoreLoopRender() ) was false.  The
-//							result was that while a net game was idle of input, the
-//							display was still being updated.  Once this was changed and
-//							m_bDrawFrame was moved into CPlayInfo (so all CPlayXxxx's
-//							could utilize it), the idle looping increased in speed by
-//							approximately 10 times on my machine.  The next logical
-//							step would be to use this flag to reduce the number of
-//							calls to ToolBarRender() and ScoreUpdateDisplay().  There's
-//							a possible order problem with simply checking m_bDrawFrame
-//							since it is set to false or true in
-//							CPlayRealm::CoreLoopRender() and ToolBarRender() and
-//							ScoreUpdateDisplay() are called in
-//							CPlayStatus::CoreLoopRender().
-//
-//		11/20/97	JMI	Added net chat and dirty rects.  Now most things don't have to
-//							bother implementing an CoreLoopRender() just for the sake of
-//							updating an area they already processed.  Now, in
-//							CoreLoopRender(), just do a pinfo->m_drl.Add(x, y, w, h) of the
-//							area dirtied and it will be combined with everyone else's area
-//							and updated to the screen (usually in one chunk if the film
-//							size has not been altered).
-//							More testing needs to be done, though.  Playing against all
-//							P200s, the game ran fine.  But with a P120, it ran poorly.
-//							We only tried once though...not sure there's really a
-//							problem (also the P120 was the only machine with Win95...).
-//
-//		11/20/97	JMI	Added bCoopLevels & bCoopMode parameters to
-//							Play_GetRealmInfo() and Play_GetRealmSectionAndEntry()
-//							calls.
-//							Also, added sCoopLevels & sCoopMode to Play() call.
-//							Also, fixed a bug in Play_GetRealmInfo() where it would
-//							write one byte off the end of the pszTitle parameter.
-//
-//		11/25/97	JMI	Changed the chats' .GUIs to be loaded from the HD
-//							instead of from the VD so we can guarantee the new assets
-//							get loaded (since they'll use their old Postal disc, we
-//							cannot load the .GUIs from the CD).
-//
-//		06/04/98 BRH	Set the cutscene mode to simple mode if this is a spawn
-//							build, since the spawn version only has 1 default cutscene
-//							bitmap, it has to use this for all cutscenes.
-//
-//		10/07/99	JMI	Changed play loop to get the number of single player levels
-//							from the INI.  Previously, it was 16.
+//      08/08/97 MJR   Fixed multiplayer go-to-next-level bug.
+//                     Got the abort message working properly.
+//
+//      08/08/97   JMI   CPlayRealm::EndRealm() now only updates players stockpiles
+//                     if we are not restarting the current level.  This way, in
+//                     single player mode, when we restart the level, you don't
+//                     get a combo of the ammo you had when you died and the warp
+//                     but rather a combo of the ammo you had when you entered the
+//                     level and the warp.
+//
+//      08/08/97   JMI   After a realm play when 'Just one realm' was specified,
+//                     the 'Game Over' flag would get set regardless of whether
+//                     the player had chosen to restart the realm.  Fixed.
+//
+//      08/09/97   JMI   CoreLoopRender() and CoreLoopUserInput() were checking
+//                     m_bCheckForAbortKey without first checking if we're in
+//                     network mode.  This flag is not used in non-net mode so we
+//                     must check before using it.
+//
+//      08/09/97   JRD   Changed play to call the new toolbar render, and modified the
+//                     score render to include the background bitmap.
+//
+//      08/11/97   JMI   Changed two occurrences of sRealNum to info.m_sRealNum.
+//                     sRealmNum is the passed in start realm and info.m_sRealNum
+//                     is the current realm.
+//
+//      08/11/97 MJR   Fixed a bug where time wasn't being updated properly (and
+//                     thereby was at least one reason for sync problems.)
+//
+//      08/12/97   JMI   Now that cheats require an input event, we only pass it to
+//                     GetLocalInput() in singel player mode.  Since the two ways
+//                     of getting input for are so different, it makes it difficult
+//                     to hack cheats into multiplayer mode.
+//
+//      08/13/97 MJR   Cleaned up use of info flags to try to simplify and
+//                     make sure no race conditions exist.
+//
+//                     Fixed bug when trying to resume paused game (wasn't
+//                     filtering out modifier keys -- now it does).
+//
+//      08/13/97   JMI   Fixed positioning macros so they are nearly constant (i.e,
+//                     changes in the g_pimScreenBuf could cause it to be non-
+//                     constant).
+//                     Fixed portions of the code that updated the realm status
+//                     using the INFO_STATUS_* macros.
+//                     Moved the initial drawing of the toolbar into
+//                     CPlayStatus::StartRealm().
+//                     Now utilizes the return value from ToolbarRender() to de-
+//                     termine whether to update that area of the display.
+//
+//      08/14/97   JMI   Took 'again' out of "Hit <pause> key again to resume"
+//                     paused message.
+//                     Also, RespondToMenuRequest() now clears all events before
+//                     starting menu.
+//                     Made XRay All key a toggle.
+//                     Changed name of difficulty parameter to Play() from
+//                     bDifficulty to sDifficulty.
+//                     Now uses sDifficulty paramter to Play().
+//                     Added sDifficulty paramter to
+//                     Play_GetRealmSectionAndEntry().
+//                     Converted ms_bQuitVerified to ms_menuaction and added two
+//                     actions:  MenuActionQuit and MenuActionSaveGame.
+//                     Now passes difficulty to Game_SavePlayersGame() which is
+//                     now called from RespondToMenuRequest().
+//
+//      08/14/97   JMI   Converted Play_VerifyQuitMenuChoice() to returning true to
+//                     accept or false to deny.
+//
+//      08/17/97   JMI   Now disables postal organ option from within the game.
+//
+//      08/17/97 MJR   Now loads abort gui from g_resmgrShell.
+//
+//      08/18/97   JMI   Was still clearing KEY_RESTART as a left over from when we
+//                     would use KEY_RESTART to flag restarting a level in single
+//                     player (nowadays uses INPUT_REVIVE).
+//                     Also, was able to get rid of INPUT_JUMP which was left over
+//                     from when we converted to INPUT_REVIVE but play.cpp was
+//                     under different construction.
+//
+//      08/18/97   JMI   Now turns on XRay all when the local dude dies.
+//
+//      08/18/97   JMI   Added variable that, when true, allows advancing to the next
+//                     level without meeting the level goal.
+//                     Also, now in multiplayer mode, the server can advance the
+//                     level without meeting the level goal.
+//
+//      08/19/97 MJR   Added supoprt for new MP parameters.
+//
+//      08/20/97   JMI   Now responds to INPUT_CHEAT_29 by advancing the level if
+//                     NOT a sales demo.
+//
+//      08/20/97 BRH   In the Play function, I used the flags passed in to
+//                     determine and set the scoring mode in the realm.
+//
+//      08/21/97   JMI   Now keeps the global savable stockpile up to date.
+//
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
+//
+//      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
+//                     since we no S32er need UpdateDisplay() now that we are
+//                     using rspLock/Unlock* functions properly.
+//                     Also, now locks the composite buffer before accessing it
+//                     and unlocks it before updating the screen.  This required
+//                     breaking CoreLoopRender() into CoreLoopRender() and
+//                     CoreLoopDraw().
+//
+//      08/23/97   JMI   Now 'Save' menu option is disabled in multiplayer mode.
+//
+//      08/24/97   JMI   Added a timeout to the abortion of playing samples just in
+//                     case there's a bug or a sound driver problem (no need to
+//                     to taunt infinite loopage).
+//
+//      08/24/97   JMI   Moved code to stop all samples into a function so we could
+//                     call it in two places.
+//                     Now used before starting the load b/c playing samples sound
+//                     too shitty during loads.
+//
+//      08/24/97   JMI   Check for INPUT_CHEAT_29 was incorrectly using
+//                     INPUT_CHEAT_29 as a mask instead of INPUT_WEAPONS_MASK so
+//                     other cheats that included all the same mask bits could
+//                     cause 29 to be activated (there was only one, of course,
+//                     INPUT_CHEAT_30).
+//
+//      08/25/97   JMI   Now uses toolbar initialized score font colors for debug
+//                     display info text.
+//
+//      08/26/97 BRH   Added special cases for the final ending demo level.
+//                     Now when it is determined that the player won, it sets
+//                     the global g_bLastLevelDemo so that the ending demo will
+//                     be shown after the final game level which is the air
+//                     force base.  Also made a few special cases so that the
+//                     Cutscene shown is the one loaded from the RealmEnd section
+//                     of the realms.ini file, and that the toolbars are not
+//                     shown during the final level demo.
+//
+//      08/26/97   JMI   Moved m_bXRayAll to CPlayInfo so it could be accessed from
+//                     anywhere.
+//                     Fixed problem where, when you come back to life in MP mode
+//                     or via cheat, the XRay would stay on even if the user
+//                     setting was off.
+//
+//      08/27/97   JMI   Changed PAUSED_FONT_HEIGHT to 48 (was 50).  Apparently, we
+//                     cannot use a size that is larger than the largest cached
+//                     font size.  So all font sizes for the Smash font must be
+//                     less than or equal to 48.
+//
+//      08/27/97 MJR   Updated to use new union name in NetMsg.
+//                     Now sets dude ID for all players in MP mode.
+//                     Now sends and receives special peer data.
+//
+//      08/28/97 MJR   Merged CPlayClient and CPlayServer into CPlayNet.
+//
+//      xx/xx/97 MJR   HUGE CHANGES to incorporate new network scheme.
+//
+//                     ==========================================================
+//      09/05/97 MJR   MERGED ALL THE CHANGES FROM THE SEPARATE BRANCH OF PLAY.CPP
+//                     WHICH IS WHERE THE FOLLOWING CHANGES CAME FROM
+//                     ==========================================================
+//
+//      08/30/97 BRH   Fixed paths for installer.  The levels were still trying
+//                     to load from the HD path but they should load from the CD
+//                     path.
+//
+//      08/30/97   JMI   If the player hits space to restart, we check if the goal
+//                     was met and, if so, show the high score dialogs.
+//
+//      09/02/97   JMI   Now Purges all resources from g_resmgrGame, Samples, and
+//                     Res on certain systems.
+//
+//      09/03/97   JMI   I realized that the last change would cause an
+//                     unnecessarily S32 load for restarting a realm so now it
+//                     only does the purging (on the MAC) if we're not restarting
+//                     the realm.
+//
+//      09/03/97   JMI   Changed the check for the end of the demo to use IsDead()
+//                     instead of State_Dead for determining whether the dude is
+//                     dead.  Also, now checks InputIsDemoOver().
+//
+//      09/03/97   JMI   Now checks to make sure we're in SP mode before pausing
+//                     while in the background.
+//
+//      09/04/97 BRH   Play no S32er sets the full path to the realm file to
+//                     load.  It is done in Realm::Load instead so that we can
+//                     try several paths.  This way the realms can be loaded
+//                     from the HD path, or if not there, loaded from the CD
+//                     path.  Then if someone wants to insert their level, or
+//                     we want to provide an updated level, they can copy it
+//                     to the mirror path on their HD and it will attempt to
+//                     load that one first.
+//
+//                     ==========================================================
+//                     Finished merging separate branches of PLAY.CPP.
+//                     ==========================================================
+//
+//      09/06/97 MJR   Fixed bug in SetupDudes() that caused crash in single
+//                     player mode.
+//
+//      09/06/97 MJR   Now allows menu to be used in MP mode.
+//                     Cleaned up how local user quits are handled in MP mode.
+//                     Properly uses abort gui thing.
+//
+//      09/07/97   JMI   Now displays the high scores at the end of each MP level.
+//                     Also, now defaults to 99 (instead of 10) kills when neither
+//                     a time or a kill limit is specified.
+//
+//      09/07/97 MJR   Fixed bug that prevented end-of-game sequence from working.
+//                     Now ignores keyboard input during end-of-game sequence.
+//
+//      09/08/97 MJR   Centered net prog gui thingy.
+//
+//      09/11/97   JMI   Added support for ENABLE_PLAY_SPECIFIC_REALMS_ONLY which
+//                     only allows you to play a realm whose name is jumbled in
+//                     ms_szSingleRealmPostFix[].
+//
+//      09/12/97 MJR   In MP game, if a realm can't be loaded, we either abort
+//                     the game if we're the server or we drop out of the game
+//                     if we're a client.
+//
+//                     Also removed the ASSERT() from CInfo.GameOver(), which
+//                     used to not get called in MP mode, but now does due to
+//                     our sudden use of "just one realm" mode in cases where
+//                     the server only has one realm available.
+//
+//      09/16/97 MJR   Removed the JUMBLE stuff, which was made obsolete when we
+//                     switched to embedding the realm files in the executable.
+//
+//      09/29/97   JMI   Now updates areas of the display that were blanked by
+//                     ScaleFilm() (called from CPlayRealm::CoreLoopRender() ) in
+//                     CPlayInfo::UpdateBlankedAreas() (called from
+//                     CPlayRealm::CoreLoopDraw() ).  Since, when ScaleFilm() is
+//                     called, we are inside a rspLock/UnlockBuffer() pair, we
+//                     cannot call rspUpdateDisplay() there.
+//
+//      10/30/97   JMI   Used to use a flag to indicate whether CInfo::m_rc* needed
+//                     to be updated.  Now we simply check whether m_rc*.sW & sH
+//                     are greater than 0 so we need to make sure they're
+//                     initialized to zero.  It didn't show up on the PC b/c Blue
+//                     does not allow negative widths/heights to be drawn but on
+//                     the Mac it seems to cause a rather bizarre mess.
+//
+//      11/19/97   JMI   The m_bDrawFrame flag was not being set to false when
+//                     bDoFrame (in CPlayRealm::CoreLoopRender() ) was false.  The
+//                     result was that while a net game was idle of input, the
+//                     display was still being updated.  Once this was changed and
+//                     m_bDrawFrame was moved into CPlayInfo (so all CPlayXxxx's
+//                     could utilize it), the idle looping increased in speed by
+//                     approximately 10 times on my machine.  The next logical
+//                     step would be to use this flag to reduce the number of
+//                     calls to ToolBarRender() and ScoreUpdateDisplay().  There's
+//                     a possible order problem with simply checking m_bDrawFrame
+//                     since it is set to false or true in
+//                     CPlayRealm::CoreLoopRender() and ToolBarRender() and
+//                     ScoreUpdateDisplay() are called in
+//                     CPlayStatus::CoreLoopRender().
+//
+//      11/20/97   JMI   Added net chat and dirty rects.  Now most things don't have to
+//                     bother implementing an CoreLoopRender() just for the sake of
+//                     updating an area they already processed.  Now, in
+//                     CoreLoopRender(), just do a pinfo->m_drl.Add(x, y, w, h) of the
+//                     area dirtied and it will be combined with everyone else's area
+//                     and updated to the screen (usually in one chunk if the film
+//                     size has not been altered).
+//                     More testing needs to be done, though.  Playing against all
+//                     P200s, the game ran fine.  But with a P120, it ran poorly.
+//                     We only tried once though...not sure there's really a
+//                     problem (also the P120 was the only machine with Win95...).
+//
+//      11/20/97   JMI   Added bCoopLevels & bCoopMode parameters to
+//                     Play_GetRealmInfo() and Play_GetRealmSectionAndEntry()
+//                     calls.
+//                     Also, added sCoopLevels & sCoopMode to Play() call.
+//                     Also, fixed a bug in Play_GetRealmInfo() where it would
+//                     write one byte off the end of the pszTitle parameter.
+//
+//      11/25/97   JMI   Changed the chats' .GUIs to be loaded from the HD
+//                     instead of from the VD so we can guarantee the new assets
+//                     get loaded (since they'll use their old Postal disc, we
+//                     cannot load the .GUIs from the CD).
+//
+//      06/04/98 BRH   Set the cutscene mode to simple mode if this is a spawn
+//                     build, since the spawn version only has 1 default cutscene
+//                     bitmap, it has to use this for all cutscenes.
+//
+//      10/07/99   JMI   Changed play loop to get the number of single player levels
+//                     from the INI.  Previously, it was 16.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define PLAY_CPP
@@ -383,136 +383,136 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define DEMO_FRAMES_PER_SECOND			15
-#define DEMO_TIME_PER_FRAME				(1000 / DEMO_FRAMES_PER_SECOND)
-#define DEMO_MAX_SEQUENTIAL_SKIPPED_FRAMES	1
-#define DEMO_MAX_LAG							(DEMO_TIME_PER_FRAME / 2)
-#define DEMO_MAX_DEAD_TIME					5000
+#define DEMO_FRAMES_PER_SECOND         15
+#define DEMO_TIME_PER_FRAME            (1000 / DEMO_FRAMES_PER_SECOND)
+#define DEMO_MAX_SEQUENTIAL_SKIPPED_FRAMES   1
+#define DEMO_MAX_LAG                     (DEMO_TIME_PER_FRAME / 2)
+#define DEMO_MAX_DEAD_TIME               5000
 
-#define DEMO_MULTIALPHA_FILE				"2d/school.mlp"
+#define DEMO_MULTIALPHA_FILE            "2d/school.mlp"
 
-#define DISP_INFO_INTERVAL					1000  // NEVER EVER MAKE THIS LESS THAN 1!!!!
-#define DISP_INFO_FONT_HEIGHT				15
+#define DISP_INFO_INTERVAL               1000  // NEVER EVER MAKE THIS LESS THAN 1!!!!
+#define DISP_INFO_FONT_HEIGHT            15
 
-#define VIEW_X									0
-#define VIEW_Y									0
-#define VIEW_W									wideScreenWidth
-#define VIEW_H									400
+#define VIEW_X                           0
+#define VIEW_Y                           0
+#define VIEW_W                           wideScreenWidth
+#define VIEW_H                           400
 
-#define FILM_X									0
-#define FILM_Y									40
+#define FILM_X                           0
+#define FILM_Y                           40
 
 // Scaling values
-#define FILM_INCDEC_SCALE					0.05
-#define FILM_MAX_SCALE						1.00
-#define FILM_MIN_SCALE						0.30
+#define FILM_INCDEC_SCALE               0.05
+#define FILM_MAX_SCALE                  1.00
+#define FILM_MIN_SCALE                  0.30
 
-#define INFO_STATUS_RECT_X					((VIEW_W - 640) / 2)
-#define INFO_STATUS_RECT_Y					(FILM_Y - (INFO_STATUS_RECT_H + 3) )
-#define INFO_STATUS_RECT_W					(g_pimScreenBuf->m_sWidth - INFO_STATUS_RECT_X)
-#define INFO_STATUS_RECT_H					DISP_INFO_FONT_HEIGHT
+#define INFO_STATUS_RECT_X               ((VIEW_W - 640) / 2)
+#define INFO_STATUS_RECT_Y               (FILM_Y - (INFO_STATUS_RECT_H + 3) )
+#define INFO_STATUS_RECT_W               (g_pimScreenBuf->m_sWidth - INFO_STATUS_RECT_X)
+#define INFO_STATUS_RECT_H               DISP_INFO_FONT_HEIGHT
 
-#define DUDE_STATUS_RECT_X					0
-#define DUDE_STATUS_RECT_Y					(FILM_Y + VIEW_H)
-#define DUDE_STATUS_RECT_W					(g_pimScreenBuf->m_sWidth - DUDE_STATUS_RECT_X)
-#define DUDE_STATUS_RECT_H					(g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y)
+#define DUDE_STATUS_RECT_X               0
+#define DUDE_STATUS_RECT_Y               (FILM_Y + VIEW_H)
+#define DUDE_STATUS_RECT_W               (g_pimScreenBuf->m_sWidth - DUDE_STATUS_RECT_X)
+#define DUDE_STATUS_RECT_H               (g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y)
 
-#define REALM_STATUS_RECT_X				0
-#define REALM_STATUS_RECT_Y				0
-#define REALM_STATUS_RECT_W				(FILM_X + VIEW_W - REALM_STATUS_RECT_X)
-#define REALM_STATUS_RECT_H				40
+#define REALM_STATUS_RECT_X            0
+#define REALM_STATUS_RECT_Y            0
+#define REALM_STATUS_RECT_W            (FILM_X + VIEW_W - REALM_STATUS_RECT_X)
+#define REALM_STATUS_RECT_H            40
 
 // No less than this even after scaling.
-#define MIN_GRIP_ZONE_RADIUS				30
+#define MIN_GRIP_ZONE_RADIUS            30
 
 // Grip movement parameters
-#define GRIP_MIN_MOVE_X						1
-#define GRIP_MIN_MOVE_Y						1
-#define GRIP_MAX_MOVE_X						8
-#define GRIP_MAX_MOVE_Y						8
-#define GRIP_ALIGN_X							1
-#define GRIP_ALIGN_Y							1
+#define GRIP_MIN_MOVE_X                  1
+#define GRIP_MIN_MOVE_Y                  1
+#define GRIP_MAX_MOVE_X                  8
+#define GRIP_MAX_MOVE_Y                  8
+#define GRIP_ALIGN_X                     1
+#define GRIP_ALIGN_Y                     1
 
 // Time for black screen between cutscene and game screen
-#define BLACK_HOLD_TIME						250
+#define BLACK_HOLD_TIME                  250
 
 // Default message in case app's time stamp is not available.  MUST be 25 characters or less!!!
-#define DEFAULT_APP_TIMESTAMP				"No time stamp available"
+#define DEFAULT_APP_TIMESTAMP            "No time stamp available"
 
-#define DEBUG_STR								" Debug"
-#define RELEASE_STR							" Release"
-#define TRACENASSERT_STR					" Trace & Assert"
+#define DEBUG_STR                        " Debug"
+#define RELEASE_STR                     " Release"
+#define TRACENASSERT_STR               " Trace & Assert"
 
 // Number of kills limit if they specified no kills limit and no time limit.
-#define KILLS_LIMIT_DEFAULT				0
+#define KILLS_LIMIT_DEFAULT            0
 
 // Default value for "final frame" in network mode (6.8 years at 10fps)
-#define DEFAULT_FINAL_FRAME				LONG_MAX
+#define DEFAULT_FINAL_FRAME            LONG_MAX
 
 #if WITH_STEAMWORKS
 extern bool EnableSteamCloud;
-#define SAVEGAME_DIR						(EnableSteamCloud ? "steamcloud" : "savegame")
+#define SAVEGAME_DIR                  (EnableSteamCloud ? "steamcloud" : "savegame")
 #else
-#define SAVEGAME_DIR						("savegame")
+#define SAVEGAME_DIR                  ("savegame")
 #endif
 
-#define SAVEGAME_EXT							"gme"
+#define SAVEGAME_EXT                     "gme"
 
-#define ABORT_GUI_FILE						"menu/abort.gui"
-#define CHAT_GUI								"res/shell/chat.gui"
-#define CHAT_IN_GUI							"res/shell/chatin.gui"
+#define ABORT_GUI_FILE                  "menu/abort.gui"
+#define CHAT_GUI                        "res/shell/chat.gui"
+#define CHAT_IN_GUI                     "res/shell/chatin.gui"
 
-#define KEY_MENU								27
+#define KEY_MENU                        27
 
-#define KEY_PAUSE							RSP_GK_PAUSE
-#define KEY_NEXT_LEVEL						RSP_GK_F1
-#define KEY_TOGGLE_TARGETING				RSP_GK_F2
+#define KEY_PAUSE                     RSP_GK_PAUSE
+#define KEY_NEXT_LEVEL                  RSP_GK_F1
+#define KEY_TOGGLE_TARGETING            RSP_GK_F2
 // NOTE THAT F3 IS IN USE: DONT USE RSP_GK_F3.
-#define KEY_TOGGLE_DISP_INFO				RSP_GK_F4
-#define KEY_SHOW_MISSION					RSP_GK_F5
-#define KEY_ENLARGE_FILM1					RSP_GK_NUMPAD_PLUS
-#define KEY_ENLARGE_FILM2					'+'
-#define KEY_ENLARGE_FILM3					'='
-#define KEY_REDUCE_FILM1					RSP_GK_NUMPAD_MINUS
-#define KEY_REDUCE_FILM2					'-'
-#define KEY_TALK1								'T'
-#define KEY_TALK2								't'
-#define KEY_ACCEPT_CHAT						'\r'
-#define KEY_ABORT_CHAT						27
+#define KEY_TOGGLE_DISP_INFO            RSP_GK_F4
+#define KEY_SHOW_MISSION               RSP_GK_F5
+#define KEY_ENLARGE_FILM1               RSP_GK_NUMPAD_PLUS
+#define KEY_ENLARGE_FILM2               '+'
+#define KEY_ENLARGE_FILM3               '='
+#define KEY_REDUCE_FILM1               RSP_GK_NUMPAD_MINUS
+#define KEY_REDUCE_FILM2               '-'
+#define KEY_TALK1                        'T'
+#define KEY_TALK2                        't'
+#define KEY_ACCEPT_CHAT                  '\r'
+#define KEY_ABORT_CHAT                  27
 
 // Note that this uses RSP_SK_* macros for use the rspGetKeyStatusArray() key interface.
-#define KEY_XRAY_ALL							RSP_SK_F3
-#define KEY_SNAP_PICTURE					RSP_SK_ENTER
+#define KEY_XRAY_ALL                     RSP_SK_F3
+#define KEY_SNAP_PICTURE               RSP_SK_ENTER
 
-#define PAUSED_FONT_HEIGHT					48
-#define PAUSED_FONT_SHADOW_X				5                       // In pixels.
-#define PAUSED_FONT_SHADOW_Y				PAUSED_FONT_SHADOW_X    // In pixels.
-#define PAUSED_BASE_PAL_INDEX				64
-#define PAUSED_FONT_SHADOW_COLOR_R		0
-#define PAUSED_FONT_SHADOW_COLOR_G		0
-#define PAUSED_FONT_SHADOW_COLOR_B		0
-#define PAUSED_FONT_COLOR_R				0
-#define PAUSED_FONT_COLOR_G				15
-#define PAUSED_FONT_COLOR_B				255
+#define PAUSED_FONT_HEIGHT               48
+#define PAUSED_FONT_SHADOW_X            5                       // In pixels.
+#define PAUSED_FONT_SHADOW_Y            PAUSED_FONT_SHADOW_X    // In pixels.
+#define PAUSED_BASE_PAL_INDEX            64
+#define PAUSED_FONT_SHADOW_COLOR_R      0
+#define PAUSED_FONT_SHADOW_COLOR_G      0
+#define PAUSED_FONT_SHADOW_COLOR_B      0
+#define PAUSED_FONT_COLOR_R            0
+#define PAUSED_FONT_COLOR_G            15
+#define PAUSED_FONT_COLOR_B            255
 
-#define PAUSED_MSG_FONT_HEIGHT			29
-#define PAUSED_MSG_FONT_SHADOW_X			3                          // In pixels.
-#define PAUSED_MSG_FONT_SHADOW_Y			PAUSED_MSG_FONT_SHADOW_X   // In pixels.
-#define PAUSED_MSG_FONT_SHADOW_COLOR_R	PAUSED_FONT_SHADOW_COLOR_R
-#define PAUSED_MSG_FONT_SHADOW_COLOR_G	PAUSED_FONT_SHADOW_COLOR_G
-#define PAUSED_MSG_FONT_SHADOW_COLOR_B	PAUSED_FONT_SHADOW_COLOR_B
-#define PAUSED_MSG_FONT_COLOR_R			PAUSED_FONT_COLOR_R
-#define PAUSED_MSG_FONT_COLOR_G			PAUSED_FONT_COLOR_G
-#define PAUSED_MSG_FONT_COLOR_B			PAUSED_FONT_COLOR_B
+#define PAUSED_MSG_FONT_HEIGHT         29
+#define PAUSED_MSG_FONT_SHADOW_X         3                          // In pixels.
+#define PAUSED_MSG_FONT_SHADOW_Y         PAUSED_MSG_FONT_SHADOW_X   // In pixels.
+#define PAUSED_MSG_FONT_SHADOW_COLOR_R   PAUSED_FONT_SHADOW_COLOR_R
+#define PAUSED_MSG_FONT_SHADOW_COLOR_G   PAUSED_FONT_SHADOW_COLOR_G
+#define PAUSED_MSG_FONT_SHADOW_COLOR_B   PAUSED_FONT_SHADOW_COLOR_B
+#define PAUSED_MSG_FONT_COLOR_R         PAUSED_FONT_COLOR_R
+#define PAUSED_MSG_FONT_COLOR_G         PAUSED_FONT_COLOR_G
+#define PAUSED_MSG_FONT_COLOR_B         PAUSED_FONT_COLOR_B
 
-#define TIME_OUT_FOR_ABORT_SOUNDS		3000  // In ms.
+#define TIME_OUT_FOR_ABORT_SOUNDS      3000  // In ms.
 
-#define MP_HIGH_SCORES_MAX_TIME			7000  // In ms.
+#define MP_HIGH_SCORES_MAX_TIME         7000  // In ms.
 
-#define NUM_CHATS								4
-#define CHAT_DELAY							5000  // In ms.
+#define NUM_CHATS                        4
+#define CHAT_DELAY                     5000  // In ms.
 
-#define CHAT_IN_LENGTH						46
+#define CHAT_IN_LENGTH                  46
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types.
@@ -545,14 +545,14 @@ typedef enum
 ////////////////////////////////////////////////////////////////////////////////
 
 // Quit flag used by menu callbacks
-static MenuAction ms_menuaction	= MenuActionNone;
+static MenuAction ms_menuaction   = MenuActionNone;
 
 // Number used in filename for snapshots
 static S32 ms_lCurPicture = 0;
 
 #ifdef SALES_DEMO
 // When true, one can advance to the next level without meeting the goal.
-extern bool g_bEnableLevelAdvanceWithoutGoal	= false;
+extern bool g_bEnableLevelAdvanceWithoutGoal   = false;
 #endif
 
 extern SampleMaster::SoundInstance g_siFinalScene; // should be in game
@@ -576,11 +576,11 @@ extern bool demoCompat; //Try to make demos not go out of sync
 class CPlayInfo
 {
 friend short Play(                                 // Returns 0 if successfull, non-zero otherwise
-   CNetClient*	pclient,                            // In:  Client object or NULL if not network game
-   CNetServer*	pserver,                            // In:  Server object or NULL if not server or not network game
+   CNetClient*   pclient,                            // In:  Client object or NULL if not network game
+   CNetServer*   pserver,                            // In:  Server object or NULL if not server or not network game
    INPUT_MODE inputMode,                           // In:  Input mode
    const short sRealmNum,                          // In:  Realm number to start on or -1 to use specified realm file
-   const char*	pszRealmFile,                       // In:  Realm file to play (ignored if sRealmNum >= 0)
+   const char*   pszRealmFile,                       // In:  Realm file to play (ignored if sRealmNum >= 0)
    const bool bJustOneRealm,                       // In:  Play just this one realm (ignored if sRealmNum < 0)
    const bool bGauntlet,                           // In:  Play challenge levels gauntlet - as selected on menu
    const bool bAddOn,                              // In:  Play new single player Add On levels
@@ -588,8 +588,8 @@ friend short Play(                                 // Returns 0 if successfull, 
    const bool bRejuvenate,                         // In:  Whether to allow players to rejuvenate (MP only)
    const short sTimeLimit,                         // In:  Time limit for MP games (0 or negative if none)
    const short sKillLimit,                         // In:  Kill limit for MP games (0 or negative if none)
-   const	short	sCoopLevels,                        // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   const	short	sCoopMode,                          // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   const short sCoopLevels,                            // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   const short sCoopMode,                              // In:  Zero for deathmatch mode, non-zero for cooperative mode.
    const short sFrameTime,                         // In:  Milliseconds per frame (MP only)
    RFile* pfileDemoModeDebugMovie);                // In:  File for loading/saving demo mode debug movie
 
@@ -601,27 +601,27 @@ friend short Play(                                 // Returns 0 if successfull, 
 // Variables
 //------------------------------------------------------------------------------
 private:
-CNetClient*		m_pclient;                       // Client object or NULL if not network game
-CNetServer*		m_pserver;                       // Server object or NULL if not server or not network game
+CNetClient*      m_pclient;                       // Client object or NULL if not network game
+CNetServer*      m_pserver;                       // Server object or NULL if not server or not network game
 
-short	m_sRealmNum;                              // Realm number
+short m_sRealmNum;                                // Realm number
 char m_szRealm[RSP_MAX_PATH + 1];               // Realm file
 bool m_bJustOneRealm;                           // Play just this one realm (ignored if sRealmNum < 0)
 
-CRealm*			m_prealm;
-CCamera*			m_pcamera;
-CGrip*			m_pgrip;
+CRealm*         m_prealm;
+CCamera*         m_pcamera;
+CGrip*         m_pgrip;
 
 bool m_bGauntlet;                               // Play challenge levels gauntlet
 bool m_bAddOn;                                  // Play new Add On levels
 bool m_bRejuvenate;                             // Whether to allow players to rejuvenate (MP only)
-short	m_sTimeLimit;                             // Time limit for MP games (0 or negative if none)
-short	m_sKillLimit;                             // Kill limit for MP games (0 or negative if none)
-short	m_sCoopLevels;                            // Zero for deathmatch levels, non-zero for cooperative levels.
+short m_sTimeLimit;                               // Time limit for MP games (0 or negative if none)
+short m_sKillLimit;                               // Kill limit for MP games (0 or negative if none)
+short m_sCoopLevels;                              // Zero for deathmatch levels, non-zero for cooperative levels.
 
-short	m_sFrameTime;                             // Milliseconds per frame (MP only)
+short m_sFrameTime;                               // Milliseconds per frame (MP only)
 
-RFile*			m_pfileDemoModeDebugMovie;       // File for loading/saving demo mode debug movie
+RFile*         m_pfileDemoModeDebugMovie;       // File for loading/saving demo mode debug movie
 
 GameState m_gamestate;
 
@@ -641,9 +641,9 @@ bool m_bBadRealmMP;                             // Whether MP realm was unable t
 bool m_bChatting;                               // true, when typing in chat messages.
                                                 // false, otherwise.
 bool m_bDrawFrame;                              // true, if we need to draw a frame.
-RDirtyRects	m_drl;                              // Any areas of the composite buffer that is
-                                                // altered should be added to this list so it can
-                                                // be updated on CoreLoopDraw().
+RDirtyRects m_drl;                                // Any areas of the composite buffer that is
+                                                  // altered should be added to this list so it can
+                                                  // be updated on CoreLoopDraw().
 
 
 //------------------------------------------------------------------------------
@@ -683,14 +683,14 @@ CPlayInfo(void)
    m_idGripTarget = CIdBank::IdNil;
    m_bDoRealmFrame = false;
    m_lSumUpdateDisplayTimes = 0;
-   m_bXRayAll	= false;          // Always default to no XRay all.
+   m_bXRayAll   = false;          // Always default to no XRay all.
    m_bPurgeSaks = false;         // Assume no purging
    m_bInMenu = false;
    m_bUserQuitMP = false;
    m_bNextRealmMP = false;
    m_bBadRealmMP = false;
 
-   m_bChatting		= false;
+   m_bChatting      = false;
 }
 
 
@@ -708,22 +708,22 @@ CPlayInfo(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Simple wrappers that allow "read-only" access to member variables
 ////////////////////////////////////////////////////////////////////////////////
-CNetClient*	Client(void)					{ return m_pclient; }
-CNetServer*	Server(void)					{ return m_pserver; }
-short			RealmNum(void)					{ return m_sRealmNum; }
-const char*	RealmName(void)				{ return m_szRealm; }
-bool			JustOneRealm(void)			{ return m_bJustOneRealm; }
-CRealm*		Realm(void)						{ return m_prealm; }
-CCamera*		Camera(void)					{ return m_pcamera; }
-CGrip*		Grip(void)						{ return m_pgrip; }
-bool			Gauntlet(void)					{ return m_bGauntlet; }
-bool			AddOn(void)						{ return m_bAddOn; }
-bool			Rejuvenate(void)				{ return m_bRejuvenate; }
-short			TimeLimit(void)				{ return m_sTimeLimit > 0 ? m_sTimeLimit : 0; }
-short			KillLimit(void)				{ return m_sKillLimit > 0 ? m_sKillLimit : 0; }
-short			CoopLevels(void)				{ return m_sCoopLevels; }
-short			FrameTime(void)				{ return m_sFrameTime; }
-RFile*		DemoModeDebugMovie(void)	{ return m_pfileDemoModeDebugMovie; }
+CNetClient*   Client(void)               { return m_pclient; }
+CNetServer*   Server(void)               { return m_pserver; }
+short         RealmNum(void)               { return m_sRealmNum; }
+const char*   RealmName(void)            { return m_szRealm; }
+bool         JustOneRealm(void)         { return m_bJustOneRealm; }
+CRealm*      Realm(void)                  { return m_prealm; }
+CCamera*      Camera(void)               { return m_pcamera; }
+CGrip*      Grip(void)                  { return m_pgrip; }
+bool         Gauntlet(void)               { return m_bGauntlet; }
+bool         AddOn(void)                  { return m_bAddOn; }
+bool         Rejuvenate(void)            { return m_bRejuvenate; }
+short         TimeLimit(void)            { return m_sTimeLimit > 0 ? m_sTimeLimit : 0; }
+short         KillLimit(void)            { return m_sKillLimit > 0 ? m_sKillLimit : 0; }
+short         CoopLevels(void)            { return m_sCoopLevels; }
+short         FrameTime(void)            { return m_sFrameTime; }
+RFile*      DemoModeDebugMovie(void)   { return m_pfileDemoModeDebugMovie; }
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -740,13 +740,13 @@ void SetFrameTime(
 // Set the SAK purge flag.
 ////////////////////////////////////////////////////////////////////////////////
 void SetPurgeSaks(void)
-{ m_bPurgeSaks	= true; }
+{ m_bPurgeSaks   = true; }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Clear the SAK purge flag.
 ////////////////////////////////////////////////////////////////////////////////
 void ClearPurgeSaks(void)
-{ m_bPurgeSaks	= false; }
+{ m_bPurgeSaks   = false; }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Query the SAK purge flag status.
@@ -805,7 +805,7 @@ void SetGameState_GameOver(
    // use of the "just one realm" mode in MP in the case where the server
    // only has a single realm available, we need this again in MP mode,
    // so I commented it out.
-   //	ASSERT(!IsMP());
+   //   ASSERT(!IsMP());
    m_gamestate = Game_GameOver;
 }
 
@@ -1119,7 +1119,7 @@ typedef RFList<CPlay*> Plays;
 // Variables
 //------------------------------------------------------------------------------
 private:
-Plays	m_Plays;                                  // List of play modules
+Plays m_Plays;                                    // List of play modules
 
 //------------------------------------------------------------------------------
 // Functions
@@ -1358,7 +1358,7 @@ void CoreLoopDraw(
       m_Plays.GetData(p)->CoreLoopDraw(pinfo);
 
    // Update the display in the dirtied areas defined by m_drl.
-   RDRect*	pdr	= pinfo->m_drl.GetHead();
+   RDRect*   pdr   = pinfo->m_drl.GetHead();
    while (pdr)
    {
       S32 lTime = rspGetMilliseconds();
@@ -1374,7 +1374,7 @@ void CoreLoopDraw(
       delete pdr;
 
       // Get the next one.
-      pdr	= pinfo->m_drl.GetNext();
+      pdr   = pinfo->m_drl.GetNext();
    }
    rspUpdateDisplayRects();
 }
@@ -1518,7 +1518,7 @@ S32 m_lTimeBomb;                                   // Time when bomb explodes
 bool m_bShowNetFeedback;                           // Whether to show net feedback thingy
 
 bool m_bFirstCoreLoopUserInput;
-REdit*			m_apeditChats[NUM_CHATS];           // Received chat edit fields.
+REdit*         m_apeditChats[NUM_CHATS];           // Received chat edit fields.
 S32 m_lLastChatMoveTime;                           // Last time chats were adjusted.
 
 //------------------------------------------------------------------------------
@@ -1531,10 +1531,10 @@ public:
 CPlayNet(void)
 {
    // Note that if any of this fails, we don't care (we just won't use them).
-   short	sIndex;
+   short sIndex;
    for (sIndex = 0; sIndex < NUM_CHATS; sIndex++)
    {
-      m_apeditChats[sIndex]	= (REdit*)RGuiItem::LoadInstantiate(FullPathHD(CHAT_GUI) );
+      m_apeditChats[sIndex]   = (REdit*)RGuiItem::LoadInstantiate(FullPathHD(CHAT_GUI) );
       if (m_apeditChats[sIndex])
       {
          // Recreate in the correct spot and dimensions . . .
@@ -1551,7 +1551,7 @@ CPlayNet(void)
          else
          {
             delete m_apeditChats[sIndex];
-            m_apeditChats[sIndex]	= NULL;
+            m_apeditChats[sIndex]   = NULL;
          }
       }
    }
@@ -1564,11 +1564,11 @@ CPlayNet(void)
 /* virtual */
 ~CPlayNet()
 {
-   short	sIndex;
+   short sIndex;
    for (sIndex = 0; sIndex < NUM_CHATS; sIndex++)
    {
       delete m_apeditChats[sIndex];
-      m_apeditChats[sIndex]	= NULL;
+      m_apeditChats[sIndex]   = NULL;
    }
 }
 
@@ -1577,9 +1577,9 @@ CPlayNet(void)
 // Move all the chat texts up one field.  Hides emptied fields.
 ////////////////////////////////////////////////////////////////////////////////
 void MoveChatsUp(
-   CPlayInfo*	pinfo)               // In:  Info object.
+   CPlayInfo*   pinfo)               // In:  Info object.
 {
-   short	sIndex	= 0;
+   short sIndex   = 0;
    // Goto last chat that is filled moving them up as we go.
    while (sIndex < NUM_CHATS)
    {
@@ -1626,16 +1626,16 @@ void MoveChatsUp(
       sIndex++;
    }
 
-   m_lLastChatMoveTime	= rspGetMilliseconds();
+   m_lLastChatMoveTime   = rspGetMilliseconds();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Draw visible chats.
 ////////////////////////////////////////////////////////////////////////////////
 void DrawChats(
-   CPlayInfo*	pinfo)               // In:  Info object.
+   CPlayInfo*   pinfo)               // In:  Info object.
 {
-   short	sIndex;
+   short sIndex;
    for (sIndex = 0; sIndex < NUM_CHATS; sIndex++)
    {
       if (m_apeditChats[sIndex]->m_sVisible != FALSE)
@@ -2087,14 +2087,14 @@ void CoreLoopUpdate(
 
             case NetMsg::CHAT:
             {
-               short	sIndex	= 0;
+               short sIndex   = 0;
 
                while (m_apeditChats[sIndex]->m_szText[0])
                {
                   if (++sIndex >= NUM_CHATS)             // Should never be greater but...
                   {
                      MoveChatsUp(pinfo);
-                     sIndex	= NUM_CHATS - 1;
+                     sIndex   = NUM_CHATS - 1;
                      break;
                   }
                }
@@ -2105,7 +2105,7 @@ void CoreLoopUpdate(
                m_apeditChats[sIndex]->Compose();
                m_apeditChats[sIndex]->SetVisible(TRUE);
 
-               m_lLastChatMoveTime	= rspGetMilliseconds();
+               m_lLastChatMoveTime   = rspGetMilliseconds();
 
                break;
             }
@@ -2177,11 +2177,11 @@ void CoreLoopUpdate(
       // The frames-per-second governor would be done at the point were we actually render the frame
       // and increment the frame seq.  That portion would say "If we're ready to render the frame AND
       // it's been 1/50th of a second since we rendered the last frame, then do it."
-//				while (rspGetMilliseconds() < m_lGovernTime)
-//					;
-//				m_lGovernTime = rspGetMilliseconds() + Net::MinFrameTime;
+//            while (rspGetMilliseconds() < m_lGovernTime)
+//               ;
+//            m_lGovernTime = rspGetMilliseconds() + Net::MinFrameTime;
 
-      if (m_lLastChatMoveTime	+ CHAT_DELAY < rspGetMilliseconds() )
+      if (m_lLastChatMoveTime   + CHAT_DELAY < rspGetMilliseconds() )
       {
          // Move the chats up -- this updates m_lLastChatMoveTime.
          MoveChatsUp(pinfo);
@@ -2274,16 +2274,16 @@ S32 m_lSumFrameTimes;
 S32 m_lNumFrames;
 S32 m_lLastIterationTime;
 /* 12/3/97 AJC */
-Net::SEQ	m_seqPrevFrameSeq;
-Net::SEQ	m_seqCurrFrameSeq;
+Net::SEQ m_seqPrevFrameSeq;
+Net::SEQ m_seqCurrFrameSeq;
 S32 m_lFramePerSecond;
 S32 m_lPrevSeqTime;
 /* 12/3/97 AJC */
 S32 m_lSumIterationTimes;
 S32 m_lNumIterations;
-RRect	m_rectDude;
-RRect	m_rectRealm;
-RRect	m_rectInfo;
+RRect m_rectDude;
+RRect m_rectRealm;
+RRect m_rectInfo;
 char m_szFileDescriptor[256];
 RPrint m_print;
 bool m_bFirstUpdate;
@@ -2321,7 +2321,7 @@ short StartRealm(                                     // Returns 0 if successful
    {
       // Initialize times and counts.
       m_lLastFrameTime = rspGetMilliseconds();
-      m_lLastIterationTime	= m_lLastFrameTime;
+      m_lLastIterationTime   = m_lLastFrameTime;
       m_lSumFrameTimes = 0;
       m_lNumFrames = 0;
       pinfo->m_lSumUpdateDisplayTimes = 0;
@@ -2331,11 +2331,11 @@ short StartRealm(                                     // Returns 0 if successful
       m_lFramePerSecond = 0;
       if (pinfo->IsMP())
          m_seqPrevFrameSeq = pinfo->Client()->GetInputSeqNotYetSent();
-      m_lPrevSeqTime	= rspGetMilliseconds();
+      m_lPrevSeqTime   = rspGetMilliseconds();
       /*** 12/3/97 AJC ***/
 
-      m_lSumIterationTimes	= 0;
-      m_lNumIterations	= 0;
+      m_lSumIterationTimes   = 0;
+      m_lNumIterations   = 0;
 
       // Get app's descriptor.
       Play_GetApplicationDescriptor(m_szFileDescriptor, sizeof(m_szFileDescriptor));
@@ -2362,7 +2362,7 @@ short StartRealm(                                     // Returns 0 if successful
       // Init the tool bar
       ToolBarInit(pinfo->Realm()->m_phood);
 
-      // Setup print	utilizing some values initialized by ToolBarInit().
+      // Setup print   utilizing some values initialized by ToolBarInit().
       m_print.SetFont(DISP_INFO_FONT_HEIGHT, &g_fontBig);
       m_print.SetColor(gsStatusFontForeIndex, gsStatusFontBackIndex, gsStatusFontShadowIndex);
       m_print.SetEffectAbs(RPrint::SHADOW_X, 1);
@@ -2487,7 +2487,7 @@ void CoreLoopRenderOnTop(
             m_lNumIterations++;
          }
 
-         m_lLastIterationTime	= rspGetMilliseconds();
+         m_lLastIterationTime   = rspGetMilliseconds();
 
          // No need for this unless we're going to draw . . .
          if (pinfo->m_bDrawFrame)
@@ -2499,7 +2499,7 @@ void CoreLoopRenderOnTop(
             if (!g_bLastLevelDemo)
             {
                // Update the realm (or Score) status
-               bUpdateRealm	= ScoreUpdateDisplay(
+               bUpdateRealm   = ScoreUpdateDisplay(
                   g_pimScreenBuf,
                   &m_rectRealm,
                   pinfo->Realm(),
@@ -2629,8 +2629,8 @@ private:
 //------------------------------------------------------------------------------
 private:
 S32 m_lDemoDeadTime;                            // Time dude has been dead for
-U8*				m_pau8KeyStatus;                 // Key status array
-REdit*			m_peditChatIn;                   // Outgoing chat.
+U8*            m_pau8KeyStatus;                 // Key status array
+REdit*         m_peditChatIn;                   // Outgoing chat.
 
 
 //------------------------------------------------------------------------------
@@ -2643,11 +2643,11 @@ public:
 CPlayInput(void)
 {
    // We don't care if this fails.
-   m_peditChatIn	= (REdit*)RGuiItem::LoadInstantiate(FullPathHD(CHAT_IN_GUI) );
+   m_peditChatIn   = (REdit*)RGuiItem::LoadInstantiate(FullPathHD(CHAT_IN_GUI) );
    if (m_peditChatIn)
    {
       // Limit to chat length minus some room for our name.
-      m_peditChatIn->m_sMaxText	= MIN(CHAT_IN_LENGTH, Net::MaxChatSize - 1);
+      m_peditChatIn->m_sMaxText   = MIN(CHAT_IN_LENGTH, Net::MaxChatSize - 1);
 
       // Recreate in the correct spot and dimensions . . .
       if (m_peditChatIn->Create(
@@ -2662,7 +2662,7 @@ CPlayInput(void)
       else
       {
          delete m_peditChatIn;
-         m_peditChatIn	= NULL;
+         m_peditChatIn   = NULL;
       }
    }
 #ifdef MOBILE
@@ -2678,7 +2678,7 @@ CPlayInput(void)
 ~CPlayInput()
 {
    delete m_peditChatIn;
-   m_peditChatIn	= NULL;
+   m_peditChatIn   = NULL;
 }
 
 
@@ -2693,7 +2693,7 @@ short StartRealm(                                     // Returns 0 if successful
    m_lDemoDeadTime = -1;
 
    // Get the key status array
-   m_pau8KeyStatus		= rspGetKeyStatusArray();
+   m_pau8KeyStatus      = rspGetKeyStatusArray();
 
    return 0;
 }
@@ -2819,7 +2819,7 @@ void CoreLoopUserInput(
                         // on the player actually pressing the key.
                         bEndLevelKey = true;
 
-                        pie->sUsed	= TRUE;
+                        pie->sUsed   = TRUE;
                      }
                      break;
 
@@ -2829,7 +2829,7 @@ void CoreLoopUserInput(
                      {
                         PauseGame(pinfo->Realm(), "Press <Pause> key to resume", KEY_PAUSE);
 
-                        pie->sUsed	= TRUE;
+                        pie->sUsed   = TRUE;
                      }
                      break;
 
@@ -2843,7 +2843,7 @@ void CoreLoopUserInput(
                         if (!pinfo->IsGameOver())
                            StartMenu(pinfo);
 
-                        pie->sUsed	= TRUE;
+                        pie->sUsed   = TRUE;
                      }
                      break;
 
@@ -2855,14 +2855,14 @@ void CoreLoopUserInput(
                      if (pdudeLocal != NULL)
                         pdudeLocal->m_bTargetingHelpEnabled = (g_GameSettings.m_sCrossHair != FALSE) ? true : false;
 
-                     pie->sUsed	= TRUE;
+                     pie->sUsed   = TRUE;
                      break;
 
                   case KEY_SHOW_MISSION:
                      // Show the mission goal line again for about 5 seconds.
                      ScoreDisplayStatus(prealm);
 
-                     pie->sUsed	= TRUE;
+                     pie->sUsed   = TRUE;
                      break;
 
                   case KEY_ENLARGE_FILM1:
@@ -2871,7 +2871,7 @@ void CoreLoopUserInput(
                      // Increase film scale
                      g_GameSettings.m_dGameFilmScale += FILM_INCDEC_SCALE;
 
-                     pie->sUsed	= TRUE;
+                     pie->sUsed   = TRUE;
                      break;
 
                   case KEY_REDUCE_FILM1:
@@ -2879,17 +2879,17 @@ void CoreLoopUserInput(
                      // Decrease film scale
                      g_GameSettings.m_dGameFilmScale -= FILM_INCDEC_SCALE;
 
-                     pie->sUsed	= TRUE;
+                     pie->sUsed   = TRUE;
                      break;
 
                   case KEY_TOGGLE_DISP_INFO:
                      // Toggle display info flag.
                      if (g_GameSettings.m_sDisplayInfo == FALSE)
-                        g_GameSettings.m_sDisplayInfo	= TRUE;
+                        g_GameSettings.m_sDisplayInfo   = TRUE;
                      else
-                        g_GameSettings.m_sDisplayInfo	= FALSE;
+                        g_GameSettings.m_sDisplayInfo   = FALSE;
 
-                     pie->sUsed	= TRUE;
+                     pie->sUsed   = TRUE;
                      break;
 
                   case KEY_TALK1:
@@ -2897,11 +2897,11 @@ void CoreLoopUserInput(
                      if (m_peditChatIn && pinfo->IsMP() && pinfo->m_bChatting == false)
                      {
                         // Activate talk mode.
-                        pinfo->m_bChatting	= true;
+                        pinfo->m_bChatting   = true;
 
                         m_peditChatIn->SetVisible(TRUE);
 
-                        pie->sUsed	= TRUE;
+                        pie->sUsed   = TRUE;
                      }
                      break;
                   }
@@ -2955,7 +2955,7 @@ void CoreLoopUserInput(
                         // Reset the input.
                         ClearLocalInput();
 
-                        pinfo->m_bChatting	= false;
+                        pinfo->m_bChatting   = false;
                         break;
 
                      default:
@@ -2983,11 +2983,11 @@ void CoreLoopUserInput(
                if (m_pau8KeyStatus[KEY_XRAY_ALL])
                {
                   // Toggle user choice for XRay all.
-                  pinfo->m_bXRayAll	= !pinfo->m_bXRayAll;
+                  pinfo->m_bXRayAll   = !pinfo->m_bXRayAll;
                   // Set new value to the scene.
                   prealm->m_scene.SetXRayAll( (pinfo->m_bXRayAll == true) ? TRUE : FALSE);
                   // Clear key's status.
-                  m_pau8KeyStatus[KEY_XRAY_ALL]	= 0;
+                  m_pau8KeyStatus[KEY_XRAY_ALL]   = 0;
                }
 
                // If snap picture pressed . . .
@@ -3001,7 +3001,7 @@ void CoreLoopUserInput(
                         Play_SnapPicture();
 
                      // Clear the key.
-                     m_pau8KeyStatus[KEY_SNAP_PICTURE]	= 0;
+                     m_pau8KeyStatus[KEY_SNAP_PICTURE]   = 0;
                   }
                }
 
@@ -3033,13 +3033,13 @@ void CoreLoopUserInput(
                         if (pdudeLocal->IsDead() == true)
                         {
                            // Restart the realm
-                           bRestart	= true;
+                           bRestart   = true;
                         }
                      }
                      else
                      {
                         // Restart the realm
-                        bRestart	= true;
+                        bRestart   = true;
                      }
 
                      if (bRestart)
@@ -3196,8 +3196,8 @@ void CoreLoopRenderOnTop(
 //
 ////////////////////////////////////////////////////////////////////////////////
 void PauseGame(
-   CRealm*	prealm,              // In:  Realm to pause or NULL.
-   char*		pszMsg,              // In:  Message to be displayed.
+   CRealm*   prealm,              // In:  Realm to pause or NULL.
+   char*      pszMsg,              // In:  Message to be displayed.
    S32 lKey)                     // In:  Key to continue or 0 to wait for foreground status
 {
    // Suspend realm.
@@ -3259,14 +3259,14 @@ void PauseGame(
    print.SetDestination(g_pimScreenBuf);
    print.SetJustifyCenter();
 
-   short	sTotalH	= PAUSED_FONT_HEIGHT + PAUSED_FONT_SHADOW_Y;
+   short sTotalH   = PAUSED_FONT_HEIGHT + PAUSED_FONT_SHADOW_Y;
    if (pszMsg)
    {
       // Include message height as well.
-      sTotalH	+= PAUSED_MSG_FONT_HEIGHT + PAUSED_MSG_FONT_SHADOW_Y;
+      sTotalH   += PAUSED_MSG_FONT_HEIGHT + PAUSED_MSG_FONT_SHADOW_Y;
    }
 
-   short	sPosY		= g_pimScreenBuf->m_sHeight / 2 - sTotalH;       // / 2;
+   short sPosY      = g_pimScreenBuf->m_sHeight / 2 - sTotalH;         // / 2;
 
    print.print(
       0,
@@ -3275,7 +3275,7 @@ void PauseGame(
 
    if (pszMsg)
    {
-      sPosY	+= PAUSED_FONT_HEIGHT + PAUSED_FONT_SHADOW_Y;
+      sPosY   += PAUSED_FONT_HEIGHT + PAUSED_FONT_SHADOW_Y;
 
       print.SetFont(PAUSED_MSG_FONT_HEIGHT);
       print.SetEffectAbs(RPrint::SHADOW_X, PAUSED_MSG_FONT_SHADOW_X);
@@ -3301,20 +3301,20 @@ void PauseGame(
 
    // Loop until signaled to continue.
    bool bResume  = false;
-   RInputEvent	ie;
+   RInputEvent ie;
    while (bResume == false)
    {
       UpdateSystem();
 
       if (lKey)
       {
-         ie.type	= RInputEvent::None;
+         ie.type   = RInputEvent::None;
          rspGetNextInputEvent(&ie);
          if (ie.type == RInputEvent::Key)
          {
             if ((ie.lKey & 0x0000FFFF) == lKey)
             {
-               bResume	= true;
+               bResume   = true;
             }
          }
       }
@@ -3322,13 +3322,13 @@ void PauseGame(
       {
          if (rspIsBackground() == FALSE)
          {
-            bResume	= true;
+            bResume   = true;
          }
       }
 
       if (rspGetQuitStatus() )
       {
-         bResume	= true;
+         bResume   = true;
       }
    }
 
@@ -3377,9 +3377,9 @@ void StartMenu(
       menuClientGame.ami[0].sEnabled = FALSE;
 #endif
    // Disable 'Play Options' on 'Options' menu.
-   menuOptions.ami[5].sEnabled	= FALSE;
+   menuOptions.ami[5].sEnabled   = FALSE;
    // Disable 'Organ' on 'Audio Options' menu.
-   menuAudioOptions.ami[1].sEnabled	= FALSE;
+   menuAudioOptions.ami[1].sEnabled   = FALSE;
    // Disable 'Save' IF in multiplayer.
    menuClientGame.ami[1].sEnabled = (pinfo->IsMP() == true) ? FALSE : TRUE;
 
@@ -3441,7 +3441,7 @@ void DoMenu(
    {
       short sResult;
       // Static so dialog will "remember" the previously-used name
-      static char	szFile[RSP_MAX_PATH]	= "";
+      static char szFile[RSP_MAX_PATH]   = "";
 
       // If not yet used, start out in appropriate directory
       if (szFile[0] == '\0')
@@ -3516,14 +3516,14 @@ void DoMenu(
 
    DoMenuOutput(pinfo->Camera()->m_pimFilm);
 
-   ms_menuaction	= MenuActionNone;
+   ms_menuaction   = MenuActionNone;
 
    // This is CHEEZY AS HELL but the normal menu callback calls
    // game.cpp which sets its action flag telling it to call this
    // function.  Not sure how to do it here.  Will we need to call
    // game.cpp, play.cpp, and gameedit.cpp whenever this menu is
    // activated?
-   Menu*	pmenu	= GetCurrentMenu();
+   Menu*   pmenu   = GetCurrentMenu();
    if (pmenu == &menuJoystick || pmenu == &menuMouse || pmenu == &menuKeyboard)
    {
       // Do the input settings.
@@ -3562,9 +3562,9 @@ void StopMenu(
    }
 
    // Re-enable 'Play Options' on 'Options' menu.
-   menuOptions.ami[5].sEnabled		= TRUE;
+   menuOptions.ami[5].sEnabled      = TRUE;
    // Re-enable 'Organ' on 'Audio Options' menu.
-   menuAudioOptions.ami[1].sEnabled	= TRUE;
+   menuAudioOptions.ami[1].sEnabled   = TRUE;
 
    // Fade colors back in
    PalTranOff();
@@ -3607,7 +3607,7 @@ private:
 typedef struct
 {
    CStockPile stockpile;
-   CDude::WeaponType	weapon;
+   CDude::WeaponType weapon;
 } LevelPersist;
 
 
@@ -3618,7 +3618,7 @@ private:
 LevelPersist m_alevelpersist[Net::MaxNumIDs];         // Index by CDude::m_sDudeNum.
 bool m_bMakeDemoMovie_WaitForClick;                   // Flag used when making demo movies
 double m_dCurrentFilmScale;
-short	m_sCurrentGripZoneRadius;
+short m_sCurrentGripZoneRadius;
 S32 m_lNumSeqSkippedFrames;
 
 
@@ -3666,7 +3666,7 @@ short PrepareGame(                                    // Returns 0 if successful
       m_alevelpersist[sDudeIndex].stockpile.Zero();
 
       // Make machine gun the default weapon.
-      m_alevelpersist[sDudeIndex].weapon	= CDude::SemiAutomatic;
+      m_alevelpersist[sDudeIndex].weapon   = CDude::SemiAutomatic;
    }
 
    // Debug demo mode stuff (always active -- takes essentially no time unless enabled from game.cpp)
@@ -3768,7 +3768,7 @@ short PrepareRealm(                                   // Returns 0 if successful
                g_pszAppName,
                g_pszPlayOneRealmOnlyMessage);
          }
-               #endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+               #endif   // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
       }
 
       // If there was an error, and this is an MP game, then we ignore the error for now,
@@ -3904,10 +3904,10 @@ void CoreLoopRender(
                   pinfo->m_bDrawFrame = false;
                }
                else
-                  m_lNumSeqSkippedFrames	= 0;
+                  m_lNumSeqSkippedFrames   = 0;
             }
             else
-               m_lNumSeqSkippedFrames	= 0;
+               m_lNumSeqSkippedFrames   = 0;
          }
 
          // Track the local dude with the grip/camera and adjust the sound, too
@@ -3915,7 +3915,7 @@ void CoreLoopRender(
          if (pdudeLocal != NULL)
          {
             // Update grip/camera
-            short	sX, sY;
+            short sX, sY;
             prealm->Map3Dto2D(pdudeLocal->GetX(), pdudeLocal->GetY(), pdudeLocal->GetZ(), &sX, &sY);
             pinfo->Grip()->TrackTarget(sX, sY, 30);
 
@@ -3937,11 +3937,11 @@ void CoreLoopRender(
       }
       else
       {
-         // 11/18/97	JMI	This didn't seem to get cleared in the case bDoFrame
-         //						is false but I didn't see why we'd need to update the
-         //						screen in this case (perhaps this is part of our net
-         //						slow down?).
-         pinfo->m_bDrawFrame	= false;
+         // 11/18/97   JMI   This didn't seem to get cleared in the case bDoFrame
+         //                  is false but I didn't see why we'd need to update the
+         //                  screen in this case (perhaps this is part of our net
+         //                  slow down?).
+         pinfo->m_bDrawFrame   = false;
       }
 
       // If not in menu . . .
@@ -3999,14 +3999,14 @@ void EndRealm(
       if (pinfo->IsRestartingRealm() == false)
       {
          // Update players' stockpiles.
-         CListNode<CThing>*	plnDude		= prealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
-         CListNode<CThing>*	plnDudeTail	= &(prealm->m_aclassTails[CThing::CDudeID]);
+         CListNode<CThing>*   plnDude      = prealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
+         CListNode<CThing>*   plnDudeTail   = &(prealm->m_aclassTails[CThing::CDudeID]);
          while (plnDude != plnDudeTail)
          {
             CDude* pdude = (CDude*)plnDude->m_powner;
             m_alevelpersist[pdude->m_sDudeNum].stockpile.Copy( &(pdude->m_stockpile) );
             m_alevelpersist[pdude->m_sDudeNum].weapon = pdude->GetCurrentWeapon();
-            plnDude	= plnDude->m_pnNext;
+            plnDude   = plnDude->m_pnNext;
          }
       }
 
@@ -4021,7 +4021,7 @@ private:
 // Setup local dude
 ////////////////////////////////////////////////////////////////////////////////
 void SetupLocalDude(
-   CPlayInfo*		pinfo,                              // I/O: Play info
+   CPlayInfo*      pinfo,                              // I/O: Play info
    CDude* pdude)                                      // In:  Dude to setup
 {
    // Get local dude's ID
@@ -4041,7 +4041,7 @@ void SetupLocalDude(
 void SetupGeneralDude(
    CDude* pdude,                                      // In:  Dude to setup
    short sColor,                                      // In:  Player's color
-   LevelPersist*	palevelpersist)                     // In:  Players' level persistent data.
+   LevelPersist*   palevelpersist)                     // In:  Players' level persistent data.
 {
    // Union player's pre-existing stockpile with warped-in dude and give him his prior weapon
    ASSERT(pdude != NULL);
@@ -4070,8 +4070,8 @@ void SetupGeneralDude(
 //
 ////////////////////////////////////////////////////////////////////////////////
 short SetupDudes(
-   CPlayInfo*		pinfo,                              // I/O: Play info
-   LevelPersist*	palevelpersist)                     // In:  Players' level persistent data.
+   CPlayInfo*      pinfo,                              // I/O: Play info
+   LevelPersist*   palevelpersist)                     // In:  Players' level persistent data.
 {
    short sResult = 0;
 
@@ -4092,16 +4092,16 @@ short SetupDudes(
    // After this point, there will be NO DUDE'S, either because there weren't any
    // to start with or because we converted them into warps.
    //------------------------------------------------------------------------------
-   CListNode<CThing>*	pln		= prealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
-   CListNode<CThing>*	plnTail	= &(prealm->m_aclassTails[CThing::CDudeID]);
-   CDude*	pdude;
-   CWarp*	pwarp;
+   CListNode<CThing>*   pln      = prealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
+   CListNode<CThing>*   plnTail   = &(prealm->m_aclassTails[CThing::CDudeID]);
+   CDude*   pdude;
+   CWarp*   pwarp;
    bool bFirst = true;
    while (pln != plnTail)
    {
-      CListNode<CThing>*	plnNext	= pln->m_pnNext;
+      CListNode<CThing>*   plnNext   = pln->m_pnNext;
 
-      pdude	= (CDude*)pln->m_powner;
+      pdude   = (CDude*)pln->m_powner;
       if (CWarp::CreateWarpFromDude(prealm, pdude, &pwarp, bFirst) == 0)
          bFirst = false;
       else
@@ -4120,9 +4120,9 @@ short SetupDudes(
    if (prealm->m_asClassNumThings[CThing::CWarpID] > 0)
    {
       // Setup warp pointers
-      CListNode<CThing>*	plnWarpHead	= &(prealm->m_aclassHeads[CThing::CWarpID]);
-      CListNode<CThing>*	plnWarp		= plnWarpHead->m_pnNext;
-      CListNode<CThing>*	plnWarpTail	= &(prealm->m_aclassTails[CThing::CWarpID]);
+      CListNode<CThing>*   plnWarpHead   = &(prealm->m_aclassHeads[CThing::CWarpID]);
+      CListNode<CThing>*   plnWarp      = plnWarpHead->m_pnNext;
+      CListNode<CThing>*   plnWarpTail   = &(prealm->m_aclassTails[CThing::CWarpID]);
 
       // Multiplayer mode is handled separately
       if (pinfo->IsMP())
@@ -4133,8 +4133,8 @@ short SetupDudes(
          // Find a random starter.  Pick a number from 0 to n - 1 where n is the
          // number of CWarps in the realm.  Next, iterate to that warp so we start
          // creating dudes at a 'random' warp.
-         short	sStartWarpNum	= GetRand() % prealm->m_asClassNumThings[CThing::CWarpID];
-         short	i;
+         short sStartWarpNum   = GetRand() % prealm->m_asClassNumThings[CThing::CWarpID];
+         short i;
          for (i = 0; i < sStartWarpNum; i++, plnWarp = plnWarp->m_pnNext)
             ;
 
@@ -4146,13 +4146,13 @@ short SetupDudes(
             {
                // If we've hit the tail of the warps, wrap around
                if (plnWarp == plnWarpTail)
-                  plnWarp	= plnWarpHead->m_pnNext;
+                  plnWarp   = plnWarpHead->m_pnNext;
 
-               pwarp	= (CWarp*)plnWarp->m_powner;
+               pwarp   = (CWarp*)plnWarp->m_powner;
                ASSERT(pwarp != NULL);
 
                // Warp in dude (creates a new dude since the pointer starts out NULL)
-               pdude	= NULL;
+               pdude   = NULL;
                if (pwarp->WarpIn(&pdude, CWarp::CopyStockPile) == 0)
                {
                   // SPECIAL CASE!!!  In multiplayer mode, we overwrite the dude numbers
@@ -4177,18 +4177,18 @@ short SetupDudes(
                   sResult = -1;
                   TRACE("SetupDudes(): pwarp->WarpIn() failed.\n");
                }
-               plnWarp	= plnWarp->m_pnNext;
+               plnWarp   = plnWarp->m_pnNext;
             }
          }
       }
       else
       {
          // Use the first warp
-         pwarp	= (CWarp*)plnWarp->m_powner;
+         pwarp   = (CWarp*)plnWarp->m_powner;
          ASSERT(pwarp != NULL);
 
          // Warp in dude (creates a new dude since the pointer starts out NULL)
-         pdude	= NULL;
+         pdude   = NULL;
          if (pwarp->WarpIn(&pdude, CWarp::CopyStockPile) == 0)
          {
             // Set general dude stuff
@@ -4223,11 +4223,11 @@ short SetupDudes(
 //
 ////////////////////////////////////////////////////////////////////////////////
 void BlankDisplay(                  // Returns nothing.
-   short	sX,                        // In:  X start position.
-   short	sY,                        // In:  Y start position.
-   short	sW,                        // In:  Width.
-   short	sH,                        // In:  Height
-   CPlayInfo*	pinfo)               // Out: Dimensions to update to the display later.
+   short sX,                          // In:  X start position.
+   short sY,                          // In:  Y start position.
+   short sW,                          // In:  Width.
+   short sH,                          // In:  Height
+   CPlayInfo*   pinfo)               // Out: Dimensions to update to the display later.
 {
    if (sW > 0 && sH > 0)
    {
@@ -4256,26 +4256,26 @@ void ScaleFilm(
    CGrip* pgrip = pinfo->Grip();
 
    // Remember previous values so we know what portion of the screen needs to be cleared
-   short	sOldFilmX = pcamera->m_sFilmViewX;
-   short	sOldFilmY = pcamera->m_sFilmViewY;
-   short	sOldViewW = pcamera->m_sViewW;
-   short	sOldViewH = pcamera->m_sViewH;
+   short sOldFilmX = pcamera->m_sFilmViewX;
+   short sOldFilmY = pcamera->m_sFilmViewY;
+   short sOldViewW = pcamera->m_sViewW;
+   short sOldViewH = pcamera->m_sViewH;
 
    // Clamp the scale to fit the valid range
    if (g_GameSettings.m_dGameFilmScale > FILM_MAX_SCALE)
-      g_GameSettings.m_dGameFilmScale	= FILM_MAX_SCALE;
+      g_GameSettings.m_dGameFilmScale   = FILM_MAX_SCALE;
    if (g_GameSettings.m_dGameFilmScale < FILM_MIN_SCALE)
-      g_GameSettings.m_dGameFilmScale	= FILM_MIN_SCALE;
+      g_GameSettings.m_dGameFilmScale   = FILM_MIN_SCALE;
 
    // Scale the actual film.
-   short	sViewW = VIEW_W * g_GameSettings.m_dGameFilmScale;
+   short sViewW = VIEW_W * g_GameSettings.m_dGameFilmScale;
    short sViewH = VIEW_H * g_GameSettings.m_dGameFilmScale;
-   short	sFilmX = FILM_X + (VIEW_W - sViewW) / 2;
-   short	sFilmY = FILM_Y + (VIEW_H - sViewH) / 2;
+   short sFilmX = FILM_X + (VIEW_W - sViewW) / 2;
+   short sFilmY = FILM_Y + (VIEW_H - sViewH) / 2;
 
    // Update the camera to the new film size.
-   pcamera->m_sViewW	= sViewW;
-   pcamera->m_sViewH	= sViewH;
+   pcamera->m_sViewW   = sViewW;
+   pcamera->m_sViewH   = sViewH;
    pcamera->SetFilm(g_pimScreenBuf, sFilmX, sFilmY);
 
    // Update the grip to the new film scaling.
@@ -4299,51 +4299,51 @@ void ScaleFilm(
    {
       // Update revealed zones.
       //  ________
-      //	|xxxxxxxx|
-      //	|xxxxxxxx|
-      //	|**|	|++|
-      //	|**|__|++|
-      //	|--------|
-      //	|--------|
+      //   |xxxxxxxx|
+      //   |xxxxxxxx|
+      //   |**|   |++|
+      //   |**|__|++|
+      //   |--------|
+      //   |--------|
 
       // Top strip.
       //  ________
-      //	|xxxxxxxx|
-      //	|xxxxxxxx|
-      //	|	|	|	|
-      //	|	|__|	|
-      //	|			|
-      //	|________|
+      //   |xxxxxxxx|
+      //   |xxxxxxxx|
+      //   |   |   |   |
+      //   |   |__|   |
+      //   |         |
+      //   |________|
       BlankDisplay(sOldFilmX, sOldFilmY, sOldViewW, sFilmY - sOldFilmY, pinfo);
 
       // Bottom strip.
       //  ________
-      //	|			|
-      //	|	 __	|
-      //	|	|	|	|
-      //	|	|__|	|
-      //	|xxxxxxxx|
-      //	|xxxxxxxx|
+      //   |         |
+      //   |    __   |
+      //   |   |   |   |
+      //   |   |__|   |
+      //   |xxxxxxxx|
+      //   |xxxxxxxx|
       BlankDisplay( sOldFilmX, sFilmY + sViewH, sOldViewW, (sOldFilmY + sOldViewH) - (sFilmY + sViewH), pinfo);
 
       // Left strip.
       //  ________
-      //	|			|
-      //	|	 __	|
-      //	|xx|	|	|
-      //	|xx|__|	|
-      //	|			|
-      //	|________|
+      //   |         |
+      //   |    __   |
+      //   |xx|   |   |
+      //   |xx|__|   |
+      //   |         |
+      //   |________|
       BlankDisplay(sOldFilmX, sFilmY, sFilmX - sOldFilmX, sViewH, pinfo);
 
       // Right strip.
       //  ________
-      //	|			|
-      //	|	 __	|
-      //	|	|	|xx|
-      //	|	|__|xx|
-      //	|			|
-      //	|________|
+      //   |         |
+      //   |    __   |
+      //   |   |   |xx|
+      //   |   |__|xx|
+      //   |         |
+      //   |________|
       BlankDisplay(sFilmX + sViewW, sFilmY, (sOldFilmX + sOldViewW) - (sFilmX + sViewW), sViewH, pinfo);
    }
 
@@ -4469,7 +4469,7 @@ void MakeDemoMovie(
                   if (m_bMakeDemoMovie_WaitForClick)
                   {
                      short sButtons;
-                     do	{
+                     do   {
                         rspGetMouse(NULL, NULL, &sButtons);
                         UpdateSystem();
                      } while (sButtons);
@@ -4479,7 +4479,7 @@ void MakeDemoMovie(
                      } while (!sButtons);
                      if (sButtons & 2)
                         m_bMakeDemoMovie_WaitForClick = false;
-                     do	{
+                     do   {
                         rspGetMouse(NULL, NULL, &sButtons);
                         UpdateSystem();
                      } while (sButtons);
@@ -4694,8 +4694,8 @@ void DoCutscene(
          0, 0, g_pimScreenBuf->m_sWidth, g_pimScreenBuf->m_sHeight);
 
       // Insert effects into this loop!
-      RInputEvent	ie;
-      ie.type	= RInputEvent::None;
+      RInputEvent ie;
+      ie.type   = RInputEvent::None;
       rspClearAllInputEvents();
       while (rspGetQuitStatus() == 0)
       {
@@ -4771,11 +4771,11 @@ inline void SynchronousSampleAbortion(void)
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern short Play(                              // Returns 0 if successfull, non-zero otherwise
-   CNetClient*	pclient,                         // In:  Client object or NULL if not network game
-   CNetServer*	pserver,                         // In:  Server object or NULL if not server or not network game
+   CNetClient*   pclient,                         // In:  Client object or NULL if not network game
+   CNetServer*   pserver,                         // In:  Server object or NULL if not server or not network game
    INPUT_MODE inputMode,                        // In:  Input mode
    const short sRealmNum,                       // In:  Realm number to start on or -1 to use specified realm file
-   const char*	pszRealmFile,                    // In:  Realm file to play (ignored if sRealmNum >= 0)
+   const char*   pszRealmFile,                    // In:  Realm file to play (ignored if sRealmNum >= 0)
    const bool bJustOneRealm,                    // In:  Play just this one realm (ignored if sRealmNum < 0)
    const bool bGauntlet,                        // In:  Play challenge levels gauntlet - as selected on menu
    const bool bAddOn,                           // In:  Play add on levels
@@ -4783,8 +4783,8 @@ extern short Play(                              // Returns 0 if successfull, non
    const bool bRejuvenate,                      // In:  Whether to allow players to rejuvenate (MP only)
    const short sTimeLimit,                      // In:  Time limit for MP games (0 or negative if none)
    const short sKillLimit,                      // In:  Kill limit for MP games (0 or negative if none)
-   const	short	sCoopLevels,                     // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   const	short	sCoopMode,                       // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   const short sCoopLevels,                         // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   const short sCoopMode,                           // In:  Zero for deathmatch mode, non-zero for cooperative mode.
    const short sFrameTime,                      // In:  Milliseconds per frame (MP only)
    RFile* pfileDemoModeDebugMovie)              // In:  File for loading/saving demo mode debug movie
 {
@@ -4833,8 +4833,8 @@ extern short Play(                              // Returns 0 if successfull, non
    SeedRand(1);
 
    // Create all the play modules
-   CPlayNet	playNet;
-   CPlayStatus	playStatus;
+   CPlayNet playNet;
+   CPlayStatus playStatus;
    CPlayRealm playRealm;
    CPlayInput playInput;
    CPlayCutscene playCutscene;
@@ -4877,7 +4877,7 @@ extern short Play(                              // Returns 0 if successfull, non
          // 09/12/97 MJR - Clear the string.  The CPlayInfo constructor actually does this, but this
          // makes it more obvious.
          info.m_szRealm[0] = 0;
-         sResult	= -1;
+         sResult   = -1;
          TRACE("Play(): Couldn't get info for realm #%hd!\n", (short)sRealmNum);
       }
    }
@@ -4897,7 +4897,7 @@ extern short Play(                              // Returns 0 if successfull, non
       sResult = prefsRealm.Open(FullPathCD(g_GameSettings.m_pszRealmPrefsFile), "rt");
    if (sResult == 0)
    {
-      short	sNumLevels;
+      short sNumLevels;
       prefsRealm.GetVal("Info", "NumSinglePlayerLevels", 16, &sNumLevels);
       prefsRealm.Close();
 
@@ -4908,7 +4908,7 @@ extern short Play(                              // Returns 0 if successfull, non
 
          // Wait until game is ready
          bool bGameReady = false;
-         do	{
+         do   {
             sResult = playgroup.IsGameReady(&info, &bGameReady);
          } while (!sResult && !bGameReady);
          if (!sResult && bGameReady)
@@ -4930,7 +4930,7 @@ extern short Play(                              // Returns 0 if successfull, non
 #endif
                /*** 12/5/97 AJC ***/
                // Outer loop keeps playing one realm after another
-               do	{
+               do   {
                   S32 startRealmMS = -1;
 
                   // Clear game status
@@ -4953,7 +4953,7 @@ extern short Play(                              // Returns 0 if successfull, non
 
                      // Wait until realm is ready
                      bool bRealmReady = false;
-                     do	{
+                     do   {
                         sResult = playgroup.IsRealmReady(&info, &bRealmReady);
                      } while (!sResult && !bRealmReady);
                      if (!sResult && bRealmReady)
@@ -5062,8 +5062,8 @@ extern short Play(                              // Returns 0 if successfull, non
                            }
 #endif
                            // Inner loop plays current realm until it's done
-                           RInputEvent	ie;
-                           do	{
+                           RInputEvent ie;
+                           do   {
 
                               if ((info.Realm()->m_flags.sDifficulty != 11) && (!g_bLastLevelDemo))
                                  Flag_Achievements &= ~FLAG_HIGHEST_DIFFICULTY;
@@ -5252,7 +5252,7 @@ extern short Play(                              // Returns 0 if successfull, non
                            if (info.IsMP())
                               info.m_bBadRealmMP = true;
                            else
-                              sResult	= -1;
+                              sResult   = -1;
                            TRACE("Play(): Couldn't get info for realm #%hd!\n", (short)info.m_sRealmNum);
                            break;
                         }
@@ -5320,8 +5320,8 @@ extern void Play_SnapPicture(void)
    RPal palPicture;
    if (palPicture.CreatePalette(RPal::PDIB) == 0)
    {
-      palPicture.m_sStartIndex	= 0;
-      palPicture.m_sNumEntries	= 256;
+      palPicture.m_sStartIndex   = 0;
+      palPicture.m_sNumEntries   = 256;
       rspGetPaletteEntries(
          palPicture.m_sStartIndex,     // Palette entry to start copying to (has no effect on source!)
          palPicture.m_sNumEntries,     // Number of palette entries to do
@@ -5332,11 +5332,11 @@ extern void Play_SnapPicture(void)
 
       // Store screen buffer's actual type and palette
       RImage::Type typeOrig    = g_pimScreenBuf->m_type;
-      RPal*				ppalOrig		= g_pimScreenBuf->m_pPalette;
+      RPal*            ppalOrig      = g_pimScreenBuf->m_pPalette;
 
       // Temporarily change its type and palette
-      g_pimScreenBuf->m_type		= RImage::BMP8;
-      g_pimScreenBuf->m_pPalette	= &palPicture;
+      g_pimScreenBuf->m_type      = RImage::BMP8;
+      g_pimScreenBuf->m_pPalette   = &palPicture;
 
       // Save picture to file
       char szFileName[RSP_MAX_PATH];
@@ -5350,8 +5350,8 @@ extern void Play_SnapPicture(void)
       rspUnlockBuffer();
 
       // Restore original type and palette
-      g_pimScreenBuf->m_type		= typeOrig;
-      g_pimScreenBuf->m_pPalette	= ppalOrig;
+      g_pimScreenBuf->m_type      = typeOrig;
+      g_pimScreenBuf->m_pPalette   = ppalOrig;
    }
 }
 
@@ -5362,8 +5362,8 @@ extern void Play_SnapPicture(void)
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern bool Play_VerifyQuitMenuChoice(          // Returns true to accept, false to deny choice.
-   Menu*	pmenuCurrent,                          // In:  Current menu.
-   short	sMenuItem)                             // In:  Item chosen or -1 for change of focus.
+   Menu*   pmenuCurrent,                          // In:  Current menu.
+   short sMenuItem)                               // In:  Item chosen or -1 for change of focus.
 {
    bool bAcceptChoice  = true;   // Assume accepting choice.
 
@@ -5373,19 +5373,19 @@ extern bool Play_VerifyQuitMenuChoice(          // Returns true to accept, false
 #ifdef MOBILE
       continueIsRestart = true;    //Now the continue button will restart the realm
 #endif
-      ms_menuaction	= MenuActionEndMenu;
+      ms_menuaction   = MenuActionEndMenu;
       break;
    case 1:     // Save game
-      ms_menuaction	= MenuActionSaveGame;
+      ms_menuaction   = MenuActionSaveGame;
       break;
    case 2:     // Options.
       break;
    case 3:     // Quit.
-      ms_menuaction	= MenuActionQuit;
+      ms_menuaction   = MenuActionQuit;
       break;
 #ifdef MOBILE
    case 10:   // Menu cancelled, set in menus_android.cpp
-      ms_menuaction	= MenuActionEndMenu;
+      ms_menuaction   = MenuActionEndMenu;
       break;
 #endif
    }
@@ -5411,7 +5411,7 @@ extern short Play_GetRealmInfo(                 // Returns 0 if successfull, 1 i
    bool bGauntlet,                              // In:  true if playing challenge mode
    bool bAddOn,                                 // In:  true if playing the new add on levels
    short sRealmNum,                             // In:  Realm number
-   short	sDifficulty,                           // In:  Realm difficulty.
+   short sDifficulty,                             // In:  Realm difficulty.
    char* pszFile,                               // Out: Realm's file name
    short sMaxFileLen,                           // In:  Max length of returned file name, including terminating null
    char* pszTitle /*= 0*/,                      // Out: Realm's title
@@ -5421,7 +5421,7 @@ extern short Play_GetRealmInfo(                 // Returns 0 if successfull, 1 i
    ASSERT(pszFile != NULL);
    ASSERT(sMaxFileLen > 0);
 
-   short	sResult = 0;
+   short sResult = 0;
 
    // Open the realm prefs file
    RPrefs prefsRealm;
@@ -5459,7 +5459,7 @@ extern short Play_GetRealmInfo(                 // Returns 0 if successfull, 1 i
 
             // Copy amount that will fit
             strncpy(pszTitle, szText, sMaxTitleLen - 2);
-            pszTitle[sMaxTitleLen - 1]	= '\0';
+            pszTitle[sMaxTitleLen - 1]   = '\0';
          }
       }
       else
@@ -5495,7 +5495,7 @@ extern void Play_GetRealmSectionAndEntry(
    bool bGauntlet,                              // In:  true if playing challenge mode
    bool bAddOnLevels,                           // In:  true if playing new add on levels
    short sRealmNum,                             // In:  Realm number
-   short	sDifficulty,                           // In:  Realm difficulty.
+   short sDifficulty,                             // In:  Realm difficulty.
    RString* pstrSection,                        // Out: Section is returned here
    RString* pstrEntry)                          // Out: Entry is returned here
 {
@@ -5579,8 +5579,8 @@ extern void Play_GetRealmSectionAndEntry(
 extern
 void Play_GetApplicationDescriptor(       // Returns nothing.
    char* pszText,                         // Out: Text descriptor.
-   short	sMaxBytes)                       // In:  Amount of writable
-                                          // memory pointed to by pszText.
+   short sMaxBytes)                         // In:  Amount of writable
+                                            // memory pointed to by pszText.
 {
    // Set default in case there's an error
    ASSERT(strlen(DEFAULT_APP_TIMESTAMP) < sMaxBytes);
@@ -5593,7 +5593,7 @@ void Play_GetApplicationDescriptor(       // Returns nothing.
       struct _stat statExe;
       if (_stat(szModuleFileName, &statExe) == 0)
       {
-         char*	pszTime	= ctime(&statExe.st_mtime);
+         char*   pszTime   = ctime(&statExe.st_mtime);
          if (pszTime)
          {
             if (strlen(pszText) + strlen(pszTime) < sMaxBytes)
@@ -5603,7 +5603,7 @@ void Play_GetApplicationDescriptor(       // Returns nothing.
             }
 
             // Get rid of trailing '\n'.
-            pszText[strlen(pszText) - 1]	= '\0';
+            pszText[strlen(pszText) - 1]   = '\0';
          }
       }
    }

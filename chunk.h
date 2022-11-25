@@ -19,18 +19,18 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		05/13/97 JMI	Started.
+//      05/13/97 JMI   Started.
 //
-//		05/22/97	JMI	Can support several types of 'chunks'.
+//      05/22/97   JMI   Can support several types of 'chunks'.
 //
-//		08/18/97	JMI	Now uses its own internal GetRand() and has randomization
-//							arguments to Setup() so the caller can still control the
-//							the randomization.
-//							Now Construct() will not construct a CChunk if particle
-//							effects are disabled.
+//      08/18/97   JMI   Now uses its own internal GetRand() and has randomization
+//                     arguments to Setup() so the caller can still control the
+//                     the randomization.
+//                     Now Construct() will not construct a CChunk if particle
+//                     effects are disabled.
 //
-//		09/08/97	JMI	Added Kevlar type for pieces of kevlar vest that get
-//							splatter off of dudes with vest.
+//      09/08/97   JMI   Added Kevlar type for pieces of kevlar vest that get
+//                     splatter off of dudes with vest.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -65,8 +65,8 @@ typedef enum
 
 typedef struct
 {
-   U8	u8ColorIndex;
-   short	sLen;
+   U8 u8ColorIndex;
+   short sLen;
 } TypeInfo;
 
 //---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ short m_sSuspend;                            // Suspend flag
 
 Type m_type;
 
-short	m_sLen;                                // Length of item.
+short m_sLen;                                  // Length of item.
 
 protected:
 CSpriteLine2d m_sprite;                      // Sprite.
@@ -113,16 +113,16 @@ public:
 CChunk(CRealm* pRealm)
    : CThing(pRealm, CChunkID)
 {
-   m_sSuspend			= 0;
-   m_dRot				= 0.0;
-   m_dVel				= 0.0;
-   m_dVertVel			= 0.0;
-   m_sLen				= 0;
+   m_sSuspend         = 0;
+   m_dRot            = 0.0;
+   m_dVel            = 0.0;
+   m_dVertVel         = 0.0;
+   m_sLen            = 0;
 
-   m_sprite.m_pthing		= this;
-   m_sprite.m_u8Color	= 1;
+   m_sprite.m_pthing      = this;
+   m_sprite.m_u8Color   = 1;
 
-   m_type				= Blood;
+   m_type            = Blood;
 }
 
 public:
@@ -158,7 +158,7 @@ static short Construct(                               // Returns 0 if successful
    else
    {
       // Particles disabled.
-      sResult	= 1;
+      sResult   = 1;
    }
 
    return sResult;
@@ -188,11 +188,11 @@ short Setup(                     // Returns 0 on success.
    short sY,                     // In:  New y coord
    short sZ,                     // In:  New z coord
    double dRot,                  // In:  Initial direction.
-   short	sRandRotSway,           // In:  Random sway on rotation or zero.
+   short sRandRotSway,             // In:  Random sway on rotation or zero.
    double dVel,                  // In:  Initial velocity.
-   short	sRandVelSway,           // In:  Random sway on velocity or zero.
+   short sRandVelSway,             // In:  Random sway on velocity or zero.
    double dVertVel,              // In:  Initial vertical velocity.
-   short	sRandVertVelSway,       // In:  Random sway on velocity or zero.
+   short sRandVertVelSway,         // In:  Random sway on velocity or zero.
    Type type);                   // In:  Type of chunk.
 
 // Get a random number that is in no way related to the game's main

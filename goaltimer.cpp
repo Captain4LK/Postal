@@ -18,21 +18,21 @@
 // goaltimer.cpp
 // Project: Postal
 //
-//	This module is a CThing that can be put in a level to keep track of a kill
-//	goal or time limit goal.  It can be set to keep the amount of time it takes
-//	to kill a set number of people, or it can be set to count down to zero and
-//	end the realm when the timer expires.
+//   This module is a CThing that can be put in a level to keep track of a kill
+//   goal or time limit goal.  It can be set to keep the amount of time it takes
+//   to kill a set number of people, or it can be set to count down to zero and
+//   end the realm when the timer expires.
 //
 //
 // History:
 //
-//		06/30/97 BRH	Started this file as part of the challenge levels.
+//      06/30/97 BRH   Started this file as part of the challenge levels.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define GOALTIMER_CPP
@@ -44,10 +44,10 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"clock.bmp"
-#define TIMER_VALUE_GUI_ID	10
-#define KILL_VALUE_GUI_ID	11
-#define UPDOWN_GUI_ID		12
+#define IMAGE_FILE         "clock.bmp"
+#define TIMER_VALUE_GUI_ID   10
+#define KILL_VALUE_GUI_ID   11
+#define UPDOWN_GUI_ID      12
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -230,18 +230,18 @@ short CGoalTimer::EditNew(                         // Returns 0 if successfull, 
    if (sResult == SUCCESS)
    {
 /*
-		CListNode<CThing>* pEditorList = m_pRealm->m_aclassHeads[CThing::CGameEditThingID].m_pnNext;
-		CGameEditThing* peditor = (CGameEditThing*) pEditorList->m_powner;
-		RListBox* plb = peditor->m_plbNavNetList;
-		if (plb != NULL)
-		{
-			RGuiItem* pgui = plb->AddString((char*) m_rstrNetName);
-			pgui->m_lId = GetInstanceID();
-			pgui->m_bcUser = NavNetListPressedCall;
-			pgui->m_ulUserInstance = (U32) this;
-			plb->AdjustContents();
-			plb->SetSel(pgui);
-		}
+      CListNode<CThing>* pEditorList = m_pRealm->m_aclassHeads[CThing::CGameEditThingID].m_pnNext;
+      CGameEditThing* peditor = (CGameEditThing*) pEditorList->m_powner;
+      RListBox* plb = peditor->m_plbNavNetList;
+      if (plb != NULL)
+      {
+         RGuiItem* pgui = plb->AddString((char*) m_rstrNetName);
+         pgui->m_lId = GetInstanceID();
+         pgui->m_bcUser = NavNetListPressedCall;
+         pgui->m_ulUserInstance = (U32) this;
+         plb->AdjustContents();
+         plb->SetSel(pgui);
+      }
 */
    }
 
@@ -253,11 +253,11 @@ short CGoalTimer::EditNew(                         // Returns 0 if successfull, 
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void SetText(              // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId,                // In:  ID of GUI to set text.
    S32 lVal)               // In:  Value to set text to.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui != NULL)
    {
       pgui->SetText("%ld", lVal);
@@ -270,13 +270,13 @@ void SetText(              // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void CheckMultiBtn(        // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId,                // In:  ID of GUI to set text.
-   short	sChecked)         // In:  1 to check, 0 to uncheck.
+   short sChecked)           // In:  1 to check, 0 to uncheck.
 {
-   short	sRes	= 0;  // Assume nothing;
+   short sRes   = 0;    // Assume nothing;
 
-   RMultiBtn*	pmb	= (RMultiBtn*)pguiRoot->GetItemFromId(lId);
+   RMultiBtn*   pmb   = (RMultiBtn*)pguiRoot->GetItemFromId(lId);
    if (pmb != NULL)
    {
       ASSERT(pmb->m_type == RGuiItem::MultiBtn);
@@ -292,17 +292,17 @@ void CheckMultiBtn(        // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 inline
 short IsMultiBtnChecked(   // Returns multibtn's state.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId)                // In:  ID of GUI to set text.
 {
-   short	sRes	= 0;  // Assume nothing;
+   short sRes   = 0;    // Assume nothing;
 
-   RMultiBtn*	pmb	= (RMultiBtn*)pguiRoot->GetItemFromId(lId);
+   RMultiBtn*   pmb   = (RMultiBtn*)pguiRoot->GetItemFromId(lId);
    if (pmb != NULL)
    {
       ASSERT(pmb->m_type == RGuiItem::MultiBtn);
 
-      sRes	= (pmb->m_sState == 1) ? 0 : 1;
+      sRes   = (pmb->m_sState == 1) ? 0 : 1;
    }
 
    return sRes;
@@ -320,7 +320,7 @@ short CGoalTimer::EditModify(void)
    if (pgui)
    {
       SetText(pgui, TIMER_VALUE_GUI_ID, m_lTimerMS);
-      SetText(pgui, KILL_VALUE_GUI_ID,	m_sKillGoal);
+      SetText(pgui, KILL_VALUE_GUI_ID,   m_sKillGoal);
       CheckMultiBtn(pgui, UPDOWN_GUI_ID, m_sUpDown);
 
       sResult = DoGui(pgui);
@@ -379,8 +379,8 @@ void CGoalTimer::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    // Layer should be based on info we get from attribute map.
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
@@ -404,31 +404,31 @@ void CGoalTimer::EditRect(RRect* pRect)
       &(pRect->sX),
       &(pRect->sY) );
 
-   pRect->sW	= 10; // Safety.
-   pRect->sH	= 10; // Safety.
+   pRect->sW   = 10; // Safety.
+   pRect->sH   = 10; // Safety.
 
    if (m_pImage != NULL)
    {
-      pRect->sW	= m_pImage->m_sWidth;
-      pRect->sH	= m_pImage->m_sHeight;
+      pRect->sW   = m_pImage->m_sWidth;
+      pRect->sH   = m_pImage->m_sHeight;
    }
 
-   pRect->sX	-= pRect->sW / 2;
-   pRect->sY	-= pRect->sH;
+   pRect->sX   -= pRect->sW / 2;
+   pRect->sY   -= pRect->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
 ////////////////////////////////////////////////////////////////////////////////
 void CGoalTimer::EditHotSpot( // Returns nothiing.
-   short*	psX,                    // Out: X coord of 2D hotspot relative to
+   short*   psX,                    // Out: X coord of 2D hotspot relative to
                                     // EditRect() pos.
-   short*	psY)                    // Out: Y coord of 2D hotspot relative to
+   short*   psY)                    // Out: Y coord of 2D hotspot relative to
                                     // EditRect() pos.
 {
    // Base of navnet is hotspot.
-   *psX	= (m_pImage->m_sWidth / 2);
-   *psY	= m_pImage->m_sHeight;
+   *psX   = (m_pImage->m_sWidth / 2);
+   *psY   = m_pImage->m_sHeight;
 }
 
 
@@ -441,7 +441,7 @@ short CGoalTimer::GetResources(void)                  // Returns 0 if successful
 
    if (m_pImage == 0)
    {
-      sResult	= rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
+      sResult   = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
       if (sResult == 0)
       {
          // This is a questionable action on a resource managed item, but it's

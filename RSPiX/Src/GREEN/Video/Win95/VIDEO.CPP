@@ -21,13 +21,13 @@
 //
 // History:
 //
-//		05/17/95 PPL	Started.
-//		05/18/95 PPL	Complete rewrite using the MCIWnd Class instead of the thousand parameters
-//							infested mciSendCommand function.
-//		05/22/95 PPL	Implemented status checking
-//		05/23/95 PPL	Commented out all the traces within the status checking function for speed.
-//		08/10/95 JMI	Altered IsPaused, IsStopped, IsPlaying, Destroy, Close, Pause, & Resume to be aware of
-//							possibility of HWND not being valid.
+//      05/17/95 PPL   Started.
+//      05/18/95 PPL   Complete rewrite using the MCIWnd Class instead of the thousand parameters
+//                     infested mciSendCommand function.
+//      05/22/95 PPL   Implemented status checking
+//      05/23/95 PPL   Commented out all the traces within the status checking function for speed.
+//      08/10/95 JMI   Altered IsPaused, IsStopped, IsPlaying, Destroy, Close, Pause, & Resume to be aware of
+//                     possibility of HWND not being valid.
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -74,12 +74,12 @@ char ms_szBuf[80];                  // Can be used anytime we need a char buffer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				CVideo
-// Description:	This is the default constructor for the class.  The responsibility of this function will
-//						be to initialize any member and/or module static variables.
-// Input:			none
-// Output:			none
-// History:			05/17/95, PPL,	Started coding.
+// Name:            CVideo
+// Description:   This is the default constructor for the class.  The responsibility of this function will
+//                  be to initialize any member and/or module static variables.
+// Input:         none
+// Output:         none
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 CVideo::CVideo(void)
 {
@@ -88,14 +88,14 @@ CVideo::CVideo(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				CVideo
-// Description:	This is an overloaded constructor.  The responsibility of this function will
-//						be to initialize any member and/or module static variables.  Additionaly, the video
-//						playback device will be opened (created).
-// Input:			See below for description
-// Output:			none
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using the MCIWnd Class.
+// Name:            CVideo
+// Description:   This is an overloaded constructor.  The responsibility of this function will
+//                  be to initialize any member and/or module static variables.  Additionaly, the video
+//                  playback device will be opened (created).
+// Input:         See below for description
+// Output:         none
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using the MCIWnd Class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 CVideo::CVideo(char* szFilename,                // filename of the video
                S32 x,                           // left edge of playback window
@@ -131,12 +131,12 @@ CVideo::CVideo(char* szFilename,                // filename of the video
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				~CVideo
-// Description:	This is the default destructor for the class.  The responsibility of this function will
-//						be to release the current device, if opened.
-// Input:			none
-// Output:			none
-// History:			05/17/95, PPL,	Started coding.
+// Name:            ~CVideo
+// Description:   This is the default destructor for the class.  The responsibility of this function will
+//                  be to release the current device, if opened.
+// Input:         none
+// Output:         none
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 CVideo::~CVideo(void)
 {
@@ -145,12 +145,12 @@ CVideo::~CVideo(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Create
-// Description:	This function creates a window and opens(allocates) the digital video device.
-//	Input:			none.
-// Output:			0 if successful, error # otherwise.
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using the MCIWnd Class.
+// Name:            Create
+// Description:   This function creates a window and opens(allocates) the digital video device.
+//   Input:         none.
+// Output:         0 if successful, error # otherwise.
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using the MCIWnd Class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Create(void)
 {
@@ -160,13 +160,13 @@ short CVideo::Create(void)
       m_lhwnd = (S32)MCIWndCreate(gsi.hWnd,
                                   gsi.hInstance,
                                   (DWORD)(WS_CHILD |
-//											          WS_EX_TOPMOST |
-//														 WS_THICKFRAME |
-//											          WS_CAPTION |
-//											          WS_BORDER |
-//											          MCIWNDF_NOAUTOSIZEMOVIE |
-//											          MCIWNDF_NOAUTOSIZEWINDOW |
-//											          MCIWNDF_SHOWALL |
+//                                           WS_EX_TOPMOST |
+//                                           WS_THICKFRAME |
+//                                           WS_CAPTION |
+//                                           WS_BORDER |
+//                                           MCIWNDF_NOAUTOSIZEMOVIE |
+//                                           MCIWNDF_NOAUTOSIZEWINDOW |
+//                                           MCIWNDF_SHOWALL |
                                           MCIWNDF_NOPLAYBAR |
                                           MCIWNDF_NOOPEN |
                                           MCIWNDF_NOMENU |
@@ -176,13 +176,13 @@ short CVideo::Create(void)
       {
          // Let's subclass the window proc for m_lhwnd.
          // First, get and save the window's original proc.
-//			m_lhwndProc = GetWindowLong((HWND)m_lhwnd, GWL_WNDPROC);
+//         m_lhwndProc = GetWindowLong((HWND)m_lhwnd, GWL_WNDPROC);
 
          // Now, let's set the window's proc to our's.
-//			if (SetWindowLong((HWND)m_lhwnd, GWL_WNDPROC, (S32)&(this->OurMCIWndProc)) == 0)
-//				{
-//				TRACE("Failed to subclass the MCI window's proc to our's.");
-//				}
+//         if (SetWindowLong((HWND)m_lhwnd, GWL_WNDPROC, (S32)&(this->OurMCIWndProc)) == 0)
+//            {
+//            TRACE("Failed to subclass the MCI window's proc to our's.");
+//            }
 
          return 0;
       }
@@ -194,13 +194,13 @@ short CVideo::Create(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Destroy
-// Description:	This function destroys(releases) the current digital video device and the child window.
-//	Input:			none.
-// Output:			none.
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using the MCIWnd class.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            Destroy
+// Description:   This function destroys(releases) the current digital video device and the child window.
+//   Input:         none.
+// Output:         none.
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using the MCIWnd class.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CVideo::Destroy(void)
 {
@@ -217,13 +217,13 @@ void CVideo::Destroy(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				CVideo
-// Description:	This function will open a video file.
-// Input:			See below for description
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using MCIWnd Class.
+// Name:            CVideo
+// Description:   This function will open a video file.
+// Input:         See below for description
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using MCIWnd Class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Open(char* szFilename,                  // name of the video file
                    S32 x,                          // left edge of the playback window
@@ -232,12 +232,12 @@ short CVideo::Open(char* szFilename,                  // name of the video file
                    S32 h,                          // height of the playback window
                    short sClip)                       // clipping flag, use following values:
                                                       //    0: no clipping, window will be resized to
-                                                      //			actual video's size.
-                                                      //		1:	video will be clipped to the size supplied.
-                                                      //		2:	video will not be clipped, video will be
-                                                      //			stretched/shrinked to the window's size.
+                                                      //         actual video's size.
+                                                      //      1:   video will be clipped to the size supplied.
+                                                      //      2:   video will not be clipped, video will be
+                                                      //         stretched/shrinked to the window's size.
 {
-   short	sResult;
+   short sResult;
    RECT rect;
    S32 lXdelta;
    S32 lYdelta;
@@ -352,18 +352,18 @@ short CVideo::Open(char* szFilename,                  // name of the video file
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Close
-// Description:	This function simulates closing the video file.
-// Input:			none
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using MCIWnd Class.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            Close
+// Description:   This function simulates closing the video file.
+// Input:         none
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using MCIWnd Class.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Close(void)
 {
-   short	sRes = VIDEO_ERR_CLOSE;
+   short sRes = VIDEO_ERR_CLOSE;
 
    // If there is a window . . .
    if (m_lhwnd != NULL)
@@ -385,15 +385,15 @@ short CVideo::Close(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Play
-// Description:	This function plays the currently loaded video -- optionally a segment within.
-// Input:			sMode:   see constants in the header file
-//						lStart:  start of the selection
-//						lEnd:		end of the selection
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
-//						05/18/95, PPL, Rewrote using MCIWnd Class.
+// Name:            Play
+// Description:   This function plays the currently loaded video -- optionally a segment within.
+// Input:         sMode:   see constants in the header file
+//                  lStart:  start of the selection
+//                  lEnd:      end of the selection
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
+//                  05/18/95, PPL, Rewrote using MCIWnd Class.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Play(short sMode, S32 lStart, S32 lEnd)
 {
@@ -437,13 +437,13 @@ short CVideo::Play(short sMode, S32 lStart, S32 lEnd)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Pause
-// Description:	This function pauses the currently playing video.
-// Input:			none
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            Pause
+// Description:   This function pauses the currently playing video.
+// Input:         none
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Pause(void)
 {
@@ -465,13 +465,13 @@ short CVideo::Pause(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Resume
-// Description:	This function resumes a previously paused video.
-// Input:			none
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            Resume
+// Description:   This function resumes a previously paused video.
+// Input:         none
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Resume(void)
 {
@@ -493,12 +493,12 @@ short CVideo::Resume(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Stop
-// Description:	This function stops a video which may current be playing.
-// Input:			none
-// Output:			0 - Success.
-//						1 - Error.  (more detailed error codes may be defined later.)
-// History:			05/17/95, PPL,	Started coding.
+// Name:            Stop
+// Description:   This function stops a video which may current be playing.
+// Input:         none
+// Output:         0 - Success.
+//                  1 - Error.  (more detailed error codes may be defined later.)
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::Stop(void)
 {
@@ -515,11 +515,11 @@ short CVideo::Stop(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				GetFrame
-// Description:	This function gets the current frame of a video.
-// Input:			none
-// Output:			S32: current frame number.
-// History:			05/17/95, PPL,	Started coding.
+// Name:            GetFrame
+// Description:   This function gets the current frame of a video.
+// Input:         none
+// Output:         S32: current frame number.
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 S32 CVideo::GetFrame(void)
 {
@@ -542,11 +542,11 @@ S32 CVideo::GetFrame(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				GetPosition
-// Description:	This function gets the current position(milliseconds) of a video.
-// Input:			none
-// Output:			S32: current position
-// History:			05/17/95, PPL,	Started coding.
+// Name:            GetPosition
+// Description:   This function gets the current position(milliseconds) of a video.
+// Input:         none
+// Output:         S32: current position
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 S32 CVideo::GetPosition(void)
 {
@@ -569,11 +569,11 @@ S32 CVideo::GetPosition(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				IsOpened
-// Description:	This function checks to see if a video is currently opened.
-// Input:			none
-// Output:			short: TRUE/FALSE
-// History:			05/22/95, PPL,	Started coding.
+// Name:            IsOpened
+// Description:   This function checks to see if a video is currently opened.
+// Input:         none
+// Output:         short: TRUE/FALSE
+// History:         05/22/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::IsOpened(void)
 {
@@ -581,7 +581,7 @@ short CVideo::IsOpened(void)
 
    lResult = MCIWndGetMode((HWND)m_lhwnd, ms_szBuf, 80);
 
-//	TRACE("Video status:  %s\n", ms_szBuf);
+//   TRACE("Video status:  %s\n", ms_szBuf);
    TraceMCIError("CVideo::IsOpened(MCIWndGetMode)");
 
    if (lResult == MCI_MODE_OPEN)
@@ -597,12 +597,12 @@ short CVideo::IsOpened(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				IsPlaying
-// Description:	This function checks to see if a video is currently playing.
-// Input:			none
-// Output:			short: TRUE/FALSE
-// History:			05/22/95, PPL,	Started coding.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            IsPlaying
+// Description:   This function checks to see if a video is currently playing.
+// Input:         none
+// Output:         short: TRUE/FALSE
+// History:         05/22/95, PPL,   Started coding.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::IsPlaying(void)
 {
@@ -614,24 +614,24 @@ short CVideo::IsPlaying(void)
       {
          sRes = TRUE;
       }
-      //	TRACE("Video status:  %s\n", ms_szBuf);
+      //   TRACE("Video status:  %s\n", ms_szBuf);
    }
-   //	TraceMCIError("CVideo::IsPlaying(MCIWndGetMode)");
+   //   TraceMCIError("CVideo::IsPlaying(MCIWndGetMode)");
 
    return sRes;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				IsPaused
-// Description:	This function checks to see if a video is currently paused.
-// Input:			none
-// Output:			short: TRUE/FALSE
-// History:			05/22/95, PPL,	Started coding.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            IsPaused
+// Description:   This function checks to see if a video is currently paused.
+// Input:         none
+// Output:         short: TRUE/FALSE
+// History:         05/22/95, PPL,   Started coding.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::IsPaused(void)
 {
-   short	sRes	= FALSE;
+   short sRes   = FALSE;
 
    if (m_lhwnd != NULL)
    {
@@ -641,23 +641,23 @@ short CVideo::IsPaused(void)
       }
    }
 
-   //	TRACE("Video status:  %s\n", ms_szBuf);
-   //	TraceMCIError("CVideo::IsPaused(MCIWndGetMode)");
+   //   TRACE("Video status:  %s\n", ms_szBuf);
+   //   TraceMCIError("CVideo::IsPaused(MCIWndGetMode)");
 
    return sRes;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				IsStopped
-// Description:	This function checks to see if a video has been stopped.
-// Input:			none
-// Output:			short: TRUE/FALSE
-// History:			05/22/95, PPL,	Started coding.
-//						08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
+// Name:            IsStopped
+// Description:   This function checks to see if a video has been stopped.
+// Input:         none
+// Output:         short: TRUE/FALSE
+// History:         05/22/95, PPL,   Started coding.
+//                  08/10/95, JMI, Altered to be aware of possibility of HWND not being valid.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 short CVideo::IsStopped(void)
 {
-   short	sRes = FALSE;
+   short sRes = FALSE;
 
    if (m_lhwnd != NULL)
    {
@@ -667,8 +667,8 @@ short CVideo::IsStopped(void)
       }
    }
 
-//	TRACE("Video status:  %s\n", ms_szBuf);
-//	TraceMCIError("CVideo::IsStopped(MCIWndGetMode)");
+//   TRACE("Video status:  %s\n", ms_szBuf);
+//   TraceMCIError("CVideo::IsStopped(MCIWndGetMode)");
 
    return sRes;
 }
@@ -679,11 +679,11 @@ short CVideo::IsStopped(void)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				Init
-// Description:	This is private function initializes all the member variables.
-// Input:			none
-// Output:			none
-// History:			05/17/95, PPL,	Started coding.
+// Name:            Init
+// Description:   This is private function initializes all the member variables.
+// Input:         none
+// Output:         none
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CVideo::Init(void)
 {
@@ -695,13 +695,13 @@ void CVideo::Init(void)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Name:				TraceMCIError
-// Description:	This function simply put up a trace message containing the string description of
-//						the current MCIWndError
-// Input:			szErrOrigin: a description for where the error might have originated.
-// Output:			S32: if 0, then error was not shown
-//								else, the error number is returned.
-// History:			05/17/95, PPL,	Started coding.
+// Name:            TraceMCIError
+// Description:   This function simply put up a trace message containing the string description of
+//                  the current MCIWndError
+// Input:         szErrOrigin: a description for where the error might have originated.
+// Output:         S32: if 0, then error was not shown
+//                        else, the error number is returned.
+// History:         05/17/95, PPL,   Started coding.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 S32 CVideo::TraceMCIError(char* szFunctionName)
 {

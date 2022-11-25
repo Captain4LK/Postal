@@ -17,25 +17,25 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	Profile.h
+//   Profile.h
 //
 // History:
-//		06/11/97 JRD	Started.
+//      06/11/97 JRD   Started.
 //
-//		06/12/97 JRD	Revamped user interfaceChanged to appear as though
-//							it's not really a class instance.  Worked on timing refinement
+//      06/12/97 JRD   Revamped user interfaceChanged to appear as though
+//                     it's not really a class instance.  Worked on timing refinement
 //
-//		06/13/97 JRD	Finally got 2nd order self timing working - accurate to 60ns.
-//							Added ability to have inside out (exclusions) loops.
+//      06/13/97 JRD   Finally got 2nd order self timing working - accurate to 60ns.
+//                     Added ability to have inside out (exclusions) loops.
 //
-//		06/14/97 JRD	Added multiple report sessions, min/max reporting,
-//							percentage of target (100%) reporting, error reporting,
-//							and error recovery.
+//      06/14/97 JRD   Added multiple report sessions, min/max reporting,
+//                     percentage of target (100%) reporting, error reporting,
+//                     and error recovery.
 //
-//		07/07/97 MJR	Switched to S64 instead of __int64.
-//							Changed printf() stuff to use %g instead of %lg.
+//      07/07/97 MJR   Switched to S64 instead of __int64.
+//                     Changed printf() stuff to use %g instead of %lg.
 //
-//		07/08/97 JRD	Removed destructor reporting when define is off.
+//      07/08/97 JRD   Removed destructor reporting when define is off.
 //
 //////////////////////////////////////////////////////////////////////////////
 // Here's RSPiX's answer to controlled profiling.
@@ -54,12 +54,12 @@ S64 i64GetTimeSpeed = 8;   // Mike's guess on the mac
 
 
 // The new profiler has one global established instance:
-RProfile	rspProfileInstance;
+RProfile rspProfileInstance;
 
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Start Profile => Begin a range!
+//   Start Profile => Begin a range!
 //
 //////////////////////////////////////////////////////////////////////////////
 void RProfile::StartProfile(char* pszFieldName)
@@ -231,7 +231,7 @@ void RProfile::EndProfile(char* pszFieldName)
    {
       // All timing is void in an error scenario!
       //STRACE("RProfile::EndProfile: Hit multiple ends without a start [%s]!\n",
-      //	m_aList[sKey].m_szFieldName);
+      //   m_aList[sKey].m_szFieldName);
       m_aList[sKey].m_sInError |= PF_END_ERR;
       m_sCommandError = TRUE;
       ProfilingOff();   // Turn off the whole thing on error, but report it!
@@ -293,7 +293,7 @@ void RProfile::EndProfile(char* pszFieldName)
    //*****************************************************************************
 }
 
-short	gsReportNumber = 0;
+short gsReportNumber = 0;
 //===============================================
 void RProfile::Report()
 {
@@ -391,7 +391,7 @@ void RProfile::Report()
          {
             fprintf(fp, "-------------------------------------------------------\n%s:\n",
                     m_aList[i].m_szFieldName);
-            fprintf(fp, "				# of passes = %ld, Tot(ms) = %g, Avg(ms) = %g",
+            fprintf(fp, "            # of passes = %ld, Tot(ms) = %g, Avg(ms) = %g",
                     S32(m_aList[i].m_lNumCalls),
                     double(m_aList[i].m_lTotTime) / 1000.0,
                     double(m_aList[i].m_lTotTime) / double(m_aList[i].m_lNumCalls * S64(1000)));
@@ -406,9 +406,9 @@ void RProfile::Report()
                fprintf(fp, "\n");
 
             //=========================
-            fprintf(fp, "				MIN(ms): %+8.6g  @+(s): %+8.6g\n",
+            fprintf(fp, "            MIN(ms): %+8.6g  @+(s): %+8.6g\n",
                     double(m_aList[i].m_lMinTime) / 1000.0, double(m_aList[i].m_lWhenMin) / 1000000.0);
-            fprintf(fp, "				MAX(ms): %+8.6g  @+(s): %+8.6g\n",
+            fprintf(fp, "            MAX(ms): %+8.6g  @+(s): %+8.6g\n",
                     double(m_aList[i].m_lMaxTime) / 1000.0, double(m_aList[i].m_lWhenMax) / 1000000.0);
          }
       }

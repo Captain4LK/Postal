@@ -20,15 +20,15 @@
 // str.CPP
 //
 // History:
-//		05/20/97 JMI	Started.
+//      05/20/97 JMI   Started.
 //
-//		05/21/97	JMI	Added a table to replace the LOWER() macro for speed as
-//							per Jeff's suggestion.
+//      05/21/97   JMI   Added a table to replace the LOWER() macro for speed as
+//                     per Jeff's suggestion.
 //
-//		05/21/97 BRH	Fixed rspStrnicmp to recognize completion correctly.
+//      05/21/97 BRH   Fixed rspStrnicmp to recognize completion correctly.
 //
-//		06/29/97 MJR	Added const's and switched to size_t for count to bring
-//							into full compliance with ASNI equivalent.
+//      06/29/97 MJR   Added const's and switched to size_t for count to bring
+//                     into full compliance with ASNI equivalent.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -63,7 +63,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Get the lowercase equivalent, if alpha.
-#define LOWER(c)	( ( (c) >= 'A' && (c) <= 'Z') ? (c) - 32 : (c) )
+#define LOWER(c)   ( ( (c) >= 'A' && (c) <= 'Z') ? (c) - 32 : (c) )
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -77,7 +77,7 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-static short ms_asUpper2Lower[256]	=
+static short ms_asUpper2Lower[256]   =
 {
    0,
    1,
@@ -362,11 +362,11 @@ extern short rspStricmp(   // Returns 0 if equivalent.
    const char* pszStr1,    // In:  First string to compare.
    const char* pszStr2)    // In:  Second string to compare.
 {
-   short	sRes	= 0;  // Assume equivalent.
+   short sRes   = 0;    // Assume equivalent.
 
    while (*pszStr1 != '\0' && *pszStr2 != '\0' && sRes == 0)
    {
-      sRes	= ms_asUpper2Lower[*pszStr1++] - ms_asUpper2Lower[*pszStr2++];
+      sRes   = ms_asUpper2Lower[*pszStr1++] - ms_asUpper2Lower[*pszStr2++];
    }
 
    // If identical . . .
@@ -375,12 +375,12 @@ extern short rspStricmp(   // Returns 0 if equivalent.
       // If first string ended prematurely . . .
       if (*pszStr1 == '\0' && *pszStr2 != '\0')
       {
-         sRes	= -1;
+         sRes   = -1;
       }
       // Else, if second string ended prematurely . . .
       else if (*pszStr1 != '\0' && *pszStr2 == '\0')
       {
-         sRes	= 1;
+         sRes   = 1;
       }
    }
 
@@ -407,11 +407,11 @@ extern short rspStrnicmp(  // Returns 0 if equivalent.
 {
    ASSERT(count >= 0);
 
-   short	sRes	= 0;  // Assume equivalent.
+   short sRes   = 0;    // Assume equivalent.
 
    while (*pszStr1 != '\0' && *pszStr2 != '\0' && sRes == 0 && count--)
    {
-      sRes	= ms_asUpper2Lower[*pszStr1++] - ms_asUpper2Lower[*pszStr2++];
+      sRes   = ms_asUpper2Lower[*pszStr1++] - ms_asUpper2Lower[*pszStr2++];
    }
 
    // If identical . . .
@@ -420,12 +420,12 @@ extern short rspStrnicmp(  // Returns 0 if equivalent.
       // If first string ended prematurely . . .
       if (*pszStr1 == '\0' && *pszStr2 != '\0')
       {
-         sRes	= -1;
+         sRes   = -1;
       }
       // Else, if second string ended prematurely . . .
       else if (*pszStr1 != '\0' && *pszStr2 == '\0')
       {
-         sRes	= 1;
+         sRes   = 1;
       }
    }
 

@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bmouse.cpp
+//   bmouse.cpp
 //
 // History:
-//		06/03/04 RCG  Started.
+//      06/03/04 RCG  Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -41,21 +41,21 @@ extern int sdlWindowHeight;
 
 typedef struct
 {
-   short	sX;
-   short	sY;
-   short	sButton;
+   short sX;
+   short sY;
+   short sButton;
    S32 lTime;
-   short	sType;
+   short sType;
 } RSP_MOUSE_EVENT, *PRSP_MOUSE_EVENT;
 
-#define MAX_EVENTS	256
+#define MAX_EVENTS   256
 // Only set value if not NULL.
-#define SET(ptr, val)		( ((ptr) != NULL) ? *(ptr) = (val) : 0)
-#define INC_N_WRAP(i, max)	(i = (i + 1) % max)
+#define SET(ptr, val)      ( ((ptr) != NULL) ? *(ptr) = (val) : 0)
+#define INC_N_WRAP(i, max)   (i = (i + 1) % max)
 
 static RSP_MOUSE_EVENT ms_ameEvents[MAX_EVENTS];
 
-static RQueue<RSP_MOUSE_EVENT, MAX_EVENTS>	ms_qmeEvents;
+static RQueue<RSP_MOUSE_EVENT, MAX_EVENTS>   ms_qmeEvents;
 
 extern bool mouse_grabbed;
 
@@ -230,32 +230,32 @@ extern void rspSetMouse(
 //
 ///////////////////////////////////////////////////////////////////////////////
 extern short rspGetLastMouseEvent(  // Returns 0 if no event was available, non-zero otherwise
-   short*	psX,                 // Event's X position is returned here (unless NULL)
-   short*	psY,                 // Event's Y position is returned here (unless NULL)
-   short*	psButton,            // Event's button status is returned here (unless NULL)
-   S32*		plTime,              // Event's time stamp returned here (unless NULL)
-   short*	psType /*= NULL*/)   // Event's type (as per OS) is returned here (unless NULL)
+   short*   psX,                 // Event's X position is returned here (unless NULL)
+   short*   psY,                 // Event's Y position is returned here (unless NULL)
+   short*   psButton,            // Event's button status is returned here (unless NULL)
+   S32*      plTime,              // Event's time stamp returned here (unless NULL)
+   short*   psType /*= NULL*/)   // Event's type (as per OS) is returned here (unless NULL)
 {
-   short	sRes	= TRUE;  // Assume success.
+   short sRes   = TRUE;    // Assume success.
 
    PRSP_MOUSE_EVENT peEvent;
-   short	sNumEvents	= ms_qmeEvents.NumItems();
+   short sNumEvents   = ms_qmeEvents.NumItems();
 
    // Are there any events?
    if (sNumEvents > 0)
    {
       while (sNumEvents-- > 0)
       {
-         peEvent	= ms_qmeEvents.DeQ();
+         peEvent   = ms_qmeEvents.DeQ();
       }
 
       if (peEvent != NULL)
       {
-         SET(psX,			peEvent->sX);
-         SET(psY,			peEvent->sY);
-         SET(psButton,	peEvent->sButton);
-         SET(plTime,		peEvent->lTime);
-         SET(psType,		peEvent->sType);
+         SET(psX,         peEvent->sX);
+         SET(psY,         peEvent->sY);
+         SET(psButton,   peEvent->sButton);
+         SET(plTime,      peEvent->lTime);
+         SET(psType,      peEvent->sType);
       }
       else
       {
@@ -265,7 +265,7 @@ extern short rspGetLastMouseEvent(  // Returns 0 if no event was available, non-
    }
    else
    {
-      sRes	= FALSE;
+      sRes   = FALSE;
    }
 
    return sRes;
@@ -278,22 +278,22 @@ extern short rspGetLastMouseEvent(  // Returns 0 if no event was available, non-
 //
 ///////////////////////////////////////////////////////////////////////////////
 extern short rspGetMouseEvent(   // Returns 0 if no event was available, non-zero otherwise
-   short*	psX,                 // Event's X position is returned here (unless NULL)
-   short*	psY,                 // Event's Y position is returned here (unless NULL)
-   short*	psButton,            // Event's button status is returned here (unless NULL)
-   S32*		plTime,              // Event's time stamp returned here (unless NULL)
-   short*	psType /*= NULL*/)   // Event's type (as per OS) is returned here (unless NULL)
+   short*   psX,                 // Event's X position is returned here (unless NULL)
+   short*   psY,                 // Event's Y position is returned here (unless NULL)
+   short*   psButton,            // Event's button status is returned here (unless NULL)
+   S32*      plTime,              // Event's time stamp returned here (unless NULL)
+   short*   psType /*= NULL*/)   // Event's type (as per OS) is returned here (unless NULL)
 {
-   short	sRes	= TRUE;  // Assume success.
+   short sRes   = TRUE;    // Assume success.
 
    PRSP_MOUSE_EVENT peEvent  = ms_qmeEvents.DeQ();
    if (peEvent != NULL)
    {
-      SET(psX,			peEvent->sX);
-      SET(psY,			peEvent->sY);
-      SET(psButton,	peEvent->sButton);
-      SET(plTime,		peEvent->lTime);
-      SET(psType,		peEvent->sType);
+      SET(psX,         peEvent->sX);
+      SET(psY,         peEvent->sY);
+      SET(psButton,   peEvent->sButton);
+      SET(plTime,      peEvent->lTime);
+      SET(psType,      peEvent->sType);
    }
    else
    {

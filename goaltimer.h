@@ -20,10 +20,10 @@
 //
 // History:
 //
-//	06/30/97 BRH	Started this file for the challenge levels.  It will
-//					keep track of the goal time and be able to count up
-//					or down.  It will set the bRealmOver flag when the goal
-//					is met.
+//   06/30/97 BRH   Started this file for the challenge levels.  It will
+//               keep track of the goal time and be able to count up
+//               or down.  It will set the bRealmOver flag when the goal
+//               is met.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef GOALTIMER_H
@@ -52,8 +52,8 @@ double m_dZ;                                          // z coord
 RImage* m_pImage;                                     // Pointer to only image (replace with 3d anim, soon)
 CSprite2 m_sprite;                                    // Sprite (replace with CSprite3, soon)
 S32 m_lTimerMS;                                       // Timer value in Milliseconds
-short	m_sKillGoal;                                    // Number of kills to achieve
-short	m_sUpDown;                                      // Up or down timer
+short m_sKillGoal;                                      // Number of kills to achieve
+short m_sUpDown;                                        // Up or down timer
 
 short m_sSuspend;                                     // Suspend flag
 
@@ -167,9 +167,9 @@ void EditRect(RRect* pRect);
 
 // Called by editor to get the hotspot of an object in 2D.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 //---------------------------------------------------------------------------

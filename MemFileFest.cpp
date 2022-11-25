@@ -19,20 +19,20 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		09/12/97 JMI	Started.
+//      09/12/97 JMI   Started.
 //
-//		09/12/97	JMI	Added SHAREWARE_RELEASE files.
+//      09/12/97   JMI   Added SHAREWARE_RELEASE files.
 //
-//		09/12/97	JMI	Now only the end of the requested resource name has to
-//							match the full embedded file's name.
+//      09/12/97   JMI   Now only the end of the requested resource name has to
+//                     match the full embedded file's name.
 //
-//		09/17/97 MJR	Renamed to the more-correct ONLINE_DEMO_RELEASE.
+//      09/17/97 MJR   Renamed to the more-correct ONLINE_DEMO_RELEASE.
 //
-//		06/24/01 MJR	Got rid of alternate CompUSA level.
+//      06/24/01 MJR   Got rid of alternate CompUSA level.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Manages a group of memory resources that represent disk files.  Currently
+//   Manages a group of memory resources that represent disk files.  Currently
 // used for .RLM files to limit the usefulness of crippleware demos.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
 
-#define NUM_ELEMENTS(a)	(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)   (sizeof(a) / sizeof(a[0]) )
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -65,17 +65,17 @@
    #include "HConsite.h"
    #include "PConsite.h"
 
-FATEntry	ms_memdisk[]	=
+FATEntry ms_memdisk[]   =
 {
-   {	pszCheckPtGConsite,	au8CheckPtGConsite,	sizeof(au8CheckPtGConsite),	},
+   {   pszCheckPtGConsite,   au8CheckPtGConsite,   sizeof(au8CheckPtGConsite),   },
 
-   {	pszEConsite,			au8EConsite,			sizeof(au8EConsite),				},
+   {   pszEConsite,         au8EConsite,         sizeof(au8EConsite),            },
 
-   {	pszMConsite,			au8MConsite,			sizeof(au8MConsite),				},
+   {   pszMConsite,         au8MConsite,         sizeof(au8MConsite),            },
 
-   {	pszHConsite,			au8HConsite,			sizeof(au8HConsite),				},
+   {   pszHConsite,         au8HConsite,         sizeof(au8HConsite),            },
 
-   {	pszPConsite,			au8PConsite,			sizeof(au8PConsite),				},
+   {   pszPConsite,         au8PConsite,         sizeof(au8PConsite),            },
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -86,20 +86,20 @@ FATEntry	ms_memdisk[]	=
 // Given a filename, open an RFile to the corresponding resource data.
 //////////////////////////////////////////////////////////////////////////////
 extern short GetMemFileResource( // Returns 0 on successful open.
-   const char*		pszResName,    // In:  Res filename.
+   const char*      pszResName,    // In:  Res filename.
    RFile::Endian endian,         // In:  Endian nature for RFile.
-   RFile*			pfile)         // In:  File to open with.
+   RFile*         pfile)         // In:  File to open with.
 {
-   short	sRes	= 1;  // Assume failure for simplicity.
+   short sRes   = 1;    // Assume failure for simplicity.
    ASSERT(pfile);
    ASSERT(pszResName);
 
-   short	sIndex;
+   short sIndex;
    bool bFound;
    S32 lReqResNameLen = strlen(pszResName);
    for (sIndex = 0, bFound = false; sIndex < NUM_ELEMENTS(ms_memdisk) && bFound == false; sIndex++)
    {
-      S32 lEmbeddedResNameLen	= strlen(ms_memdisk[sIndex].pszResName);
+      S32 lEmbeddedResNameLen   = strlen(ms_memdisk[sIndex].pszResName);
       // If the requested name is S32 enough . . .
       if (lReqResNameLen >= lEmbeddedResNameLen)
       {
@@ -108,10 +108,10 @@ extern short GetMemFileResource( // Returns 0 on successful open.
          if (rspStricmp(pszResName + lReqResNameLen - lEmbeddedResNameLen, ms_memdisk[sIndex].pszResName) == 0)
          {
             // Found it.
-            bFound	= true;
+            bFound   = true;
 
             // Open the resource data . . .
-            sRes	= pfile->Open(ms_memdisk[sIndex].pau8Res, ms_memdisk[sIndex].lResSize, endian);
+            sRes   = pfile->Open(ms_memdisk[sIndex].pau8Res, ms_memdisk[sIndex].lResSize, endian);
          }
       }
    }
@@ -119,7 +119,7 @@ extern short GetMemFileResource( // Returns 0 on successful open.
    return sRes;
 }
 
-#endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+#endif   // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

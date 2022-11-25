@@ -21,16 +21,16 @@
 // Project: RSPiX/Green/3d
 //
 // History:
-//		02/01/97 JRD	Started.
+//      02/01/97 JRD   Started.
 //
-//		02/05/97 MJR	Filled in.
+//      02/05/97 MJR   Filled in.
 //
-//		02/10/97 MJR	Removed the no-S32er-necessary "S32" casts for loading
-//							and saving of RPixel32's.
-//							Renamed RForm3d to RSop (Sea-Of-Points) since that's what
-//							we all think of it as, so it may as well be called that.
+//      02/10/97 MJR   Removed the no-S32er-necessary "S32" casts for loading
+//                     and saving of RPixel32's.
+//                     Renamed RForm3d to RSop (Sea-Of-Points) since that's what
+//                     we all think of it as, so it may as well be called that.
 //
-//		10/06/99	JMI	Added Unmap() and Adjust().
+//      10/06/99   JMI   Added Unmap() and Adjust().
 //
 // This module impliments the "high level" data types (containers) needed by the
 // renderer.
@@ -206,14 +206,14 @@ RTexture::Unmap(
    if (m_pColors == 0)
       AllocColors();
 
-   U8*			pu8	= m_pIndices;
-   RPixel32*	ppix	= m_pColors;
-   short	sCount		= m_sNum;
+   U8*         pu8   = m_pIndices;
+   RPixel32*   ppix   = m_pColors;
+   short sCount      = m_sNum;
    while (sCount--)
    {
-      ppix->u8Red		= pr[*pu8];
-      ppix->u8Green	= pg[*pu8];
-      ppix->u8Blue	= pb[*pu8];
+      ppix->u8Red      = pr[*pu8];
+      ppix->u8Green   = pg[*pu8];
+      ppix->u8Blue   = pb[*pu8];
 
       ppix++;
       pu8++;
@@ -232,20 +232,20 @@ RTexture::Adjust(
    ASSERT(m_pColors);
    ASSERT(fAdjustment >= 0.0f);
 
-#define CLAMP255(u8Color, fColor)	( (u8Color) = ( (fColor) < 255) ? (fColor) + 0.5f : 255)
+#define CLAMP255(u8Color, fColor)   ( (u8Color) = ( (fColor) < 255) ? (fColor) + 0.5f : 255)
 
-   RPixel32*	ppix	= m_pColors;
-   short	sCount		= m_sNum / lInc;
-   float	fColor;
+   RPixel32*   ppix   = m_pColors;
+   short sCount      = m_sNum / lInc;
+   float fColor;
    while (sCount--)
    {
-      fColor	= ppix->u8Red		* fAdjustment;
+      fColor   = ppix->u8Red      * fAdjustment;
       CLAMP255(ppix->u8Red, fColor);
 
-      fColor	= ppix->u8Green	* fAdjustment;
+      fColor   = ppix->u8Green   * fAdjustment;
       CLAMP255(ppix->u8Green, fColor);
 
-      fColor	= ppix->u8Blue		* fAdjustment;
+      fColor   = ppix->u8Blue      * fAdjustment;
       CLAMP255(ppix->u8Blue, fColor);
 
       ppix += lInc;

@@ -64,14 +64,14 @@ short m_sAlignY;                                // Required y alignment (1 allow
 short m_sZoneX;
 short m_sZoneY;
 short m_sZoneR;
-//		short m_sZoneW;
-//		short m_sZoneH;
+//      short m_sZoneW;
+//      short m_sZoneH;
 
-//		bool m_bAlwaysInView;							// Always keep target in view, regardless of
+//      bool m_bAlwaysInView;                     // Always keep target in view, regardless of
 // any other settings
-//		bool m_bUseZone;
+//      bool m_bUseZone;
 bool m_bKeepInsideZone;
-//		bool m_bKeepOutsideZone;
+//      bool m_bKeepOutsideZone;
 
 CCamera* m_pCamera;                             // Camera being controlled
 
@@ -133,8 +133,8 @@ void TrackTarget(
 {
    if (m_bKeepInsideZone)
       KeepInside(sTargetX, sTargetY, sTargetR);
-//			else
-//				KeepOutside(sTargetx, sTargetY);
+//         else
+//            KeepOutside(sTargetx, sTargetY);
 }
 
 void KeepInside(
@@ -160,12 +160,12 @@ void KeepInside(
       short sMoveX = (short)(rspCos(sDeg) * dMoveBy);
       short sMoveY = (short)(rspSin(sDeg) * dMoveBy);
 
-//				if ((sMoveX >= m_sMinMoveX) && (sMoveY >= m_sMinMoveY))
-//					{
-//					if (sMoveX > m_sMaxMoveX)
-//						sMoveX = m_sMaxMoveX;
-//					if (sMoveY > m_sMaxMoveY)
-//						sMoveY = m_sMaxMoveY;
+//            if ((sMoveX >= m_sMinMoveX) && (sMoveY >= m_sMinMoveY))
+//               {
+//               if (sMoveX > m_sMaxMoveX)
+//                  sMoveX = m_sMaxMoveX;
+//               if (sMoveY > m_sMaxMoveY)
+//                  sMoveY = m_sMaxMoveY;
 
       short sModX;
       if (sMoveX >= 0)
@@ -195,7 +195,7 @@ void KeepInside(
          sUpperLeftY = 0;
 
       m_pCamera->SetViewPos(sUpperLeftX, sUpperLeftY);
-//					}
+//               }
    }
 }
 

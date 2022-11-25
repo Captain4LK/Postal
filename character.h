@@ -23,111 +23,111 @@
 //
 // History:
 //
-//		03/03/97	BRH,JMI	Started this generic character object to reduce the
-//							amount of redundant code.
+//      03/03/97   BRH,JMI   Started this generic character object to reduce the
+//                     amount of redundant code.
 //
-//		03/04/97	JMI	Changed calling convention and naming for velocities and
-//							position functions and added a Deluxe updater.
+//      03/04/97   JMI   Changed calling convention and naming for velocities and
+//                     position functions and added a Deluxe updater.
 //
-//		03/04/97 BRH	Added a few states for the band members.
+//      03/04/97 BRH   Added a few states for the band members.
 //
-//		03/04/97	JMI	Now initializes m_dDrag and m_dExtHorzDrag in constructor.
+//      03/04/97   JMI   Now initializes m_dDrag and m_dExtHorzDrag in constructor.
 //
-//		03/04/97	JMI	Added support for messages.
+//      03/04/97   JMI   Added support for messages.
 //
-//		03/04/97 BRH	Added states from enemy guys.
+//      03/04/97 BRH   Added states from enemy guys.
 //
-//		03/04/97	JMI	Added State_Delete and functions for blood.
+//      03/04/97   JMI   Added State_Delete and functions for blood.
 //
-//		03/04/97	JMI	Added proto for UpdateFirePosition() member.
+//      03/04/97   JMI   Added proto for UpdateFirePosition() member.
 //
-//		03/05/97	JMI	Added PrepareWeapon() and ShootWeapon() that can handle
-//							any current CThing weapon (i.e., cannot handle bullets).
+//      03/05/97   JMI   Added PrepareWeapon() and ShootWeapon() that can handle
+//                     any current CThing weapon (i.e., cannot handle bullets).
 //
-//		03/05/97 BRH	Added WhileShot function.
+//      03/05/97 BRH   Added WhileShot function.
 //
-//		03/05/97	JMI	Added OnSuicideMsg() handler function.
+//      03/05/97   JMI   Added OnSuicideMsg() handler function.
 //
-//		03/06/97	JMI	Added m_bAboveTerrain member indicating whether on terrrain
-//							or above it.
+//      03/06/97   JMI   Added m_bAboveTerrain member indicating whether on terrrain
+//                     or above it.
 //
-//		03/06/97	JMI	Added a GetAttributes() function.
+//      03/06/97   JMI   Added a GetAttributes() function.
 //
-//		03/12/97	JMI	DeluxeUpdatePosition() now takes the duration in seconds
-//							as a parameter instead of calculating it itself (and over-
-//							writing m_lPrevTime).
+//      03/12/97   JMI   DeluxeUpdatePosition() now takes the duration in seconds
+//                     as a parameter instead of calculating it itself (and over-
+//                     writing m_lPrevTime).
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/17/97	JMI	Now most of CCharacter's functionality is implemented in
-//							its base class, CThing3d.
+//      03/17/97   JMI   Now most of CCharacter's functionality is implemented in
+//                     its base class, CThing3d.
 //
-//		03/18/97	JMI	Made On and While functions virtual.
+//      03/18/97   JMI   Made On and While functions virtual.
 //
-//		03/21/97	JMI	Removed m_pWeapon.
+//      03/21/97   JMI   Removed m_pWeapon.
 //
-//		03/21/97	JMI	ShootWeapon() now returns a ptr to the weapon.
+//      03/21/97   JMI   ShootWeapon() now returns a ptr to the weapon.
 //
-//		04/02/97	JMI	PrepareWeapon() now, also, returns a ptr to the weapon.
-//							Also, removed #include of fire.h.
+//      04/02/97   JMI   PrepareWeapon() now, also, returns a ptr to the weapon.
+//                     Also, removed #include of fire.h.
 //
-//		04/23/97	JMI	Added IsPathClear(), a rather deluxe function.
+//      04/23/97   JMI   Added IsPathClear(), a rather deluxe function.
 //
-//		04/25/97	JMI	Added MakeBloodPool().
+//      04/25/97   JMI   Added MakeBloodPool().
 //
-//		04/28/97	JMI	Added m_bullets and FireBullets().
+//      04/28/97   JMI   Added m_bullets and FireBullets().
 //
-//		05/02/97	JMI	FireBullets() now returns type bool indicating whether or
-//							not someone/thing was hit by the bullets.
+//      05/02/97   JMI   FireBullets() now returns type bool indicating whether or
+//                     not someone/thing was hit by the bullets.
 //
-//		05/02/97	JMI	Added timer explicitly for CCharacter::While/On* functions.
+//      05/02/97   JMI   Added timer explicitly for CCharacter::While/On* functions.
 //
-//		05/07/97 BRH	Added FindAngleTo(x,z) function that all characters can
-//							use to set their rotational angle to a given position.
+//      05/07/97 BRH   Added FindAngleTo(x,z) function that all characters can
+//                     use to set their rotational angle to a given position.
 //
-//		05/13/97	JMI	You can now pass the amount of damage to MakeBloody()
-//							which affects the amount of carnage.
+//      05/13/97   JMI   You can now pass the amount of damage to MakeBloody()
+//                     which affects the amount of carnage.
 //
-//		05/16/97	JMI	Added directionality to blood.
+//      05/16/97   JMI   Added directionality to blood.
 //
-//		05/26/97 BRH	Added CSmash bits to ShootWeapon and FireBullets so that
-//							enemies can pass in different collision bits allowing
-//							enemy bullets to ignore other enemies.
+//      05/26/97 BRH   Added CSmash bits to ShootWeapon and FireBullets so that
+//                     enemies can pass in different collision bits allowing
+//                     enemy bullets to ignore other enemies.
 //
-//		06/02/97	JMI	Added an WhileOnLadder() and m_idLadder.
+//      06/02/97   JMI   Added an WhileOnLadder() and m_idLadder.
 //
-//		06/02/97	JMI	Removed ladder stuff.
+//      06/02/97   JMI   Removed ladder stuff.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/08/97 BRH	Added IlluminateTarget() function to check for targets within
-//							a cone in the direction you specify.  This will be used by the
-//							CDude for targeting feedback.  He will use it to place a
-//							target sprite on the target he is aiming at.
+//      06/08/97 BRH   Added IlluminateTarget() function to check for targets within
+//                     a cone in the direction you specify.  This will be used by the
+//                     CDude for targeting feedback.  He will use it to place a
+//                     target sprite on the target he is aiming at.
 //
-//		06/11/97	JMI	Added Preload() for loading assets used during play.
+//      06/11/97   JMI   Added Preload() for loading assets used during play.
 //
-//		06/11/97 BRH	Added ID for whoever kills you so you can report it
-//							to the score module.  This value will be copied from
-//							the message information.
+//      06/11/97 BRH   Added ID for whoever kills you so you can report it
+//                     to the score module.  This value will be copied from
+//                     the message information.
 //
-//		06/13/97	JMI	Added WhileHoldingWeapon().
+//      06/13/97   JMI   Added WhileHoldingWeapon().
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/21/97	JMI	Now overrides base class's Update().
-//							Also, added OnWeaponDestroyed().
-//							Also, added ValidateWeaponPosition().
+//      07/21/97   JMI   Now overrides base class's Update().
+//                     Also, added OnWeaponDestroyed().
+//                     Also, added ValidateWeaponPosition().
 //
-//		08/02/97 BRH	Added virtual OnHelpMsg function.
+//      08/02/97 BRH   Added virtual OnHelpMsg function.
 //
-//		08/08/97	JMI	Added Kill() to hook destruction and members for playing
-//							weapon noises.
+//      08/08/97   JMI   Added Kill() to hook destruction and members for playing
+//                     weapon noises.
 //
-//		08/28/97 BRH	Added virtual put me down message handler.
+//      08/28/97 BRH   Added virtual put me down message handler.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CHARACTER_H
@@ -154,7 +154,7 @@ public:
 public:
 U16 m_u16IdWeapon;                        // ID of your generic weapon.
 CThing::ClassIDType m_eWeaponType;        // Type of weapon to be shot
-CBulletFest	m_bullets;                    // Generic bullet interface.
+CBulletFest m_bullets;                      // Generic bullet interface.
 
 S32 m_lCharacterTimer;                    // This timer is intended for use by
                                           // CCharacter's On/While* functions.
@@ -183,9 +183,9 @@ CCharacter(CRealm* pRealm, CThing::ClassIDType id)
    : CThing3d(pRealm, id)
 {
    m_eWeaponType = CThing::CRocketID;
-   m_u16IdWeapon	= CIdBank::IdNil;
-   m_siLastWeaponPlayInstance	= 0;
-   m_lStopLoopingWeaponSoundTime	= 0;
+   m_u16IdWeapon   = CIdBank::IdNil;
+   m_siLastWeaponPlayInstance   = 0;
+   m_lStopLoopingWeaponSoundTime   = 0;
 }
 
 public:
@@ -364,19 +364,19 @@ public:
 // Creates blood splat and pool animations.
 void MakeBloody(
    short sDamage,             // In:  Damage to base carnage on.
-   short	sDamageAngle,        // In:  Angle in which (NOT from which) damage was
-                              // applied.
-   short	sSwayRange);         // In:  Random amount chunks can sway from the
-                              // sDamageAngle (If 360, there'll be no noticeable
-                              // damage direction for the chunks).
+   short sDamageAngle,          // In:  Angle in which (NOT from which) damage was
+                                // applied.
+   short sSwayRange);           // In:  Random amount chunks can sway from the
+                                // sDamageAngle (If 360, there'll be no noticeable
+                                // damage direction for the chunks).
 
 // Creates blood pool animation.
 void MakeBloodPool(void);
 
 // Draws last frame of blood pool into background.
 void BloodToBackground(
-   short	sAnimX2d,               // Position of animation in 2d.
-   short	sAnimY2d);              // Position of animation in 2d.
+   short sAnimX2d,                 // Position of animation in 2d.
+   short sAnimY2d);                // Position of animation in 2d.
 
 // Prepare current weapon (ammo).
 // This should be done when the character starts its shoot animation.
@@ -402,10 +402,10 @@ bool ValidateWeaponPosition(void);        // Returns true, if weapon is in a val
 
 // Fire a bullet.
 bool FireBullets(                         // Returns true, if we hit someone/thing.
-   RP3d*				ppt3d,                  // In:  Launch pt in Postal units.
-   short	sNumShots,                       // In:  Number of shots to fire.
-   short	sRange,                          // In:  Bullet range.
-   SampleMasterID	smidAmmo,               // In:  Ammo noise.
+   RP3d*            ppt3d,                  // In:  Launch pt in Postal units.
+   short sNumShots,                         // In:  Number of shots to fire.
+   short sRange,                            // In:  Bullet range.
+   SampleMasterID smidAmmo,                 // In:  Ammo noise.
    CSmash::Bits bitsInclude = 0,          // In:  Optional bits we can hit
    CSmash::Bits bitsDontcare = 0,         // In:  Optional bits for don't care
    CSmash::Bits bitsExclude = 0);         // In:  Optional bits for exclude
@@ -416,7 +416,7 @@ bool IsPathClear(                   // Returns true, if the entire path is clear
                                     // Returns false, if only a portion of the path is clear.
                                     // (see *psX, *psY, *psZ).
    short sX,                        // In:  Starting X.
-   short	sY,                        // In:  Starting Y.
+   short sY,                          // In:  Starting Y.
    short sZ,                        // In:  Starting Z.
    short sRotY,                     // In:  Rotation around y axis (direction on X/Z plane).
    short sCrawlRate,                // In:  Rate at which to scan ('crawl') path in pixels per
@@ -425,7 +425,7 @@ bool IsPathClear(                   // Returns true, if the entire path is clear
                                     // so small values of sCrawl are not necessary.
                                     // NOTE: We could change this to a speed in pixels per second
                                     // where we'd assume a certain frame rate.
-   short	sRangeXZ,                  // In:  Range on X/Z plane.
+   short sRangeXZ,                    // In:  Range on X/Z plane.
    short sRadius,                   // In:  Radius of path traverser.
    short sVerticalTolerance,        // In:  Max traverser can step up.
    CSmash::Bits bitsInclude,        // In:  Mask of CSmash bits that would terminate path.
@@ -435,7 +435,7 @@ bool IsPathClear(                   // Returns true, if the entire path is clear
    short* psY,                      // Out: Last clear point on path.
    short* psZ,                      // Out: Last clear point on path.
    CThing** ppthing,                // Out: Thing that intercepted us or NULL, if none.
-   CSmash*	psmashExclude = NULL);      // In:  Optional CSmash to exclude or NULL, if none.
+   CSmash*   psmashExclude = NULL);      // In:  Optional CSmash to exclude or NULL, if none.
 
 // Show a target sprite on whoever you would hit when aiming in the given
 // direction.  This will probably only be used by the CDude to help give feedback
@@ -466,7 +466,7 @@ void Kill(void);
 
 };
 
-#endif	// CHARACTER_H
+#endif   // CHARACTER_H
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

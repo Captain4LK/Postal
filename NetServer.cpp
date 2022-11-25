@@ -19,20 +19,20 @@
 // Project: RSPiX
 //
 // History:
-//		09/01/97 MJR	Nearing the end of a major overhaul.
+//      09/01/97 MJR   Nearing the end of a major overhaul.
 //
-//		09/06/97 MJR	No S32er responds to browse attempts once game starts.
+//      09/06/97 MJR   No S32er responds to browse attempts once game starts.
 //
-//		09/07/97 MJR	Added support for PROCEED and PROGRESS_REALM messages.
+//      09/07/97 MJR   Added support for PROCEED and PROGRESS_REALM messages.
 //
-//		11/20/97	JMI	Added support for new sCoopLevels & sCoopMode flag in
-//							StartGame and SetupGame messages.
+//      11/20/97   JMI   Added support for new sCoopLevels & sCoopMode flag in
+//                     StartGame and SetupGame messages.
 //
-//		11/25/97	JMI	Added determination between version conflicts and platform
-//							conflicts.  Also, added error propagation.
+//      11/25/97   JMI   Added determination between version conflicts and platform
+//                     conflicts.  Also, added error propagation.
 //
-//		11/26/97	JMI	Masking error in evaluation of version mismatch problem
-//							such that platform mismatch was never detected.
+//      11/26/97   JMI   Masking error in evaluation of version mismatch problem
+//                     such that platform mismatch was never detected.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -161,7 +161,7 @@ void CNetServer::Update(void)
 
                   // Don't return an actual error code from this function because we can't
                   // get all bent-out-of-shape over not being able to connect to a client
-//						TRACE("CNetServer()::Update(): Tried to accept connection, but failed.\n");
+//                  TRACE("CNetServer()::Update(): Tried to accept connection, but failed.\n");
                }
             }
             // Break out of loop that was looking for unused clients
@@ -278,7 +278,7 @@ void CNetServer::GetMsg(
    // messages to get, then we have no client messages to process this time.
    bool bGotOne = false;
    Net::ID id = m_idPrevGet;
-   do	{
+   do   {
       if (++id >= Net::MaxNumIDs)
          id = 0;
 
@@ -367,8 +367,8 @@ void CNetServer::GetMsg(
                else
                {
                   // Must set the type.
-                  pmsg->msg.err.ucType	= NetMsg::ERR;
-                  pmsg->ucSenderID		= Net::InvalidID;
+                  pmsg->msg.err.ucType   = NetMsg::ERR;
+                  pmsg->ucSenderID      = Net::InvalidID;
 
                   // Determine error type (possibilities are incompatible
                   // versions and/or incompatible platforms).
@@ -384,8 +384,8 @@ void CNetServer::GetMsg(
                      // is really an issue but just in case).
                      U32 ulVersion   = pmsg->msg.login.ulVersion;
                      // Incompatible version number.
-                     pmsg->msg.err.error		= NetMsg::ServerVersionMismatchError;
-                     pmsg->msg.err.ulParam	= ulVersion & ~CNetMsgr::MacVersionBit;
+                     pmsg->msg.err.error      = NetMsg::ServerVersionMismatchError;
+                     pmsg->msg.err.ulParam   = ulVersion & ~CNetMsgr::MacVersionBit;
                   }
 
                   // Return this error msg to caller
@@ -462,25 +462,25 @@ void CNetServer::GetMsg(
 
                // Add client info to database.  Note that client's "peer address" is the same
                // as the one we're connected to, but with a different port number.
-               m_aClients[id].m_address	= m_aClients[id].m_msgr.GetAddress();
+               m_aClients[id].m_address   = m_aClients[id].m_msgr.GetAddress();
                RSocket::SetAddressPort(m_usBasePort + Net::FirstPeerPortOffset + id, &m_aClients[id].m_address);
                memcpy(m_aClients[id].m_acName, pmsg->msg.joinReq.acName, sizeof(m_aClients[id].m_acName));
-               m_aClients[id].m_ucColor		= pmsg->msg.joinReq.ucColor;
-               m_aClients[id].m_ucTeam			= pmsg->msg.joinReq.ucTeam;
-               m_aClients[id].m_sBandwidth	= pmsg->msg.joinReq.sBandwidth;
+               m_aClients[id].m_ucColor      = pmsg->msg.joinReq.ucColor;
+               m_aClients[id].m_ucTeam         = pmsg->msg.joinReq.ucTeam;
+               m_aClients[id].m_sBandwidth   = pmsg->msg.joinReq.sBandwidth;
 
                // Tell client he was accepted
                msg.msg.joinAccept.ucType = NetMsg::JOIN_ACCEPT;
                SendMsg(id, &msg);
 
                // Send all clients (including new one) info about the new client
-               msg.msg.joined.ucType		= NetMsg::JOINED;
-               msg.msg.joined.id				= id;
-               msg.msg.joined.address		= m_aClients[id].m_address;
+               msg.msg.joined.ucType      = NetMsg::JOINED;
+               msg.msg.joined.id            = id;
+               msg.msg.joined.address      = m_aClients[id].m_address;
                memcpy(msg.msg.joined.acName, m_aClients[id].m_acName, sizeof(msg.msg.joined.acName));
-               msg.msg.joined.ucColor		= m_aClients[id].m_ucColor;
-               msg.msg.joined.ucTeam		= m_aClients[id].m_ucTeam;
-               msg.msg.joined.sBandwidth	= m_aClients[id].m_sBandwidth;
+               msg.msg.joined.ucColor      = m_aClients[id].m_ucColor;
+               msg.msg.joined.ucTeam      = m_aClients[id].m_ucTeam;
+               msg.msg.joined.sBandwidth   = m_aClients[id].m_sBandwidth;
                SendMsg(&msg);
 
                // Send new client info about other joined clients
@@ -521,15 +521,15 @@ void CNetServer::GetMsg(
          case NetMsg::CHANGE_REQ:
             // Change client's info in database
             memcpy(m_aClients[id].m_acName, pmsg->msg.changed.acName, sizeof(m_aClients[id].m_acName));
-            m_aClients[id].m_ucColor		= pmsg->msg.changed.ucColor;
-            m_aClients[id].m_ucTeam			= pmsg->msg.changed.ucTeam;
+            m_aClients[id].m_ucColor      = pmsg->msg.changed.ucColor;
+            m_aClients[id].m_ucTeam         = pmsg->msg.changed.ucTeam;
 
             // Send CHANGED message to all clients, including the one that requested the change
-            msg.msg.changed.ucType	= NetMsg::CHANGED;
+            msg.msg.changed.ucType   = NetMsg::CHANGED;
             msg.msg.changed.id = id;
             memcpy(msg.msg.changed.acName, m_aClients[id].m_acName, sizeof(msg.msg.changed.acName));
-            msg.msg.changed.ucColor	= m_aClients[id].m_ucColor;
-            msg.msg.changed.ucTeam	= m_aClients[id].m_ucTeam;
+            msg.msg.changed.ucColor   = m_aClients[id].m_ucColor;
+            msg.msg.changed.ucTeam   = m_aClients[id].m_ucTeam;
             SendMsg(&msg);
 
             // Return this msg to caller
@@ -610,7 +610,7 @@ void CNetServer::GetMsg(
 
          case NetMsg::CHAT_REQ:
             // Send chat text to the clients specified by the mask
-            msg.msg.chat.ucType	= NetMsg::CHAT;
+            msg.msg.chat.ucType   = NetMsg::CHAT;
             strncpy(msg.msg.chat.acText, pmsg->msg.chatReq.acText, sizeof(msg.msg.chat.acText) );
             SendMsg(pmsg->msg.chatReq.u16Mask, &msg);
 
@@ -706,13 +706,13 @@ void CNetServer::GetMsg(
             }
             break;
 
-//						case FINISH_REALM:
-//							break;
+//                  case FINISH_REALM:
+//                     break;
 
          case NetMsg::PING:
             // Simply echo the ping right back, and record the latest result
             SendMsg(id, pmsg);
-//					m_lLatestPingTime = pmsg->msg.ping.lLatestPingTime;
+//               m_lLatestPingTime = pmsg->msg.ping.lLatestPingTime;
             break;
 
          default:
@@ -888,14 +888,14 @@ void CNetServer::SetupGame(
    short sRejuvenate,                           // In:  Rejuvenate flag
    short sTimeLimit,                            // In:  Time limit in minutes, or negative if none
    short sKillLimit,                            // In:  Kill limit, or negative if none
-   short	sCoopLevels,                           // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   short	sCoopMode)                             // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   short sCoopLevels,                             // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   short sCoopMode)                               // In:  Zero for deathmatch mode, non-zero for cooperative mode.
 {
    // Setup a special START_GAME message that we keep around so we can send
    // it to clients as soon as they join.  That way, they get better feedback.
    // Otherwise, they would have to wait until the next time this function
    // is called, which may not be all that often.
-   m_msgSetupGame.msg.setupGame.ucType	= NetMsg::SETUP_GAME;
+   m_msgSetupGame.msg.setupGame.ucType   = NetMsg::SETUP_GAME;
    m_msgSetupGame.msg.setupGame.sRealmNum = sRealmNum;
    memcpy(m_msgSetupGame.msg.setupGame.acRealmFile, pszRealmFile, sizeof(m_msgSetupGame.msg.setupGame.acRealmFile));
    m_msgSetupGame.msg.setupGame.acRealmFile[sizeof(m_msgSetupGame.msg.setupGame.acRealmFile) - 1] = 0;
@@ -924,8 +924,8 @@ void CNetServer::StartGame(
    short sRejuvenate,                           // In:  Rejuvenate flag
    short sTimeLimit,                            // In:  Time limit in minutes, or negative if none
    short sKillLimit,                            // In:  Kill limit, or negative if none
-   short	sCoopLevels,                           // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   short	sCoopMode,                             // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   short sCoopLevels,                             // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   short sCoopMode,                               // In:  Zero for deathmatch mode, non-zero for cooperative mode.
    short sFrameTime,                            // In:  Time per frame (in milliseconds)
    Net::SEQ seqMaxAhead)                        // In:  Initial max ahead for input versus frame seq
 {
@@ -1063,9 +1063,9 @@ void CNetServer::StartDroppingClientDuringGame(
 bool CNetServer::GotAllDropAcks(void)
 {
    // Go through all the responses and find
-   //		(1) the lowest frame seq,
-   //		(2) the highest frame seq
-   //		(3) the highest known dropee input seq
+   //      (1) the lowest frame seq,
+   //      (2) the highest frame seq
+   //      (3) the highest known dropee input seq
    // To do this, we need to start out with some valid values, which we
    // get from the first client we come across.  We can't do a typical thing
    // where you set the values to a very high or very low value to initial
@@ -1084,10 +1084,10 @@ bool CNetServer::GotAllDropAcks(void)
          if (bFirst)
          {
             // Fill in the values from the first client we get to
-            m_seqHighestDoneFrame	= m_aClients[id].m_seqLastDoneFrame;
-            idHighestDoneFrame		= id;
-            seqHighestDropeeInput	= m_aClients[id].m_seqHighestDropeeInput;
-            seqLowestDropeeInput		= m_aClients[id].m_seqHighestDropeeInput;
+            m_seqHighestDoneFrame   = m_aClients[id].m_seqLastDoneFrame;
+            idHighestDoneFrame      = id;
+            seqHighestDropeeInput   = m_aClients[id].m_seqHighestDropeeInput;
+            seqLowestDropeeInput      = m_aClients[id].m_seqHighestDropeeInput;
             bFirst = false;
          }
          else

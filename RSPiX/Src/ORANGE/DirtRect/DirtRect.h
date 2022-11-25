@@ -47,10 +47,10 @@
 // This structure is used to encapsulate a rectangle used by RDirtyRects.
 typedef struct
 {
-   short	sX;
-   short	sY;
-   short	sW;
-   short	sH;
+   short sX;
+   short sY;
+   short sW;
+   short sH;
 } RDRect;
 
 
@@ -65,10 +65,10 @@ public:     // Typedefs.
 
 public:     // Con/Destruction.
 RDirtyRects();
-RDirtyRects(	short sMinDistX,           // Copied into m_sMinDistanceX.
+RDirtyRects(   short sMinDistX,           // Copied into m_sMinDistanceX.
                short sMinDistY,        // Copied into m_sMinDistanceY.
-               short sClipX	= -1,    // Copied into m_sClipX.
-               short	sClipY	= -1);   // Copied into m_sClipY.
+               short sClipX   = -1,    // Copied into m_sClipX.
+               short sClipY   = -1);     // Copied into m_sClipY.
 ~RDirtyRects();
 
 public:     // Implementation.
@@ -98,12 +98,12 @@ void Expand(RDRect* pdrExpand, RDRect* pdrNew);
 short Clip(short* psPos, short* psDistance, short sClipDistance);
 
 public:        // User may/should modify these.
-short	m_sMinDistanceX;        // Minimum x-distance between rectangles.
-                              // All rectangles closer will be combined.
-short	m_sMinDistanceY;        // Minimum y-distance between rectangles.
-                              // All rectangles closer will be combined.
-short	m_sClipX;               // Clip input rectangles in the x direction.
-short	m_sClipY;               // Clip input rectangles in the y direction.
+short m_sMinDistanceX;          // Minimum x-distance between rectangles.
+                                // All rectangles closer will be combined.
+short m_sMinDistanceY;          // Minimum y-distance between rectangles.
+                                // All rectangles closer will be combined.
+short m_sClipX;                 // Clip input rectangles in the x direction.
+short m_sClipY;                 // Clip input rectangles in the y direction.
 };
 
 #endif // DIRTRECT

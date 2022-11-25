@@ -19,34 +19,34 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		04/18/97 MJR	Started.
+//      04/18/97 MJR   Started.
 //
-//		04/22/97 MJR	Testing and tuning.
+//      04/22/97 MJR   Testing and tuning.
 //
-//		04/26/97 JRD	Added CSwirlMe
+//      04/26/97 JRD   Added CSwirlMe
 //
-//		06/08/97 MJR	Changed interface in order to properly clean everything
-//							up without memory leaks.
+//      06/08/97 MJR   Changed interface in order to properly clean everything
+//                     up without memory leaks.
 //
-//		06/11/97	JMI	Changed so CutSceneStart() does not require a prefs file
-//							and section name but instead opens and creates them using
-//							a single realm number that is now passed in.
+//      06/11/97   JMI   Changed so CutSceneStart() does not require a prefs file
+//                     and section name but instead opens and creates them using
+//                     a single realm number that is now passed in.
 //
-//					MJR	Added support for sepearate network sections in realms
-//							prefs file.
+//               MJR   Added support for sepearate network sections in realms
+//                     prefs file.
 //
-//		07/14/97 BRH	Added challenge mode parameter to CutSceneStart so that
-//							the proper text can be displayed for the Gauntlet.
+//      07/14/97 BRH   Added challenge mode parameter to CutSceneStart so that
+//                     the proper text can be displayed for the Gauntlet.
 //
-//		08/27/97	JRD	Adding a compact stand aS32 Martini effect for us with the
-//							end of the game called MartiniDo
+//      08/27/97   JRD   Adding a compact stand aS32 Martini effect for us with the
+//                     end of the game called MartiniDo
 //
-//		08/27/97	JRD	Made MartiniDo WAY to easy for Bill to use, by putting up
-//							with him justpassing the whole screen buffer, me doing a
-//							general lock on it, creating a temporary bmp, and copying
-//							it in.  Happy Bill?
+//      08/27/97   JRD   Made MartiniDo WAY to easy for Bill to use, by putting up
+//                     with him justpassing the whole screen buffer, me doing a
+//                     general lock on it, creating a temporary bmp, and copying
+//                     it in.  Happy Bill?
 //
-//		08/28/97 JRD	Refined martini effect and added fade out option.
+//      08/28/97 JRD   Refined martini effect and added fade out option.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CUTSCENE_H
@@ -59,25 +59,25 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//		MartiniDo - this is a greatly simplified version of the cutscene Martini
+//      MartiniDo - this is a greatly simplified version of the cutscene Martini
 //
-//		It allows the user a few parameters and then does the effect for a set
-//		amount of time, regardless of user input.  There are no text overlays.
-//		The program will blacken the screen when done.  (g_pimScreenBuf)
+//      It allows the user a few parameters and then does the effect for a set
+//      amount of time, regardless of user input.  There are no text overlays.
+//      The program will blacken the screen when done.  (g_pimScreenBuf)
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	MartiniDo(	RImage*	pimBackground, // actually, this is the ONLY graphic
-                  short	sStartX,          // logical start position of image
-                  short	sStartY,          // NOTE: it will be clipped so won't actually hit this point!
-                  RMultiAlpha*	pAlpha,  // only need 50% - see cut scenes
-                  S32 lMilliLen,          // how S32 to do the effect
-                  short	sRadius = 24,     // Your tuning pleasure
-                  S32 lSpinTime = 3600,   // in milliseconds
-                  S32 lSwayTime = 4000,   // in milliseconds
-                  RRect*  prCenter = NULL,// if not NULL, use this portion of the image only!
-                  S32 lFadeTime = 0,      // fade to black, in milliseconds. (INCL in total time!)
-                  SampleMaster::SoundInstance siFade = 0// to make sound fade out
-                  );
+short   MartiniDo(   RImage*   pimBackground, // actually, this is the ONLY graphic
+                     short sStartX,         // logical start position of image
+                     short sStartY,         // NOTE: it will be clipped so won't actually hit this point!
+                     RMultiAlpha*   pAlpha,// only need 50% - see cut scenes
+                     S32 lMilliLen,       // how S32 to do the effect
+                     short sRadius = 24,    // Your tuning pleasure
+                     S32 lSpinTime = 3600, // in milliseconds
+                     S32 lSwayTime = 4000, // in milliseconds
+                     RRect*  prCenter = NULL,// if not NULL, use this portion of the image only!
+                     S32 lFadeTime = 0,   // fade to black, in milliseconds. (INCL in total time!)
+                     SampleMaster::SoundInstance siFade = 0// to make sound fade out
+                     );
 
 ////////////////////////////////////////////////////////////////////////////////
 //

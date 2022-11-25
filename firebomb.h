@@ -19,37 +19,37 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		02/28/97 BRH	Derived this from the CWeapon base class
+//      02/28/97 BRH   Derived this from the CWeapon base class
 //
-//		03/03/97 BRH	Moved 3D sprite to CWeapon base class.
+//      03/03/97 BRH   Moved 3D sprite to CWeapon base class.
 //
-//		03/13/97	JMI	Load()s now take a version number.
+//      03/13/97   JMI   Load()s now take a version number.
 //
-//		04/29/97	JMI	Now CFirebomb defines m_sprite (as a CSprite3), which was
-//							previously defined in the base class CWeapon.
-//							Also, added GetSprite() virtual override to CFirebomb and
-//							CFireFrag to provide access to the sprite from a lower
-//							level.
+//      04/29/97   JMI   Now CFirebomb defines m_sprite (as a CSprite3), which was
+//                     previously defined in the base class CWeapon.
+//                     Also, added GetSprite() virtual override to CFirebomb and
+//                     CFireFrag to provide access to the sprite from a lower
+//                     level.
 //
-//		05/09/97 BRH	Added SetRangeToTarget function to vary the velocity
-//							of the weapon before it is shot in order to hit
-//							your target.
+//      05/09/97 BRH   Added SetRangeToTarget function to vary the velocity
+//                     of the weapon before it is shot in order to hit
+//                     your target.
 //
-//		05/20/97 BRH	Fixed problem with SetRangeToTarget.
+//      05/20/97 BRH   Fixed problem with SetRangeToTarget.
 //
-//		06/17/97 BRH	Fixed a bug in SetRangeToTarget and adjusted the
-//							Min range up a bit so the enemies don't set themselves
-//							on fire.
+//      06/17/97 BRH   Fixed a bug in SetRangeToTarget and adjusted the
+//                     Min range up a bit so the enemies don't set themselves
+//                     on fire.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		08/28/97	JMI	Added a explode counter so we can cap the number of
-//							explosions a firefrag can make.
+//      08/28/97   JMI   Added a explode counter so we can cap the number of
+//                     explosions a firefrag can make.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef FIREBOMB_H
@@ -79,7 +79,7 @@ short m_sPrevHeight;                                  // Previous height
 
 CAnim3D m_anim;                                       // 3D animation
 RTransform m_trans;                                   // Transform
-CSprite3	m_sprite;                                    // 3D sprite to render this thing.
+CSprite3 m_sprite;                                      // 3D sprite to render this thing.
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -98,7 +98,7 @@ CFirebomb(CRealm* pRealm)
    : CWeapon(pRealm, CFirebombID)
 {
    m_sSuspend = 0;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
 }
 
 public:
@@ -219,7 +219,7 @@ CFire*  m_pFire;                                      // Pointer to controlled f
 U16 m_u16FireID;                                      // ID for fire.
 RImage* m_pImage;                                     // Pointer to only image (replace with 3d anim, soon)
 CSprite2 m_sprite;                                    // 2D sprite to render this object.
-short	m_sNumExplosions;                               // Total Number of explosions.
+short m_sNumExplosions;                                 // Total Number of explosions.
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -246,7 +246,7 @@ CFirefrag(CRealm* pRealm)
    m_pImage = 0;
    m_pFire = NULL;
    m_u16FireID = CIdBank::IdNil;
-   m_sNumExplosions	= 0;
+   m_sNumExplosions   = 0;
 }
 
 public:

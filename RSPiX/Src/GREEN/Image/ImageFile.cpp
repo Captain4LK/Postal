@@ -20,14 +20,14 @@
 // ImageFile.CPP
 //
 // History:
-//		12/11/96 JMI	Started.
+//    12/11/96 JMI   Started.
 //
-//		12/19/96	JMI	Took out comment regarding adding a version to LOADFUNC.
+//    12/19/96 JMI   Took out comment regarding adding a version to LOADFUNC.
 //
-//		02/04/97	JMI	Changed #include "ImageLoad.h" to "ImageFile.h".
+//    02/04/97 JMI   Changed #include "ImageLoad.h" to "ImageFile.h".
 //
-//		02/04/97	JMI	Now RImageFile::Load() will invoke RImage->LoadDib() for
-//							BMP formatted files.
+//    02/04/97 JMI   Now RImageFile::Load() will invoke RImage->LoadDib() for
+//                   BMP formatted files.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -38,15 +38,15 @@
 // support.
 //
 // NOTES TO THOSE ADDING NEW FILE VERSIONS:
-//	Please follow these steps when adding a new version Load or Save:
-//	o	Define a new static short RImageFile::LoadVersion#(RImage*, RFile*)
-//	where # is the number of the new version.
+// Please follow these steps when adding a new version Load or Save:
+// o  Define a new static short RImageFile::LoadVersion#(RImage*, RFile*)
+// where # is the number of the new version.
 //
-// o	Call your new LoadVersion#(...) in the switch statement in
-//	RImageFile::Load().
+// o  Call your new LoadVersion#(...) in the switch statement in
+// RImageFile::Load().
 //
-// o	Make sure the last versions' case in the switch is surrounded by a
-//	#if defined(IMAGE_LOAD_num) #endif block where 'num' is the last version
+// o  Make sure the last versions' case in the switch is surrounded by a
+// #if defined(IMAGE_LOAD_num) #endif block where 'num' is the last version
 // number.
 //
 //
@@ -112,10 +112,10 @@ short RImageFile::LoadVersion1(  // Returns SUCCESS on success or FAILURE on
    RImage*  /*pim*/,             // Image to load into.
    RFile*   /*pfile*/)           // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    TRACE("LoadVersion1(): No current support for version 1 RImage.\n");
-   sRes	= FAILURE;
+   sRes  = FAILURE;
 
    return sRes;
 }
@@ -127,41 +127,41 @@ short RImageFile::LoadVersion1(  // Returns SUCCESS on success or FAILURE on
 //////////////////////////////////////////////////////////////////////////////
 short RImageFile::LoadVersion2(  // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile)               // File to load from.
+   RImage*  pim,                 // Image to load into.
+   RFile*   pfile)               // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    // No RFile support for RImage::Type, so we used a U32.
    U32 u32Temp           = 0;
 
    pfile->Read(&u32Temp);
-   pim->m_type					= (RImage::Type)u32Temp;
+   pim->m_type             = (RImage::Type)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_typeDestination	= (RImage::Type)u32Temp;
+   pim->m_typeDestination  = (RImage::Type)u32Temp;
 
    pfile->Read(&pim->m_ulSize);
 
    // Note that the window ones may need to be read after the other ones or,
    // more likely, we may need to put in the same patch that is in version 5.
    pfile->Read(&u32Temp);
-   pim->m_sWinWidth			= (short)u32Temp;
+   pim->m_sWinWidth        = (short)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_sWinHeight			= (short)u32Temp;
+   pim->m_sWinHeight       = (short)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_sWidth				= (short)u32Temp;
+   pim->m_sWidth           = (short)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_sHeight				= (short)u32Temp;
+   pim->m_sHeight          = (short)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_sWinX				= (short)u32Temp;
+   pim->m_sWinX            = (short)u32Temp;
 
    pfile->Read(&u32Temp);
-   pim->m_sWinY				= (short)u32Temp;
+   pim->m_sWinY            = (short)u32Temp;
 
    pfile->Read(&pim->m_lPitch);
    pfile->Read(&pim->m_sDepth);
@@ -221,10 +221,10 @@ short RImageFile::LoadVersion3(  // Returns SUCCESS on success or FAILURE on
    RImage*  /*pim*/,             // Image to load into.
    RFile*   /*pfile*/)           // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    TRACE("LoadVersion3(): No current support for version 3 RImage.\n");
-   sRes	= FAILURE;
+   sRes  = FAILURE;
 
    return sRes;
 }
@@ -238,10 +238,10 @@ short RImageFile::LoadVersion4(  // Returns SUCCESS on success or FAILURE on fai
    RImage*  /*pim*/,             // Image to load into.
    RFile*   /*pfile*/)           // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    TRACE("LoadVersion4(): No current support for version 4 RImage.\n");
-   sRes	= FAILURE;
+   sRes  = FAILURE;
 
    return sRes;
 }
@@ -253,17 +253,17 @@ short RImageFile::LoadVersion4(  // Returns SUCCESS on success or FAILURE on fai
 //////////////////////////////////////////////////////////////////////////////
 short RImageFile::LoadVersion5(  // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile)               // File to load from.
+   RImage*  pim,                 // Image to load into.
+   RFile*   pfile)               // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    // No RFile support for RImage::Type, so we used a U32.
    U32 u32Temp           = 0;
    pfile->Read(&u32Temp);
-   pim->m_type					= (RImage::Type)u32Temp;
+   pim->m_type             = (RImage::Type)u32Temp;
    pfile->Read(&u32Temp);
-   pim->m_typeDestination	= (RImage::Type)u32Temp;
+   pim->m_typeDestination  = (RImage::Type)u32Temp;
    pfile->Read(&pim->m_ulSize);
    pfile->Read(&pim->m_sWinWidth);
    pfile->Read(&pim->m_sWinHeight);
@@ -280,7 +280,7 @@ short RImageFile::LoadVersion5(  // Returns SUCCESS on success or FAILURE on
    // m_sWidth and m_sHeight.  This was incorrect, as Jeff had
    // intended these m_sBuffer* to represent the overall size of
    // the buffer, and m_sWidth and m_sHeight to represent the
-   // rectangular sub region.	 Consequently, these incorrect
+   // rectangular sub region.  Consequently, these incorrect
    // images spread far and wide and even crept into other
    // formats, such as SPRY and kludge, seeping their incorrect
    // interpretations of the Image.
@@ -309,8 +309,8 @@ short RImageFile::LoadVersion5(  // Returns SUCCESS on success or FAILURE on
 
    if (pim->m_sWinWidth > pim->m_sWidth && pim->m_sWinHeight > pim->m_sHeight)
    {
-      pim->m_sWidth		= pim->m_sWinWidth;
-      pim->m_sHeight		= pim->m_sWinHeight;
+      pim->m_sWidth     = pim->m_sWinWidth;
+      pim->m_sHeight    = pim->m_sWinHeight;
    }
 
    /////////////////////////////////////////////////////////////
@@ -374,10 +374,10 @@ short RImageFile::LoadVersion5(  // Returns SUCCESS on success or FAILURE on
 //
 //////////////////////////////////////////////////////////////////////////////
 short RImageFile::Load(       // Returns SUCCESS on success or FAILURE on failure.
-   RImage*	pim,              // Image to load into.
-   RFile*	pfile)            // File to load from.
+   RImage*  pim,              // Image to load into.
+   RFile*   pfile)            // File to load from.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes  = SUCCESS;  // Assume success.
 
    //File is shell.sak
    //Readed ulFinger seems to be offset by 4 bytes
@@ -396,33 +396,33 @@ short RImageFile::Load(       // Returns SUCCESS on success or FAILURE on failur
             {
                #if defined(IMAGE_LOAD_1) || defined(IMAGE_LOAD_ALL)
             case 1:
-               sRes	= LoadVersion1(pim, pfile);
+               sRes  = LoadVersion1(pim, pfile);
                break;
-               #endif	// IMAGE_LOAD_1
+               #endif   // IMAGE_LOAD_1
 
                #if defined(IMAGE_LOAD_2) || defined(IMAGE_LOAD_ALL)
             case 2:
-               sRes	= LoadVersion2(pim, pfile);
+               sRes  = LoadVersion2(pim, pfile);
                break;
-               #endif	// IMAGE_LOAD_2
+               #endif   // IMAGE_LOAD_2
 
                #if defined(IMAGE_LOAD_3) || defined(IMAGE_LOAD_ALL)
             case 3:
-               sRes	= LoadVersion3(pim, pfile);
+               sRes  = LoadVersion3(pim, pfile);
                break;
-               #endif	// IMAGE_LOAD_3
+               #endif   // IMAGE_LOAD_3
 
                #if defined(IMAGE_LOAD_4) || defined(IMAGE_LOAD_ALL)
             case 4:
-               sRes	= LoadVersion4(pim, pfile);
+               sRes  = LoadVersion4(pim, pfile);
                break;
-               #endif	// IMAGE_LOAD_4
+               #endif   // IMAGE_LOAD_4
 
-//					#if defined(IMAGE_LOAD_5) || defined(IMAGE_LOAD_ALL)
+//             #if defined(IMAGE_LOAD_5) || defined(IMAGE_LOAD_ALL)
             case 5:
-               sRes	= LoadVersion5(pim, pfile);
+               sRes  = LoadVersion5(pim, pfile);
                break;
-//					#endif	// IMAGE_LOAD_5
+//             #endif   // IMAGE_LOAD_5
 
             default:    // No current support.
                TRACE("RImage::Load - Error: Unsupported version.\n");
@@ -461,21 +461,21 @@ short RImageFile::Load(       // Returns SUCCESS on success or FAILURE on failur
 
             // Invoke LoadDib() . . .
             //printf("file %p\n",pim->m_pData);
-            sRes	= pim->LoadDib(pfile);
+            sRes  = pim->LoadDib(pfile);
          }
          else
          {
             //volatile int _f = 1/0;
             TRACE("RImage::Load - Error: Wrong filetype, Image files should start with 'IM  ' and "
                   "DIB files should start with 'BM'.\n");
-            sRes	= FAILURE;
+            sRes  = FAILURE;
          }
       }
    }
    else
    {
       TRACE("ImageLoad(): Error reading RImage format finger print.\n");
-      sRes	= FAILURE;
+      sRes  = FAILURE;
    }
 
    return sRes;

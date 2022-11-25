@@ -71,40 +71,40 @@ public:
 
 // Maps a particular file load onto the appropriate function, if available.
 static short Load(         // Returns SUCCESS on success or FAILURE on failure.
-   RImage*	pim,           // Image to load into.
-   RFile*	pfile);        // File to load from.
+   RImage*   pim,           // Image to load into.
+   RFile*   pfile);        // File to load from.
 
 protected:
 
 // Loads an RImage with file version 1 into pim from pfile.
 static short LoadVersion1(       // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile);              // File to load from.
+   RImage*   pim,                 // Image to load into.
+   RFile*   pfile);              // File to load from.
 
 // Loads an RImage with file version 2 into pim from pfile.
 static short LoadVersion2(       // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile);              // File to load from.
+   RImage*   pim,                 // Image to load into.
+   RFile*   pfile);              // File to load from.
 
 // Loads an RImage with file version 3 into pim from pfile.
 static short LoadVersion3(       // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile);              // File to load from.
+   RImage*   pim,                 // Image to load into.
+   RFile*   pfile);              // File to load from.
 
 // Loads an RImage with file version 4 into pim from pfile.
 static short LoadVersion4(       // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile);              // File to load from.
+   RImage*   pim,                 // Image to load into.
+   RFile*   pfile);              // File to load from.
 
 // Loads an RImage with file version 5 into pim from pfile.
 static short LoadVersion5(       // Returns SUCCESS on success or FAILURE on
                                  // failure.
-   RImage*	pim,                 // Image to load into.
-   RFile*	pfile);              // File to load from.
+   RImage*   pim,                 // Image to load into.
+   RFile*   pfile);              // File to load from.
 
 ///////////////////////////////////////////////////////////////////////////
 // Querries.
@@ -123,7 +123,7 @@ public:
 public:
 };
 
-#endif	// IMAGEFILE_H
+#endif   // IMAGEFILE_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

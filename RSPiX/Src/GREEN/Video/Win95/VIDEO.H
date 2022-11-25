@@ -24,32 +24,32 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Error codes.
-#define VIDEO_SUCCESS						((short)0)
-#define VIDEO_ERR_GENERIC					((short)1)
-#define VIDEO_ERR_VIDEO_UNSUPPORTED		((short)2)
-#define VIDEO_ERR_CREATE					((short)3)
-#define VIDEO_ERR_OPEN						((short)4)
-#define VIDEO_ERR_PLAY						((short)5)
-#define VIDEO_ERR_PAUSE						((short)6)
-#define VIDEO_ERR_RESUME					((short)7)
-#define VIDEO_ERR_STOP						((short)8)
-#define VIDEO_ERR_CLOSE						((short)9)
-#define VIDEO_ERR_ALREADY_CREATED		((short)10)
-#define VIDEO_ERR_GETTING_WRECT			((short)11)
-#define VIDEO_ERR_RESIZE_FAIL				((short)12)
-#define VIDEO_ERR_SET_FRAMES				((short)13)
-#define VIDEO_ERR_SET_TIME					((short)14)
+#define VIDEO_SUCCESS                  ((short)0)
+#define VIDEO_ERR_GENERIC               ((short)1)
+#define VIDEO_ERR_VIDEO_UNSUPPORTED      ((short)2)
+#define VIDEO_ERR_CREATE               ((short)3)
+#define VIDEO_ERR_OPEN                  ((short)4)
+#define VIDEO_ERR_PLAY                  ((short)5)
+#define VIDEO_ERR_PAUSE                  ((short)6)
+#define VIDEO_ERR_RESUME               ((short)7)
+#define VIDEO_ERR_STOP                  ((short)8)
+#define VIDEO_ERR_CLOSE                  ((short)9)
+#define VIDEO_ERR_ALREADY_CREATED      ((short)10)
+#define VIDEO_ERR_GETTING_WRECT         ((short)11)
+#define VIDEO_ERR_RESIZE_FAIL            ((short)12)
+#define VIDEO_ERR_SET_FRAMES            ((short)13)
+#define VIDEO_ERR_SET_TIME               ((short)14)
 
 
 // Clipping modes.
-#define MODE_NORMAL							((short)0)        // no clipping
-#define MODE_CLIP								((short)1)        // clip
-#define MODE_STRETCH							((short)2)        // stretch/shrink to fit
+#define MODE_NORMAL                     ((short)0)        // no clipping
+#define MODE_CLIP                        ((short)1)        // clip
+#define MODE_STRETCH                     ((short)2)        // stretch/shrink to fit
 
 // Play modes.
-#define PLAY_ALL								((short)0)     // Play the entire video from begin to end
-#define PLAY_SELECTION_TIME				((short)1)     // Play a selection specified in milliseconds
-#define PLAY_SELECTION_FRAME				((short)2)     // Play a selection specified in frames
+#define PLAY_ALL                        ((short)0)     // Play the entire video from begin to end
+#define PLAY_SELECTION_TIME            ((short)1)     // Play a selection specified in milliseconds
+#define PLAY_SELECTION_FRAME            ((short)2)     // Play a selection specified in frames
 
 class CVideo
 {
@@ -85,22 +85,22 @@ short Open(char* szFileName,                       // name of the video file
            S32 h,                               // height of the playback window
            short sClip);                           // clipping flag, use following values:
                                                    //    0: no clipping, window will be resized to
-                                                   //			actual video's size.
-                                                   //		1:	video will be clipped to the size supplied.
-                                                   //		2:	video will not be clipped, video will be
-                                                   //			stretched/shrinked to the window's size.
+                                                   //         actual video's size.
+                                                   //      1:   video will be clipped to the size supplied.
+                                                   //      2:   video will not be clipped, video will be
+                                                   //         stretched/shrinked to the window's size.
                                                    // Close a video file.  Will abort the current video file, if playing.
 short Close(void);
 
 // Play the current video.  Currently, when this function is called, the video will be played
-//	from begin to end.  Possible future functionality may include setting from/to selections,
+//   from begin to end.  Possible future functionality may include setting from/to selections,
 // repeat characteristics, etc.  For now, just plain play the darn video.
 // The next day: I realize that we need additional functionality for playing segments within
 // the video.  This could be accomplished with 3 parameters, all of which could be left out
 // for default operation.
 // sMode:   0 - default operation, lStart/lEnd ignored
 //          1 - lStart and lEnd specified as time (milliseconds)
-//				2 - lStart and lEnd specified as number of frames.
+//            2 - lStart and lEnd specified as number of frames.
 short Play(short sMode = 0, S32 lStart = 0, S32 lEnd = 0);
 
 // Pause the current video.  This function must be used if you wish to pause the video.  Stop

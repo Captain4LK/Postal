@@ -63,15 +63,15 @@
 // since the old image can't be restored.
 
 //----------------  Predeclare linklate functions ---------------------------
-short		DeleteFSPR1(RImage* pImage);
-short		ConvertToFSPR1(RImage* pImage);
-short		ConvertFromFSPR1(RImage* pImage);
-short		LoadFSPR1(RImage* pImage, RFile* pcf);
-short		SaveFSPR1(RImage* pImage, RFile* pcf);
+short      DeleteFSPR1(RImage* pImage);
+short      ConvertToFSPR1(RImage* pImage);
+short      ConvertFromFSPR1(RImage* pImage);
+short      LoadFSPR1(RImage* pImage, RFile* pcf);
+short      SaveFSPR1(RImage* pImage, RFile* pcf);
 
 //----------------  EXTRA Conversion Information ----------------------------
 
-typedef	struct
+typedef   struct
 {
    U32 u32TransparentColor;   // ConvertTo
    S16 sX, sY, sW, sH;         // ConvertTo (-1 == don't use)
@@ -90,8 +90,8 @@ ConversionInfoFSPR1 gFSPR1 =
    (S16) -1,
    (S16) -1,
    (RImage**) NULL,
-   (U32)	0xffffff01, // And the color to the correct depth
-   (U32)	0,
+   (U32)   0xffffff01, // And the color to the correct depth
+   (U32)   0,
    (S16) TRUE
 };    // Defaults...
 
@@ -117,7 +117,7 @@ void SetConvertToFSPR1
    S16 sY,     // Use (-1) to use default value
    S16 sW,     // Use (-1) to use default value
    S16 sH,     // Use (-1) to use default value
-   RImage**	ppimCopy
+   RImage**   ppimCopy
 )
 {
    gFSPR1.u32TransparentColor = u32TransparentColor;
@@ -144,7 +144,7 @@ void SetConvertFromFSPR1
 IMAGELINKLATE(FSPR1, ConvertToFSPR1, ConvertFromFSPR1,
               LoadFSPR1, SaveFSPR1, NULL, DeleteFSPR1);
 
-short		DeleteFSPR1(RImage* pImage) // from CImage ONLY
+short      DeleteFSPR1(RImage* pImage) // from CImage ONLY
 {
    delete (RSpecialFSPR1*) pImage->m_pSpecialMem;
    return SUCCESS;
@@ -201,7 +201,7 @@ short ConvertToFSPR1(RImage* pImage)
    S32 lMaxSize = (S32)sW * (sH + 2) * 2 + sH;
    lMaxSize = (lMaxSize + 15) & ~15; // 128 bit alignment
 
-   UCHAR*	pCodeBuf = (UCHAR*) calloc(1, lMaxSize);
+   UCHAR*   pCodeBuf = (UCHAR*) calloc(1, lMaxSize);
    if (pCodeBuf == NULL)
    {
       TRACE("ConvertToFSPR1: Out of memory ERROR!");
@@ -209,10 +209,10 @@ short ConvertToFSPR1(RImage* pImage)
       return RImage::NOT_SUPPORTED;
    }
 
-   UCHAR*	pCode = pCodeBuf;
+   UCHAR*   pCode = pCodeBuf;
    S32 lP =  pImage->m_lPitch;
-   UCHAR	*pBuf, *pBufLine = pImage->m_pData + sX + lP * sY; // 8-bit for now!
-   UCHAR	ucTranCol = (UCHAR) (gFSPR1.u32TransparentColor & 0xff); // 8-bit for now!
+   UCHAR   *pBuf, *pBufLine = pImage->m_pData + sX + lP * sY; // 8-bit for now!
+   UCHAR ucTranCol = (UCHAR) (gFSPR1.u32TransparentColor & 0xff);   // 8-bit for now!
    short sLineLen, sLineW = sW;
    short y;
 
@@ -403,9 +403,9 @@ void _rspBLiT(UCHAR ucColor, RImage* pimSrc, RImage* pimDst,
 
    S32 lP = pimDst->m_lPitch;
    UCHAR *pDst, *pDstLine = pimDst->m_pData + sDstX + lP * sDstY;
-   UCHAR	*pCode = ((RSpecialFSPR1*)pimSrc->m_pSpecialMem)->m_pCode;
+   UCHAR   *pCode = ((RSpecialFSPR1*)pimSrc->m_pSpecialMem)->m_pCode;
    // Take advantage of the new FSPR1 EOS safety code:
-   UCHAR	ucCode, ucCount;
+   UCHAR ucCode, ucCount;
 
    while (TRUE) // loop through drawing lines:
    {
@@ -418,7 +418,7 @@ void _rspBLiT(UCHAR ucColor, RImage* pimSrc, RImage* pimDst,
          continue; ///********** Start next scanline!
       }
 
-      do	{ // Draw the scanline!
+      do   { // Draw the scanline!
          pDst += ucCode;//HSKIP
          ucCount = *pCode++;
          while (ucCount--) *pDst++ = ucColor; //HRUN
@@ -431,7 +431,7 @@ void _rspBLiT(UCHAR ucColor, RImage* pimSrc, RImage* pimDst,
 
 // Will convert back to the source 8-bit format.
 //
-short		ConvertFromFSPR1(RImage* pImage)
+short      ConvertFromFSPR1(RImage* pImage)
 {
    // Here's the pattern:  create the appropriate buffer, BLiT
    // pSpecial into it, then kill pSpecial!
@@ -465,7 +465,7 @@ short		ConvertFromFSPR1(RImage* pImage)
 // Assumes all of the FSPR1 has successfully been
 // loaded EXCEPT for pSpecial[Mem]
 //
-short		LoadFSPR1(RImage* pImage, RFile* pcf)
+short      LoadFSPR1(RImage* pImage, RFile* pcf)
 {
    S32 lBogus1  = pcf->Tell();
 
@@ -528,7 +528,7 @@ short		LoadFSPR1(RImage* pImage, RFile* pcf)
 
 // SAVES ONLY the pSpecial information!
 //
-short		SaveFSPR1(RImage* pImage, RFile* pcf)
+short      SaveFSPR1(RImage* pImage, RFile* pcf)
 {
    // Assume valid pImage and cnfile:
    RSpecialFSPR1* pSpec = (RSpecialFSPR1*) pImage->m_pSpecialMem;
@@ -625,7 +625,7 @@ short rspBlit(
 #endif
 
    // transfer colors:
-   UCHAR	ucForeColor = (UCHAR) ulForeColor;
+   UCHAR ucForeColor = (UCHAR) ulForeColor;
 
    // Clip!
    short sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
@@ -696,29 +696,29 @@ short rspBlit(
    {
    case BUF_MEMORY:    // image to system buffer
 /*
-			// need to lock / unlock this one:
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         // need to lock / unlock this one:
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case BUF_VRAM:    // image to front screen
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -751,9 +751,9 @@ short rspBlit(
       return FAILURE;
    }
 
-   UCHAR	*pDst, *pDstLine, *pCode, ucCount;
+   UCHAR   *pDst, *pDstLine, *pCode, ucCount;
    pDstLine = pimDst->m_pData + lDstP * sDstY + sDstX;
-   RSpecialFSPR1*	pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecialMem);
+   RSpecialFSPR1*   pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecialMem);
    pCode = pHead->m_pCode;
    const UCHAR FF = (UCHAR)255;
 
@@ -777,7 +777,7 @@ short rspBlit(
       while (TRUE)
          {
          if ((*pCode) == FF) // vertical run
-            {	// end of sprite?
+            {   // end of sprite?
             if ( (ucCount = *(++pCode)) == FF) break;
             pDstLine += lDstP * ucCount;
             pCode++; // open stack
@@ -835,11 +835,11 @@ short rspBlit(
       break;
 
    case BUF_MEMORY:
-      //	rspUnlockBuffer();
+      //   rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-      //	rspUnlockScreen();
+      //   rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -924,7 +924,7 @@ short rspBlit(
    }
 
    // transfer colors:
-   UCHAR	ucForeColor = (UCHAR) ulForeColor;
+   UCHAR ucForeColor = (UCHAR) ulForeColor;
 
    // Clip!
    short sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
@@ -994,15 +994,15 @@ short rspBlit(
    {
    case BUF_MEMORY:    // image to system buffer
 /*
-			// need to lock / unlock this one:
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         // need to lock / unlock this one:
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
@@ -1049,9 +1049,9 @@ short rspBlit(
       return FAILURE;
    }
 
-   UCHAR	*pDst, *pDstLine, *pCode, ucCount;
+   UCHAR   *pDst, *pDstLine, *pCode, ucCount;
    pDstLine = pimDst->m_pData + lDstP * sDstY + sDstX;
-   RSpecialFSPR1*	pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
+   RSpecialFSPR1*   pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
    pCode = pHead->m_pCode;
    const UCHAR FF = (UCHAR)255;
 
@@ -1153,11 +1153,11 @@ short rspBlit(
       break;
 
    case BUF_MEMORY:
-//			rspUnlockBuffer();
+//         rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-//			rspUnlockScreen();
+//         rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -1221,7 +1221,7 @@ short rspBlit(
 #endif
 
    // transfer colors:
-   UCHAR	ucForeColor = (UCHAR) ulForeColor;
+   UCHAR ucForeColor = (UCHAR) ulForeColor;
    S32 lDstP = pimDst->m_lPitch;
 
    //**************  INSERT BUFFER HOOKS HERE!  ************************
@@ -1246,29 +1246,29 @@ short rspBlit(
    {
    case BUF_MEMORY:    // image to system buffer
 /*
-			// need to lock / unlock this one:
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         // need to lock / unlock this one:
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case BUF_VRAM:    // image to front screen
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -1301,9 +1301,9 @@ short rspBlit(
       return FAILURE;
    }
 
-   UCHAR	*pDst, *pDstLine, *pCode, ucCount;
+   UCHAR   *pDst, *pDstLine, *pCode, ucCount;
    pDstLine = pimDst->m_pData + lDstP * sDstY + sDstX;
-   RSpecialFSPR1*	pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecialMem);
+   RSpecialFSPR1*   pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecialMem);
    pCode = pHead->m_pCode;
    const UCHAR FF = (UCHAR)255;
 
@@ -1362,11 +1362,11 @@ short rspBlit(
       break;
 
    case BUF_MEMORY:
-      //	rspUnlockBuffer();
+      //   rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-      //	rspUnlockScreen();
+      //   rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -1438,7 +1438,7 @@ short rspBlit(
    }
 
    // transfer colors:
-   UCHAR	ucForeColor = (UCHAR) ulForeColor;
+   UCHAR ucForeColor = (UCHAR) ulForeColor;
 
    short sW = sDstW; // clippng parameters...
    short sH = sDstH; // clippng parameters...
@@ -1467,28 +1467,28 @@ short rspBlit(
    case BUF_MEMORY:    // image to system buffer
       // need to lock / unlock this one:
 /*
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case BUF_VRAM:    // image to front screen
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -1521,9 +1521,9 @@ short rspBlit(
       return FAILURE;
    }
 
-   UCHAR	*pDst, *pDstLine, *pCode, ucCount;
+   UCHAR   *pDst, *pDstLine, *pCode, ucCount;
    pDstLine = pimDst->m_pData + lDstP * sDstY + sDstX;
-   RSpecialFSPR1*	pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
+   RSpecialFSPR1*   pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
    pCode = pHead->m_pCode;
    const UCHAR FF = (UCHAR)255;
 
@@ -1623,11 +1623,11 @@ short rspBlit(
       break;
 
    case BUF_MEMORY:
-      //	rspUnlockBuffer();
+      //   rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-      //	rspUnlockScreen();
+      //   rspUnlockScreen();
       break;
 
    case BUF_VRAM2:

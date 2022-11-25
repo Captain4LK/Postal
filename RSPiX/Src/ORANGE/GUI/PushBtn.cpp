@@ -20,22 +20,22 @@
 // PUSHBTN.CPP
 //
 // History:
-//		02/05/97 JMI	Started.
+//      02/05/97 JMI   Started.
 //
-//		02/05/97	JMI	Forgot to make sure we were actually clicked in before
-//							processing a release within cursor event area.
+//      02/05/97   JMI   Forgot to make sure we were actually clicked in before
+//                     processing a release within cursor event area.
 //
-//		02/05/97	JMI	Forgot to remove a debug TRACE.
+//      02/05/97   JMI   Forgot to remove a debug TRACE.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		03/28/97	JMI	RSP_MB0_DOUBLECLICK is now treated the same as
-//							RSP_MB0_PRESSED.
+//      03/28/97   JMI   RSP_MB0_DOUBLECLICK is now treated the same as
+//                     RSP_MB0_PRESSED.
 //
-//		04/16/97	JMI	In previous update, forgot to add case RSP_MB0_DOUBLECLICK
-//							in both places need for this implentation of CursorEvent().
+//      04/16/97   JMI   In previous update, forgot to add case RSP_MB0_DOUBLECLICK
+//                     in both places need for this implentation of CursorEvent().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def)   ((val == -1) ? def : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -90,12 +90,12 @@
 RPushBtn::RPushBtn()
 {
    // Override RGuiItem's default justification.
-   m_justification	= RGuiItem::Centered;
+   m_justification   = RGuiItem::Centered;
 
-   m_type				= PushBtn;  // Indicates type of GUI item.
+   m_type            = PushBtn;  // Indicates type of GUI item.
 
    // Initialize RPushBtn members.
-   m_state	= Off;      // The button's current state (On or Off (see enums)).
+   m_state   = Off;      // The button's current state (On or Off (see enums)).
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -120,24 +120,24 @@ void RPushBtn::Compose(       // Returns nothing.
 {
    if (pim == NULL)
    {
-      pim	= &m_im;
+      pim   = &m_im;
    }
 
    if (m_sPressed != FALSE || m_state == On)
    {
       // Invert border.
-      m_sInvertedBorder	= TRUE;
+      m_sInvertedBorder   = TRUE;
    }
    else
    {
-      m_sInvertedBorder	= FALSE;
+      m_sInvertedBorder   = FALSE;
    }
 
    // Call base (draws border and background).
    RGuiItem::Compose(pim);
 
    // Draw pushbtn stuff.
-   short	sX, sY, sW, sH;
+   short sX, sY, sW, sH;
    // Get client relative to border so we know where to
    // put the text.
    GetClient(&sX, &sY, &sW, &sH);
@@ -167,11 +167,11 @@ void RPushBtn::CursorEvent(   // Returns nothing.
          // Do change of state right away so user callback gets the new
          // value.
          // If within event area . . .
-         if (		pie->sPosX >= m_sEventAreaX && pie->sPosX < m_sEventAreaX + m_sEventAreaW
-                  &&	pie->sPosY >= m_sEventAreaY && pie->sPosY < m_sEventAreaY + m_sEventAreaH)
+         if (      pie->sPosX >= m_sEventAreaX && pie->sPosX < m_sEventAreaX + m_sEventAreaW
+                   &&   pie->sPosY >= m_sEventAreaY && pie->sPosY < m_sEventAreaY + m_sEventAreaH)
          {
             // Change state.
-            m_state	= (m_state == Off) ? On : Off;
+            m_state   = (m_state == Off) ? On : Off;
          }
       }
 
@@ -190,7 +190,7 @@ void RPushBtn::CursorEvent(   // Returns nothing.
       Compose();
 
       // Note that we used it.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
 
@@ -200,7 +200,7 @@ void RPushBtn::CursorEvent(   // Returns nothing.
       Compose();
 
       // Note that we used it.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
    }
@@ -209,57 +209,57 @@ void RPushBtn::CursorEvent(   // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 //
 // Draw border.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
 void RPushBtn::DrawBorder(       // Returns nothing.
    RImage* pim /*= NULL*/,       // Dest image, uses m_im if NULL.
    short sInvert /*= FALSE*/)    // Inverts border if TRUE.
 {
-   short	sVertShadowPos;
-   short	sHorzShadowPos;
-   short	sVertHighlightPos;
+   short sVertShadowPos;
+   short sHorzShadowPos;
+   short sVertHighlightPos;
    short sHorzHighlightPos;
    short sVertEdgePos;
    short sHorzEdgePos;
-   short	sShadowThickness		= m_sBorderThickness;
-   short	sEdgeThickness			= m_sBorderThickness;
-   short	sHighlightThickness	= m_sBorderThickness;
+   short sShadowThickness      = m_sBorderThickness;
+   short sEdgeThickness         = m_sBorderThickness;
+   short sHighlightThickness   = m_sBorderThickness;
 
    if (pim == NULL)
    {
-      pim	= &m_im;
+      pim   = &m_im;
    }
 
-   short sW	= pim->m_sWidth;
-   short	sH	= pim->m_sHeight;
+   short sW   = pim->m_sWidth;
+   short sH   = pim->m_sHeight;
 
-   m_sInvertedBorder	= sInvert;
+   m_sInvertedBorder   = sInvert;
 
    if (sInvert == FALSE)
    {
-      sVertShadowPos			= sW - m_sBorderThickness;
-      sHorzShadowPos			= sH - m_sBorderThickness;
-      sVertHighlightPos		= 0;
-      sHorzHighlightPos		= 0;
-      sVertEdgePos			= sW - m_sBorderThickness * 2;
-      sHorzEdgePos			= sH - m_sBorderThickness * 2;
+      sVertShadowPos         = sW - m_sBorderThickness;
+      sHorzShadowPos         = sH - m_sBorderThickness;
+      sVertHighlightPos      = 0;
+      sHorzHighlightPos      = 0;
+      sVertEdgePos         = sW - m_sBorderThickness * 2;
+      sHorzEdgePos         = sH - m_sBorderThickness * 2;
    }
    else
    {
       // Left top becomes thicker when pressed.
-      sShadowThickness		= (m_sPressed == FALSE) ? m_sBorderThickness
+      sShadowThickness      = (m_sPressed == FALSE) ? m_sBorderThickness
                                                    : (m_sBorderThickness * 2);
 
-      sEdgeThickness			= sShadowThickness;
-      sHighlightThickness	= m_sBorderThickness;//sShadowThickness;
+      sEdgeThickness         = sShadowThickness;
+      sHighlightThickness   = m_sBorderThickness;//sShadowThickness;
 
-      sVertShadowPos			= 0;
-      sHorzShadowPos			= 0;
-      sVertHighlightPos		= sW - sHighlightThickness;
-      sHorzHighlightPos		= sH - sHighlightThickness;
-      sVertEdgePos			= sShadowThickness;
-      sHorzEdgePos			= sShadowThickness;
+      sVertShadowPos         = 0;
+      sHorzShadowPos         = 0;
+      sVertHighlightPos      = sW - sHighlightThickness;
+      sHorzHighlightPos      = sH - sHighlightThickness;
+      sVertEdgePos         = sShadowThickness;
+      sHorzEdgePos         = sShadowThickness;
    }
 
    // One pixel for each edge of border gets overwritten.
@@ -280,7 +280,7 @@ void RPushBtn::DrawBorder(       // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 //
 // Gets the thickness of the top/left border (including border edge effect).
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
 short RPushBtn::GetTopLeftBorderThickness(void) // Returns border thickness
@@ -297,7 +297,7 @@ short RPushBtn::GetTopLeftBorderThickness(void) // Returns border thickness
 //////////////////////////////////////////////////////////////////////////////
 //
 // Gets the thickness of the bottom/right border (including border edge effect).
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 //
 //////////////////////////////////////////////////////////////////////////////
 short RPushBtn::GetBottomRightBorderThickness(void)   // Returns border thickness
@@ -308,7 +308,7 @@ short RPushBtn::GetBottomRightBorderThickness(void)   // Returns border thicknes
    else
       return (m_sBorderThickness
               + ((m_sInvertedBorder == FALSE) ? m_sBorderThickness : 0) )
-      ; //		* ((m_sPressed == FALSE) ? 1 : 2);
+      ; //      * ((m_sPressed == FALSE) ? 1 : 2);
 }
 
 //////////////////////////////////////////////////////////////////////////////

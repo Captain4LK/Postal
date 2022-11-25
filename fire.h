@@ -19,49 +19,49 @@
 // Project: Postal
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/24/97	JMI	Changed declaration of m_sprite from CAlphaSprite2 to
-//							CSprite2.
+//      02/24/97   JMI   Changed declaration of m_sprite from CAlphaSprite2 to
+//                     CSprite2.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/24/97 BRH	Added a static variable for wind direction that will
-//							be changed slightly every time a smoke is created, but
-//							will generally cause them all to drift in the same
-//							direction.
+//      04/24/97 BRH   Added a static variable for wind direction that will
+//                     be changed slightly every time a smoke is created, but
+//                     will generally cause them all to drift in the same
+//                     direction.
 //
-//		05/02/97	JMI	Added GetTimeLeftToLive() which returns the amount of
-//							time left before the fire goes out or the smoke thins
-//							out.
+//      05/02/97   JMI   Added GetTimeLeftToLive() which returns the amount of
+//                     time left before the fire goes out or the smoke thins
+//                     out.
 //
-//		06/11/97 BRH	Added m_u16ShooterID to store the shooter ID which
-//							will get passed aS32 in the Burn Message.
+//      06/11/97 BRH   Added m_u16ShooterID to store the shooter ID which
+//                     will get passed aS32 in the Burn Message.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		07/01/97 BRH	Added Small smoke animation.
+//      07/01/97 BRH   Added Small smoke animation.
 //
-//		07/04/97 BRH	Added starting time used to calculate the alpha
-//							level based on time to live.
+//      07/04/97 BRH   Added starting time used to calculate the alpha
+//                     level based on time to live.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/13/97 BRH	Added some variables and changed others for the new
-//							method of using 1 alpha mask and setting the level
-//							in the code.
+//      07/13/97 BRH   Added some variables and changed others for the new
+//                     method of using 1 alpha mask and setting the level
+//                     in the code.
 //
-//		07/23/97 BRH	Changed the limits on the wind velocity so it can
-//							be higher.
+//      07/23/97 BRH   Changed the limits on the wind velocity so it can
+//                     be higher.
 //
-//		09/02/97	JMI	Added m_u16FireStarterID.  This is used for a special case
-//							when the starter of the fire is not the thing using the
-//							fire as a weapon (e.g., when a guy catches fire he can
-//							use the fire on other people by running into them causing
-//							them to catch on fire; however, if his own fire kills him
-//							it is to the creator of the fire's credit that he dies).
+//      09/02/97   JMI   Added m_u16FireStarterID.  This is used for a special case
+//                     when the starter of the fire is not the thing using the
+//                     fire as a weapon (e.g., when a guy catches fire he can
+//                     use the fire on other people by running into them causing
+//                     them to catch on fire; however, if his own fire kills him
+//                     it is to the creator of the fire's credit that he dies).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -149,9 +149,9 @@ FireAnim m_eFireAnim;                  // Which animation to use for the fire
 
 S32 m_lPrevTime;                       // Previous update time
 
-CSprite2	m_sprite;                     // Sprite (replace with CSprite3, soon)
+CSprite2 m_sprite;                       // Sprite (replace with CSprite3, soon)
 
-ChannelAA*	m_pAnimChannel;            // Alpha animation stored as a channel.
+ChannelAA*   m_pAnimChannel;            // Alpha animation stored as a channel.
 
 short m_sSuspend;                      // Suspend flag
 
@@ -231,7 +231,7 @@ static short Construct(                               // Returns 0 if successful
 //---------------------------------------------------------------------------
 
 // Function for this class that is called before play begins to make
-//	the resource manager cache the resources for this object.
+//   the resource manager cache the resources for this object.
 static short Preload(
    CRealm* prealm);                 // In:  Calling realm.
 

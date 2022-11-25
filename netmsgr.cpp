@@ -19,44 +19,44 @@
 // Project: Net Messenger
 //
 // History:
-//		05/24/97 MJR	Final assault begins.
+//      05/24/97 MJR   Final assault begins.
 //
-//		05/25/97	JMI	Filled out CNetMsgr::InfoMsg declaration.
+//      05/25/97   JMI   Filled out CNetMsgr::InfoMsg declaration.
 //
-//					MJR	Made some changes to union, structs, etc.
+//               MJR   Made some changes to union, structs, etc.
 //
-//		05/26/97 MJR	Moved some functions from header to here.
+//      05/26/97 MJR   Moved some functions from header to here.
 //
-//		06/11/97	JMI	Added FINISH_REALM and FINISHED_REALM net messages.
+//      06/11/97   JMI   Added FINISH_REALM and FINISHED_REALM net messages.
 //
-//		06/14/97 MJR	Removed LOAD_REALM and FINISHED_REALM messages and
-//							modified START_GAME message.
+//      06/14/97 MJR   Removed LOAD_REALM and FINISHED_REALM messages and
+//                     modified START_GAME message.
 //
-//		08/13/97 MJR	Changed from ASSERT() to TRACE() when message len is
-//							incorrect.
+//      08/13/97 MJR   Changed from ASSERT() to TRACE() when message len is
+//                     incorrect.
 //
-//		08/14/97 MJR	Changed from TRACE() when message len is incorrect to
-//							generating an actual error.  This is safer in case this
-//							ever occurs in a real game situation.
+//      08/14/97 MJR   Changed from TRACE() when message len is incorrect to
+//                     generating an actual error.  This is safer in case this
+//                     ever occurs in a real game situation.
 //
-//							Also fixed bug where the message byte would be ungotten
-//							twice if the message hadn't been fully received yet.
+//                     Also fixed bug where the message byte would be ungotten
+//                     twice if the message hadn't been fully received yet.
 //
-//		08/15/97 MJR	Cleaned up usage of CBufQ aS32 with some other potential
-//							(actual???) bugs.
+//      08/15/97 MJR   Cleaned up usage of CBufQ aS32 with some other potential
+//                     (actual???) bugs.
 //
-//		08/18/97 MJR	Added "ChangeReq" and "Changed" messages.
+//      08/18/97 MJR   Added "ChangeReq" and "Changed" messages.
 //
-//		09/01/97 MJR	Lots of changes as part of overall network overhaul.
+//      09/01/97 MJR   Lots of changes as part of overall network overhaul.
 //
-//		09/02/97 MJR	Tested and tuned alot, and fixed a bunch of bugs.  Now
-//							appears to be very stable.
+//      09/02/97 MJR   Tested and tuned alot, and fixed a bunch of bugs.  Now
+//                     appears to be very stable.
 //
-//		09/07/97 MJR	Added "Proceed" message.
+//      09/07/97 MJR   Added "Proceed" message.
 //
-//		06/02/98	JMI	The handling of variable length messages was assuming the
-//							message size was 2 (a short) but it was really a S32.
-//							Fixed.
+//      06/02/98   JMI   The handling of variable length messages was assuming the
+//                     message size was 2 (a short) but it was really a S32.
+//                     Fixed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -83,39 +83,39 @@
 ////////////////////////////////////////////////////////////////////////////////
 CNetMsgr::InfoMsg CNetMsgr::ms_aInfoMsg[NetMsg::NumMessages] =
 {
-   {	NetMsg::NOTHING,	INFO(Nothing)			},
-   {	NetMsg::STAT,	INFO(Stat)				},
-   {	NetMsg::ERR,  INFO(Err)            },
-   {	NetMsg::LOGIN,  INFO(Login)          },
-   {	NetMsg::LOGIN_ACCEPT,  INFO(LoginAccept)    },
-   {	NetMsg::LOGIN_DENY,	INFO(LoginDeny)		},
-   {	NetMsg::LOGOUT,  INFO(Logout)         },
-   {	NetMsg::JOIN_REQ,  INFO(JoinReq)        },
-   {	NetMsg::JOIN_ACCEPT,  INFO(JoinAccept)     },
-   {	NetMsg::JOIN_DENY,  INFO(JoinDeny)       },
-   {	NetMsg::JOINED,  INFO(Joined)         },
-   {	NetMsg::CHANGE_REQ,	INFO(ChangeReq)		},
-   {	NetMsg::CHANGED,	INFO(Changed)			},
-   {	NetMsg::DROP_REQ,  INFO(DropReq)        },
-   {	NetMsg::DROPPED,	INFO(Dropped)			},
-   {	NetMsg::DROP_ACK,  INFO(DropAck)        },
-   {	NetMsg::INPUT_REQ,  INFO(InputReq)       },
-   {	NetMsg::INPUT_DATA,	(size_t) (INFO(InputData))	},
-   {	NetMsg::INPUT_MARK,	INFO(InputMark)		},
-   {	NetMsg::CHAT_REQ,  INFO(ChatReq)        },
-   {	NetMsg::CHAT,	INFO(Chat)				},
-   {	NetMsg::SETUP_GAME,	INFO(SetupGame)		},
-   {	NetMsg::START_GAME,	INFO(StartGame)		},
-   {	NetMsg::ABORT_GAME,	INFO(AbortGame)		},
-   {	NetMsg::READY_REALM,  INFO(ReadyRealm)     },
-   {	NetMsg::BAD_REALM,  INFO(BadRealm)       },
-   {	NetMsg::START_REALM,  INFO(StartRealm)     },
-   {	NetMsg::HALT_REALM,	INFO(HaltRealm)		},
-   {	NetMsg::NEXT_REALM,	INFO(NextRealm)		},
-   {	NetMsg::PROGRESS_REALM,  INFO(ProgressRealm)  },
-   {	NetMsg::PROCEED,	INFO(Proceed)			},
-   {	NetMsg::PING,	INFO(Ping)				},
-   {	NetMsg::RAND,	INFO(Rand)				}
+   {   NetMsg::NOTHING,   INFO(Nothing)         },
+   {   NetMsg::STAT,   INFO(Stat)            },
+   {   NetMsg::ERR,  INFO(Err)            },
+   {   NetMsg::LOGIN,  INFO(Login)          },
+   {   NetMsg::LOGIN_ACCEPT,  INFO(LoginAccept)    },
+   {   NetMsg::LOGIN_DENY,   INFO(LoginDeny)      },
+   {   NetMsg::LOGOUT,  INFO(Logout)         },
+   {   NetMsg::JOIN_REQ,  INFO(JoinReq)        },
+   {   NetMsg::JOIN_ACCEPT,  INFO(JoinAccept)     },
+   {   NetMsg::JOIN_DENY,  INFO(JoinDeny)       },
+   {   NetMsg::JOINED,  INFO(Joined)         },
+   {   NetMsg::CHANGE_REQ,   INFO(ChangeReq)      },
+   {   NetMsg::CHANGED,   INFO(Changed)         },
+   {   NetMsg::DROP_REQ,  INFO(DropReq)        },
+   {   NetMsg::DROPPED,   INFO(Dropped)         },
+   {   NetMsg::DROP_ACK,  INFO(DropAck)        },
+   {   NetMsg::INPUT_REQ,  INFO(InputReq)       },
+   {   NetMsg::INPUT_DATA,   (size_t) (INFO(InputData))   },
+   {   NetMsg::INPUT_MARK,   INFO(InputMark)      },
+   {   NetMsg::CHAT_REQ,  INFO(ChatReq)        },
+   {   NetMsg::CHAT,   INFO(Chat)            },
+   {   NetMsg::SETUP_GAME,   INFO(SetupGame)      },
+   {   NetMsg::START_GAME,   INFO(StartGame)      },
+   {   NetMsg::ABORT_GAME,   INFO(AbortGame)      },
+   {   NetMsg::READY_REALM,  INFO(ReadyRealm)     },
+   {   NetMsg::BAD_REALM,  INFO(BadRealm)       },
+   {   NetMsg::START_REALM,  INFO(StartRealm)     },
+   {   NetMsg::HALT_REALM,   INFO(HaltRealm)      },
+   {   NetMsg::NEXT_REALM,   INFO(NextRealm)      },
+   {   NetMsg::PROGRESS_REALM,  INFO(ProgressRealm)  },
+   {   NetMsg::PROCEED,   INFO(Proceed)         },
+   {   NetMsg::PING,   INFO(Ping)            },
+   {   NetMsg::RAND,   INFO(Rand)            }
 };
 
 
@@ -206,7 +206,7 @@ bool CNetMsgr::GetMsg(                          // True if message was available
                      m_bufIn.Get(&lMsgSize);
 
                      // Undo the get of lMsgSize.
-                     short	sInc;
+                     short sInc;
                      for (sInc = 0; sInc < sizeof(lMsgSize); sInc++)
                      {
                         m_bufIn.UnGet();
@@ -241,27 +241,27 @@ bool CNetMsgr::GetMsg(                          // True if message was available
                      // Indicate that we got a message
                      bGotOne = true;
 
-/*							// 12/7/97 AJC
+/*                     // 12/7/97 AJC
 #ifdef WIN32
-							if (g_GameSettings.m_bLogNetTime)
-								{
-								if (ucMsg == NetMsg::INPUT_DATA)
-									WriteTimeStamp("CNetMsgr::GetMsg()",
-														(char*)pmsg->msg.inputData.id ,
-														ucMsg,
-														0,
-														0,
-														true);
-								else if (ucMsg != NetMsg::NOTHING)
-									WriteTimeStamp("CNetMsgr::GetMsg()",
-														NULL,
-														ucMsg,
-														0,
-														0,
-														true);
-								}
+                     if (g_GameSettings.m_bLogNetTime)
+                        {
+                        if (ucMsg == NetMsg::INPUT_DATA)
+                           WriteTimeStamp("CNetMsgr::GetMsg()",
+                                          (char*)pmsg->msg.inputData.id ,
+                                          ucMsg,
+                                          0,
+                                          0,
+                                          true);
+                        else if (ucMsg != NetMsg::NOTHING)
+                           WriteTimeStamp("CNetMsgr::GetMsg()",
+                                          NULL,
+                                          ucMsg,
+                                          0,
+                                          0,
+                                          true);
+                        }
 #endif
-							// 12/7/97 AJC
+                     // 12/7/97 AJC
 */
                   }
                   else
@@ -298,19 +298,19 @@ bool CNetMsgr::GetMsg(                          // True if message was available
       // Clear error now that user has been notified.
       m_error = NetMsg::NoError;
 
-/*		// 12/7/97 AJC
+/*      // 12/7/97 AJC
 #ifdef WIN32
-		if (g_GameSettings.m_bLogNetTime)
-			{
-			WriteTimeStamp("CNetMsgr::GetMsg()",
-								NULL,
-								NetMsg::ERR,
-								0,
-								0,
-								true);
-			}
+      if (g_GameSettings.m_bLogNetTime)
+         {
+         WriteTimeStamp("CNetMsgr::GetMsg()",
+                        NULL,
+                        NetMsg::ERR,
+                        0,
+                        0,
+                        true);
+         }
 #endif
-		// 12/7/97 AJC
+      // 12/7/97 AJC
 */
    }
 
@@ -352,7 +352,7 @@ void CNetMsgr::SendMsg(
    if (m_state == Connected)
    {
       // Get msg type.
-      U8	ucMsg = pmsg->msg.nothing.ucType;
+      U8 ucMsg = pmsg->msg.nothing.ucType;
 
       // Make sure it's a valid message type
       if ((ucMsg >= 0) && (ucMsg < NetMsg::NumMessages))
@@ -409,27 +409,27 @@ void CNetMsgr::SendMsg(
       // If "send now" flag is set, do it
       if (bSendNow)
       {
-/*			// 12/7/97 AJC
+/*         // 12/7/97 AJC
 #ifdef WIN32
-			if (g_GameSettings.m_bLogNetTime)
-				{
-				if (ucMsg == NetMsg::INPUT_DATA)
-					WriteTimeStamp("CNetMsgr::SendMsg()",
-										(char*)pmsg->msg.inputData.id ,
-										ucMsg,
-										0,
-										0,
-										false);
-				else if (ucMsg != NetMsg::NOTHING)
-					WriteTimeStamp("CNetMsgr::SendMsg()",
-										NULL,
-										ucMsg,
-										0,
-										0,
-										false);
-				}
+         if (g_GameSettings.m_bLogNetTime)
+            {
+            if (ucMsg == NetMsg::INPUT_DATA)
+               WriteTimeStamp("CNetMsgr::SendMsg()",
+                              (char*)pmsg->msg.inputData.id ,
+                              ucMsg,
+                              0,
+                              0,
+                              false);
+            else if (ucMsg != NetMsg::NOTHING)
+               WriteTimeStamp("CNetMsgr::SendMsg()",
+                              NULL,
+                              ucMsg,
+                              0,
+                              0,
+                              false);
+            }
 #endif
-			// 12/7/97 AJC
+         // 12/7/97 AJC
 */
          SendData();
       }

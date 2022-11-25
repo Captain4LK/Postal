@@ -19,80 +19,80 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/24/97 MJR	Stole infrastructure from Jon's AnimThing.
+//      02/24/97 MJR   Stole infrastructure from Jon's AnimThing.
 //
-//		03/07/97	JMI	Now remembers last channel played with and will attempt
-//							to abort the sample, if this object is killed.
-//							This obejct now responds to the delete message.
+//      03/07/97   JMI   Now remembers last channel played with and will attempt
+//                     to abort the sample, if this object is killed.
+//                     This obejct now responds to the delete message.
 //
-//		03/07/97	JMI	Was only checking messages when the sound looped.
+//      03/07/97   JMI   Was only checking messages when the sound looped.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/25/97	JMI	Changed EDIT_GUI_FILE to 8.3 compliant name.
+//      03/25/97   JMI   Changed EDIT_GUI_FILE to 8.3 compliant name.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/22/97	JMI	When I added the remembering of the last channel played,
-//							I forgot to actually remember the last channel played.
-//							Duh!  Fixed.
+//      04/22/97   JMI   When I added the remembering of the last channel played,
+//                     I forgot to actually remember the last channel played.
+//                     Duh!  Fixed.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/29/97	JMI	Converted EditRect(), EditRender(), and/or Render() to
-//							use Map3Dto2D().
+//      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to
+//                     use Map3Dto2D().
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/17/97	JMI	Changed RSnd*'s to SampleMaster::SoundInstances.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed RSnd*'s to SampleMaster::SoundInstances.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
-//							Also, added user edittable member m_lVolumeHalfLife.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
+//                     Also, added user edittable member m_lVolumeHalfLife.
 //
-//		07/25/97 MJR	Added the loading/saving of x,y,z.
+//      07/25/97 MJR   Added the loading/saving of x,y,z.
 //
-//		07/28/97	JMI	Now varies volume as sound plays (based on distance to
-//							ear).
-//							Also, makes sure the next sound does not start until at
-//							least after the sound sample should be done.
+//      07/28/97   JMI   Now varies volume as sound plays (based on distance to
+//                     ear).
+//                     Also, makes sure the next sound does not start until at
+//                     least after the sound sample should be done.
 //
-//		08/01/97	JMI	Added looping parameters.
-//							Also, fixed bug where &m_b* were casted to S32* (but
-//							they are not 32 bits).
+//      08/01/97   JMI   Added looping parameters.
+//                     Also, fixed bug where &m_b* were casted to S32* (but
+//                     they are not 32 bits).
 //
-//		08/04/97	JMI	Made hiding and showing of id 499, in UseLoopingGuiCall,
-//							_slightly_ more efficient.
+//      08/04/97   JMI   Made hiding and showing of id 499, in UseLoopingGuiCall,
+//                     _slightly_ more efficient.
 //
-//		08/04/97	JMI	Added m_sAmbient indicating whether or not this sound
-//							is ambient (i.e., non-essential).
-//							Also, implemented a special random number generator
-//							strictly for sound things so they can be merry and random
-//							and not de-synchronize.
+//      08/04/97   JMI   Added m_sAmbient indicating whether or not this sound
+//                     is ambient (i.e., non-essential).
+//                     Also, implemented a special random number generator
+//                     strictly for sound things so they can be merry and random
+//                     and not de-synchronize.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/09/97	JMI	Added better UI for 'loop back from end' usage.
-//							Now offers a checkbox option to loop infinitely.
+//      08/09/97   JMI   Added better UI for 'loop back from end' usage.
+//                     Now offers a checkbox option to loop infinitely.
 //
-//		08/11/97	JMI	Added RelayVolume() so CSoundRelays can update their
-//							CSoundThing parents.
+//      08/11/97   JMI   Added RelayVolume() so CSoundRelays can update their
+//                     CSoundThing parents.
 //
-//		08/12/97	JMI	Now can browse for files with paths relative to the
-//							samples SAK.
+//      08/12/97   JMI   Now can browse for files with paths relative to the
+//                     samples SAK.
 //
-//		09/27/99	JMI	Eliminated boolean performance warnings.
+//      09/27/99   JMI   Eliminated boolean performance warnings.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -122,20 +122,20 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"soundthing.bmp"
+#define IMAGE_FILE         "soundthing.bmp"
 
-#define GUI_FILE_NAME		"res/editor/Sound.gui"
+#define GUI_FILE_NAME      "res/editor/Sound.gui"
 
-#define END_OF_TIME			0x7fffffff  // Unfortunately, we won't be dead (or,
-                                       // considering it's always just 24 days
-                                       // off, fortunately).  The program, will
-                                       // break, however.
+#define END_OF_TIME         0x7fffffff  // Unfortunately, we won't be dead (or,
+                                        // considering it's always just 24 days
+                                        // off, fortunately).  The program, will
+                                        // break, however.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class statics.
 ////////////////////////////////////////////////////////////////////////////////
 
-short	CSoundThing::ms_sFileCount			= 0;  // File count.
+short CSoundThing::ms_sFileCount         = 0;    // File count.
 S32 CSoundThing::ms_lGetRandomSeed   = 0;    // Seed for get random.
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -153,12 +153,12 @@ short CSoundThing::Load(                        // Returns 0 if successfull, non
       // If new file . . .
       if (sFileCount != ms_sFileCount)
       {
-         ms_sFileCount	= sFileCount;
+         ms_sFileCount   = sFileCount;
 
          // Do one time stuff.
 
          // Reseed local random.
-         ms_lGetRandomSeed	= 0;
+         ms_lGetRandomSeed   = 0;
       }
 
       switch (ulFileVersion)
@@ -168,12 +168,12 @@ short CSoundThing::Load(                        // Returns 0 if successfull, non
          pFile->Read(&m_sAmbient);
       case 39:
       case 38:
-         pFile->Read(&m_sPurgeSampleWhenDone	);
-         pFile->Read(&m_sUseLooping				);
-         pFile->Read(&m_lStopLoopingTime		);
-         pFile->Read(&m_lNumLoopBacks			);
-         pFile->Read(&m_lLoopBackTo				);
-         pFile->Read(&m_lLoopBackFrom			);
+         pFile->Read(&m_sPurgeSampleWhenDone   );
+         pFile->Read(&m_sUseLooping            );
+         pFile->Read(&m_lStopLoopingTime      );
+         pFile->Read(&m_lNumLoopBacks         );
+         pFile->Read(&m_lLoopBackTo            );
+         pFile->Read(&m_lLoopBackFrom         );
 
       case 37:
       case 36:
@@ -218,9 +218,9 @@ short CSoundThing::Load(                        // Returns 0 if successfull, non
       case 1:
          S32 lBool;
          pFile->Read(&lBool);
-         m_bInitiallyEnabled	= lBool ? true : false;
+         m_bInitiallyEnabled   = lBool ? true : false;
          pFile->Read(&lBool);
-         m_bInitiallyRepeats	= lBool ? true : false;
+         m_bInitiallyRepeats   = lBool ? true : false;
          pFile->Read(m_lMinTime, 2);
          pFile->Read(m_lRndTime, 2);
          pFile->Read(m_szResName);
@@ -250,16 +250,16 @@ short CSoundThing::Save(                              // Returns 0 if successful
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       pFile->Write(m_sAmbient);
-      pFile->Write(m_sPurgeSampleWhenDone	);
-      pFile->Write(m_sUseLooping				);
-      pFile->Write(m_lStopLoopingTime		);
-      pFile->Write(m_lNumLoopBacks			);
-      pFile->Write(m_lLoopBackTo				);
-      pFile->Write(m_lLoopBackFrom			);
+      pFile->Write(m_sPurgeSampleWhenDone   );
+      pFile->Write(m_sUseLooping            );
+      pFile->Write(m_lStopLoopingTime      );
+      pFile->Write(m_lNumLoopBacks         );
+      pFile->Write(m_lLoopBackTo            );
+      pFile->Write(m_lLoopBackFrom         );
       pFile->Write(m_dX);
       pFile->Write(m_dY);
       pFile->Write(m_dZ);
@@ -271,7 +271,7 @@ short CSoundThing::Save(                              // Returns 0 if successful
       pFile->Write(m_szResName);
 
       // Make sure there were no file errors
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
 
    return sResult;
@@ -284,7 +284,7 @@ short CSoundThing::Save(                              // Returns 0 if successful
 short CSoundThing::Startup(void)                      // Returns 0 if successfull, non-zero otherwise
 {
    // Set the collective volume to zero to start.
-   m_lCollectiveVolume	= 0;
+   m_lCollectiveVolume   = 0;
 
    return 0;
 }
@@ -345,12 +345,12 @@ void CSoundThing::Update(void)
             S32 lLoopEndTime   = m_lLoopBackFrom;
             if (m_sUseLooping)
             {
-               lLoopStartTime	= m_lLoopBackTo;
+               lLoopStartTime   = m_lLoopBackTo;
             }
             else
             {
                // Indicate no looping.
-               lLoopStartTime	= -1;
+               lLoopStartTime   = -1;
             }
 
             // If first time (not init) OR nth time with repeat enabled . . .
@@ -367,11 +367,11 @@ void CSoundThing::Update(void)
                bool bPurge;
                if (m_sPurgeSampleWhenDone)
                {
-                  bPurge	= true;
+                  bPurge   = true;
                }
                else
                {
-                  bPurge	= false;
+                  bPurge   = false;
                }
 
                PlaySample(                                                 // Returns nothing.
@@ -382,7 +382,7 @@ void CSoundThing::Update(void)
                   &m_siChannel,                                            // Out: Handle for adjusting sound volume
                   &lSampleDuration,                                        // Out: Sample duration in ms, if not NULL.
                   lLoopStartTime,                                          // In:  Where to loop back to in milliseconds.
-                                                                           //	-1 indicates no looping (unless m_sLoop is
+                                                                           //   -1 indicates no looping (unless m_sLoop is
                                                                            // explicitly set).
                   lLoopEndTime,                                            // In:  Where to loop back from in milliseconds.
                                                                            // If less than 1, the end + lLoopEndTime is used.
@@ -397,7 +397,7 @@ void CSoundThing::Update(void)
                if (lLoopEndTime < 1)
                {
                   // Use the duration plus the specified negative time.
-                  lLoopEndTime		+= lSampleDuration;
+                  lLoopEndTime      += lSampleDuration;
                }
 
                // Fix these values in case we're in release mode.
@@ -425,12 +425,12 @@ void CSoundThing::Update(void)
                if (m_sUseLooping && m_lNumLoopBacks >= 0)
                {
                   // Calculate time until we stop looping . . .
-                  m_lStopLoopingTime	= lCurTime + (m_lNumLoopBacks + 1) * (lLoopEndTime - lLoopStartTime) + lLoopStartTime;
+                  m_lStopLoopingTime   = lCurTime + (m_lNumLoopBacks + 1) * (lLoopEndTime - lLoopStartTime) + lLoopStartTime;
                }
                else
                {
                   // Set time way into the future so we don't bother for a while.
-                  m_lStopLoopingTime	= END_OF_TIME;
+                  m_lStopLoopingTime   = END_OF_TIME;
                }
             }
 
@@ -464,7 +464,7 @@ void CSoundThing::Update(void)
          }
 
          // Set time way into the future so we don't bother for a while.
-         m_lStopLoopingTime	= END_OF_TIME;
+         m_lStopLoopingTime   = END_OF_TIME;
       }
 
       // Process messages.
@@ -489,13 +489,13 @@ void CSoundThing::Update(void)
 void CSoundThing::Render(void)
 {
    // Render our sound.  What a cheezy way of trying to justify putting this
-   //	here.
+   //   here.
 
    // Adjust volume of last play instance.  Clip just in case.
    SetInstanceVolume(m_siChannel, MIN(255L, m_lCollectiveVolume) );
 
    // Reset volume.
-   m_lCollectiveVolume	= 0;
+   m_lCollectiveVolume   = 0;
 }
 
 
@@ -514,7 +514,7 @@ short CSoundThing::EditNew(                           // Returns 0 if successful
    m_dY = (double)sY;
    m_dZ = (double)sZ;
 
-   sResult	= EditModify();
+   sResult   = EditModify();
 
    return sResult;
 }
@@ -523,11 +523,11 @@ short CSoundThing::EditNew(                           // Returns 0 if successful
 // Helper function/macro for changing a GUIs text value.
 ////////////////////////////////////////////////////////////////////////////////
 inline void SetGuiItemVal( // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  GUI Root.
+   RGuiItem*   pguiRoot,   // In:  GUI Root.
    S32 lId,                // In:  ID of item whose text we'll change.
    S32 lVal)               // In:  New value.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui)
    {
       pgui->SetText("%ld", lVal);
@@ -539,23 +539,23 @@ inline void SetGuiItemVal( // Returns nothing.
 // Callback from multibtn checkbox.
 ////////////////////////////////////////////////////////////////////////////////
 static void CheckEnableGuiCall(  // Returns nothing.
-   RGuiItem*	pgui_pmb)         // In:  GUI pointer to the multi button that was
+   RGuiItem*   pgui_pmb)         // In:  GUI pointer to the multi button that was
                                  // pressed.
 {
    ASSERT(pgui_pmb->m_type == RGuiItem::MultiBtn);
 
-   RMultiBtn*	pmb	= (RMultiBtn*)pgui_pmb;
+   RMultiBtn*   pmb   = (RMultiBtn*)pgui_pmb;
 
    // Show based on value stored in GUI.
-   short	sVisible	= pmb->m_ulUserData;
+   short sVisible   = pmb->m_ulUserData;
    // If unchecked . . .
    if (pmb->m_sState == 1)
    {
       // Opposite show/hide state.
-      sVisible	= !sVisible;
+      sVisible   = !sVisible;
    }
 
-   RGuiItem*	pguiLoopSettingsContainer	= pmb->GetParent()->GetItemFromId(pmb->m_ulUserInstance);
+   RGuiItem*   pguiLoopSettingsContainer   = pmb->GetParent()->GetItemFromId(pmb->m_ulUserInstance);
    if (pguiLoopSettingsContainer)
    {
       pguiLoopSettingsContainer->SetVisible(sVisible);
@@ -567,11 +567,11 @@ static void CheckEnableGuiCall(  // Returns nothing.
 // path could be made.
 ////////////////////////////////////////////////////////////////////////////////
 static void BrowseCall(    // Returns nothing.
-   RGuiItem*	pgui)       // In:  GUI pointer that was pressed.
+   RGuiItem*   pgui)       // In:  GUI pointer that was pressed.
 {
    ASSERT(pgui->GetParent() );
 
-   RGuiItem*	pguiName	= pgui->GetParent()->GetItemFromId(pgui->m_ulUserInstance);
+   RGuiItem*   pguiName   = pgui->GetParent()->GetItemFromId(pgui->m_ulUserInstance);
    if (pguiName)
    {
       char szTitle[256];
@@ -579,7 +579,7 @@ static void BrowseCall(    // Returns nothing.
 
       // Create full system path from existing RSPiX subpath.
       char szSystemPath[RSP_MAX_PATH];
-      char*	pszSakpath	= g_resmgrSamples.GetBasePath();
+      char*   pszSakpath   = g_resmgrSamples.GetBasePath();
       if (pguiName->m_szText[0] == '\0')
       {
          pguiName->SetText(".");
@@ -587,17 +587,17 @@ static void BrowseCall(    // Returns nothing.
 
       strcpy(szSystemPath, FullPathCustom(pszSakpath, pguiName->m_szText) );
 
-      short	sResult;
+      short sResult;
       do {
-         sResult	= SubPathOpenBox(       // Returns 0 on success, negative on error, 1 if
-                                          // not subpathable (i.e., returned path is full path).
+         sResult   = SubPathOpenBox(       // Returns 0 on success, negative on error, 1 if
+                                           // not subpathable (i.e., returned path is full path).
             pszSakpath,                   // In:  Full path to be relative to (system format).
             szTitle,                      // In:  Title of box.
             szSystemPath,                 // In:  Default filename (system format).
             szSystemPath,                 // Out: User's choice (system format).
             sizeof(szSystemPath),         // In:  Amount of memory pointed to by pszChosenFileName.
             "wav");                       // In:  If not NULL, '.' delimited extension based filename
-                                          //	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+                                          //   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
                                           // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 
          if (sResult > 0)
@@ -626,7 +626,7 @@ static void BrowseCall(    // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 short CSoundThing::EditModify(void)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    // Load gui dialog
    RGuiItem* pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
@@ -640,12 +640,12 @@ short CSoundThing::EditModify(void)
       pResName->Compose();
 
       // Setup name browse button.
-      RGuiItem*	pguiNameBrowse	= pgui->GetItemFromId(4);
+      RGuiItem*   pguiNameBrowse   = pgui->GetItemFromId(4);
       ASSERT(pguiNameBrowse);
       // Set callback for browsage.
-      pguiNameBrowse->m_bcUser			= BrowseCall;
+      pguiNameBrowse->m_bcUser         = BrowseCall;
       // Tell it what ID to fill with result.
-      pguiNameBrowse->m_ulUserInstance	= pResName->m_lId;
+      pguiNameBrowse->m_ulUserInstance   = pResName->m_lId;
 
       // Init "first time" edit
       REdit* pFirstTime = (REdit*)pgui->GetItemFromId(100);
@@ -695,24 +695,24 @@ short CSoundThing::EditModify(void)
       peditHalfLife->Compose();
 
       // Init "Purge sample when done" checkbox.
-      RMultiBtn*	pmbPurge	= (RMultiBtn*)pgui->GetItemFromId(500);
+      RMultiBtn*   pmbPurge   = (RMultiBtn*)pgui->GetItemFromId(500);
       ASSERT(pmbPurge);
       ASSERT(pmbPurge->m_type == RGuiItem::MultiBtn);
-      pmbPurge->m_sState	= (m_sPurgeSampleWhenDone == FALSE) ? 1 : 2;
+      pmbPurge->m_sState   = (m_sPurgeSampleWhenDone == FALSE) ? 1 : 2;
       pmbPurge->Compose();
 
       // Init "Use looping" checkbox.
-      RMultiBtn*	pmbUseLooping	= (RMultiBtn*)pgui->GetItemFromId(400);
+      RMultiBtn*   pmbUseLooping   = (RMultiBtn*)pgui->GetItemFromId(400);
       ASSERT(pmbUseLooping);
       ASSERT(pmbUseLooping->m_type == RGuiItem::MultiBtn);
-      pmbUseLooping->m_sState	= (m_sUseLooping == FALSE) ? 1 : 2;
+      pmbUseLooping->m_sState   = (m_sUseLooping == FALSE) ? 1 : 2;
       pmbUseLooping->Compose();
       // Set the callback so we can tell when state changes.
-      pmbUseLooping->m_bcUser	= CheckEnableGuiCall;
+      pmbUseLooping->m_bcUser   = CheckEnableGuiCall;
       // Set GUI to enable/disable.
-      pmbUseLooping->m_ulUserInstance	= 499;
+      pmbUseLooping->m_ulUserInstance   = 499;
       // Set show state to use when checked.
-      pmbUseLooping->m_ulUserData		= TRUE;
+      pmbUseLooping->m_ulUserData      = TRUE;
       // Setup intially.
       CheckEnableGuiCall(pmbUseLooping);
 
@@ -721,40 +721,40 @@ short CSoundThing::EditModify(void)
       SetGuiItemVal(pgui, 403, (m_lNumLoopBacks < 0) ? 0 : m_lNumLoopBacks);
 
       // Init "End" checkbox.
-      RMultiBtn*	pmbLoopFromEnd	= (RMultiBtn*)pgui->GetItemFromId(404);
+      RMultiBtn*   pmbLoopFromEnd   = (RMultiBtn*)pgui->GetItemFromId(404);
       ASSERT(pmbLoopFromEnd);
       ASSERT(pmbLoopFromEnd->m_type == RGuiItem::MultiBtn);
-      pmbLoopFromEnd->m_sState	= (m_lLoopBackFrom == 0) ? 2 : 1;
+      pmbLoopFromEnd->m_sState   = (m_lLoopBackFrom == 0) ? 2 : 1;
       pmbLoopFromEnd->Compose();
       // Set the callback so we can tell when state changes.
-      pmbLoopFromEnd->m_bcUser	= CheckEnableGuiCall;
+      pmbLoopFromEnd->m_bcUser   = CheckEnableGuiCall;
       // Set GUI to enable/disable.
-      pmbLoopFromEnd->m_ulUserInstance	= 402;
+      pmbLoopFromEnd->m_ulUserInstance   = 402;
       // Set show state to use when checked.
-      pmbLoopFromEnd->m_ulUserData		= FALSE;
+      pmbLoopFromEnd->m_ulUserData      = FALSE;
       // Setup intially.
       CheckEnableGuiCall(pmbLoopFromEnd);
 
       // Init "Infinite" checkbox.
-      RMultiBtn*	pmbLoopInfinitely	= (RMultiBtn*)pgui->GetItemFromId(405);
+      RMultiBtn*   pmbLoopInfinitely   = (RMultiBtn*)pgui->GetItemFromId(405);
       ASSERT(pmbLoopInfinitely);
       ASSERT(pmbLoopInfinitely->m_type == RGuiItem::MultiBtn);
-      pmbLoopInfinitely->m_sState	= (m_lNumLoopBacks < 0) ? 2 : 1;
+      pmbLoopInfinitely->m_sState   = (m_lNumLoopBacks < 0) ? 2 : 1;
       pmbLoopInfinitely->Compose();
       // Set the callback so we can tell when state changes.
-      pmbLoopInfinitely->m_bcUser	= CheckEnableGuiCall;
+      pmbLoopInfinitely->m_bcUser   = CheckEnableGuiCall;
       // Set GUI to enable/disable.
-      pmbLoopInfinitely->m_ulUserInstance	= 403;
+      pmbLoopInfinitely->m_ulUserInstance   = 403;
       // Set show state to use when checked.
-      pmbLoopInfinitely->m_ulUserData		= FALSE;
+      pmbLoopInfinitely->m_ulUserData      = FALSE;
       // Setup intially.
       CheckEnableGuiCall(pmbLoopInfinitely);
 
       // Init "Ambient sound" checkbox.
-      RMultiBtn*	pmbAmbient	= (RMultiBtn*)pgui->GetItemFromId(600);
+      RMultiBtn*   pmbAmbient   = (RMultiBtn*)pgui->GetItemFromId(600);
       ASSERT(pmbAmbient);
       ASSERT(pmbAmbient->m_type == RGuiItem::MultiBtn);
-      pmbAmbient->m_sState	= (m_sAmbient == FALSE) ? 1 : 2;
+      pmbAmbient->m_sState   = (m_sAmbient == FALSE) ? 1 : 2;
       pmbAmbient->Compose();
 
       // Run the dialog using this super-duper helper funciton
@@ -768,17 +768,17 @@ short CSoundThing::EditModify(void)
          m_lRndTime[1] = pRepeatRndTime->GetVal();
          m_bInitiallyEnabled = (pEnable->m_state == RPushBtn::On) ? true : false;
          m_bInitiallyRepeats = (pRepeat->m_state == RPushBtn::On) ? true : false;
-         m_lVolumeHalfLife	= peditHalfLife->GetVal();
-         m_sPurgeSampleWhenDone		= (pmbPurge->m_sState == 2) ? TRUE : FALSE;
-         m_sUseLooping		= (pmbUseLooping->m_sState == 2) ? TRUE : FALSE;
-         m_lLoopBackTo		= pgui->GetVal(401);
-         m_lLoopBackFrom	= (pmbLoopFromEnd->m_sState == 2) ? 0 : pgui->GetVal(402);
-         m_lNumLoopBacks	= (pmbLoopInfinitely->m_sState == 2) ? -1 : pgui->GetVal(403);
-         m_sAmbient			= (pmbAmbient->m_sState == 2) ? TRUE : FALSE;
+         m_lVolumeHalfLife   = peditHalfLife->GetVal();
+         m_sPurgeSampleWhenDone      = (pmbPurge->m_sState == 2) ? TRUE : FALSE;
+         m_sUseLooping      = (pmbUseLooping->m_sState == 2) ? TRUE : FALSE;
+         m_lLoopBackTo      = pgui->GetVal(401);
+         m_lLoopBackFrom   = (pmbLoopFromEnd->m_sState == 2) ? 0 : pgui->GetVal(402);
+         m_lNumLoopBacks   = (pmbLoopInfinitely->m_sState == 2) ? -1 : pgui->GetVal(403);
+         m_sAmbient         = (pmbAmbient->m_sState == 2) ? TRUE : FALSE;
       }
       else
       {
-         sResult	= 1;
+         sResult   = 1;
       }
 
       // Done with GUI.
@@ -786,7 +786,7 @@ short CSoundThing::EditModify(void)
    }
    else
    {
-      sResult	= -1;
+      sResult   = -1;
    }
 
    // If everything's okay, init using new values
@@ -814,10 +814,10 @@ short CSoundThing::EditMove(                          // Returns 0 if successful
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the clickable pos/area of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CSoundThing::EditRect(   // Returns nothiing.
-   RRect*	prc)           // Out: Clickable pos/area of object.
+   RRect*   prc)           // Out: Clickable pos/area of object.
 {
    Map3Dto2D(
       m_dX,
@@ -826,36 +826,36 @@ void CSoundThing::EditRect(   // Returns nothiing.
       &(prc->sX),
       &(prc->sY) );
 
-   prc->sW	= 10; // Safety.
-   prc->sH	= 10; // Safety.
+   prc->sW   = 10; // Safety.
+   prc->sH   = 10; // Safety.
 
    if (m_pImage)
    {
-      prc->sW	= m_pImage->m_sWidth;
-      prc->sH	= m_pImage->m_sHeight;
+      prc->sW   = m_pImage->m_sWidth;
+      prc->sH   = m_pImage->m_sHeight;
    }
 
-   prc->sX	-= prc->sW / 2;
-   prc->sY	-= prc->sH;
+   prc->sX   -= prc->sW / 2;
+   prc->sY   -= prc->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CSoundThing::EditHotSpot(   // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY)              // Out: Y coord of 2D hotspot relative to
+   short*   psY)              // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 {
-   *psX	= 5;  // Safety.
-   *psY	= 5;  // Safety.
+   *psX   = 5;  // Safety.
+   *psY   = 5;  // Safety.
 
    if (m_pImage)
    {
-      *psX	= m_pImage->m_sWidth / 2;
-      *psY	= m_pImage->m_sHeight;
+      *psX   = m_pImage->m_sWidth / 2;
+      *psY   = m_pImage->m_sHeight;
    }
 }
 
@@ -885,8 +885,8 @@ void CSoundThing::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
@@ -950,7 +950,7 @@ short CSoundThing::Kill(void)                   // Returns 0 if successfull, non
       // Abort it.
       AbortSample(m_siChannel);
       // Done with ID.
-      m_siChannel	= 0;
+      m_siChannel   = 0;
    }
 
    return 0;
@@ -963,13 +963,13 @@ short CSoundThing::Kill(void)                   // Returns 0 if successfull, non
 void CSoundThing::ProcessMessages(void)
 {
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       switch(msg.msg_Generic.eType)
       {
       case typeObjectDelete:
-         m_state	= State_Delete;
+         m_state   = State_Delete;
          break;
       }
 
@@ -991,7 +991,7 @@ S32 CSoundThing::GetRandom(void)
 void CSoundThing::RelayVolume(   // Returns nothing.
    S32 lVolume)                  // In:  Volume to relay.
 {
-   m_lCollectiveVolume	+= lVolume;
+   m_lCollectiveVolume   += lVolume;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

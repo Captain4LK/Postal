@@ -18,12 +18,12 @@
 // TexEdit.h
 //
 // History:
-//		10/03/99 JMI	Started.
+//      10/03/99 JMI   Started.
 //
-//		10/06/99	JMI	Now DoModal() accepts two lights to use.
+//      10/06/99   JMI   Now DoModal() accepts two lights to use.
 //
-//		10/07/99	JMI	Replaced m_fAlt and m_fAzi with a transform so rotations
-//							can always be relative to the current orientation.
+//      10/07/99   JMI   Replaced m_fAlt and m_fAzi with a transform so rotations
+//                     can always be relative to the current orientation.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -49,7 +49,7 @@
    static void Name ## _Static(RGuiItem * pgui)                \
    {                                                     \
       ASSERT(pgui->m_ulUserInstance);                       \
-      CTexEdit* pte	= (CTexEdit*)pgui->m_ulUserInstance;   \
+      CTexEdit* pte   = (CTexEdit*)pgui->m_ulUserInstance;   \
       pte->Name(pgui);                                      \
    }
 
@@ -58,7 +58,7 @@
    static void Name ## _Static(RGuiItem * pgui, RInputEvent * pie) \
    {                                                        \
       ASSERT(pgui->m_ulUserInstance);                          \
-      CTexEdit* pte	= (CTexEdit*)pgui->m_ulUserInstance;      \
+      CTexEdit* pte   = (CTexEdit*)pgui->m_ulUserInstance;      \
       pte->Name(pgui, pie);                                    \
    }
 
@@ -67,7 +67,7 @@
    static void Name ## _Static(RScrollBar * psb)                  \
    {                                                        \
       ASSERT(psb->m_ulUserInstance);                           \
-      CTexEdit* pte	= (CTexEdit*)psb->m_ulUserInstance;       \
+      CTexEdit* pte   = (CTexEdit*)psb->m_ulUserInstance;       \
       pte->Name(psb);                                          \
    }
 
@@ -98,15 +98,15 @@ typedef enum
 
 typedef enum
 {
-   MaxCmds	= 10
+   MaxCmds   = 10
 } Macros;
 
 
 typedef struct
 {
    S32 lTriIndex;             // Triangle affected.
-   U8	u8Color;                // Color applied.
-   U8	u8PrevColor;            // Prev color.
+   U8 u8Color;                  // Color applied.
+   U8 u8PrevColor;              // Prev color.
 } Cmd;
 
 //------------------------------------------------------------------------------
@@ -114,30 +114,30 @@ typedef struct
 //------------------------------------------------------------------------------
 public:
 
-RGuiItem*	m_pguiRoot;             // Main dialog frame.
-RGuiItem*	m_pguiAnim;             // Anim frame.
-RGuiItem*	m_pguiCurColor;         // Current color frame.
-RGuiItem*	m_pguiPal;              // Color palette frame.
+RGuiItem*   m_pguiRoot;             // Main dialog frame.
+RGuiItem*   m_pguiAnim;             // Anim frame.
+RGuiItem*   m_pguiCurColor;         // Current color frame.
+RGuiItem*   m_pguiPal;              // Color palette frame.
 CScene m_scene;                     // Scene for rendering.
-Manip	m_manip;                      // Current manipulation type.
+Manip m_manip;                        // Current manipulation type.
 bool m_bDragging;                   // true if in drag manipulation.
-short	m_sCursorResetX;              // Used by ProcessManip() to process drags.
-short	m_sCursorResetY;              // Used by ProcessManip() to process drags.
-float	m_fScale;                     // Scaling.
+short m_sCursorResetX;                // Used by ProcessManip() to process drags.
+short m_sCursorResetY;                // Used by ProcessManip() to process drags.
+float m_fScale;                       // Scaling.
 RTransform m_transRot;              // Rotation.
-float	m_fX;                         // Translation.
-float	m_fY;                         // Translation.
+float m_fX;                           // Translation.
+float m_fY;                           // Translation.
 bool m_bQuit;                       // true when done.
-U8	m_u8Color;                       // Current color.
+U8 m_u8Color;                         // Current color.
 S32 m_lTriIndex;                    // Index of tri selected or < 0, if none.
-RTexture	m_texWork;                 // Work texture.
-RTexture*	m_ptexSrc;              // The real thing.
-ChanTexture*	m_ptexchanSrc;       // Animation being edited.
+RTexture m_texWork;                   // Work texture.
+RTexture*   m_ptexSrc;              // The real thing.
+ChanTexture*   m_ptexchanSrc;       // Animation being edited.
 bool m_bModified;                   // true if texture has been modified since last
                                     // synch (revert or apply).
 RString m_strFileName;              // Filename to save textures as.
 bool m_bSpotLight;                  // true for spotlight; false for ambient.
-short	m_sBrightness;                // Brightness for sprite.
+short m_sBrightness;                  // Brightness for sprite.
 
 //------------------------------------------------------------------------------
 // Construction.
@@ -245,7 +245,7 @@ SetManip(
 //////////////////////////////////////////////////////////////////////////////
 void
 SetColor(
-   U8	u8Color)          // In:  New color index.
+   U8 u8Color)            // In:  New color index.
 ;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -283,8 +283,8 @@ ResetTransformation(void)
 {
    m_fScale = 0.5f;
    m_transRot.Make1();
-   m_fX		= 0;
-   m_fY		= 0;
+   m_fX      = 0;
+   m_fY      = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -325,5 +325,5 @@ DECL_EVENT_CALL(AnimCall)
 
 #endif // CTEXEDIT_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

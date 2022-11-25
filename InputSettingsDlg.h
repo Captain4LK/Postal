@@ -19,11 +19,11 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		07/03/97 JMI	Started.
+//      07/03/97 JMI   Started.
 //
-//		07/05/97	JMI	Added protos for InputSettingsDlg_InitMenu() and
-//							InputSettingsDlg_KillMenu().
-//							Removed protos for EditKeySettings() and EditMouseSetings().
+//      07/05/97   JMI   Added protos for InputSettingsDlg_InitMenu() and
+//                     InputSettingsDlg_KillMenu().
+//                     Removed protos for EditKeySettings() and EditMouseSetings().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef INPUTSETTINGSDLG_H
@@ -49,7 +49,7 @@ extern short InputSettingsDlg_KillMenu(   // Returns 0 on success.
 // setttings menu.
 //////////////////////////////////////////////////////////////////////////////
 void InputSettingsDlg_Choice( // Returns nothing.
-   Menu*	pmenuCurrent,        // In:  Current menu.
+   Menu*   pmenuCurrent,        // In:  Current menu.
    short sMenuItem);          // In:  Menu item chosen or -1 if selection
                               // change.
 
@@ -58,7 +58,7 @@ void InputSettingsDlg_Choice( // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 extern short EditInputSettings(void);  // Returns nothing.
 
-#endif	// INPUTSETTINGSDLG_H
+#endif   // INPUTSETTINGSDLG_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

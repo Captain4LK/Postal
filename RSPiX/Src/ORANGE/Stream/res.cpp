@@ -20,14 +20,14 @@
 // RES.CPP
 //
 // History:
-//		09/22/95 JMI	Started.
+//      09/22/95 JMI   Started.
 //
-//		10/26/95	JMI	Added CNFile Open and Close hooking.
+//      10/26/95   JMI   Added CNFile Open and Close hooking.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This class stores data identified by a string in a CResItem stored in
-// HASH_SIZE Clist <CResItem>'s.	 Use GetResource to get a resource and
+// HASH_SIZE Clist <CResItem>'s.    Use GetResource to get a resource and
 // FreeResource to release it.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
 //////////////////////////////////////////////////////////////////////////////
-CList<CRes>	CRes::ms_listRes;             // List of all CRes objects.
+CList<CRes>   CRes::ms_listRes;             // List of all CRes objects.
 
 //////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction Functions.
@@ -129,7 +129,7 @@ CRes::~CRes()
 //////////////////////////////////////////////////////////////////////////////
 S32 HashFunc(char* psz)
 {
-   S32 lHash	= 0L;
+   S32 lHash   = 0L;
 
    while (*psz != '\0')
    {
@@ -149,8 +149,8 @@ S32 HashFunc(char* psz)
 //////////////////////////////////////////////////////////////////////////////
 void CRes::Set(void)
 {
-   m_pDispatch		= NULL;
-   m_sFreeOnClose	= TRUE;
+   m_pDispatch      = NULL;
+   m_sFreeOnClose   = TRUE;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -175,20 +175,20 @@ void CRes::Reset(void)
 // Handles data callbacks from dispatch.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::UseCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-                     S32 lTime)
+short CRes::UseCall(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                       S32 lTime)
 {
-   short	sRes		= RET_DONTFREE;   // Assume success.
-   short	sError	= 0;
+   short sRes      = RET_DONTFREE;     // Assume success.
+   short sError   = 0;
 
-   ASSERT(usType	== RT_TYPE_FILEIMAGE);
-   ASSERT(puc		!= NULL);
+   ASSERT(usType   == RT_TYPE_FILEIMAGE);
+   ASSERT(puc      != NULL);
 
-   char*		pszName	= (char*)puc;
+   char*      pszName   = (char*)puc;
    S32 lLen     = strlen(pszName) + 1;
 
    // Allocate a CResItem.
-   PRESITEM	pri	= new CResItem(pszName, puc + lLen, lSize - lLen, this);
+   PRESITEM pri   = new CResItem(pszName, puc + lLen, lSize - lLen, this);
    if (pri != NULL)
    {
       // Check for duplicate resource names.
@@ -225,7 +225,7 @@ short CRes::UseCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
    if (sError != 0)
    {
       // We won't be needing this.
-      sRes	= RET_FREE;
+      sRes   = RET_FREE;
    }
 
    return sRes;
@@ -237,8 +237,8 @@ short CRes::UseCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::UseCallStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags, S32 lTime, S32 l_pRes)
+short CRes::UseCallStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                             UCHAR ucFlags, S32 lTime, S32 l_pRes)
 {
    return ((CRes*)l_pRes)->UseCall(puc, lSize, usType, ucFlags, lTime);
 }
@@ -252,7 +252,7 @@ UCHAR* CRes::AllocCall(S32 lSize, USHORT usType, UCHAR ucFlags)
 {
    ASSERT(usType == RT_TYPE_FILEIMAGE);
 
-   UCHAR*	puc	= (UCHAR*)malloc(lSize);
+   UCHAR*   puc   = (UCHAR*)malloc(lSize);
 
    if (puc != NULL)
    {
@@ -273,8 +273,8 @@ UCHAR* CRes::AllocCall(S32 lSize, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-UCHAR* CRes::AllocCallStatic(	S32 lSize, USHORT usType, UCHAR ucFlags,
-                              S32 l_pRes)
+UCHAR* CRes::AllocCallStatic(   S32 lSize, USHORT usType, UCHAR ucFlags,
+                                S32 l_pRes)
 {
    return ((CRes*)l_pRes)->AllocCall(lSize, usType, ucFlags);
 }
@@ -286,8 +286,8 @@ UCHAR* CRes::AllocCallStatic(	S32 lSize, USHORT usType, UCHAR ucFlags,
 //////////////////////////////////////////////////////////////////////////////
 void CRes::FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags)
 {
-   ASSERT(usType	== RT_TYPE_FILEIMAGE);
-   ASSERT(puc		!= NULL);
+   ASSERT(usType   == RT_TYPE_FILEIMAGE);
+   ASSERT(puc      != NULL);
 
    free(puc);
 }
@@ -298,8 +298,8 @@ void CRes::FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void CRes::FreeCallStatic(	UCHAR* puc, USHORT usType, UCHAR ucFlags,
-                           S32 l_pRes)
+void CRes::FreeCallStatic(   UCHAR* puc, USHORT usType, UCHAR ucFlags,
+                             S32 l_pRes)
 {
    ((CRes*)l_pRes)->FreeCall(puc, usType, ucFlags);
 }
@@ -309,11 +309,11 @@ void CRes::FreeCallStatic(	UCHAR* puc, USHORT usType, UCHAR ucFlags,
 // Returns a resource item based on it's hash value and .
 //
 //////////////////////////////////////////////////////////////////////////////
-PRESITEM	CRes::GetResItem(char* pszName)
+PRESITEM CRes::GetResItem(char* pszName)
 {
-   S32 lHash		= HashFunc(pszName);
+   S32 lHash      = HashFunc(pszName);
 
-   PRESITEM	pri	= m_alistRes[lHash].GetHead();
+   PRESITEM pri   = m_alistRes[lHash].GetHead();
 
    while (pri != NULL)
    {
@@ -322,7 +322,7 @@ PRESITEM	CRes::GetResItem(char* pszName)
          break;
       }
 
-      pri	= m_alistRes[lHash].GetNext();
+      pri   = m_alistRes[lHash].GetNext();
    }
 
    return pri;
@@ -346,13 +346,13 @@ void CRes::SetDispatcher(CDispatch* pDispatch)
       m_pDispatch->SetFreeHandler(RT_TYPE_FILEIMAGE, NULL);
    }
 
-   m_pDispatch	= pDispatch;
+   m_pDispatch   = pDispatch;
 
    if (m_pDispatch != NULL)
    {
-      m_pDispatch->SetDataHandler(	RT_TYPE_FILEIMAGE, UseCallStatic);
-      m_pDispatch->SetAllocHandler(	RT_TYPE_FILEIMAGE, AllocCallStatic);
-      m_pDispatch->SetFreeHandler(	RT_TYPE_FILEIMAGE, FreeCallStatic);
+      m_pDispatch->SetDataHandler(   RT_TYPE_FILEIMAGE, UseCallStatic);
+      m_pDispatch->SetAllocHandler(   RT_TYPE_FILEIMAGE, AllocCallStatic);
+      m_pDispatch->SetFreeHandler(   RT_TYPE_FILEIMAGE, FreeCallStatic);
       m_pDispatch->SetUserVal(RT_TYPE_FILEIMAGE, (S32)this);
    }
 }
@@ -365,7 +365,7 @@ void CRes::SetDispatcher(CDispatch* pDispatch)
 //////////////////////////////////////////////////////////////////////////////
 PRESITEM CRes::GetResource(char* pszName)
 {
-   PRESITEM	pri	= GetResItem(pszName);
+   PRESITEM pri   = GetResItem(pszName);
 
    if (pri != NULL)
    {
@@ -404,7 +404,7 @@ void CRes::FreeResource(PRESITEM pri)
 //////////////////////////////////////////////////////////////////////////////
 void CRes::FreeAll(void)
 {
-   PRESITEM	pri;
+   PRESITEM pri;
 
    for (short i = 0; i < HASH_SIZE; i++)
    {
@@ -428,16 +428,16 @@ void CRes::FreeAll(void)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRes::FileOpenHook(	CNFile* pfile, char* pszFileName,
-                           char* pszFlags, short sEndian, S32 lUser)
+short CRes::FileOpenHook(   CNFile* pfile, char* pszFileName,
+                            char* pszFlags, short sEndian, S32 lUser)
 {
-   short	sRes	= 1;  // Assume we fail to find file.
+   short sRes   = 1;    // Assume we fail to find file.
 
-   CRes*	pres	= ms_listRes.GetHead();
+   CRes*   pres   = ms_listRes.GetHead();
    while (pres != NULL && sRes > 0)
    {
       // Attempt to get file from resource manager.
-      PRESITEM	pri	= pres->GetResource(pszFileName);
+      PRESITEM pri   = pres->GetResource(pszFileName);
       if (pri != NULL)
       {
          // Open the file.
@@ -482,16 +482,16 @@ short CRes::FileOpenHook(	CNFile* pfile, char* pszFileName,
 //////////////////////////////////////////////////////////////////////////////
 short CRes::FileCloseHook(CNFile* pfile, S32 lUser)
 {
-   short	sRes	= 0;  // Assume we find the file.
+   short sRes   = 0;    // Assume we find the file.
 
    // Get user value (which is the pointer to the CResItem).
-   PRESITEM	pri	= (PRESITEM)pfile->GetUserVal();
+   PRESITEM pri   = (PRESITEM)pfile->GetUserVal();
    if (pri != NULL)
    {
-      CRes*		pres	= pri->m_pRes;
+      CRes*      pres   = pri->m_pRes;
       #ifdef _DEBUG
       // Verify it's a valid one.
-      pres	= ms_listRes.GetHead();
+      pres   = ms_listRes.GetHead();
       while (pres != NULL)
       {
          if (pres == pri->m_pRes)

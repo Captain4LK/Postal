@@ -20,13 +20,13 @@
 // BTN.CPP
 //
 // History:
-//		08/07/96 JMI	Started.
+//      08/07/96 JMI   Started.
 //
-//		03/19/97	JMI	Started tracking history of this file.
+//      03/19/97   JMI   Started tracking history of this file.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
 //////////////////////////////////////////////////////////////////////////////
 // Please see the CPP file for an explanation of this API.
@@ -118,5 +118,5 @@ protected:     // Protected member variables.
 
 #endif // BTN_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

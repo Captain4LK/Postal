@@ -17,20 +17,20 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	IMAGECON.H
+//   IMAGECON.H
 //
-//	Created on     09/28/95	BRH
+//   Created on     09/28/95   BRH
 // Implemented on 09/28/95 BRH
 //
-// 09/28/95	BRH	Standard conversion functions for the standard
-//						image types.  The two main standards are 8 and 24
-//						bit images.  The standard converters are explained
-//						in the .cpp file before each conversion function.
+// 09/28/95   BRH   Standard conversion functions for the standard
+//                  image types.  The two main standards are 8 and 24
+//                  bit images.  The standard converters are explained
+//                  in the .cpp file before each conversion function.
 //
-//	10/30/96	JMI	Added a message indicating this was obsoleted as it doesn't
-//						seem to do anything.
+//   10/30/96   JMI   Added a message indicating this was obsoleted as it doesn't
+//                  seem to do anything.
 //
-//	11/01/96	JMI	Enhanced message referred to on 10/30/96.
+//   11/01/96   JMI   Enhanced message referred to on 10/30/96.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -81,9 +81,9 @@ class CImage;     // forward declaration
 // Example:
 // LINK_IMAGECONV_FROM(ConvertFromBMP8, BMP8);
 /*
-#define LINK_IMAGECONV_FROM(pUserFromFunc, lUserFromFuncIndex)		\
-	LINKLATE(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS,				\
-				pUserFromFunc, lUserFromFuncIndex)
+#define LINK_IMAGECONV_FROM(pUserFromFunc, lUserFromFuncIndex)      \
+   LINKLATE(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS,            \
+            pUserFromFunc, lUserFromFuncIndex)
 */
 // Use this to link a new Image Convertor that converts _TO_ an extended
 // format from a standard.
@@ -91,21 +91,21 @@ class CImage;     // forward declaration
 // Example:
 // LINK_IMAGECONV_TO(ConvertToBMP8, BMP8);
 /*
-#define LINK_IMAGECONV_TO(pUserToFunc, lUserToFuncIndex)		\
-	LINKLATE(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS,			\
-				pUserToFunc, lUserToFuncIndex)
+#define LINK_IMAGECONV_TO(pUserToFunc, lUserToFuncIndex)      \
+   LINKLATE(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS,         \
+            pUserToFunc, lUserToFuncIndex)
 */
 ///////////////////////////////////////////////////////////////////////////////
 // Internal Image use:
 ///////////////////////////////////////////////////////////////////////////////
 // Use this to get a "to" function.
 /*
-#define GETTOFUNC(lIndex)		\
-	GETLINKFUNC(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS, lIndex)
+#define GETTOFUNC(lIndex)      \
+   GETLINKFUNC(CONVTOFUNC, CImage, MAX_IMAGE_TOCONVERTORS, lIndex)
 
 // Use this to get a "from" function.
-#define GETFROMFUNC(lIndex)	\
-	GETLINKFUNC(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS, lIndex)
+#define GETFROMFUNC(lIndex)   \
+   GETLINKFUNC(CONVFROMFUNC, CImage, MAX_IMAGE_FROMCONVERTORS, lIndex)
 */
 #endif //IMAGECON_H
 

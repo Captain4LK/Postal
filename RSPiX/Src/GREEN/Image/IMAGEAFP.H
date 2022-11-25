@@ -15,23 +15,23 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-//	IMAGEAFP.H
+//   IMAGEAFP.H
 //
-//	Created on     10/17/95	BRH
+//   Created on     10/17/95   BRH
 // Implemented on 10/17/95 BRH
 //
-// 10/17/95	BRH	Split this from imagetyp.h to avoid multiple
-//						inclusion of the array of function pointers.
+// 10/17/95   BRH   Split this from imagetyp.h to avoid multiple
+//                  inclusion of the array of function pointers.
 //
-//	10/26/95 BRH	Added ConvertToSCREEN24_RGB to support one of the
-//						more standard windows screen formats.
+//   10/26/95 BRH   Added ConvertToSCREEN24_RGB to support one of the
+//                  more standard windows screen formats.
 //
-//	When adding a convert function:
-//	------------------------------
+//   When adding a convert function:
+//   ------------------------------
 // Make sure you add a enumerated type to imagetyp.h, preferably
-//	just before END_OF_TYPES and then add your convert function to
+//   just before END_OF_TYPES and then add your convert function to
 // the afpConvert array in the proper place.  Your convert function
-//	will be indexed by your image type, for example image type BMP8
+//   will be indexed by your image type, for example image type BMP8
 // = 1 in the enumerated type list and so afpConvert[1] =
 // ConvertToBMP8.  Then you can add your function prototype to
 // imagecon.h and the implementation to imagecon.cpp, or you can

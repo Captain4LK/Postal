@@ -21,15 +21,15 @@
 //
 //
 // History:
-//		12/08/95	BRH	Started.
-//		12/11/95	BRH	Added Ray constructor that takes two points and
-//							calculates the unit vector for the ray.
+//      12/08/95   BRH   Started.
+//      12/11/95   BRH   Added Ray constructor that takes two points and
+//                     calculates the unit vector for the ray.
 //
-//		11/04/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							C2DRay			R2DRay
-//							C3DRay			R3dRay
+//      11/04/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     C2DRay         R2DRay
+//                     C3DRay         R3dRay
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -40,16 +40,16 @@
 // Constructor
 //
 // Description:
-//		Takes two points and calculates the unit vector for the ray
+//      Takes two points and calculates the unit vector for the ray
 //
 // Parameters:
-//		lX1 = x coordinate of originating point
-//		lY2 = y coordinate of originating point
-//		lX2 = x coordinate in direction of ray
-//		lY2 = y coordinate in direction of ray
+//      lX1 = x coordinate of originating point
+//      lY2 = y coordinate of originating point
+//      lX2 = x coordinate in direction of ray
+//      lY2 = y coordinate in direction of ray
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////////////
 

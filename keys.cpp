@@ -19,28 +19,28 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		03/31/97	JMI	Started.
+//      03/31/97   JMI   Started.
 //
-//		07/06/97	JMI	Changed pu8ScanKey parm in KeyDescriptionToValue
-//							call from a U8 to a short.
-//							Also, changed g_apszButtonDescriptions to
-//							g_apszMouseButtonDescriptions.
+//      07/06/97   JMI   Changed pu8ScanKey parm in KeyDescriptionToValue
+//                     call from a U8 to a short.
+//                     Also, changed g_apszButtonDescriptions to
+//                     g_apszMouseButtonDescriptions.
 //
-//		08/10/97	JMI	Changed description of 0 to "None" (was "NULL").
+//      08/10/97   JMI   Changed description of 0 to "None" (was "NULL").
 //
-//		08/24/97	JMI	Changed descriptions of Numpad <whatever>s to Numpad
-//							<whatever symbol>s.
-//							Also, changed 'UNUSED 59' to 'Semicolon' and 'UNUSED 61'
-//							to 'Equal'.
+//      08/24/97   JMI   Changed descriptions of Numpad <whatever>s to Numpad
+//                     <whatever symbol>s.
+//                     Also, changed 'UNUSED 59' to 'Semicolon' and 'UNUSED 61'
+//                     to 'Equal'.
 //
-//		08/27/97	JMI	Reduced mouse strings to minimum verbosity.
+//      08/27/97   JMI   Reduced mouse strings to minimum verbosity.
 //
-//		10/10/97	JMI	Added g_apszJoyButtonDescriptions and
-//							JoyButtonDescriptionToMask().
+//      10/10/97   JMI   Added g_apszJoyButtonDescriptions and
+//                     JoyButtonDescriptionToMask().
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Key stuff.  I'm not sure if this will ever amount to more than just the
+//   Key stuff.  I'm not sure if this will ever amount to more than just the
 // descriptions.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,14 +65,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
 ////////////////////////////////////////////////////////////////////////////////
 // Data.
 ////////////////////////////////////////////////////////////////////////////////
 
 // Array of key descriptors.
-extern char* g_apszKeyDescriptions[128]	=
+extern char* g_apszKeyDescriptions[128]   =
 {
    "None",
    "End",
@@ -205,7 +205,7 @@ extern char* g_apszKeyDescriptions[128]	=
 };
 
 // Array of mouse button descriptors.
-extern char* g_apszMouseButtonDescriptions[8]	=
+extern char* g_apszMouseButtonDescriptions[8]   =
 {
    "None",
    "Left",
@@ -240,26 +240,26 @@ extern char* g_apszJoyButtonDescriptions[18] =
    "RT"
 };
 /*
-extern char* g_apszJoyButtonDescriptions[16]	=
-	{
-	"None",								// 0000
-	"A",									// 0001
-	"B",									// 0010
-	"A,B",								// 0011
-	"C",									// 0100
-	"A,C",								// 0101
-	"B,C",								// 0110
-	"A,B,C",								// 0111
-	"D",									// 1000
-	"A,D",								// 1001
-	"B,D",								// 1010
-	"A,B,D",								// 1011
-	"C,D",								// 1100
-	"A,C,D",								// 1101
-	"B,C,D",								// 1110
-	"A,B,C,D",							// 1111
-	};
-	*/
+extern char* g_apszJoyButtonDescriptions[16]   =
+   {
+   "None",                        // 0000
+   "A",                           // 0001
+   "B",                           // 0010
+   "A,B",                        // 0011
+   "C",                           // 0100
+   "A,C",                        // 0101
+   "B,C",                        // 0110
+   "A,B,C",                        // 0111
+   "D",                           // 1000
+   "A,D",                        // 1001
+   "B,D",                        // 1010
+   "A,B,D",                        // 1011
+   "C,D",                        // 1100
+   "A,C,D",                        // 1101
+   "B,C,D",                        // 1110
+   "A,B,C,D",                     // 1111
+   };
+   */
 ////////////////////////////////////////////////////////////////////////////////
 // Functions.
 ////////////////////////////////////////////////////////////////////////////////
@@ -269,19 +269,19 @@ extern char* g_apszJoyButtonDescriptions[16]	=
 ////////////////////////////////////////////////////////////////////////////////
 extern short KeyDescriptionToValue( // Returns 0 on success.  Returns non-zero, if
                                     // key not found.
-   char*		pszKeyDescriptor,       // In:  Description of key.
-   U32*	psScanKey)              // Out: Key value.
+   char*      pszKeyDescriptor,       // In:  Description of key.
+   U32*   psScanKey)              // Out: Key value.
 {
-   short	sRes	= 1;  // Assume failure.
+   short sRes   = 1;    // Assume failure.
 
-   U8	u8KeyIndex;
+   U8 u8KeyIndex;
    for (u8KeyIndex = 0; u8KeyIndex < NUM_ELEMENTS(g_apszKeyDescriptions); u8KeyIndex++)
    {
       if (rspStricmp(pszKeyDescriptor, g_apszKeyDescriptions[u8KeyIndex]) == 0)
       {
          // Found it!
-         *psScanKey	= u8KeyIndex;
-         sRes	= 0;
+         *psScanKey   = u8KeyIndex;
+         sRes   = 0;
 
          break;
       }
@@ -296,19 +296,19 @@ extern short KeyDescriptionToValue( // Returns 0 on success.  Returns non-zero, 
 extern short MouseButtonDescriptionToMask(   // Returns 0 on success.  Returns
                                              // non-zero, if description not
                                              // found.
-   char*		pszButtonDescriptor,             // In:  Description of button.
-   U32*	psButtonMask)                    // Out: Button mask.
+   char*      pszButtonDescriptor,             // In:  Description of button.
+   U32*   psButtonMask)                    // Out: Button mask.
 {
-   short	sRes	= 1;  // Assume failure.
+   short sRes   = 1;    // Assume failure.
 
-   short	sButtonIndex;
+   short sButtonIndex;
    for (sButtonIndex = 0; sButtonIndex < NUM_ELEMENTS(g_apszMouseButtonDescriptions); sButtonIndex++)
    {
       if (rspStricmp(pszButtonDescriptor, g_apszMouseButtonDescriptions[sButtonIndex]) == 0)
       {
          // Found it!
          *psButtonMask = MouseIndexToBitfield(sButtonIndex);
-         sRes	= 0;
+         sRes   = 0;
 
          break;
       }
@@ -322,19 +322,19 @@ extern short MouseButtonDescriptionToMask(   // Returns 0 on success.  Returns
 ////////////////////////////////////////////////////////////////////////////////
 extern short JoyButtonDescriptionToMask(  // Returns 0 on success.  Returns
                                           // non-zero, if description not found.
-   char*		pszButtonDescriptor,          // In:  Description of button.
-   U32*	psButtonMask)                 // Out: Button mask.
+   char*      pszButtonDescriptor,          // In:  Description of button.
+   U32*   psButtonMask)                 // Out: Button mask.
 {
-   short	sRes	= 1;  // Assume failure.
+   short sRes   = 1;    // Assume failure.
 
-   short	sButtonIndex;
+   short sButtonIndex;
    for (sButtonIndex = 0; sButtonIndex < NUM_ELEMENTS(g_apszJoyButtonDescriptions); sButtonIndex++)
    {
       if (rspStricmp(pszButtonDescriptor, g_apszJoyButtonDescriptions[sButtonIndex]) == 0)
       {
          // Found it!
          *psButtonMask = JoyIndexToBitfield(sButtonIndex);
-         sRes	= 0;
+         sRes   = 0;
 
          break;
       }

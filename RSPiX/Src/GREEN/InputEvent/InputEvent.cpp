@@ -20,10 +20,10 @@
 // InputEvent.CPP
 //
 // History:
-//		01/16/97 JMI	Started.
+//      01/16/97 JMI   Started.
 //
-//		01/18/97	JMI	Added rspClear*InputEvents() definitions.  They were
-//							already declared in the .h file.
+//      01/18/97   JMI   Added rspClear*InputEvents() definitions.  They were
+//                     already declared in the .h file.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -102,9 +102,9 @@ static XInputState ms_XInputState = {};      // CURRENT XInput state.
 //
 //////////////////////////////////////////////////////////////////////////////
 short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
-   RInputEvent*	pie)        // Out: Filled with input event type and details.
+   RInputEvent*   pie)        // Out: Filled with input event type and details.
 {
-   short	sGotEvent	= 1;  // Assume we have one.
+   short sGotEvent   = 1;    // Assume we have one.
 
    // If no current mouse event . . .
    if (ms_sMouseEvent == FALSE)
@@ -117,7 +117,7 @@ short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
              &ms_ieMouse.lTime,
              &ms_ieMouse.sEvent) == 1)
       {
-         ms_sMouseEvent	= TRUE;
+         ms_sMouseEvent   = TRUE;
       }
    }
 
@@ -129,7 +129,7 @@ short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
              &ms_ieKey.lKey,
              &ms_ieKey.lTime) == 1)
       {
-         ms_sKeyEvent	= TRUE;
+         ms_sKeyEvent   = TRUE;
       }
    }
 
@@ -139,15 +139,15 @@ short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
       // Pick earlier one . . .
       if (ms_ieMouse.lTime < ms_ieKey.lTime)
       {
-         *pie	= ms_ieMouse;
+         *pie   = ms_ieMouse;
          // Invalidate current mouse event.
-         ms_sMouseEvent	= FALSE;
+         ms_sMouseEvent   = FALSE;
       }
       else
       {
-         *pie	= ms_ieKey;
+         *pie   = ms_ieKey;
          // Invalidate current key event.
-         ms_sKeyEvent	= FALSE;
+         ms_sKeyEvent   = FALSE;
       }
    }
    else
@@ -155,22 +155,22 @@ short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
       // Pick whichever is available . . .
       if (ms_sMouseEvent != FALSE)
       {
-         *pie	= ms_ieMouse;
+         *pie   = ms_ieMouse;
          // Invalidate current mouse event.
-         ms_sMouseEvent	= FALSE;
+         ms_sMouseEvent   = FALSE;
       }
       else
       {
          if (ms_sKeyEvent != FALSE)
          {
-            *pie	= ms_ieKey;
+            *pie   = ms_ieKey;
             // Invalidate current key event.
-            ms_sKeyEvent	= FALSE;
+            ms_sKeyEvent   = FALSE;
          }
          else
          {
             // No event.
-            sGotEvent	= 0;
+            sGotEvent   = 0;
          }
       }
    }
@@ -187,8 +187,8 @@ short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
 void rspClearAllInputEvents(void)   // Returns nothing.
 {
    // Invalidate any stored events.
-   ms_sKeyEvent	= FALSE;
-   ms_sMouseEvent	= FALSE;
+   ms_sKeyEvent   = FALSE;
+   ms_sMouseEvent   = FALSE;
    // Empty queues.
    rspClearKeyEvents();
    rspClearMouseEvents();
@@ -202,7 +202,7 @@ void rspClearAllInputEvents(void)   // Returns nothing.
 void rspClearKeyInputEvents(void)   // Returns nothing.
 {
    // Invalidate any stored event.
-   ms_sKeyEvent	= FALSE;
+   ms_sKeyEvent   = FALSE;
    // Empty queues.
    rspClearKeyEvents();
 }
@@ -215,7 +215,7 @@ void rspClearKeyInputEvents(void)   // Returns nothing.
 void rspClearMouseInputEvents(void) // Returns nothing.
 {
    // Invalidate any stored event.
-   ms_sMouseEvent	= FALSE;
+   ms_sMouseEvent   = FALSE;
    // Empty queues.
    rspClearMouseEvents();
 }

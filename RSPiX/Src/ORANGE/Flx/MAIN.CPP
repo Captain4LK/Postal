@@ -40,7 +40,7 @@ void DumpHeader(FLX_FILE_HDR* pfilehdr);
 ///////////////////////////////////////////////////////////////////////////////
 void main(void)
 {
-//	CopyFlic("BUS_DRIV.FLI", "MYBUS.FLI");
+//   CopyFlic("BUS_DRIV.FLI", "MYBUS.FLI");
    ReadFlic("h:\\sidewalk\\jukebox\\assets\\abc\\ABC_B.FLI");
 }
 

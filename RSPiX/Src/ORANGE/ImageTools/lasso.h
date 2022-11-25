@@ -15,7 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-//	Lasso.h
+//   Lasso.h
 #ifndef LASSO_H
 #define LASSO_H
 //////////////////////////////////////////////////////////////////////////////
@@ -49,8 +49,8 @@ typedef short (*RLassoNextEvalCall)(   // Returns TRUE if the specified pixel
                                        // the empty space between shapes.
    short sX,                           // X coordinate of pixel in question.
                                        // Already clipped.
-   short	sY);                          // Y coordinate of pixel in question.
-                                       // Already clipped.
+   short sY);                            // Y coordinate of pixel in question.
+                                         // Already clipped.
 
 //////////////////////////////////////////////////////////////////////////////
 // Protos.
@@ -92,22 +92,22 @@ short rspLassoNext(  // Returns 0 if a polygon found,
    // negative if an error occurred (most likely
    // allocation problems or image bit depth mis-
    // matches).
-   RImage*	pimSrc,        // In:  Image to search in sub region sSrcX, sSrcY,
-                           // sSrcW, sSrcH.
-   RImage*	pimDst,        // In/Out: Destination image.  If too small, polygon
-                           // will be clipped.  If not yet allocated, will be
-                           // allocated to the correct minimum size.
-   short	sSrcX,            // In:  X coordinate of sub region to search.
-   short	sSrcY,            // In:  Y coordinate of sub region to search.
-   short	sSrcW,            // In:  Width of sub region to search.
-   short	sSrcH,            // In:  Height of sub region to search.
-   COLOR	clrDisjoin,       // In:  Color that separates shapes.  This is the
-                           // color that, to this function.
-                           // Cast or use U8 for 8 bit, U16 for 16 bit,
-                           // or U32 for 32 bit.
-   COLOR	clrDstEmpty,      // In:  Color that will be used to initialize
-                           // pimDst, if pimDst is allocated by this function.
-                           // Type must be same size as clrDisjoinColor/COLOR.
+   RImage*   pimSrc,        // In:  Image to search in sub region sSrcX, sSrcY,
+                            // sSrcW, sSrcH.
+   RImage*   pimDst,        // In/Out: Destination image.  If too small, polygon
+                            // will be clipped.  If not yet allocated, will be
+                            // allocated to the correct minimum size.
+   short sSrcX,              // In:  X coordinate of sub region to search.
+   short sSrcY,              // In:  Y coordinate of sub region to search.
+   short sSrcW,              // In:  Width of sub region to search.
+   short sSrcH,              // In:  Height of sub region to search.
+   COLOR clrDisjoin,         // In:  Color that separates shapes.  This is the
+                             // color that, to this function.
+                             // Cast or use U8 for 8 bit, U16 for 16 bit,
+                             // or U32 for 32 bit.
+   COLOR clrDstEmpty,        // In:  Color that will be used to initialize
+                             // pimDst, if pimDst is allocated by this function.
+                             // Type must be same size as clrDisjoinColor/COLOR.
    short* psShapeX,        // Out: X coordinate of poly relative to pimSrc 0,0;
                            // NOT relative to sSrcX.
    short* psShapeY,        // Out: Y coordinate of poly relative to pimSrc 0,0;
@@ -121,7 +121,7 @@ short rspLassoNext(  // Returns 0 if a polygon found,
                                  // instead of clrDisjoin.
 
 
-#endif	// LASSO_H
+#endif   // LASSO_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

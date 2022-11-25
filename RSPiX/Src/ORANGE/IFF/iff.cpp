@@ -20,40 +20,40 @@
 // IFF.CPP
 //
 // History:
-//		08/14/96 JMI	Started.
+//      08/14/96 JMI   Started.
 //
-//		08/30/96	MJR	Corrected AIFF form name (it's "FORM", not "AIFF").
+//      08/30/96   MJR   Corrected AIFF form name (it's "FORM", not "AIFF").
 //
-//		09/04/96	JMI	Added comment about A/RIFF.
-//							Based sizing off of chunk.lSizePos + sizeof(chunk.ulSize)
-//							instead of chunk.lDataPos so that the form type is
-//							included in the chunk.ulSize.  This made the logic a
-//							little trickier and I think it was big time silly for
-//							them to have done this.  I would guess it is b/c they
-//							figured it makes it possible to skip a chunk containing
-//							subchunks even if you don't know it is a containing
-//							chunk.
-//							EndChunk() now makes sure that chunks are padded to
-//							WORD aligned boundaries.
-//							Next() increments to WORD aligned position.
+//      09/04/96   JMI   Added comment about A/RIFF.
+//                     Based sizing off of chunk.lSizePos + sizeof(chunk.ulSize)
+//                     instead of chunk.lDataPos so that the form type is
+//                     included in the chunk.ulSize.  This made the logic a
+//                     little trickier and I think it was big time silly for
+//                     them to have done this.  I would guess it is b/c they
+//                     figured it makes it possible to skip a chunk containing
+//                     subchunks even if you don't know it is a containing
+//                     chunk.
+//                     EndChunk() now makes sure that chunks are padded to
+//                     WORD aligned boundaries.
+//                     Next() increments to WORD aligned position.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CIff				RIff
-//							CStack			RStack
-//		10/31/96	JMI	CNFile			RFile
-//							ENDIAN_BIG		BigEndian
-//							ENDIAN_LITTLE	LittleEndian
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CIff            RIff
+//                     CStack         RStack
+//      10/31/96   JMI   CNFile         RFile
+//                     ENDIAN_BIG      BigEndian
+//                     ENDIAN_LITTLE   LittleEndian
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This module handles IFF file stuff.  The API is fairly simple but requires
 // some explanation.  There are only 3 FORMs currently recognized by this
 // module:
-//		1) FORM
-//		2) RIFF
-//		3) LIST
+//      1) FORM
+//      2) RIFF
+//      3) LIST
 //
 // You must use Next() to get even the first chunk.  The first chunk after an
 // Open() or Find(".") is always the "RIFF" form (for RIFF files) or "FORM"
@@ -148,7 +148,7 @@ RIff::~RIff(void)
 //////////////////////////////////////////////////////////////////////////////
 short RIff::CreateChunk(FCC fccChunk, FCC fccForm /*= 0*/)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Attempt to allocate CHUNK for stack . . .
    PCHUNK pChunk = new CHUNK;
@@ -159,9 +159,9 @@ short RIff::CreateChunk(FCC fccChunk, FCC fccForm /*= 0*/)
       if (Write(&fccChunk, 4L) == 4L)
       {
          // Store info.
-         pChunk->fccChunk	= fccChunk;
-         pChunk->fccForm	= fccForm;
-         pChunk->lSizePos	= Tell();
+         pChunk->fccChunk   = fccChunk;
+         pChunk->fccForm   = fccForm;
+         pChunk->lSizePos   = Tell();
 
          S32 lDummySize = 0L;
          // Attempt to write 32 bit size field space . . .
@@ -224,7 +224,7 @@ short RIff::CreateChunk(FCC fccChunk, FCC fccForm /*= 0*/)
 //////////////////////////////////////////////////////////////////////////////
 short RIff::EndChunk(FCC fccChunk /*= 0*/, FCC fccForm /*= 0*/)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Get top.
    PCHUNK pChunk;
@@ -253,7 +253,7 @@ short RIff::EndChunk(FCC fccChunk /*= 0*/, FCC fccForm /*= 0*/)
       if ((lSize % 2) != 0)
       {
          // Write a pad byte.
-         U8	u8Dummy	= 0;
+         U8 u8Dummy   = 0;
          Write(&u8Dummy);
          // Increment size and current position.
          lSize++;
@@ -333,7 +333,7 @@ short RIff::Close(void)
 //////////////////////////////////////////////////////////////////////////////
 short RIff::Find(char* pszPath)  // Returns 0 on success.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (*pszPath == '.')
    {
@@ -350,11 +350,11 @@ short RIff::Find(char* pszPath)  // Returns 0 on success.
       // If IFF . . .
       if (m_endian == BigEndian)
       {
-         fccFind	= IffStr2FCC(pszPath);
+         fccFind   = IffStr2FCC(pszPath);
       }
       else
       {
-         fccFind	= RiffStr2FCC(pszPath);
+         fccFind   = RiffStr2FCC(pszPath);
       }
 
       do
@@ -365,11 +365,11 @@ short RIff::Find(char* pszPath)  // Returns 0 on success.
             // If this is a FORM . . .
             if (m_chunk.fccForm != 0)
             {
-               fccNext	= m_chunk.fccForm;
+               fccNext   = m_chunk.fccForm;
             }
             else
             {
-               fccNext	= m_chunk.fccChunk;
+               fccNext   = m_chunk.fccChunk;
             }
          }
          else
@@ -381,7 +381,7 @@ short RIff::Find(char* pszPath)  // Returns 0 on success.
       } while (sRes == 0 && fccFind != fccNext);
 
       // Skip current.
-      pszPath	+= 4;
+      pszPath   += 4;
 
       // If there's a '.' . . .
       if (*pszPath == '.')
@@ -408,7 +408,7 @@ short RIff::Find(char* pszPath)  // Returns 0 on success.
 short RIff::Next(void)  // Returns 0 if successful, 1 if no more chunks,
                         // negative on error.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    S32 lNextPos    = GetNextChunkPos(&m_chunk);
 
@@ -424,7 +424,7 @@ short RIff::Next(void)  // Returns 0 if successful, 1 if no more chunks,
       else
       {
          // No more sub chunks.
-         sRes	= 1;
+         sRes   = 1;
       }
    }
 
@@ -440,19 +440,19 @@ short RIff::Next(void)  // Returns 0 if successful, 1 if no more chunks,
             break;
 
          case 1:     // EOF.
-            sRes	= 1;
+            sRes   = 1;
             break;
 
          default:    // Error.
             TRACE("Next(): ReadChunkHeader() failed.\n");
-            sRes	= -2;
+            sRes   = -2;
             break;
          }
       }
       else
       {
          TRACE("Next(): SeekRel() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
@@ -470,7 +470,7 @@ short RIff::Next(void)  // Returns 0 if successful, 1 if no more chunks,
 short RIff::Descend(void)  // Returns 0 if successful, 1 if no subchunks,
                            // negative on error.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // We should only descend into chunks that are FORMs.
    if (m_chunk.fccForm != 0L)
@@ -479,15 +479,15 @@ short RIff::Descend(void)  // Returns 0 if successful, 1 if no subchunks,
       if (pchunk != NULL)
       {
          // Copy chunk.
-         *pchunk	= m_chunk;
+         *pchunk   = m_chunk;
          // Push onto stack . . .
          if (m_stack.Push(pchunk) == 0)
          {
             // By simply initializing these, the next Next call will take us to the
             // first subchunk.
-            m_chunk.fccChunk	= 0L;
-            m_chunk.fccForm	= 0L;
-            m_chunk.ulSize		= 4L; // Skip form type.
+            m_chunk.fccChunk   = 0L;
+            m_chunk.fccForm   = 0L;
+            m_chunk.ulSize      = 4L; // Skip form type.
             // Leave data/size position so we know where to seek from.
          }
          else
@@ -515,7 +515,7 @@ short RIff::Descend(void)  // Returns 0 if successful, 1 if no subchunks,
 
       TRACE("Descend(): Attempt to descend into a chunk that is not a form "
             "(current chunk <%s>).\n", szFCC);
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -531,20 +531,20 @@ short RIff::Descend(void)  // Returns 0 if successful, 1 if no subchunks,
 short RIff::Ascend(void)   // Returns 0 if successful, 1 if no more chunks,
                            // negative on error.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Attempt to pop stack . . .
    PCHUNK pchunk;
    if (m_stack.Pop(&pchunk) == 0)
    {
-      m_chunk	= *pchunk;
+      m_chunk   = *pchunk;
       // Destroy chunk data.
       delete pchunk;
       // By simply initializing these, the next Next call will take us to the
       // next chunk at this level.
-      m_chunk.fccChunk	= 0L;
-      m_chunk.fccForm	= 0L;
-      m_chunk.ulSize		= 0L;
+      m_chunk.fccChunk   = 0L;
+      m_chunk.fccForm   = 0L;
+      m_chunk.ulSize      = 0L;
       // Leave data position so we know where to seek from.
    }
    else
@@ -563,11 +563,11 @@ short RIff::Ascend(void)   // Returns 0 if successful, 1 if no more chunks,
 //////////////////////////////////////////////////////////////////////////////
 void RIff::Init()
 {
-   m_chunk.fccChunk	= 0L;
-   m_chunk.fccForm	= 0L;
-   m_chunk.ulSize		= 0L;
-   m_chunk.lDataPos	= 0L;
-   m_chunk.lSizePos	= 0L;
+   m_chunk.fccChunk   = 0L;
+   m_chunk.fccForm   = 0L;
+   m_chunk.ulSize      = 0L;
+   m_chunk.lDataPos   = 0L;
+   m_chunk.lSizePos   = 0L;
 
    // Clean up remaining stack.
    PCHUNK pchunk;
@@ -590,7 +590,7 @@ void RIff::Init()
 //////////////////////////////////////////////////////////////////////////////
 short RIff::RelSeek(S32 lPos)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Determine distance to destination.
    S32 lDistance   = lPos - Tell();
@@ -602,7 +602,7 @@ short RIff::RelSeek(S32 lPos)
       else
       {
          TRACE("RelSeek(): CNFile::Seek() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
@@ -617,7 +617,7 @@ short RIff::RelSeek(S32 lPos)
 short RIff::IsForm(  // Returns TRUE if fcc is a form; FALSE otherwise.
    FCC fcc)
 {
-   FCC*	pfcc	= (m_endian == LittleEndian)	? ms_afccRiffForms
+   FCC*   pfcc   = (m_endian == LittleEndian)   ? ms_afccRiffForms
                                                 : ms_afccIffForms;
    while (*pfcc != 0 && *pfcc != fcc)
    {
@@ -639,21 +639,21 @@ short RIff::ReadChunkHeader(void)   // Returns 0 on success.
    Read(&(m_chunk.ulSize));
 
    // Get size and data position.
-   m_chunk.lDataPos	= Tell();
-   m_chunk.lSizePos	= m_chunk.lDataPos - sizeof(m_chunk.ulSize);
+   m_chunk.lDataPos   = Tell();
+   m_chunk.lSizePos   = m_chunk.lDataPos - sizeof(m_chunk.ulSize);
 
    // Check if this is a form.
    if (IsForm(m_chunk.fccChunk) != FALSE)
    {
       Read(&m_chunk.fccForm);
-      m_chunk.lDataPos	+= sizeof(m_chunk.fccForm);
+      m_chunk.lDataPos   += sizeof(m_chunk.fccForm);
    }
    else
    {
-      m_chunk.fccForm	= 0L;
+      m_chunk.fccForm   = 0L;
    }
 
-   short sRes	= 0;
+   short sRes   = 0;
    // Error only if CNFile thinks so.
    if (Error() == 0)
    {
@@ -670,7 +670,7 @@ short RIff::ReadChunkHeader(void)   // Returns 0 on success.
    else
    {
       TRACE("ReadChunkHeader(): CNFile::Error() reported an error.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;

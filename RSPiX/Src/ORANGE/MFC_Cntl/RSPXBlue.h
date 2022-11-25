@@ -23,16 +23,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Macros.
 ///////////////////////////////////////////////////////////////////////////////
-#define DllExport	__declspec( dllexport )
-#define DllImport	__declspec( dllimport )
+#define DllExport   __declspec( dllexport )
+#define DllImport   __declspec( dllimport )
 
 #ifdef _WINDLL
-   #define DLL2EXE	DllExport
-   #define EXE2DLL	DllImport
+   #define DLL2EXE   DllExport
+   #define EXE2DLL   DllImport
 #else
-   #define DLL2EXE	DllImport
-   #define EXE2DLL	DllExport
-#endif	// _WINDLL
+   #define DLL2EXE   DllImport
+   #define EXE2DLL   DllExport
+#endif   // _WINDLL
 
 ///////////////////////////////////////////////////////////////////////////////
 // Blue Includes.
@@ -101,9 +101,9 @@ short Blu_AddCritical(CRITICALL cc, U32 ulUser)
 { return ::Blu_AddCritical(cc, ulUser); }
 // BDEBUG.H
       #undef TRACE   // We will use MFC's TRACE
-      #define TRACE	::AfxTrace("%s(%d) :", __FILE__, __LINE__), ::AfxTrace
+      #define TRACE   ::AfxTrace("%s(%d) :", __FILE__, __LINE__), ::AfxTrace
       #undef STRACE
-      #define STRACE	::AfxTrace
+      #define STRACE   ::AfxTrace
 // BDIALOG.H
 short Blu_MsgBox(USHORT usFlags, char *pszTitle, char *pszFrmt, ...)
 {
@@ -119,36 +119,36 @@ short Blu_MsgBox(USHORT usFlags, char *pszTitle, char *pszFrmt, ...)
 }
 short Blu_OpenBox(char* pszBoxTitle, char *pszFileName, short sStrSize)
 { return ::Blu_OpenBox(pszBoxTitle, pszFileName, sStrSize); }
-short Blu_MultiOpenBox(	char* pszBoxTitle,
-                        char* pszFileNameMemory,
-                        S32 lNumBytes,
-                        char **ppszFileNames,
-                        short sMaxPtrs,
-                        short* psNumFiles
-                        )
+short Blu_MultiOpenBox(   char* pszBoxTitle,
+                          char* pszFileNameMemory,
+                          S32 lNumBytes,
+                          char **ppszFileNames,
+                          short sMaxPtrs,
+                          short* psNumFiles
+                          )
 {
-   return ::Blu_MultiOpenBox(	pszBoxTitle, pszFileNameMemory,
-                              lNumBytes, ppszFileNames,
-                              sMaxPtrs, psNumFiles);
+   return ::Blu_MultiOpenBox(   pszBoxTitle, pszFileNameMemory,
+                                lNumBytes, ppszFileNames,
+                                sMaxPtrs, psNumFiles);
 }
 // BDISPLAY.H
 short Blu_CreateDisplay(S32 lWidth, S32 lHeight, short sColorDepth)
 { return ::Blu_CreateDisplay(lWidth, lHeight, sColorDepth); }
-void Blu_SetRedrawBuf(	void* pvBuf,
-                        S32 lBufW, S32 lBufH,
-                        S32 sx, S32 sy,
-                        S32 dx, S32 dy,
-                        S32 lBltW, S32 lBltH,
-                        short sColorDepth,
-                        short sVertFlip = FALSE)
+void Blu_SetRedrawBuf(   void* pvBuf,
+                         S32 lBufW, S32 lBufH,
+                         S32 sx, S32 sy,
+                         S32 dx, S32 dy,
+                         S32 lBltW, S32 lBltH,
+                         short sColorDepth,
+                         short sVertFlip = FALSE)
 {
-   ::Blu_SetRedrawBuf(	pvBuf, lBufW, lBufH, sx, sy, dx, dy,
-                        lBltW, lBltH, sColorDepth, sVertFlip);
+   ::Blu_SetRedrawBuf(   pvBuf, lBufW, lBufH, sx, sy, dx, dy,
+                         lBltW, lBltH, sColorDepth, sVertFlip);
 }
-void Blu_SetDisplayBuf(	void* pvBuf, S32 lWidth, S32 lHeight,
-                        short sColorDepth, short sVertFlip = FALSE)
+void Blu_SetDisplayBuf(   void* pvBuf, S32 lWidth, S32 lHeight,
+                          short sColorDepth, short sVertFlip = FALSE)
 { ::Blu_SetDisplayBuf(pvBuf, lWidth, lHeight, sColorDepth, sVertFlip); }
-U16*	Blu_GetPaletteTranslation(void)
+U16*   Blu_GetPaletteTranslation(void)
 { return ::Blu_GetPaletteTranslation(); }
 short Blu_UpdateDisplay(S32 sx, S32 sy,
                         S32 dx, S32 dy,
@@ -224,13 +224,13 @@ S32 Blu_GetSoundOutPaneSize(void)
 { return ::Blu_GetSoundOutPaneSize(); }
 void Blu_SetSoundOutPaneSize(S32 lPaneSize)
 { ::Blu_SetSoundOutPaneSize(lPaneSize); }
-short Blu_OpenSoundOut(	U32 ulSampleRate,
-                        USHORT usBitsPerSample,
-                        USHORT usNumChannels)
+short Blu_OpenSoundOut(   U32 ulSampleRate,
+                          USHORT usBitsPerSample,
+                          USHORT usNumChannels)
 {
-   return ::Blu_OpenSoundOut(	ulSampleRate,
-                              usBitsPerSample,
-                              usNumChannels);
+   return ::Blu_OpenSoundOut(   ulSampleRate,
+                                usBitsPerSample,
+                                usNumChannels);
 }
 short Blu_CloseSoundOut(void)
 { return ::Blu_CloseSoundOut(); }
@@ -258,7 +258,7 @@ SYSINFO* GetSysInfo(void)
 
 // Additional non-blue.
 // Returns a CWnd* to the RSPiX window.
-CWnd*	GetBlueWindow();
+CWnd*   GetBlueWindow();
 
 // Returns a CWnd* to the palette window.
 CWnd* GetPaletteWindow();

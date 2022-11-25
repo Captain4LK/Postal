@@ -19,12 +19,12 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		08/11/97 JMI	Stole infrastructure from SoundThing.
+//      08/11/97 JMI   Stole infrastructure from SoundThing.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This CThing-derived class will relay sound volumes based on
-//	DistanceToVolume() (i.e., the distance to the ear (usually the local dude))
+//   DistanceToVolume() (i.e., the distance to the ear (usually the local dude))
 // to the selected CSoundThing.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ bool m_bEnabled;
 
 short m_sSuspend;                         // Suspend flag
 
-State	m_state;                            // Current state.
+State m_state;                              // Current state.
 
 U16 m_idParent;                           // Parent CSoundThing.
 
@@ -81,13 +81,13 @@ CSndRelay(CRealm* pRealm)
    : CThing(pRealm, CSndRelayID)
 {
    m_bInitiallyEnabled = true;
-   m_bEnabled	= m_bInitiallyEnabled;
+   m_bEnabled   = m_bInitiallyEnabled;
 
-   m_sSuspend	= 0;
+   m_sSuspend   = 0;
 
-   m_state		= State_Happy;
+   m_state      = State_Happy;
 
-   m_idParent	= CIdBank::IdNil;
+   m_idParent   = CIdBank::IdNil;
 }
 
 public:
@@ -173,14 +173,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -191,13 +191,13 @@ void EditRender(void);
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // Internal functions

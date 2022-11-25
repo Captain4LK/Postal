@@ -19,24 +19,24 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/24/97	JMI	Changed declaration of m_sprite from CAlphaSprite2 to
-//							CSprite2.
+//      02/24/97   JMI   Changed declaration of m_sprite from CAlphaSprite2 to
+//                     CSprite2.
 //
-//		03/05/97 BRH	Added ms_sProjectVelocity as default velocity to throw
-//							other objects nearby.
+//      03/05/97 BRH   Added ms_sProjectVelocity as default velocity to throw
+//                     other objects nearby.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		06/11/97 BRH	Added m_u16ShooterID to store the shooter as it
-//							passes the information aS32 to the explosion message.
+//      06/11/97 BRH   Added m_u16ShooterID to store the shooter as it
+//                     passes the information aS32 to the explosion message.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/30/97	JMI	Added m_u16ExceptID (an ID to except when sending
-//							explosion messages).
+//      07/30/97   JMI   Added m_u16ExceptID (an ID to except when sending
+//                     explosion messages).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -87,8 +87,8 @@ S32 m_lTimer;                                         // General purpose timer
 
 S32 m_lPrevTime;                                      // Previous update time
 
-CSprite2	m_sprite;                                    // Sprite
-ChannelAA*	m_pAnimChannel;                           // Alpha Explosion animation stored as a channel
+CSprite2 m_sprite;                                      // Sprite
+ChannelAA*   m_pAnimChannel;                           // Alpha Explosion animation stored as a channel
 
 short m_sSuspend;                                     // Suspend flag
 
@@ -109,8 +109,8 @@ public:
 CExplode(CRealm* pRealm)
    : CThing(pRealm, CExplodeID)
 {
-   m_sSuspend		= 0;
-   m_u16ExceptID	= CIdBank::IdNil;
+   m_sSuspend      = 0;
+   m_u16ExceptID   = CIdBank::IdNil;
 }
 
 public:

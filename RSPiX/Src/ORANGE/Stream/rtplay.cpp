@@ -20,7 +20,7 @@
 // RtPlay.CPP
 //
 // History:
-//		09/21/95 JMI	Started.
+//      09/21/95 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -39,15 +39,15 @@
 // if you have one, that displays a warning if you get a transition not in
 // this table).
 //
-//	From\To	| Stopped | Starting | Begin | Playing | Aborting | Ending | Pause
-//	---------+---------+----------+-------+---------+----------+--------+------
-// Stopped	| --      | Yes      | No    | No      | No       | No     | No
-// Starting	| No      | --       | Yes   | No      | Yes      | No     | No
-// Begin		| No      | No       | --    | Yes     | Yes      | No     | No
-// Playing	| No      | No       | No    | --      | Yes      | Yes    | Yes
-// Aborting	| Yes     | No       | No    | No      | --       | No     | No
-// Ending	| Yes     | No       | No    | No      | Yes      | --     | No
-// Pause		| No      | No       | No    | Yes     | Yes      | No     | --
+//   From\To   | Stopped | Starting | Begin | Playing | Aborting | Ending | Pause
+//   ---------+---------+----------+-------+---------+----------+--------+------
+// Stopped   | --      | Yes      | No    | No      | No       | No     | No
+// Starting   | No      | --       | Yes   | No      | Yes      | No     | No
+// Begin      | No      | No       | --    | Yes     | Yes      | No     | No
+// Playing   | No      | No       | No    | --      | Yes      | Yes    | Yes
+// Aborting   | Yes     | No       | No    | No      | --       | No     | No
+// Ending   | Yes     | No       | No    | No      | Yes      | --     | No
+// Pause      | No      | No       | No    | Yes     | Yes      | No     | --
 //
 // Currently there are a total of 13 transitions that could be handled by
 // your handler.
@@ -85,20 +85,20 @@
 //////////////////////////////////////////////////////////////////////////////
 // If behind more than MAX_LAG a TRACE displays how far behind we are in
 // debug build only.
-#define MAX_LAG	500L  // One half second.
+#define MAX_LAG   500L  // One half second.
 
 // Default size for file window.
-#define DEF_WINDOW_SIZE			(60L * 1024L)
-#define DEF_INPUTPANE_SIZE		(20L * 1024L)
-#define DEF_FILTERPANE_SIZE	(20L * 1024L)
+#define DEF_WINDOW_SIZE         (60L * 1024L)
+#define DEF_INPUTPANE_SIZE      (20L * 1024L)
+#define DEF_FILTERPANE_SIZE   (20L * 1024L)
 
 // Commands from the RTF.
-#define CMD_INIT				0x0000
-#define CMD_SUSPENDREADS	0x0001
-#define CMD_RESUMEREADS		0x0002
-#define CMD_EOC				0x0003
-#define CMD_ENDING			0x0004
-#define CMD_STREAMHIT		0x0005
+#define CMD_INIT            0x0000
+#define CMD_SUSPENDREADS   0x0001
+#define CMD_RESUMEREADS      0x0002
+#define CMD_EOC            0x0003
+#define CMD_ENDING         0x0004
+#define CMD_STREAMHIT      0x0005
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -120,9 +120,9 @@
 CRtPlay::CRtPlay()
 {
    // These values are set only on construction, or by the user.
-   m_lWindowSize		= DEF_WINDOW_SIZE;
-   m_lInputPaneSize	= DEF_INPUTPANE_SIZE;
-   m_lFilterPaneSize	= DEF_FILTERPANE_SIZE;
+   m_lWindowSize      = DEF_WINDOW_SIZE;
+   m_lInputPaneSize   = DEF_INPUTPANE_SIZE;
+   m_lFilterPaneSize   = DEF_FILTERPANE_SIZE;
 
    Set();
 }
@@ -149,7 +149,7 @@ CRtPlay::~CRtPlay()
 void CRtPlay::Set(void)
 {
    // Set data handler (where we get direction from the RT file).
-   m_dispatch.SetDataHandler(	RT_TYPE_RTFINFO, RtInfoCallStatic);
+   m_dispatch.SetDataHandler(   RT_TYPE_RTFINFO, RtInfoCallStatic);
    m_dispatch.SetUserVal(RT_TYPE_RTFINFO, (S32)this);
 
    // Let resource know who the dispatcher is.
@@ -166,7 +166,7 @@ void CRtPlay::Set(void)
    // Let file win know what time base to use.
    m_filewin.SetTimeFunc(CRtTime::GetTime, (S32)&m_rttime);
 
-   m_usState	= RT_STATE_STOPPED;
+   m_usState   = RT_STATE_STOPPED;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -188,10 +188,10 @@ void CRtPlay::Reset(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::CreateCmd(USHORT usCmd, S32 lTime, S32 lParm1, S32 lParm2)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
    S32 lSize = sizeof(usCmd) + sizeof(lParm1) + sizeof(lParm2);
 
-   UCHAR*	puc	= (UCHAR*)malloc(lSize);
+   UCHAR*   puc   = (UCHAR*)malloc(lSize);
 
    // If successful . . .
    if (puc != NULL)
@@ -237,10 +237,10 @@ short CRtPlay::CreateCmd(USHORT usCmd, S32 lTime, S32 lParm1, S32 lParm2)
 // Returns RET_FREE if puc should be freed and RET_DONTFREE, otherwise.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtPlay::RtInfoCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-                           S32 lTime)
+short CRtPlay::RtInfoCall(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                             S32 lTime)
 {
-   short	sError	= 0;
+   short sError   = 0;
 
    // If this is the init/first chunk . . .
    if (ucFlags & RT_FLAG_INIT)
@@ -330,7 +330,7 @@ short CRtPlay::RtInfoCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          // Get the channels that are done so far.
          file.Read(&ulChannels);
          // Add to done mask.
-         m_ulChannelsDone	|= ulChannels;
+         m_ulChannelsDone   |= ulChannels;
          // If all current channels done . . .
          if ((m_ulChannelsDone & m_filter.GetFilter()) == m_filter.GetFilter())
          {
@@ -393,8 +393,8 @@ short CRtPlay::RtInfoCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtPlay::RtInfoCallStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                                 UCHAR ucFlags, S32 lTime, S32 l_pRtPlay)
+short CRtPlay::RtInfoCallStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                                   UCHAR ucFlags, S32 lTime, S32 l_pRtPlay)
 {
    return ((CRtPlay*)l_pRtPlay)->RtInfoCall(puc, lSize, usType, ucFlags, lTime);
 }
@@ -408,7 +408,7 @@ short CRtPlay::RtInfoCallStatic(	UCHAR* puc, S32 lSize, USHORT usType,
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::SetState(USHORT usState)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If new state . . .
    if (m_usState != usState)
@@ -420,24 +420,24 @@ short CRtPlay::SetState(USHORT usState)
       // macros, you'll never see this until you figure out that there's
       // a problem.
       USHORT usMsg = usState;
-      short	sNum	= m_dispatch.SendHandlerMessage(usMsg);
+      short sNum   = m_dispatch.SendHandlerMessage(usMsg);
 
       if (sNum == 0)
       {
          // All message handlers okayed the new state.  Change it.
-         m_usState	= usState;
+         m_usState   = usState;
       }
       else
       {
          TRACE("SetState(): Attempt to change to %s state rejected by %d "
                "handlers!\n",
-               (usState == RT_STATE_STOPPED	? "STOPPED"		:
+               (usState == RT_STATE_STOPPED   ? "STOPPED"      :
                 (usState == RT_STATE_STARTING ? "STARTING"   :
                  (usState == RT_STATE_BEGIN    ? "BEGIN"      :
-                  (usState == RT_STATE_PLAYING	? "PLAYING"		:
+                  (usState == RT_STATE_PLAYING   ? "PLAYING"      :
                    (usState == RT_STATE_PAUSE    ? "PAUSE"      :
                     (usState == RT_STATE_ABORTING ? "ABORTING"   :
-                     (usState == RT_STATE_ENDING	? "ENDING"		: "UNKNOWN"
+                     (usState == RT_STATE_ENDING   ? "ENDING"      : "UNKNOWN"
                      ) ) ) ) ) ) ), sNum);
          // At least one handler rejected the state change.
          sRes = 1;
@@ -455,7 +455,7 @@ short CRtPlay::SetState(USHORT usState)
 //////////////////////////////////////////////////////////////////////////////
 void CRtPlay::Critical(void)
 {
-   short	sError	= 0;
+   short sError   = 0;
 
    switch (m_usState)
    {
@@ -534,7 +534,7 @@ void CRtPlay::Critical(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Open(char* pszFileName)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (Close() == 0)
    {
@@ -584,7 +584,7 @@ short CRtPlay::Open(char* pszFileName)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Close(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If stopped . . .
    if (m_usState == RT_STATE_STOPPED)
@@ -618,7 +618,7 @@ short CRtPlay::Close(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Play(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If stopped . . .
    if (m_usState == RT_STATE_STOPPED)
@@ -626,7 +626,7 @@ short CRtPlay::Play(void)
       // Set the time to 0.
       m_rttime.SetTime(0L);
       // Start with no channels done.
-      m_ulChannelsDone	= 0;
+      m_ulChannelsDone   = 0;
 
       // Attempt to start the file window . . .
       if (m_filewin.Start() == 0)
@@ -706,7 +706,7 @@ short CRtPlay::Play(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Abort(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If not stopped . . .
    if (m_usState != RT_STATE_STOPPED)
@@ -762,7 +762,7 @@ short CRtPlay::Abort(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Pause(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If playing . . .
    if (m_usState == RT_STATE_PLAYING)
@@ -801,7 +801,7 @@ short CRtPlay::Pause(void)
 //////////////////////////////////////////////////////////////////////////////
 short CRtPlay::Resume(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (m_usState == RT_STATE_PAUSE)
    {

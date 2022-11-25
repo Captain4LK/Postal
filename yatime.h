@@ -19,30 +19,30 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/22/97 MJR	Started.
+//      01/22/97 MJR   Started.
 //
-//		04/18/97	JMI	Added Suspend() and Resume().
-//							I wasn't sure how to handle when Update() was passed a
-//							forced elapsed time while the time was suspended.  The two
-//							options are:
-//							1) Ignore the forced time and keep suspended anyway.
-//							2) Force the time to advance even though we're suspended.
-//							I chose 1.
+//      04/18/97   JMI   Added Suspend() and Resume().
+//                     I wasn't sure how to handle when Update() was passed a
+//                     forced elapsed time while the time was suspended.  The two
+//                     options are:
+//                     1) Ignore the forced time and keep suspended anyway.
+//                     2) Force the time to advance even though we're suspended.
+//                     I chose 1.
 //
-//		05/08/97	JMI	Set MaxElapsedRealTime to 200 (was 1250).
+//      05/08/97   JMI   Set MaxElapsedRealTime to 200 (was 1250).
 //
-//		06/05/97	JMI	Changed MaxElapsedRealTime to 67 (15 FPS) (was 200).
+//      06/05/97   JMI   Changed MaxElapsedRealTime to 67 (15 FPS) (was 200).
 //
-//		06/09/97	JMI	Put MaxElapsedRealTime back to 200.
+//      06/09/97   JMI   Put MaxElapsedRealTime back to 200.
 //
-//		06/26/97 MJR	MaxElapsedRealTime only applies to real time (its name was
-//							changed to reflect this).  When a forced elapsed time is
-//							being used, that forced time is not limited in any way.
+//      06/26/97 MJR   MaxElapsedRealTime only applies to real time (its name was
+//                     changed to reflect this).  When a forced elapsed time is
+//                     being used, that forced time is not limited in any way.
 //
-//		07/14/97 MJR	Renamed module to yatime.cpp/.h to avoid conflicts with
-//							<time.h>, which are only conflicts because the VC++
-//							compiler doesn't properly differentiate between #include's
-//							using <> and "".
+//      07/14/97 MJR   Renamed module to yatime.cpp/.h to avoid conflicts with
+//                     <time.h>, which are only conflicts because the VC++
+//                     compiler doesn't properly differentiate between #include's
+//                     using <> and "".
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef YATIME_H
@@ -89,8 +89,8 @@ S32 m_lResetTime;
 S32 m_lLastTime;
 S32 m_lGameTime;
 S32 m_lForceInterval;
-short	m_sNumSuspends;            // Number of Suspend()s that have occurred w/o
-                                 // corresponding Resume()s.
+short m_sNumSuspends;              // Number of Suspend()s that have occurred w/o
+                                   // corresponding Resume()s.
 
 //---------------------------------------------------------------------------
 // Functions
@@ -123,7 +123,7 @@ void Reset(void)
    m_lLastTime = m_lResetTime;
    m_lGameTime = 0;
    m_lForceInterval = 0;
-   m_sNumSuspends	= 0;
+   m_sNumSuspends   = 0;
 }
 
 
@@ -168,7 +168,7 @@ void Update(
    // If suspended . . .
    if (m_sNumSuspends > 0)
    {
-      m_lLastTime	= lNewTime;
+      m_lLastTime   = lNewTime;
    }
 
    // Calculate elapsed time since last update

@@ -97,8 +97,8 @@ extern short   ConvertFromFSPR1(RImage* pImage);
 extern short   ConvertToFSPR1(RImage* pImage);
 extern short   DeleteFSPR1(RImage* pImage);
 
-void	LinkImage();
-void	LinkImage()
+void   LinkImage();
+void   LinkImage()
 {
    RImage* pim = NULL;
    ConvertFromFSPR8(pim);
@@ -153,12 +153,12 @@ RInitBLiT::~RInitBLiT()
    delete pimScreenBuffer;
    delete pimScreenVisible;
    delete pimScreenBackPlane;
-//	TRACE("BLiT has deceased\n");
+//   TRACE("BLiT has deceased\n");
 }
 
-RImage*	RInitBLiT::pimScreenBuffer = NULL;
+RImage*   RInitBLiT::pimScreenBuffer = NULL;
 RImage*  RInitBLiT::pimScreenVisible = NULL;
-RImage*	RInitBLiT::pimScreenBackPlane = NULL;
+RImage*   RInitBLiT::pimScreenBackPlane = NULL;
 
 // this function is a way to refer to buffers in the new BLiT:
 // Note that a dib buffer MUST return a negative pitch!
@@ -178,9 +178,9 @@ void rspNameBuffers(RImage** ppimMemBuf, RImage** ppimVidBuf, RImage** ppimBackB
       // If not already locked . . .
       if (!gsBufferLocked)
       {
-         void*	pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
-                        // clear RInitBlit::pimScreenBuffer->m_pData right after
-                        // this the way we used to).
+         void*   pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
+                          // clear RInitBlit::pimScreenBuffer->m_pData right after
+                          // this the way we used to).
 
          // Really all we get out of this is the pitch.
          if (rspLockVideoBuffer(&pvTmp, &((*ppimMemBuf)->m_lPitch)) == 0)
@@ -204,9 +204,9 @@ void rspNameBuffers(RImage** ppimMemBuf, RImage** ppimVidBuf, RImage** ppimBackB
       // If not already locked . . .
       if (!gsBufferLocked)
       {
-         void*	pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
-                        // clear RInitBlit::pimScreenVisible->m_pData right after
-                        // this the way we used to).
+         void*   pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
+                          // clear RInitBlit::pimScreenVisible->m_pData right after
+                          // this the way we used to).
 
          // Really all we get out of this is the pitch.
          if (rspLockVideoPage(&pvTmp, &((*ppimVidBuf)->m_lPitch)) == 0)
@@ -230,9 +230,9 @@ void rspNameBuffers(RImage** ppimMemBuf, RImage** ppimVidBuf, RImage** ppimBackB
       // If not already locked . . .
       if (!gsBufferLocked)
       {
-         void*	pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
-                        // clear RInitBlit::pimScreenBackPlane->m_pData right after
-                        // this the way we used to).
+         void*   pvTmp;   // JMI:  Use a temp var (otherwise we end up having to
+                          // clear RInitBlit::pimScreenBackPlane->m_pData right after
+                          // this the way we used to).
 
          // Really all we get out of this is the pitch.
          if (rspLockVideoFlipPage(&pvTmp, &((*ppimBackBuf)->m_lPitch)) == 0)
@@ -253,7 +253,7 @@ RInitBLiT RStartBlittingForFun;     // only included once, of course!
 
 // For your convenience, this lets you emulate normal windows static colors...
 //
-//#include ".h"	// need the macro
+//#include ".h"   // need the macro
 
 short rspSetWindowColors()
 {
@@ -278,17 +278,17 @@ void rspWaitForClick(short sWait)
          (sWait==2) ? "the right" :
          "any");
 
-   do	{
+   do   {
       rspGetMouse(&sDummy, &sDummy, &sB);
       rspDoSystem();
    } while ((sB & sWait)!=0);
 
-   do	{
+   do   {
       rspGetMouse(&sDummy, &sDummy, &sB);
       rspDoSystem();
    } while ((sB & sWait)==0);
 
-   do	{
+   do   {
       rspGetMouse(&sDummy, &sDummy, &sB);
       rspDoSystem();
    } while ((sB & sWait)!=0);
@@ -301,8 +301,8 @@ class RCompressedImageData
 public:
 USHORT usCompType;      // = FSPR8 image type
 USHORT usSourceType;       // uncompressed Image pre-compressed type
-UCHAR*	pCBuf;         // Start of compressed picture data, 128-aligned, NULL for monochrome
-UCHAR*	pCMem;
+UCHAR*   pCBuf;         // Start of compressed picture data, 128-aligned, NULL for monochrome
+UCHAR*   pCMem;
 UCHAR* pControlBlock;   // 32-aligned run length code for compressed BLiT
 UCHAR** pLineArry;      // 32-aligned, arry of ptrs to pCBuf scanlines, 32-bit align assumed
 UCHAR** pCtlArry;       // 32-aligned, arry of offset ptrs into CtlBlock
@@ -324,9 +324,9 @@ RCompressedImageData()
 };
 
 // for your convenience:
-void	rspSetBMPColors(RImage* pim, short sStartIndex, short sNum)
+void   rspSetBMPColors(RImage* pim, short sStartIndex, short sNum)
 {
-#ifdef	_DEBUG
+#ifdef   _DEBUG
 
    // Figure out later how to tell if the source type was BMP8...
    // Actually, we ONLY need to worry about type FSPR8
@@ -347,15 +347,15 @@ void	rspSetBMPColors(RImage* pim, short sStartIndex, short sNum)
 
 #endif
 
-   typedef	struct
+   typedef   struct
    {
-      UCHAR	b;
+      UCHAR b;
       UCHAR g;
       UCHAR r;
       UCHAR a;
-   }	RGB;
+   }   RGB;
 
-   RGB*	pPal = (RGB*)pim->m_pPalette->m_pData;
+   RGB*   pPal = (RGB*)pim->m_pPalette->m_pData;
 
    rspSetPaletteEntries(sStartIndex, sNum, &pPal[sStartIndex].r,
                         &pPal[sStartIndex].g, &pPal[sStartIndex].b, sizeof(RGB));
@@ -364,7 +364,7 @@ void	rspSetBMPColors(RImage* pim, short sStartIndex, short sNum)
 }
 
 // This is the official composite buffer of the OS
-short	rspLockBuffer()
+short   rspLockBuffer()
 {
 
    if (!gsBufferLocked) // we haven't actually locked it yet!
@@ -393,11 +393,11 @@ short	rspLockBuffer()
 }
 
 // This is the official OS composite buffer
-short	rspUnlockBuffer()
+short   rspUnlockBuffer()
 {
    gsBufferLocked--;
 
-#ifdef	_DEBUG
+#ifdef   _DEBUG
 
    if (gsBufferLocked < 0)
    {
@@ -419,7 +419,7 @@ short	rspUnlockBuffer()
 }
 
 // This is the hardware video screen
-short	rspLockScreen()
+short   rspLockScreen()
 {
    if (!gsScreenLocked) // we haven't actually locked it yet!
    {
@@ -447,12 +447,12 @@ short	rspLockScreen()
    return 0;
 }
 
-short	rspUnlockScreen()
+short   rspUnlockScreen()
 {
 
    gsScreenLocked--;
 
-#ifdef	_DEBUG
+#ifdef   _DEBUG
 
    if (gsScreenLocked < 0)
    {
@@ -474,14 +474,14 @@ short	rspUnlockScreen()
 
 /////////////////////////////////////////////////////////////////////////
 //
-//		General Locking - help the user know how to lock / unlock in a
+//      General Locking - help the user know how to lock / unlock in a
 //    general case:
 //
 /////////////////////////////////////////////////////////////////////////
 
 // This locks the required buffer.
 // NOTE: will NOT be appropriate for an rspUpdateDisplay scenario!
-short	rspGeneralLock(RImage* pimDst)
+short   rspGeneralLock(RImage* pimDst)
 {
    ASSERT(pimDst);
 
@@ -517,7 +517,7 @@ short	rspGeneralLock(RImage* pimDst)
 
 // This locks the required buffer.
 // NOTE: will NOT be appropriate for an rspUpdateDisplay scenario!
-short	rspGeneralUnlock(RImage* pimDst)
+short   rspGeneralUnlock(RImage* pimDst)
 {
    ASSERT(pimDst);
 

@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	UnixCyan.h
+//   UnixCyan.h
 //
 // History:
-//		06/01/04 RCG     Initial add.
+//      06/01/04 RCG     Initial add.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef CYAN
 #define CYAN
@@ -63,29 +63,29 @@ void rspSetWin32StaticColors(
 ///////////////////////////////////////////////////////////////////////////////
 
 // MsgBox button flags and return types.
-#define RSP_MB_BUT_OK					0x0000
-#define RSP_MB_BUT_OKCANCEL			0x0001
-#define RSP_MB_BUT_ABORTRETRYIGNORE	0x0002
-#define RSP_MB_BUT_YESNOCANCEL		0x0003
-#define RSP_MB_BUT_YESNO				0x0004
-#define RSP_MB_BUT_RETRYCANCEL		0x0005
-#define RSP_MB_BUT_MASK					0x000F
+#define RSP_MB_BUT_OK               0x0000
+#define RSP_MB_BUT_OKCANCEL         0x0001
+#define RSP_MB_BUT_ABORTRETRYIGNORE   0x0002
+#define RSP_MB_BUT_YESNOCANCEL      0x0003
+#define RSP_MB_BUT_YESNO            0x0004
+#define RSP_MB_BUT_RETRYCANCEL      0x0005
+#define RSP_MB_BUT_MASK               0x000F
 
 // MsgBox icon flags.
-#define RSP_MB_ICN_STOP					0x0010
-#define RSP_MB_ICN_QUERY				0x0020
-#define RSP_MB_ICN_EXCLAIM				0x0030
-#define RSP_MB_ICN_INFO					0x0040
-#define RSP_MB_ICN_MASK					0x00F0
+#define RSP_MB_ICN_STOP               0x0010
+#define RSP_MB_ICN_QUERY            0x0020
+#define RSP_MB_ICN_EXCLAIM            0x0030
+#define RSP_MB_ICN_INFO               0x0040
+#define RSP_MB_ICN_MASK               0x00F0
 
 // MsgBox return values.
-#define RSP_MB_RET_OK					0x0000
-#define RSP_MB_RET_CANCEL				0x0001
-#define RSP_MB_RET_ABORT				0x0002
-#define RSP_MB_RET_RETRY				0x0003
-#define RSP_MB_RET_IGNORE				0x0004
-#define RSP_MB_RET_YES					0x0005
-#define RSP_MB_RET_NO					0x0006
+#define RSP_MB_RET_OK               0x0000
+#define RSP_MB_RET_CANCEL            0x0001
+#define RSP_MB_RET_ABORT            0x0002
+#define RSP_MB_RET_RETRY            0x0003
+#define RSP_MB_RET_IGNORE            0x0004
+#define RSP_MB_RET_YES               0x0005
+#define RSP_MB_RET_NO               0x0006
 
 // Display a message (with buttons and/or icon if specified).
 extern short rspMsgBox( // Returns one of the macro defined RSP_MB_RET_*.
@@ -137,10 +137,10 @@ extern short rspMsgBox( // Returns one of the macro defined RSP_MB_RET_*.
 ////////////////////////////////////////////////////////////////////////////////
 extern short rspOpenBox(                        // Returns 0 if successfull, non-zero otherwise
    const char* pszBoxTitle,                     // In:  Title of box
-   const char*	pszDefaultPath,                  // In:  Default directory and file
+   const char*   pszDefaultPath,                  // In:  Default directory and file
    char* pszSelectedFile,                       // Out: File that user selected
    short sSelectedFileBufSize,                  // In:  Size of buffer pointed to by pszSelectedFile
-   const char*	pszFilter = NULL);               // In:  Filename filter or NULL for none
+   const char*   pszFilter = NULL);               // In:  Filename filter or NULL for none
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -151,10 +151,10 @@ extern short rspOpenBox(                        // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 extern short rspSaveBox(                        // Returns 0 if successfull, non-zero otherwise
    const char* pszBoxTitle,                     // In:  Title of box
-   const char*	pszDefaultPath,                  // In:  Default directory and file
+   const char*   pszDefaultPath,                  // In:  Default directory and file
    char* pszSelectedFile,                       // Out: File that user selected
    short sSelectedFileBufSize,                  // In:  Size of buffer pointed to by pszSelectedFile
-   const char*	pszFilter = NULL);               // In:  Filename filter or NULL for none
+   const char*   pszFilter = NULL);               // In:  Filename filter or NULL for none
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,11 +165,11 @@ extern short rspSaveBox(                        // Returns 0 if successfull, non
 // pszExe can be relative, but only to the current path.  The pszDir parameter
 // is only for the current directory for the rspExec'd process.
 extern short rspExec(         // Returns 0 on success.
-   char*	pszExe,              // Executable (full path or relative to CURRENT).
+   char*   pszExe,              // Executable (full path or relative to CURRENT).
    char* pszDir = NULL,       // Current drive/directory for the child process,
                               // if not NULL.
-   short	sWait = FALSE,       // Waits for child execution to stop before
-                              // returning if TRUE.
+   short sWait = FALSE,         // Waits for child execution to stop before
+                                // returning if TRUE.
    short (*waitcall)(void)    // App callback to call during wait, if not NULL.
    = NULL);                   // Returns 0 to continue waiting,
                               // non-zero otherwise.
@@ -185,17 +185,17 @@ extern short rspExec(         // Returns 0 on success.
 #endif
 
 #define RSP_MAX_PATH                        PATH_MAX
-#define RSP_PATH_SEPARATOR				'/'
+#define RSP_PATH_SEPARATOR            '/'
 
 #ifdef WIN32
-#define RSP_SYSTEM_PATH_SEPARATOR	'\\'
+#define RSP_SYSTEM_PATH_SEPARATOR   '\\'
 #else
-#define RSP_SYSTEM_PATH_SEPARATOR	'/'
+#define RSP_SYSTEM_PATH_SEPARATOR   '/'
 #endif
 
 extern short rspGetTempPath(        // Returns 0 on success, non-zero otherwise
    char* pszPath,                   // Out: Temp path returned here if available.
-   short	sMaxPathLen);              // In:  Max path length (to avoid overwrites)
+   short sMaxPathLen);                // In:  Max path length (to avoid overwrites)
 
 extern char* rspPathToSystem(       // Returns pszSystem
    const char* pszRSPiX,            // In:  RSPiX path
@@ -216,8 +216,8 @@ extern char* rspPathFromSystem(     // Returns pointer to system-specific path (
 // File Attributes API
 ///////////////////////////////////////////////////////////////////////////////
 
-#define RSP_READPERMISSION		0x0001
-#define RSP_WRITEPERMISSION	0x0002
+#define RSP_READPERMISSION      0x0001
+#define RSP_WRITEPERMISSION   0x0002
 
 extern short rspSetFileAttributes(  // Returns 0 on success, non-zero otherwise
    char* pszFileName,               // In:  Filename of file to update.
@@ -229,11 +229,11 @@ extern short rspSetFileAttributes(  // Returns 0 on success, non-zero otherwise
 ///////////////////////////////////////////////////////////////////////////////
 
 // Cursor ID's for built-in cursors (never need loading or unloading)
-#define RSP_CURSOR_ARROW		((short)0)
-#define RSP_CURSOR_IBEAM		((short)1)
-#define RSP_CURSOR_CROSSHAIR	((short)2)
-//#define RSP_CURSOR_BIGPLUS	((short)3)	// Not used for now
-#define RSP_CURSOR_WAIT			((short)4)
+#define RSP_CURSOR_ARROW      ((short)0)
+#define RSP_CURSOR_IBEAM      ((short)1)
+#define RSP_CURSOR_CROSSHAIR   ((short)2)
+//#define RSP_CURSOR_BIGPLUS   ((short)3)   // Not used for now
+#define RSP_CURSOR_WAIT         ((short)4)
 
 // CURSOR type used to manipulate cursors
 typedef struct

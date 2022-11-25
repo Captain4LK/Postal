@@ -18,11 +18,11 @@
 // BufQ.CPP
 //
 // History:
-//		05/24/97 JMI	Started.
+//      05/24/97 JMI   Started.
 //
-//		05/24/97	JMI	Added UnGet().
+//      05/24/97   JMI   Added UnGet().
 //
-//		08/14/97 MJR	Moved everything into this header so it would inline.
+//      08/14/97 MJR   Moved everything into this header so it would inline.
 //
 //////////////////////////////////////////////////////////////////////////////
 

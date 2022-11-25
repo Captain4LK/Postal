@@ -19,122 +19,122 @@
 // Project: Postal
 //
 // History:
-//		03/31/97 JMI	Started.
+//      03/31/97 JMI   Started.
 //
-//		03/31/97	JMI	Moved CGameSettings implementation from game.h to this
-//							file.
+//      03/31/97   JMI   Moved CGameSettings implementation from game.h to this
+//                     file.
 //
-//		03/31/97	JMI	Now loads game play keys from prefs file.
+//      03/31/97   JMI   Now loads game play keys from prefs file.
 //
-//		04/07/97	JMI	Added m_szServerName and m_usServerPort.
+//      04/07/97   JMI   Added m_szServerName and m_usServerPort.
 //
-//		04/08/97	JMI	Added m_szPlayerName and m_sPlayerColorIndex.
+//      04/08/97   JMI   Added m_szPlayerName and m_sPlayerColorIndex.
 //
-//		04/08/97	JMI	Changed defualt for m_usServerPort from 9999 to 61663.
+//      04/08/97   JMI   Changed defualt for m_usServerPort from 9999 to 61663.
 //
-//		04/11/97	JMI	No S32er sets m_sClient and m_sServer in PreDemo().
+//      04/11/97   JMI   No S32er sets m_sClient and m_sServer in PreDemo().
 //
-//		04/14/97	JMI	Added TEMP flag m_bDontBlit to allow us to speed up the
-//							Snap() call by not blitting.
+//      04/14/97   JMI   Added TEMP flag m_bDontBlit to allow us to speed up the
+//                     Snap() call by not blitting.
 //
-//		04/21/97 MJR	Added m_pszRealm for the name of the realm prefs file.
+//      04/21/97 MJR   Added m_pszRealm for the name of the realm prefs file.
 //
-//		04/22/97	JMI	Added m_sCanRecordDemos indicating something obscure.
+//      04/22/97   JMI   Added m_sCanRecordDemos indicating something obscure.
 //
-//		05/15/97	JMI	Added m_sAlphaBlend and m_sXRayEffect.
+//      05/15/97   JMI   Added m_sAlphaBlend and m_sXRayEffect.
 //
-//		05/19/97	JMI	Added m_sDisplayInfo.
+//      05/19/97   JMI   Added m_sDisplayInfo.
 //
-//		05/22/97	JMI	Added m_s3dFog.
+//      05/22/97   JMI   Added m_s3dFog.
 //
-//		05/22/97	JMI	Added m_sParticleEffects.
+//      05/22/97   JMI   Added m_sParticleEffects.
 //
-//		06/03/97	JMI	Added m_lInitialDemoTimeOut and m_lPersistentDemoTimeOut.
+//      06/03/97   JMI   Added m_lInitialDemoTimeOut and m_lPersistentDemoTimeOut.
 //
-//		06/09/97	JMI	Added m_sCanTakeSnapShots.
+//      06/09/97   JMI   Added m_sCanTakeSnapShots.
 //
-//		06/09/97	JMI	Added m_sCrossHair.
+//      06/09/97   JMI   Added m_sCrossHair.
 //
-//		06/11/97	JMI	Added m_szDontShowTitles.
+//      06/11/97   JMI   Added m_szDontShowTitles.
 //
-//		06/12/97 MJR	Renamed m_pszRealm to m_pszRealmPrefsFile.
-//							Removed m_sServer and m_sClient and m_sDemo.
-//							Everything now sets defaults in constructor instead of
-//							some things doing it in the Load() portion.
+//      06/12/97 MJR   Renamed m_pszRealm to m_pszRealmPrefsFile.
+//                     Removed m_sServer and m_sClient and m_sDemo.
+//                     Everything now sets defaults in constructor instead of
+//                     some things doing it in the Load() portion.
 //
-//		06/13/97 MJR	Removed m_bDontBlit and cleaned up the loads and saves
-//							and made sure everything defaulted properly.
+//      06/13/97 MJR   Removed m_bDontBlit and cleaned up the loads and saves
+//                     and made sure everything defaulted properly.
 //
-//		06/16/97 MJR	Added m_pszDemoMovie.
-//							Added m_sNetGetInputInterval
-//							Added m_sNetSendInputInterval.
-//							Added m_sNetMaxFrameLag.
-//							Added m_sNetTimePerFrame.
+//      06/16/97 MJR   Added m_pszDemoMovie.
+//                     Added m_sNetGetInputInterval
+//                     Added m_sNetSendInputInterval.
+//                     Added m_sNetMaxFrameLag.
+//                     Added m_sNetTimePerFrame.
 //
-//					MJR	Added m_lNetMaxBlockingTime.
-//							Added m_sNetUsersMaxPlayers;
+//               MJR   Added m_lNetMaxBlockingTime.
+//                     Added m_sNetUsersMaxPlayers;
 //
-//					JMI	Added m_sTrickySystemQuit.
+//               JMI   Added m_sTrickySystemQuit.
 //
-//		06/17/97 MJR	Added m_lNetForceAbortTime.
+//      06/17/97 MJR   Added m_lNetForceAbortTime.
 //
-//					MJR	Modified to call newer version of CorrectifyBasePath().
+//               MJR   Modified to call newer version of CorrectifyBasePath().
 //
-//		06/19/97	JMI	Added m_sResetMPScoresEachLevel.
+//      06/19/97   JMI   Added m_sResetMPScoresEachLevel.
 //
-//		06/23/97	JMI	Added m_szSynchLogFile.
+//      06/23/97   JMI   Added m_szSynchLogFile.
 //
-//		07/07/97	JMI	Added m_dGameFilmScale and m_dEditorFilmScale.
+//      07/07/97   JMI   Added m_dGameFilmScale and m_dEditorFilmScale.
 //
-//		07/07/97	JMI	Removed m_dEditorFilmScale and added m_sEditorViewWidth
-//							and m_sEditorViewHeight.
+//      07/07/97   JMI   Removed m_dEditorFilmScale and added m_sEditorViewWidth
+//                     and m_sEditorViewHeight.
 //
-//		07/08/97 MJR	Added use of separate section ("MacPaths") for mac paths.
+//      07/08/97 MJR   Added use of separate section ("MacPaths") for mac paths.
 //
-//		07/16/97	JMI	Changed m_lTitleLoadLoops to m_lTitleDuration.
+//      07/16/97   JMI   Changed m_lTitleLoadLoops to m_lTitleDuration.
 //
-//		07/17/97	JMI	Now saves and loads volume category settings.
+//      07/17/97   JMI   Now saves and loads volume category settings.
 //
-//		07/20/97	JMI	Added m_sVolumeDistance and m_sGripZoneRadius.
-//							Also, now saves m_sDisplayInfo.
+//      07/20/97   JMI   Added m_sVolumeDistance and m_sGripZoneRadius.
+//                     Also, now saves m_sDisplayInfo.
 //
-//		07/23/97 BRH	Changed title durations so that each title screen
-//							can have its own duration time rather than splitting
-//							it up evenly across all title screens.
+//      07/23/97 BRH   Changed title durations so that each title screen
+//                     can have its own duration time rather than splitting
+//                     it up evenly across all title screens.
 //
-//		08/03/97 BRH	Added m_usProtocol to be loaded and saved in the ini
-//							file.
+//      08/03/97 BRH   Added m_usProtocol to be loaded and saved in the ini
+//                     file.
 //
-//		08/04/97	JMI	Added m_sPlayAmbientSounds.
+//      08/04/97   JMI   Added m_sPlayAmbientSounds.
 //
-//		08/05/97	JMI	Added m_eNetConnectionType and
-//							ms_apszNetConnectionTypeNames[].
+//      08/05/97   JMI   Added m_eNetConnectionType and
+//                     ms_apszNetConnectionTypeNames[].
 //
-//		08/11/97 MJR	Added m_szHostName and modified connection types and text.
+//      08/11/97 MJR   Added m_szHostName and modified connection types and text.
 //
-//		08/13/97	JMI	PreDemo() now uses difficulty level 10.
+//      08/13/97   JMI   PreDemo() now uses difficulty level 10.
 //
-//		08/18/97 MJR	Lots of changes to network-related stuff.
+//      08/18/97 MJR   Lots of changes to network-related stuff.
 //
-//		08/20/97 BRH	Added Sound, Game and Hoods paths to give more
-//							installation options.
+//      08/20/97 BRH   Added Sound, Game and Hoods paths to give more
+//                     installation options.
 //
-//		08/23/97	JMI	Added ms_apszPlayerColorDescriptions[] to provide color
-//							descriptions and ms_sNumPlayerColorDescriptions.
+//      08/23/97   JMI   Added ms_apszPlayerColorDescriptions[] to provide color
+//                     descriptions and ms_sNumPlayerColorDescriptions.
 //
-//		08/24/97	JMI	Editor width and height now default to 640 and 480.
+//      08/24/97   JMI   Editor width and height now default to 640 and 480.
 //
-//		08/25/97	JMI	Changed some of the color descriptors.
+//      08/25/97   JMI   Changed some of the color descriptors.
 //
-//		08/25/97	JMI	Now includes the m_eCurSoundQuality enum representing the
-//							game's current sound quality.
-//							Also, now sets all the default volumes to one value and
-//							stores all values from 0 to the UserMaxVolume instead of
-//							in the 0..MaxVolume scale samplemaster uses.
+//      08/25/97   JMI   Now includes the m_eCurSoundQuality enum representing the
+//                     game's current sound quality.
+//                     Also, now sets all the default volumes to one value and
+//                     stores all values from 0 to the UserMaxVolume instead of
+//                     in the 0..MaxVolume scale samplemaster uses.
 //
-//		09/06/97 MJR	Clamped net values to valid ranges.
+//      09/06/97 MJR   Clamped net values to valid ranges.
 //
-//		09/07/97 MJR	Now defaults to 2 for network lag.
+//      09/07/97 MJR   Now defaults to 2 for network lag.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -156,7 +156,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)					(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)               (sizeof(a) / sizeof(a[0]) )
 
 // Clamp the specified value so it's between min and max, inclusive
 template <class T>
@@ -175,7 +175,7 @@ inline T CLAMP(T val, T min, T max)
 //////////////////////////////////////////////////////////////////////////////
 
 // Player color descriptions.
-char*	CGameSettings::ms_apszPlayerColorDescriptions[CDude::MaxTextures + 1]	=
+char*   CGameSettings::ms_apszPlayerColorDescriptions[CDude::MaxTextures + 1]   =
 {
    "Black",
    "Green",
@@ -191,88 +191,88 @@ char*	CGameSettings::ms_apszPlayerColorDescriptions[CDude::MaxTextures + 1]	=
 };
 
 // Number of color descriptions.
-const	short CGameSettings::ms_sNumPlayerColorDescriptions	= NUM_ELEMENTS(ms_apszPlayerColorDescriptions) - 1;
+const short CGameSettings::ms_sNumPlayerColorDescriptions   = NUM_ELEMENTS(ms_apszPlayerColorDescriptions) - 1;
 
 //////////////////////////////////////////////////////////////////////////////
 // Set settings to default values
 //////////////////////////////////////////////////////////////////////////////
 CGameSettings::CGameSettings(void)
 {
-   m_pszCDPath[0]					= 0;
-   m_pszHDPath[0]					= 0;
-   m_pszVDPath[0]					= 0;
-   m_pszSoundPath[0]				= 0;
-   m_pszGamePath[0]				= 0;
-   m_pszHoodsPath[0]				= 0;
-   m_szNoSakDir[0]				= 0;
-   m_pszRealmPrefsFile[0]		= 0;
+   m_pszCDPath[0]               = 0;
+   m_pszHDPath[0]               = 0;
+   m_pszVDPath[0]               = 0;
+   m_pszSoundPath[0]            = 0;
+   m_pszGamePath[0]            = 0;
+   m_pszHoodsPath[0]            = 0;
+   m_szNoSakDir[0]            = 0;
+   m_pszRealmPrefsFile[0]      = 0;
 
-   m_sDifficulty					= 5;
-   m_sViolence						= 11;
-   m_sCrossHair					= TRUE;
+   m_sDifficulty               = 5;
+   m_sViolence                  = 11;
+   m_sCrossHair               = TRUE;
 
-   m_szServerName[0]				= 0;
-   m_usServerPort					= 61663;
-   m_usProtocol					= RSocket::FirstProtocol;
-   m_szPlayerName[0]				= 0;
-   m_sPlayerColorIndex			= 0;
-   m_sNetBandwidth				= Net::Analog28_8;
-   m_sHostMinBandwidth			= Net::Analog14_4;
-   m_sHostMaxPlayers				= Net::MaxNumIDs;
-   m_szHostName[0]				= 0;
+   m_szServerName[0]            = 0;
+   m_usServerPort               = 61663;
+   m_usProtocol               = RSocket::FirstProtocol;
+   m_szPlayerName[0]            = 0;
+   m_sPlayerColorIndex         = 0;
+   m_sNetBandwidth            = Net::Analog28_8;
+   m_sHostMinBandwidth         = Net::Analog14_4;
+   m_sHostMaxPlayers            = Net::MaxNumIDs;
+   m_szHostName[0]            = 0;
    m_sHostResetScoresEachLevel = TRUE;
-   m_sHostRejuvenate				= TRUE;
-   m_sHostTimeLimit				= 0;
-   m_sHostKillLimit				= 20;
-   m_lNetMaxBlockingTime		= 10000;
-   m_lNetForceAbortTime			= 5000;
-   m_sNetGetInputInterval		= 100;
-   m_sNetSendInputInterval		= 500;
-   m_sNetMaxFrameLag				= 2;     // For the new networking stuff, 2 seems to be the "right" number
-   m_sNetTimePerFrame			= 200;
+   m_sHostRejuvenate            = TRUE;
+   m_sHostTimeLimit            = 0;
+   m_sHostKillLimit            = 20;
+   m_lNetMaxBlockingTime      = 10000;
+   m_lNetForceAbortTime         = 5000;
+   m_sNetGetInputInterval      = 100;
+   m_sNetSendInputInterval      = 500;
+   m_sNetMaxFrameLag            = 2;     // For the new networking stuff, 2 seems to be the "right" number
+   m_sNetTimePerFrame         = 200;
 /*** 12/5/97 AJC ***/
-   m_szNetSyncLogFile[0]		= 0;
-   m_lStartRealmTime				= 0L;
-   m_bLogNetTime					= false;    // Default is not to log net time
+   m_szNetSyncLogFile[0]      = 0;
+   m_lStartRealmTime            = 0L;
+   m_bLogNetTime               = false;    // Default is not to log net time
 /*** 12/5/97 AJC ***/
 /*** 01/14/98 SPA ***/
-   m_lPeerDropMaxWaitTime		= 10000;       // Default to 10 seconds
+   m_lPeerDropMaxWaitTime      = 10000;       // Default to 10 seconds
 /*** 01/14/98 SPA ***/
 
-   m_lInitialDemoTimeOut		= 10000;
-   m_lPersistentDemoTimeOut	= 60000;
-   m_sCanRecordDemos				= FALSE;
-   m_szDemoDebugMovie[0]		= 0;
-   m_sNumAvailableDemos			= 0;
+   m_lInitialDemoTimeOut      = 10000;
+   m_lPersistentDemoTimeOut   = 60000;
+   m_sCanRecordDemos            = FALSE;
+   m_szDemoDebugMovie[0]      = 0;
+   m_sNumAvailableDemos         = 0;
 
-   m_sGammaVal						= 128;
+   m_sGammaVal                  = 128;
    m_sUseCurrentDeviceDimensions = 0;
 
-   m_sAlphaBlend					= TRUE;
-   m_sXRayEffect					= TRUE;
-   m_s3dFog							= TRUE;
-   m_sParticleEffects			= TRUE;
-   m_sVolumeDistance				= TRUE;
-   m_sPlayAmbientSounds			= TRUE;
+   m_sAlphaBlend               = TRUE;
+   m_sXRayEffect               = TRUE;
+   m_s3dFog                     = TRUE;
+   m_sParticleEffects         = TRUE;
+   m_sVolumeDistance            = TRUE;
+   m_sPlayAmbientSounds         = TRUE;
 
-   m_sDisplayInfo					= FALSE;
+   m_sDisplayInfo               = FALSE;
 
-   m_sCanTakeSnapShots			= FALSE;
+   m_sCanTakeSnapShots         = FALSE;
 
-   m_szDontShowTitles[0]		= 0;
+   m_szDontShowTitles[0]      = 0;
 
-   m_sTrickySystemQuit			= FALSE;
+   m_sTrickySystemQuit         = FALSE;
 
-   m_szSynchLogFile[0]			= '\0';
+   m_szSynchLogFile[0]         = '\0';
 
-   m_dGameFilmScale				= 1.0;   // 100%
+   m_dGameFilmScale            = 1.0;   // 100%
 
-   m_sEditorViewWidth			= 640;
-   m_sEditorViewHeight			= 480;
+   m_sEditorViewWidth         = 640;
+   m_sEditorViewHeight         = 480;
 
-   m_sGripZoneRadius				= 75;
+   m_sGripZoneRadius            = 75;
 
-   m_eCurSoundQuality			= SampleMaster::SQ_22050_8;
+   m_eCurSoundQuality         = SampleMaster::SQ_22050_8;
 
    // Initialize all category volumes.
    short i;
@@ -483,7 +483,7 @@ short CGameSettings::LoadPrefs(
    // Verify we're in bounds.
    if (m_sPlayerColorIndex >= CDude::MaxTextures || m_sPlayerColorIndex < 0)
    {
-      m_sPlayerColorIndex	= 0;
+      m_sPlayerColorIndex   = 0;
    }
 
    if (!sResult)

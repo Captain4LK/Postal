@@ -19,122 +19,122 @@
 // Project: Nostril (aka Postal)
 //
 // This module implements the bouy marker for use with the network navagation
-//	system that will help the enemy guys get around the world.
+//   system that will help the enemy guys get around the world.
 //
 // History:
-//		01/28/97 BRH	Added navigation net objects as the thing that holds
-//							a group of bouys together in a navigational network.
+//      01/28/97 BRH   Added navigation net objects as the thing that holds
+//                     a group of bouys together in a navigational network.
 //
-//		02/02/97 BRH	Added Ping routine that gives the miniumum number of hops
-//							from src to dst nodes in the network.  Added
-//							FindNearestBouy function to locate the closest Bouy to
-//							a given position.  This may later be optimized using
-//							collision regions.  Also added UpdateRoutingTables()
-//							function which asks for each destination node from each
-//							Bouy so that each Bouy will discover a route and add it
-//							to its routing table.  This will give a fully connected
-//							routing table for faster access rather than building
-//							the routing tables as we go.
+//      02/02/97 BRH   Added Ping routine that gives the miniumum number of hops
+//                     from src to dst nodes in the network.  Added
+//                     FindNearestBouy function to locate the closest Bouy to
+//                     a given position.  This may later be optimized using
+//                     collision regions.  Also added UpdateRoutingTables()
+//                     function which asks for each destination node from each
+//                     Bouy so that each Bouy will discover a route and add it
+//                     to its routing table.  This will give a fully connected
+//                     routing table for faster access rather than building
+//                     the routing tables as we go.
 //
-//		02/03/97 BRH	Changed Load and Save functions to call the base
-//							class load and save to preserve the instance ID's
-//							and also saved the number of nodes in the network
-//							to be used later to reinitialize the network after
-//							a load of the NavNet and the Bouys.  Added the
-//							startup code to update the routing tables after the load
-//							is done.
+//      02/03/97 BRH   Changed Load and Save functions to call the base
+//                     class load and save to preserve the instance ID's
+//                     and also saved the number of nodes in the network
+//                     to be used later to reinitialize the network after
+//                     a load of the NavNet and the Bouys.  Added the
+//                     startup code to update the routing tables after the load
+//                     is done.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/04/97 BRH	Sets itself to be the current Nav Net in the realm on
-//							construction, Startup, and EditModify.
+//      02/04/97 BRH   Sets itself to be the current Nav Net in the realm on
+//                     construction, Startup, and EditModify.
 //
-//		02/05/97 BRH	Fixed problem with the FindNearestBouy function and
-//							fixed a problem with Ping where it wasn't adding 1
-//							if it pinged a link from a routing table entry.
+//      02/05/97 BRH   Fixed problem with the FindNearestBouy function and
+//                     fixed a problem with Ping where it wasn't adding 1
+//                     if it pinged a link from a routing table entry.
 //
-//		02/06/97 BRH	Added SetAsDefault() function which sets this NavNet
-//							as the default one in its realm.  This was needed
-//							by the editor when deleteing the default NavNet, the
-//							editor didn't have access to the realm's protected
-//							current NavNet pointer.  Also added DeleteNetwork()
-//							which frees all of the bouys in this network.  This
-//							is also called by the editor when deleting a NavNet.
+//      02/06/97 BRH   Added SetAsDefault() function which sets this NavNet
+//                     as the default one in its realm.  This was needed
+//                     by the editor when deleteing the default NavNet, the
+//                     editor didn't have access to the realm's protected
+//                     current NavNet pointer.  Also added DeleteNetwork()
+//                     which frees all of the bouys in this network.  This
+//                     is also called by the editor when deleting a NavNet.
 //
-//		02/18/97	JMI	Changed GetResources() to use the resmgr.
+//      02/18/97   JMI   Changed GetResources() to use the resmgr.
 //
-//		02/23/97 BRH	Moved Render() functionality to EditRender and made
-//							Render do nothing so that it isn't drawing during gameplay.
+//      02/23/97 BRH   Moved Render() functionality to EditRender and made
+//                     Render do nothing so that it isn't drawing during gameplay.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		03/04/97 BRH	Added a string name to the NavNet so it can be displayed
-//							in a listbox int eh editor to indicate the current
-//							NavNet and be able to tell them apart.
+//      03/04/97 BRH   Added a string name to the NavNet so it can be displayed
+//                     in a listbox int eh editor to indicate the current
+//                     NavNet and be able to tell them apart.
 //
-//		03/06/97 BRH	Changed Ping to include a visited nodes list to detect
-//							loops faster.  The old method was extremely slow, as in
-//							days of checking for a network of 45 bouys.  The new one
-//							is still somewhat slow at 3 minutes for that number, but
-//							the bouys will save their route tables to save time when
-//							the level is loaded.
+//      03/06/97 BRH   Changed Ping to include a visited nodes list to detect
+//                     loops faster.  The old method was extremely slow, as in
+//                     days of checking for a network of 45 bouys.  The new one
+//                     is still somewhat slow at 3 minutes for that number, but
+//                     the bouys will save their route tables to save time when
+//                     the level is loaded.
 //
-//		03/13/97 BRH	Made a few modifications to Ping and verified that it
-//							correctly builds routing tables for several networks.
-//							It is still slow for large looped networks so I will
-//							be adding a hops table to the bouys to cut down on the
-//							number of pings required to complete the tables.  Then
-//							the hops tables can be freed at some point.
+//      03/13/97 BRH   Made a few modifications to Ping and verified that it
+//                     correctly builds routing tables for several networks.
+//                     It is still slow for large looped networks so I will
+//                     be adding a hops table to the bouys to cut down on the
+//                     number of pings required to complete the tables.  Then
+//                     the hops tables can be freed at some point.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/15/97 BRH	Changing over to the new BFS tree method of routing, and
-//							getting rid of the old code like Ping().  Also added
-//							dialog box that allows you to set the name of the NavNet
-//							as well as to set it as the default Network.
+//      04/15/97 BRH   Changing over to the new BFS tree method of routing, and
+//                     getting rid of the old code like Ping().  Also added
+//                     dialog box that allows you to set the name of the NavNet
+//                     as well as to set it as the default Network.
 //
-//		04/18/97 BRH	Fixed problem in Save where it saved the number of nodes
-//							using the last index, rather than the size of the node map
-//							which would be off if some bouys were deleted from the
-//							network.  Changed it to save the size of the m_NodeMap.
+//      04/18/97 BRH   Fixed problem in Save where it saved the number of nodes
+//                     using the last index, rather than the size of the node map
+//                     which would be off if some bouys were deleted from the
+//                     network.  Changed it to save the size of the m_NodeMap.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/27/97 BRH	Changed FindNearestBouy to use the new bouy tree nodes
-//							to build a sorted list of nearest bouys.  It then checks
-//							to see if the closest is reachable without terrain
-//							terrain blocking the path, and if so returns that bouy.
-//							If it is blocked, then it will try the next one in the
-//							list.
+//      06/27/97 BRH   Changed FindNearestBouy to use the new bouy tree nodes
+//                     to build a sorted list of nearest bouys.  It then checks
+//                     to see if the closest is reachable without terrain
+//                     terrain blocking the path, and if so returns that bouy.
+//                     If it is blocked, then it will try the next one in the
+//                     list.
 //
-//		06/29/97	JMI	Converted EditRect(), EditRender(), and/or Render() to
-//							use Map3Dto2D().
-//							Moved EditRect() here from navnet.h and added EditHotSpot().
+//      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to
+//                     use Map3Dto2D().
+//                     Moved EditRect() here from navnet.h and added EditHotSpot().
 //
-//		06/30/97 BRH	Fixed bug where the wrong overloaded version of IsPathClear
-//							was being called.
+//      06/30/97 BRH   Fixed bug where the wrong overloaded version of IsPathClear
+//                     was being called.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/14/97	JMI	FindNearestBouy() was deleting a NULL tree, if no bouys.
-//							Fixed.
+//      07/14/97   JMI   FindNearestBouy() was deleting a NULL tree, if no bouys.
+//                     Fixed.
 //
-//		07/25/97 BRH	Fixed problem of > 254 bouys being created in the editor.
+//      07/25/97 BRH   Fixed problem of > 254 bouys being created in the editor.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/08/97 BRH	Added EditPostLoad function which adds the Nav Net name
-//							to the editor's list box, just as it does when EditNew is
-//							called.  This way the NavNets loaded from the realm file
-//							are now correctly displayed.
+//      08/08/97 BRH   Added EditPostLoad function which adds the Nav Net name
+//                     to the editor's list box, just as it does when EditNew is
+//                     called.  This way the NavNets loaded from the realm file
+//                     are now correctly displayed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define NAVIGATIONNET_CPP
@@ -150,10 +150,10 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"nnet.bmp"
+#define IMAGE_FILE         "nnet.bmp"
 
 // Minimum elapsed time (in milliseconds)
-#define MIN_ELAPSED_TIME	10
+#define MIN_ELAPSED_TIME   10
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ short CNavigationNet::Save(                              // Returns 0 if success
 
    // Save the number of nodes so we can check after load to see if all
    // of the Bouys have been loaded yet.
-//	pFile->Write(&m_ucNextID);
+//   pFile->Write(&m_ucNextID);
    UCHAR ucNumNodes = m_NodeMap.size();
    pFile->Write(&ucNumNodes);
 
@@ -406,11 +406,11 @@ short CNavigationNet::EditNew(                           // Returns 0 if success
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void SetText(              // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId,                // In:  ID of GUI to set text.
-   char*			str)        // In:  Value to set text to.
+   char*         str)        // In:  Value to set text to.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui != NULL)
    {
       pgui->SetText(str);
@@ -443,8 +443,8 @@ short CNavigationNet::EditModify(void)
          RListBox* plb = peditor->m_plbNavNetList;
          SetText(plb, GetInstanceID(), (char*) m_rstrNetName);
          plb->SetSel(plb->GetItemFromId(GetInstanceID()));
-//			RGuiItem* pguiRemove = plb->GetItemFromId(GetInstanceID());
-//			SetText(pguiRemove,
+//         RGuiItem* pguiRemove = plb->GetItemFromId(GetInstanceID());
+//         SetText(pguiRemove,
 
       }
    }
@@ -453,21 +453,21 @@ short CNavigationNet::EditModify(void)
 }
 /*
 
-		RGuiItem*	pguiRemove;
-		if (pview != NULL)
-			{
-			pguiRemove	= plb->GetItemFromId((S32)pview);
-			}
-		else
-			{
-			pguiRemove	= plb->GetSel();
-			}
+      RGuiItem*   pguiRemove;
+      if (pview != NULL)
+         {
+         pguiRemove   = plb->GetItemFromId((S32)pview);
+         }
+      else
+         {
+         pguiRemove   = plb->GetSel();
+         }
 
-		if (pguiRemove != NULL)
-			{
-			KillView((View*)(pguiRemove->m_lId));
-			plb->RemoveItem(pguiRemove);
-			plb->AdjustContents();
+      if (pguiRemove != NULL)
+         {
+         KillView((View*)(pguiRemove->m_lId));
+         plb->RemoveItem(pguiRemove);
+         plb->AdjustContents();
 */
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to move object to specified position
@@ -512,8 +512,8 @@ void CNavigationNet::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    // Layer should be based on info we get from attribute map.
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
@@ -537,31 +537,31 @@ void CNavigationNet::EditRect(RRect* pRect)
       &(pRect->sX),
       &(pRect->sY) );
 
-   pRect->sW	= 10; // Safety.
-   pRect->sH	= 10; // Safety.
+   pRect->sW   = 10; // Safety.
+   pRect->sH   = 10; // Safety.
 
    if (m_pImage != NULL)
    {
-      pRect->sW	= m_pImage->m_sWidth;
-      pRect->sH	= m_pImage->m_sHeight;
+      pRect->sW   = m_pImage->m_sWidth;
+      pRect->sH   = m_pImage->m_sHeight;
    }
 
-   pRect->sX	-= pRect->sW / 2;
-   pRect->sY	-= pRect->sH;
+   pRect->sX   -= pRect->sW / 2;
+   pRect->sY   -= pRect->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
 ////////////////////////////////////////////////////////////////////////////////
 void CNavigationNet::EditHotSpot(   // Returns nothiing.
-   short*	psX,                    // Out: X coord of 2D hotspot relative to
+   short*   psX,                    // Out: X coord of 2D hotspot relative to
                                     // EditRect() pos.
-   short*	psY)                    // Out: Y coord of 2D hotspot relative to
+   short*   psY)                    // Out: Y coord of 2D hotspot relative to
                                     // EditRect() pos.
 {
    // Base of navnet is hotspot.
-   *psX	= (m_pImage->m_sWidth / 2);
-   *psY	= m_pImage->m_sHeight;
+   *psX   = (m_pImage->m_sWidth / 2);
+   *psY   = m_pImage->m_sHeight;
 }
 
 
@@ -574,7 +574,7 @@ short CNavigationNet::GetResources(void)                 // Returns 0 if success
 
    if (m_pImage == 0)
    {
-      sResult	= rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
+      sResult   = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_pImage);
       if (sResult == 0)
       {
          // This is a questionable action on a resource managed item, but it's
@@ -654,10 +654,10 @@ CBouy* CNavigationNet::GetBouy(UCHAR ucBouyID)
 
 ////////////////////////////////////////////////////////////////////////////////
 // FindNearestBouy - Go through the list and get the ID of the nearest
-//							bouy to the given x, z position
+//                     bouy to the given x, z position
 //
-//							This has been modified to return the closest available
-//							bouy - one that is not blocked by terrain.
+//                     This has been modified to return the closest available
+//                     bouy - one that is not blocked by terrain.
 ////////////////////////////////////////////////////////////////////////////////
 
 UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
@@ -669,7 +669,7 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
    CBouy* pBouy;
    TreeListNode* pRoot = NULL;
    TreeListNode* pCurrent = NULL;
-   UCHAR	ucNode = 0;
+   UCHAR ucNode = 0;
 
    // Build the sorted list of bouys
    for (i = m_NodeMap.begin(); i != m_NodeMap.end(); i++)
@@ -700,7 +700,7 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
    while (pCurrent && bSearching)
    {
       pBouy = pCurrent->m_powner;
-//		ASSERT(pBouy != NULL);
+//      ASSERT(pBouy != NULL);
       if (pBouy)
       {
          if (m_pRealm->IsPathClear(sX, sY, sZ, 4.0, (short) pBouy->GetX(), (short) pBouy->GetZ()))
@@ -755,8 +755,8 @@ UCHAR CNavigationNet::FindNearestBouy(short sX, short sZ)
 
 ////////////////////////////////////////////////////////////////////////////////
 // UpdateRoutingTables - Ping all of the bouys from the list in this network
-//								 which will force them all to build up complete
-//								 routing tables
+//                         which will force them all to build up complete
+//                         routing tables
 ////////////////////////////////////////////////////////////////////////////////
 
 void CNavigationNet::UpdateRoutingTables(void)
@@ -787,7 +787,7 @@ void CNavigationNet::UpdateRoutingTables(void)
    }
 #endif
 
-//	PrintRoutingTables();
+//   PrintRoutingTables();
 }
 
 void CNavigationNet::PrintRoutingTables(void)
@@ -803,7 +803,7 @@ void CNavigationNet::PrintRoutingTables(void)
          sprintf(szLine, "\nNode %d\n----------------------\n", ((*i).second)->m_ucID);
          fwrite(szLine, sizeof(char), strlen(szLine), fp);
          ((*i).second)->PrintRouteTable(fp);
-//			((*i).second)->PrintDirectLinks(fp);
+//         ((*i).second)->PrintDirectLinks(fp);
       }
       fclose(fp);
 

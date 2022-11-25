@@ -24,7 +24,7 @@
 // NOTE: RSPXBlue.h is in ORANGE/MFC_CNTL.
 ///////////////////////////////////////////////////////////////////////////////
 // Plug-ins:
-//	1) To get started making your plug-in DLL, you must first create an
+//   1) To get started making your plug-in DLL, you must first create an
 // AppWizard DLL project.  Choose an MFC Extension DLL as the way in which your
 // project uses MFC (on the first step dialog in the AppWizard).
 //
@@ -58,9 +58,9 @@
 // Instantiate static members.
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef _WINDLL
-/*EXE2DLL*/ CImage*			CPlugIn::ms_pimBuf	= NULL;  // The current buffer.
-/*EXE2DLL*/ CDialog*			CPlugIn::ms_pdlg		= NULL;  // The Plugger dialog.
-/*EXE2DLL*/ CRSPiXBlue*		CPlugIn::ms_prspix	= NULL;  // The RSPiX window.
+/*EXE2DLL*/ CImage*         CPlugIn::ms_pimBuf   = NULL;  // The current buffer.
+/*EXE2DLL*/ CDialog*         CPlugIn::ms_pdlg      = NULL;  // The Plugger dialog.
+/*EXE2DLL*/ CRSPiXBlue*      CPlugIn::ms_prspix   = NULL;  // The RSPiX window.
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,14 +81,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef _WINDLL
-DLL2EXE char*	CPlugIn::GetDllMagicTime(void)
+DLL2EXE char*   CPlugIn::GetDllMagicTime(void)
 {
    return m_szMagicTime;
 }
 #endif // _WINDLL
 
 #ifdef _WINDLL
-DLL2EXE S32	CPlugIn::GetDllMagicSize(void)
+DLL2EXE S32 CPlugIn::GetDllMagicSize(void)
 {
    return m_lMagicSize;
 }

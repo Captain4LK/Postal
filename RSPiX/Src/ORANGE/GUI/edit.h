@@ -20,26 +20,26 @@
 // Edit.H
 //
 // History:
-//		01/18/97 JMI	Started tracking history of this file.
-//							Converted Do() to take an RInputEvent* instead of a
-//							S32*.
+//      01/18/97 JMI   Started tracking history of this file.
+//                     Converted Do() to take an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/21/97	JMI	Added ReadMembers() and WriteMembers() overloads to read
-//							and write members of this class.
+//      01/21/97   JMI   Added ReadMembers() and WriteMembers() overloads to read
+//                     and write members of this class.
 //
-//		03/14/97	JMI	Added ClipCaret().
+//      03/14/97   JMI   Added ClipCaret().
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		08/25/97	JMI	Added m_sFirstVisibleCharIndex which is the first visible
-//							character in the field.
+//      08/25/97   JMI   Added m_sFirstVisibleCharIndex which is the first visible
+//                     character in the field.
 //
-//		09/22/97	JMI	Also, added friend class CEditPropPage for GUI
-//							editor.
+//      09/22/97   JMI   Also, added friend class CEditPropPage for GUI
+//                     editor.
 //
-//		09/23/97	JMI	Flags for m_sBehavior started at 0 instead of 1.  Fixed.
+//      09/23/97   JMI   Flags for m_sBehavior started at 0 instead of 1.  Fixed.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -95,15 +95,15 @@ typedef struct
 
 typedef void (*EditNotifyCall)(        // Called when a user input notification
                                        // should occur.
-   REdit*	pedit);                    // this.
+   REdit*   pedit);                    // this.
 
 public:     // Enums.
 enum                    // Values for member flags.
 {
    // Values for m_sBehavior.
-   None			= 0x0000,
-   NumbersOnly	= 0x0001,         // Allow only numbers as input.
-   Multiline	= 0x0002          // Allow GK/SK_ENTER to cause CR/LF.
+   None         = 0x0000,
+   NumbersOnly   = 0x0001,         // Allow only numbers as input.
+   Multiline   = 0x0002          // Allow GK/SK_ENTER to cause CR/LF.
 };
 
 public:     // Methods.
@@ -117,8 +117,8 @@ public:     // Methods.
 virtual                       // If you override this, call this base if possible.
 short Draw(                   // Returns 0 on success.
    RImage* pimDst,            // Destination image.
-   short sDstX	= 0,           // X position in destination.
-   short sDstY	= 0,           // Y position in destination.
+   short sDstX   = 0,           // X position in destination.
+   short sDstY   = 0,           // Y position in destination.
    short sSrcX = 0,           // X position in source.
    short sSrcY = 0,           // Y position in source.
    short sW = 0,              // Amount to draw.
@@ -133,7 +133,7 @@ short DrawText(               // Returns 0 on success.
    short sX,                  // X position in image.
    short sY,                  // Y position in image.
    short sW = 0,              // Width of text area.
-   short	sH = 0,              // Height of test area.
+   short sH = 0,                // Height of test area.
    RImage* pim = NULL);       // Destination image.  NULL == use m_im.
 
 // Does REdit stuff like check for text, update caret, and draw new
@@ -167,7 +167,7 @@ void OnLoseFocus(void)
    RTxt::OnLoseFocus();
 
    // Give up our caret, if we had it.
-   m_sCaretState	= 0;
+   m_sCaretState   = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -185,13 +185,13 @@ protected:     // Internal functions.
 // Read item's members from file.
 virtual                 // Overridden here.
 short ReadMembers(               // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version);              // File format version to use.
 
 // Write item's members to file.
 virtual                 // Overridden here.
 short WriteMembers(              // Returns 0 on success.
-   RFile*	pfile);              // File to write to.
+   RFile*   pfile);              // File to write to.
 
 // Clips the caret to within the string length.
 void ClipCaret(void);            // Returns nothing.
@@ -201,31 +201,31 @@ void ClipCaret(void);            // Returns nothing.
 public:     // Member variables.
 char m_cCaretChar;            // Character to use as caret.
 U32 m_u32CaretColor;          // Color to use for caret.
-short	m_sCaretPos;            // Text position of caret.
+short m_sCaretPos;              // Text position of caret.
 S32 m_lCaretBlinkRate;        // Rate at which character blinks in ms.  Can be
                               // 0 indicating no blinkage.
 
-short	m_sMaxText;             // Maximum text to allow.  Limited to GUI_MAX_STR.
+short m_sMaxText;               // Maximum text to allow.  Limited to GUI_MAX_STR.
 
 short m_sBehavior;            // Flags.  See enums above.
 
-EditNotifyCall	m_encCall;        // Callback when a user input notification
-                                 // should occur such as too much input or
-                                 // invalid character generated (e.g., alphas
-                                 // in NUMBERS_ONLY mode).  A good place to
-                                 // generate a beep or something.
+EditNotifyCall m_encCall;          // Callback when a user input notification
+                                   // should occur such as too much input or
+                                   // invalid character generated (e.g., alphas
+                                   // in NUMBERS_ONLY mode).  A good place to
+                                   // generate a beep or something.
 
 S32 m_lNextCaretUpdate;          // Time in ms of next caret update.
-short	m_sCaretState;             // Current state the caret is in until
-                                 // m_lNextCaretUpdate. (0 == hidden,
-                                 // 1 == shown).
+short m_sCaretState;               // Current state the caret is in until
+                                   // m_lNextCaretUpdate. (0 == hidden,
+                                   // 1 == shown).
 
-short	m_sFirstVisibleCharIndex;        // Index of the first visible character.
+short m_sFirstVisibleCharIndex;          // Index of the first visible character.
 
-Point	m_aptTextPos[GUI_MAX_STR];       // Positions for characters in m_szText.
-                                       // This is no S32er dynamically allocated
-                                       // do to the amount of overhead that added
-                                       // when adding characters.
+Point m_aptTextPos[GUI_MAX_STR];         // Positions for characters in m_szText.
+                                         // This is no S32er dynamically allocated
+                                         // do to the amount of overhead that added
+                                         // when adding characters.
 
 
 protected:     // Internal typedefs.
@@ -241,5 +241,5 @@ friend class CEditPropPage;
 
 #endif // EDIT_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

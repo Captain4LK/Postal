@@ -17,41 +17,41 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	sample.cpp
+//   sample.cpp
 //
 // History:
-//		06/23/95 JMI	Started.
+//      06/23/95 JMI   Started.
 //
-//		09/13/95	JMI	Added Convert8to16 to convert 8 bit sample to 16 bit
-//							sample size.
+//      09/13/95   JMI   Added Convert8to16 to convert 8 bit sample to 16 bit
+//                     sample size.
 //
-//		08/04/96 MJR	Minor fix of typo in ASSERT().
-//							Revised some IFF stuff to work on Mac.  Will be
-//							further revised when Jon finishes new IFF stuff.
+//      08/04/96 MJR   Minor fix of typo in ASSERT().
+//                     Revised some IFF stuff to work on Mac.  Will be
+//                     further revised when Jon finishes new IFF stuff.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CSample			RSample
-//							CIff				RIff
-//		10/31/96	JMI	CNFile			RFile
-//							ENDIAN_BIG		BigEndian
-//							ENDIAN_LITTLE	LittleEndian
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CSample         RSample
+//                     CIff            RIff
+//      10/31/96   JMI   CNFile         RFile
+//                     ENDIAN_BIG      BigEndian
+//                     ENDIAN_LITTLE   LittleEndian
 //
-//		01/28/97	JMI	Added Load(RFile*), Save(char*), and Save(RFile*).
+//      01/28/97   JMI   Added Load(RFile*), Save(char*), and Save(RFile*).
 //
-//		02/04/97	JMI	Load(RFile*) forgot to make sure the ref count was 0
-//							before loading and also forgot to Lock() the sample
-//							before loading.
+//      02/04/97   JMI   Load(RFile*) forgot to make sure the ref count was 0
+//                     before loading and also forgot to Lock() the sample
+//                     before loading.
 //
-//		02/05/97	JMI	Had to cast Reads and Writes that used void* overload
-//							in RFile to use U8* since void* is now protected
-//							(see file.h for more details).
+//      02/05/97   JMI   Had to cast Reads and Writes that used void* overload
+//                     in RFile to use U8* since void* is now protected
+//                     (see file.h for more details).
 //
-//		03/25/97	JMI	Changed a Seek(0, SEEK_SET) to a relative seek.
+//      03/25/97   JMI   Changed a Seek(0, SEEK_SET) to a relative seek.
 //
-//		07/05/97 MJR	Changed so Read() now reads 16-bit values as words so
-//							they will be properly byte-swapped as necessary.
+//      07/05/97 MJR   Changed so Read() now reads 16-bit values as words so
+//                     they will be properly byte-swapped as necessary.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -83,15 +83,15 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define SAMPLE_TYPE_UNKNOWN	0x0000
-#define SAMPLE_TYPE_WAVE		0x0001
+#define SAMPLE_TYPE_UNKNOWN   0x0000
+#define SAMPLE_TYPE_WAVE      0x0001
 
 #ifndef WAVE_FORMAT_PCM
-#define WAVE_FORMAT_PCM		0x0001
-#define WAVE_FORMAT_ADPCM	0x0002
+#define WAVE_FORMAT_PCM      0x0001
+#define WAVE_FORMAT_ADPCM   0x0002
 #endif // WAVE_FORMAT_PCM
 
-#define DEFAULT_READBUFSIZE	16384
+#define DEFAULT_READBUFSIZE   16384
 
 //////////////////////////////////////////////////////////////////////////////
 // Functions.
@@ -117,17 +117,17 @@ RSample::RSample(void)
 // (public)
 //
 //////////////////////////////////////////////////////////////////////////////
-RSample::RSample(	void *pData, S32 lBufSize, S32 lSamplesPerSec,
-                  short sBitsPerSample, short sNumChannels)
+RSample::RSample(   void *pData, S32 lBufSize, S32 lSamplesPerSec,
+                    short sBitsPerSample, short sNumChannels)
 {
    // Intialize instantiables.
    Init();
    // Fill in supplied members.
-   m_pData				= pData;
-   m_lBufSize			= lBufSize;
-   m_lSamplesPerSec	= lSamplesPerSec;
-   m_sBitsPerSample	= sBitsPerSample;
-   m_sNumChannels		= sNumChannels;
+   m_pData            = pData;
+   m_lBufSize         = lBufSize;
+   m_lSamplesPerSec   = lSamplesPerSec;
+   m_sBitsPerSample   = sBitsPerSample;
+   m_sNumChannels      = sNumChannels;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -153,13 +153,13 @@ RSample::~RSample(void)
 void RSample::Init(void)
 {
    // Initialize members.
-   m_pData				= NULL;
-   m_sOwnBuf			= FALSE;
-   m_lBufSize			= 0L;
-   m_lSamplesPerSec	= 0L;
-   m_sBitsPerSample	= 0;
-   m_sNumChannels		= 0;
-   m_sRefCnt			= 0;
+   m_pData            = NULL;
+   m_sOwnBuf         = FALSE;
+   m_lBufSize         = 0L;
+   m_lSamplesPerSec   = 0L;
+   m_sBitsPerSample   = 0;
+   m_sNumChannels      = 0;
+   m_sRefCnt         = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,7 +320,7 @@ S32 RSample::ReadWaveHeader(void)
                            if (m_iff.Find("data") == 0)
                            {
                               // Success.
-                              lRes	= m_iff.GetSize();
+                              lRes   = m_iff.GetSize();
                            }
                            else
                            {
@@ -376,7 +376,7 @@ S32 RSample::ReadWaveHeader(void)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	Determines the file type of the supplied file stream, if possible, and
+//   Determines the file type of the supplied file stream, if possible, and
 // returns a short value indicating that file type.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -525,9 +525,9 @@ S32 RSample::Read(S32 lAmount)
       {
          // Remember we own this buffer (i.e., we allocated it and should
          // be responsible for freeing it).
-         m_sOwnBuf	= TRUE;
+         m_sOwnBuf   = TRUE;
          // Set data buffer size.
-         m_lBufSize	= lAmount;
+         m_lBufSize   = lAmount;
       }
       else
       {
@@ -646,9 +646,9 @@ short RSample::Load(char* pszSampleName)
 //
 ///////////////////////////////////////////////////////////////////////////////
 short RSample::Load( // Returns 0 on success.
-   RFile*	pfile)   // Open RFile.
+   RFile*   pfile)   // Open RFile.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Reset variables and free data if any.
    Reset();
@@ -696,7 +696,7 @@ short RSample::Load( // Returns 0 on success.
          else
          {
             TRACE("Load(): ReadWaveHeader() failed.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
 
          // Close and clean up.  Will 'unsynch' with pfile via m_iff.Close() call.
@@ -705,7 +705,7 @@ short RSample::Load( // Returns 0 on success.
       else
       {
          TRACE("Load(): m_iff.Open(pfile) failed.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
@@ -725,19 +725,19 @@ short RSample::Load( // Returns 0 on success.
 short RSample::Save(    // Returns 0 on success.
    char* pszFileName)   // Filename for sample file.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Open file for write . . .
    RFile file;
    if (file.Open(pszFileName, "wb", RFile::LittleEndian) == 0)
    {
       // Do it.
-      sRes	= Save(&file);
+      sRes   = Save(&file);
    }
    else
    {
       TRACE("Save(\"%s\"): file.Open() failed.\n", pszFileName);
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -751,7 +751,7 @@ short RSample::Save(    // Returns 0 on success.
 short RSample::Save(    // Returns 0 on success.
    RFile* pfile)        // Open RFile for sample.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Attempt to synchronize . . .
    RIff iff;
@@ -788,7 +788,7 @@ short RSample::Save(    // Returns 0 on success.
                else
                {
                   TRACE("Save(): Failed to write entire data buffer to 'data' chunk.\n");
-                  sRes	= -5;
+                  sRes   = -5;
                }
 
                // End 'data' chunk.
@@ -797,13 +797,13 @@ short RSample::Save(    // Returns 0 on success.
             else
             {
                TRACE("Save(): Failed to create 'data' chunk.\n");
-               sRes	= -4;
+               sRes   = -4;
             }
          }
          else
          {
             TRACE("Save(): Failed to create 'fmt ' chunk.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
 
          // End 'RIFF' 'WAVE' form.
@@ -812,13 +812,13 @@ short RSample::Save(    // Returns 0 on success.
       else
       {
          TRACE("Save(): Failed to create RIFF WAVE form.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
    {
       TRACE("Save(): iff.Open(pfile) failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -873,23 +873,23 @@ short RSample::Unlock(void)
 //////////////////////////////////////////////////////////////////////////////
 short RSample::Convert8to16(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   ASSERT(m_sBitsPerSample	== 8);
-   ASSERT(m_sRefCnt			== 0);
-   ASSERT(m_pData				!= NULL);
+   ASSERT(m_sBitsPerSample   == 8);
+   ASSERT(m_sRefCnt         == 0);
+   ASSERT(m_pData            != NULL);
 
    // Allocate space for new data.
-   S16*	ps16Dst	= (S16*)malloc(m_lBufSize);
+   S16*   ps16Dst   = (S16*)malloc(m_lBufSize);
 
    // If successful . . .
    if (ps16Dst != NULL)
    {
-      U8* pu8Src	= (U8*)m_pData;
+      U8* pu8Src   = (U8*)m_pData;
 
       for (S32 l = 0L; l < m_lBufSize; l++)
       {
-         ps16Dst[l]	= (S16)((pu8Src[l] << 8) ^ 0x8000);
+         ps16Dst[l]   = (S16)((pu8Src[l] << 8) ^ 0x8000);
       }
 
       // Discard old data.
@@ -900,11 +900,11 @@ short RSample::Convert8to16(void)
       }
 
       // Set new data.
-      m_pData				= (void*)ps16Dst;
+      m_pData            = (void*)ps16Dst;
       // Set new size.
-      m_lBufSize			*= 2L;
+      m_lBufSize         *= 2L;
       // Set new sample size.
-      m_sBitsPerSample	= 16;
+      m_sBitsPerSample   = 16;
    }
    else
    {

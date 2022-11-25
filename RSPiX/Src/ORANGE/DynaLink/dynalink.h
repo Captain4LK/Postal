@@ -20,7 +20,7 @@
 // dynalink.h
 //
 // History:
-//		01/10/96	JMI	Started.
+//      01/10/96   JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -48,9 +48,9 @@
 // Use this macro to instantiate your class and its array of function ptrs.
 // FunctionTypedef is a typedef of a pointer to your function type.
 // FriendClass is a class to befriend this one (allowing it, and only it,
-//		to access the function array.
+//      to access the function array.
 // MaxElements is the maximum number of functions in your array list.  It must
-//		be 1 or greater.
+//      be 1 or greater.
 #define LINKINSTANTIATE(FunctionTypedef, FriendClass, MaxElements)   \
    FunctionTypedef                                                \
    CDynaLink<FunctionTypedef, FriendClass, MaxElements>::ms_afp[MaxElements]  \
@@ -60,19 +60,19 @@
 // You can use this function so you don't have to remember any template
 // declaration crap.  Create a macro in your header for your users that calls
 // LINKLATE similar to the following:
-// #define LINKME(pUserFunc, lUserFuncIndex)	\
-//		LINKLATE([Your Function Typedef], [Your Friend Class], [Max functions], \
-//					pUserFunc, lUserFuncIndex)
+// #define LINKME(pUserFunc, lUserFuncIndex)   \
+//      LINKLATE([Your Function Typedef], [Your Friend Class], [Max functions], \
+//               pUserFunc, lUserFuncIndex)
 // FunctionTypedef is a typedef of a pointer to your function type.
 // FriendClass is a class to befriend this one (allowing it, and only it,
-//		to access the function array.
+//      to access the function array.
 // MaxElements is the maximum number of functions in your array list.  It must
-//		be 1 or greater.
+//      be 1 or greater.
 // pUserFunc is a pointer to the user's function.
 // lUserFuncIndex is the index in the function array to be filled with
-//		pUserFunc.
+//      pUserFunc.
 // Note that dl##FunctionTypedef##lUserFuncIndex creates a name for the
-//	CDynaLink that is specific for each element of the array which means
+//   CDynaLink that is specific for each element of the array which means
 // one module can link more than one function and allows easy identification
 // of the CDynaLink during compile, link, and debug steps.  This means,
 // however, you cannot put anything for lUserFuncIndex that would make an
@@ -84,11 +84,11 @@
 // To access a function from your array.
 // FunctionTypedef is a typedef of a pointer to your function type.
 // FriendClass is a class to befriend this one (allowing it, and only it,
-//		to access the function array.
+//      to access the function array.
 // MaxElements is the maximum number of functions in your array list.  It must
-//		be 1 or greater.
+//      be 1 or greater.
 // lUserFuncIndex is the index in the function array to be filled with
-//		pUserFunc.
+//      pUserFunc.
 // Returns a pointer to the user function.
 #define GETLINKFUNC(FunctionTypedef, FriendClass, MaxElements, lUserFuncIndex)   \
    (CDynaLink<FunctionTypedef, FriendClass, MaxElements>::ms_afp[lUserFuncIndex])
@@ -104,7 +104,7 @@ CDynaLink(FUNCTYPEPTR pfn, S32 lIndex)
 {
    ASSERT(lIndex < lMax);
    ASSERT(ms_afp[lIndex] == NULL);
-   ms_afp[lIndex]	= pfn;
+   ms_afp[lIndex]   = pfn;
 }
 
 friend FRIEND;

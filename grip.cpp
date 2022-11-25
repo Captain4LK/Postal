@@ -21,8 +21,8 @@
 // This module impliments the CGrip class
 //
 // History:
-//		01/09/97 MJR	Started.
-//		01/28/97	MJR	Actually started filling in some usefull code.
+//      01/09/97 MJR   Started.
+//      01/28/97   MJR   Actually started filling in some usefull code.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define GRIP_CPP
@@ -67,13 +67,13 @@ void CGrip::SetCamera(
 // Track specified target coordinates
 ////////////////////////////////////////////////////////////////////////////////
 //void CGrip::TrackTarget(
-//	short sTargetX,										// In:  Target's x coord
-//	short sTargetY)										// In:  Target's y coord
-//	{
-//	// For now, simply move camera to specified coordinates
-//	ASSERT(m_pCamera != 0);
-//	m_pCamera->SetViewPos(sTargetX, sTargetY);
-//	}
+//   short sTargetX,                              // In:  Target's x coord
+//   short sTargetY)                              // In:  Target's y coord
+//   {
+//   // For now, simply move camera to specified coordinates
+//   ASSERT(m_pCamera != 0);
+//   m_pCamera->SetViewPos(sTargetX, sTargetY);
+//   }
 
 
 ////////////////////////////////////////////////////////////////////////////////

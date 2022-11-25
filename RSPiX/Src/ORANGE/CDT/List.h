@@ -20,28 +20,28 @@
 // list.h
 //
 // History:
-//		06/23/94 JMI	Started.
+//      06/23/94 JMI   Started.
 //
-//		06/13/95	JMI	Converted to a template in attempt to make this class
-//							more useful.  This class used to be defined in a .CPP
-//							but that proves too cumbersome for templates.
+//      06/13/95   JMI   Converted to a template in attempt to make this class
+//                     more useful.  This class used to be defined in a .CPP
+//                     but that proves too cumbersome for templates.
 //
-//		07/08/96	JMI	Converted to new CList that does not convert your
-//							template type into a poiter.
+//      07/08/96   JMI   Converted to new CList that does not convert your
+//                     template type into a poiter.
 //
-//		07/09/96	JMI	Converted back to CList that does convert your
-//							template type into a pointer.  Now utilizes CBList<T>.
+//      07/09/96   JMI   Converted back to CList that does convert your
+//                     template type into a pointer.  Now utilizes CBList<T>.
 //
-//		10/09/96	JMI	CList() constructor now has option to skip initialization
-//							and automatic dealloaction which is passed on to CBList().
+//      10/09/96   JMI   CList() constructor now has option to skip initialization
+//                     and automatic dealloaction which is passed on to CBList().
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CList				RList
-//							CBList			RBList
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CList            RList
+//                     CBList         RBList
 //
-//		01/05/96	JMI	Added standard forms of GetLogicalNext()/Prev().
+//      01/05/96   JMI   Added standard forms of GetLogicalNext()/Prev().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -156,7 +156,7 @@ short IsEmpty(void)           // Returns TRUE if empty, FALSE otherwise.
 { return RBList<T*>::IsEmpty(); }
 
 // Constructor to merely pass on arguments.
-RList(short sInitialize	= TRUE) :
+RList(short sInitialize   = TRUE) :
    RBList<T*>(sInitialize)
 {}
 

@@ -25,19 +25,19 @@
 //
 // History:
 //
-//		08/06/97 JRD	Started.  Set bars to load in the realm
+//      08/06/97 JRD   Started.  Set bars to load in the realm
 //
-//		08/08/97 JRD	Changed methodology to a proprietary data format and abandoning
-//							attempts of a one to one interface with postal.  Tollbar will
-//							update an internal map of the weapon states based on events
-//							passed.
+//      08/08/97 JRD   Changed methodology to a proprietary data format and abandoning
+//                     attempts of a one to one interface with postal.  Tollbar will
+//                     update an internal map of the weapon states based on events
+//                     passed.
 //
-//		08/08/97	JRD	Completely revamped and finalized the class structure.
-//							Added the first hook to draw the entire bar.
-//							Added aliased functions to reduce header dependencies.
-//		08/09/97	JRD	Added all functionality except a hook to refresh on event.
+//      08/08/97   JRD   Completely revamped and finalized the class structure.
+//                     Added the first hook to draw the entire bar.
+//                     Added aliased functions to reduce header dependencies.
+//      08/09/97   JRD   Added all functionality except a hook to refresh on event.
 //
-//		08/25/97	JMI	Moved gsStatus* here from score.cpp.
+//      08/25/97   JMI   Moved gsStatus* here from score.cpp.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef TOOL_BAR_H

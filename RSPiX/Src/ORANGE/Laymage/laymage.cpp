@@ -19,73 +19,73 @@
 //
 // LAYMAGE.CPP
 //
-// Created on	10/04/96 BRH
+// Created on   10/04/96 BRH
 // Implemented 10/04/96 BRH
 //
-//	10/04/96 BRH	Started this class for use in several utilities
-//						dealing with multiple layer Photoshop images.
-//						This class loads a Photoshop file and creates
-//						a CImage for each layer and provides way of
-//						accessing specific layers.
+//   10/04/96 BRH   Started this class for use in several utilities
+//                  dealing with multiple layer Photoshop images.
+//                  This class loads a Photoshop file and creates
+//                  a CImage for each layer and provides way of
+//                  accessing specific layers.
 //
-// 10/10/96 BRH	Put in basic support which includes loading a
-//						layered Photoshop file and converting it to
-//						a CLaymage in memory.  GetLayer functions provide
-//						access to the layers either by name or number,
-//						and GetLayerName will give the names of a
-//						specific layer number.
+// 10/10/96 BRH   Put in basic support which includes loading a
+//                  layered Photoshop file and converting it to
+//                  a CLaymage in memory.  GetLayer functions provide
+//                  access to the layers either by name or number,
+//                  and GetLayerName will give the names of a
+//                  specific layer number.
 //
-// 10/11/96 BRH	Added SetPSD function which instead of loading
-//						all of the layers as LoadPSD does, just reads in
-//						the layer names, and saves file positions for
-//						the layers header section and layers channel
-//						data section.  Then GetLayer is called, if the
-//						layers are all in memory because of LoadPSD,
-//						then it will return the pointer to that CImage
-//						layer.  If SetPSD was called, then it will read
-//						from the Photoshop, the requested layer and
-//						create the CImage.  Once the user is done with
-//						a layer, they can call FreeLayer() with the layer
-//						name or number and it will free that CImage.
-//						These features were added to avoid problems with
-//						large Photoshop images which expanded to fill all
-//						available RAM.
+// 10/11/96 BRH   Added SetPSD function which instead of loading
+//                  all of the layers as LoadPSD does, just reads in
+//                  the layer names, and saves file positions for
+//                  the layers header section and layers channel
+//                  data section.  Then GetLayer is called, if the
+//                  layers are all in memory because of LoadPSD,
+//                  then it will return the pointer to that CImage
+//                  layer.  If SetPSD was called, then it will read
+//                  from the Photoshop, the requested layer and
+//                  create the CImage.  Once the user is done with
+//                  a layer, they can call FreeLayer() with the layer
+//                  name or number and it will free that CImage.
+//                  These features were added to avoid problems with
+//                  large Photoshop images which expanded to fill all
+//                  available RAM.
 //
-//	10/22/96	JMI	Moved #include <stdlib.h> and #include <string.h> to
-//						before #include "System.h".
+//   10/22/96   JMI   Moved #include <stdlib.h> and #include <string.h> to
+//                  before #include "System.h".
 //
-//	10/28/96 MJR	Minor tweaks to make it compile correctly and with
-//						warnings under CodeWarrior.  No functional changes.
+//   10/28/96 MJR   Minor tweaks to make it compile correctly and with
+//                  warnings under CodeWarrior.  No functional changes.
 //
-//	11/01/96 BRH	Changed CLaymage to RLaymage to conform to new
-//						RSPiX class names.
+//   11/01/96 BRH   Changed CLaymage to RLaymage to conform to new
+//                  RSPiX class names.
 //
-//	11/01/96	JMI	Changed:
-//						Old label:		New label:
-//						=========		=========
-//						ENDIAN_BIG		RFile::BigEndian
-//						ENDIAN_LITTLE	RFile::LittleEndian
+//   11/01/96   JMI   Changed:
+//                  Old label:      New label:
+//                  =========      =========
+//                  ENDIAN_BIG      RFile::BigEndian
+//                  ENDIAN_LITTLE   RFile::LittleEndian
 //
-//						Also, changed all members referenced in RImage to
-//						m_ and all position/dimension members referenced in
-//						RImage to type short usage.
+//                  Also, changed all members referenced in RImage to
+//                  m_ and all position/dimension members referenced in
+//                  RImage to type short usage.
 //
-//	02/13/97 MJR	Added Reset() to reset object back to its initial
-//						freshly-constructed state.
+//   02/13/97 MJR   Added Reset() to reset object back to its initial
+//                  freshly-constructed state.
 //
-//						Fixed a problem having to do with single-layer
-//						files.  The code was assuming that the layer-related
-//						section always exists, but it doesn't for files with
-//						just one layer.
+//                  Fixed a problem having to do with single-layer
+//                  files.  The code was assuming that the layer-related
+//                  section always exists, but it doesn't for files with
+//                  just one layer.
 //
-//	02/27/97 BRH	Fixed bug in ReadLayerInfo where the channel IDs
-//						were being read into only the last Channel ID,
-//						causing many channels to be skipped.  Also
-//						ConvertToImage now initializes the image data buffer
-//						to white pixels that are transparent (in Photoshop
-//						fashion) to match Photoshop layers that may contain
-//						a rectangular area that is smaller than the full
-//						image size.
+//   02/27/97 BRH   Fixed bug in ReadLayerInfo where the channel IDs
+//                  were being read into only the last Channel ID,
+//                  causing many channels to be skipped.  Also
+//                  ConvertToImage now initializes the image data buffer
+//                  to white pixels that are transparent (in Photoshop
+//                  fashion) to match Photoshop layers that may contain
+//                  a rectangular area that is smaller than the full
+//                  image size.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -110,13 +110,13 @@
 // Constructor
 //
 // Description:
-//		General constructor for RLaymage for initializing member variables
+//      General constructor for RLaymage for initializing member variables
 //
 // Parameters:
-//		none
+//      none
 //
-//	Returns:
-//		none
+//   Returns:
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -139,13 +139,13 @@ RLaymage::RLaymage()
 // Destructor
 //
 // Description:
-//		Deallocates memory for RImage layers and layer names
+//      Deallocates memory for RImage layers and layer names
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -159,13 +159,13 @@ RLaymage::~RLaymage()
 // Reset
 //
 // Description:
-//		Resets object back to its freshly-constructed state
+//      Resets object back to its freshly-constructed state
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -187,13 +187,13 @@ void RLaymage::Reset()
 // ClearChannelBuffers
 //
 // Description:
-//		Deallocate all channel buffers and reset the pointers
+//      Deallocate all channel buffers and reset the pointers
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -214,15 +214,15 @@ void RLaymage::ClearChannelBuffers(void)
 // AllocateChannelBuffers
 //
 // Description:
-//		Allocate the 4 standard channel buffers, Red, Green, Blue, and
-//		Alpha.
+//      Allocate the 4 standard channel buffers, Red, Green, Blue, and
+//      Alpha.
 //
 // Parameters:
-//		Number of bytes to be allocated for each buffer
+//      Number of bytes to be allocated for each buffer
 //
 // Returns:
-//		SUCCESS if all buffers were allocated
-//		FAILURE if memory was not allocated for the buffers
+//      SUCCESS if all buffers were allocated
+//      FAILURE if memory was not allocated for the buffers
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -255,18 +255,18 @@ short RLaymage::AllocateChannelBuffers(U32 ulSize)
 // SetPSD
 //
 // Description:
-//		Opens the given Photoshop file and reads it layer names and
-//		saves poistions to key points in the Photoshop file.  It
-//		does not load any layers.  When the user requests a layer
-//		using GetLayer(), it will load that layer from this Photoshop
-//		file.
+//      Opens the given Photoshop file and reads it layer names and
+//      saves poistions to key points in the Photoshop file.  It
+//      does not load any layers.  When the user requests a layer
+//      using GetLayer(), it will load that layer from this Photoshop
+//      file.
 //
 // Parameters:
-//		pszFilename = filename of Photoshop file (.PSD) to be set
+//      pszFilename = filename of Photoshop file (.PSD) to be set
 //
 // Returns:
-//		SUCCESS if the file was loaded and set up
-//		FAILURE otherwise - TRACE information gives failure
+//      SUCCESS if the file was loaded and set up
+//      FAILURE otherwise - TRACE information gives failure
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -319,14 +319,14 @@ error:
 // LoadPSD
 //
 // Description:
-//		Load the given Photoshop file and convert its layers into a
-//		series of RImages.
+//      Load the given Photoshop file and convert its layers into a
+//      series of RImages.
 //
 // Parameters:
-//		pszFilename = filename of Photoshop file (.PSD) to be loaded
+//      pszFilename = filename of Photoshop file (.PSD) to be loaded
 //
 // Returns:
-//		SUCCESS if the file was loaded and converted
+//      SUCCESS if the file was loaded and converted
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -379,21 +379,21 @@ error:
 // ReadPSDHeader
 //
 // Description:
-//		Reads in the header for the Photoshop file and sets the
-//		width, height, number of layers and the file positions to
-//		the beginning of the layers header information, and the
-//		beginning of the channel data.  This routine can be called
-//		from either LoadPSD or SetPSD to get this information.  SetPSD
-//		will then just read the names of the layers, and LoadPSD
-//		will call the ReadLayerInfo for each layer.
+//      Reads in the header for the Photoshop file and sets the
+//      width, height, number of layers and the file positions to
+//      the beginning of the layers header information, and the
+//      beginning of the channel data.  This routine can be called
+//      from either LoadPSD or SetPSD to get this information.  SetPSD
+//      will then just read the names of the layers, and LoadPSD
+//      will call the ReadLayerInfo for each layer.
 //
 // Parameters:
-//		pszFilename = name of the Photoshop header to read
+//      pszFilename = name of the Photoshop header to read
 //
 // Returns:
-//		SUCCESS if the file was opened and header was read successfully
-//		FAILURE if there was an error - TRACE messages will help
-//				  pinpoint the error.
+//      SUCCESS if the file was opened and header was read successfully
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoint the error.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -525,21 +525,21 @@ error:
 // ReadLayer
 //
 // Description:
-//		This function is called by GetLayer when the layer requested
-//		is not currently loaded into memory and needs to be retrieved
-//		from the Photoshop file.  It interfaces with ReadLayerInfo
-//		by opening the Layer and Channel files and setting them to the
-//		saved locations.  Then it loops through the layers, reading each
-//		one in order to parse the file.  If the layer it just read
-//		in the loop was not the requested layer, then it frees that
-//		layer and reads the next one until it finds the one it wants.
+//      This function is called by GetLayer when the layer requested
+//      is not currently loaded into memory and needs to be retrieved
+//      from the Photoshop file.  It interfaces with ReadLayerInfo
+//      by opening the Layer and Channel files and setting them to the
+//      saved locations.  Then it loops through the layers, reading each
+//      one in order to parse the file.  If the layer it just read
+//      in the loop was not the requested layer, then it frees that
+//      layer and reads the next one until it finds the one it wants.
 //
 // Parameters
-//		sRequestedLayer = The number of the layer to be set in memory
+//      sRequestedLayer = The number of the layer to be set in memory
 //
 // Returns:
-//		SUCCESS if the layer was found and read
-//		FAILURE if there was an error
+//      SUCCESS if the layer was found and read
+//      FAILURE if there was an error
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -592,25 +592,25 @@ error:
 // SetChannelPointer
 //
 // Description:
-//		Private function to set a second file pointer to the
-//		beginning of the Channel data so that two pointers
-//		working together can read both the layer header information
-//		and the data.  This routine gets an open RFile pointer
-//		at the start of the layer header information and it will
-//		skip through the header information for all of the layers
-//		and will be left at the beginning of the channel data for
-//		the first layer.
+//      Private function to set a second file pointer to the
+//      beginning of the Channel data so that two pointers
+//      working together can read both the layer header information
+//      and the data.  This routine gets an open RFile pointer
+//      at the start of the layer header information and it will
+//      skip through the header information for all of the layers
+//      and will be left at the beginning of the channel data for
+//      the first layer.
 //
 // Parameters:
-//		sNumLayers = number of layers to be skipped
-//		pcfChannel = RFile pointer to open Photoshop file at
-//						 the beginning of the Layers header section
-//						 which will be moved to the beginning of the
-//						 channel data for the layers.
+//      sNumLayers = number of layers to be skipped
+//      pcfChannel = RFile pointer to open Photoshop file at
+//                   the beginning of the Layers header section
+//                   which will be moved to the beginning of the
+//                   channel data for the layers.
 //
 // Returns:
-//		SUCCESS if the pointer was skipped successfully
-//		FAILURE otherwise
+//      SUCCESS if the pointer was skipped successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -675,18 +675,18 @@ short RLaymage::SetChannelPointer(short sNumLayers, RFile* pcfChannel)
 // ReadLayerInfo
 //
 // Description:
-//		This is called for each layer.  It creates a new RImage
-//		layer, reads the Photoshop data for the layer, and
-//		converts it to a 32-bit ARGB format RImage
+//      This is called for each layer.  It creates a new RImage
+//      layer, reads the Photoshop data for the layer, and
+//      converts it to a 32-bit ARGB format RImage
 //
 // Parameters:
-//		sLayerNum = current layer number
-//		pcfLayer = pointer to layer header portion of file
-//		pcfChannel = pointer to channel data portion of file
+//      sLayerNum = current layer number
+//      pcfLayer = pointer to layer header portion of file
+//      pcfChannel = pointer to channel data portion of file
 //
 // Returns:
-//		SUCCESS if layer was loaded and converted successfully
-//		FAILURE otherwise
+//      SUCCESS if layer was loaded and converted successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -920,17 +920,17 @@ short RLaymage::ReadLayerInfo(short sLayerNum, RFile* pcfLayer,
 // ReadLayerName
 //
 // Description:
-//		Read the name of the given layer.  This will be called in
-//		a loop much like ReadLayerInfo, but it only gets the names,
-//		it does not read the channel data.
+//      Read the name of the given layer.  This will be called in
+//      a loop much like ReadLayerInfo, but it only gets the names,
+//      it does not read the channel data.
 //
 // Parameters:
-//		sLayer = layer number to read
-//		pcfLayer = pointer to open RFile at layer header
+//      sLayer = layer number to read
+//      pcfLayer = pointer to open RFile at layer header
 //
 // Returns:
-//		SUCCESS if read successfully
-//		FAILURE if there was an error
+//      SUCCESS if read successfully
+//      FAILURE if there was an error
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1012,25 +1012,25 @@ short RLaymage::ReadLayerName(short sLayerNum, RFile* pcfLayer)
 // RLE_Decompress
 //
 // Description:
-//		Decompress the RLE data using the algroithm from the Mac's
-//		PackBits/UnpackBits routines.  This function gets the file
-//		pointer at the beginning of the RLE data, the size of the
-//		compressed data to read (so it knows when to stop), and the
-//		buffer that is already allocated large enough to hold the
-//		decompressed data.
+//      Decompress the RLE data using the algroithm from the Mac's
+//      PackBits/UnpackBits routines.  This function gets the file
+//      pointer at the beginning of the RLE data, the size of the
+//      compressed data to read (so it knows when to stop), and the
+//      buffer that is already allocated large enough to hold the
+//      decompressed data.
 //
 // Input:
-//		char* pcBuffer = pointer to buffer large enough for the
-//							  decompressed data.
-//		ulCompSize = size of compressed data
-//		pcf = RFile pointer at the start of compressed data
+//      char* pcBuffer = pointer to buffer large enough for the
+//                       decompressed data.
+//      ulCompSize = size of compressed data
+//      pcf = RFile pointer at the start of compressed data
 //
 // Output:
-//		pcBuffer is filled with decompressed data
+//      pcBuffer is filled with decompressed data
 //
 // Returns:
-//		SUCCESS if decompressed successfully
-//		FAILURE otherwise
+//      SUCCESS if decompressed successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1100,19 +1100,19 @@ short RLaymage::RLE_Decompress(char* pcBuffer, U32 ulCompSize, RFile* pcfRLE)
 // ConvertToImage
 //
 // Description:
-//		Takes the 4 channels of Photoshop data and converts it to a
-//		32-bit ARGB RImage.  The Photoshop layers are saved not as
-//		the whole image size, but a bounding rectangle that contains
-//		information.  So the bounding rectangle is passed in and will
-//		be mapped on to a full size RImage layer.
+//      Takes the 4 channels of Photoshop data and converts it to a
+//      32-bit ARGB RImage.  The Photoshop layers are saved not as
+//      the whole image size, but a bounding rectangle that contains
+//      information.  So the bounding rectangle is passed in and will
+//      be mapped on to a full size RImage layer.
 //
 // Parameters:
-//		ulTop, ulBottom, ulLeft, ulRight = bounding rectangle for
-//													  the Photoshop data
+//      ulTop, ulBottom, ulLeft, ulRight = bounding rectangle for
+//                                         the Photoshop data
 //
 // Returns:
-//		SUCCESS if converted successfully
-//		FAILURE otherwise
+//      SUCCESS if converted successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1167,16 +1167,16 @@ short RLaymage::ConvertToImage(short sLayerNum, U32 ulTop, U32 ulBottom,
 // Load
 //
 // Description:
-//		The load functions take either a filename or an open RFile
-//		pointer and begin loading a CLamage file (,IML)
+//      The load functions take either a filename or an open RFile
+//      pointer and begin loading a CLamage file (,IML)
 //
 // Parameters:
-//		pszFilename = filename of the .IML file to be loaded - OR -
-//		CFile* pcf = pointer to open RFile where image loading starts
+//      pszFilename = filename of the .IML file to be loaded - OR -
+//      CFile* pcf = pointer to open RFile where image loading starts
 //
 // Returns:
-//		SUCCESS if the file was loaded successfully
-//		FAILURE otherwise
+//      SUCCESS if the file was loaded successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1258,20 +1258,20 @@ short RLaymage::Load(RFile* pcf)
 // Save
 //
 // Description:
-//		These functions save the RLaymage as its own file type (.IML)
-//		They save the layer names and use the RImage save to save each
-//		Image layer.  One version takes a filename to save and the other
-//		version takes a pointer to an open RFile and writes the data where
-//		it is.
+//      These functions save the RLaymage as its own file type (.IML)
+//      They save the layer names and use the RImage save to save each
+//      Image layer.  One version takes a filename to save and the other
+//      version takes a pointer to an open RFile and writes the data where
+//      it is.
 //
 // Parameters:
-//		char* pszFilename = filename of the .IML file you wish to save - OR -
-//		RFile* pcf = pointer to an open RFile where the data will be saved
+//      char* pszFilename = filename of the .IML file you wish to save - OR -
+//      RFile* pcf = pointer to an open RFile where the data will be saved
 //
 // Returns:
-//		SUCCESS if the file was saved
-//		FAILURE is there was an error -
-//				  TRACE message will help pinpoint failure
+//      SUCCESS if the file was saved
+//      FAILURE is there was an error -
+//              TRACE message will help pinpoint failure
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1303,17 +1303,17 @@ short RLaymage::Save(RFile* /*pcf*/)
 // GetLayer
 //
 // Description:
-//		Returns a pointer to the RImage for the requested layer.
-//		This version of the function takes a string and tries to
-//		find a layer with the same name.  If it finds it, it returns
-//		a pointer to the RImage for that layer.
+//      Returns a pointer to the RImage for the requested layer.
+//      This version of the function takes a string and tries to
+//      find a layer with the same name.  If it finds it, it returns
+//      a pointer to the RImage for that layer.
 //
 // Parameters:
-//		pszLayerName = requested layer
+//      pszLayerName = requested layer
 //
 // Returns:
-//		pointer to RImage of the requested layer if found
-//		NULL if not found
+//      pointer to RImage of the requested layer if found
+//      NULL if not found
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1345,17 +1345,17 @@ RImage* RLaymage::GetLayer(char* pszLayerName)
 // GetLayer
 //
 // Description:
-//		Returns a pointer to the RImage for the reuested layer.
-//		This version of the function takes a layer number and
-//		retuns a pointer to that layer (as S32 as it is a valid
-//		layer number).
+//      Returns a pointer to the RImage for the reuested layer.
+//      This version of the function takes a layer number and
+//      retuns a pointer to that layer (as S32 as it is a valid
+//      layer number).
 //
 // Parameters:
-//		sLayerNumber = number of the requested layer
+//      sLayerNumber = number of the requested layer
 //
 // Returns:
-//		pointer to RImage of the requested layer if found
-//		NULL if not found
+//      pointer to RImage of the requested layer if found
+//      NULL if not found
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1382,15 +1382,15 @@ RImage* RLaymage::GetLayer(short sLayerNumber)
 // FreeLayer
 //
 // Description:
-//		Frees the RImage for the specified layer.  This version of the
-//		function takes the name of a layer and frees it as S32 as
-//		that layer exists.
+//      Frees the RImage for the specified layer.  This version of the
+//      function takes the name of a layer and frees it as S32 as
+//      that layer exists.
 //
 // Parameters
-//		pszLayerName = name of layer to be freed
+//      pszLayerName = name of layer to be freed
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1419,15 +1419,15 @@ void RLaymage::FreeLayer(char* pszLayerName)
 // FreeLayer
 //
 // Description:
-//		Frees the RImage for the specified layer.  This version of the
-//		function takes the layer number and frees it as S32 as that
-//		layer exists.
+//      Frees the RImage for the specified layer.  This version of the
+//      function takes the layer number and frees it as S32 as that
+//      layer exists.
 //
 // Parameters
-//		sLayer = number of layer to be freed
+//      sLayer = number of layer to be freed
 //
-//	Returns:
-//		none
+//   Returns:
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1446,13 +1446,13 @@ void RLaymage::FreeLayer(short sLayerNumber)
 // FreeAllLayers
 //
 // Description:
-//		Frees all of the RImage layers that have been allocated
+//      Frees all of the RImage layers that have been allocated
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1475,16 +1475,16 @@ void RLaymage::FreeAllLayers(void)
 // GetLayerName
 //
 // Description:
-//		Get the name of the requested layer
+//      Get the name of the requested layer
 //
 // Parameters:
-//		sLayer = Number of the layer
-//		pszNameBuffer = a buffer in which the name will be copied
+//      sLayer = Number of the layer
+//      pszNameBuffer = a buffer in which the name will be copied
 //
 // Returns:
-//		SUCCESS if the layer number given was valid
-//		FAILURE if that layer number does not exist or if the
-//				  buffer passed in was NULL
+//      SUCCESS if the layer number given was valid
+//      FAILURE if that layer number does not exist or if the
+//              buffer passed in was NULL
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1506,16 +1506,16 @@ short RLaymage::GetLayerName(short sLayer, char* pszNameBuffer)
 // FreeLayerArrays
 //
 // Description:
-//		Frees the array of pointers to RImage and layer names aS32
-//		with the things they were pointing to.  This is called to
-//		clean up the memory either by the destructor or if a new
-//		file is set or loaded.
+//      Frees the array of pointers to RImage and layer names aS32
+//      with the things they were pointing to.  This is called to
+//      clean up the memory either by the destructor or if a new
+//      file is set or loaded.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1544,16 +1544,16 @@ void RLaymage::FreeLayerArrays(void)
 // AllocateLayerArrays
 //
 // Description:
-//		Allocates the arrays of RImage pointers and string pointers
-//		for the layer names.  It first calls FreeLayerArrays in
-//		case a file had already been loaded.
+//      Allocates the arrays of RImage pointers and string pointers
+//      for the layer names.  It first calls FreeLayerArrays in
+//      case a file had already been loaded.
 //
 // Parameters:
-//		sNumLayers = number of pointers to allocate
+//      sNumLayers = number of pointers to allocate
 //
 // Returns:
-//		SUCCESS if the arrays were allocated successfully
-//		FAILURE otherwise
+//      SUCCESS if the arrays were allocated successfully
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 

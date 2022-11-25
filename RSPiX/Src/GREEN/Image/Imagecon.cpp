@@ -17,156 +17,156 @@
 //
 //////////////////////////////////////////////////////////////////////
 //
-//	IMAGECON.CPP
+//   IMAGECON.CPP
 //
-//	Created on     09/28/95	BRH
+//   Created on     09/28/95   BRH
 // Implemented on 09/28/95 BRH
 //
-// 09/28/95	BRH	Standard conversion functions for the standard
-//						image types.  The two main standards are 8 and 24
-//						bit images.  The standard converters are explained
-//						below
+// 09/28/95   BRH   Standard conversion functions for the standard
+//                  image types.  The two main standards are 8 and 24
+//                  bit images.  The standard converters are explained
+//                  below
 //
-//	11/03/95 BRH	Added support for RPal's new sPalEntrySize.  Any
-//						conversion that changes the palette will also
-//						update this variable.
+//   11/03/95 BRH   Added support for RPal's new sPalEntrySize.  Any
+//                  conversion that changes the palette will also
+//                  update this variable.
 //
-//	11/06/95 BRH	Fixed the ConvertToSCREEN8_888 to use the proper
-//						24-bit palette entries rather than the 32-bit
-//						that it was using.
+//   11/06/95 BRH   Fixed the ConvertToSCREEN8_888 to use the proper
+//                  24-bit palette entries rather than the 32-bit
+//                  that it was using.
 //
-//	11/07/95	JMI	Changed all occurrences of RGBQUAD to IM_RGBQUAD &
-//						RGBTRIPLE to IM_RGBTRIPLE.
+//   11/07/95   JMI   Changed all occurrences of RGBQUAD to IM_RGBQUAD &
+//                  RGBTRIPLE to IM_RGBTRIPLE.
 //
-// 11/08/95 BRH	Added several direct conversions to BMP8 and BMP24.
-//						Previously we had BMP8 and BMP24 as our two base
-//						types which then were converted to SCREEN8_xxx formats
-//						and others.  By providing a few more direct conversions
-//						I can then provide almost any other conversion by
-//						calling two conversion functions, one from the current
-//						to BMP8 and then from BMP8 to the new format.  The
-//						only conversions not supported are high color or
-//						true color images being converted to palette images.
+// 11/08/95 BRH   Added several direct conversions to BMP8 and BMP24.
+//                  Previously we had BMP8 and BMP24 as our two base
+//                  types which then were converted to SCREEN8_xxx formats
+//                  and others.  By providing a few more direct conversions
+//                  I can then provide almost any other conversion by
+//                  calling two conversion functions, one from the current
+//                  to BMP8 and then from BMP8 to the new format.  The
+//                  only conversions not supported are high color or
+//                  true color images being converted to palette images.
 //
-// 11/15/95	BRH	Change the conversion routines that deal with palettes
-//						so that the images keep the original RPal object in
-//						their pPalette pointers when the are converted.
-//						Previously the conversion routines detached the
-//						palette from the RImage and then created a new palette
-//						and attached that to the RImage.  This causes trouble
-//						if there are other external pointers to the same RPal,
-//						for example if several images use the same palette we
-//						don't want to throw the palette out.  Now the image
-//						keeps the same RPal object and only the palette's data
-//						is discarded during the conversion.
+// 11/15/95   BRH   Change the conversion routines that deal with palettes
+//                  so that the images keep the original RPal object in
+//                  their pPalette pointers when the are converted.
+//                  Previously the conversion routines detached the
+//                  palette from the RImage and then created a new palette
+//                  and attached that to the RImage.  This causes trouble
+//                  if there are other external pointers to the same RPal,
+//                  for example if several images use the same palette we
+//                  don't want to throw the palette out.  Now the image
+//                  keeps the same RPal object and only the palette's data
+//                  is discarded during the conversion.
 //
-//	11/20/95 BRH	Finished up all of the cross conversions between formats
-//						using intermediate BMP8 or BMP24 translations when necessary.
-//						Currently any standard format can be converted to any other
-//						standard format with the exception that 32, 24, or 16 bit
-//						images cannot be converted to any of the 8 bit formats due
-//						to the lack of a good color reduction algorithm.
+//   11/20/95 BRH   Finished up all of the cross conversions between formats
+//                  using intermediate BMP8 or BMP24 translations when necessary.
+//                  Currently any standard format can be converted to any other
+//                  standard format with the exception that 32, 24, or 16 bit
+//                  images cannot be converted to any of the 8 bit formats due
+//                  to the lack of a good color reduction algorithm.
 //
-// 01/15/96 JMI	Changed the array of conversion functions to a dynamic
-//						linking mechanism of ConvertTo and ConvertFrom function
-//						pointers so that new conversion functions can be added in
-//						.cpp files other than imagecon.cpp.
+// 01/15/96 JMI   Changed the array of conversion functions to a dynamic
+//                  linking mechanism of ConvertTo and ConvertFrom function
+//                  pointers so that new conversion functions can be added in
+//                  .cpp files other than imagecon.cpp.
 //
-//	01/16/96	BRH	Added calls to RImage::GetPitch(width,depth) to calculate
-//						the 128-bit aligned pitch for converted image types.
-//						previously, several of the conversion functions forgot
-//						to change the pitch for the new format.
+//   01/16/96   BRH   Added calls to RImage::GetPitch(width,depth) to calculate
+//                  the 128-bit aligned pitch for converted image types.
+//                  previously, several of the conversion functions forgot
+//                  to change the pitch for the new format.
 //
-// 01/19/96 BRH	Fixed a bug in creating new buffers.  Most calls were
-//						incorrectly using width*height*(depth/8) where they should
-//						have been using pitch instead of width.
+// 01/19/96 BRH   Fixed a bug in creating new buffers.  Most calls were
+//                  incorrectly using width*height*(depth/8) where they should
+//                  have been using pitch instead of width.
 //
-// 02/27/95	BRH	Changed over from using DYNALINK to the RImageSpecialFunc
-//						class for Conversion functions.  The new class is based on
-//						the same concept as DYNALINK but is specialized for RImage
-//						in that it supports 6 special function types for conversion
-//						to/from, load/save, and alloc/delete.  I moved the instantiation
-//						of the static arrays from imagecon.cpp to image.cpp since
-//						it now instantiates 6 arrays, 4 of which are not conversion
-//						related.  Then I changed the calls to LINKLATE macros (DYNALINK)
-//						to IMAGELINKLATE macros (RImageSpecialFunc).
+// 02/27/95   BRH   Changed over from using DYNALINK to the RImageSpecialFunc
+//                  class for Conversion functions.  The new class is based on
+//                  the same concept as DYNALINK but is specialized for RImage
+//                  in that it supports 6 special function types for conversion
+//                  to/from, load/save, and alloc/delete.  I moved the instantiation
+//                  of the static arrays from imagecon.cpp to image.cpp since
+//                  it now instantiates 6 arrays, 4 of which are not conversion
+//                  related.  Then I changed the calls to LINKLATE macros (DYNALINK)
+//                  to IMAGELINKLATE macros (RImageSpecialFunc).
 //
-//	07/22/96	JMI	Added ConvertFromBMP8RLE to allow LoadDib to load RLE8
-//						compressed DIBs.  BMP8RLE format can be used as any other
-//						image format.  Will implement ConvertToBMP8RLE soon.
+//   07/22/96   JMI   Added ConvertFromBMP8RLE to allow LoadDib to load RLE8
+//                  compressed DIBs.  BMP8RLE format can be used as any other
+//                  image format.  Will implement ConvertToBMP8RLE soon.
 //
-//	07/23/96	JMI	Added ConvertToBMP8RLE to allow one to convert into
-//						BMP8RLE (RLE8 Windows' bitmap compressed format).  The convert
-//						flips upside down as it compresses making it official
-//						as far as BMP files go.  SaveDib is aware of this use of
-//						RLE8 and can save these preserving compression.
-//						Also, made ConvertFromBMP8RLE flip the image so you get
-//						a DIB that is upside down as far as DIBs go, but right side
-//						up to the naked eye.  This is functionality was implemented
-//						since LoadDib does this as well.
+//   07/23/96   JMI   Added ConvertToBMP8RLE to allow one to convert into
+//                  BMP8RLE (RLE8 Windows' bitmap compressed format).  The convert
+//                  flips upside down as it compresses making it official
+//                  as far as BMP files go.  SaveDib is aware of this use of
+//                  RLE8 and can save these preserving compression.
+//                  Also, made ConvertFromBMP8RLE flip the image so you get
+//                  a DIB that is upside down as far as DIBs go, but right side
+//                  up to the naked eye.  This is functionality was implemented
+//                  since LoadDib does this as well.
 //
-//	08/04/96 MJR	Commented-out the "pImage" parameter to ConvertNoSupport()
-//						to avoid compiler warning about "unused variable".
-//						Also modified ConvertToSystem() to use WIN32 instead of
-//						_WINDOWS and to use MAC instead of _MAC.  However, note that
-//						ConvertToSystem() still does nothing on the mac.
+//   08/04/96 MJR   Commented-out the "pImage" parameter to ConvertNoSupport()
+//                  to avoid compiler warning about "unused variable".
+//                  Also modified ConvertToSystem() to use WIN32 instead of
+//                  _WINDOWS and to use MAC instead of _MAC.  However, note that
+//                  ConvertToSystem() still does nothing on the mac.
 //
-//	09/04/96	JMI	Added BMP1 IMAGELINKLATE's and corresponding ConvertToBMP1()
-//						and ConvertFromBMP1().  BMP8 is, as usual, the only type
-//						convertible to BMP1.
+//   09/04/96   JMI   Added BMP1 IMAGELINKLATE's and corresponding ConvertToBMP1()
+//                  and ConvertFromBMP1().  BMP8 is, as usual, the only type
+//                  convertible to BMP1.
 //
-//	10/10/96	JMI	ConvertToBMP24() was not checking for error return from
-//						CreateData() and so it was crashing when memory was
-//						low.
+//   10/10/96   JMI   ConvertToBMP24() was not checking for error return from
+//                  CreateData() and so it was crashing when memory was
+//                  low.
 //
-//	10/30/96	JMI	Changed:
-//						Old label:		New label:
-//						=========		=========
-//						RImage			RImage
-//						RPal				RPal
-//						U32 ulType	RImage::Type ulType
+//   10/30/96   JMI   Changed:
+//                  Old label:      New label:
+//                  =========      =========
+//                  RImage         RImage
+//                  RPal            RPal
+//                  U32 ulType   RImage::Type ulType
 //
-//						Removed #include of "imagetyp.h" b/c it has been obsoleted.
-//						Removed #include of "imagecon.h" b/c all it does is include
-//						image.h and then redeclare RImage (now RImage anyway) and
-//						replaced with #include of image.h.
+//                  Removed #include of "imagetyp.h" b/c it has been obsoleted.
+//                  Removed #include of "imagecon.h" b/c all it does is include
+//                  image.h and then redeclare RImage (now RImage anyway) and
+//                  replaced with #include of image.h.
 //
-//	11/01/96	JMI	Changed all members of image to be preceded by m_ (e.g.,
-//						sDepth to m_sDepth).  Changed all position members (i.e.,
-//						lWidth, lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos)
-//						to be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
-//						m_sBufferHeight, m_sXPos, m_sYPos).  Changed ulType to
-//						m_type and ulDestinationType to m_typeDestination.
+//   11/01/96   JMI   Changed all members of image to be preceded by m_ (e.g.,
+//                  sDepth to m_sDepth).  Changed all position members (i.e.,
+//                  lWidth, lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos)
+//                  to be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
+//                  m_sBufferHeight, m_sXPos, m_sYPos).  Changed ulType to
+//                  m_type and ulDestinationType to m_typeDestination.
 //
-//	11/06/96 MJR	Added "RImage::: before many instances of BMP8, BMP24, etc.
-//						This was suddenly required because the IMAGELINKLATE macro
-//						no S32er used the "using" syntax which had, as a side-effect,
-//						allowed the use of the enums without a preceeding "RImage::".
+//   11/06/96 MJR   Added "RImage::: before many instances of BMP8, BMP24, etc.
+//                  This was suddenly required because the IMAGELINKLATE macro
+//                  no S32er used the "using" syntax which had, as a side-effect,
+//                  allowed the use of the enums without a preceeding "RImage::".
 //
-//	11/08/96	JMI	Added more "RImage::"s where necessary in the #ifdef WIN32
-//						block.
+//   11/08/96   JMI   Added more "RImage::"s where necessary in the #ifdef WIN32
+//                  block.
 //
-//	11/08/96	JMI	Changed reference of BMP8RLE to RImage::BMP8RLE in an ASSERT.
+//   11/08/96   JMI   Changed reference of BMP8RLE to RImage::BMP8RLE in an ASSERT.
 //
 // Standard Converters:
 //
 // Buffer Conversions:
 //
-// BMP8 (8-bit buffer 32-bit color pal)	-> 16-bit buffer (555)
-// BMP8 (8-bit buffer 32-bit color pal)	-> 16-bit buffer (565)
-// BMP8 (8-bit buffer 32-bit color pal)	-> 24-bit buffer (888)	RGB
-// BMP8 (8-bit buffer 32-bit color pal)	-> 32-bit buffer (8888) ARGB
-// BMP24 (24-bit buffer)						-> 16-bit buffer (555)
-// BMP24 (24-bit buffer)						-> 16-bit buffer (565)
-// BMP24 (24-bit buffer)						-> 32-bit buffer (8888) ARGB
+// BMP8 (8-bit buffer 32-bit color pal)   -> 16-bit buffer (555)
+// BMP8 (8-bit buffer 32-bit color pal)   -> 16-bit buffer (565)
+// BMP8 (8-bit buffer 32-bit color pal)   -> 24-bit buffer (888)   RGB
+// BMP8 (8-bit buffer 32-bit color pal)   -> 32-bit buffer (8888) ARGB
+// BMP24 (24-bit buffer)                  -> 16-bit buffer (555)
+// BMP24 (24-bit buffer)                  -> 16-bit buffer (565)
+// BMP24 (24-bit buffer)                  -> 32-bit buffer (8888) ARGB
 //
 // Palette Conversions:
 //
-// BMP8 (IM_RGBQUAD)	-> 555 Palette
+// BMP8 (IM_RGBQUAD)   -> 555 Palette
 // BMP8 (IM_RGBQUAD) -> 565 Palette
 // BMP8 (IM_RGBQUAD) -> 888 Palette
 // BMP8 (IM_RGBQUAD) -> SYSTEM Palette (for setting colors on a platform
-//							basis) Windows = IM_RGBQUAD, Mac = Mac System Pal
+//                     basis) Windows = IM_RGBQUAD, Mac = Mac System Pal
 //
 //
 //////////////////////////////////////////////////////////////////////
@@ -178,11 +178,11 @@
 //////////////////////////////////////////////////////////////////////
 // Prototypes.
 //////////////////////////////////////////////////////////////////////
-short	ConvertNoSupport(RImage* pImage);
-short	ConvertToBMP8(RImage* pImage);
-short	ConvertToBMP24(RImage* pImage);
-short	ConvertToSystem(RImage* pImage);
-short	ConvertToSCREEN8_555(RImage* pImage);
+short   ConvertNoSupport(RImage* pImage);
+short   ConvertToBMP8(RImage* pImage);
+short   ConvertToBMP24(RImage* pImage);
+short   ConvertToSystem(RImage* pImage);
+short   ConvertToSCREEN8_555(RImage* pImage);
 short ConvertToSCREEN8_565(RImage* pImage);
 short ConvertToSCREEN8_888(RImage* pImage);
 short ConvertToSCREEN16_555(RImage* pImage);
@@ -221,7 +221,7 @@ IMAGELINKLATE(BMP1, ConvertToBMP1, ConvertFromBMP1, NULL, NULL, NULL, NULL);
 //
 // ConvertNoSupport:
 //
-//	Catch function in case somebody passes in a format that is not
+//   Catch function in case somebody passes in a format that is not
 // supported.  This function will just return RImage::NOT_SUPPORTED
 //
 //////////////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ short ConvertNoSupport(RImage* /*pImage*/)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	ConvertToBMP8(RImage* pImage)
+short   ConvertToBMP8(RImage* pImage)
 {
    short sReturn;
 
@@ -395,7 +395,7 @@ short	ConvertToBMP8(RImage* pImage)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	ConvertToBMP24(RImage* pImage)
+short   ConvertToBMP24(RImage* pImage)
 {
    short sReturn;
 
@@ -466,9 +466,9 @@ short	ConvertToBMP24(RImage* pImage)
             for (c = 0; c < width; c++)
             {
                U32 ulPixel = ulp32[r * sPitchWidth + c];
-               ucp24[r * pImage->m_lPitch + 3 * c + 0]	= (UCHAR)  (ulPixel & 0x000000ff);    // Red
-               ucp24[r * pImage->m_lPitch + 3 * c + 1]	= (UCHAR) ((ulPixel & 0x0000ff00) >> 8);// Green
-               ucp24[r * pImage->m_lPitch + 3 * c + 2]	= (UCHAR) ((ulPixel & 0x00ff0000) >> 16);// Blue
+               ucp24[r * pImage->m_lPitch + 3 * c + 0]   = (UCHAR)  (ulPixel & 0x000000ff);    // Red
+               ucp24[r * pImage->m_lPitch + 3 * c + 1]   = (UCHAR) ((ulPixel & 0x0000ff00) >> 8);// Green
+               ucp24[r * pImage->m_lPitch + 3 * c + 2]   = (UCHAR) ((ulPixel & 0x00ff0000) >> 16);// Blue
             }
 
          RImage::DestroyDetachedData(&pDetachedMem);
@@ -479,8 +479,8 @@ short	ConvertToBMP24(RImage* pImage)
       else
       {
          // Restore memory.
-         pImage->m_pMem		= (UCHAR*)pDetachedMem;
-         pImage->m_pData	= (UCHAR*)ulp32;
+         pImage->m_pMem      = (UCHAR*)pDetachedMem;
+         pImage->m_pData   = (UCHAR*)ulp32;
          TRACE("ConvertToBMP24(): CreateData() failed.\n");
          // Return old type.
          sReturn = (short)pImage->m_type;
@@ -643,7 +643,7 @@ short ConvertToSystem(RImage* pImage)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	ConvertToSCREEN8_555(RImage* pImage)
+short   ConvertToSCREEN8_555(RImage* pImage)
 {
    short sReturn;
 
@@ -803,7 +803,7 @@ short ConvertToSCREEN8_565(RImage* pImage)
 // the palette entries from IM_RGBQUAD to the 888 "Screen Format" palette
 //
 // The normal RImage::BMP8 DIB palette
-//		when viewed as U32 is Reserved|R|G|B
+//      when viewed as U32 is Reserved|R|G|B
 //
 // And the screen format is the same, so just change the image type
 //
@@ -1417,7 +1417,7 @@ short ConvertToSCREEN32_ARGB(RImage* pImage)
 // Description of this process from Win32 documentation:
 // This format can be compressed in encoded or absolute modes. Both
 // modes can occur anywhere in the same bitmap.
-// ·	Encoded mode consists of two bytes: the first byte specifies the
+// ·   Encoded mode consists of two bytes: the first byte specifies the
 // number of consecutive pixels to be drawn using the color index
 // contained in the second byte. In addition, the first byte of the pair
 // can be set to zero to indicate an escape that denotes an end of line,
@@ -1425,15 +1425,15 @@ short ConvertToSCREEN32_ARGB(RImage* pImage)
 // the value of the second byte of the pair, which can be one of the
 // following:
 //
-// Value	Meaning
+// Value   Meaning
 //
-// 0	End of line.
-// 1	End of bitmap.
-// 2	Delta. The two bytes following the escape contain unsigned values
+// 0   End of line.
+// 1   End of bitmap.
+// 2   Delta. The two bytes following the escape contain unsigned values
 // indicating the horizontal and vertical offsets of the next pixel from
 // the current position.
 //
-// ·	In absolute mode, the first byte is zero and the second byte is a
+// ·   In absolute mode, the first byte is zero and the second byte is a
 // value in the range 03H through FFH. The second byte represents the
 // number of bytes that follow, each of which contains the color index
 // of a single pixel. When the second byte is 2 or less, the escape has
@@ -1444,13 +1444,13 @@ short ConvertToSCREEN32_ARGB(RImage* pImage)
 //////////////////////////////////////////////////////////////////////
 short ConvertFromBMP8RLE(RImage* pImage)
 {
-   short	sRes	= RImage::NOT_SUPPORTED;   // Assume failure.
+   short sRes   = RImage::NOT_SUPPORTED;     // Assume failure.
 
    ASSERT(pImage->m_type == RImage::BMP8RLE);
 
    // Set up a pointer to the 8-bit compressed buffer before detaching
-   U8*	pu8Comp	= pImage->m_pData;
-   U8*	pu8End	= pu8Comp + pImage->m_ulSize;
+   U8*   pu8Comp   = pImage->m_pData;
+   U8*   pu8End   = pu8Comp + pImage->m_ulSize;
 
    // Detach the 8-bit compressed buffer from the Image
    void* pvDetachedMem = pImage->DetachData();
@@ -1459,27 +1459,27 @@ short ConvertFromBMP8RLE(RImage* pImage)
    // data.  Leave the current pitch.
    if (pImage->CreateData(pImage->m_lPitch * (S32)pImage->m_sHeight) == 0)
    {
-      U8*	pu8Uncomp	= pImage->m_pData;
+      U8*   pu8Uncomp   = pImage->m_pData;
 
       // We must flip the image during decompression.
       // This should work for both negative and positive
       // pitch buffers (i.e., upside down and right side up).
       S32 lPitch   = -pImage->m_lPitch;
-      pu8Uncomp		= pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
-      U8*	pu8Row	= pu8Uncomp;
+      pu8Uncomp      = pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
+      U8*   pu8Row   = pu8Uncomp;
 
       // Actual decompression.  See function header for details.
-      U8	u8Num;   // Num pixels to run.
-      U8	u8Pixel; // Pixel to run.
-      short	sDone	= FALSE;
+      U8 u8Num;     // Num pixels to run.
+      U8 u8Pixel;   // Pixel to run.
+      short sDone   = FALSE;
       while (sDone == FALSE && pu8Comp < pu8End)
       {
          // First byte is number of pixels to run, if not 0.
-         u8Num	= *pu8Comp++;
+         u8Num   = *pu8Comp++;
          if (u8Num > 0)
          {
             // Second byte is the pixel to run the u8Num pixels.
-            u8Pixel	= *pu8Comp++;
+            u8Pixel   = *pu8Comp++;
 
             // Intrinsic version of this should be faster than C.
             memset(pu8Uncomp, u8Pixel, u8Num);
@@ -1492,17 +1492,17 @@ short ConvertFromBMP8RLE(RImage* pImage)
             // absolute mode.
             // Second byte is the type of escape, unless 3 or more
             // which indicates the number of absolute bytes to copy.
-            u8Num	= *pu8Comp++;
+            u8Num   = *pu8Comp++;
             switch (u8Num)
             {
             case 0:     // End of line.
                // Move to next line of destination.
                // We require these end of lines for correct decompression.
-               pu8Row		+= lPitch;
-               pu8Uncomp	= pu8Row;
+               pu8Row      += lPitch;
+               pu8Uncomp   = pu8Row;
                break;
             case 1:     // End of bitmap.
-               sDone	= TRUE;
+               sDone   = TRUE;
                break;
             case 2:
             {
@@ -1511,17 +1511,17 @@ short ConvertFromBMP8RLE(RImage* pImage)
                // This should only be used in the case of deltas and
                // I cannot see how that could ever be since this isn't
                // an animation format.
-               U8	u8Horz	= *pu8Comp++;
-               U8	u8Vert	= *pu8Comp++;
-               pu8Uncomp	+= u8Horz + (u8Vert * lPitch);
+               U8 u8Horz   = *pu8Comp++;
+               U8 u8Vert   = *pu8Comp++;
+               pu8Uncomp   += u8Horz + (u8Vert * lPitch);
                break;
             }
             default:    // Absolute mode.
                // Intrinsic version of memcpy is fast; it aligns its copies
                // unless the compiler sucks.
                memcpy(pu8Uncomp, pu8Comp, u8Num);
-               pu8Comp		+= u8Num;
-               pu8Uncomp	+= u8Num;
+               pu8Comp      += u8Num;
+               pu8Uncomp   += u8Num;
                // This copy is supposed to be word aligned.  It is not clearly
                // stated in the dox, but it seems that, if this was an odd
                // number of bytes, we should skip the next byte.
@@ -1545,7 +1545,7 @@ short ConvertFromBMP8RLE(RImage* pImage)
    {
       TRACE("ConvertFromBMP8RLE(): CreateData() failed.\n");
       // Re-attach old buffer.
-      pImage->m_pMem	= (UCHAR*)pvDetachedMem;
+      pImage->m_pMem   = (UCHAR*)pvDetachedMem;
    }
 
    return sRes;
@@ -1561,7 +1561,7 @@ short ConvertFromBMP8RLE(RImage* pImage)
 //////////////////////////////////////////////////////////////////////
 short ConvertToBMP8RLE(RImage* pImage)
 {
-   short	sRes	= RImage::NOT_SUPPORTED;   // Assume failure.
+   short sRes   = RImage::NOT_SUPPORTED;     // Assume failure.
 
    // Only certain types can be converted from.
    switch (pImage->m_type)
@@ -1569,13 +1569,13 @@ short ConvertToBMP8RLE(RImage* pImage)
    case RImage::BMP8:
    {
       // Set up a pointer to the 8-bit uncompressed buffer before detaching
-      U8*	pu8Uncomp	= pImage->m_pData;
+      U8*   pu8Uncomp   = pImage->m_pData;
 
       // We must flip the image during compression.
       // This should work for both negative and positive
       // pitch buffers (i.e., upside down and right side up).
       S32 lPitch   = -pImage->m_lPitch;
-      pu8Uncomp		= pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
+      pu8Uncomp      = pu8Uncomp + pImage->m_lPitch * ((S32)pImage->m_sHeight - 1);
 
       // Detach the 8-bit uncompressed buffer from the Image
       void* pvDetachedMem = pImage->DetachData();
@@ -1593,10 +1593,10 @@ short ConvertToBMP8RLE(RImage* pImage)
       // 2 * ulSize + lHeight * 2 + 2.
       if (pImage->CreateData(2 * pImage->m_ulSize + (S32)pImage->m_sHeight * 2 + 2) == 0)
       {
-         U8*	pu8Comp		= pImage->m_pData;
+         U8*   pu8Comp      = pImage->m_pData;
 
          // Actual compression.  See function header for details.
-         U8*	pu8Row	= pu8Uncomp;
+         U8*   pu8Row   = pu8Uncomp;
          S32 lRowRemain;
          S32 lRun;
 
@@ -1607,13 +1607,13 @@ short ConvertToBMP8RLE(RImage* pImage)
          // It seems to me this would only be useful in animation.
          for (S32 lNumLines = (S32)pImage->m_sHeight; lNumLines > 0; lNumLines--)
          {
-            lRowRemain	= (S32)pImage->m_sWidth;
+            lRowRemain   = (S32)pImage->m_sWidth;
 
             while (lRowRemain > 0)
             {
                // Look for verbatim runs first since they are limited
                // to 3 or more.
-               for (lRun	= 1; lRun < lRowRemain && lRun < 255; lRun++)
+               for (lRun   = 1; lRun < lRowRemain && lRun < 255; lRun++)
                {
                   if (pu8Uncomp[lRun] == pu8Uncomp[lRun - 1])
                   {
@@ -1625,7 +1625,7 @@ short ConvertToBMP8RLE(RImage* pImage)
                if (lRun < 3)
                {
                   // Look for length of run with one color index.
-                  for (lRun	= 1; lRun < lRowRemain && lRun < 255; lRun++)
+                  for (lRun   = 1; lRun < lRowRemain && lRun < 255; lRun++)
                   {
                      if (pu8Uncomp[lRun] != *pu8Uncomp)
                      {
@@ -1634,55 +1634,55 @@ short ConvertToBMP8RLE(RImage* pImage)
                   }
 
                   // Number of pixels to run this color index.
-                  *pu8Comp++	= (U8)lRun;
+                  *pu8Comp++   = (U8)lRun;
                   // Color index to run.
-                  *pu8Comp++	= *pu8Uncomp;
+                  *pu8Comp++   = *pu8Uncomp;
                   // Advance past run.
-                  pu8Uncomp	+= lRun;
+                  pu8Uncomp   += lRun;
                }
                else
                {
                   // 0 indicates "absolute mode".
-                  *pu8Comp++	= 0;
+                  *pu8Comp++   = 0;
                   // Number of absolute pixels.
-                  *pu8Comp++	= (U8)lRun;
+                  *pu8Comp++   = (U8)lRun;
 
                   // Verbatim run.
                   memcpy(pu8Comp, pu8Uncomp, lRun);
 
                   // Advance uncomp.
-                  pu8Uncomp	+= lRun;
+                  pu8Uncomp   += lRun;
                   // Advance comp.
-                  pu8Comp		+= lRun;
+                  pu8Comp      += lRun;
 
                   // If this is an odd number . . .
                   if ((lRun % 2) == 1)
                   {
                      // Skip to maintain "word align"ment.  Make
                      // ignored byte 0 for obviousness.
-                     *pu8Comp++	= 0;
+                     *pu8Comp++   = 0;
                   }
                }
 
                // Reduce amount left this row.
-               lRowRemain	-= lRun;
+               lRowRemain   -= lRun;
 
                ASSERT(lRowRemain >= 0);
             }
 
             // Add end of line escape.
-            *pu8Comp++		= 0;
-            *pu8Comp++		= 0;
+            *pu8Comp++      = 0;
+            *pu8Comp++      = 0;
 
             // Update row.
-            pu8Row		+= lPitch;
+            pu8Row      += lPitch;
             // Set ptr to new row.
-            pu8Uncomp	= pu8Row;
+            pu8Uncomp   = pu8Row;
          }
 
          // Add end of BMP escape.
-         *pu8Comp++		= 0;
-         *pu8Comp++		= 1;
+         *pu8Comp++      = 0;
+         *pu8Comp++      = 1;
 
 
          // Get size of compressed buffer.
@@ -1692,8 +1692,8 @@ short ConvertToBMP8RLE(RImage* pImage)
          RImage::DestroyDetachedData(&pvDetachedMem);
 
          // Allocate again and copy.
-         pu8Comp			= pImage->m_pData;
-         pvDetachedMem	= pImage->DetachData();
+         pu8Comp         = pImage->m_pData;
+         pvDetachedMem   = pImage->DetachData();
 
          // Attempt to allocate new correctly sized buffer . . .
          if (pImage->CreateData(ulSize) == 0)
@@ -1708,7 +1708,7 @@ short ConvertToBMP8RLE(RImage* pImage)
          {
             TRACE("ConvertToBMP8RLE(): CreateData() failed for second compressed buffer.\n");
             // Re-attach old buffer.
-            pImage->m_pMem	= (UCHAR*)pvDetachedMem;
+            pImage->m_pMem   = (UCHAR*)pvDetachedMem;
          }
 
          pImage->m_type = RImage::BMP8RLE;
@@ -1719,7 +1719,7 @@ short ConvertToBMP8RLE(RImage* pImage)
       {
          TRACE("ConvertToBMP8RLE(): CreateData() failed.\n");
          // Re-attach old buffer.
-         pImage->m_pMem	= (UCHAR*)pvDetachedMem;
+         pImage->m_pMem   = (UCHAR*)pvDetachedMem;
       }
 
       break;
@@ -1741,10 +1741,10 @@ short ConvertToBMP8RLE(RImage* pImage)
 //////////////////////////////////////////////////////////////////////
 short ConvertFromBMP1(RImage* pImage)
 {
-   short	sRes	= RImage::NOT_SUPPORTED;   // Assume failure.
+   short sRes   = RImage::NOT_SUPPORTED;     // Assume failure.
 
    // Set up a pointer to the 1-bit packed buffer before detaching.
-   U8*	pu8Src	= pImage->m_pData;
+   U8*   pu8Src   = pImage->m_pData;
 
    // Detach the 1-bit packed buffer from the Image
    void* pvDetachedMem = pImage->DetachData();
@@ -1753,7 +1753,7 @@ short ConvertFromBMP1(RImage* pImage)
    // data.  Alter the current pitch.
 
    // Set new depth.
-   pImage->m_sDepth	= 8;
+   pImage->m_sDepth   = 8;
 
    // Remember old pitch.
    S32 lSrcPitch   = pImage->m_lPitch;
@@ -1761,46 +1761,46 @@ short ConvertFromBMP1(RImage* pImage)
    // Compute the new pitch.  Preserve sign.
    if (pImage->m_lPitch > 0)
    {
-      pImage->m_lPitch	= RImage::GetPitch(pImage->m_sWidth, pImage->m_sDepth);
+      pImage->m_lPitch   = RImage::GetPitch(pImage->m_sWidth, pImage->m_sDepth);
    }
    else
    {
-      pImage->m_lPitch	= -RImage::GetPitch(pImage->m_sWidth, pImage->m_sDepth);
+      pImage->m_lPitch   = -RImage::GetPitch(pImage->m_sWidth, pImage->m_sDepth);
    }
 
    // Allocate new data.  This call sets ulSize.  Preserve m_sWidth, m_sHeight.
    if (pImage->CreateData(pImage->m_sHeight * ABS(pImage->m_lPitch)) == 0)
    {
       // Destination.
-      U8*	pu8Dst	= pImage->m_pData;
+      U8*   pu8Dst   = pImage->m_pData;
       // Row trackers.
-      U8*	pu8SrcRow	= pu8Src;
-      U8*	pu8DstRow	= pu8Dst;
+      U8*   pu8SrcRow   = pu8Src;
+      U8*   pu8DstRow   = pu8Dst;
 
       S32 lRows = (S32)pImage->m_sHeight;
       S32 lCols;
       while (lRows-- > 0)
       {
-         lCols	= (S32)pImage->m_sWidth / 8;
+         lCols   = (S32)pImage->m_sWidth / 8;
          while (lCols-- > 0)
          {
             // Pack a byte.
-            *pu8Dst++	= *pu8Src >> 7;
-            *pu8Dst++	= (*pu8Src & 0x40) >> 6;
-            *pu8Dst++	= (*pu8Src & 0x20) >> 5;
-            *pu8Dst++	= (*pu8Src & 0x10) >> 4;
-            *pu8Dst++	= (*pu8Src & 0x08) >> 3;
-            *pu8Dst++	= (*pu8Src & 0x04) >> 2;
-            *pu8Dst++	= (*pu8Src & 0x02) >> 1;
-            *pu8Dst++	= (*pu8Src++ & 0x01);
+            *pu8Dst++   = *pu8Src >> 7;
+            *pu8Dst++   = (*pu8Src & 0x40) >> 6;
+            *pu8Dst++   = (*pu8Src & 0x20) >> 5;
+            *pu8Dst++   = (*pu8Src & 0x10) >> 4;
+            *pu8Dst++   = (*pu8Src & 0x08) >> 3;
+            *pu8Dst++   = (*pu8Src & 0x04) >> 2;
+            *pu8Dst++   = (*pu8Src & 0x02) >> 1;
+            *pu8Dst++   = (*pu8Src++ & 0x01);
          }
 
          // Move "down" a row.
-         pu8SrcRow	+= lSrcPitch;
-         pu8DstRow	+= pImage->m_lPitch;
+         pu8SrcRow   += lSrcPitch;
+         pu8DstRow   += pImage->m_lPitch;
          // Update columns to beginning of row.
-         pu8Src		= pu8SrcRow;
-         pu8Dst		= pu8DstRow;
+         pu8Src      = pu8SrcRow;
+         pu8Dst      = pu8DstRow;
       }
 
       // Deallocate old buffer.
@@ -1816,7 +1816,7 @@ short ConvertFromBMP1(RImage* pImage)
    {
       TRACE("ConvertToBMP1(): CreateData() failed.\n");
       // Re-attach old buffer.
-      pImage->m_pMem	= (UCHAR*)pvDetachedMem;
+      pImage->m_pMem   = (UCHAR*)pvDetachedMem;
    }
 
    return sRes;
@@ -1830,7 +1830,7 @@ short ConvertFromBMP1(RImage* pImage)
 //////////////////////////////////////////////////////////////////////
 short ConvertToBMP1(RImage* pImage)
 {
-   short	sRes	= RImage::NOT_SUPPORTED;   // Assume failure.
+   short sRes   = RImage::NOT_SUPPORTED;     // Assume failure.
 
    // Only certain types can be converted from.
    switch (pImage->m_type)
@@ -1838,7 +1838,7 @@ short ConvertToBMP1(RImage* pImage)
    case RImage::BMP8:
    {
       // Set up a pointer to the 8-bit buffer before detaching.
-      U8*	pu8Src	= pImage->m_pData;
+      U8*   pu8Src   = pImage->m_pData;
 
       // Detach the 8-bit buffer from the Image
       void* pvDetachedMem = pImage->DetachData();
@@ -1847,7 +1847,7 @@ short ConvertToBMP1(RImage* pImage)
       // data.  Alter the current pitch.
 
       // Set new depth.
-      pImage->m_sDepth	= 1;
+      pImage->m_sDepth   = 1;
 
       // Remember old pitch.
       S32 lSrcPitch   = pImage->m_lPitch;
@@ -1855,7 +1855,7 @@ short ConvertToBMP1(RImage* pImage)
       // If there is a partial byte . . .
       if ((pImage->m_lPitch % 8) != 0)
       {
-         pImage->m_lPitch	= (pImage->m_lPitch / 8);
+         pImage->m_lPitch   = (pImage->m_lPitch / 8);
 
          // Adjust appropriately for positive pitch . . .
          if (pImage->m_lPitch > 0)
@@ -1869,45 +1869,45 @@ short ConvertToBMP1(RImage* pImage)
       }
       else
       {
-         pImage->m_lPitch	= (pImage->m_lPitch / 8);
+         pImage->m_lPitch   = (pImage->m_lPitch / 8);
       }
 
       // Allocate new data.  This call sets ulSize.  Preserve lWidth, lHeight.
       if (pImage->CreateData((S32)pImage->m_sHeight * ABS(pImage->m_lPitch)) == 0)
       {
          // Bit packed destination.
-         U8*	pu8Dst	= pImage->m_pData;
+         U8*   pu8Dst   = pImage->m_pData;
          // Row trackers.
-         U8*	pu8SrcRow	= pu8Src;
-         U8*	pu8DstRow	= pu8Dst;
+         U8*   pu8SrcRow   = pu8Src;
+         U8*   pu8DstRow   = pu8Dst;
 
          // Converts non-zero values to a 1 and increments ptr.
-            #define CHECK_NONZERO_INC(p)	((*(p)++ == 0) ? 0 : 1)
+            #define CHECK_NONZERO_INC(p)   ((*(p)++ == 0) ? 0 : 1)
 
          S32 lRows = (S32)pImage->m_sHeight;
          S32 lCols;
          while (lRows-- > 0)
          {
-            lCols	= (S32)pImage->m_sWidth / 8;
+            lCols   = (S32)pImage->m_sWidth / 8;
             while (lCols-- > 0)
             {
                // Pack a byte.
-               *pu8Dst		= CHECK_NONZERO_INC(pu8Src) << 7;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 6;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 5;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 4;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 3;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 2;
-               *pu8Dst		|= CHECK_NONZERO_INC(pu8Src) << 1;
-               *pu8Dst++	|= CHECK_NONZERO_INC(pu8Src) << 0;
+               *pu8Dst      = CHECK_NONZERO_INC(pu8Src) << 7;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 6;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 5;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 4;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 3;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 2;
+               *pu8Dst      |= CHECK_NONZERO_INC(pu8Src) << 1;
+               *pu8Dst++   |= CHECK_NONZERO_INC(pu8Src) << 0;
             }
 
             // Move "down" a row.
-            pu8SrcRow	+= lSrcPitch;
-            pu8DstRow	+= pImage->m_lPitch;
+            pu8SrcRow   += lSrcPitch;
+            pu8DstRow   += pImage->m_lPitch;
             // Update columns to beginning of row.
-            pu8Src		= pu8SrcRow;
-            pu8Dst		= pu8DstRow;
+            pu8Src      = pu8SrcRow;
+            pu8Dst      = pu8DstRow;
          }
 
          // Deallocate old buffer.
@@ -1923,7 +1923,7 @@ short ConvertToBMP1(RImage* pImage)
       {
          TRACE("ConvertToBMP1(): CreateData() failed.\n");
          // Re-attach old buffer.
-         pImage->m_pMem	= (UCHAR*)pvDetachedMem;
+         pImage->m_pMem   = (UCHAR*)pvDetachedMem;
       }
 
       break;

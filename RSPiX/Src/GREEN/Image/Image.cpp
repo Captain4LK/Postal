@@ -17,319 +17,319 @@
 //
 //////////////////////////////////////////////////////////////////////
 //
-//	IMAGE.CPP
+//   IMAGE.CPP
 //
-//	Created on     4/20/95	MR
-// Implemented on 4/21/95	JW
-// Changes Added	4/25/95	PPL	Change from using halloc to malloc
-//											since we are in Win32.
-// 05/08/95	JMI	Took out CDib dependency and added internal method
-//						for loading BMPs.
+//   Created on     4/20/95   MR
+// Implemented on 4/21/95   JW
+// Changes Added   4/25/95   PPL   Change from using halloc to malloc
+//                                 since we are in Win32.
+// 05/08/95   JMI   Took out CDib dependency and added internal method
+//                  for loading BMPs.
 //
-//	05/09/95	JMI	No S32er converting from RGBQUAD type palette to
-//						555 when loading DIBs since RGBQUAD is the DIB
-//						palette.
+//   05/09/95   JMI   No S32er converting from RGBQUAD type palette to
+//                  555 when loading DIBs since RGBQUAD is the DIB
+//                  palette.
 //
-//	05/10/95	JMI	CPal now contains the ability to convert between
-//						an RGBQUAD (DIB-type (FCC_pdib)) and a 555
-//						(FCC_p555).
+//   05/10/95   JMI   CPal now contains the ability to convert between
+//                  an RGBQUAD (DIB-type (FCC_pdib)) and a 555
+//                  (FCC_p555).
 //
-//	05/10/95	JMI	Added member to store whether it's okay to free
-//						the palette data (i.e., we allocated it in CPal).
+//   05/10/95   JMI   Added member to store whether it's okay to free
+//                  the palette data (i.e., we allocated it in CPal).
 //
-//	05/11/95	JMI	Took out fstream stuff that was including Windows.h
-//						causing this module to take weeks to compile.
+//   05/11/95   JMI   Took out fstream stuff that was including Windows.h
+//                  causing this module to take weeks to compile.
 //
-//	09/26/95 BRH	Completely changed the CImage class to a new
-//						version that is compatible with Jeff's Blit modules
-//						and includes expandability for future image types.
-//						This is the new standard image which each new image
-//						type will be required to understand and be able to
-//						convert to/from.  This CImage will complete the missing
-//						link between the app level image format and Jeff's
-//						Blit library.  There is no CPalImage anymore, but the
-//						more general CImage may have a valid CPal pointer or
-//						NULL if there is no palette.
+//   09/26/95 BRH   Completely changed the CImage class to a new
+//                  version that is compatible with Jeff's Blit modules
+//                  and includes expandability for future image types.
+//                  This is the new standard image which each new image
+//                  type will be required to understand and be able to
+//                  convert to/from.  This CImage will complete the missing
+//                  link between the app level image format and Jeff's
+//                  Blit library.  There is no CPalImage anymore, but the
+//                  more general CImage may have a valid CPal pointer or
+//                  NULL if there is no palette.
 //
-// 11/03/95 BRH	Made a few minor changes to the TRACE messages.
-//						Implemented the CImage and CPal Load and Save
-//						functions which will be able to save any standard
-//						image and palette.  Currently there are no image
-//						types that it cannot save, but an image type that
-//						used a pSpecial to point to data containing other
-//						pointers would not be saved correctly with the
-//						standard CImage::Load.  If you have a special case
-//						like that, you can call write your own save that calls
-//						CImage::Load to save the standard part of the image
-//						and then append your own special data at the end.
+// 11/03/95 BRH   Made a few minor changes to the TRACE messages.
+//                  Implemented the CImage and CPal Load and Save
+//                  functions which will be able to save any standard
+//                  image and palette.  Currently there are no image
+//                  types that it cannot save, but an image type that
+//                  used a pSpecial to point to data containing other
+//                  pointers would not be saved correctly with the
+//                  standard CImage::Load.  If you have a special case
+//                  like that, you can call write your own save that calls
+//                  CImage::Load to save the standard part of the image
+//                  and then append your own special data at the end.
 //
-//	11/15/95	BRH	Added CPal::DetachData() so that the pData can be
-//						detached from the palette.  This makes the new
-//						way of converting palettes easier.  Previously when
-//						a CImage converted a palette it created a whole new
-//						CPal object, but now it instead keeps the original
-//						CPal object and just changes the palette's pData.
-//						See note in imagecon.cpp history for more information.
+//   11/15/95   BRH   Added CPal::DetachData() so that the pData can be
+//                  detached from the palette.  This makes the new
+//                  way of converting palettes easier.  Previously when
+//                  a CImage converted a palette it created a whole new
+//                  CPal object, but now it instead keeps the original
+//                  CPal object and just changes the palette's pData.
+//                  See note in imagecon.cpp history for more information.
 //
-// 11/20/95 BRH	Added CPal::Convert() so that palettes can be converted
-//						using the existing CImage::Convert routines.  The Pal
-//						conversion creates a temporary palettized image and
-//						runs the conversion.  Also added CImage::SetPalette()
-//						and a mechanism by which a CImage can keep track of
-//						palettes that it allocated and those that were set
-//						by the user.  Also changed pMem from public to private
-//						and added a GetMemory access function to effectively
-//						make the memory pointer read only.
+// 11/20/95 BRH   Added CPal::Convert() so that palettes can be converted
+//                  using the existing CImage::Convert routines.  The Pal
+//                  conversion creates a temporary palettized image and
+//                  runs the conversion.  Also added CImage::SetPalette()
+//                  and a mechanism by which a CImage can keep track of
+//                  palettes that it allocated and those that were set
+//                  by the user.  Also changed pMem from public to private
+//                  and added a GetMemory access function to effectively
+//                  make the memory pointer read only.
 //
-//	01/16/96	JMI	Altered Convert to utilize dynamically linked convertors.
-//						Updated aPalEntrySizes.
+//   01/16/96   JMI   Altered Convert to utilize dynamically linked convertors.
+//                  Updated aPalEntrySizes.
 //
-//	01/16/96 BRH	Added pSpecialMem to solve a problem that came up when
-//						images that included pSpecial data were loaded from a file.
-//						Before the user was always responsible for freeing the
-//						pSpecial data but in this case, if a user simply loads
-//						a specific image type that happened to have pSpecial data,
-//						it would be a burden to them to have to remember to free
-//						the special data before the desturctor was called for the image.
-//						so the destructor will take care of pSpecial if it was the one
-//						that created it (as a result of loading from a file).
+//   01/16/96 BRH   Added pSpecialMem to solve a problem that came up when
+//                  images that included pSpecial data were loaded from a file.
+//                  Before the user was always responsible for freeing the
+//                  pSpecial data but in this case, if a user simply loads
+//                  a specific image type that happened to have pSpecial data,
+//                  it would be a burden to them to have to remember to free
+//                  the special data before the desturctor was called for the image.
+//                  so the destructor will take care of pSpecial if it was the one
+//                  that created it (as a result of loading from a file).
 //
-//						Also added GetPitch(width, depth) to provide an easy calculation
-//						of 128-bit aligned pitches.  Some of the conversion functions
-//						were not recalculating the pitch of the new image type so this
-//						function call will be added to the conversion functions.
+//                  Also added GetPitch(width, depth) to provide an easy calculation
+//                  of 128-bit aligned pitches.  Some of the conversion functions
+//                  were not recalculating the pitch of the new image type so this
+//                  function call will be added to the conversion functions.
 //
-// 01/23/96 BRH	Adding Operator= function to copy images and palettes which
-//						will be used in the new SaveDIB function.  SaveDIB is the
-//						counterpart to LoadDIB.  This will allow us to export images
-//						back into a common .BMP file for further editing with standard
-//						tools.  SaveDIB will use the code from DIB's save and will
-//						help CImage start to take the place of DIB in any RSPIX programs.
+// 01/23/96 BRH   Adding Operator= function to copy images and palettes which
+//                  will be used in the new SaveDIB function.  SaveDIB is the
+//                  counterpart to LoadDIB.  This will allow us to export images
+//                  back into a common .BMP file for further editing with standard
+//                  tools.  SaveDIB will use the code from DIB's save and will
+//                  help CImage start to take the place of DIB in any RSPIX programs.
 //
-// 02/27/96 BRH	Added call to IMAGELINKINSTANTIATE macro to set up the
-//						CImageSpecialFunc class's arrays of special functions
-//						This version of CImage uses the CImageSpecialFunc class to
-//						set up functions for special image types for conversion,
-//						load/save and alloc/delete.  The CImageSpecialFunc class
-//						is based on the DYNALINK that was used in the last version
-//						for ConvertTo and ConvertFrom functions.  Once we determined
-//						that we also needed special version of load, save, alloc,
-//						and delete we decided to make a class similar to DYNALINK that
-//						would take care of all of these special functions at once
-//						rather than setting up 6 different DYNALINK arrays.
+// 02/27/96 BRH   Added call to IMAGELINKINSTANTIATE macro to set up the
+//                  CImageSpecialFunc class's arrays of special functions
+//                  This version of CImage uses the CImageSpecialFunc class to
+//                  set up functions for special image types for conversion,
+//                  load/save and alloc/delete.  The CImageSpecialFunc class
+//                  is based on the DYNALINK that was used in the last version
+//                  for ConvertTo and ConvertFrom functions.  Once we determined
+//                  that we also needed special version of load, save, alloc,
+//                  and delete we decided to make a class similar to DYNALINK that
+//                  would take care of all of these special functions at once
+//                  rather than setting up 6 different DYNALINK arrays.
 //
-// 03/04/96 BRH	Added calls to the special functions.  The ConvertTo
-//						and ConvertFrom have been changed from DYNALINK to
-//						CImageSpecialFunc but the macros to call them remained
-//						the same.  Macro calls to get the function pointers for
-//						special image save and load were added to the Image's
-//						Save and Load functions.  First the standard image
-//						information is written and then the special save for that
-//						image type is called if it exists to write the special
-//						data to the open CNFile.  I also added calls to special
-//						allocation functions in CreateData and a call to the special
-//						delete function in the destructor.
+// 03/04/96 BRH   Added calls to the special functions.  The ConvertTo
+//                  and ConvertFrom have been changed from DYNALINK to
+//                  CImageSpecialFunc but the macros to call them remained
+//                  the same.  Macro calls to get the function pointers for
+//                  special image save and load were added to the Image's
+//                  Save and Load functions.  First the standard image
+//                  information is written and then the special save for that
+//                  image type is called if it exists to write the special
+//                  data to the open CNFile.  I also added calls to special
+//                  allocation functions in CreateData and a call to the special
+//                  delete function in the destructor.
 //
-// 03/18/96	JMI	Added SaveDib() ripped nearly verbatim from DIB.CPP.
+// 03/18/96   JMI   Added SaveDib() ripped nearly verbatim from DIB.CPP.
 //
-// 04/30/96	BRH	Added some new fields to the header of the CImage, thus
-//						invalidating the previous .IMG files but at this point they
-//						weren't in wide use.  The Blit routines required a few
-//						additional pieces of information so that they could avoid
-//						recreating the buffer as they needed it.  I added
-//						lBufferWidth, lBufferHeight, lXPos, lYPos to accomodate
-//						the Blit functions.  This way a buffer that is larger
-//						than the image can be created and the image can be
-//						located at a specific position in that buffer. Note that
-//						the whole buffer is not saved, just the image but the
-//						size of the buffer is saved so that upon load, the buffer
-//						can be recreated at its desired size.
-//						I also added ulDestinationType to accomodate image formats
-//						that may be saved as one type but are converted to another
-//						type once they are loaded.  For example, if you are using
-//						sprites and there is no save funciton for sprites, you can
-//						save the file with BMP8 type and a destination type of
-//						FAST_SPRITE so that when the file is loaded, it is
-//						read as a BMP8 format but automatically converted to
-//						the fast sprite type.  Then to avoid debugging problems
-//						when the CImage header is changed, I added a version number
-//						as a #define and write that to the file.  Then when a .IMG file
-//						is loaded, the version number is checked with the current
-//						version of CImage and if they are different it will return
-//						an error.
+// 04/30/96   BRH   Added some new fields to the header of the CImage, thus
+//                  invalidating the previous .IMG files but at this point they
+//                  weren't in wide use.  The Blit routines required a few
+//                  additional pieces of information so that they could avoid
+//                  recreating the buffer as they needed it.  I added
+//                  lBufferWidth, lBufferHeight, lXPos, lYPos to accomodate
+//                  the Blit functions.  This way a buffer that is larger
+//                  than the image can be created and the image can be
+//                  located at a specific position in that buffer. Note that
+//                  the whole buffer is not saved, just the image but the
+//                  size of the buffer is saved so that upon load, the buffer
+//                  can be recreated at its desired size.
+//                  I also added ulDestinationType to accomodate image formats
+//                  that may be saved as one type but are converted to another
+//                  type once they are loaded.  For example, if you are using
+//                  sprites and there is no save funciton for sprites, you can
+//                  save the file with BMP8 type and a destination type of
+//                  FAST_SPRITE so that when the file is loaded, it is
+//                  read as a BMP8 format but automatically converted to
+//                  the fast sprite type.  Then to avoid debugging problems
+//                  when the CImage header is changed, I added a version number
+//                  as a #define and write that to the file.  Then when a .IMG file
+//                  is loaded, the version number is checked with the current
+//                  version of CImage and if they are different it will return
+//                  an error.
 //
-// 05/16/96 BRH	Changed from using malloc to calloc so that image buffers
-//						will be cleared to zero before being used.
+// 05/16/96 BRH   Changed from using malloc to calloc so that image buffers
+//                  will be cleared to zero before being used.
 //
-//	07/12/96	JMI	Changed CreateImage so it updates the lPitch member once
-//						calculated (if calculated (may be passed in)).
+//   07/12/96   JMI   Changed CreateImage so it updates the lPitch member once
+//                  calculated (if calculated (may be passed in)).
 //
-// 08/02/96 BRH	Fixed Load so it is in sync with Save.  The Save function
-//						had been updated as described above in 4/30/96 comment with the
-//						new fields added, but the Load function did not yet read those
-//						fields.
+// 08/02/96 BRH   Fixed Load so it is in sync with Save.  The Save function
+//                  had been updated as described above in 4/30/96 comment with the
+//                  new fields added, but the Load function did not yet read those
+//                  fields.
 //
-// 08/04/95 MJR	Added function prototypes for sCreateMem(), sCreateAlignedMem(),
-//						and sDestroyMem(), and also made them static, thereby brining
-//						them into compliance with ANSI Section 5.75.53 Subsection 5a
-//						and Section 8.27 Subsection 2b.  More importantly, it avoided
-//						CodeWarrior compiler warnings.
+// 08/04/95 MJR   Added function prototypes for sCreateMem(), sCreateAlignedMem(),
+//                  and sDestroyMem(), and also made them static, thereby brining
+//                  them into compliance with ANSI Section 5.75.53 Subsection 5a
+//                  and Section 8.27 Subsection 2b.  More importantly, it avoided
+//                  CodeWarrior compiler warnings.
 //
-//	09/10/96	JMI	Modified LoadDib() to be able to calculate proper pitches for
-//						bit depths that don't have 8 as a factor.  Same for
-//						SaveDib().  LoadDib() was not reporting an error for 16 bit
-//						BMPs even though it was setting the ulType field to
-//						NOT_SUPPORTED.  Also, SaveDib() was improperly setting the
-//						size field of the DIB file header to the lPitch * lHeight
-//						when it should have been the lDibPitch * lHeight.  Also,
-//						WIDTHUCHAR and WIDTH128 macros were not 'order-of-operations'
-//						safe macros.  Added parenthesis surrounding arguments for
-//						that extra sense of comfort we've come to know and love.  We
-//						deserve that kind of protection.
+//   09/10/96   JMI   Modified LoadDib() to be able to calculate proper pitches for
+//                  bit depths that don't have 8 as a factor.  Same for
+//                  SaveDib().  LoadDib() was not reporting an error for 16 bit
+//                  BMPs even though it was setting the ulType field to
+//                  NOT_SUPPORTED.  Also, SaveDib() was improperly setting the
+//                  size field of the DIB file header to the lPitch * lHeight
+//                  when it should have been the lDibPitch * lHeight.  Also,
+//                  WIDTHUCHAR and WIDTH128 macros were not 'order-of-operations'
+//                  safe macros.  Added parenthesis surrounding arguments for
+//                  that extra sense of comfort we've come to know and love.  We
+//                  deserve that kind of protection.
 //
-//	10/09/96	JMI	Load() was converting to ulDestinationType even
-//						if it was NOT_SUPPORTED.  ReadPixelData() was using
-//						a comparison that was not compatable with the one
-//						used in WritePixelData() for the same data set.
-//						Fixed.
+//   10/09/96   JMI   Load() was converting to ulDestinationType even
+//                  if it was NOT_SUPPORTED.  ReadPixelData() was using
+//                  a comparison that was not compatable with the one
+//                  used in WritePixelData() for the same data set.
+//                  Fixed.
 //
-//	10/10/96	JMI	CreateImage() was computing lPitch wrong.  Fixed.
+//   10/10/96   JMI   CreateImage() was computing lPitch wrong.  Fixed.
 //
-//	10/15/96 MJR	Added GetEntries() to CPal as a standardized method of
-//						accessing the palette color info regardless of format or type.
+//   10/15/96 MJR   Added GetEntries() to CPal as a standardized method of
+//                  accessing the palette color info regardless of format or type.
 //
-//	10/16/96	JMI	Minor fix in CPal::GetEntries() to ASSERTs on undefined vars.
+//   10/16/96   JMI   Minor fix in CPal::GetEntries() to ASSERTs on undefined vars.
 //
-//	10/18/96 MJR	Added SetEntries() to CPal as a standardized method of
-//						accessing the palette color info regardless of format or type.
-//						Added CreatePalette() to CPal as a way to create a palette
-//						without having to know much (if anything) about it's format.
-//						Fixed GetEntries() to properly handle 555 and 565 palettes.
-//						Fixed GetEntries() to properly deal with palette's whose starting
-//						index is not 0 (very rare, but a bug nonetheless).
+//   10/18/96 MJR   Added SetEntries() to CPal as a standardized method of
+//                  accessing the palette color info regardless of format or type.
+//                  Added CreatePalette() to CPal as a way to create a palette
+//                  without having to know much (if anything) about it's format.
+//                  Fixed GetEntries() to properly handle 555 and 565 palettes.
+//                  Fixed GetEntries() to properly deal with palette's whose starting
+//                  index is not 0 (very rare, but a bug nonetheless).
 //
-//	10/21/96 BRH	Changed all loads and saves so that optional data
-//						does not need to be present to save an Image or
-//						palette.  Now you can save a palette with no
-//						color data, just the header if you want.  Each
-//						optional section is flaged in the file.  Also, I
-//						modified the load and save routines to check
-//						only for critical errors like wrong cookie or
-//						wrong version.  Then the error codee is checked
-//						after all of the reads or writes have been done
-//						before it reports an error.  This cut out most of
-//						the if/else pyramid code and made it much easier
-//						to read.
+//   10/21/96 BRH   Changed all loads and saves so that optional data
+//                  does not need to be present to save an Image or
+//                  palette.  Now you can save a palette with no
+//                  color data, just the header if you want.  Each
+//                  optional section is flaged in the file.  Also, I
+//                  modified the load and save routines to check
+//                  only for critical errors like wrong cookie or
+//                  wrong version.  Then the error codee is checked
+//                  after all of the reads or writes have been done
+//                  before it reports an error.  This cut out most of
+//                  the if/else pyramid code and made it much easier
+//                  to read.
 //
-//	10/24/96 BRH	Changed WritePixelData and ReadPixelData functions
-//						to read and write their data according to the bit
-//						depth rather than treating it as a block of bytes.
-//						This was done so that the data will be properly
-//						byte swapped when transfering it between the Mac and PC.
-//						For example, 16 bit image formats are now written
-//						to the CNFile as a number of USHORTs rather than
-//						twice as many UCHARs.  This same functionality
-//						needs to be added to load and save for DIBs which
-//						will be in the next version.
+//   10/24/96 BRH   Changed WritePixelData and ReadPixelData functions
+//                  to read and write their data according to the bit
+//                  depth rather than treating it as a block of bytes.
+//                  This was done so that the data will be properly
+//                  byte swapped when transfering it between the Mac and PC.
+//                  For example, 16 bit image formats are now written
+//                  to the CNFile as a number of USHORTs rather than
+//                  twice as many UCHARs.  This same functionality
+//                  needs to be added to load and save for DIBs which
+//                  will be in the next version.
 //
-//	10/30/96	JMI	Pulled CPal stuff out of here and put it into pal.cpp.
-//						Pulled astrImageTypeNames out of imagetyp.h and put it
-//						here as ms_astrTypeNames static member.
-//						Attempted to reword comment summary to reflect these
-//						changes.
-//						Note: I'm not positive but I think the references to
-//						imageafp.h are out of date.
+//   10/30/96   JMI   Pulled CPal stuff out of here and put it into pal.cpp.
+//                  Pulled astrImageTypeNames out of imagetyp.h and put it
+//                  here as ms_astrTypeNames static member.
+//                  Attempted to reword comment summary to reflect these
+//                  changes.
+//                  Note: I'm not positive but I think the references to
+//                  imageafp.h are out of date.
 //
-//	10/30/96	JMI	Changed:
-//						Old label:		New label:
-//						=========		=========
-//						CNFile			RFile
-//						CImage			RImage
-//						CPal				RPal
-//						U32 ulType	RImage::Type ulType
+//   10/30/96   JMI   Changed:
+//                  Old label:      New label:
+//                  =========      =========
+//                  CNFile         RFile
+//                  CImage         RImage
+//                  CPal            RPal
+//                  U32 ulType   RImage::Type ulType
 //
-//						The thing that annoys me the most about using actual enums
-//						instead of U32s is that you have to copy it into a dummy
-//						U32 to use RFile on it.  This isn't very bad, but it's
-//						annoying.
+//                  The thing that annoys me the most about using actual enums
+//                  instead of U32s is that you have to copy it into a dummy
+//                  U32 to use RFile on it.  This isn't very bad, but it's
+//                  annoying.
 //
-//	10/31/96	JMI	Changed all members to be preceded by m_ (e.g., sDepth
-//						m_sDepth).  Changed all position members (i.e., lWidth,
-//						lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos) to
-//						be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
-//						m_sBufferHeight, m_sXPos, m_sYPos) and functions associated
-//						with these members reflect this change (e.g., S32 GetWidth()
-//						is now short GetWidth()).  Changed ulType to m_type and
-//						ulDestinationType to m_typeDestination.  Increased file
-//						version to 5 since members converted to short will affect
-//						the file format.
+//   10/31/96   JMI   Changed all members to be preceded by m_ (e.g., sDepth
+//                  m_sDepth).  Changed all position members (i.e., lWidth,
+//                  lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos) to
+//                  be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
+//                  m_sBufferHeight, m_sXPos, m_sYPos) and functions associated
+//                  with these members reflect this change (e.g., S32 GetWidth()
+//                  is now short GetWidth()).  Changed ulType to m_type and
+//                  ulDestinationType to m_typeDestination.  Increased file
+//                  version to 5 since members converted to short will affect
+//                  the file format.
 //
-//	11/22/96	JMI	DestroyData() now destroys m_pSpecialMem as well.
+//   11/22/96   JMI   DestroyData() now destroys m_pSpecialMem as well.
 //
-//	11/25/96	JMI	Because DestroyData() had explicit returns other than the
-//						one at the end, the fix above was rarely being processed.
-//						Fixed.  Now DestroyData() contains only one return.
+//   11/25/96   JMI   Because DestroyData() had explicit returns other than the
+//                  one at the end, the fix above was rarely being processed.
+//                  Fixed.  Now DestroyData() contains only one return.
 //
-//	11/26/96	JMI	Now DestroyData() sets pSpecialMem to NULL.
+//   11/26/96   JMI   Now DestroyData() sets pSpecialMem to NULL.
 //
-//	11/27/96 BRH	Changed names of the buffer and image width around
-//						to make the usage more clear and to make sure that
-//						code using the previous method would not quit working
-//						due to this change.  Previously the widht and height
-//						referred to the visible picture which may be stored
-//						in a larger buffer.  The BufferWidth and BufferHeight
-//						referred to the size of the memory in which the picture
-//						was being stored.  Now we will change the width and height
-//						to mean the entire memory area and the size of the picture
-//						will be referred to by WinWidth and WinHeight.  I am
-//						rearranging the order of the variables in the class so
-//						that I won't have to change the version of the file
-//						format and I will also change the order that these values
-//						are being written and read from the files so that old
-//						image files will continue to work.
+//   11/27/96 BRH   Changed names of the buffer and image width around
+//                  to make the usage more clear and to make sure that
+//                  code using the previous method would not quit working
+//                  due to this change.  Previously the widht and height
+//                  referred to the visible picture which may be stored
+//                  in a larger buffer.  The BufferWidth and BufferHeight
+//                  referred to the size of the memory in which the picture
+//                  was being stored.  Now we will change the width and height
+//                  to mean the entire memory area and the size of the picture
+//                  will be referred to by WinWidth and WinHeight.  I am
+//                  rearranging the order of the variables in the class so
+//                  that I won't have to change the version of the file
+//                  format and I will also change the order that these values
+//                  are being written and read from the files so that old
+//                  image files will continue to work.
 //
-//	12/04/96	JMI	Added patch to make old .IMG files that had m_sBufferWidth
-//						and m_sBufferHeight set to 0.  For a more detailed
-//						explanation, search for "Begin load patch".
+//   12/04/96   JMI   Added patch to make old .IMG files that had m_sBufferWidth
+//                  and m_sBufferHeight set to 0.  For a more detailed
+//                  explanation, search for "Begin load patch".
 //
-//	12/11/96	JMI	Now calls RImageFile::Load(...) to load images.
-//						RImageFile::Load(...) has the advantage of potentially
-//						supporting older formats.  This required that extended
-//						support functions for load and save be aware of the file
-//						version number, so LOADFUNC and SAVEFUNC now take a
-//						ulVersion.
+//   12/11/96   JMI   Now calls RImageFile::Load(...) to load images.
+//                  RImageFile::Load(...) has the advantage of potentially
+//                  supporting older formats.  This required that extended
+//                  support functions for load and save be aware of the file
+//                  version number, so LOADFUNC and SAVEFUNC now take a
+//                  ulVersion.
 //
-//	12/11/96	JMI	Changed LOADFUNC and SAVEFUNC back to NOT taking a ulVersion
-//						because the BLiT libs already use these extensions without
-//						the ulVersion.  This change is temporary until such a change
-//						can be made to BLiT.
+//   12/11/96   JMI   Changed LOADFUNC and SAVEFUNC back to NOT taking a ulVersion
+//                  because the BLiT libs already use these extensions without
+//                  the ulVersion.  This change is temporary until such a change
+//                  can be made to BLiT.
 //
-//	12/18/96 BRH	Added overloaded versions of LoadDib and SaveDib that
-//						take an RFile* and can load or save to that rather than
-//						just the filename versions.  This was first used
-//						in the resource manager but is also otherwise
-//						generally useful.
+//   12/18/96 BRH   Added overloaded versions of LoadDib and SaveDib that
+//                  take an RFile* and can load or save to that rather than
+//                  just the filename versions.  This was first used
+//                  in the resource manager but is also otherwise
+//                  generally useful.
 //
-//	12/21/96	JMI	LoadDib() is now able to load itself from a larger file.
-//						It was using a Seek() to a non-relative file address.  Now
-//						it simply adds the value of an initial Tell() to the address
-//						to Seek().
+//   12/21/96   JMI   LoadDib() is now able to load itself from a larger file.
+//                  It was using a Seek() to a non-relative file address.  Now
+//                  it simply adds the value of an initial Tell() to the address
+//                  to Seek().
 //
-//	02/04/97	JMI	Added BMP_COOKIE for in detecting a .BMP formatted file.
-//						Made LoadDib() a private member.  Now Load() will load *.BMP
-//						or *.IMG formatted files.
+//   02/04/97   JMI   Added BMP_COOKIE for in detecting a .BMP formatted file.
+//                  Made LoadDib() a private member.  Now Load() will load *.BMP
+//                  or *.IMG formatted files.
 //
-//	04/16/97	JMI	Ammendded operator= overload.
+//   04/16/97   JMI   Ammendded operator= overload.
 //
-// 05/21/97 JRD	Fixed a bug in the default pitch generation of CreateImage.
+// 05/21/97 JRD   Fixed a bug in the default pitch generation of CreateImage.
 //
-//	06/08/97 MJR	Removed unecessary (some would say incorrect) TRACE messages
-//						and associated error returns from DestroyData() and
-//						DestroyPalette().  They were complaining if you called
-//						called them when the data had been allocated by the user.
-//						Instead, they now silently deal with it.
+//   06/08/97 MJR   Removed unecessary (some would say incorrect) TRACE messages
+//                  and associated error returns from DestroyData() and
+//                  DestroyPalette().  They were complaining if you called
+//                  called them when the data had been allocated by the user.
+//                  Instead, they now silently deal with it.
 //
-//	Image.h contains the class RImage.  Pal.h contains RPal.  The RImage is used
+//   Image.h contains the class RImage.  Pal.h contains RPal.  The RImage is used
 // to store generic images either with or without palettes.  RPal can also be
 // used alone to store palettes.
 //
@@ -408,14 +408,14 @@ char* RImage::ms_astrTypeNames[END_OF_TYPES] =
    "FLX8_888",
    "IMAGE_STUB",
    "BMP8RLE",
-   "BMP1",           // Added 09/04/96	JMI.
+   "BMP1",           // Added 09/04/96   JMI.
 };
 
 //////////////////////////////////////////////////////////////////////
 // Instantiate Dynamic Arrays
 //////////////////////////////////////////////////////////////////////
 
-short	ConvertNoSupport(RImage* pImage);
+short   ConvertNoSupport(RImage* pImage);
 
 IMAGELINKINSTANTIATE();
 
@@ -423,27 +423,27 @@ IMAGELINKLATE(NOT_SUPPORTED, ConvertNoSupport, NULL, NULL, NULL, NULL, NULL);
 
 //////////////////////////////////////////////////////////////////////
 //
-//	sCreateMem
+//   sCreateMem
 // (static)
 //
-//	Description:
-//		To allocate memory for the data buffers of RPal
+//   Description:
+//      To allocate memory for the data buffers of RPal
 //
-//	Parameters:
-//		hMem		handle used for the buffer
-//		ulSize	size of buffer to allocate in bytes
+//   Parameters:
+//      hMem      handle used for the buffer
+//      ulSize   size of buffer to allocate in bytes
 //
-//	Returns:
-//		0		Success
-//		-1		Buffer has already been allocated
-//		-2		Buffer could not be allocated
+//   Returns:
+//      0      Success
+//      -1      Buffer has already been allocated
+//      -2      Buffer could not be allocated
 //
 //////////////////////////////////////////////////////////////////////
 
 short RImage::sCreateMem(void **hMem, U32 ulSize)
 {
-   //	Make sure the data
-   //	hasn't already been allocated
+   //   Make sure the data
+   //   hasn't already been allocated
    if (*hMem != NULL)
    {
       TRACE("RPal::AllocMem() called by CreateData() -- A buffer has already been allocated\n");
@@ -477,23 +477,23 @@ short RImage::sCreateMem(void **hMem, U32 ulSize)
 
 //////////////////////////////////////////////////////////////////////
 //
-//	sCreateAlignedMem
+//   sCreateAlignedMem
 // (static)
 //
-//	Description:
-//		To allocate memory and return a pointer aligned to 128-bits
-//		for optimum blit speed.  This is the function used by
-//		RImage when it creates memory for the image buffers.
+//   Description:
+//      To allocate memory and return a pointer aligned to 128-bits
+//      for optimum blit speed.  This is the function used by
+//      RImage when it creates memory for the image buffers.
 //
-//	Parameters:
-//		hMem		handle used for deallocating memory later
-//		hData		handle for the aligned image buffer
-//		ulSize	size of buffer to allocate in bytes
+//   Parameters:
+//      hMem      handle used for deallocating memory later
+//      hData      handle for the aligned image buffer
+//      ulSize   size of buffer to allocate in bytes
 //
-//	Returns:
-//		0		Success
-//		-1		Buffer has already been allocated
-//		-2		Buffer could not be allocated
+//   Returns:
+//      0      Success
+//      -1      Buffer has already been allocated
+//      -2      Buffer could not be allocated
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -540,18 +540,18 @@ short RImage::sCreateAlignedMem(void **hMem, void **hData, U32 ulSize)
 
 //////////////////////////////////////////////////////////////////////
 //
-//	sDestroyMem
+//   sDestroyMem
 // (static)
 //
-//	Description:
-//		To free the data buffers of RPal and RImage that were created
-//		using either sCreateMem() or sCreateAlignedMem()
+//   Description:
+//      To free the data buffers of RPal and RImage that were created
+//      using either sCreateMem() or sCreateAlignedMem()
 //
-//	Parameters:
-//		hMem		handle to the memory used by the buffer
+//   Parameters:
+//      hMem      handle to the memory used by the buffer
 //
-//	Returns:
-//		0		Success
+//   Returns:
+//      0      Success
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -577,7 +577,7 @@ short RImage::sDestroyMem(void **hMem)
 
 //////////////////////////////////////////////////////////////////////
 //
-//	RImage Member Functions
+//   RImage Member Functions
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -597,18 +597,18 @@ void RImage::Init()
 // RImage::DestroyDetachedData
 //
 // Description:
-//		static member function that deallocates memory that was
-//		originally created using RImage::CreateData() and then
-//		detached from the RImage using DetachData().  This function
-//		will use the correct method to free the memory.
+//      static member function that deallocates memory that was
+//      originally created using RImage::CreateData() and then
+//      detached from the RImage using DetachData().  This function
+//      will use the correct method to free the memory.
 //
-//	Parameters:
-//		hMem	handle to the memory to be freed
+//   Parameters:
+//      hMem   handle to the memory to be freed
 //
 // Returns:
-//		SUCCESS if the memory was successfully freed
-//		FAILURE if either the handle or the pointer to memory was
-//				  NULL already
+//      SUCCESS if the memory was successfully freed
+//      FAILURE if either the handle or the pointer to memory was
+//              NULL already
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -631,14 +631,14 @@ short RImage::DestroyDetachedData(void** hMem)
 // Constructor
 //
 // Description:
-//		Default constructor for the RImage class.  Initializes the
-//		member variables but does not create or load any data.
+//      Default constructor for the RImage class.  Initializes the
+//      member variables but does not create or load any data.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -653,13 +653,13 @@ RImage::RImage()
 // Constructor
 //
 // Description:
-//		Initializes class members and creates data of the given size
+//      Initializes class members and creates data of the given size
 //
 // Parameters:
-//		ulNewSize	size of data to be created
+//      ulNewSize   size of data to be created
 //
-//	Returns:
-//		none
+//   Returns:
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -676,14 +676,14 @@ RImage::RImage(U32 ulNewSize)
 // Constructor
 //
 // Description:
-//		Initializes member variables and attempts to load the given
-//		BMP from a file.
+//      Initializes member variables and attempts to load the given
+//      BMP from a file.
 //
 // Parameters:
-//		pszFilename	Filename to load
+//      pszFilename   Filename to load
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -700,13 +700,13 @@ RImage::RImage(char* pszFilename)
 // Destructor
 //
 // Description:
-//		Deallocates buffer memory, and palette if any
+//      Deallocates buffer memory, and palette if any
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -725,40 +725,40 @@ RImage::~RImage()
 // RImage::Init
 //
 // Description:
-//		Initialize all members.  Calling this when m_pMem* is set is
-//		not a good idea.
+//      Initialize all members.  Calling this when m_pMem* is set is
+//      not a good idea.
 //
 // Parameters:
-//		None.
+//      None.
 //
-//	Affects:
-//		All members.
+//   Affects:
+//      All members.
 //
 // Returns:
-//		Nothing.
+//      Nothing.
 //
 //////////////////////////////////////////////////////////////////////
 
 void RImage::InitMembers(void)
 {
    // Initialize member variables to zero
-   m_type				= NOT_SUPPORTED;
-   m_typeDestination	= NOT_SUPPORTED;
-   m_ulSize				= 0;
-   m_sWidth				= 0;
-   m_sHeight			= 0;
-   m_sWinWidth			= 0;
-   m_sWinHeight		= 0;
-   m_sWinX				= 0;
-   m_sWinY				= 0;
-   m_lPitch				= 0;
-   m_sDepth				= 0;
-   m_pMem				= NULL;
-   m_pData				= NULL;
-   m_pPalette			= NULL;
-   m_pPalMem			= NULL;
-   m_pSpecial			= NULL;
-   m_pSpecialMem		= NULL;
+   m_type            = NOT_SUPPORTED;
+   m_typeDestination   = NOT_SUPPORTED;
+   m_ulSize            = 0;
+   m_sWidth            = 0;
+   m_sHeight         = 0;
+   m_sWinWidth         = 0;
+   m_sWinHeight      = 0;
+   m_sWinX            = 0;
+   m_sWinY            = 0;
+   m_lPitch            = 0;
+   m_sDepth            = 0;
+   m_pMem            = NULL;
+   m_pData            = NULL;
+   m_pPalette         = NULL;
+   m_pPalMem         = NULL;
+   m_pSpecial         = NULL;
+   m_pSpecialMem      = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -766,18 +766,18 @@ void RImage::InitMembers(void)
 // RImage::CreateData
 //
 // Description:
-//		Creates an 128-bit aligned buffer for the image data
+//      Creates an 128-bit aligned buffer for the image data
 //
 // Parameters:
-//		ulNewSize	Size in bytes of the buffer
+//      ulNewSize   Size in bytes of the buffer
 //
 // Returns:
-//		SUCCESS if the memory was alocated successfully
-//		FAILURE if memory could not be allocted
+//      SUCCESS if the memory was alocated successfully
+//      FAILURE if memory could not be allocted
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RImage::CreateData(U32 ulNewSize)
+short RImage::CreateData(U32 ulNewSize)
 {
    if (m_pMem)
    {
@@ -803,27 +803,27 @@ short	RImage::CreateData(U32 ulNewSize)
 // RImage::CreateData
 //
 // Description:
-//		Create IMAGE's data utilizing passed in fields.
-//		Calls CreateData(U32) to do the allocation.
+//      Create IMAGE's data utilizing passed in fields.
+//      Calls CreateData(U32) to do the allocation.
 //
 // Parameters:
-//		As described below.
+//      As described below.
 //
 // Returns:
-//		Return value from CreateData(U32).
-//		SUCCESS if the memory was alocated successfully
-//		FAILURE if memory could not be allocted
+//      Return value from CreateData(U32).
+//      SUCCESS if the memory was alocated successfully
+//      FAILURE if memory could not be allocted
 //
 //////////////////////////////////////////////////////////////////////
 
 short RImage::CreateImage(    // Returns 0 if successful.
-   short	sWidth,              // Width of new buffer.
-   short	sHeight,             // Height of new buffer.
+   short sWidth,                // Width of new buffer.
+   short sHeight,               // Height of new buffer.
    Type type,                 // Type of new buffer.
    S32 lPitch /*= 0L*/,       // Pitch of new buffer or -1 to calculate.
-   short	sDepth /*= 8*/)      // Color depth of new buffer.
+   short sDepth /*= 8*/)        // Color depth of new buffer.
 {
-   short	sRes	= SUCCESS;  // Assume success.
+   short sRes   = SUCCESS;    // Assume success.
 
    // Fill in fields.
    m_sWidth = m_sWinWidth   = sWidth;
@@ -834,15 +834,15 @@ short RImage::CreateImage(    // Returns 0 if successful.
    // If no pitch specified . . .
    if (lPitch == 0L)
    {
-      lPitch	= GetPitch(sWidth, sDepth);
+      lPitch   = GetPitch(sWidth, sDepth);
    }
 
    // Update member lPitch.
-   m_lPitch			= lPitch;
-   m_ulSize			= lPitch * (S32)sHeight;
+   m_lPitch         = lPitch;
+   m_ulSize         = lPitch * (S32)sHeight;
    if (m_ulSize > 0)
    {
-      sRes	= CreateData(m_ulSize);
+      sRes   = CreateData(m_ulSize);
    }
 
    return sRes;
@@ -853,32 +853,32 @@ short RImage::CreateImage(    // Returns 0 if successful.
 // RImage::DetachData
 //
 // Description:
-//		This function detaches the image buffer from the RImage
-//		and returns the pointer to the original buffer to you.
-//		You can then call RImage::CreateData again to create a new
-//		buffer.  You are responsible for keeping track of the detached
-//		buffer and deallocating its memory when you are finished with it.
-//		You should deallocate the memory by calling
-//		RImage::DestroyDetachedData() so it will be freed using a
-//		deallocation function that is compatible with the way the
-//		data was allocated.
+//      This function detaches the image buffer from the RImage
+//      and returns the pointer to the original buffer to you.
+//      You can then call RImage::CreateData again to create a new
+//      buffer.  You are responsible for keeping track of the detached
+//      buffer and deallocating its memory when you are finished with it.
+//      You should deallocate the memory by calling
+//      RImage::DestroyDetachedData() so it will be freed using a
+//      deallocation function that is compatible with the way the
+//      data was allocated.
 //
-//		This function is useful when doing image conversion where you
-//		want to create a new buffer for the new data and get rid of
-//		the old buffer when you are done with the conversion.  This
-//		version of DetachData returns pointer to the memory buffer,
-//		and not the pointer to the data (the aligned pointer).  If you
-//		need to use the data for a conversion for example, then you
-//		should first save a pointer to the data pImage->pData before
-//		calling DetachData, or you can call the other version of
-//		DetachData where you supply a handle to the memory and to
-//		the data.
+//      This function is useful when doing image conversion where you
+//      want to create a new buffer for the new data and get rid of
+//      the old buffer when you are done with the conversion.  This
+//      version of DetachData returns pointer to the memory buffer,
+//      and not the pointer to the data (the aligned pointer).  If you
+//      need to use the data for a conversion for example, then you
+//      should first save a pointer to the data pImage->pData before
+//      calling DetachData, or you can call the other version of
+//      DetachData where you supply a handle to the memory and to
+//      the data.
 //
-//	Parameters:
-//		none
+//   Parameters:
+//      none
 //
 // Returns:
-//		RImage.pMem, the pointer to the allocated memory
+//      RImage.pMem, the pointer to the allocated memory
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -894,32 +894,32 @@ void* RImage::DetachData(void)
 // RImage::DetachData
 //
 // Description:
-//		This function detaches the image buffer from the RImage
-//		and returns the pointer to the original buffer to you.
-//		You can then call RImage::CreateData again to create a new
-//		buffer.  You are responsible for keeping track of the detached
-//		buffer and deallocating its memory when you are finished with it.
-//		You should deallocate the memory by calling
-//		RImage::DestroyDetachedData() so it will be freed using a
-//		deallocation function that is compatible with the way the
-//		data was allocated.
+//      This function detaches the image buffer from the RImage
+//      and returns the pointer to the original buffer to you.
+//      You can then call RImage::CreateData again to create a new
+//      buffer.  You are responsible for keeping track of the detached
+//      buffer and deallocating its memory when you are finished with it.
+//      You should deallocate the memory by calling
+//      RImage::DestroyDetachedData() so it will be freed using a
+//      deallocation function that is compatible with the way the
+//      data was allocated.
 //
-//		This function is useful when doing image conversion where you
-//		want to create a new buffer for the new data and get rid of
-//		the old buffer when you are done with the conversion.  This
-//		version of DetachData takes two handles to memory and
-//		gives hMem the pointer to the allocated memory and hData
-//		the pointer to the aligned memory where the data begins.
-//		Alternatively you could save a pointer to the image data
-//		RImage.pData and then call DetachData() which returns
-//		a pointer to the memory buffer.
+//      This function is useful when doing image conversion where you
+//      want to create a new buffer for the new data and get rid of
+//      the old buffer when you are done with the conversion.  This
+//      version of DetachData takes two handles to memory and
+//      gives hMem the pointer to the allocated memory and hData
+//      the pointer to the aligned memory where the data begins.
+//      Alternatively you could save a pointer to the image data
+//      RImage.pData and then call DetachData() which returns
+//      a pointer to the memory buffer.
 //
-//	Parameters:
-//		none
+//   Parameters:
+//      none
 //
 // Returns:
-//		FAILURE if either handle passed in was NULL
-//		SUCCESS otherwise
+//      FAILURE if either handle passed in was NULL
+//      SUCCESS otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -941,27 +941,27 @@ short RImage::DetachData(void** hMem, void** hData)
 // RImage::DestroyData
 //
 // Description:
-//		Deallocated memory created by CreateData()
+//      Deallocated memory created by CreateData()
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		FAILURE if DestoryData is called with data that was set by
-//		        the user using SetData().
-//		SUCCESS after freeing the data created by CreateData()
+//      FAILURE if DestoryData is called with data that was set by
+//              the user using SetData().
+//      SUCCESS after freeing the data created by CreateData()
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RImage::DestroyData()
+short RImage::DestroyData()
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Only if the data was not supplied by the user.
    if (m_pMem)
    {
       m_pData = NULL;
-      sRes	= sDestroyMem((void**) &m_pMem);
+      sRes   = sDestroyMem((void**) &m_pMem);
       m_pMem = NULL;
    }
 
@@ -974,7 +974,7 @@ short	RImage::DestroyData()
       {
          if ((*cdf)(this) == SUCCESS)
          {
-            m_pSpecialMem	= NULL;
+            m_pSpecialMem   = NULL;
          }
       }
       else
@@ -982,7 +982,7 @@ short	RImage::DestroyData()
          // Else do the best you can
          free(m_pSpecialMem);
 
-         m_pSpecialMem	= NULL;
+         m_pSpecialMem   = NULL;
       }
    }
 
@@ -994,16 +994,16 @@ short	RImage::DestroyData()
 // RImage::SetData
 //
 // Description:
-//		Allows the user to set the image data pointer to a buffer
-//		that was created by the user.  The user will be responsible
-//		for deallocating this buffer, they cannot use DestroyData().
+//      Allows the user to set the image data pointer to a buffer
+//      that was created by the user.  The user will be responsible
+//      for deallocating this buffer, they cannot use DestroyData().
 //
 // Parameters:
-//		pUserData = pointer to an image buffer
+//      pUserData = pointer to an image buffer
 //
 // Returns:
-//		SUCCESS if the memory was set
-//		FAILURE if the image already had a buffer
+//      SUCCESS if the memory was set
+//      FAILURE if the image already had a buffer
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1026,18 +1026,18 @@ short RImage::SetData(void* pUserData)
 // SetPalette
 //
 // Description:
-//		Sets a user palette to the image's pPalette pointer.  This is
-//		the safe way of setting your own palette rather than just
-//		setting pImage->pPalette to your palette.  This will warn you
-//		if the image is already pointing to a palette allocated by
-//		the image by a function like CreatePalette().
+//      Sets a user palette to the image's pPalette pointer.  This is
+//      the safe way of setting your own palette rather than just
+//      setting pImage->pPalette to your palette.  This will warn you
+//      if the image is already pointing to a palette allocated by
+//      the image by a function like CreatePalette().
 //
 // Parameters:
-//		pPal = pointer to your palette
+//      pPal = pointer to your palette
 //
 // Returns:
-//		SUCCESS - in all cases for now anyway, since it will always
-//					 set the palette even if it has to delete the old one
+//      SUCCESS - in all cases for now anyway, since it will always
+//                set the palette even if it has to delete the old one
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1059,14 +1059,14 @@ short RImage::SetPalette(RPal* pPal)
 // RImage::CreatePalette
 //
 // Description:
-//		Creates a RPal object but doesn't allocate any palette buffer
+//      Creates a RPal object but doesn't allocate any palette buffer
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		SUCCESS if the palette was created
-//		FAILURE if memory could not be allocated for the palette
+//      SUCCESS if the palette was created
+//      FAILURE if memory could not be allocated for the palette
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1084,15 +1084,15 @@ short RImage::CreatePalette(void)
 // RImage::CreatePalette
 //
 // Description:
-//		Creates a RPal object and allocates a pallete of the given
-//		size
+//      Creates a RPal object and allocates a pallete of the given
+//      size
 //
 // Parameters:
-//		ulSize = size in bytes of the palette
+//      ulSize = size in bytes of the palette
 //
 // Returns:
-//		SUCCESS if the palette was created
-//		FAILURE if memory could not be allocated for the palette
+//      SUCCESS if the palette was created
+//      FAILURE if memory could not be allocated for the palette
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1109,21 +1109,21 @@ short RImage::CreatePalette(U32 ulSize)
 // RImage::DetachPalette
 //
 // Description:
-//		Removes the RPal from the image and returns the pointer to you.
-//		Now you can call CreatePalette again for the image to create
-//		a new palette and you are responsible for the palette returned
+//      Removes the RPal from the image and returns the pointer to you.
+//      Now you can call CreatePalette again for the image to create
+//      a new palette and you are responsible for the palette returned
 //    to you.  You should use delete to deallocate the palette when
-//		you are done with it.  This function is useful when doing
-//		palette conversions on an image where you want to create a
-//		new palette for the image and only want to use the old one
-//		during the conversion and then delete it when you are done.
+//      you are done with it.  This function is useful when doing
+//      palette conversions on an image where you want to create a
+//      new palette for the image and only want to use the old one
+//      during the conversion and then delete it when you are done.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		RPal* = pointer to the RPal object
-//		NULL if there is no palette for this image
+//      RPal* = pointer to the RPal object
+//      NULL if there is no palette for this image
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1139,16 +1139,16 @@ RPal* RImage::DetachPalette(void)
 // RImage::DestroyPalette
 //
 // Description:
-//		Deallocates the palette for the image that was created using
-//		CreatePalette()
+//      Deallocates the palette for the image that was created using
+//      CreatePalette()
 //
 // Parameters:
-//		none
+//      none
 //
-//	Returns:
-//		SUCCESS after the palette is deallocated
-//		FAILURE if the palette could not be destroyed either because
-//			     there was no palette or it was a user set palette
+//   Returns:
+//      SUCCESS after the palette is deallocated
+//      FAILURE if the palette could not be destroyed either because
+//              there was no palette or it was a user set palette
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1170,7 +1170,7 @@ RImage& RImage::operator=(const RImage& imSrc)
 {
    // Easiest most likely to succeed way to get an image copy is to
    // write it to a file.
-   RFile	file;
+   RFile file;
    // We know we'll probably need at least m_ulSize bytes so that's a
    // good start for the size of the mem file.
    // Allow it to grow byte let's say 1K at a time for reasonable
@@ -1213,25 +1213,25 @@ RImage& RImage::operator=(const RImage& imSrc)
 // RImage::Convert
 //
 // Description:
-//		This function calls one of the convert functions from the
-//		array ms_afp stored in the CDynaLink template.  The array of
-//		functions is indexed by the type of image that you wish to
-//		convert to.
-//		Each convert function will evaluate the current type of the
-//		image and if it supports converting from the current type
-//		to the new type, it will do the conversion and return the
-//		new type.  If it is not supported then it will return
-//		NOT_SUPPORTED.
+//      This function calls one of the convert functions from the
+//      array ms_afp stored in the CDynaLink template.  The array of
+//      functions is indexed by the type of image that you wish to
+//      convert to.
+//      Each convert function will evaluate the current type of the
+//      image and if it supports converting from the current type
+//      to the new type, it will do the conversion and return the
+//      new type.  If it is not supported then it will return
+//      NOT_SUPPORTED.
 //
 // Parameters:
-//		ulType = one of the enumerated types in imagetyp.h.  This
-//				   is the type you wish to convert to.
+//      ulType = one of the enumerated types in imagetyp.h.  This
+//               is the type you wish to convert to.
 //
 // Returns:
-//		ulType if successful
-//		NOT_SUPPORTED if the conversion cannot be done with the
-//				        current image type, or if there is no
-//						  convert function for the type you specified
+//      ulType if successful
+//      NOT_SUPPORTED if the conversion cannot be done with the
+//                    current image type, or if there is no
+//                    convert function for the type you specified
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1254,22 +1254,22 @@ RImage::Type RImage::Convert(Type type)
          if (cft != NULL)
          {
             // Convert to a standard type.
-            typeRes	= (Type)(*cft)(this);
+            typeRes   = (Type)(*cft)(this);
          }
          else
          {
             TRACE("Convert(): Type exists, but no current link to convert to "
                   "standard type.  Check for proper module.\n");
-            typeRes	= NOT_SUPPORTED;
+            typeRes   = NOT_SUPPORTED;
          }
       }
 
       // If current format is standard . . .
-      if (	m_type	>= BMP8
-            &&	m_type	<= SCREEN32_ARGB)
+      if (   m_type   >= BMP8
+             &&   m_type   <= SCREEN32_ARGB)
       {
          // If current format is not the destination format . . .
-         if (m_type	!= type)
+         if (m_type   != type)
          {
             // Verify function exists . . .
             CONVTOFUNC ctt   = GETTOFUNC(type);
@@ -1281,13 +1281,13 @@ RImage::Type RImage::Convert(Type type)
             {
                TRACE("Convert(): Type exists, but no current link.  Check for "
                      "proper module.\n");
-               typeRes	= NOT_SUPPORTED;
+               typeRes   = NOT_SUPPORTED;
             }
          }
          else
          {
             // Already in correct format (after standardization).
-            typeRes	= type;
+            typeRes   = type;
          }
       }
       else
@@ -1305,39 +1305,39 @@ RImage::Type RImage::Convert(Type type)
 // RImage::LoadDib
 //
 // Description
-//		This function will allow the user of RPalImage to
-//		read in a Window's Dib.
+//      This function will allow the user of RPalImage to
+//      read in a Window's Dib.
 //
 // Parameters:
-//		pszFileName = pointer to the filename of the DIB
-//			or
-//		pcf = pointer to open RFile where a DIB is stored
+//      pszFileName = pointer to the filename of the DIB
+//         or
+//      pcf = pointer to open RFile where a DIB is stored
 //
 // Returns:
-//		  0:     (SUCCESS) if successful
-//		-20:		Palette read error
-//		-19:		Pixel data read error
-//		-18:		Can't allocate memory for DIB
-//		-17:		colors important field not read
-//		-16:		colors used field not read
-//		-15:		vert pixels per meter field not read
-//		-14:		horz pixels per meter field not read
-//		-13:		size of image field not read
-//		-12:		compression field not read
-//		-11:		bit count field not read
-//		-10:		planes field not read
-//		-9:		height field not read
-//		-8:		width field not read
-//		-7:		size field not read
-//		-6:		offset to bits field not read
-//		-5:		reserved2 field not read
-//		-4:		reserved1 field not read
-//		-3:		size of header field not read or not a BMP file
-//		-2:		type field not read
-//		-1:		unable to open file
-///	1:			if a colordepth of 1 or 4 was read
-//		2:			if an unknown colordepth has been encountered
-//		3:			if the dib is compressed, can not handle yet
+//        0:     (SUCCESS) if successful
+//      -20:      Palette read error
+//      -19:      Pixel data read error
+//      -18:      Can't allocate memory for DIB
+//      -17:      colors important field not read
+//      -16:      colors used field not read
+//      -15:      vert pixels per meter field not read
+//      -14:      horz pixels per meter field not read
+//      -13:      size of image field not read
+//      -12:      compression field not read
+//      -11:      bit count field not read
+//      -10:      planes field not read
+//      -9:      height field not read
+//      -8:      width field not read
+//      -7:      size field not read
+//      -6:      offset to bits field not read
+//      -5:      reserved2 field not read
+//      -4:      reserved1 field not read
+//      -3:      size of header field not read or not a BMP file
+//      -2:      type field not read
+//      -1:      unable to open file
+///   1:         if a colordepth of 1 or 4 was read
+//      2:         if an unknown colordepth has been encountered
+//      3:         if the dib is compressed, can not handle yet
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1416,20 +1416,20 @@ short RImage::LoadDib(RFile* pcf)
                                                          m_sWinX = m_sWinY = 0;
 
                                                          // Pre calc width in bits.
-                                                         S32 lBitsWidth	= dh.lWidth * (S32)dh.usBitCount;
-                                                         m_lPitch		= WIDTH128(((lBitsWidth + 7) & ~7) / 8);
-                                                         lDibPitch	= WIDTHUCHAR(((lBitsWidth + 7) & ~7) / 8);
+                                                         S32 lBitsWidth   = dh.lWidth * (S32)dh.usBitCount;
+                                                         m_lPitch      = WIDTH128(((lBitsWidth + 7) & ~7) / 8);
+                                                         lDibPitch   = WIDTHUCHAR(((lBitsWidth + 7) & ~7) / 8);
 
                                                          // Calculate size.
                                                          // If not compressed . . .
                                                          if (dh.ulCompression == 0)
                                                          {
-                                                            m_ulSize	= m_lPitch * dh.lHeight;
+                                                            m_ulSize   = m_lPitch * dh.lHeight;
                                                          }
                                                          else
                                                          {
                                                             // Compressed, use bitmap's header.
-                                                            m_ulSize	= dh.ulSizeImage;
+                                                            m_ulSize   = dh.ulSizeImage;
                                                          }
 
                                                          if (CreateData(m_ulSize) == 0)
@@ -1624,7 +1624,7 @@ short RImage::LoadDib(RFile* pcf)
          case 1:
             // raw, 1 bit per pixel (monochrome).
             // (index of 0 == White and 1 == Black).
-            m_type	= BMP1;
+            m_type   = BMP1;
             m_pPalette->m_type = RPal::PDIB;
             break;
 
@@ -1637,7 +1637,7 @@ short RImage::LoadDib(RFile* pcf)
 
          case 8:
             // raw, 8 bits per pixel
-            m_type	= BMP8;
+            m_type   = BMP8;
             m_pPalette->m_type = RPal::PDIB;
             break;
 
@@ -1645,17 +1645,17 @@ short RImage::LoadDib(RFile* pcf)
             // This color depth is really not supported by RImage!
             m_type = NOT_SUPPORTED;
             TRACE("RImage:LoadDib() encountered a dib of colordepth 16, not supported!\n");
-            sRes	= 1;
+            sRes   = 1;
             break;
 
          case 24:
             // raw, 24 bits per pixel
-            m_type	= BMP24;
+            m_type   = BMP24;
             break;
 
          case 32:
             // raw, 32 bits per pixel
-            m_type	= BMP24;
+            m_type   = BMP24;
             break;
 
          default:
@@ -1673,7 +1673,7 @@ short RImage::LoadDib(RFile* pcf)
          {
          case 8:
             // RLE8.
-            m_type	= BMP8RLE;
+            m_type   = BMP8RLE;
             break;
          default:
             // Unsupported compressed colordepth.
@@ -1711,16 +1711,16 @@ short RImage::LoadDib(RFile* pcf)
 // SaveDib
 //
 // Description:
-//		Saves the Image in DIB format (.bmp) to the given file.
+//      Saves the Image in DIB format (.bmp) to the given file.
 //
 // Parameters:
-//		pszFilename = name of BMP file to be saved
-//			or
-//		pcf = pointer to open RFile where BMP is to be saved
+//      pszFilename = name of BMP file to be saved
+//         or
+//      pcf = pointer to open RFile where BMP is to be saved
 //
 // Returns:
-//		SUCCESS if the file was saved
-//		negative error code on failure
+//      SUCCESS if the file was saved
+//      negative error code on failure
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -1754,17 +1754,17 @@ short RImage::SaveDib(RFile* pcf)
       S32 ulColorData = 0;
       if (m_pPalette != NULL)
       {
-         ulColorData	= m_pPalette->m_ulSize;
+         ulColorData   = m_pPalette->m_ulSize;
       }
 
       DIBFILEHEADER dfh;
 
-      dfh.ulOffBits		= 14 + 40 + ulColorData;
-      dfh.ulSize			= (dfh.ulOffBits + lDibPitch * (S32)m_sHeight) / 4L;
-      dfh.usReserved1	= 0;
-      dfh.usReserved2	= 0;
+      dfh.ulOffBits      = 14 + 40 + ulColorData;
+      dfh.ulSize         = (dfh.ulOffBits + lDibPitch * (S32)m_sHeight) / 4L;
+      dfh.usReserved1   = 0;
+      dfh.usReserved2   = 0;
 
-      UCHAR	auc[2]	= { 'B', 'M' };
+      UCHAR auc[2]   = { 'B', 'M' };
 
       //  Write BITMAPFILEHEADER
       if (pcf->Write(auc) == 1L && pcf->Write(auc + 1) == 1L)
@@ -1778,27 +1778,27 @@ short RImage::SaveDib(RFile* pcf)
                   if (pcf->Write(&dfh.ulOffBits) == 1L)
                   {
                      DIBHEADER dh;
-                     dh.ulSize			= 40L;
-                     dh.usPlanes			= 1;
+                     dh.ulSize         = 40L;
+                     dh.usPlanes         = 1;
                      switch (m_type)
                      {
                      case BMP8RLE:
-                        dh.ulCompression	= 1;     // BI_RLE8.
-                        dh.ulSizeImage		= m_ulSize;
+                        dh.ulCompression   = 1;     // BI_RLE8.
+                        dh.ulSizeImage      = m_ulSize;
                         break;
                      default:
-                        dh.ulCompression	= 0L;
+                        dh.ulCompression   = 0L;
                         // Can't use ulSize b/c our buffer
                         // may have a pitch that does not match
                         // a DIB pitch.
-                        dh.ulSizeImage		= lDibPitch * m_sHeight;
+                        dh.ulSizeImage      = lDibPitch * m_sHeight;
                         break;
                      }
 
-                     dh.lXPelsPerMeter	= 50L;
-                     dh.lYPelsPerMeter	= 50L;
-                     dh.ulClrUsed		= 0L;
-                     dh.ulClrImportant	= 0L;
+                     dh.lXPelsPerMeter   = 50L;
+                     dh.lYPelsPerMeter   = 50L;
+                     dh.ulClrUsed      = 0L;
+                     dh.ulClrImportant   = 0L;
                      if (pcf->Write(&dh.ulSize) == 1L)
                      {
                         S32 lWidth   = (S32)m_sWidth;
@@ -1842,7 +1842,7 @@ short RImage::SaveDib(RFile* pcf)
                                                          {
                                                             // Upside down way.
                                                             // Write the dib a line at a time and flip it upside down (which is really right side up)
-                                                            lHeight	= (S32)m_sHeight;
+                                                            lHeight   = (S32)m_sHeight;
                                                             for (S32 l = lHeight - 1L; l >= 0L; l--)
                                                             {
                                                                if (pcf->Write(m_pData + (l * m_lPitch), lDibPitch) != lDibPitch)
@@ -1861,7 +1861,7 @@ short RImage::SaveDib(RFile* pcf)
                                                             else
                                                             {
                                                                TRACE("RImage::SaveDib: Unable to write all the compressed bits.\n");
-                                                               sRes	= -19;
+                                                               sRes   = -19;
                                                             }
                                                          }
                                                       }
@@ -1976,30 +1976,30 @@ short RImage::SaveDib(RFile* pcf)
 // RImage::Save
 //
 // Description:
-//		Writes out any image format except special cases of
-//		images that use pSpecial.  This function writes out
-//		the image data and if you supply a size for the
-//		pSpecial buffer it will write that out also.  As S32
-//		as your pSpecial pointer doesn't point to data containing
-//		other pointers, this will work.  If your pSpecial pointed
-//		to another RPal for example, then it would not properly
-//		save that data since RPal contains a pData pointer.  For
-//		that special case you should write your own save function
-//		for your special image type and first open a RFile and
-//		call Save with that open RFile and a ulSpecialSize of 0
-//		which will write the contents of the image except the
-//		pSpecial buffer, the write your pSpecial data before
-//		closing the RFile.
+//      Writes out any image format except special cases of
+//      images that use pSpecial.  This function writes out
+//      the image data and if you supply a size for the
+//      pSpecial buffer it will write that out also.  As S32
+//      as your pSpecial pointer doesn't point to data containing
+//      other pointers, this will work.  If your pSpecial pointed
+//      to another RPal for example, then it would not properly
+//      save that data since RPal contains a pData pointer.  For
+//      that special case you should write your own save function
+//      for your special image type and first open a RFile and
+//      call Save with that open RFile and a ulSpecialSize of 0
+//      which will write the contents of the image except the
+//      pSpecial buffer, the write your pSpecial data before
+//      closing the RFile.
 //
 // Parameters:
-//		pszFilename = filename of the image to be saved
-//		ulSpecialSize = The size in bytes of the buffer pointed to
-//						    by pSpecial.
+//      pszFilename = filename of the image to be saved
+//      ulSpecialSize = The size in bytes of the buffer pointed to
+//                      by pSpecial.
 //
-//	Returns:
-//		SUCCESS if the file was saved successfully
-//		FAILURE if there was an error - TRACE messages will help
-//			     pinpoint the failure.
+//   Returns:
+//      SUCCESS if the file was saved successfully
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoint the failure.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -2026,33 +2026,33 @@ short RImage::Save(char* pszFilename) const
 // RImage::Save
 //
 // Description:
-//		Writes out any image format except special cases of
-//		images that use pSpecial.  This function writes out
-//		the image data and if you supply a size for the
-//		pSpecial buffer it will write that out also.  As S32
-//		as your pSpecial pointer doesn't point to data containing
-//		other pointers, this will work.  If your pSpecial pointed
-//		to another RPal for example, then it would not properly
-//		save that data since RPal contains a pData pointer.  For
-//		that special case you should write your own save function
-//		for your special image type and first open a RFile and
-//		call Save with that open RFile and a ulSpecialSize of 0
-//		which will write the contents of the image except the
-//		pSpecial buffer, the write your pSpecial data before
-//		closing the RFile.
+//      Writes out any image format except special cases of
+//      images that use pSpecial.  This function writes out
+//      the image data and if you supply a size for the
+//      pSpecial buffer it will write that out also.  As S32
+//      as your pSpecial pointer doesn't point to data containing
+//      other pointers, this will work.  If your pSpecial pointed
+//      to another RPal for example, then it would not properly
+//      save that data since RPal contains a pData pointer.  For
+//      that special case you should write your own save function
+//      for your special image type and first open a RFile and
+//      call Save with that open RFile and a ulSpecialSize of 0
+//      which will write the contents of the image except the
+//      pSpecial buffer, the write your pSpecial data before
+//      closing the RFile.
 //
-//		This function assumes the the RFile object referrs to
-//		an open file and will add to the file in the current location.
-//		It will not close the file when it is finished so that you
-//		could potentially add your own data following the image data.
+//      This function assumes the the RFile object referrs to
+//      an open file and will add to the file in the current location.
+//      It will not close the file when it is finished so that you
+//      could potentially add your own data following the image data.
 //
 // Parameters:
-//		RFile* pcf = the open RFile to which to write the data
+//      RFile* pcf = the open RFile to which to write the data
 //
-//	Returns:
-//		SUCCESS if the file was saved successfully
-//		FAILURE if there was an error - TRACE messages will help
-//			     pinpoint the failure.
+//   Returns:
+//      SUCCESS if the file was saved successfully
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoint the failure.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -2070,7 +2070,7 @@ short RImage::Save(RFile* pcf) const
       // No RFile support for RImage::Type, so we use a U32.
       U32 u32Temp  = (U32)m_type;
       pcf->Write(&u32Temp);
-      u32Temp			= (U32)m_typeDestination;
+      u32Temp         = (U32)m_typeDestination;
       pcf->Write(&u32Temp);
       pcf->Write(&m_ulSize);
       pcf->Write(&m_sWinWidth);
@@ -2130,18 +2130,18 @@ short RImage::Save(RFile* pcf) const
 // WritePixelData
 //
 // Description:
-//		Private function called by Save to write the data in one of
-//		two ways.  If the buffer is larger than the image, then it
-//		must write the image line by line starting at the lXPos, lYPos
-//		position in the buffer.  If a larger buffer is not being used,
-//		then it writes the image data in one chunk.
+//      Private function called by Save to write the data in one of
+//      two ways.  If the buffer is larger than the image, then it
+//      must write the image line by line starting at the lXPos, lYPos
+//      position in the buffer.  If a larger buffer is not being used,
+//      then it writes the image data in one chunk.
 //
 // Parameters:
-//		pcf = pointer to an open RFile where the data will be written
+//      pcf = pointer to an open RFile where the data will be written
 //
 // Returns:
-//		SUCCESS if the pixel data was written correctly
-//		FAILURE otherwise
+//      SUCCESS if the pixel data was written correctly
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -2281,19 +2281,19 @@ short RImage::WritePixelData(RFile* pcf) const
 // Load
 //
 // Description:
-//		Loads any standard image format including any straight
-//		forward pSpecial data that was saved.  If there is a special
-//		Save function for pSpecial data that contained pointers to
-//		other data, then you will have to use the special load function
-//		as well.
+//      Loads any standard image format including any straight
+//      forward pSpecial data that was saved.  If there is a special
+//      Save function for pSpecial data that contained pointers to
+//      other data, then you will have to use the special load function
+//      as well.
 //
 // Parameters:
-//		pszFilename = filename of the IMG file to load
+//      pszFilename = filename of the IMG file to load
 //
 // Returns:
-//		SUCCESS if the file was loaded correctly
-//		FAILURE if there was an error - TRACE messages will help
-//				  pinpoint the error.
+//      SUCCESS if the file was loaded correctly
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoint the error.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -2322,7 +2322,7 @@ short RImage::Load(RFile* pcf)
    if (pcf && pcf->IsOpen())
    {
       // Load image dependent on version.
-      sReturn	= RImageFile::Load(this, pcf);
+      sReturn   = RImageFile::Load(this, pcf);
    }
    else
    {
@@ -2344,18 +2344,18 @@ short RImage::Load(RFile* pcf)
 // ReadPixelData
 //
 // Description:
-//		Private function called by Load to read the data in one of
-//		two ways.  If the buffer is larger than the image, then it
-//		must read the image line by line and put it at the lXPos, lYPos
-//		position in the buffer.  If a larger buffer is not being used,
-//		then it reads the image data in one chunk.
+//      Private function called by Load to read the data in one of
+//      two ways.  If the buffer is larger than the image, then it
+//      must read the image line by line and put it at the lXPos, lYPos
+//      position in the buffer.  If a larger buffer is not being used,
+//      then it reads the image data in one chunk.
 //
 // Parameters:
-//		pcf = pointer to an open RFile where the data will be read
+//      pcf = pointer to an open RFile where the data will be read
 //
 // Returns:
-//		SUCCESS if the pixel data was read correctly
-//		FAILURE otherwise
+//      SUCCESS if the pixel data was read correctly
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 

@@ -17,14 +17,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bsound.cpp
+//   bsound.cpp
 //
 // History:
-//		10/29/95 JMI	Started.  Based on original WinMM bsound.cpp.
-//							This is now the interface by which Blue decides into
-//							which namespace to call.
+//      10/29/95 JMI   Started.  Based on original WinMM bsound.cpp.
+//                     This is now the interface by which Blue decides into
+//                     which namespace to call.
 //
-//		08/05/97	JMI	Added rspIsSoundOutPaused().
+//      08/05/97   JMI   Added rspIsSoundOutPaused().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -38,7 +38,7 @@
 #include "Blue.h"
 
 // Only set value if not NULL.
-#define SET(ptr, val)		( ((ptr) != NULL) ? *(ptr) = (val) : 0)
+#define SET(ptr, val)      ( ((ptr) != NULL) ? *(ptr) = (val) : 0)
 
 static U32 callback_data = 0;
 

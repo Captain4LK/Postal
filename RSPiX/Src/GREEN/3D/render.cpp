@@ -33,11 +33,11 @@ typedef struct
 // rendered.
 // sX and sY are additional offsets into pimDst
 //
-void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
-                        RP3d* p1, RP3d* p2, RP3d* p3,
-                        RZBuffer* pZB, UCHAR* pFog,
-                        short sOffsetX /* = 0*/, // In: 2D offset for pZB.
-                        short sOffsetY /* = 0*/) // In: 2D offset for pZB.
+void   DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
+                         RP3d* p1, RP3d* p2, RP3d* p3,
+                         RZBuffer* pZB, UCHAR* pFog,
+                         short sOffsetX /* = 0*/, // In: 2D offset for pZB.
+                         short sOffsetY /* = 0*/) // In: 2D offset for pZB.
 {
 //////////////////////////////////////////////////////////////////
 //****************************************************************
@@ -67,9 +67,9 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
    /*
    // Catch the special case of a single pixel
    // This is really only useful for POSTAL TM, where polygons are tiny:
-   if (pt1.x.mod == pt2.x.mod)	// hierarchal check to save time:
+   if (pt1.x.mod == pt2.x.mod)   // hierarchal check to save time:
       {
-      if ( (pt1.y.mod == pt2.y.mod)	// WE'VE GOT A SINGLE SCREEN POINT!
+      if ( (pt1.y.mod == pt2.y.mod)   // WE'VE GOT A SINGLE SCREEN POINT!
           && (pt1.x.mod == pt3.x.mod)
           && (pt1.y.mod == pt3.y.mod) )
 
@@ -92,7 +92,7 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
             *pBufZ = pt1.z.mod;
             }
 
-         return;	// DONE THE FAST WAY!
+         return;   // DONE THE FAST WAY!
          }
       }
       */
@@ -103,7 +103,7 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
    short sAbort = TRUE;
    if (pt1.x.mod == pt2.x.mod)
       {
-      if ( (pt1.y.mod == pt2.y.mod)	// WE'VE GOT A SINGLE SCREEN POINT!
+      if ( (pt1.y.mod == pt2.y.mod)   // WE'VE GOT A SINGLE SCREEN POINT!
           && (pt1.x.mod == pt3.x.mod)
           && (pt1.y.mod == pt3.y.mod) )
          {
@@ -161,8 +161,8 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
    // Use 16 bit accuracy in y, 32-bit in x...
    short y1 = pv1->y.mod;
 
-   short	y2 = pv2->y.mod - y1;
-   short	y3 = pv3->y.mod - y1;
+   short y2 = pv2->y.mod - y1;
+   short y3 = pv3->y.mod - y1;
    short ybot = y3 - y2; // lower half delta
 
    if (y2 + y3 == 0) return; // don;t bother drawing horiz line
@@ -279,7 +279,7 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
          {
             if (fz.mod > *(pBufZ + x) )
             {
-               *(pDst + x) = pFog[fz.upper];// pFog[fz.upper];	// offset for fog
+               *(pDst + x) = pFog[fz.upper];// pFog[fz.upper];   // offset for fog
                *(pBufZ + x) = fz.mod;          // set Z-buffer!
             }
             fz.val += fzinc.val;
@@ -458,8 +458,8 @@ void	DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
 
 //==================================================
 // For debugging:
-void	DrawTri_wire(RImage* pimDst, short sX, short sY,
-                   RP3d* p1, RP3d* p2, RP3d* p3, UCHAR ucColor)
+void   DrawTri_wire(RImage* pimDst, short sX, short sY,
+                    RP3d* p1, RP3d* p2, RP3d* p3, UCHAR ucColor)
 {
    rspLine(ucColor, pimDst,
            sX + short(p1->x), sY + short(p1->y),
@@ -477,11 +477,11 @@ void	DrawTri_wire(RImage* pimDst, short sX, short sY,
 // FLAT SHADED!
 // sX and sY are additional offsets into pimDst
 //
-void	DrawTri_ZColor(UCHAR* pDstOffset, S32 lDstP,
-                     RP3d* p1, RP3d* p2, RP3d* p3,
-                     RZBuffer* pZB, UCHAR ucFlatColor,
-                     short sOffsetX /* = 0*/, // In: 2D offset for pZB.
-                     short sOffsetY /* = 0*/) // In: 2D offset for pZB.
+void   DrawTri_ZColor(UCHAR* pDstOffset, S32 lDstP,
+                      RP3d* p1, RP3d* p2, RP3d* p3,
+                      RZBuffer* pZB, UCHAR ucFlatColor,
+                      short sOffsetX /* = 0*/, // In: 2D offset for pZB.
+                      short sOffsetY /* = 0*/) // In: 2D offset for pZB.
 {
 //////////////////////////////////////////////////////////////////
 //****************************************************************
@@ -519,8 +519,8 @@ void	DrawTri_ZColor(UCHAR* pDstOffset, S32 lDstP,
    // Use 16 bit accuracy in y, 32-bit in x...
    short y1 = pv1->y.mod;
 
-   short	y2 = pv2->y.mod - y1;
-   short	y3 = pv3->y.mod - y1;
+   short y2 = pv2->y.mod - y1;
+   short y3 = pv3->y.mod - y1;
    short ybot = y3 - y2; // lower half delta
 
    if (y2 + y3 == 0) return; // don;t bother drawing horiz line
@@ -637,7 +637,7 @@ void	DrawTri_ZColor(UCHAR* pDstOffset, S32 lDstP,
          {
             if (fz.mod > *(pBufZ + x) )
             {
-               *(pDst + x) = ucFlatColor;// pFog[fz.upper];	// offset for fog
+               *(pDst + x) = ucFlatColor;// pFog[fz.upper];   // offset for fog
                *(pBufZ + x) = fz.mod;          // set Z-buffer!
             }
             fz.val += fzinc.val;
@@ -819,9 +819,9 @@ void	DrawTri_ZColor(UCHAR* pDstOffset, S32 lDstP,
 // sX and sY are additional offsets into pimDst
 // There is NO Z_BUFFER here!  It is JUST a polygon drawer
 //
-void	DrawTri(UCHAR* pDstOffset, S32 lDstP,
-              RP3d* p1, RP3d* p2, RP3d* p3,
-              UCHAR ucFlatColor)
+void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
+               RP3d* p1, RP3d* p2, RP3d* p3,
+               UCHAR ucFlatColor)
 {
 //////////////////////////////////////////////////////////////////
 //****************************************************************
@@ -856,8 +856,8 @@ void	DrawTri(UCHAR* pDstOffset, S32 lDstP,
    // Use 16 bit accuracy in y, 32-bit in x...
    short y1 = pv1->y.mod;
 
-   short	y2 = pv2->y.mod - y1;
-   short	y3 = pv3->y.mod - y1;
+   short y2 = pv2->y.mod - y1;
+   short y3 = pv3->y.mod - y1;
    short ybot = y3 - y2; // lower half delta
 
    if (y2 + y3 == 0) return; // don;t bother drawing horiz line

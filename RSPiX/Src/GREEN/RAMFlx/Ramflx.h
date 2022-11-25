@@ -22,26 +22,26 @@
 #include "file/file.h"
 
 // Define the magic numbers for FLC and FLI files.
-#define FLX_MAGIC_FLI			0xAF11
-#define FLX_MAGIC_FLC			0xAF12
+#define FLX_MAGIC_FLI         0xAF11
+#define FLX_MAGIC_FLC         0xAF12
 
 // Define operation modes
-#define FLX_RETURN_DELTAS		0
-#define FLX_RETURN_FULL			1
+#define FLX_RETURN_DELTAS      0
+#define FLX_RETURN_FULL         1
 
 // Define data chunk types
-#define FLX_DATA_COLOR256		4
-#define FLX_DATA_SS2				7
-#define FLX_DATA_COLOR			11
-#define FLX_DATA_LC				12
-#define FLX_DATA_BLACK			13
-#define FLX_DATA_BRUN			15
-#define FLX_DATA_COPY			16
-#define FLX_DATA_PSTAMP			18
+#define FLX_DATA_COLOR256      4
+#define FLX_DATA_SS2            7
+#define FLX_DATA_COLOR         11
+#define FLX_DATA_LC            12
+#define FLX_DATA_BLACK         13
+#define FLX_DATA_BRUN         15
+#define FLX_DATA_COPY         16
+#define FLX_DATA_PSTAMP         18
 
 // This is the value in the reserveA field of the header
 // when a flic with no delta compression is read.
-#define FLX_RSP_NODELTA			1
+#define FLX_RSP_NODELTA         1
 
 #ifndef FLX_H  // Already defined if FLX.H was included.
 // Define struct that describes everything in a FLC/FLI header.  The header is
@@ -104,7 +104,7 @@ typedef struct tag_FLX_RGB
    UCHAR bG;
    UCHAR bB;
 } FLX_RGB;
-#endif	// FLX_H
+#endif   // FLX_H
 
 // Define class
 class CRamFlx
@@ -158,7 +158,7 @@ short ReadNextFrame(
    CImage* pbufRead);            // Buffer for frame being read
 
 // Return the current buffer state
-CImage*	GetBuffer(void)
+CImage*   GetBuffer(void)
 { return &m_imagePrev; };
 
 // Create a CImage based on the specified width, height, and number of colors.
@@ -188,7 +188,7 @@ static short DoReadFrame(CImage* pbufRead, CNFile* pfile,
 private:
 void Restart(void);
 
-short	DoReadFrame(CImage* pbufRead);
+short   DoReadFrame(CImage* pbufRead);
 
 // Work horse functions.
 static short ReadDataColor(CImage* pbufRead, short sDataType, CNFile* pfile,
@@ -210,26 +210,26 @@ void  CopyBuf(CImage* pbufDst, CImage* pbufSrc);
 short CreateFramePointers(void);
 
 private:
-short	m_sOpenForRead;                  // TRUE if file is open for read
+short m_sOpenForRead;                    // TRUE if file is open for read
 
 FLX_FILE_HDR m_filehdr;                // File header
 
 CImage m_imagePrev;                    // Buffer for previous frame
 
-short	m_sNoDelta;                      // Flag to signal no delta compression
+short m_sNoDelta;                        // Flag to signal no delta compression
 
-UCHAR*			m_pucFlxBuf;            // RAM buffer for flic frames from .FLC file
+UCHAR*         m_pucFlxBuf;            // RAM buffer for flic frames from .FLC file
 
-S32*				m_plFrames;             // Indexices of frames in flics
-                                       // with no delta compression
+S32*            m_plFrames;             // Indexices of frames in flics
+                                        // with no delta compression
 
-short	m_sReadColors;                   // Whether or not to read colors from flic
-short	m_sReadPixels;                   // Whether or not to read pixels from flic
+short m_sReadColors;                     // Whether or not to read colors from flic
+short m_sReadPixels;                     // Whether or not to read pixels from flic
 
-short	m_sPixelsModified;               // Whether the pixels were modified
-short	m_sColorsModified;               // Whether the colors were modified
+short m_sPixelsModified;                 // Whether the pixels were modified
+short m_sColorsModified;                 // Whether the colors were modified
 
-short	m_sFrameNum;                     // Current frame number, 1 to n, 0 means none
+short m_sFrameNum;                       // Current frame number, 1 to n, 0 means none
 
 CNFile m_file;                         // File stream (for buffered file I/O)
 };

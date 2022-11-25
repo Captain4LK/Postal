@@ -19,12 +19,12 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/09/96 MJR	Started.
+//      01/09/96 MJR   Started.
 //
-//		02/28/97	JMI	Snap(...) now accepts a CHood*.
+//      02/28/97   JMI   Snap(...) now accepts a CHood*.
 //
-//		07/31/97	JMI	Added m_bClip to allow us to disable clipping to realm
-//							edges.
+//      07/31/97   JMI   Added m_bClip to allow us to disable clipping to realm
+//                     edges.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CAMERA_H

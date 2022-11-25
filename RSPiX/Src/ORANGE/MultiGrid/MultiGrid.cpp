@@ -19,17 +19,17 @@
 //
 // MULTIGRID.CPP
 //
-// Created on	03/23/97 JRD
-// Implemented	03/23/97 JRD
+// Created on   03/23/97 JRD
+// Implemented   03/23/97 JRD
 //
-//		05/08/97	JMI	Added #include <string.h> for strcmp*().  I guess
-//							that, in VC <= 4.1, the strcmp*() protos are not
-//							in stdlib.h.
+//      05/08/97   JMI   Added #include <string.h> for strcmp*().  I guess
+//                     that, in VC <= 4.1, the strcmp*() protos are not
+//                     in stdlib.h.
 //
-//		06/24/97    MJR	Switched to rspStricmp() for mac compatibility.
-//						Also changed a few constants to S32s instead
-//						of ints so that MIN() would work (real strict
-//						on mac).
+//      06/24/97    MJR   Switched to rspStricmp() for mac compatibility.
+//                  Also changed a few constants to S32s instead
+//                  of ints so that MIN() would work (real strict
+//                  on mac).
 //
 //////////////////////////////////////////////////////////////////////
 #include <stdlib.h>
@@ -42,7 +42,7 @@
 #else
    #include "MULTIGRID.H"
    #include "str.h"
-#endif	//PATHS_IN_INCLUDES
+#endif   //PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -83,7 +83,7 @@
 //////////////////////////////////////////////////////////////////////
 //  Static Members:
 //////////////////////////////////////////////////////////////////////
-short	RMultiGrid::ms_sShiftToMask[16] =
+short RMultiGrid::ms_sShiftToMask[16] =
 {0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383};
 
 //////////////////////////////////////////////////////////////////////
@@ -189,9 +189,9 @@ void RMultiGrid::DumpTiles(RImage* pimDst)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RMultiGrid::Alloc(short sW, short sH)
+short RMultiGrid::Alloc(short sW, short sH)
 {
-#ifdef	_DEBUG
+#ifdef   _DEBUG
    if (m_sIsCompressed)
    {
       TRACE("RMultiGrid::Alloc: You've already allocated a grid!\n");
@@ -215,7 +215,7 @@ short	RMultiGrid::Alloc(short sW, short sH)
 //
 //////////////////////////////////////////////////////////////////////
 
-short	RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
+short RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
 {
    // Set the parameters:
    //--------------------------------------------- Convert Input to log 2
@@ -271,16 +271,16 @@ short	RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
    //--------------------------------------------- Allocate the coarse grid
    short sGridW, sGridH;
    GetGridDimensions(&sGridW, &sGridH);
-   short	sFullHeight = sGridH * sScaleH;
+   short sFullHeight = sGridH * sScaleH;
 
-   short*	psUncompressed = m_psGrid;    // Save old!
+   short*   psUncompressed = m_psGrid;    // Save old!
 
    //--------------------------------------------- Allocate the Tile Lists:
    S32 lShortTileSize = S32(sScaleW) * sScaleH;
    S32 lByteTileSize = lShortTileSize << 1;
    S32 lLongTileSize = lShortTileSize >> 1;
    // Initial Max
-   short	sMaxNumTiles = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
+   short sMaxNumTiles = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
 
    if (!(m_psTiles = (short*) calloc(lByteTileSize, sMaxNumTiles ) )) return FAILURE;
 
@@ -304,7 +304,7 @@ short	RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
 
    //---------------------------------------------  Populate the coarse grid:
 
-   short	*psSrc, *psSrcLine = psUncompressed;
+   short   *psSrc, *psSrcLine = psUncompressed;
    S32 lSrcSkip = S32(m_sWidth) * sScaleH;
 
    for (j = 0; j < sFullHeight; j += sScaleH, psSrcLine += lSrcSkip)
@@ -378,13 +378,13 @@ short RMultiGrid::Compress(
    GetGridDimensions(&sGridW, &sGridH);
 
    short sWholeGridW = sGridW - 1; // guaranteed to be whole.
-   short	sWholeGridH = sGridH - 1;
+   short sWholeGridH = sGridH - 1;
 
-   short	sExtraW = m_sWidth - (sWholeGridW << m_sShiftX);
-   short	sExtraH = m_sHeight - (sWholeGridH << m_sShiftY);
+   short sExtraW = m_sWidth - (sWholeGridW << m_sShiftX);
+   short sExtraH = m_sHeight - (sWholeGridH << m_sShiftY);
 
    short sMaxTile = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
-   short	sShortSize = (m_sMaskX + 1) * (m_sMaskY + 1);
+   short sShortSize = (m_sMaskX + 1) * (m_sMaskY + 1);
    short sNumMatches = 0;
 
    short sScanH = m_sMaskY + 1;
@@ -710,7 +710,7 @@ short RMultiGrid::Load(RFile* fp)
    m_sShiftY = MaskToShift(m_sMaskY);
 
    // Set up random access for grid:
-   short	sFullHeight = sGridH * (m_sMaskY + 1);
+   short sFullHeight = sGridH * (m_sMaskY + 1);
    if (!(m_ppsGridLines = (short**) calloc(sizeof(short*), sFullHeight ) )) return FAILURE;
    for (i = 0; i < sFullHeight; i++) m_ppsGridLines[i] = m_psGrid + (i >> m_sShiftY) * sGridW;
 

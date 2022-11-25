@@ -19,263 +19,263 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		04/08/97 JMI	Started.
+//      04/08/97 JMI   Started.
 //
-//		05/20/97	JMI	Now ms_pguiOK and ms_pguiCancel use SAFE_REF() so the
-//							current GUI can, optionally, not have one or both GUI
-//							items.
+//      05/20/97   JMI   Now ms_pguiOK and ms_pguiCancel use SAFE_REF() so the
+//                     current GUI can, optionally, not have one or both GUI
+//                     items.
 //
-//		05/25/97	JMI	Integrated newest TCP/IP CNetServer/Client interface.
-//							Still need to detect when the game is starting.
-//							GUI could still use a little cleaning up.
+//      05/25/97   JMI   Integrated newest TCP/IP CNetServer/Client interface.
+//                     Still need to detect when the game is starting.
+//                     GUI could still use a little cleaning up.
 //
-//		05/26/97	JMI	Removed case for NetMsg::DuplicateName in reason
-//							for JoinDeny message (it no S32er exists).
+//      05/26/97   JMI   Removed case for NetMsg::DuplicateName in reason
+//                     for JoinDeny message (it no S32er exists).
 //
-//		05/26/97	JMI	Added sending and receiving of START_REALM.
-//							Removed psNumPlayers and psMyPlayerNum parameters.
+//      05/26/97   JMI   Added sending and receiving of START_REALM.
+//                     Removed psNumPlayers and psMyPlayerNum parameters.
 //
-//		05/27/97	JMI	Added sending and receiving of LOAD_REALM before
-//							START_REALM.
-//							Fixed bug in OnLoginMsg() which was telling the client
-//							the wrong net ID.
-//							Upgraded to utilize new functions RSocket::SetPort() and
-//							CNet::OpenPeerData().
+//      05/27/97   JMI   Added sending and receiving of LOAD_REALM before
+//                     START_REALM.
+//                     Fixed bug in OnLoginMsg() which was telling the client
+//                     the wrong net ID.
+//                     Upgraded to utilize new functions RSocket::SetPort() and
+//                     CNet::OpenPeerData().
 //
-//		05/27/97	JMI	OnJoinedMsg() now only adds the players' names to the
-//							listbox of players.
+//      05/27/97   JMI   OnJoinedMsg() now only adds the players' names to the
+//                     listbox of players.
 //
-//		05/28/97	JMI	Integrated new dialog.
+//      05/28/97   JMI   Integrated new dialog.
 //
-//		05/28/97	JMI	Changed so the LOAD_REALM message motivates the leaving
-//							of the dialog interface (was START_REALM that did it
-//							before).
+//      05/28/97   JMI   Changed so the LOAD_REALM message motivates the leaving
+//                     of the dialog interface (was START_REALM that did it
+//                     before).
 //
-//		06/11/97	JMI	Removed unnecessary code in OnLoadRealmMsg().
-//							Now uses Play_GetNextLevel to get realm names.
+//      06/11/97   JMI   Removed unnecessary code in OnLoadRealmMsg().
+//                     Now uses Play_GetNextLevel to get realm names.
 //
-//		06/11/97	JMI	Now centers client/server dialogs on screen.
+//      06/11/97   JMI   Now centers client/server dialogs on screen.
 //
-//		06/13/97 MJR	Restructed lots of stuff to consolidate client and
-//							server code into a single function.
-//							Implimented new version of START_GAME message.
-//							Added code to get/release resources for new deluxe
-//							dialog box.
+//      06/13/97 MJR   Restructed lots of stuff to consolidate client and
+//                     server code into a single function.
+//                     Implimented new version of START_GAME message.
+//                     Added code to get/release resources for new deluxe
+//                     dialog box.
 //
-//		06/15/97	JMI	Now deactivates client items in listbox as they are
-//							added.
-//							Also, now, instead of simply squashing the dialog to
-//							exclude server controls in client mode, we simply hide
-//							the server controls and center the remaining controls
-//							in the dialog without altering its size.
+//      06/15/97   JMI   Now deactivates client items in listbox as they are
+//                     added.
+//                     Also, now, instead of simply squashing the dialog to
+//                     exclude server controls in client mode, we simply hide
+//                     the server controls and center the remaining controls
+//                     in the dialog without altering its size.
 //
-//		06/16/97	JMI	Now uses g_fontSmall for dialogs.
+//      06/16/97   JMI   Now uses g_fontSmall for dialogs.
 //
-//					MJR	Added use of watchdog timer for network blocking callbacks.
+//               MJR   Added use of watchdog timer for network blocking callbacks.
 //
-//					JMI	Changed use of g_fontSmall to g_fontBig.
+//               JMI   Changed use of g_fontSmall to g_fontBig.
 //
-//		06/17/97	JMI	Now only allows the server to process a DLG_OK.
+//      06/17/97   JMI   Now only allows the server to process a DLG_OK.
 //
-//		06/30/97 MJR	Switched over to new GuiItem.h-supplied macros.
+//      06/30/97 MJR   Switched over to new GuiItem.h-supplied macros.
 //
-//		07/14/97 BRH	Changed call to Play_GetRealmInfo to include the
-//							new challenge mode parameter.
+//      07/14/97 BRH   Changed call to Play_GetRealmInfo to include the
+//                     new challenge mode parameter.
 //
-//		08/02/97	JMI	Added an icon to watchdog timer for network blocking
-//							callbacks and made it generally callable.
+//      08/02/97   JMI   Added an icon to watchdog timer for network blocking
+//                     callbacks and made it generally callable.
 //
-//		08/04/97 BRH	Added protocol parameter to net calls.
+//      08/04/97 BRH   Added protocol parameter to net calls.
 //
-//		08/11/97	JMI	Changed a little of the structure of SetUpDlg() to allow
-//							for more than just two types of dialogs.
-//							Also, changed UpdateDialog() to use an RProcessGui which
-//							simplifies that down to nearly nothing.  #if 0'd out old
-//							stuff for now.
-//							Checking in so Mike can compile so we can check his stuff
-//							in so I can check this out again.
+//      08/11/97   JMI   Changed a little of the structure of SetUpDlg() to allow
+//                     for more than just two types of dialogs.
+//                     Also, changed UpdateDialog() to use an RProcessGui which
+//                     simplifies that down to nearly nothing.  #if 0'd out old
+//                     stuff for now.
+//                     Checking in so Mike can compile so we can check his stuff
+//                     in so I can check this out again.
 //
-//					MJR	Modified to use new browsing functions and moved all
-//							the find-the-host code into a separate function.
+//               MJR   Modified to use new browsing functions and moved all
+//                     the find-the-host code into a separate function.
 //
-//					JMI	Now adds the items from the browse list to the dialog
-//							(and drops them too (theoretically) ).
+//               JMI   Now adds the items from the browse list to the dialog
+//                     (and drops them too (theoretically) ).
 //
-//		08/12/97	JMI	Dropped hosts were not setting the repaginate flag in
-//							UpdateListBox().  Fixed.
-//							DoNetGameDialog() now loops nearly all logic while
-//							browsing and no errors.
+//      08/12/97   JMI   Dropped hosts were not setting the repaginate flag in
+//                     UpdateListBox().  Fixed.
+//                     DoNetGameDialog() now loops nearly all logic while
+//                     browsing and no errors.
 //
-//		08/13/97 JMI	Cleaned up some more stuff.
-//					MJR	Fixed bugs that kept us in a browsing loop.
+//      08/13/97 JMI   Cleaned up some more stuff.
+//               MJR   Fixed bugs that kept us in a browsing loop.
 //
-//		08/14/97	JMI	Added global difficulty parameter to Play_GetRealmInfo().
-//							I imagine it's not actually used for multiplayer levels
-//							until we have options to play cooperative.
+//      08/14/97   JMI   Added global difficulty parameter to Play_GetRealmInfo().
+//                     I imagine it's not actually used for multiplayer levels
+//                     until we have options to play cooperative.
 //
-//		08/19/97	JMI	Added some unfinished usage of the multiplayer options
-//							updating.  Needs to be updated to the correct spot,
-//							either the game settings or the message.  Probably the
-//							game settings which then get copied to the message.
+//      08/19/97   JMI   Added some unfinished usage of the multiplayer options
+//                     updating.  Needs to be updated to the correct spot,
+//                     either the game settings or the message.  Probably the
+//                     game settings which then get copied to the message.
 //
-//		08/19/97	JMI	Now uses the g_GameSettings for the multiplayer options.
-//							Tinkered with chat messages that I thought weren't
-//							working but then realized they were being ignored b/c
-//							the UpdateDialog() function was being called by the
-//							net blocking callback so hopefully I didn't ruin anything
-//							in that process... .
-//							Genericized SetupDlg() to use UploadLinks().
+//      08/19/97   JMI   Now uses the g_GameSettings for the multiplayer options.
+//                     Tinkered with chat messages that I thought weren't
+//                     working but then realized they were being ignored b/c
+//                     the UpdateDialog() function was being called by the
+//                     net blocking callback so hopefully I didn't ruin anything
+//                     in that process... .
+//                     Genericized SetupDlg() to use UploadLinks().
 //
-//		08/19/97	JMI	Added a flag to UpdateDialog() indicating that it should
-//							not clear any GUIs.  This is useful for when
-//							UpdateDialog() is called via callback (so we don't loose
-//							any of the pressages processed via the callback).
+//      08/19/97   JMI   Added a flag to UpdateDialog() indicating that it should
+//                     not clear any GUIs.  This is useful for when
+//                     UpdateDialog() is called via callback (so we don't loose
+//                     any of the pressages processed via the callback).
 //
-//		08/20/97	JMI	Up/DownloadLinkInteger() are now hardwired to assume
-//							'signed' type for String links b/c bool had a warning
-//							for the trickery I was using to determine if the type
-//							was signed.
+//      08/20/97   JMI   Up/DownloadLinkInteger() are now hardwired to assume
+//                     'signed' type for String links b/c bool had a warning
+//                     for the trickery I was using to determine if the type
+//                     was signed.
 //
-//		08/20/97	JMI	Now chat history is a listbox.
-//							Clicking the 'Send Chat' button moves focus back to the
-//							edit field for better feedback.
-//							Limits chats to 20.
-//							Now updates client's view of host's multiplay options.
-//							Now the server can select a player (for disconnection)
-//							from the players list.
-//							Implemented host option to disconnect a player.
-//							Newest player is EnsureVisible()d in player list now.
-//							Newest chat is EnsureVisible()d in chat list now.
-//							Now sets number of connected players on two GUIs so
-//							there can be a 3D effect.
-//							Sends and responds to SETUP_GAME message.
-//							Sets options in START_GAME message from dialog settings
-//							now.
-//							Updates settings even if dialog aborted for consistency.
+//      08/20/97   JMI   Now chat history is a listbox.
+//                     Clicking the 'Send Chat' button moves focus back to the
+//                     edit field for better feedback.
+//                     Limits chats to 20.
+//                     Now updates client's view of host's multiplay options.
+//                     Now the server can select a player (for disconnection)
+//                     from the players list.
+//                     Implemented host option to disconnect a player.
+//                     Newest player is EnsureVisible()d in player list now.
+//                     Newest chat is EnsureVisible()d in chat list now.
+//                     Now sets number of connected players on two GUIs so
+//                     there can be a 3D effect.
+//                     Sends and responds to SETUP_GAME message.
+//                     Sets options in START_GAME message from dialog settings
+//                     now.
+//                     Updates settings even if dialog aborted for consistency.
 //
-//		08/21/97	JMI	Temporarily hardwired 'Rejuvenate' to ON and disallowed
-//							user modifications of the checkbox.
+//      08/21/97   JMI   Temporarily hardwired 'Rejuvenate' to ON and disallowed
+//                     user modifications of the checkbox.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/23/97 MJR	Lots of changes in how errors are handled and other such
-//							stuff.
+//      08/23/97 MJR   Lots of changes in how errors are handled and other such
+//                     stuff.
 //
-//		08/23/97	JMI	Now list box items appear with a barely perceptible
-//							shadow that makes them alot easier to read.
-//							Player colors now displayed as color descriptions.
+//      08/23/97   JMI   Now list box items appear with a barely perceptible
+//                     shadow that makes them alot easier to read.
+//                     Player colors now displayed as color descriptions.
 //
-//		08/25/97	JMI	Now the chat text edit field limits the text to the
-//							message's capacity for text.
-//							Also, got rid of some '***'s.
+//      08/25/97   JMI   Now the chat text edit field limits the text to the
+//                     message's capacity for text.
+//                     Also, got rid of some '***'s.
 //
-//		08/25/97	JMI	Now removes areas on chat items in chat box to make
-//							for the border lines we hide to get more space.
+//      08/25/97   JMI   Now removes areas on chat items in chat box to make
+//                     for the border lines we hide to get more space.
 //
-//		08/27/97	JMI	Changed NetProbIcons functions to NetProbGui functions.
-//							Also, instead of a DrawNetProbGui() there's a
-//							GetNetProbGui() so you can draw it, move it, change the
-//							text, etc.
+//      08/27/97   JMI   Changed NetProbIcons functions to NetProbGui functions.
+//                     Also, instead of a DrawNetProbGui() there's a
+//                     GetNetProbGui() so you can draw it, move it, change the
+//                     text, etc.
 //
-//		09/01/97 MJR	Nearing the end of a huge overhaul of networking.
+//      09/01/97 MJR   Nearing the end of a huge overhaul of networking.
 //
-//		09/02/97 MJR	It appears to work well after much testing, tuning, and
-//							debugging.
+//      09/02/97 MJR   It appears to work well after much testing, tuning, and
+//                     debugging.
 //
-//		09/03/97 MJR	Fixed a problem that made browsing for yourself fail
-//							once in a while (the timeout timer was too short).
+//      09/03/97 MJR   Fixed a problem that made browsing for yourself fail
+//                     once in a while (the timeout timer was too short).
 //
-//		09/06/97	JMI	Now sets the Client's Game Options text field to use
-//							the text shadow.  Also, selects the first item in the
-//							level browser box in the Server's dialog.
-//							Also, combined the status field and the chat box into
-//							one 'Net Console'.
+//      09/06/97   JMI   Now sets the Client's Game Options text field to use
+//                     the text shadow.  Also, selects the first item in the
+//                     level browser box in the Server's dialog.
+//                     Also, combined the status field and the chat box into
+//                     one 'Net Console'.
 //
-//		09/06/97	JMI	Now filters out the high word of ie.lKey when checking
-//							for enter.  This filters out the the key flags (i.e.,
-//							shift, control, alt, system).
+//      09/06/97   JMI   Now filters out the high word of ie.lKey when checking
+//                     for enter.  This filters out the the key flags (i.e.,
+//                     shift, control, alt, system).
 //
-//		09/07/97	JMI	Now BrowseForHosts() updates the display before
-//							displaying the browse dialog.
+//      09/07/97   JMI   Now BrowseForHosts() updates the display before
+//                     displaying the browse dialog.
 //
-//		09/08/97 MJR	Fixed bug where net prob gui was showing up
-//							immediately instead of after the watchdog expired.
-//							Also cleaned up the erasing of the net prob gui.
+//      09/08/97 MJR   Fixed bug where net prob gui was showing up
+//                     immediately instead of after the watchdog expired.
+//                     Also cleaned up the erasing of the net prob gui.
 //
-//		09/09/97	JMI	Now initializes ms_pguiRetry to NULL in DlgBeGone().
+//      09/09/97   JMI   Now initializes ms_pguiRetry to NULL in DlgBeGone().
 //
-//		09/09/97 MJR	Now detects protocol-not-supported and dispalys a
-//							specific msg box describing the problem.
+//      09/09/97 MJR   Now detects protocol-not-supported and dispalys a
+//                     specific msg box describing the problem.
 //
-//		09/11/97 MJR	Now client checks to see whether the level that was
-//							specified in the SETUP_GAME message is available, and
-//							automatically sends a chat message that complains if it
-//							isn't, in the hope that the host player will change it.
+//      09/11/97 MJR   Now client checks to see whether the level that was
+//                     specified in the SETUP_GAME message is available, and
+//                     automatically sends a chat message that complains if it
+//                     isn't, in the hope that the host player will change it.
 //
-//							Now the host will send the realm name if only a single
-//							realm is available, which tells everyone to only play
-//							that realm.
+//                     Now the host will send the realm name if only a single
+//                     realm is available, which tells everyone to only play
+//                     that realm.
 //
-//							Changed the dropped message, which was incorrectly using
-//							the error message as the player's name.
+//                     Changed the dropped message, which was incorrectly using
+//                     the error message as the player's name.
 //
-//		09/11/97	JMI	Now only adds the SPECIFIC_MP_REALM_TEXT choice to the
-//							host's level browser if ENABLE_PLAY_SPECIFIC_REALMS_ONLY
-//							is defined. Otherwise, it chooses the first item in the
-//							listbox.
+//      09/11/97   JMI   Now only adds the SPECIFIC_MP_REALM_TEXT choice to the
+//                     host's level browser if ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+//                     is defined. Otherwise, it chooses the first item in the
+//                     listbox.
 //
-//		09/12/97 MJR	Reversed the #if for which method to use for filling
-//							hood listbox.
+//      09/12/97 MJR   Reversed the #if for which method to use for filling
+//                     hood listbox.
 //
-//							Added hardwired realm stuff to SetupGame() when we're
-//							in the specific realm mode.
+//                     Added hardwired realm stuff to SetupGame() when we're
+//                     in the specific realm mode.
 //
-//		09/18/97	JMI	There were some /"s instead of \"s.  If someone had
-//							their syntax coloring on useful colors, they would've
-//							seen this blaringly obvious color collage. :)
+//      09/18/97   JMI   There were some /"s instead of \"s.  If someone had
+//                     their syntax coloring on useful colors, they would've
+//                     seen this blaringly obvious color collage. :)
 //
-//		09/24/97	JMI	Fixed OnSetupGameMsg() to handle checking to see if the
-//							local machine has the required realm using the title
-//							that is passed in the SetupGame msg (was originally
-//							intended to use filenames but got hosed).
+//      09/24/97   JMI   Fixed OnSetupGameMsg() to handle checking to see if the
+//                     local machine has the required realm using the title
+//                     that is passed in the SetupGame msg (was originally
+//                     intended to use filenames but got hosed).
 //
-//		09/26/97	JMI	Now '-' is blocked at the UpdateDialog() level and never
-//							reaches the GUIs so that the time limit and kill limit
-//							edit fields cannot have a negative number enter in them
-//							(of course you could enter the letter 'a' which looks
-//							wrong too but I know one cares about that (you'd have to
-//							be STUPID to do that but even smart people enter negative
-//							numbers for time and kill limits) ).
-//							Also, this keeps players from using '-' in their chat
-//							strings.
+//      09/26/97   JMI   Now '-' is blocked at the UpdateDialog() level and never
+//                     reaches the GUIs so that the time limit and kill limit
+//                     edit fields cannot have a negative number enter in them
+//                     (of course you could enter the letter 'a' which looks
+//                     wrong too but I know one cares about that (you'd have to
+//                     be STUPID to do that but even smart people enter negative
+//                     numbers for time and kill limits) ).
+//                     Also, this keeps players from using '-' in their chat
+//                     strings.
 //
-//		11/20/97	JMI	Added cooperative flags and associated checkboxes.  Now
-//							displays info on client side regarding cooperative mode
-//							and carries all the necessary flagage around between
-//							messages regarding cooperative mode as well.  Also, now
-//							the level browse listbox can show either deathmatch or
-//							cooperative levels (controlled by the user's cooperative
-//							checkbox setting).
-//							Also, the user can choose operate checkbox deciding
-//							whether to allow cooperative play mode (which is missiles
-//							and bullets pass through fellow players).
+//      11/20/97   JMI   Added cooperative flags and associated checkboxes.  Now
+//                     displays info on client side regarding cooperative mode
+//                     and carries all the necessary flagage around between
+//                     messages regarding cooperative mode as well.  Also, now
+//                     the level browse listbox can show either deathmatch or
+//                     cooperative levels (controlled by the user's cooperative
+//                     checkbox setting).
+//                     Also, the user can choose operate checkbox deciding
+//                     whether to allow cooperative play mode (which is missiles
+//                     and bullets pass through fellow players).
 //
-//		11/25/97	JMI	Added platform conflict message and more informative
-//							version conflict messages (also added version conflict
-//							message for server -- previous the error did not propagate
-//							to this level).
+//      11/25/97   JMI   Added platform conflict message and more informative
+//                     version conflict messages (also added version conflict
+//                     message for server -- previous the error did not propagate
+//                     to this level).
 //
-//		11/25/97	JMI	Changed the server dialog .GUI to be loaded from the HD
-//							instead of from the VD so we can guarantee the new asset
-//							gets loaded (since they'll use their old Postal disc, we
-//							cannot load the .GUI from the CD).
+//      11/25/97   JMI   Changed the server dialog .GUI to be loaded from the HD
+//                     instead of from the VD so we can guarantee the new asset
+//                     gets loaded (since they'll use their old Postal disc, we
+//                     cannot load the .GUI from the CD).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // Deals with networking dialogs.  There is an interface for the server,
-//	client, and browser dialogs that deal heavily with user input, and GUI
-//	output.  The client/server messages are now handled by the black-box-like
+//   client, and browser dialogs that deal heavily with user input, and GUI
+//   output.  The client/server messages are now handled by the black-box-like
 // lower level.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -296,76 +296,76 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Common.
-#define GUI_ID_OK						1001
-#define GUI_ID_CANCEL				1002
+#define GUI_ID_OK                  1001
+#define GUI_ID_CANCEL            1002
 
 // Common Client/Server dialog.
-#define GUI_ID_PLAYERS_LISTBOX	1010
-#define GUI_ID_CHAT_TEXT			1013
-#define GUI_ID_CHAT_SEND			1015
-#define GUI_ID_NET_CONSOLE			1016
-#define GUI_ID_PLAYERS_STATIC1	7000
-#define GUI_ID_PLAYERS_STATIC2	7001
+#define GUI_ID_PLAYERS_LISTBOX   1010
+#define GUI_ID_CHAT_TEXT         1013
+#define GUI_ID_CHAT_SEND         1015
+#define GUI_ID_NET_CONSOLE         1016
+#define GUI_ID_PLAYERS_STATIC1   7000
+#define GUI_ID_PLAYERS_STATIC2   7001
 
 // Client dialog.
-#define GUI_ID_OPTIONS_STATIC		2000
-#define GUI_ID_RETRY					9000
+#define GUI_ID_OPTIONS_STATIC      2000
+#define GUI_ID_RETRY               9000
 
 // Server dialog.
-#define GUI_ID_DISCONNECT_PLAYER	6000
-//#define GUI_ID_RESPAWN_PLAYERS	3000
-#define GUI_ID_ENABLE_TIME_LIMIT	4000
-#define GUI_ID_EDIT_TIME_LIMIT	4001
-#define GUI_ID_ENABLE_KILL_LIMIT	5000
-#define GUI_ID_EDIT_KILL_LIMIT	5001
-#define GUI_ID_LEVEL_LISTBOX		1020
-#define GUI_ID_SHOW_COOP_LEVELS	8000
-#define GUI_ID_ENABLE_COOP_MODE	9000
+#define GUI_ID_DISCONNECT_PLAYER   6000
+//#define GUI_ID_RESPAWN_PLAYERS   3000
+#define GUI_ID_ENABLE_TIME_LIMIT   4000
+#define GUI_ID_EDIT_TIME_LIMIT   4001
+#define GUI_ID_ENABLE_KILL_LIMIT   5000
+#define GUI_ID_EDIT_KILL_LIMIT   5001
+#define GUI_ID_LEVEL_LISTBOX      1020
+#define GUI_ID_SHOW_COOP_LEVELS   8000
+#define GUI_ID_ENABLE_COOP_MODE   9000
 
 // Browser dialog.
-#define GUI_ID_HOST_LISTBOX		1010
+#define GUI_ID_HOST_LISTBOX      1010
 
-#define SERVER_GUI					"res/shell/Server.gui"
-#define CLIENT_GUI					"res/shell/Client.gui"
-#define BROWSER_GUI					"res/shell/Browser.gui"
-#define GUI_DIR						"menu/"
+#define SERVER_GUI               "res/shell/Server.gui"
+#define CLIENT_GUI               "res/shell/Client.gui"
+#define BROWSER_GUI               "res/shell/Browser.gui"
+#define GUI_DIR                  "menu/"
 
 // Note that this is evaluated at compile time, so even
 // if the ptr is NULL, it will work.
-#define MAX_STATUS_STR				GUI_MAX_STR
+#define MAX_STATUS_STR            GUI_MAX_STR
 
 // Maximum number of chat strings in the box.
-#define MAX_CHAT_STRINGS			20
+#define MAX_CHAT_STRINGS         20
 
 // Time between game setup net sends.
-#define OPTIONS_SEND_FREQUENCY	2000
+#define OPTIONS_SEND_FREQUENCY   2000
 
 // Amount of time that must elapse after the first "Cancel" before an
 // addition "Cancel" wil be recognized.
-#define CANCEL_DELAY_TIME			1500
+#define CANCEL_DELAY_TIME         1500
 
 // If status hasn't been updated for this S32, then we will display the default message
-#define STATUS_MAX_DISPLAY_TIME	2000
+#define STATUS_MAX_DISPLAY_TIME   2000
 
 // NOTE:  If we add anymore icons, we might as well just spend the extra few
 // minutes making a separate file for them.
 // Net problems icon file.
-#define NET_PROB_GUI_FILE			"menu/netprob.gui"
+#define NET_PROB_GUI_FILE         "menu/netprob.gui"
 
 // Initial location for net problems icon on screen.
-#define NET_PROB_GUI_X				10
-#define NET_PROB_GUI_Y				40
+#define NET_PROB_GUI_X            10
+#define NET_PROB_GUI_Y            40
 
-#define NET_PROB_TEXT_SHADOW_COLOR_INDEX	4
+#define NET_PROB_TEXT_SHADOW_COLOR_INDEX   4
 
-#define TERMINATING_GUI_ID			0x80000000
+#define TERMINATING_GUI_ID         0x80000000
 
 // Note that the following color indices are from the 'Artie Zone' of colors
 // in the menu palette and, therefore, should not change.
-#define LIST_ITEM_TEXT_SHADOW_COLOR_INDEX			220
+#define LIST_ITEM_TEXT_SHADOW_COLOR_INDEX         220
 
 // This has been remapped to a Win32 color to make it stand out more
-#define NET_STATUS_MSG_COLOR_INDEX					247
+#define NET_STATUS_MSG_COLOR_INDEX               247
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -373,68 +373,68 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Client-specific messages displayed in client dialog's status area
-char* g_pszClientStat_NameTooLongForChat		= "Name too S32, can't chat";
-char* g_pszClientStat_YouWereDropped			= "Connection was lost";
-char* g_pszClientStat_SomeoneDropped_s			= "\"%s\" is no S32er connected";
-char* g_pszClientStat_ServerAborted				= "Game aborted";
-char* g_pszClientStat_ServerStarted				= "Starting game";
-char* g_pszClientStat_Opened						= "Opened connection";
-char* g_pszClientStat_Connected					= "Connected";
-char* g_pszClientStat_JoinDenyTooMany			= "Can't join -- too many players";
-char* g_pszClientStat_JoinDenyLowBandwidth	= "Can't join -- your bandwidth is too low";
-char* g_pszClientStat_JoinDenyCantDropIn		= "Can't join -- game has already started";
-char* g_pszClientStat_JoinDenyUnknown			= "Can't join -- don't know why";
-char* g_pszClientStat_JoinAccepted				= "Joined";
-char* g_pszClientStat_LoginAccepted_hd			= "Logged in (ID = %hd)";
-char* g_pszClientStat_Startup						= "Trying to connect...";
-char* g_pszClientStat_Default						= "Ready";
-char* g_pszClientStat_Error_s						= "Network error (%s) -- aborting";
-char* g_pszClientStat_Retrying					= "Retry...";
+char* g_pszClientStat_NameTooLongForChat      = "Name too S32, can't chat";
+char* g_pszClientStat_YouWereDropped         = "Connection was lost";
+char* g_pszClientStat_SomeoneDropped_s         = "\"%s\" is no S32er connected";
+char* g_pszClientStat_ServerAborted            = "Game aborted";
+char* g_pszClientStat_ServerStarted            = "Starting game";
+char* g_pszClientStat_Opened                  = "Opened connection";
+char* g_pszClientStat_Connected               = "Connected";
+char* g_pszClientStat_JoinDenyTooMany         = "Can't join -- too many players";
+char* g_pszClientStat_JoinDenyLowBandwidth   = "Can't join -- your bandwidth is too low";
+char* g_pszClientStat_JoinDenyCantDropIn      = "Can't join -- game has already started";
+char* g_pszClientStat_JoinDenyUnknown         = "Can't join -- don't know why";
+char* g_pszClientStat_JoinAccepted            = "Joined";
+char* g_pszClientStat_LoginAccepted_hd         = "Logged in (ID = %hd)";
+char* g_pszClientStat_Startup                  = "Trying to connect...";
+char* g_pszClientStat_Default                  = "Ready";
+char* g_pszClientStat_Error_s                  = "Network error (%s) -- aborting";
+char* g_pszClientStat_Retrying               = "Retry...";
 
 // Server-specific messages displayed in server dialog's status area
-char* g_pszServerStat_InvalidDropReq_hd		= "Ignored invalid drop request (ID = %hd)";
-char* g_pszServerStat_AcceptedClient			= "\"%s\" has joined";
-char* g_pszServerStat_CantAcceptJoinReq		= "Can't grant join request (too many players)";
-char* g_pszServerStat_InvalidChangeReq_hd		= "Ignored invalid change request (ID = %hd)";
-char* g_pszServerStat_LoginAccepted_hd			= "Login accepted (id = %hd)";
-char* g_pszServerStat_LoginDeniedVersion_ld	= "Login denied (obsolete client version %ld)";
-char* g_pszServerStat_LoginDeniedMagic			= "Login denied (invalid signature)";
-char* g_pszServerStat_Startup						= "Setting up connection...";
-char* g_pszServerStat_Default						= "Ready";
-char* g_pszServerStat_CantDropSelf				= "You can't drop yourself";
-char* g_pszServerStat_PlayerErr					= "Player was dropped (bad connection)";
+char* g_pszServerStat_InvalidDropReq_hd      = "Ignored invalid drop request (ID = %hd)";
+char* g_pszServerStat_AcceptedClient         = "\"%s\" has joined";
+char* g_pszServerStat_CantAcceptJoinReq      = "Can't grant join request (too many players)";
+char* g_pszServerStat_InvalidChangeReq_hd      = "Ignored invalid change request (ID = %hd)";
+char* g_pszServerStat_LoginAccepted_hd         = "Login accepted (id = %hd)";
+char* g_pszServerStat_LoginDeniedVersion_ld   = "Login denied (obsolete client version %ld)";
+char* g_pszServerStat_LoginDeniedMagic         = "Login denied (invalid signature)";
+char* g_pszServerStat_Startup                  = "Setting up connection...";
+char* g_pszServerStat_Default                  = "Ready";
+char* g_pszServerStat_CantDropSelf            = "You can't drop yourself";
+char* g_pszServerStat_PlayerErr               = "Player was dropped (bad connection)";
 
 // General messages displayed in client or server dialog's status area
-char* g_pszNetStat_Aborting						= "Aborting...";
-char* g_pszNetStat_Starting						= "Starting game...";
-char* g_pszNetStat_AttemptToDrop_s				= "Attempting to drop \"%s\"";
-char* g_pszNetStat_UnhandledMsg					= "Ignoring extraneous message";
+char* g_pszNetStat_Aborting                  = "Aborting...";
+char* g_pszNetStat_Starting                  = "Starting game...";
+char* g_pszNetStat_AttemptToDrop_s            = "Attempting to drop \"%s\"";
+char* g_pszNetStat_UnhandledMsg               = "Ignoring extraneous message";
 
-char* g_pszNetStat_NoError							= "No errors";
-char* g_pszNetStat_ReceiveError					= "Network error (can't receive data)";
-char* g_pszNetStat_InQFullError					= "Network error (input buffer is full)";
-char* g_pszNetStat_OutQFullError					= "Network error (output buffer is full)";
-char* g_pszNetStat_SendError						= "Network error (can't send data)";
-char* g_pszNetStat_InQReadError					= "Network error (can't read data)";
-char* g_pszNetStat_OutQWriteError				= "Network error (couldn't write data)";
-char* g_pszNetStat_ConnectionError				= "Network error (bad connection)";
-char* g_pszNetStat_TimeoutError					= "Network error (time-out)";
-char* g_pszNetStat_ListenError					= "Network error (can't listen)";
-char* g_pszNetStat_ConnectError					= "Network error (can't connect)";
-char* g_pszNetStat_ConnectTimeoutError			= "Network error (connection attempt timed-out)";
-char* g_pszNetStat_ClientVersionMismatchError_lu_lu	= "Version mismatch--dropping (Host ver is %lu -- Our ver is %lu)";
-char* g_pszNetStat_ServerVersionMismatchError_lu_lu	= "Version mismatch--dropping client (Client ver is %lu -- Our ver is %lu)";
-char* g_pszNetStat_CantOpenPeerSocketError	= "Network error (couldn't connect to other players)";
-char* g_pszNetStat_LoginDeniedError				= "Login failed";
-char* g_pszNetStat_JoinDeniedError				= "Host refused join request";
-char* g_pszNetStat_UnknownError					= "Network error (general failure)";
-char* g_pszNetStat_ProgramError					= "Network error (generic failure)";
+char* g_pszNetStat_NoError                     = "No errors";
+char* g_pszNetStat_ReceiveError               = "Network error (can't receive data)";
+char* g_pszNetStat_InQFullError               = "Network error (input buffer is full)";
+char* g_pszNetStat_OutQFullError               = "Network error (output buffer is full)";
+char* g_pszNetStat_SendError                  = "Network error (can't send data)";
+char* g_pszNetStat_InQReadError               = "Network error (can't read data)";
+char* g_pszNetStat_OutQWriteError            = "Network error (couldn't write data)";
+char* g_pszNetStat_ConnectionError            = "Network error (bad connection)";
+char* g_pszNetStat_TimeoutError               = "Network error (time-out)";
+char* g_pszNetStat_ListenError               = "Network error (can't listen)";
+char* g_pszNetStat_ConnectError               = "Network error (can't connect)";
+char* g_pszNetStat_ConnectTimeoutError         = "Network error (connection attempt timed-out)";
+char* g_pszNetStat_ClientVersionMismatchError_lu_lu   = "Version mismatch--dropping (Host ver is %lu -- Our ver is %lu)";
+char* g_pszNetStat_ServerVersionMismatchError_lu_lu   = "Version mismatch--dropping client (Client ver is %lu -- Our ver is %lu)";
+char* g_pszNetStat_CantOpenPeerSocketError   = "Network error (couldn't connect to other players)";
+char* g_pszNetStat_LoginDeniedError            = "Login failed";
+char* g_pszNetStat_JoinDeniedError            = "Host refused join request";
+char* g_pszNetStat_UnknownError               = "Network error (general failure)";
+char* g_pszNetStat_ProgramError               = "Network error (generic failure)";
 #if defined(WIN32)
-char* g_pszNetStat_ClientPlatformMismatchError	= "Cannot login to host because it is a Mac";
-char* g_pszNetStat_ServerPlatformMismatchError	= "Cannot allow client to connect because it is a Mac";
+char* g_pszNetStat_ClientPlatformMismatchError   = "Cannot login to host because it is a Mac";
+char* g_pszNetStat_ServerPlatformMismatchError   = "Cannot allow client to connect because it is a Mac";
 #else
-char* g_pszNetStat_ClientPlatformMismatchError	= "Cannot login to host because it is a PC";
-char* g_pszNetStat_ServerPlatformMismatchError	= "Cannot allow client to connect because it is a PC";
+char* g_pszNetStat_ClientPlatformMismatchError   = "Cannot login to host because it is a PC";
+char* g_pszNetStat_ServerPlatformMismatchError   = "Cannot allow client to connect because it is a PC";
 #endif
 
 // This is  what we say when the user has chosen a protocol that is not supported.
@@ -452,15 +452,15 @@ char* g_pszNetProtocolUnsupported_s =
    "multiplayer options menu.";
 
 // Text which is used to dynamically update one of the text fields on the client or server dialog
-char* g_pszNetDlg_ConnectedPlayers_d			= "Connected Players: %d";
+char* g_pszNetDlg_ConnectedPlayers_d         = "Connected Players: %d";
 
 // Text which is used for the net problems GUI.
 // WARNING: This is an EXTERN and is used by other modules!
-char*	g_pszNetProb_General =
+char*   g_pszNetProb_General =
    "Network not responding.\nYou can wait or\npress " NET_PROB_GUI_ABORT_KEY_TEXT " to abort";
 
 // Text to prefix net status messages, if any.
-char* g_pszNetStatusMsgPrefix						= "> ";
+char* g_pszNetStatusMsgPrefix                  = "> ";
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -509,19 +509,19 @@ typedef struct
 #if 1
    union
    {
-      void*			pvLink;
-      S32*			pl;
-      U32*		pul;
-      short*		ps;
-      USHORT*		pus;
-      char*			pc;
-      UCHAR*		puc;
-      char*			psz;
-      bool*			pb;
-      RGuiItem**	ppgui;
+      void*         pvLink;
+      S32*         pl;
+      U32*      pul;
+      short*      ps;
+      USHORT*      pus;
+      char*         pc;
+      UCHAR*      puc;
+      char*         psz;
+      bool*         pb;
+      RGuiItem**   ppgui;
    };
 #else
-   void*	pvLink;
+   void*   pvLink;
 #endif
 
 } GuiLink;
@@ -531,96 +531,96 @@ typedef struct
 //////////////////////////////////////////////////////////////////////////////
 
 // Common.
-static RGuiItem*	ms_pguiRoot			= NULL;     // Root of GUI tree for network interface.
-static RGuiItem*	ms_pguiOk			= NULL;     // GUI that, once 'clicked', indicates acceptance.
-static RGuiItem*	ms_pguiCancel		= NULL;     // GUI that, once 'clicked', indicates rejection.
+static RGuiItem*   ms_pguiRoot         = NULL;     // Root of GUI tree for network interface.
+static RGuiItem*   ms_pguiOk         = NULL;     // GUI that, once 'clicked', indicates acceptance.
+static RGuiItem*   ms_pguiCancel      = NULL;     // GUI that, once 'clicked', indicates rejection.
 
 // Client/Server common.
-static RListBox*	ms_plbPlayers		= NULL;     // Listbox used by both types of net dialogs.
-static RListBox*	ms_plbNetConsole	= NULL;     // List of net console (chat and status) strings.
-static RGuiItem*	ms_pguiChatText	= NULL;     // Chat text.
-static RGuiItem*	ms_pguiChatSend	= NULL;     // Chat send button.
+static RListBox*   ms_plbPlayers      = NULL;     // Listbox used by both types of net dialogs.
+static RListBox*   ms_plbNetConsole   = NULL;     // List of net console (chat and status) strings.
+static RGuiItem*   ms_pguiChatText   = NULL;     // Chat text.
+static RGuiItem*   ms_pguiChatSend   = NULL;     // Chat send button.
 
 // Server.
-static RListBox*	ms_plbLevelBrowse	= NULL;     // Level browse listbox.
-static RGuiItem*	ms_pguiDisconnectPlayer	= NULL;  // Disconnect a player button.
-static RMultiBtn*	ms_pmbCoopLevels	= NULL;     // Coop levels checkbox.
-static RMultiBtn*	ms_pmbCoopMode		= NULL;     // Coop mode checkbox.
+static RListBox*   ms_plbLevelBrowse   = NULL;     // Level browse listbox.
+static RGuiItem*   ms_pguiDisconnectPlayer   = NULL;  // Disconnect a player button.
+static RMultiBtn*   ms_pmbCoopLevels   = NULL;     // Coop levels checkbox.
+static RMultiBtn*   ms_pmbCoopMode      = NULL;     // Coop mode checkbox.
 
 // Client.
-static RGuiItem*	ms_pguiOptions		= NULL;     // Options shown on client dialog.
-static RGuiItem*	ms_pguiRetry		= NULL;     // Retry button on client dialog shown when needed.
+static RGuiItem*   ms_pguiOptions      = NULL;     // Options shown on client dialog.
+static RGuiItem*   ms_pguiRetry      = NULL;     // Retry button on client dialog shown when needed.
 
 // Browser.
-static RListBox*	ms_plbHostBrowse	= NULL;     // Browse for host listbox.
+static RListBox*   ms_plbHostBrowse   = NULL;     // Browse for host listbox.
 
 // Other static vars.
 
 static S32 ms_lWatchdogTime = 0;                // Watchdog timer
-static bool	ms_bNetBlockingAbort = false;       // Net blocking abort flag
+static bool ms_bNetBlockingAbort = false;         // Net blocking abort flag
 
 static S32 ms_lNumConsoleEntries      = 0;               // Track number of chat items.
 
-static bool	ms_bGotSetupMsg = false;
+static bool ms_bGotSetupMsg = false;
 static short ms_sSetupRealmNum = 0;
-static char	ms_szSetupRealmFile[Net::MaxRealmNameSize];
+static char ms_szSetupRealmFile[Net::MaxRealmNameSize];
 static S32 ms_lSetupLastChatComplaint = 0;
 
 static S32 ms_lNextOptionsUpdateTime;           // Next time to send an options update.
 
-static RTxt*		ms_ptxtNetProb	= NULL;        // Net problem GUI.
-static bool	m_bNetWatchdogExpired	= false;       // Whether net blocking expired
-static bool	ms_bCoopLevels	= false;             // true, to use cooperative levels.
+static RTxt*      ms_ptxtNetProb   = NULL;        // Net problem GUI.
+static bool m_bNetWatchdogExpired   = false;         // Whether net blocking expired
+static bool ms_bCoopLevels   = false;               // true, to use cooperative levels.
 
 // This is used by UpdateDialog() to perform GUI processing.
 static RProcessGui ms_pgDoGui;
 
 // Linkable vars.
-static bool	ms_bTimeLimit	= false;             // Enable Time Limit if true.
-static bool	ms_bKillLimit	= false;             // Enable Kill Limit if true.
-static bool	ms_bCoopMode = false;               // true, for cooperative mode (false for deathmatch).
+static bool ms_bTimeLimit   = false;               // Enable Time Limit if true.
+static bool ms_bKillLimit   = false;               // Enable Kill Limit if true.
+static bool ms_bCoopMode = false;                 // true, for cooperative mode (false for deathmatch).
 
-static GuiLink	ms_aglServerLinkage[]	=
+static GuiLink ms_aglServerLinkage[]   =
 {
-   { GUI_ID_DISCONNECT_PLAYER,	GuiLink::Gui,		&ms_pguiDisconnectPlayer,				},
-//		{ GUI_ID_RESPAWN_PLAYERS,		GuiLink::Short,	&g_GameSettings.m_sHostRejuvenate,	},
-   { GUI_ID_ENABLE_TIME_LIMIT,	GuiLink::Bool,		&ms_bTimeLimit,							},
-   { GUI_ID_EDIT_TIME_LIMIT,		GuiLink::Short,	&g_GameSettings.m_sHostTimeLimit,	},
-   { GUI_ID_ENABLE_KILL_LIMIT,	GuiLink::Bool,		&ms_bKillLimit,							},
-   { GUI_ID_EDIT_KILL_LIMIT,		GuiLink::Short,	&g_GameSettings.m_sHostKillLimit,	},
-   { GUI_ID_LEVEL_LISTBOX,			GuiLink::Gui,		&ms_plbLevelBrowse,						},
-   { GUI_ID_SHOW_COOP_LEVELS,		GuiLink::Gui,		&ms_pmbCoopLevels,						},
-   { GUI_ID_ENABLE_COOP_MODE,		GuiLink::Gui,		&ms_pmbCoopMode,							},
-   { GUI_ID_ENABLE_COOP_MODE,		GuiLink::Bool,		&ms_bCoopMode,								},
+   { GUI_ID_DISCONNECT_PLAYER,   GuiLink::Gui,      &ms_pguiDisconnectPlayer,            },
+//      { GUI_ID_RESPAWN_PLAYERS,      GuiLink::Short,   &g_GameSettings.m_sHostRejuvenate,   },
+   { GUI_ID_ENABLE_TIME_LIMIT,   GuiLink::Bool,      &ms_bTimeLimit,                     },
+   { GUI_ID_EDIT_TIME_LIMIT,      GuiLink::Short,   &g_GameSettings.m_sHostTimeLimit,   },
+   { GUI_ID_ENABLE_KILL_LIMIT,   GuiLink::Bool,      &ms_bKillLimit,                     },
+   { GUI_ID_EDIT_KILL_LIMIT,      GuiLink::Short,   &g_GameSettings.m_sHostKillLimit,   },
+   { GUI_ID_LEVEL_LISTBOX,         GuiLink::Gui,      &ms_plbLevelBrowse,                  },
+   { GUI_ID_SHOW_COOP_LEVELS,      GuiLink::Gui,      &ms_pmbCoopLevels,                  },
+   { GUI_ID_ENABLE_COOP_MODE,      GuiLink::Gui,      &ms_pmbCoopMode,                     },
+   { GUI_ID_ENABLE_COOP_MODE,      GuiLink::Bool,      &ms_bCoopMode,                        },
 
    { static_cast<S32>(TERMINATING_GUI_ID), },      // Terminator.
 };
 
-static GuiLink	ms_aglClientLinkage[]	=
+static GuiLink ms_aglClientLinkage[]   =
 {
-   { GUI_ID_OPTIONS_STATIC,		GuiLink::Gui,		&ms_pguiOptions,							},
-   { GUI_ID_RETRY,					GuiLink::Gui,		&ms_pguiRetry,								},
+   { GUI_ID_OPTIONS_STATIC,      GuiLink::Gui,      &ms_pguiOptions,                     },
+   { GUI_ID_RETRY,               GuiLink::Gui,      &ms_pguiRetry,                        },
 
    { static_cast<S32>(TERMINATING_GUI_ID), },      // Terminator.
 };
 
-static GuiLink	ms_aglClientServerLinkage[]	=
+static GuiLink ms_aglClientServerLinkage[]   =
 {
-   { GUI_ID_PLAYERS_LISTBOX,		GuiLink::Gui,		&ms_plbPlayers,							},
-   { GUI_ID_CHAT_TEXT,				GuiLink::Gui,		&ms_pguiChatText,							},
-   { GUI_ID_CHAT_SEND,				GuiLink::Gui,		&ms_pguiChatSend,							},
-   { GUI_ID_NET_CONSOLE,			GuiLink::Gui,		&ms_plbNetConsole,						},
-   { GUI_ID_OK,						GuiLink::Gui,		&ms_pguiOk,									},
-   { GUI_ID_CANCEL,					GuiLink::Gui,		&ms_pguiCancel,							},
+   { GUI_ID_PLAYERS_LISTBOX,      GuiLink::Gui,      &ms_plbPlayers,                     },
+   { GUI_ID_CHAT_TEXT,            GuiLink::Gui,      &ms_pguiChatText,                     },
+   { GUI_ID_CHAT_SEND,            GuiLink::Gui,      &ms_pguiChatSend,                     },
+   { GUI_ID_NET_CONSOLE,         GuiLink::Gui,      &ms_plbNetConsole,                  },
+   { GUI_ID_OK,                  GuiLink::Gui,      &ms_pguiOk,                           },
+   { GUI_ID_CANCEL,               GuiLink::Gui,      &ms_pguiCancel,                     },
 
    { static_cast<S32>(TERMINATING_GUI_ID), },      // Terminator.
 };
 
-static GuiLink	ms_aglBrowserLinkage[]	=
+static GuiLink ms_aglBrowserLinkage[]   =
 {
-   { GUI_ID_HOST_LISTBOX,			GuiLink::Gui,		&ms_plbHostBrowse,						},
-   { GUI_ID_OK,						GuiLink::Gui,		&ms_pguiOk,									},
-   { GUI_ID_CANCEL,					GuiLink::Gui,		&ms_pguiCancel,							},
+   { GUI_ID_HOST_LISTBOX,         GuiLink::Gui,      &ms_plbHostBrowse,                  },
+   { GUI_ID_OK,                  GuiLink::Gui,      &ms_pguiOk,                           },
+   { GUI_ID_CANCEL,               GuiLink::Gui,      &ms_pguiCancel,                     },
 
    { static_cast<S32>(TERMINATING_GUI_ID), },      // Terminator.
 };
@@ -647,14 +647,14 @@ void DlgReleaseRes(                             // Returns 0 if successfull, non
 static short NetBlockingCallback(void);         // Returns 0 to continue normally, 1 to abort
 
 static short BrowseForHost(
-   CNetServer*	pserver,                         // I/O: Server interface or NULL if none
+   CNetServer*   pserver,                         // I/O: Server interface or NULL if none
    RSocket::Address* paddress);                 // Out: Address returned here (if successfull)
 
 static short FindSpecificSystem(
    RSocket::Address* paddress);                 // Out: Address returned here (if successfull)
 
 static short BrowseForSelf(
-   CNetServer*	pserver,                         // I/O: Server interface
+   CNetServer*   pserver,                         // I/O: Server interface
    RSocket::Address* paddress);                 // Out: Address returned here (if successfull)
 
 
@@ -663,7 +663,7 @@ static short BrowseForSelf(
 //////////////////////////////////////////////////////////////////////////////
 template <class Int>          // Templated input type (can be unsigned).
 void UploadLinkInteger(       // Returns nothing.
-   RGuiItem*	pgui,          // In:  GUI to upload to.
+   RGuiItem*   pgui,          // In:  GUI to upload to.
    Int i)                     // In:  Input val to upload to GUI.
 {
    ASSERT(pgui);
@@ -672,27 +672,27 @@ void UploadLinkInteger(       // Returns nothing.
    {
    case RGuiItem::MultiBtn:
    {
-      RMultiBtn*	pmb	= (RMultiBtn*)pgui;
+      RMultiBtn*   pmb   = (RMultiBtn*)pgui;
       if (i)
       {
-         pmb->m_sState	= 1;
+         pmb->m_sState   = 1;
       }
       else
       {
-         pmb->m_sState	= 2;
+         pmb->m_sState   = 2;
       }
       break;
    }
    case RGuiItem::PushBtn:
    {
-      RPushBtn*	ppushbtn	= (RPushBtn*)pgui;
+      RPushBtn*   ppushbtn   = (RPushBtn*)pgui;
       if (i)
       {
-         ppushbtn->m_state	= RPushBtn::On;
+         ppushbtn->m_state   = RPushBtn::On;
       }
       else
       {
-         ppushbtn->m_state	= RPushBtn::Off;
+         ppushbtn->m_state   = RPushBtn::Off;
       }
       break;
    }
@@ -726,8 +726,8 @@ void UploadLinkInteger(       // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 template <class Int>          // Templated output type (can be unsigned).
 void DownloadLinkInteger(     // Returns nothing.
-   RGuiItem*	pgui,          // In:  GUI to download from.
-   Int*	pi)                  // Out: Input val to download into from GUI.
+   RGuiItem*   pgui,          // In:  GUI to download from.
+   Int*   pi)                  // Out: Input val to download into from GUI.
 {
    ASSERT(pgui);
 
@@ -735,13 +735,13 @@ void DownloadLinkInteger(     // Returns nothing.
    {
    case RGuiItem::MultiBtn:
    {
-      RMultiBtn*	pmb	= (RMultiBtn*)pgui;
+      RMultiBtn*   pmb   = (RMultiBtn*)pgui;
       *pi = (pmb->m_sState == 1) ? 1 : 0;
       break;
    }
    case RGuiItem::PushBtn:
    {
-      RPushBtn*	ppushbtn	= (RPushBtn*)pgui;
+      RPushBtn*   ppushbtn   = (RPushBtn*)pgui;
       *pi = (ppushbtn->m_state == RPushBtn::On) ? 1 : 0;
       break;
    }
@@ -776,15 +776,15 @@ void DownloadLinkInteger(     // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 static void UploadLinks(   // Returns nothing.
-   GuiLink*		pagl,       // In:  Links to upload.
-   RGuiItem*	pguiRoot)   // In:  GUI to upload to.
+   GuiLink*      pagl,       // In:  Links to upload.
+   RGuiItem*   pguiRoot)   // In:  GUI to upload to.
 {
    ASSERT(pguiRoot);
 
    while (pagl->lId != TERMINATING_GUI_ID)
    {
       // Get item.
-      RGuiItem*	pgui	= pguiRoot->GetItemFromId(pagl->lId);
+      RGuiItem*   pgui   = pguiRoot->GetItemFromId(pagl->lId);
       if (pgui)
       {
          switch (pagl->type)
@@ -823,7 +823,7 @@ static void UploadLinks(   // Returns nothing.
 
          // This may seem backward but it's more convenient.
          case GuiLink::Gui:
-            *pagl->ppgui	= pgui;
+            *pagl->ppgui   = pgui;
             break;
 
          default:
@@ -848,15 +848,15 @@ static void UploadLinks(   // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 static void DownloadLinks( // Returns nothing.
-   GuiLink*		pagl,       // In:  Links to upload.
-   RGuiItem*	pguiRoot)   // In:  GUI to upload to.
+   GuiLink*      pagl,       // In:  Links to upload.
+   RGuiItem*   pguiRoot)   // In:  GUI to upload to.
 {
    ASSERT(pguiRoot);
 
    while (pagl->lId != TERMINATING_GUI_ID)
    {
       // Get item.
-      RGuiItem*	pgui	= pguiRoot->GetItemFromId(pagl->lId);
+      RGuiItem*   pgui   = pguiRoot->GetItemFromId(pagl->lId);
       if (pgui)
       {
          switch (pagl->type)
@@ -919,15 +919,15 @@ static void DownloadLinks( // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void MakeMoreReadable(    // Returns nothing.
-   RGuiItem*	pgui)             // In:  GUI to shadowify using global values.
+   RGuiItem*   pgui)             // In:  GUI to shadowify using global values.
 {
    ASSERT(pgui);
 
    if (pgui)
    {
-      pgui->m_sTextEffects			= RGuiItem::Shadow;
-      pgui->m_u32TextShadowColor	= LIST_ITEM_TEXT_SHADOW_COLOR_INDEX;
-      pgui->m_sShowFocus			= FALSE;
+      pgui->m_sTextEffects         = RGuiItem::Shadow;
+      pgui->m_u32TextShadowColor   = LIST_ITEM_TEXT_SHADOW_COLOR_INDEX;
+      pgui->m_sShowFocus         = FALSE;
    }
 }
 
@@ -943,7 +943,7 @@ inline void ComposeOptions(void)
    if (ms_pguiOptions)
    {
       // Store old word wrap status so we can restore it when done.
-      short sWordWrapWas	= (ms_pguiOptions->m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
+      short sWordWrapWas   = (ms_pguiOptions->m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
 
       // Enable word wrap (not accessible from GUI editor currently).
       ms_pguiOptions->m_pprint->SetWordWrap(TRUE);
@@ -982,10 +982,10 @@ static void CleanClientDlg(
 
    // This cheese updates the number of players displayed.  I cannot remember why we did not simply
    // make this one text shadowed GUI.
-   RGuiItem*	pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
+   RGuiItem*   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, iNumPlayers));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose());
-   pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
+   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, iNumPlayers));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose());
 
@@ -1004,7 +1004,7 @@ static void CleanClientDlg(
 //////////////////////////////////////////////////////////////////////////////
 static short ShowLevels(void)                // Returns 0 on success.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (ms_plbLevelBrowse != NULL)
    {
@@ -1017,7 +1017,7 @@ static short ShowLevels(void)                // Returns 0 on success.
       // Add all the available realms.
       char szRealm[RSP_MAX_PATH + 1];
       char szTitle[512];
-      short	i	= 0;
+      short i   = 0;
       while (sRes == 0)
       {
          // Get realm name from realm prefs file
@@ -1025,13 +1025,13 @@ static short ShowLevels(void)                // Returns 0 on success.
          if (sRes == 1)
          {
             // That's it.
-            sRes	= 0;
+            sRes   = 0;
             break;
          }
          else if (sRes == 0)
          {
             // Add to listbox.
-            RGuiItem*	pguiLevel = ms_plbLevelBrowse->AddString(szTitle);
+            RGuiItem*   pguiLevel = ms_plbLevelBrowse->AddString(szTitle);
             if (pguiLevel != NULL)
             {
                // Activate shadow parameters.
@@ -1043,7 +1043,7 @@ static short ShowLevels(void)                // Returns 0 on success.
             else
             {
                TRACE("ShowLevels(): Failed to add string to listbox.\n");
-               sRes	= -1;
+               sRes   = -1;
             }
          }
          i++;
@@ -1052,7 +1052,7 @@ static short ShowLevels(void)                // Returns 0 on success.
       #else
 
       // Add the one and only level option.
-      RGuiItem*	pguiLevel = ms_plbLevelBrowse->AddString(SPECIFIC_MP_REALM_TEXT);
+      RGuiItem*   pguiLevel = ms_plbLevelBrowse->AddString(SPECIFIC_MP_REALM_TEXT);
       if (pguiLevel != NULL)
       {
          // Activate shadow parameters.
@@ -1064,10 +1064,10 @@ static short ShowLevels(void)                // Returns 0 on success.
       else
       {
          TRACE("ShowLevels(): Failed to add string to listbox.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
 
-      #endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+      #endif   // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
 
       // Select the first item in the listbox.
       ms_plbLevelBrowse->SetSel(ms_plbLevelBrowse->GetFirst() );
@@ -1093,20 +1093,20 @@ static void DlgBeGone(void)
       delete ms_pguiRoot;
    }
 
-   ms_pguiRoot					= NULL;
-   ms_pguiOk					= NULL;
-   ms_pguiCancel				= NULL;
-   ms_plbPlayers				= NULL;
-   ms_plbNetConsole			= NULL;
-   ms_pguiChatText			= NULL;
-   ms_pguiChatSend			= NULL;
-   ms_plbLevelBrowse			= NULL;
-   ms_pguiOptions				= NULL;
-   ms_pguiDisconnectPlayer	= NULL;
-   ms_pmbCoopLevels			= NULL;
-   ms_pmbCoopMode				= NULL;
-   ms_plbHostBrowse			= NULL;
-   ms_pguiRetry				= NULL;
+   ms_pguiRoot               = NULL;
+   ms_pguiOk               = NULL;
+   ms_pguiCancel            = NULL;
+   ms_plbPlayers            = NULL;
+   ms_plbNetConsole         = NULL;
+   ms_pguiChatText         = NULL;
+   ms_pguiChatSend         = NULL;
+   ms_plbLevelBrowse         = NULL;
+   ms_pguiOptions            = NULL;
+   ms_pguiDisconnectPlayer   = NULL;
+   ms_pmbCoopLevels         = NULL;
+   ms_pmbCoopMode            = NULL;
+   ms_plbHostBrowse         = NULL;
+   ms_pguiRetry            = NULL;
 }
 
 
@@ -1116,17 +1116,17 @@ static void DlgBeGone(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 static short SetupDlg(     // Returns 0 on success.
-   char*	pszGuiFile,       // In:  Full path to GUI file.
-   DLG_TYPE	type)          // In:  Type of dialog.
+   char*   pszGuiFile,       // In:  Full path to GUI file.
+   DLG_TYPE type)            // In:  Type of dialog.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Make sure everything is clean.
    DlgBeGone();
 
    // Anh...reset these here.
-   ms_lNumConsoleEntries					= 0;
-   ms_lNextOptionsUpdateTime	= 0;
+   ms_lNumConsoleEntries               = 0;
+   ms_lNextOptionsUpdateTime   = 0;
 
    // Create a dialog.  We have to take this approach instea of the nicer
    // LoadInstantiate() method because we need to install callbacks for
@@ -1180,7 +1180,7 @@ static short SetupDlg(     // Returns 0 on success.
                // Must be edit.
                ASSERT(ms_pguiChatText->m_type == RGuiItem::Edit);
                // Limit text.
-               ( (REdit*)ms_pguiChatText)->m_sMaxText	= Net::MaxChatSize - 1;
+               ( (REdit*)ms_pguiChatText)->m_sMaxText   = Net::MaxChatSize - 1;
             }
 
             // Make the options GUI more readable.
@@ -1224,7 +1224,7 @@ static short SetupDlg(     // Returns 0 on success.
                // Must be edit.
                ASSERT(ms_pguiChatText->m_type == RGuiItem::Edit);
                // Limit text.
-               ( (REdit*)ms_pguiChatText)->m_sMaxText	= Net::MaxChatSize - 1;
+               ( (REdit*)ms_pguiChatText)->m_sMaxText   = Net::MaxChatSize - 1;
             }
 
             // If exists . . .
@@ -1233,7 +1233,7 @@ static short SetupDlg(     // Returns 0 on success.
                // Must be multibtn.
                ASSERT(ms_pmbCoopLevels->m_type == RGuiItem::MultiBtn);
                // Set state to last choice.
-               ms_pmbCoopLevels->m_sState	= (ms_bCoopLevels == false) ? 1 : 2;
+               ms_pmbCoopLevels->m_sState   = (ms_bCoopLevels == false) ? 1 : 2;
                // Recompose with new state.
                ms_pmbCoopLevels->Compose();
             }
@@ -1244,7 +1244,7 @@ static short SetupDlg(     // Returns 0 on success.
                // Must be multibtn.
                ASSERT(ms_pmbCoopMode->m_type == RGuiItem::MultiBtn);
                // Set state to last choice.
-               ms_pmbCoopMode->m_sState	= (ms_bCoopMode == false) ? 2 : 1;
+               ms_pmbCoopMode->m_sState   = (ms_bCoopMode == false) ? 2 : 1;
                // Recompose with new state.
                ms_pmbCoopMode->Compose();
             }
@@ -1287,7 +1287,7 @@ static short SetupDlg(     // Returns 0 on success.
          ms_pguiRoot->SetVisible(TRUE);
 
          // Prepare GUI processor.
-         ms_pgDoGui.m_sFlags	= RProcessGui::NoCleanScreen;
+         ms_pgDoGui.m_sFlags   = RProcessGui::NoCleanScreen;
 
          ms_pgDoGui.Prepare(ms_pguiRoot, ms_pguiOk, ms_pguiCancel);
       }
@@ -1375,7 +1375,7 @@ void DlgReleaseRes(                             // Returns 0 if successfull, non
 //
 //////////////////////////////////////////////////////////////////////////////
 static DLG_ACTION UpdateDialog(                 // Returns dialog action
-   RGuiItem*	pguiRoot,                        // In:  GUI to process via user input.
+   RGuiItem*   pguiRoot,                        // In:  GUI to process via user input.
    bool bReset)                                 // In:  If false, does not reset any
                                                 // GUIs before returning their action.
                                                 // Note that this means that the next
@@ -1383,9 +1383,9 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
                                                 // the same action.
 {
    // Get next input event.
-   RInputEvent	ie;
+   RInputEvent ie;
    // Make sure we start with no event.
-   ie.type	= RInputEvent::None;
+   ie.type   = RInputEvent::None;
    rspGetNextInputEvent(&ie);
 
    // Block minus sign right here (note that this will keep players
@@ -1395,7 +1395,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
       switch (ie.lKey & 0x0000FFFF)
       {
       case '-':
-         ie.type	= RInputEvent::None;
+         ie.type   = RInputEvent::None;
          break;
       }
    }
@@ -1465,7 +1465,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
          RSP_SAFE_GUI_REF_VOID(ms_pguiRetry, SetClicked(FALSE) );
       }
 
-      action	= DLG_RETRY;
+      action   = DLG_RETRY;
    }
 
    if (RSP_SAFE_GUI_REF(ms_pguiChatSend, IsClicked()))
@@ -1495,7 +1495,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
          RSP_SAFE_GUI_REF_VOID(ms_pguiDisconnectPlayer, SetClicked(FALSE) );
       }
 
-      action	= DLG_DISCONNECT_PLAYER;
+      action   = DLG_DISCONNECT_PLAYER;
    }
 
    // If no other action . . .
@@ -1507,10 +1507,10 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
       {
          if (bReset)
          {
-            ms_lNextOptionsUpdateTime	= lCurTime + OPTIONS_SEND_FREQUENCY;
+            ms_lNextOptionsUpdateTime   = lCurTime + OPTIONS_SEND_FREQUENCY;
          }
 
-         action	= DLG_OPTIONS_UPDATED;
+         action   = DLG_OPTIONS_UPDATED;
       }
    }
 
@@ -1525,7 +1525,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
          if (bCoopLevels != ms_bCoopLevels)
          {
             // Set new value.
-            ms_bCoopLevels	= bCoopLevels;
+            ms_bCoopLevels   = bCoopLevels;
 
             // Repaginate.
             ShowLevels();
@@ -1536,7 +1536,7 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
                // Since cooperative mode in deathmatch levels makes little
                // sense, let's automagically switch to deathmatch mode for
                // convenience sake.
-               ms_pmbCoopMode->m_sState	= 2;
+               ms_pmbCoopMode->m_sState   = 2;
                ms_pmbCoopMode->Compose();
             }
          }
@@ -1552,16 +1552,16 @@ static DLG_ACTION UpdateDialog(                 // Returns dialog action
 //
 //////////////////////////////////////////////////////////////////////////////
 static short UpdateListBox(               // Returns 0 on success.
-   RListBox*	plb,                       // In:  Browser listbox.
+   RListBox*   plb,                       // In:  Browser listbox.
    CNetBrowse::Hosts* phostslistPersist,  // In:  Hosts.
    CNetBrowse::Hosts* phostslistAdded,    // In:  Hosts to add to listbox.
    CNetBrowse::Hosts* phostslistDropped)  // In:  Hosts to drop from listbox.
 {
-   short	sResult	= 0;  // Assume success.
+   short sResult   = 0;    // Assume success.
 
    if (plb)
    {
-      CNetBrowse::Hosts::Pointer	i;
+      CNetBrowse::Hosts::Pointer i;
       bool bRepaginate = false;
 
       // Look for unGUIed entries . . .
@@ -1571,24 +1571,24 @@ static short UpdateListBox(               // Returns 0 on success.
          // If not yet GUIed . . .
          if ( !(phost->m_u32User) )
          {
-            RGuiItem*	pgui	= plb->AddString(phost->m_acName);
+            RGuiItem*   pgui   = plb->AddString(phost->m_acName);
             if (pgui)
             {
                // Activate shadow parameters.
                MakeMoreReadable(pgui);
                pgui->Compose();
                // Point GUI at entry.
-               pgui->m_ulUserData	= (uintptr_t)phost;
+               pgui->m_ulUserData   = (uintptr_t)phost;
                // Successfully added entry.
-               phost->m_u32User	= (uintptr_t)pgui;
+               phost->m_u32User   = (uintptr_t)pgui;
                // Note that we updated the dialog and will need to re-adjust
                // fields and recompose.
-               bRepaginate	= true;
+               bRepaginate   = true;
             }
             else
             {
                TRACE("UpdateListBox():  Failed to add a host to the listbox.\n");
-//					sResult	= -1;	// Error?
+//               sResult   = -1;   // Error?
             }
          }
       }
@@ -1615,7 +1615,7 @@ static short UpdateListBox(               // Returns 0 on success.
             plb->RemoveItem((RGuiItem*)(u32User));
             // Note that we updated the dialog and will need to re-adjust
             // fields and recompose.
-            bRepaginate	= true;
+            bRepaginate   = true;
          }
 
          // Remove first host in list
@@ -1643,7 +1643,7 @@ static short UpdateListBox(               // Returns 0 on success.
    else
    {
       TRACE("UpdateListBox():  No listbox to update.\n");
-      sResult	= -1;
+      sResult   = -1;
    }
 
    return sResult;
@@ -1682,7 +1682,7 @@ static void AddConsoleMsg( // Returns nothing.
          // Otherwise, add optional prefix.
          sprintf(szMsg, "%s%s", g_pszNetStatusMsgPrefix, szOutput);
          // And use alternate color.
-         u32TextColor		= NET_STATUS_MSG_COLOR_INDEX;
+         u32TextColor      = NET_STATUS_MSG_COLOR_INDEX;
       }
 
       bool bRepaginate = false;  // true to repaginate the listbox.
@@ -1691,28 +1691,28 @@ static void AddConsoleMsg( // Returns nothing.
       if (ms_lNumConsoleEntries >= MAX_CHAT_STRINGS)
       {
          // Get the oldest chat.
-         RGuiItem*	pguiOldestConsoleMsg	= ms_plbNetConsole->GetFirst();
+         RGuiItem*   pguiOldestConsoleMsg   = ms_plbNetConsole->GetFirst();
          if (pguiOldestConsoleMsg)
          {
             // Remove it.
             ms_plbNetConsole->RemoveItem(pguiOldestConsoleMsg);
             // Repaginate.
-            bRepaginate	= true;
+            bRepaginate   = true;
          }
       }
 
-      RGuiItem*	pguiConsoleMsg	= ms_plbNetConsole->AddString(szMsg);
+      RGuiItem*   pguiConsoleMsg   = ms_plbNetConsole->AddString(szMsg);
       if (pguiConsoleMsg)
       {
          // Another chat.
          ms_lNumConsoleEntries++;
          // Store the old border thickness so we know how much we can reduce
          // these.
-         short	sOrigTotalBorderThickness	= pguiConsoleMsg->GetTopLeftBorderThickness() + pguiConsoleMsg->GetBottomRightBorderThickness();
+         short sOrigTotalBorderThickness   = pguiConsoleMsg->GetTopLeftBorderThickness() + pguiConsoleMsg->GetBottomRightBorderThickness();
          // No lines.
-         pguiConsoleMsg->m_sBorderThickness	= 0;
+         pguiConsoleMsg->m_sBorderThickness   = 0;
          // Adjust color.
-         pguiConsoleMsg->m_u32TextColor		= u32TextColor;
+         pguiConsoleMsg->m_u32TextColor      = u32TextColor;
          // Activate shadow parameters.
          MakeMoreReadable(pguiConsoleMsg);
          // Recreate without space for border lines . . .
@@ -1726,7 +1726,7 @@ static void AddConsoleMsg( // Returns nothing.
                 pguiConsoleMsg->m_im.m_sDepth) == 0)
          {
             // We cannot click on these.
-            pguiConsoleMsg->m_sActive	= FALSE;
+            pguiConsoleMsg->m_sActive   = FALSE;
             pguiConsoleMsg->SetActive(FALSE);
             // Repaginate now, now.
             ms_plbNetConsole->AdjustContents();
@@ -1737,7 +1737,7 @@ static void AddConsoleMsg( // Returns nothing.
          {
             // This is useless then.
             delete pguiConsoleMsg;
-            pguiConsoleMsg	= NULL;
+            pguiConsoleMsg   = NULL;
          }
       }
       else
@@ -1842,12 +1842,12 @@ extern const char* NetErrorText(                // Returns pointer to text
 static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
                                           // otherwise.
    bool bCoopLevel,                       // In:  true, if a coop level; false, if deathmatch level.
-   char*	pszRealmTitle,                   // In:  Realm title.
+   char*   pszRealmTitle,                   // In:  Realm title.
    char* pszRealmFileName,                // Out: Realm filename.
    short sMaxLen)                         // In:  Max space available at
                                           // pszRealmFileName.
 {
-   short	sResult	= 0;  // Assume success.
+   short sResult   = 0;    // Assume success.
 
    RPrefs prefsRealm;
    // Try opening the realms.ini file on the HD path first, if that fails go to the CD
@@ -1861,7 +1861,7 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
       // Multiplayer sections are named "RealmNet1, "RealmNet2", etc.
       // Multiplayer realm entry is always "Realm".
       // The title is always "Title".
-      short	sRealmNum	= 1;
+      short sRealmNum   = 1;
       char szRealmTitle[512];
       char szSection[512];
       bool bFound   = false;
@@ -1875,7 +1875,7 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
             sRealmNum++);
 
          // Safety; renitialize.
-         szRealmTitle[0]	= '\0';
+         szRealmTitle[0]   = '\0';
 
          // Get the title for this net realm.
          prefsRealm.GetVal(szSection, "Title", "", szRealmTitle);
@@ -1888,7 +1888,7 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
             prefsRealm.GetVal(szSection, "Realm", "", pszRealmFileName);
 
             // Done.
-            bFound	= true;
+            bFound   = true;
          }
 
       } while (szRealmTitle[0] != '\0' && bFound == false);
@@ -1897,7 +1897,7 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
       if (bFound == false)
       {
          // Let the caller know.
-         sResult	= 1;
+         sResult   = 1;
       }
    }
 
@@ -1910,8 +1910,8 @@ static short GetRealmFileFromRealmTitle(  // Returns 0, if found; non-zero
 //
 //////////////////////////////////////////////////////////////////////////////
 static void OnDroppedMsg(
-   CNetClient*	pnet,       // In:  Network interface.
-   NetMsg*		pmsg)       // In:  Dropped msg from client to remove.
+   CNetClient*   pnet,       // In:  Network interface.
+   NetMsg*      pmsg)       // In:  Dropped msg from client to remove.
 {
    ASSERT(pmsg->msg.nothing.ucType == NetMsg::DROPPED);
 
@@ -1922,10 +1922,10 @@ static void OnDroppedMsg(
       AddConsoleMsg(false, g_pszClientStat_SomeoneDropped_s, pnet->GetPlayerName(pmsg->msg.dropped.id));
 
    // Update number of players displayed.
-   RGuiItem*	pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
+   RGuiItem*   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, pnet->GetNumPlayers()));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose());
-   pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
+   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, pnet->GetNumPlayers()));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose());
 
@@ -1950,27 +1950,27 @@ static void OnDroppedMsg(
 //
 //////////////////////////////////////////////////////////////////////////////
 static short OnJoinedMsg(  // Returns 0 on success.
-   CNetClient*	pnet,       // In:  Network interface.
-   NetMsg*		pmsg,       // In:  Joined msg from client to add.
+   CNetClient*   pnet,       // In:  Network interface.
+   NetMsg*      pmsg,       // In:  Joined msg from client to add.
    bool bServer)           // In:  true if in server mode; false if client.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pmsg->msg.nothing.ucType == NetMsg::JOINED);
 
-   UCHAR	ucColorIndex	= pmsg->msg.joined.ucColor;
+   UCHAR ucColorIndex   = pmsg->msg.joined.ucColor;
    if (ucColorIndex >= CGameSettings::ms_sNumPlayerColorDescriptions)
-      ucColorIndex	= 0;
+      ucColorIndex   = 0;
 
    // Add info to listbox.
    char szPlayer[256];
    sprintf(szPlayer, "%s   (%s)", pmsg->msg.joined.acName, CGameSettings::ms_apszPlayerColorDescriptions[ucColorIndex]);
 
    // Update number of players displayed.
-   RGuiItem*	pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
+   RGuiItem*   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC1);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, pnet->GetNumPlayers()));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose() );
-   pguiConnected	= ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
+   pguiConnected   = ms_pguiRoot->GetItemFromId(GUI_ID_PLAYERS_STATIC2);
    RSP_SAFE_GUI_REF_VOID(pguiConnected, SetText(g_pszNetDlg_ConnectedPlayers_d, pnet->GetNumPlayers()));
    RSP_SAFE_GUI_REF_VOID(pguiConnected, Compose() );
 
@@ -1978,12 +1978,12 @@ static short OnJoinedMsg(  // Returns 0 on success.
    if (pguiClient != NULL)
    {
       // Let's be able to identify this client by its net ID.
-      pguiClient->m_lId	= (S32)pmsg->msg.joined.id;
+      pguiClient->m_lId   = (S32)pmsg->msg.joined.id;
 
       // Don't allow the user to select these in client mode . . .
       if (bServer == false)
       {
-         pguiClient->m_sActive	= FALSE;
+         pguiClient->m_sActive   = FALSE;
          pguiClient->SetActive(FALSE);
       }
 
@@ -2010,10 +2010,10 @@ static short OnJoinedMsg(  // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
 static short OnChangedMsg( // Returns 0 on success.
-   CNetClient*	pnet,       // In:  Network interface.
-   NetMsg*		pmsg)       // In:  Changed msg
+   CNetClient*   pnet,       // In:  Network interface.
+   NetMsg*      pmsg)       // In:  Changed msg
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pmsg->msg.nothing.ucType == NetMsg::CHANGED);
 
@@ -2029,8 +2029,8 @@ static short OnChangedMsg( // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
 static void OnChatMsg(
-   CNetClient*	pnet,          // In:  Network interface.
-   NetMsg*		pmsg)          // In:  Chat msg.
+   CNetClient*   pnet,          // In:  Network interface.
+   NetMsg*      pmsg)          // In:  Chat msg.
 {
    ASSERT(pmsg->msg.nothing.ucType == NetMsg::CHAT);
    AddConsoleMsg(true, "%s", pmsg->msg.chat.acText);
@@ -2043,8 +2043,8 @@ static void OnChatMsg(
 //
 //////////////////////////////////////////////////////////////////////////////
 static void OnSetupGameMsg(
-   CNetClient*	pnet,          // In:  Network interface.
-   NetMsg*		pmsg)          // In:  Message.
+   CNetClient*   pnet,          // In:  Network interface.
+   NetMsg*      pmsg)          // In:  Message.
 {
    // Paginate into user displayable single string.
    if (ms_pguiOptions)
@@ -2259,14 +2259,14 @@ void ProtoNotSupported(void)
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short DoNetGameDialog(                   // Returns 0 if successfull, non-zero otherwise.
-   CNetClient*	pclient,                         // I/O: Client interface
+   CNetClient*   pclient,                         // I/O: Client interface
    bool bBrowse,                                // In:  Whether to browse (true) or connect (false)
-   CNetServer*	pserver,                         // I/O: Server interface or NULL if not server
+   CNetServer*   pserver,                         // I/O: Server interface or NULL if not server
    NetMsg* pmsgOut)                             // Out: NetMsg::NOTHING or NetMsg::START_GAME
 {
    ASSERT(pclient != NULL);
 
-   short	sResult = 0;                           // Assume success.
+   short sResult = 0;                             // Assume success.
 
    // Under Win95 with DirectX, certain problems have come up due to a
    // combination of our hogging the CPU and DirectX adding to that hogging,
@@ -2277,18 +2277,18 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
    rspSetDoSystemMode(RSP_DOSYSTEM_TOLERATEOS);
 
    // Init globals
-   ms_pguiRoot			= NULL;
-   ms_pguiOk			= NULL;
-   ms_pguiCancel		= NULL;
-   ms_plbPlayers		= NULL;
-   ms_plbNetConsole	= NULL;
-   ms_pguiChatText	= NULL;
-   ms_pguiChatSend	= NULL;
-   ms_plbLevelBrowse	= NULL;
-   ms_pmbCoopLevels	= NULL;
-   ms_pmbCoopMode		= NULL;
-   ms_pguiRetry		= NULL;
-   ms_lWatchdogTime	= 0;
+   ms_pguiRoot         = NULL;
+   ms_pguiOk         = NULL;
+   ms_pguiCancel      = NULL;
+   ms_plbPlayers      = NULL;
+   ms_plbNetConsole   = NULL;
+   ms_pguiChatText   = NULL;
+   ms_pguiChatSend   = NULL;
+   ms_plbLevelBrowse   = NULL;
+   ms_pmbCoopLevels   = NULL;
+   ms_pmbCoopMode      = NULL;
+   ms_pguiRetry      = NULL;
+   ms_lWatchdogTime   = 0;
    ms_bNetBlockingAbort = false;
 
    // We haven't received a setup msg yet
@@ -2302,23 +2302,23 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
    // No time limit is flagged as 0 or negative
    if (g_GameSettings.m_sHostTimeLimit > 0)
    {
-      ms_bTimeLimit	= true;
+      ms_bTimeLimit   = true;
    }
    else
    {
-      ms_bTimeLimit	= false;
-      g_GameSettings.m_sHostTimeLimit	= -g_GameSettings.m_sHostTimeLimit;
+      ms_bTimeLimit   = false;
+      g_GameSettings.m_sHostTimeLimit   = -g_GameSettings.m_sHostTimeLimit;
    }
 
    // No kill limit is flagged as 0 or negative
    if (g_GameSettings.m_sHostKillLimit > 0)
    {
-      ms_bKillLimit	= true;
+      ms_bKillLimit   = true;
    }
    else
    {
-      ms_bKillLimit	= false;
-      g_GameSettings.m_sHostKillLimit	= -g_GameSettings.m_sHostKillLimit;
+      ms_bKillLimit   = false;
+      g_GameSettings.m_sHostKillLimit   = -g_GameSettings.m_sHostKillLimit;
    }
 
    // Save current mouse cursor level and then force it to be visible
@@ -2329,14 +2329,14 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
    rspClearAllInputEvents();
 
    // *************************** TEMP
-//	bBrowse	= true;
+//   bBrowse   = true;
 // *************************** TEMP
 
    // If we're browsing, this loop continues until the user aborts or starts.
    // If we're not browsing, this loop only goes through once.
    bool bAbort = false;
    bool bStart = false;
-   do	{
+   do   {
       // Call this periodically to let it know we're not locked up
       NetBlockingWatchdog();
 
@@ -2345,7 +2345,7 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
 
       // If there's a server, start it up
       if (pserver)
-         sResult = pserver->Startup(g_GameSettings.m_usServerPort, g_GameSettings.m_szHostName,	&NetBlockingCallback);
+         sResult = pserver->Startup(g_GameSettings.m_usServerPort, g_GameSettings.m_szHostName,   &NetBlockingCallback);
       if (sResult == 0)
       {
 
@@ -2359,7 +2359,7 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
          {
 
             // Setup dialog in client or server mode, as appropriate
-            sResult	= SetupDlg(pserver ? FullPathHD(SERVER_GUI) : FullPathVD(CLIENT_GUI), pserver ? DLG_SERVER : DLG_CLIENT);
+            sResult   = SetupDlg(pserver ? FullPathHD(SERVER_GUI) : FullPathVD(CLIENT_GUI), pserver ? DLG_SERVER : DLG_CLIENT);
             if (sResult == 0)
             {
                // Display "startup" messages
@@ -2601,7 +2601,7 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
                               if (!bStart && !bAbort)
                               {
                                  // If there's a selection . . .
-                                 RGuiItem*	pguiPlayerSel	= ms_plbPlayers->GetSel();
+                                 RGuiItem*   pguiPlayerSel   = ms_plbPlayers->GetSel();
                                  if (pguiPlayerSel)
                                  {
                                     Net::ID id = (UCHAR)pguiPlayerSel->m_lId;
@@ -2954,13 +2954,13 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
    if (ms_bTimeLimit == false)
    {
       // Flag no time limit as a negative or zero.
-      g_GameSettings.m_sHostTimeLimit	= -g_GameSettings.m_sHostTimeLimit;
+      g_GameSettings.m_sHostTimeLimit   = -g_GameSettings.m_sHostTimeLimit;
    }
 
    if (ms_bKillLimit == false)
    {
       // Flag no kill limit as a negative or zero.
-      g_GameSettings.m_sHostKillLimit	= -g_GameSettings.m_sHostKillLimit;
+      g_GameSettings.m_sHostKillLimit   = -g_GameSettings.m_sHostKillLimit;
    }
 
    // Clear any events that might be in the queue
@@ -2993,7 +2993,7 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
 //
 //////////////////////////////////////////////////////////////////////////////
 static short BrowseForHost(
-   CNetServer*	pserver,                         // I/O: Server interface or NULL if none
+   CNetServer*   pserver,                         // I/O: Server interface or NULL if none
    RSocket::Address* paddress)                  // Out: Address returned here (if successfull)
 {
    short sResult = 0;
@@ -3016,7 +3016,7 @@ static short BrowseForHost(
          // Since we don't let RProcessGUI draw cleaned up the screen, we should.
          rspUpdateDisplay();
 
-         DLG_ACTION action	= DLG_NOTHING;
+         DLG_ACTION action   = DLG_NOTHING;
          // Loop until error, user abort, or user choice . . .
          while ((sResult == 0) && action != DLG_OK && action != DLG_CANCEL)
          {
@@ -3036,7 +3036,7 @@ static short BrowseForHost(
             if (sResult == 0)
             {
                // Update the dialog (user input and GUI output).
-               action	= UpdateDialog(ms_pguiRoot, true);
+               action   = UpdateDialog(ms_pguiRoot, true);
             }
 
             // If quitting . . .
@@ -3055,12 +3055,12 @@ static short BrowseForHost(
                PlaySample(g_smidMenuItemSelect, SampleMaster::UserFeedBack);
 
                // Get selection . . .
-               RGuiItem*	pguiSel	= ms_plbHostBrowse->GetSel();
+               RGuiItem*   pguiSel   = ms_plbHostBrowse->GetSel();
                // If there's no selection . . .
                if (pguiSel == NULL)
                {
                   // Take the first.
-                  pguiSel	= ms_plbHostBrowse->GetFirst();
+                  pguiSel   = ms_plbHostBrowse->GetFirst();
                }
 
                // If tehre's a selection . . .
@@ -3076,7 +3076,7 @@ static short BrowseForHost(
                else
                {
                   TRACE("BrowseForHost():  No host selected.\n");
-                  sResult	= -1;
+                  sResult   = -1;
                }
                break;
             }
@@ -3086,12 +3086,12 @@ static short BrowseForHost(
                PlaySample(g_smidMenuItemSelect, SampleMaster::UserFeedBack);
 
                // Cancelled.
-               sResult	= 1;
+               sResult   = 1;
                break;
 
             default:
                TRACE("BrowseForHost(): Unknown action.\n");
-               sResult	= 1;
+               sResult   = 1;
                break;
             }
          }
@@ -3159,7 +3159,7 @@ static short FindSpecificSystem(
 //
 //////////////////////////////////////////////////////////////////////////////
 static short BrowseForSelf(
-   CNetServer*	pserver,                         // I/O: Server interface
+   CNetServer*   pserver,                         // I/O: Server interface
    RSocket::Address* paddress)                  // Out: Address returned here (if successfull)
 {
    ASSERT(pserver);
@@ -3248,7 +3248,7 @@ extern void NetBlockingWatchdog(void)
       m_bNetWatchdogExpired = false;
 
       // Erase net prob gui
-      RGuiItem* ptxt	= GetNetProbGUI();
+      RGuiItem* ptxt   = GetNetProbGUI();
       if (ptxt)
       {
          // This will PROBABLY work, but it does assume that something else
@@ -3283,10 +3283,10 @@ static short NetBlockingCallback(void)          // Returns 0 to continue normall
    // check on a key's status.  The important thing would be NOT to clear
    // any key's status so we don't affect the input module (input.cpp) or
    // the play loop (play.cpp:PlayRealm()).
-   static U8*	pau8KeyStatus	= rspGetKeyStatusArray();
+   static U8*   pau8KeyStatus   = rspGetKeyStatusArray();
 
    // Assume we won't abort
-   short	sAbort = 0;
+   short sAbort = 0;
 
    // It's always a good idea to do this
    UpdateSystem();
@@ -3309,7 +3309,7 @@ static short NetBlockingCallback(void)          // Returns 0 to continue normall
          // displayed and we should check for the abort key, and (2) it let's
          // other parts of the program determine whether or not to draw the
          // net prob gui on top of whatever else is being drawn to the screen.
-         m_bNetWatchdogExpired	= true;
+         m_bNetWatchdogExpired   = true;
       }
    }
 
@@ -3317,7 +3317,7 @@ static short NetBlockingCallback(void)          // Returns 0 to continue normall
    if (m_bNetWatchdogExpired)
    {
       // Display net problem gui
-      RGuiItem* ptxt	= GetNetProbGUI();
+      RGuiItem* ptxt   = GetNetProbGUI();
       if (ptxt)
       {
          // Set to display general error and abort instructions
@@ -3378,19 +3378,19 @@ static short NetBlockingCallback(void)          // Returns 0 to continue normall
 //////////////////////////////////////////////////////////////////////////////
 extern short InitNetProbGUI(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    KillNetProbGUI();
 
-   sRes	= rspGetResource(&g_resmgrShell, NET_PROB_GUI_FILE, &ms_ptxtNetProb);
+   sRes   = rspGetResource(&g_resmgrShell, NET_PROB_GUI_FILE, &ms_ptxtNetProb);
 
    if (sRes == 0)
    {
       // Set some intial stuff.
-      ms_ptxtNetProb->m_sTextEffects			= RGuiItem::Shadow;
-      ms_ptxtNetProb->m_u32TextShadowColor	= NET_PROB_TEXT_SHADOW_COLOR_INDEX;
-      ms_ptxtNetProb->m_sX							= NET_PROB_GUI_X;
-      ms_ptxtNetProb->m_sY							= NET_PROB_GUI_Y;
+      ms_ptxtNetProb->m_sTextEffects         = RGuiItem::Shadow;
+      ms_ptxtNetProb->m_u32TextShadowColor   = NET_PROB_TEXT_SHADOW_COLOR_INDEX;
+      ms_ptxtNetProb->m_sX                     = NET_PROB_GUI_X;
+      ms_ptxtNetProb->m_sY                     = NET_PROB_GUI_Y;
       // Set generic initial text.
       ms_ptxtNetProb->SetText("%s", g_pszNetProb_General);
       ms_ptxtNetProb->Compose();

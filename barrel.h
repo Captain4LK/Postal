@@ -19,29 +19,29 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		03/14/97 BRH	Started this exploding barrel object from the napalm
-//							object.
+//      03/14/97 BRH   Started this exploding barrel object from the napalm
+//                     object.
 //
-//		03/17/97 BRH	Restarted this object based on the new CThing3D base
-//							class which will make it easier to do the motion for
-//							explosions and other message processing.
+//      03/17/97 BRH   Restarted this object based on the new CThing3D base
+//                     class which will make it easier to do the motion for
+//                     explosions and other message processing.
 //
-//		04/02/97	JMI	Removed initialization of m_pFire.
+//      04/02/97   JMI   Removed initialization of m_pFire.
 //
-//		04/04/97	JMI	Added barrel spin animation which has the origin at the
-//							barrel's center of gravity for better spinning.
+//      04/04/97   JMI   Added barrel spin animation which has the origin at the
+//                     barrel's center of gravity for better spinning.
 //
-//		06/11/97 BRH	Added m_u16ShooterID so it can pass aS32 the information
-//							for scoring purposes.
+//      06/11/97 BRH   Added m_u16ShooterID so it can pass aS32 the information
+//                     for scoring purposes.
 //
-//		06/25/97 BRH	Added shadow sprite and alpha animation for the shadow
-//							aS32 the ground to see how it looks.  If it looks good,
-//							then it will probably be moved further up into CThing3D.
+//      06/25/97 BRH   Added shadow sprite and alpha animation for the shadow
+//                     aS32 the ground to see how it looks.  If it looks good,
+//                     then it will probably be moved further up into CThing3D.
 //
-//		08/15/97 BRH	Added a special barrel flag so that this type of
-//							barrel can only be destroyed by the CDude.  Added an
-//							EditModify dialog to set the option and added it to
-//							the load and save.
+//      08/15/97 BRH   Added a special barrel flag so that this type of
+//                     barrel can only be destroyed by the CDude.  Added an
+//                     EditModify dialog to set the option and added it to
+//                     the load and save.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef BARREL_H
@@ -79,13 +79,13 @@ CCharacter::State m_ePreviousState;          // State variable to remember where
 CAnim3D m_animStill;             // Barrel still animation
 CAnim3D m_animSpin;              // Barrel still but rotatable around center of gravity.
 
-CAnim3D*	m_pPreviousAnim;        // Previous state's animation
+CAnim3D*   m_pPreviousAnim;        // Previous state's animation
 
-short	m_sSphereRadius;                    // Radius of the grenader's current frame
-short	m_sSphereX;                         // Location of the grenader's sphere center
-short	m_sSphereY;                         // Location of the grenader's sphere center
+short m_sSphereRadius;                      // Radius of the grenader's current frame
+short m_sSphereX;                           // Location of the grenader's sphere center
+short m_sSphereY;                           // Location of the grenader's sphere center
 
-short	m_sScreenRadius;                    // Object's radius
+short m_sScreenRadius;                      // Object's radius
 bool m_bSpecial;                          // Special dude-destroy-only barrel;
 
 // Tracks file counter so we know when to load/save "common" data
@@ -109,7 +109,7 @@ CBarrel(CRealm* pRealm)
    m_dX = m_dY = m_dZ = m_dVel = m_dAcc = 0;
    m_sScreenRadius = 20;
    m_panimCur = m_pPreviousAnim = NULL;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_bSpecial = false;
 }
 

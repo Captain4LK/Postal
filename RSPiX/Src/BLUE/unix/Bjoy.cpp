@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bjoy.cpp
+//   bjoy.cpp
 //
 // History:
-//		06/02/04 RCG	Started.
+//      06/02/04 RCG   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -35,16 +35,16 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define NUM_JOYSTICKS	2
+#define NUM_JOYSTICKS   2
 
 // For simplicity of CHECK_AXIS_* macros, define RSP macros that match the
 // Windows name for the W axis (Windows uses R for Rudder).
-#define RSP_JOY_R_POS	RSP_JOY_W_POS
-#define RSP_JOY_R_NEG	RSP_JOY_W_NEG
+#define RSP_JOY_R_POS   RSP_JOY_W_POS
+#define RSP_JOY_R_NEG   RSP_JOY_W_NEG
 
-#define MID_THRESHOLD_PERCENT	((float)20) // In % (e.g., 25 would be 25%).
+#define MID_THRESHOLD_PERCENT   ((float)20) // In % (e.g., 25 would be 25%).
 
-#define SET(p, val)	(p ? *p = val : val)
+#define SET(p, val)   (p ? *p = val : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -302,16 +302,16 @@ extern void rspUpdateJoy(short sJoy)
 //////////////////////////////////////////////////////////////////////////////
 extern void rspGetJoyState(
    short sJoy,                // In:  Joystick to query.
-   U32*	pu32Buttons,         // Out: Buttons that are down, if not NULL.
-                              // An RSP_JOY_BUT_## bit field that is set indicates
-                              // that button is down.
-   U32*	pu32Axes /*= NULL*/) // Out: Directions that are specificed, if not NULL.
-                              // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
-                              // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
-                              // If neither is set for ? axis, that axis is 0.
+   U32*   pu32Buttons,         // Out: Buttons that are down, if not NULL.
+                               // An RSP_JOY_BUT_## bit field that is set indicates
+                               // that button is down.
+   U32*   pu32Axes /*= NULL*/) // Out: Directions that are specificed, if not NULL.
+                               // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
+                               // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
+                               // If neither is set for ? axis, that axis is 0.
 {
-   SET(pu32Buttons,	ms_ajsCurr[sJoy].u32Buttons);
-   SET(pu32Axes,		ms_ajsCurr[sJoy].u32Axes);
+   SET(pu32Buttons,   ms_ajsCurr[sJoy].u32Buttons);
+   SET(pu32Axes,      ms_ajsCurr[sJoy].u32Axes);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -322,16 +322,16 @@ extern void rspGetJoyState(
 //////////////////////////////////////////////////////////////////////////////
 extern void rspGetJoyPrevState(
    short sJoy,                // In:  Joystick to query.
-   U32*	pu32Buttons,         // Out: Buttons that are down, if not NULL.
-                              // An RSP_JOY_BUT_## bit field that is set indicates
-                              // that button is down.
-   U32*	pu32Axes /*= NULL*/) // Out: Directions that are specificed, if not NULL.
-                              // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
-                              // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
-                              // If neither is set for ? axis, that axis is 0.
+   U32*   pu32Buttons,         // Out: Buttons that are down, if not NULL.
+                               // An RSP_JOY_BUT_## bit field that is set indicates
+                               // that button is down.
+   U32*   pu32Axes /*= NULL*/) // Out: Directions that are specificed, if not NULL.
+                               // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
+                               // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
+                               // If neither is set for ? axis, that axis is 0.
 {
-   SET(pu32Buttons,	ms_ajsPrev[sJoy].u32Buttons);
-   SET(pu32Axes,		ms_ajsPrev[sJoy].u32Axes);
+   SET(pu32Buttons,   ms_ajsPrev[sJoy].u32Buttons);
+   SET(pu32Axes,      ms_ajsPrev[sJoy].u32Axes);
 }
 
 //////////////////////////////////////////////////////////////////////////////

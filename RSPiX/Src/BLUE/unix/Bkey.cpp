@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bkey.cpp
+//   bkey.cpp
 //
 // History:
-//		06/04/04 RCG	Started.
+//      06/04/04 RCG   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -35,10 +35,10 @@
 #include "ORANGE/CDT/QUEUE.H"
 
 
-#define MAX_EVENTS	256
+#define MAX_EVENTS   256
 // Only set value if not NULL.
-#define SET(ptr, val)		( ((ptr) != NULL) ? *(ptr) = (val) : 0 )
-#define INC_N_WRAP(i, max)	(i = (i + 1) % max)
+#define SET(ptr, val)      ( ((ptr) != NULL) ? *(ptr) = (val) : 0 )
+#define INC_N_WRAP(i, max)   (i = (i + 1) % max)
 
 extern SDL_Window *sdlWindow;
 extern SDL_Surface *sdlShadowSurface;
@@ -60,7 +60,7 @@ typedef struct
 static RSP_SK_EVENT ms_akeEvents[MAX_EVENTS];
 
 // Queue of keyboard events.
-static RQueue<RSP_SK_EVENT, MAX_EVENTS>	ms_qkeEvents;
+static RQueue<RSP_SK_EVENT, MAX_EVENTS>   ms_qkeEvents;
 
 extern bool mouse_grabbed;
 
@@ -138,7 +138,7 @@ extern void Key_Event(SDL_Event *event)
          if ( ( (*pu8KeyStatus) & 1) == 0)
          {
             // Go to next odd state.
-            *pu8KeyStatus	+= 1;
+            *pu8KeyStatus   += 1;
          }
          else
          {
@@ -193,15 +193,15 @@ extern short rspGetKey(       // Returns 1 if a key was available; 0 if not.
    S32* plKey,             // Key info returned here (or 0 if no key available)
    S32* plTime /*= NULL*/) // Key's time stamp returned here (unless NULL)
 {
-   short	sRes	= 0;  // Assume no key.
+   short sRes   = 0;    // Assume no key.
 
    PRSP_SK_EVENT pkeEvent = ms_qkeEvents.DeQ();
    if (pkeEvent != NULL)
    {
-      SET(plKey,	pkeEvent->lKey);
-      SET(plTime,	pkeEvent->lTime);
+      SET(plKey,   pkeEvent->lKey);
+      SET(plTime,   pkeEvent->lTime);
       // Indicate a key was available.
-      sRes	= 1;
+      sRes   = 1;
    }
    else
    {
@@ -448,9 +448,9 @@ extern void rspSetQuitStatusFlags(  // Returns nothing.
 // obtained as close to the current key status as is possible dependent
 // upon the platform.
 //////////////////////////////////////////////////////////////////////////////
-#define RSP_CAPS_LOCK_ON		0x00000001
-#define RSP_NUM_LOCK_ON			0x00000002
-#define RSP_SCROLL_LOCK_ON		0x00000004
+#define RSP_CAPS_LOCK_ON      0x00000001
+#define RSP_NUM_LOCK_ON         0x00000002
+#define RSP_SCROLL_LOCK_ON      0x00000004
 
 extern S32 rspGetToggleKeyStates(void) // Returns toggle key state flags.
 {

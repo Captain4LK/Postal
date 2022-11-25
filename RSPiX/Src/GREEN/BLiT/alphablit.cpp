@@ -23,9 +23,9 @@
 // ALPHABLIT.CPP
 //
 // Created in 1996 JRD
-// Implemented	throughout 1996 and 1997 - JRD
+// Implemented   throughout 1996 and 1997 - JRD
 //
-//		07/10/97	JRD	Finally added history section.
+//      07/10/97   JRD   Finally added history section.
 //
 //////////////////////////////////////////////////////////////////////
 //***********************************************************************************
@@ -148,7 +148,7 @@ void rspGeneralAlphaBlit(short sLevel, RMultiAlpha* pX, RImage* pimMask,
    // MUST ROUND UP!
    ucTransparent = (ucTransparent + 1) >> 1;
    // Set up the dimming parameter
-   UCHAR*	pucDim = &RMultiAlpha::ms_aucLiveDimming[sLevel * 256];
+   UCHAR*   pucDim = &RMultiAlpha::ms_aucLiveDimming[sLevel * 256];
 
    for (j = 0; j<sDstH; j++, pSrcLine += lSrcP, pDstLine += lDstP, pMaskLine += lMaskP)
    {
@@ -206,7 +206,7 @@ extern void rspGeneralAlphaBlitT(short sLevel, RMultiAlpha* pX, RImage* pimMask,
    // MUST ROUND UP!
    ucTransparent = (ucTransparent + 1) >> 1;
    // Set up the dimming parameter
-   UCHAR*	pucDim = &RMultiAlpha::ms_aucLiveDimming[sLevel * 256];
+   UCHAR*   pucDim = &RMultiAlpha::ms_aucLiveDimming[sLevel * 256];
 
    for (j = 0; j<sDstH; j++, pSrcLine += lSrcP, pDstLine += lDstP, pMaskLine += lMaskP)
    {
@@ -360,48 +360,48 @@ void rspFastMaskAlphaBlitT(UCHAR*** pfaX, RImage* pimMask,
 //
 /*
 extern void rspAlphaMaskBlit(RMultiAlpha* pX,RImage* pimMask,
-									RImage* pimSrc,RImage* pimDst,short sDstX,short sDstY,
-									RRect &rDstClip)
-	{
-	short sSrcX = 0,sSrcY = 0,sDstW = pimSrc->m_sWidth,sDstH = pimSrc->m_sHeight;
+                           RImage* pimSrc,RImage* pimDst,short sDstX,short sDstY,
+                           RRect &rDstClip)
+   {
+   short sSrcX = 0,sSrcY = 0,sDstW = pimSrc->m_sWidth,sDstH = pimSrc->m_sHeight;
 
-	// right here adjust things if you need to clip to other thatn the full dst im
-	if (rspSimpleClip(sSrcX,sSrcY,sDstX,sDstY,sDstW,sDstH,
-		rDstClip.sX,rDstClip.sY,rDstClip.sW,rDstClip.sH) == -1) return ; // clipped out
+   // right here adjust things if you need to clip to other thatn the full dst im
+   if (rspSimpleClip(sSrcX,sSrcY,sDstX,sDstY,sDstW,sDstH,
+      rDstClip.sX,rDstClip.sY,rDstClip.sW,rDstClip.sH) == -1) return ; // clipped out
 
-	short i,j;
-	S32 lSrcP = pimSrc->m_lPitch;
-	S32 lDstP = pimDst->m_lPitch;
-	S32 lMaskP = pimMask->m_lPitch;
-	UCHAR* pSrc,*pSrcLine = pimSrc->m_pData + sSrcX + sSrcY * lSrcP;
-	UCHAR* pMask,*pMaskLine = pimMask->m_pData + sSrcX + sSrcY * lSrcP;
-	UCHAR* pDst,*pDstLine = pimDst->m_pData + sDstX + lDstP * sDstY;
-	UCHAR ucOpaque = (UCHAR) pX->m_sNumLevels;
+   short i,j;
+   S32 lSrcP = pimSrc->m_lPitch;
+   S32 lDstP = pimDst->m_lPitch;
+   S32 lMaskP = pimMask->m_lPitch;
+   UCHAR* pSrc,*pSrcLine = pimSrc->m_pData + sSrcX + sSrcY * lSrcP;
+   UCHAR* pMask,*pMaskLine = pimMask->m_pData + sSrcX + sSrcY * lSrcP;
+   UCHAR* pDst,*pDstLine = pimDst->m_pData + sDstX + lDstP * sDstY;
+   UCHAR ucOpaque = (UCHAR) pX->m_sNumLevels;
 
-	for (j=0;j<sDstH;j++,pSrcLine += lSrcP,pDstLine += lDstP,pMaskLine += lMaskP)
-		{
-		pSrc = pSrcLine;
-		pDst = pDstLine;
-		pMask = pMaskLine;
-		UCHAR ucMask;
+   for (j=0;j<sDstH;j++,pSrcLine += lSrcP,pDstLine += lDstP,pMaskLine += lMaskP)
+      {
+      pSrc = pSrcLine;
+      pDst = pDstLine;
+      pMask = pMaskLine;
+      UCHAR ucMask;
 
-		for (i=0;i<sDstW;i++,pSrc++,pDst++,pMask++)
-			{
-			ucMask = *pMask;
-			if (ucMask)
-				{
-				if (ucMask == ucOpaque) // optimized for mostly opqaue mask:
-					{
-					*pDst = *pSrc;
-					}
-				else
-					{
-					*pDst = pX->m_pAlphaList[ucMask]->m_pAlphas[*pSrc][*pDst];
-					}
-				}
-			}
-		}
-	}
+      for (i=0;i<sDstW;i++,pSrc++,pDst++,pMask++)
+         {
+         ucMask = *pMask;
+         if (ucMask)
+            {
+            if (ucMask == ucOpaque) // optimized for mostly opqaue mask:
+               {
+               *pDst = *pSrc;
+               }
+            else
+               {
+               *pDst = pX->m_pAlphaList[ucMask]->m_pAlphas[*pSrc][*pDst];
+               }
+            }
+         }
+      }
+   }
 */
 
 // Here is a wrapper so that the homogenous alpha blit can use a multialpha:

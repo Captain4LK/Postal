@@ -19,412 +19,412 @@
 // Project: Postal
 //
 // This module implements the CDoofus class which is the class of enemy
-//	guys for the game.
+//   guys for the game.
 //
 // History:
-//		01/13/97 BRH	Started this file from CDude and modified it
-//							to do some enemy logic using the same assets
-//							as the sample 2D guy.
+//      01/13/97 BRH   Started this file from CDude and modified it
+//                     to do some enemy logic using the same assets
+//                     as the sample 2D guy.
 //
-//		01/15/97 BRH	Changed the render to draw the guy with his
-//							hotspot between his feet.
+//      01/15/97 BRH   Changed the render to draw the guy with his
+//                     hotspot between his feet.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/05/97 BRH	Fixed problem loading Instance ID.  Also fixed some other
-//							problems with the run routine.  He now will follow the
-//							bouys to get to the bouy nearest the CDude.
+//      02/05/97 BRH   Fixed problem loading Instance ID.  Also fixed some other
+//                     problems with the run routine.  He now will follow the
+//                     bouys to get to the bouy nearest the CDude.
 //
-//		02/23/97 BRH	Changed coordinate system to x, -z in Find Direction.
+//      02/23/97 BRH   Changed coordinate system to x, -z in Find Direction.
 //
-//		02/25/97 BRH	Fixed problem with the Startup where the height was not
-//							being multiplied by 4, so enemies would start too low
-//							if placed on a roof.
+//      02/25/97 BRH   Fixed problem with the Startup where the height was not
+//                     being multiplied by 4, so enemies would start too low
+//                     if placed on a roof.
 //
-//		03/04/97 BRH	Derived this from CCharacter instead of CThing
+//      03/04/97 BRH   Derived this from CCharacter instead of CThing
 //
-//		03/05/97 BRH	Added SelectRandomBouy function which picks a random
-//							bouy number (a valid one) or returns 0 if there are
-//							no bouys.
+//      03/05/97 BRH   Added SelectRandomBouy function which picks a random
+//                     bouy number (a valid one) or returns 0 if there are
+//                     no bouys.
 //
-//		03/06/97 BRH	Added realignment timer and function so that the
-//							direction to the bouy can be recalculated every
-//							so often to avoid missing it.
+//      03/06/97 BRH   Added realignment timer and function so that the
+//                     direction to the bouy can be recalculated every
+//                     so often to avoid missing it.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/14/97	JMI	SelectDude() now chooses the closest dude on the X/Z plane.
+//      03/14/97   JMI   SelectDude() now chooses the closest dude on the X/Z plane.
 //
-//		04/04/97	JMI	SelectDude() no S32er chooses dead dudes.
-//							Also, last update to make SelectDude() find the closest
-//							CDude was not comparing the distance to the CDude from this
-//							guy, but instead was comparing the distance to the CDude from
-//							(0, 0, 0).
+//      04/04/97   JMI   SelectDude() no S32er chooses dead dudes.
+//                     Also, last update to make SelectDude() find the closest
+//                     CDude was not comparing the distance to the CDude from this
+//                     guy, but instead was comparing the distance to the CDude from
+//                     (0, 0, 0).
 //
-//		04/16/97 BRH	Changed references to the realm's list of CThings to use
-//							the new non-STL methods.
+//      04/16/97 BRH   Changed references to the realm's list of CThings to use
+//                     the new non-STL methods.
 //
-//		04/22/97 BRH	Moved common code and some variables like the animations
-//							to the base class.  Put common logic routines like the
-//							reactions to weapons in this base class.
+//      04/22/97 BRH   Moved common code and some variables like the animations
+//                     to the base class.  Put common logic routines like the
+//                     reactions to weapons in this base class.
 //
-//		04/24/97 BRH	Added TryClearDirection function that uses the
-//							IsPathClear() funciton to try 3 directions to see if they
-//							are clear.
+//      04/24/97 BRH   Added TryClearDirection function that uses the
+//                     IsPathClear() funciton to try 3 directions to see if they
+//                     are clear.
 //
-//		05/02/97	JMI	Added check to make sure not already in shot state or
-//							writhing state before changing to shot state in OnShotMsg.
-//							Also, now OnBurnMsg() sets him into the m_animOnFire in-
-//							stead of m_animRun.
+//      05/02/97   JMI   Added check to make sure not already in shot state or
+//                     writhing state before changing to shot state in OnShotMsg.
+//                     Also, now OnBurnMsg() sets him into the m_animOnFire in-
+//                     stead of m_animRun.
 //
-//		05/04/97 BRH	Removed #ifdef code sections referring to STL lists.
+//      05/04/97 BRH   Removed #ifdef code sections referring to STL lists.
 //
-//		05/06/97 BRH	Added Popout logic, detection smash.
+//      05/06/97 BRH   Added Popout logic, detection smash.
 //
-//		05/09/97 BRH	Added Writhing and Shot logic from CPerson.
+//      05/09/97 BRH   Added Writhing and Shot logic from CPerson.
 //
-//		05/11/97 BRH	Fixed problem with Logic_Guard.
+//      05/11/97 BRH   Fixed problem with Logic_Guard.
 //
-//		05/15/97 BRH	In the popout and run & shoot wait states, changed from
-//							the temporary timeout method to checking for the
-//							triggered pylon before running the logic.
+//      05/15/97 BRH   In the popout and run & shoot wait states, changed from
+//                     the temporary timeout method to checking for the
+//                     triggered pylon before running the logic.
 //
-//		05/18/97 BRH	Added some logic functions for the victims to use.
+//      05/18/97 BRH   Added some logic functions for the victims to use.
 //
-//		05/20/97 BRH	Added the hiding states.  Also added calls to
-//							ReevaluateState() at times in the action cycles
-//							where the action can be changed.  Changed Logic_PylonDetect
-//							to set flags for use in ReevaluateState() and
-//							in the logic table variables evaluation.
+//      05/20/97 BRH   Added the hiding states.  Also added calls to
+//                     ReevaluateState() at times in the action cycles
+//                     where the action can be changed.  Changed Logic_PylonDetect
+//                     to set flags for use in ReevaluateState() and
+//                     in the logic table variables evaluation.
 //
-//		05/21/97 BRH	Added m_dAnimRot to specify the direction the guy is
-//							facing and separating that from the direction he is
-//							moving.  This will be used for the run and shoot
-//							so that he can run and face sideways.
+//      05/21/97 BRH   Added m_dAnimRot to specify the direction the guy is
+//                     facing and separating that from the direction he is
+//                     moving.  This will be used for the run and shoot
+//                     so that he can run and face sideways.
 //
-//		05/22/97 BRH	Fixed typo bug in Logic_Shoot.
+//      05/22/97 BRH   Fixed typo bug in Logic_Shoot.
 //
-//		05/25/97 BRH	Added the m_ShootAngle variable and an override for
-//							ShootWeapon that uses this angle to aim the weapon.
+//      05/25/97 BRH   Added the m_ShootAngle variable and an override for
+//                     ShootWeapon that uses this angle to aim the weapon.
 //
-//		05/26/97 BRH	Changed ShootWeapon so that CSmash bits are passed in
-//							so that enemy bullets don't hit other enemies.
+//      05/26/97 BRH   Changed ShootWeapon so that CSmash bits are passed in
+//                     so that enemy bullets don't hit other enemies.
 //
-//		05/26/97 BRH	Added a timer for shooting to limit the number of shots
-//							for each type of gun.  Also added some avoidance
-//							of obstacles during MoveNext in case the guy gets stuck
-//							trying to get to the next bouy.
+//      05/26/97 BRH   Added a timer for shooting to limit the number of shots
+//                     for each type of gun.  Also added some avoidance
+//                     of obstacles during MoveNext in case the guy gets stuck
+//                     trying to get to the next bouy.
 //
-//		05/27/97 BRH	Fixed a few problems with logic table transitions.
+//      05/27/97 BRH   Fixed a few problems with logic table transitions.
 //
-//		05/27/97 BRH	Added some avoidance of obstacles to Logic_PopBegin in
-//							case he gets stuck on walls while trying to find the
-//							first pylon.
+//      05/27/97 BRH   Added some avoidance of obstacles to Logic_PopBegin in
+//                     case he gets stuck on walls while trying to find the
+//                     first pylon.
 //
-//		05/31/97	JMI	Replaced m_pDude with m_idDude.  The problem was that, by
-//							just using a pointer to the dude, we never found out when
-//							the dude was gone (deleted).  Although this is rare for
-//							CDudes, it does happen.  For example, in the beginning of
-//							a level all CDudes that do not have an associated player
-//							are sent a Delete msg.  They do not process this message
-//							until their respective Update() calls.  If a CDoofus
-//							derived guy happened to be placed in the level before a
-//							CDude (that is, the CDoofus' Update() got called before the
-//							CDude's), and the CDoofus happened to point its m_pDude at
-//							this CDude (that was destined to soon be deleted), later
-//							when referencing the pointer to the freed and/or reallocated
-//							memory, the CDoofus could cause a protection	fault or	math
-//							overflow (due to invalid values returned by
-//							m_pDude->GetX, Y, Z() with the non-CDude 'this' pointer).
-//							Also, in the case that SelectDude() did not select a dude,
-//							SQDistanceToDude() was returning an unitialized double
-//							which, in some cases, could be a totally illegal double
-//							value.
-//
-//		06/02/97 BRH	Added AdvanceHold action and state so that once he reaches
-//							the end of the advancement, he goes into this hold state
-//							rather than Engage automatically.  This way the logic
-//							table can have more control over the next state.
-//
-//		06/02/97 BRH	Changed TryClearShot to use the CRealm version of
-//							IsPathClear which just checks for terrain obstacles.
-//
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
-//
-//		06/10/97 BRH	Now sends messages to CDemon for Explosion, and burning.
-//
-//		06/10/97 BRH	Added RunIdleAnimation() function which monitors the
-//							idle timer and controls which of 3 idle animations to
-//							use.  This should be called when in some kind of wait
-//							state.
-//
-//		06/10/97 BRH	Fixed "YMCA" bug where the enemy guy would cycle
-//							each frame between Advance and AdvanceHold.
-//
-//		06/11/97 BRH	Fixed the crouch and search animations since the
-//							search is done from the crouch posiiton.  It was
-//							previously backwards because I thought the search
-//							animation was done from a standing position.
-//
-//		06/13/97	JMI	Changed FindDirection() to return m_dRot if we cannot find
-//							a CDude.
-//							Also, changed Logic_Shoot() over to using events.
-//
-//		06/17/97 BRH	Changed NEAR_DEATH_HITPOINTS to a higher value since the
-//							machine gun bullets were increased, it was diffucult to
-//							get a writhing person.
-//
-//		06/17/97 BRH	Attempted to make enemies stop shooting dead CDudes.
-//
-//		06/17/97	JMI	Now doubles smash radius when in writhing state.
-//
-//		06/18/97	JMI	Changed PlaySoundWrithing() to return the duration of the
-//							played sample.
-//
-//		06/18/97 BRH	Changed over to using GetRandom()
-//
-//		06/24/97	JMI	Added intialization of m_sRotateDir.
-//
-//		06/26/97 BRH	Added a special case for Writhers who get burned.
-//							Previously they didn't react because their smash bits
-//							were changed when they went into writhing.  Then we wanted
-//							them to get killed by fire so included the AlmostDead bits
-//							but they they would jump to their feet and run around
-//							once they got burned.  So now they will just lie there
-//							and die.
-//
-//		06/26/97 BRH	When a doofus is killed after preparing a weapon but
-//							before shooting it, he will drop it if it was a throwing
-//							weapon, but will just delete it if it was a launched
-//							weapon.
-//
-//		06/27/97 BRH	Added a flag for recently stuck so that when a character
-//							gets stuck on a wall, he sets the flag, then when he gets
-//							free of the obstacle, it will get the closest bouy rather
-//							than trying to align to the one it was trying to get to
-//							previously which many times caused him to get stuck in
-//							the same manner.
-//
-//		06/28/97 BRH	Changed the RegisterBirth and RegisterDeath calls to pass
-//							m_bCivilian so that the scoring can updated for hostiles
-//							or civilians.
-//
-//		07/09/97 BRH	Added logic for walking and running around on a bouy
-//							network - used for victims.
-//
-//		07/11/97 BRH	Added call to inline Cheater() to disable game if necessary
-//
-//		07/12/97 BRH	Added addional text strings for the new actions that were
-//							added.  Also changed PylonDetect function to use
-//							QuickCheckClosest rather than QuickCheck so that enemies
-//							will detect the pylon you put them closest to and not
-//							just a marker pylon.
-//
-//		07/12/97 BRH	Changed macro MAX_STEPUP_THRESHOLD to use the CThing3d
-//							definitino MaxStepUpThreshold so that the detecting and
-//							ability to move will be the same.
-//
-//		07/15/97 BRH	Added a few more calls to Cheater.
-//
-//		07/20/97 BRH	Effectively canceled the DelayShoot state by setting
-//							the timeout to zero since it caused the guys to
-//							not shoot very often on levels that were difficult
-//							to move in.
-//
-//		07/21/97	JMI	Now Update() calls base class version.
-//
-//		07/23/97 BRH	Added tunable values for different timeouts which will get
-//							set in doofus to the default static values that they were
-//							before, and can be set in Person to the personatorium values
-//							so that different people have different traits.
-//
-//		08/01/97 BRH	Changed the aiming so that it is based on the game
-//							difficulty setting.
-//
-//		08/02/97 BRH	Added YellForHelp funciton that enemies can call when they
-//							get shot to alert others in the are that they need help.
-//
-//		08/05/97 BRH	Fixed the problem with the doofus leaving the Run&Shoot
-//							state at higher difficulty settings due to re-aligning
-//							the angles with the shoot angle.
-//
-//		08/06/97 BRH	Changed TryClearShot to first do the point translation
-//							to the rigid body where the weapon is shot from, in order
-//							to get the correct height.  This will give the guys more
-//							opportunities to shoot, and will work when the guys
-//							are scaled larger or smaller.
-//
-//		08/06/97	JMI	Added m_ptransExecutionTarget link point for execution
-//							sphere.  Also, added PositionSmash() to provide overridable
-//							method for updating the collision sphere.
-//
-//		08/06/97	JMI	Now TryClearPath() returns false if there's no weapon
-//							link point.
-//
-//		08/07/97	JMI	Added ms_awdWeapons[], ms_apszWeaponResNames[], and
-//							GetResources() and FreeResources() for loading these anims.
-//							Also, added ms_lWeaponResRefCount so we could know when the
-//							weapons were no S32er needed.
-//
-//		08/08/97	JMI	Now Logic_Shoot() handles flamer.
-//
-//		08/08/97	JMI	Now Logic_Shoot() handles AutoRifle, Uzi, and SmallPistol.
-//
-//		08/08/97 BRH	Added start and end bouy ID's for special cases like
-//							marching.  Added these to load and save.  They are set
-//							by the dialog in the CPerson.  Also added marching logic.
-//
-//		08/09/97 BRH	Changed panic to be vicinity based so only the nearby
-//							people panic.  Also added checks for prepared weapons
-//							when guys get blown up or burned, where they should
-//							either randomly discard their weapon, or delete it.
-//
-//		08/10/97	JMI	Moved CDoofus() and ~CDoofus() into doofus.cpp from
-//							doofus.h.
-//							Was going to move the registering of the birth into the
-//							constructor but I realized that m_bCivilian probably won't
-//							get set until Load() so I left it in Startup() (it could
-//							probably also get set via EditModify() but this doesn't
-//							matter b/c that's in edit mode only).
-//							Now Registers death with the realm in the destructor if
-//							m_bRegisteredBirth is true.
-//							Also, now OnShotMsg() calls base class version even if
-//							other states don't permit a state change b/c this gives
-//							better feedback to the user (base class OnShotMsg() creates
-//							blood).
-//
-//		08/10/97	JMI	Moved NoWeapon up to enum value 0 and created a new one
-//							to take its -1 place as an invalid weapon (InvalidWeapon).
-//							Also, added block in PrepareWeapon() for the NoWeapon case.
-//							Also, moved prepare weapon from the .H to the .CPP.
-//
-//		08/11/97 BRH	Found the problem with the parade level victims where they
-//							were flipping around one bouy.  The problem was that they
-//							asked how to get to a particular bouy which was unreachable
-//							because the network was not fully connected, so when it
-//							got the unreachable flag, it kept retrying the same bouy.
-//							I fixed the problem so they will pick a new bouy, but also
-//							we are deleting the unconnected nodes in the parade level.
-//
-//		08/11/97	JMI	Now sets backup weapon to default 'none' and uses the
-//							backup weapon when there's no animation for the current
-//							weapon type.
-//							Also, changed incorrectly name ms_awtType2Id to
-//							ms_awtId2Type mapping.
-//
-//		08/11/97 BRH	Fixed problem with run & shoot not using the correct
-//							angle.
-//
-//		08/12/97	JMI	Now hides weapon if current event is 10 or more.
-//
-//		08/12/97 BRH	Checks for events channel in render so that people
-//							without animation events like the band guys will still
-//							work.  Also made shooting timing based on game
-//							difficulty.
-//
-//		08/13/97	JMI	Changed so OnShotMsg() calls base class to generate blood
-//							no matter what.
-//
-//		08/14/97	JMI	Switched references to g_GameSettings.m_sDifficulty to
-//							m_pRealm->m_flags.sDifficulty.
-//
-//		08/14/97 BRH	Added static default bits to pass to weapons for their
-//							collision testing.  Changed call to WhileHoldingWeapon
-//							to include these defaults.
-//
-//		08/15/97 BRH	Changed the check for available pylons to check for a
-//							clear path to the pylon before saying it is available.
-//							Some guys were getting stuck on fences between themselves
-//							an an available pylon.  Also fixed the writhing to
-//							executed transition so that the guys don't flip around
-//							180 degrees.  Also fixed the smash bits that get passed
-//							to the missile weapons.
-//
-//		08/16/97 BRH	Changed the person's PlaySound functions so that comments
-//							are only made when the CDude is alive.  So in this module, I
-//							made sure that the victims were also calling SelectDude()
-//							for the logic that they were doing, just to keep track of
-//							whether the CDude was alive or dead.  Also tuned the
-//							shooting accuracy for the levels to make them more accurate
-//							on the easier levels since the easy dudes were missing too
-//							much.
-//
-//		08/18/97 BRH	Added virtual override for CCharacter's WhileHoldingWeapon
-//							so that for higher difficulty settings where the enemies
-//							re-aim after preparing the weapon, they could do it
-//							every frame between PrepareWeapon and ShootWeapon so that
-//							they turned smoothy and didn't just flip around when they
-//							got to ShootWeapon.  This was a problem with the Rocketman
-//							who had a S32 shoot animation.  If the target moved a
-//							quite a bit between PrepareWeapon and ShootWeapon, he would
-//							spin around just before releasing the shot.  Also fixed
-//							a problem with the ShootWeapon adjustment of the
-//							random shooting innacuracy when I changed the values
-//							last time, I adjusted the max left swing, but forgot to
-//							adjust the random amount.
-//
-//		08/18/97	JMI	Now sends doofuses who are writhing to the back most sprite
-//							layer.  As people pointed out this is another of two evils.
-//							It is, however, a lessor.  It appears a little wierd in one
-//							case but better in all others I've seen so far.
-//
-//		08/19/97	JMI	Now sends doofuses who are dying to the back as well.
-//
-//		08/19/97	JMI	No S32er shoots CSmash::Misc items.
-//
-//		08/20/97	JMI	Now Logic_Shot() does not wait to the end of the animation
-//							to check for death.  This way they don't seem to kick back
-//							from the shot, shoot forward, and then die.
-//
-//		08/20/97 BRH	Trying a smaller tolerance on the Bouys so that the
-//							enemies must get closer to the hotspot before
-//							moving to the next one.  We wanted to see if this helps
-//							certain situations where guys are getting stuck.  Changed
-//							from 10 pixel radius to 5.
-//
-//		08/21/97	JMI	Now does deluxe reporting on whether this doofus finds his
-//							NavNet.
-//
-//		08/21/97	JMI	Now after reporting that the doofus did not find its NavNet
-//							it sets him to the current NavNet.
-//
-//		08/21/97 BRH	Added a blooc counter so that the number of blood pools
-//							created while writhing could be cut down a little bit.
-//
-//		08/24/97 BRH	Changed the TryClearShot to use the Character version of
-//							IsPathClear which also checks for people in the way.  Added
-//							an additional call to TryClearShot in ShootWeapon which is
-//							after the weapon has been re-aimed to make sure that the
-//							path is still clear.  It was a problem with the rocketman
-//							who has the slowest animation and may turn completely
-//							around before shooting.
-//
-//		08/24/97 BRH	Aborts sample that was playing when the guy gets executed
-//							so that he doesn't keep making noises after he is dead.
-//
-//		08/25/97 BRH	Undid a bunch of changes made yesterday which changed the
-//							logic too much which threw off the tuning.  Added two new
-//							escape routes for the Engage mode instead.  Fixed the
-//							shoot timer which was being set to two different values
-//							in two different places.  Made the shooting more accurate
-//							and more of the difficulty tuning will be with the
-//							shooting times.
-//
-//		08/27/97 BRH	Victims now panic when they are shot.
-//
-//		09/03/97	JMI	Sentries now exclude CSmash::Bads and CSmash::Civilians.
-//
-//		09/07/97 BRH	As Steve requested, the medium difficulty will now
-//							re-adjust aiming just like hard difficulty in ShootWeapon.
-//
-//		12/18/97	JMI	Changed SelectRandomBouy() to return 0 if a the number of
-//							bouys is less than or equal to one.  It used to be less
-//							than one but, for some reason, GetNumNodes() returns 1 when
-//							there's no bouys.  This caused it to lock up when no bouys
-//							for some lgk files.
+//      05/31/97   JMI   Replaced m_pDude with m_idDude.  The problem was that, by
+//                     just using a pointer to the dude, we never found out when
+//                     the dude was gone (deleted).  Although this is rare for
+//                     CDudes, it does happen.  For example, in the beginning of
+//                     a level all CDudes that do not have an associated player
+//                     are sent a Delete msg.  They do not process this message
+//                     until their respective Update() calls.  If a CDoofus
+//                     derived guy happened to be placed in the level before a
+//                     CDude (that is, the CDoofus' Update() got called before the
+//                     CDude's), and the CDoofus happened to point its m_pDude at
+//                     this CDude (that was destined to soon be deleted), later
+//                     when referencing the pointer to the freed and/or reallocated
+//                     memory, the CDoofus could cause a protection   fault or   math
+//                     overflow (due to invalid values returned by
+//                     m_pDude->GetX, Y, Z() with the non-CDude 'this' pointer).
+//                     Also, in the case that SelectDude() did not select a dude,
+//                     SQDistanceToDude() was returning an unitialized double
+//                     which, in some cases, could be a totally illegal double
+//                     value.
+//
+//      06/02/97 BRH   Added AdvanceHold action and state so that once he reaches
+//                     the end of the advancement, he goes into this hold state
+//                     rather than Engage automatically.  This way the logic
+//                     table can have more control over the next state.
+//
+//      06/02/97 BRH   Changed TryClearShot to use the CRealm version of
+//                     IsPathClear which just checks for terrain obstacles.
+//
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
+//
+//      06/10/97 BRH   Now sends messages to CDemon for Explosion, and burning.
+//
+//      06/10/97 BRH   Added RunIdleAnimation() function which monitors the
+//                     idle timer and controls which of 3 idle animations to
+//                     use.  This should be called when in some kind of wait
+//                     state.
+//
+//      06/10/97 BRH   Fixed "YMCA" bug where the enemy guy would cycle
+//                     each frame between Advance and AdvanceHold.
+//
+//      06/11/97 BRH   Fixed the crouch and search animations since the
+//                     search is done from the crouch posiiton.  It was
+//                     previously backwards because I thought the search
+//                     animation was done from a standing position.
+//
+//      06/13/97   JMI   Changed FindDirection() to return m_dRot if we cannot find
+//                     a CDude.
+//                     Also, changed Logic_Shoot() over to using events.
+//
+//      06/17/97 BRH   Changed NEAR_DEATH_HITPOINTS to a higher value since the
+//                     machine gun bullets were increased, it was diffucult to
+//                     get a writhing person.
+//
+//      06/17/97 BRH   Attempted to make enemies stop shooting dead CDudes.
+//
+//      06/17/97   JMI   Now doubles smash radius when in writhing state.
+//
+//      06/18/97   JMI   Changed PlaySoundWrithing() to return the duration of the
+//                     played sample.
+//
+//      06/18/97 BRH   Changed over to using GetRandom()
+//
+//      06/24/97   JMI   Added intialization of m_sRotateDir.
+//
+//      06/26/97 BRH   Added a special case for Writhers who get burned.
+//                     Previously they didn't react because their smash bits
+//                     were changed when they went into writhing.  Then we wanted
+//                     them to get killed by fire so included the AlmostDead bits
+//                     but they they would jump to their feet and run around
+//                     once they got burned.  So now they will just lie there
+//                     and die.
+//
+//      06/26/97 BRH   When a doofus is killed after preparing a weapon but
+//                     before shooting it, he will drop it if it was a throwing
+//                     weapon, but will just delete it if it was a launched
+//                     weapon.
+//
+//      06/27/97 BRH   Added a flag for recently stuck so that when a character
+//                     gets stuck on a wall, he sets the flag, then when he gets
+//                     free of the obstacle, it will get the closest bouy rather
+//                     than trying to align to the one it was trying to get to
+//                     previously which many times caused him to get stuck in
+//                     the same manner.
+//
+//      06/28/97 BRH   Changed the RegisterBirth and RegisterDeath calls to pass
+//                     m_bCivilian so that the scoring can updated for hostiles
+//                     or civilians.
+//
+//      07/09/97 BRH   Added logic for walking and running around on a bouy
+//                     network - used for victims.
+//
+//      07/11/97 BRH   Added call to inline Cheater() to disable game if necessary
+//
+//      07/12/97 BRH   Added addional text strings for the new actions that were
+//                     added.  Also changed PylonDetect function to use
+//                     QuickCheckClosest rather than QuickCheck so that enemies
+//                     will detect the pylon you put them closest to and not
+//                     just a marker pylon.
+//
+//      07/12/97 BRH   Changed macro MAX_STEPUP_THRESHOLD to use the CThing3d
+//                     definitino MaxStepUpThreshold so that the detecting and
+//                     ability to move will be the same.
+//
+//      07/15/97 BRH   Added a few more calls to Cheater.
+//
+//      07/20/97 BRH   Effectively canceled the DelayShoot state by setting
+//                     the timeout to zero since it caused the guys to
+//                     not shoot very often on levels that were difficult
+//                     to move in.
+//
+//      07/21/97   JMI   Now Update() calls base class version.
+//
+//      07/23/97 BRH   Added tunable values for different timeouts which will get
+//                     set in doofus to the default static values that they were
+//                     before, and can be set in Person to the personatorium values
+//                     so that different people have different traits.
+//
+//      08/01/97 BRH   Changed the aiming so that it is based on the game
+//                     difficulty setting.
+//
+//      08/02/97 BRH   Added YellForHelp funciton that enemies can call when they
+//                     get shot to alert others in the are that they need help.
+//
+//      08/05/97 BRH   Fixed the problem with the doofus leaving the Run&Shoot
+//                     state at higher difficulty settings due to re-aligning
+//                     the angles with the shoot angle.
+//
+//      08/06/97 BRH   Changed TryClearShot to first do the point translation
+//                     to the rigid body where the weapon is shot from, in order
+//                     to get the correct height.  This will give the guys more
+//                     opportunities to shoot, and will work when the guys
+//                     are scaled larger or smaller.
+//
+//      08/06/97   JMI   Added m_ptransExecutionTarget link point for execution
+//                     sphere.  Also, added PositionSmash() to provide overridable
+//                     method for updating the collision sphere.
+//
+//      08/06/97   JMI   Now TryClearPath() returns false if there's no weapon
+//                     link point.
+//
+//      08/07/97   JMI   Added ms_awdWeapons[], ms_apszWeaponResNames[], and
+//                     GetResources() and FreeResources() for loading these anims.
+//                     Also, added ms_lWeaponResRefCount so we could know when the
+//                     weapons were no S32er needed.
+//
+//      08/08/97   JMI   Now Logic_Shoot() handles flamer.
+//
+//      08/08/97   JMI   Now Logic_Shoot() handles AutoRifle, Uzi, and SmallPistol.
+//
+//      08/08/97 BRH   Added start and end bouy ID's for special cases like
+//                     marching.  Added these to load and save.  They are set
+//                     by the dialog in the CPerson.  Also added marching logic.
+//
+//      08/09/97 BRH   Changed panic to be vicinity based so only the nearby
+//                     people panic.  Also added checks for prepared weapons
+//                     when guys get blown up or burned, where they should
+//                     either randomly discard their weapon, or delete it.
+//
+//      08/10/97   JMI   Moved CDoofus() and ~CDoofus() into doofus.cpp from
+//                     doofus.h.
+//                     Was going to move the registering of the birth into the
+//                     constructor but I realized that m_bCivilian probably won't
+//                     get set until Load() so I left it in Startup() (it could
+//                     probably also get set via EditModify() but this doesn't
+//                     matter b/c that's in edit mode only).
+//                     Now Registers death with the realm in the destructor if
+//                     m_bRegisteredBirth is true.
+//                     Also, now OnShotMsg() calls base class version even if
+//                     other states don't permit a state change b/c this gives
+//                     better feedback to the user (base class OnShotMsg() creates
+//                     blood).
+//
+//      08/10/97   JMI   Moved NoWeapon up to enum value 0 and created a new one
+//                     to take its -1 place as an invalid weapon (InvalidWeapon).
+//                     Also, added block in PrepareWeapon() for the NoWeapon case.
+//                     Also, moved prepare weapon from the .H to the .CPP.
+//
+//      08/11/97 BRH   Found the problem with the parade level victims where they
+//                     were flipping around one bouy.  The problem was that they
+//                     asked how to get to a particular bouy which was unreachable
+//                     because the network was not fully connected, so when it
+//                     got the unreachable flag, it kept retrying the same bouy.
+//                     I fixed the problem so they will pick a new bouy, but also
+//                     we are deleting the unconnected nodes in the parade level.
+//
+//      08/11/97   JMI   Now sets backup weapon to default 'none' and uses the
+//                     backup weapon when there's no animation for the current
+//                     weapon type.
+//                     Also, changed incorrectly name ms_awtType2Id to
+//                     ms_awtId2Type mapping.
+//
+//      08/11/97 BRH   Fixed problem with run & shoot not using the correct
+//                     angle.
+//
+//      08/12/97   JMI   Now hides weapon if current event is 10 or more.
+//
+//      08/12/97 BRH   Checks for events channel in render so that people
+//                     without animation events like the band guys will still
+//                     work.  Also made shooting timing based on game
+//                     difficulty.
+//
+//      08/13/97   JMI   Changed so OnShotMsg() calls base class to generate blood
+//                     no matter what.
+//
+//      08/14/97   JMI   Switched references to g_GameSettings.m_sDifficulty to
+//                     m_pRealm->m_flags.sDifficulty.
+//
+//      08/14/97 BRH   Added static default bits to pass to weapons for their
+//                     collision testing.  Changed call to WhileHoldingWeapon
+//                     to include these defaults.
+//
+//      08/15/97 BRH   Changed the check for available pylons to check for a
+//                     clear path to the pylon before saying it is available.
+//                     Some guys were getting stuck on fences between themselves
+//                     an an available pylon.  Also fixed the writhing to
+//                     executed transition so that the guys don't flip around
+//                     180 degrees.  Also fixed the smash bits that get passed
+//                     to the missile weapons.
+//
+//      08/16/97 BRH   Changed the person's PlaySound functions so that comments
+//                     are only made when the CDude is alive.  So in this module, I
+//                     made sure that the victims were also calling SelectDude()
+//                     for the logic that they were doing, just to keep track of
+//                     whether the CDude was alive or dead.  Also tuned the
+//                     shooting accuracy for the levels to make them more accurate
+//                     on the easier levels since the easy dudes were missing too
+//                     much.
+//
+//      08/18/97 BRH   Added virtual override for CCharacter's WhileHoldingWeapon
+//                     so that for higher difficulty settings where the enemies
+//                     re-aim after preparing the weapon, they could do it
+//                     every frame between PrepareWeapon and ShootWeapon so that
+//                     they turned smoothy and didn't just flip around when they
+//                     got to ShootWeapon.  This was a problem with the Rocketman
+//                     who had a S32 shoot animation.  If the target moved a
+//                     quite a bit between PrepareWeapon and ShootWeapon, he would
+//                     spin around just before releasing the shot.  Also fixed
+//                     a problem with the ShootWeapon adjustment of the
+//                     random shooting innacuracy when I changed the values
+//                     last time, I adjusted the max left swing, but forgot to
+//                     adjust the random amount.
+//
+//      08/18/97   JMI   Now sends doofuses who are writhing to the back most sprite
+//                     layer.  As people pointed out this is another of two evils.
+//                     It is, however, a lessor.  It appears a little wierd in one
+//                     case but better in all others I've seen so far.
+//
+//      08/19/97   JMI   Now sends doofuses who are dying to the back as well.
+//
+//      08/19/97   JMI   No S32er shoots CSmash::Misc items.
+//
+//      08/20/97   JMI   Now Logic_Shot() does not wait to the end of the animation
+//                     to check for death.  This way they don't seem to kick back
+//                     from the shot, shoot forward, and then die.
+//
+//      08/20/97 BRH   Trying a smaller tolerance on the Bouys so that the
+//                     enemies must get closer to the hotspot before
+//                     moving to the next one.  We wanted to see if this helps
+//                     certain situations where guys are getting stuck.  Changed
+//                     from 10 pixel radius to 5.
+//
+//      08/21/97   JMI   Now does deluxe reporting on whether this doofus finds his
+//                     NavNet.
+//
+//      08/21/97   JMI   Now after reporting that the doofus did not find its NavNet
+//                     it sets him to the current NavNet.
+//
+//      08/21/97 BRH   Added a blooc counter so that the number of blood pools
+//                     created while writhing could be cut down a little bit.
+//
+//      08/24/97 BRH   Changed the TryClearShot to use the Character version of
+//                     IsPathClear which also checks for people in the way.  Added
+//                     an additional call to TryClearShot in ShootWeapon which is
+//                     after the weapon has been re-aimed to make sure that the
+//                     path is still clear.  It was a problem with the rocketman
+//                     who has the slowest animation and may turn completely
+//                     around before shooting.
+//
+//      08/24/97 BRH   Aborts sample that was playing when the guy gets executed
+//                     so that he doesn't keep making noises after he is dead.
+//
+//      08/25/97 BRH   Undid a bunch of changes made yesterday which changed the
+//                     logic too much which threw off the tuning.  Added two new
+//                     escape routes for the Engage mode instead.  Fixed the
+//                     shoot timer which was being set to two different values
+//                     in two different places.  Made the shooting more accurate
+//                     and more of the difficulty tuning will be with the
+//                     shooting times.
+//
+//      08/27/97 BRH   Victims now panic when they are shot.
+//
+//      09/03/97   JMI   Sentries now exclude CSmash::Bads and CSmash::Civilians.
+//
+//      09/07/97 BRH   As Steve requested, the medium difficulty will now
+//                     re-adjust aiming just like hard difficulty in ShootWeapon.
+//
+//      12/18/97   JMI   Changed SelectRandomBouy() to return 0 if a the number of
+//                     bouys is less than or equal to one.  It used to be less
+//                     than one but, for some reason, GetNumNodes() returns 1 when
+//                     there's no bouys.  This caused it to lock up when no bouys
+//                     for some lgk files.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define DOOFUS_CPP
@@ -442,9 +442,9 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define	NEAR_DEATH_HITPOINTS 31                   // Below this, start writhing
-#define  MS_BETWEEN_SAMPLES	100                  // Time between pain groans.
-#define  BURNT_BRIGHTNESS		-40                  // -128 to 127.
+#define   NEAR_DEATH_HITPOINTS 31                   // Below this, start writhing
+#define  MS_BETWEEN_SAMPLES   100                  // Time between pain groans.
+#define  BURNT_BRIGHTNESS      -40                  // -128 to 127.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -465,15 +465,15 @@ double CDoofus::ms_dMinFightDistance = 80.0;       // Closest you want to get
 double CDoofus::ms_dMedFightDistance = 200.0;      // Median distance for fighting
 double CDoofus::ms_dMaxFightDistance = 400.0;      // Farthest distance for fighting
 double CDoofus::ms_dMinFightDistanceSQ = 80.0 * 80.0;// Square distance for
-double CDoofus::ms_dMedFightDistanceSQ	= 200.0 * 200.0;
+double CDoofus::ms_dMedFightDistanceSQ   = 200.0 * 200.0;
 double CDoofus::ms_dMaxFightDistanceSQ = 400.0 * 400.0;
 double CDoofus::ms_dMarchVelocity = 20.0;          // Speed at which to march
-S32 CDoofus::ms_lDefaultAlignTime = 100; //2000;	// Time to realign to bouy position
+S32 CDoofus::ms_lDefaultAlignTime = 100; //2000;   // Time to realign to bouy position
 S32 CDoofus::ms_lGuardTimeoutMin = 4000;           // Time to check for CDudes again
 S32 CDoofus::ms_lGuardTimeoutInc = 500;            // Interval to add for each easier difficulty level
 S32 CDoofus::ms_lShootTimeoutMin = 1000;           // Min time between shots, adjused for difficulty
 S32 CDoofus::ms_lShootTimeoutInc = 200;            // Adjustment time for difficulty level between shots
-S32 CDoofus::ms_lDetectionRadius = 100;//80			// Radius of detection smash sphere
+S32 CDoofus::ms_lDetectionRadius = 100;//80         // Radius of detection smash sphere
 S32 CDoofus::ms_lRunShootInterval = 2000;       // Time between shots while running
 S32 CDoofus::ms_lReseekTime = 15 * 1000;           // Seek the dude again after this time
 S32 CDoofus::ms_lShotTimeout = 3000;               // Time between full shot reaction animations
@@ -482,7 +482,7 @@ S32 CDoofus::ms_lStuckRecoveryTime = 5000;         // Time to stay in recoverys 
 S32 CDoofus::ms_lAvoidRadius = 40;                 // Radius of fire detection smash
 S32 CDoofus::ms_lYellRadius = 150;                 // Yell for help in this vicinity
 S32 CDoofus::ms_lHelpTimeout = 3000;               // Time to react to a call for help.
-S32 CDoofus::ms_lDelayShootTimeout = 0; //2000;			// Time before shooting
+S32 CDoofus::ms_lDelayShootTimeout = 0; //2000;         // Time before shooting
 S32 CDoofus::ms_lHelpingTimeout = 1000;            // Only shoot every this often
 
 // Note that these seem to apply to all weapons except bullet weapons.  That is, these are
@@ -765,14 +765,14 @@ CDoofus::CDoofus(CRealm* pRealm, ClassIDType id)
    m_lSampleTimeIsPlaying = 0;
    m_bRecentlyStuck = false;
    m_bCivilian = false;
-   m_ptransExecutionTarget	= NULL;
-   m_spriteWeapon.m_pthing	= this;
+   m_ptransExecutionTarget   = NULL;
+   m_spriteWeapon.m_pthing   = this;
    m_ucSpecialBouy0ID = 0;
    m_ucSpecialBouy1ID = 0;
    m_bPanic = false;
    m_bRegisteredBirth = false;
    // Default to no fallback weapon.
-   m_eFallbackWeaponType	= TotalIDs;
+   m_eFallbackWeaponType   = TotalIDs;
    m_sStuckCounter = 0;
    m_usBloodCounter = 0;
    m_siPlaying = 0;
@@ -794,7 +794,7 @@ CDoofus::~CDoofus()
    {
       // See who killed us, if anyone
       bool bPlayerKill = false;
-      CThing*	pthing;
+      CThing*   pthing;
       if (m_u16KillerId != 0 && m_pRealm->m_idbank.GetThingByID(&pthing, m_u16KillerId) == 0)
          if (pthing->GetClassID() == CDudeID)
             bPlayerKill = true;
@@ -945,7 +945,7 @@ short CDoofus::Save(                            // Returns 0 if successfull, non
       pFile->Write(&m_ucSpecialBouy1ID);
       U16 u16Data = CIdBank::IdNil; // Safety.
       if (m_pNavNet)
-         u16Data	= m_pNavNet->GetInstanceID();
+         u16Data   = m_pNavNet->GetInstanceID();
       pFile->Write(&u16Data);
 
       sResult = pFile->Error();
@@ -974,7 +974,7 @@ short CDoofus::Startup(void)                       // Returns 0 if successfull, 
          }
          else
          {
-            m_pNavNet	= NULL;
+            m_pNavNet   = NULL;
          }
       }
 
@@ -1002,11 +1002,11 @@ short CDoofus::Startup(void)                       // Returns 0 if successfull, 
          }
 
          // Use the current NavNet.
-         m_pNavNet	= m_pRealm->GetCurrentNavNet();
+         m_pNavNet   = m_pRealm->GetCurrentNavNet();
          if (m_pNavNet)
          {
             // Remember to reset our ID so this doesn't happen again.
-            m_u16NavNetID	= m_pNavNet->GetInstanceID();
+            m_u16NavNetID   = m_pNavNet->GetInstanceID();
          }
       }
    }
@@ -1035,7 +1035,7 @@ short CDoofus::Startup(void)                       // Returns 0 if successfull, 
    m_smashAvoid.m_pThing = this;
 
    // Setup weapon sprite.
-   m_spriteWeapon.m_sInFlags	= CSprite::InHidden;
+   m_spriteWeapon.m_sInFlags   = CSprite::InHidden;
    m_sprite.AddChild(&m_spriteWeapon);
 
 
@@ -1045,7 +1045,7 @@ short CDoofus::Startup(void)                       // Returns 0 if successfull, 
    m_pRealm->RegisterBirth(m_bCivilian);
    // Note that we've registered our birth so we know later that we need to
    // register our death.
-   m_bRegisteredBirth	= true;
+   m_bRegisteredBirth   = true;
 
    // Set tunable values to their doofus defaults
    m_lShootTimeout = ms_lShootTimeoutMin + ((11 - m_pRealm->m_flags.sDifficulty) * ms_lShootTimeoutInc);
@@ -1078,8 +1078,8 @@ short CDoofus::EditNew(                         // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Render - This override version temporarily replaces the m_dRot with the
-//				m_dAnimRot so that it draws the person in the desired facing
-//				direction.
+//            m_dAnimRot so that it draws the person in the desired facing
+//            direction.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Render(void)
@@ -1091,17 +1091,17 @@ void CDoofus::Render(void)
 
    m_dRot = dSaveRotation;
 
-   CAnim3D*		panimWeapon	= NULL;
+   CAnim3D*      panimWeapon   = NULL;
 
    if (m_panimCur->m_pevent)
    {
       // Get current event.
-      U8	u8Event	= *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
+      U8 u8Event   = *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
 
       // If gun not hidden by Randy . . .
       if (u8Event < 10)
       {
-         panimWeapon	= GetWeaponAnim(m_eWeaponType);
+         panimWeapon   = GetWeaponAnim(m_eWeaponType);
          // If we got an anim . . .
          if (panimWeapon)
          {
@@ -1109,7 +1109,7 @@ void CDoofus::Render(void)
             if (panimWeapon->m_pmeshes == NULL && m_eWeaponType != TotalIDs)
             {
                // Get fallback weapon, if any.
-               panimWeapon	= GetWeaponAnim(m_eFallbackWeaponType);
+               panimWeapon   = GetWeaponAnim(m_eFallbackWeaponType);
             }
          }
       }
@@ -1122,24 +1122,24 @@ void CDoofus::Render(void)
       if (panimWeapon->m_pmeshes && m_panimCur->m_ptransWeapon)
       {
          // Show weapon sprite.
-         m_spriteWeapon.m_sInFlags	&= ~CSprite::InHidden;
+         m_spriteWeapon.m_sInFlags   &= ~CSprite::InHidden;
 
-         m_spriteWeapon.m_pmesh		= panimWeapon->m_pmeshes->GetAtTime(m_lAnimTime);
-         m_spriteWeapon.m_psop		= panimWeapon->m_psops->GetAtTime(m_lAnimTime);
-         m_spriteWeapon.m_ptex		= panimWeapon->m_ptextures->GetAtTime(m_lAnimTime);
-         m_spriteWeapon.m_psphere	= panimWeapon->m_pbounds->GetAtTime(m_lAnimTime);
-         m_spriteWeapon.m_ptrans		= m_panimCur->m_ptransWeapon->GetAtTime(m_lAnimTime);
+         m_spriteWeapon.m_pmesh      = panimWeapon->m_pmeshes->GetAtTime(m_lAnimTime);
+         m_spriteWeapon.m_psop      = panimWeapon->m_psops->GetAtTime(m_lAnimTime);
+         m_spriteWeapon.m_ptex      = panimWeapon->m_ptextures->GetAtTime(m_lAnimTime);
+         m_spriteWeapon.m_psphere   = panimWeapon->m_pbounds->GetAtTime(m_lAnimTime);
+         m_spriteWeapon.m_ptrans      = m_panimCur->m_ptransWeapon->GetAtTime(m_lAnimTime);
       }
       else
       {
          // Hide weapon sprite.
-         m_spriteWeapon.m_sInFlags	|= CSprite::InHidden;
+         m_spriteWeapon.m_sInFlags   |= CSprite::InHidden;
       }
    }
    else
    {
       // Hide weapon sprite.
-      m_spriteWeapon.m_sInFlags	|= CSprite::InHidden;
+      m_spriteWeapon.m_sInFlags   |= CSprite::InHidden;
    }
 }
 
@@ -1161,12 +1161,12 @@ void CDoofus::EditRender(void)
 short CDoofus::SelectDudeBouy(void)
 {
    short sReturn = SUCCESS;
-//	CDude* pDude;
-//	CBouy* pBouytest;
+//   CDude* pDude;
+//   CBouy* pBouytest;
 
    if (SelectDude() == SUCCESS)
    {
-      CDude*	pdude;
+      CDude*   pdude;
       if (m_pRealm->m_idbank.GetThingByID((CThing**)&pdude, m_idDude) == 0)
       {
          m_ucDestBouyID = m_pNavNet->FindNearestBouy(pdude->GetX(), pdude->GetZ());
@@ -1176,25 +1176,25 @@ short CDoofus::SelectDudeBouy(void)
       sReturn = FAILURE;
 
 /*
-	if (m_pRealm->m_asClassNumThings[CThing::CDudeID] > 0)
-	{
-		pDude = (CDude*) m_pRealm->m_aclassHeads[CThing::CDudeID].GetNext();
-		m_ucDestBouyID = m_pNavNet->FindNearestBouy(pDude->GetX(), pDude->GetZ());
-	}
-	else
-	{
-		if (m_pNavNet->GetNumNodes() < 1)
-			sReturn = FAILURE;
-		else
-		{
-			pBouytest = NULL;
-			while (pBouytest == NULL)
-			{
-				m_ucDestBouyID = GetRandom() % m_pNavNet->GetNumNodes();
-				pBouytest = m_pNavNet->GetBouy(m_ucDestBouyID);
-			}
-		}
-	}
+   if (m_pRealm->m_asClassNumThings[CThing::CDudeID] > 0)
+   {
+      pDude = (CDude*) m_pRealm->m_aclassHeads[CThing::CDudeID].GetNext();
+      m_ucDestBouyID = m_pNavNet->FindNearestBouy(pDude->GetX(), pDude->GetZ());
+   }
+   else
+   {
+      if (m_pNavNet->GetNumNodes() < 1)
+         sReturn = FAILURE;
+      else
+      {
+         pBouytest = NULL;
+         while (pBouytest == NULL)
+         {
+            m_ucDestBouyID = GetRandom() % m_pNavNet->GetNumNodes();
+            pBouytest = m_pNavNet->GetBouy(m_ucDestBouyID);
+         }
+      }
+   }
 */
    return sReturn;
 
@@ -1222,21 +1222,21 @@ UCHAR CDoofus::SelectRandomBouy(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // SelectDude - Picks the closest dude from the dude list and assignes it to
-//					 this enemy's CDude pointer.
+//                this enemy's CDude pointer.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CDoofus::SelectDude(void)
 {
-//	Things::iterator i;
-//	Things* pDudes;
+//   Things::iterator i;
+//   Things* pDudes;
 
    m_idDude = CIdBank::IdNil;
    U32 ulSqrDistance;
    U32 ulCurSqrDistance  = 0xFFFFFFFF;
    U32 ulDistX;
    U32 ulDistZ;
-//	pDudes = m_pRealm->m_apthings[CThing::CDudeID];
-   CDude*	pdude;
+//   pDudes = m_pRealm->m_apthings[CThing::CDudeID];
+   CDude*   pdude;
 
    CListNode<CThing>* pDudeList = m_pRealm->m_aclassHeads[CThing::CDudeID].m_pnNext;
 
@@ -1246,14 +1246,14 @@ short CDoofus::SelectDude(void)
       // If this dude is not dead . . .
       if (pdude->m_state != State_Dead)
       {
-         ulDistX	= pdude->m_dX - m_dX;
-         ulDistZ	= pdude->m_dZ - m_dZ;
-         ulSqrDistance	= ulDistX * ulDistX + ulDistZ * ulDistZ;
+         ulDistX   = pdude->m_dX - m_dX;
+         ulDistZ   = pdude->m_dZ - m_dZ;
+         ulSqrDistance   = ulDistX * ulDistX + ulDistZ * ulDistZ;
          if (ulSqrDistance < ulCurSqrDistance)
          {
             // This one is closer.
-            ulCurSqrDistance	= ulSqrDistance;
-            m_idDude	= pdude->GetInstanceID();
+            ulCurSqrDistance   = ulSqrDistance;
+            m_idDude   = pdude->GetInstanceID();
          }
       }
       pDudeList = pDudeList->m_pnNext;
@@ -1279,7 +1279,7 @@ short CDoofus::FindDirection()
 
    if (m_idDude != CIdBank::IdNil)
    {
-      CDude*	pdude;
+      CDude*   pdude;
       if (m_pRealm->m_idbank.GetThingByID((CThing**)&pdude, m_idDude) == 0)
       {
          dDudeX = pdude->GetX();
@@ -1303,7 +1303,7 @@ short CDoofus::FindDirection()
 
 double CDoofus::SQDistanceToDude()
 {
-   double dSquareDistance	= 0.0;
+   double dSquareDistance   = 0.0;
    double dX;
    double dZ;
 
@@ -1312,7 +1312,7 @@ double CDoofus::SQDistanceToDude()
 
    if (m_idDude != CIdBank::IdNil)
    {
-      CDude*	pdude;
+      CDude*   pdude;
       if (m_pRealm->m_idbank.GetThingByID((CThing**)&pdude, m_idDude) == 0)
       {
          dX = pdude->GetX() - m_dX;
@@ -1357,14 +1357,14 @@ void CDoofus::AlignToBouy(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // TryClearDirection - Given an angle, and a variance, checks the given angle
-//							  to see if it is clear.  If it is blocked by walls or fire
-//							  it will try the max variance in either direction for a
-//							  clear path and set the angle if it finds one.  If these
-//							  three angles fail, it will return false.
+//                       to see if it is clear.  If it is blocked by walls or fire
+//                       it will try the max variance in either direction for a
+//                       clear path and set the angle if it finds one.  If these
+//                       three angles fail, it will return false.
 //
 // Enemy guys can use this to attempt several paths before moving.  If it fails
 // then they can fall back on using a random direction, or they could try again
-//	with a completely different angle and variance.
+//   with a completely different angle and variance.
 ////////////////////////////////////////////////////////////////////////////////
 
 bool CDoofus::TryClearDirection(double* pdRot, short sVariance)
@@ -1428,8 +1428,8 @@ bool CDoofus::TryClearDirection(double* pdRot, short sVariance)
 
 ////////////////////////////////////////////////////////////////////////////////
 // TryClearShot - Works like the TryClearDirection, but doesn't check for
-//						fire, only walls.  So it knows if it could hit the target
-//						from here.
+//                  fire, only walls.  So it knows if it could hit the target
+//                  from here.
 ////////////////////////////////////////////////////////////////////////////////
 
 bool CDoofus::TryClearShot(double dRot, short sVariance)
@@ -1452,31 +1452,31 @@ bool CDoofus::TryClearShot(double dRot, short sVariance)
          m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime), // In:  Transform specifying point.
          &dMuzzleX,                                         // Out: Point speicfied.
          &dMuzzleY,                                         // Out: Point speicfied.
-         &dMuzzleZ);                                        // Out: Point speicfied.			// Update execution point via link point.
+         &dMuzzleZ);                                        // Out: Point speicfied.         // Update execution point via link point.
 
       while (!bFoundPath && sTries < 2)
       {
          // Check clear path
 /*
-				// This one checks terrain and for people in the way
-				if (IsPathClear(
-					(short) (m_dX + dMuzzleX),			// Start x position
-					(short) (m_dY + dMuzzleY),			// Start y position
-					(short) (m_dZ + dMuzzleZ),			// Start z position
-					(short) dRotAttempt,					// Angle of shot
-					4,											// Crawl rate
-					rspSqrt(CDoofus::SQDistanceToDude()),
-					2,											// radius of traverser
-					2,											// vertical tolerance
-					CSmash::Bad,							// Bits that would terminate path
-					0,											// Bits that would not affect path
-					0,											// Bits that cannot affect path
-					&sX,										// pointer to terminating point
-					&sY,										// pointer to terminating point
-					&sZ,										// pointer to terminating point
-					&pthing,									// handle to terminating target
-					&m_smash)								// exclude your own smash
-					== false)
+            // This one checks terrain and for people in the way
+            if (IsPathClear(
+               (short) (m_dX + dMuzzleX),         // Start x position
+               (short) (m_dY + dMuzzleY),         // Start y position
+               (short) (m_dZ + dMuzzleZ),         // Start z position
+               (short) dRotAttempt,               // Angle of shot
+               4,                                 // Crawl rate
+               rspSqrt(CDoofus::SQDistanceToDude()),
+               2,                                 // radius of traverser
+               2,                                 // vertical tolerance
+               CSmash::Bad,                     // Bits that would terminate path
+               0,                                 // Bits that would not affect path
+               0,                                 // Bits that cannot affect path
+               &sX,                              // pointer to terminating point
+               &sY,                              // pointer to terminating point
+               &sZ,                              // pointer to terminating point
+               &pthing,                           // handle to terminating target
+               &m_smash)                        // exclude your own smash
+               == false)
 */
          // This one only checks terrain
          if (m_pRealm->IsPathClear(
@@ -1529,8 +1529,8 @@ void CDoofus::Update(void)
       ProcessMessages();
 
       // If he has no network, then he should stick to Guard mode
-//		if (m_pNavNet == NULL)
-//			m_state = State_Guard;
+//      if (m_pNavNet == NULL)
+//         m_state = State_Guard;
 
       // See if there are any pylons nearby that he wants to use.
       if (m_state == State_Idle ||
@@ -1633,12 +1633,12 @@ void CDoofus::Logic_Shot(void)
          // Add this check for low health -> retreat
          // if (m_stockpile.m_sHitPoints < DefHitPoints / 2)
          //{
-         //	m_state = State_Retreat;
-         //	m_panimCur = &m_animRun;
-         //	m_lAnimTime = 0;
-         //	m_dRot = rspMod360(CDoofus::FindDirection() + 180);
-         //	if (CDoofus::TryClearDirection(&m_dRot, 90) == false)
-         //		m_dRot = rspMod360(GetRandom());
+         //   m_state = State_Retreat;
+         //   m_panimCur = &m_animRun;
+         //   m_lAnimTime = 0;
+         //   m_dRot = rspMod360(CDoofus::FindDirection() + 180);
+         //   if (CDoofus::TryClearDirection(&m_dRot, 90) == false)
+         //      m_dRot = rspMod360(GetRandom());
          //}
          //
          // else // go back to previous state
@@ -1717,7 +1717,7 @@ void CDoofus::Logic_Die(void)
 #endif
 
    // Send to back.
-   m_sLayerOverride	= CRealm::LayerSprite1;
+   m_sLayerOverride   = CRealm::LayerSprite1;
 
    // When the die animation is finsihed, so are you.
    if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
@@ -1782,7 +1782,7 @@ void CDoofus::Logic_Die(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Writhing - Rolling around on the ground in pain, waiting to be
-//						  executed or until the pain is no S32er tolerable.
+//                    executed or until the pain is no S32er tolerable.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_Writhing(void)
@@ -1791,7 +1791,7 @@ void CDoofus::Logic_Writhing(void)
    S32 lTimeDifference = lThisTime - m_lPrevTime;
 
    // Send to back.
-   m_sLayerOverride	= CRealm::LayerSprite1;
+   m_sLayerOverride   = CRealm::LayerSprite1;
 
    if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
    {
@@ -1803,12 +1803,12 @@ void CDoofus::Logic_Writhing(void)
          m_state = State_Die;
          m_panimCur = &m_animExecuted;
          m_lAnimTime = 0;
-//			m_state = State_Dead;
+//         m_state = State_Dead;
       }
       else
       {
          // Whoa!  MOD EQUALS is deep, man!
-         m_lAnimTime	%= m_panimCur->m_psops->TotalTime();
+         m_lAnimTime   %= m_panimCur->m_psops->TotalTime();
          // Now you can tune the amount of blood if it gets too thick.
          if ((++m_usBloodCounter % 2) == 0)
             MakeBloodPool();
@@ -1819,13 +1819,13 @@ void CDoofus::Logic_Writhing(void)
             S32 lSampleDuration;
             PlaySoundWrithing(&lSampleDuration);
 
-            m_lTimer	= lThisTime	+ lSampleDuration + MS_BETWEEN_SAMPLES;
+            m_lTimer   = lThisTime   + lSampleDuration + MS_BETWEEN_SAMPLES;
          }
       }
    }
    else
    {
-      CWeapon*	pweapon;
+      CWeapon*   pweapon;
       if (m_pRealm->m_idbank.GetThingByID((CThing**)&pweapon, m_u16IdWeapon) == 0)
       {
          // It should drop like a rock if its a throwing weapon or just delete it if it
@@ -1866,11 +1866,11 @@ void CDoofus::Logic_Guard(void)
    // Calculate the elapsed time in seconds
    dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
-//	if (m_panimCur != &m_animStand)
-//	{
-//		m_panimCur = &m_animStand;
-//		m_lAnimTime = 0;
-//	}
+//   if (m_panimCur != &m_animStand)
+//   {
+//      m_panimCur = &m_animStand;
+//      m_lAnimTime = 0;
+//   }
    m_dRot = m_dAnimRot = m_dShootAngle = FindDirection();
    RunIdleAnimation();
 
@@ -1885,7 +1885,7 @@ void CDoofus::Logic_Guard(void)
       {
          if (CDoofus::TryClearShot(m_dRot, 20) == true)
          {
-            CWeapon*	pweapon	= PrepareWeapon();
+            CWeapon*   pweapon   = PrepareWeapon();
             if (pweapon != NULL)
             {
                // Keep it hidden, for now.
@@ -1957,11 +1957,11 @@ void CDoofus::Logic_Hunt(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_HuntHold - This state means that you were trying to advance to the
-//						  Dude and have got to the bouy closest to the Dude.  The
-//						  Logic table can either break you out into Engage or
-//						  whatever, or you will stay in this state where you will
-//						  be in a guard mode, but always looking to see if you should
-//						  move to a closer bouy once the Dude changes his position.
+//                    Dude and have got to the bouy closest to the Dude.  The
+//                    Logic table can either break you out into Engage or
+//                    whatever, or you will stay in this state where you will
+//                    be in a guard mode, but always looking to see if you should
+//                    move to a closer bouy once the Dude changes his position.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_HuntHold(void)
@@ -1996,7 +1996,7 @@ void CDoofus::Logic_HuntHold(void)
          {
             if (SelectDude() == SUCCESS && SQDistanceToDude() < ms_dGuardDistance)
             {
-               CWeapon*	pweapon	= PrepareWeapon();
+               CWeapon*   pweapon   = PrepareWeapon();
                if (pweapon != NULL)
                {
                   // Keep it hidden, for now.
@@ -2308,7 +2308,7 @@ void CDoofus::Logic_PositionMove(void)
       // Check for clear shot before shooting.  If not clear, go back to moving
       if (CDoofus::TryClearShot(m_dRot, 20) == true && SelectDude() == SUCCESS)
       {
-         CWeapon*	pweapon	= PrepareWeapon();
+         CWeapon*   pweapon   = PrepareWeapon();
          if (pweapon != NULL)
          {
             // Keep it hidden, for now.
@@ -2375,9 +2375,9 @@ void CDoofus::Logic_Firefight(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_PylonDetect - If you detect that a pylon is near, find out what kind
-//						     it is and decide if you will use it based on the
-//							  suggested action.  This function is only called when
-//							  the suggested action requires the use of a pylon.
+//                       it is and decide if you will use it based on the
+//                       suggested action.  This function is only called when
+//                       the suggested action requires the use of a pylon.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_PylonDetect(void)
@@ -2505,7 +2505,7 @@ void CDoofus::Logic_HideBegin(void)
    double dSeconds = lElapsedTime / 1000.0;
    DeluxeUpdatePosVel(dSeconds);
 
-   //	if close to pylon, go to next state
+   //   if close to pylon, go to next state
    // for now just check the square distance, but later, probably use
    // QuickCheckCloses in smash to see if you are there yet.
    double dX = m_dX - (double) m_sNextX;
@@ -2530,7 +2530,7 @@ void CDoofus::Logic_Hide(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_PopBegin - Once you have detected a nearby Pylon, begin the popout
-//						  phase here by going to that pylon.
+//                    phase here by going to that pylon.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_PopBegin(void)
@@ -2575,7 +2575,7 @@ void CDoofus::Logic_PopBegin(void)
       m_lAlignTimer = lThisTime + 100;
    }
 
-   //	if close to pylon, go to next state
+   //   if close to pylon, go to next state
    // for now just check the square distance, but later, probably use
    // QuickCheckCloses in smash to see if you are there yet.
    double dX = m_dX - (double) m_sNextX;
@@ -2594,11 +2594,11 @@ void CDoofus::Logic_PopBegin(void)
 void CDoofus::Logic_PopWait(void)
 {
    // If the stand animation is not being used yet then switch to it.
-//	if (m_panimCur != &m_animStand)
-//	{
-//		m_panimCur = &m_animStand;
-//		m_lAnimTime = 0;
-//	}
+//   if (m_panimCur != &m_animStand)
+//   {
+//      m_panimCur = &m_animStand;
+//      m_lAnimTime = 0;
+//   }
    RunIdleAnimation();
 
    if (!ReevaluateState())
@@ -2623,9 +2623,9 @@ void CDoofus::Logic_PopWait(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Popout - When at a popout bouy, if the guy is close, popout, shoot,
-//						and duck back behind the bouy.  If he is not in range, stay
-//						behind the bouy and wait for some amount of time.  Reevaluate
-//						logic choice based on enemy attributes.
+//                  and duck back behind the bouy.  If he is not in range, stay
+//                  behind the bouy and wait for some amount of time.  Reevaluate
+//                  logic choice based on enemy attributes.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_Popout(void)
@@ -2645,7 +2645,7 @@ void CDoofus::Logic_Popout(void)
    AvoidFire();
 
    // If you are at the pylon, then go to the next state
-   //	if close to pylon, go to next state
+   //   if close to pylon, go to next state
    // for now just check the square distance, but later, probably use
    // QuickCheckCloses in smash to see if you are there yet.
    double dX = m_dX - (double) m_sNextX;
@@ -2660,7 +2660,7 @@ void CDoofus::Logic_Popout(void)
       m_lTimer = lThisTime + 2000 + GetRandom() % 2000;
       m_sNextX = m_pPylonStart->GetX();
       m_sNextZ = m_pPylonStart->GetZ();
-      CWeapon*	pweapon	= PrepareWeapon();
+      CWeapon*   pweapon   = PrepareWeapon();
       if (pweapon != NULL)
       {
          // Keep it hidden, for now.
@@ -2704,7 +2704,7 @@ void CDoofus::Logic_Shoot(void)
    case CSmallPistolID:
    {
       // Get event.
-      U8	u8Event	= *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
+      U8 u8Event   = *( (U8*)(m_panimCur->m_pevent->GetAtTime(m_lAnimTime) ) );
       // We don't care about show point for these non-object weapon types.
       // If it's time to fire the weapon . . .
       if (u8Event > 0 && lThisTime > m_lShootTimer)
@@ -2767,8 +2767,8 @@ void CDoofus::Logic_Shoot(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_ShootRun - Shoot while running - use the Shoot logic to control
-//						  the firing of the shot and the animation, and just add on
-//						  the motion update
+//                    the firing of the shot and the animation, and just add on
+//                    the motion update
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_ShootRun(void)
@@ -2839,15 +2839,15 @@ void CDoofus::Logic_RunShootBegin(void)
       m_sNextZ = m_pPylonEnd->GetZ();
       m_dAnimRot = m_dRot = FindAngleTo(m_sNextX, m_sNextZ);
       m_lTimer = lThisTime + m_lRunShootInterval;
-//		m_state = State_RunShoot;
+//      m_state = State_RunShoot;
       m_state = State_RunShootWait;
    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_RunShoot - Run and Shoot logic.  When near a ShootCycle bouy, hide,
-//						  run out and shoot at a Dude, run towards other bouy, stop
-//						  and shoot again, then duck behind the second bouy.  Repeat
+//                    run out and shoot at a Dude, run towards other bouy, stop
+//                    and shoot again, then duck behind the second bouy.  Repeat
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_RunShoot(void)
@@ -2859,7 +2859,7 @@ void CDoofus::Logic_RunShoot(void)
    if (m_panimCur != &m_animRun)
    {
       m_panimCur = &m_animRun;
-//		m_lAnimTime = 0;
+//      m_lAnimTime = 0;
       m_dAnimRot = m_dRot;
    }
 
@@ -2874,7 +2874,7 @@ void CDoofus::Logic_RunShoot(void)
          m_state = State_ShootRun;
          // After shooting, go back to beginning
          m_eNextState = State_RunShoot;
-         CWeapon*	pweapon	= PrepareWeapon();
+         CWeapon*   pweapon   = PrepareWeapon();
          if (pweapon != NULL)
          {
             // Keep it hidden, for now.
@@ -2963,7 +2963,7 @@ void CDoofus::Logic_RunShoot(void)
          // Check for fire in your path
          AvoidFire();
 
-         //	if close to pylon, go to next state
+         //   if close to pylon, go to next state
          // for now just check the square distance, but later, probably use
          // QuickCheckCloses in smash to see if you are there yet.
          double dX = m_dX - (double) m_sNextX;
@@ -3009,7 +3009,7 @@ void CDoofus::Logic_RunShootWait(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Retreat - Once you are low on health, you may choose this logic to
-//						 run away from the Dude, taking shelter wherever you can.
+//                   run away from the Dude, taking shelter wherever you can.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_Retreat(void)
@@ -3190,7 +3190,7 @@ void CDoofus::Logic_WalkContinue(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Helping - Help out your buddies without moving around and screwing
-//						 up your positioning
+//                   up your positioning
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_Helping(void)
@@ -3205,7 +3205,7 @@ void CDoofus::Logic_Helping(void)
       {
          if (CDoofus::TryClearShot(m_dRot, 20) == true)
          {
-            CWeapon*	pweapon	= PrepareWeapon();
+            CWeapon*   pweapon   = PrepareWeapon();
             if (pweapon != NULL)
             {
                // Keep it hidden, for now.
@@ -3232,8 +3232,8 @@ void CDoofus::Logic_Helping(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_AvoidFire - Wait for fire danger to pass before going back to your
-//						   previous state.  This state is set by AvoidFire function
-//							when there is a fire in your path.
+//                     previous state.  This state is set by AvoidFire function
+//                     when there is a fire in your path.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_AvoidFire(void)
@@ -3253,8 +3253,8 @@ void CDoofus::Logic_AvoidFire(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // AvoidFire - checks for fire in your path, returns true if there is a fire
-//					danger.  If you are not already in the fire avoidance state,
-//					it will save your previous state info and change your state.
+//               danger.  If you are not already in the fire avoidance state,
+//               it will save your previous state info and change your state.
 ////////////////////////////////////////////////////////////////////////////////
 
 bool CDoofus::AvoidFire(void)
@@ -3289,8 +3289,8 @@ bool CDoofus::AvoidFire(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // YellForHelp - Call this when you get shot and it will alert other enemies in
-//					  the area within line of sight that you are in trouble.  Then
-//					  they can choose to react.
+//                 the area within line of sight that you are in trouble.  Then
+//                 they can choose to react.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::YellForHelp(void)
@@ -3355,9 +3355,9 @@ void CDoofus::YellForHelp(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // ReevaluateState - Based on parameters, some randomness, current state etc,
-//							come up with a new state.
+//                     come up with a new state.
 //
-//							Returns true if the state changed
+//                     Returns true if the state changed
 ////////////////////////////////////////////////////////////////////////////////
 
 bool CDoofus::ReevaluateState(void)
@@ -3496,9 +3496,9 @@ void CDoofus::OnShotMsg(Shot_Message* pMessage)
    // the additional bullets
    m_stockpile.m_sHitPoints -= pMessage->sDamage;
 
-   if (m_state != State_Burning	&&
-       m_state != State_BlownUp	&&
-       m_state != State_Die		&&
+   if (m_state != State_Burning   &&
+       m_state != State_BlownUp   &&
+       m_state != State_Die      &&
        m_state != State_Dead)
    {
       // Alert other in the area that you are being attacked.
@@ -3525,8 +3525,8 @@ void CDoofus::OnShotMsg(Shot_Message* pMessage)
 
             PlaySoundShot();
 
-            if (	m_state != State_Shot		&&
-                  m_state != State_Writhing)
+            if (   m_state != State_Shot      &&
+                   m_state != State_Writhing)
             {
                m_ePreviousState = m_state;
                m_panimPrev = m_panimCur;
@@ -3561,7 +3561,7 @@ void CDoofus::OnExplosionMsg(Explosion_Message* pMessage)
    {
       CCharacter::OnExplosionMsg(pMessage);
 
-//		PlaySample(g_smidBlownupYell);
+//      PlaySample(g_smidBlownupYell);
       PlaySoundBlownup();
       m_ePreviousState = m_state;
       m_state = State_BlownUp;
@@ -3609,9 +3609,9 @@ void CDoofus::OnBurnMsg(Burn_Message* pMessage)
    CCharacter::OnBurnMsg(pMessage);
    m_stockpile.m_sHitPoints -= pMessage->sDamage;
 
-   if (m_state != State_Burning	&&
-       m_state != State_BlownUp	&&
-       m_state != State_Die		&&
+   if (m_state != State_Burning   &&
+       m_state != State_BlownUp   &&
+       m_state != State_Die      &&
        m_state != State_Dead)
    {
       PlaySoundBurning();
@@ -3707,15 +3707,15 @@ CWeapon* CDoofus::PrepareWeapon(void)  // Returns the weapon ptr or NULL.
    // Play sound even if we have no weapon...seems like they're threatening him.
    PlaySoundShooting();
 
-   CWeapon*	pweapon;
+   CWeapon*   pweapon;
    // If we have a weapon . . .
    if (m_eWeaponType != TotalIDs)
    {
-      pweapon	= CCharacter::PrepareWeapon();
+      pweapon   = CCharacter::PrepareWeapon();
    }
    else
    {
-      pweapon	= NULL;
+      pweapon   = NULL;
    }
 
    return pweapon;
@@ -3796,11 +3796,11 @@ CWeapon* CDoofus::ShootWeapon(CSmash::Bits bitsInclude,
       m_dRot = m_dShootAngle;
    }
 /*
-	// Allow rockets to hit other enemies, but still not the special barrel type
-	if (m_eWeaponType == CHeatseekerID || m_eWeaponType == CRocketID)
-	{
-		bitsExclude &= ~CSmash::Bad;
-	}
+   // Allow rockets to hit other enemies, but still not the special barrel type
+   if (m_eWeaponType == CHeatseekerID || m_eWeaponType == CRocketID)
+   {
+      bitsExclude &= ~CSmash::Bad;
+   }
 */
    pWeapon = CCharacter::ShootWeapon(bitsInclude, bitsDontcare, bitsExclude);
    if (pWeapon)
@@ -3941,10 +3941,10 @@ void CDoofus::PositionSmash(void)
    if (m_state != State_Writhing)
    {
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY + m_sprite.m_sRadius;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY + m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
    }
    else
    {
@@ -3959,13 +3959,13 @@ void CDoofus::PositionSmash(void)
             m_ptransExecutionTarget->GetAtTime(m_lAnimTime),   // In:  Transform specifying point.
             &dVitalOrganX,                                     // Out: Point speicfied.
             &dVitalOrganY,                                     // Out: Point speicfied.
-            &dVitalOrganZ);                                    // Out: Point speicfied.			// Update execution point via link point.
+            &dVitalOrganZ);                                    // Out: Point speicfied.         // Update execution point via link point.
 
          // Offset from hotspot to set collision sphere position.
-         m_smash.m_sphere.sphere.X			= m_dX + dVitalOrganX;
-         m_smash.m_sphere.sphere.Y			= m_dY + dVitalOrganY;
-         m_smash.m_sphere.sphere.Z			= m_dZ + dVitalOrganZ;
-         m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+         m_smash.m_sphere.sphere.X         = m_dX + dVitalOrganX;
+         m_smash.m_sphere.sphere.Y         = m_dY + dVitalOrganY;
+         m_smash.m_sphere.sphere.Z         = m_dZ + dVitalOrganZ;
+         m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
       }
       else
       {
@@ -3975,17 +3975,17 @@ void CDoofus::PositionSmash(void)
          // Let's go a radius up their torso.  Say... .
          // This only looks decent if m_dRot is the direction they fell which is
          // not always the case.
-         short	sPseudoCenter	= m_sprite.m_sRadius;
-         m_smash.m_sphere.sphere.X			= m_dX + COSQ[short(m_dRot)] * sPseudoCenter;
-         m_smash.m_sphere.sphere.Y			= m_dY + m_sprite.m_sRadius;
-         m_smash.m_sphere.sphere.Z			= m_dZ - SINQ[short(m_dRot)] * sPseudoCenter;
-         m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+         short sPseudoCenter   = m_sprite.m_sRadius;
+         m_smash.m_sphere.sphere.X         = m_dX + COSQ[short(m_dRot)] * sPseudoCenter;
+         m_smash.m_sphere.sphere.Y         = m_dY + m_sprite.m_sRadius;
+         m_smash.m_sphere.sphere.Z         = m_dZ - SINQ[short(m_dRot)] * sPseudoCenter;
+         m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
       }
    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//	WhileHoldingWeapon
+//   WhileHoldingWeapon
 //
 // Override for the character version which will just re-aim the guy during the
 // shoot-prepare frames.  Otherwise, guys like the rocketman which has a S32
@@ -4051,20 +4051,20 @@ bool CDoofus::WhileHoldingWeapon(   // Returns true when weapon is released.
 ////////////////////////////////////////////////////////////////////////////////
 short CDoofus::GetResources(void)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    // If the ref count was 0 . . .
    if (ms_lWeaponResRefCount++ == 0)
    {
       // Get the actual resources.
-      short	i;
-      short	sLoadResult;
+      short i;
+      short sLoadResult;
       for (i = 0; i < NumWeaponTypes; i++)
       {
          // If this weapon has a visible resource . . .
          if (ms_awdWeapons[i].pszResName)
          {
-            sLoadResult	= ms_aanimWeapons[i].Get(
+            sLoadResult   = ms_aanimWeapons[i].Get(
                ms_awdWeapons[i].pszResName,
                NULL,
                NULL,
@@ -4075,7 +4075,7 @@ short CDoofus::GetResources(void)
             {
                TRACE("GetResources(): Failed to load weapon resource \"%s\".\n",
                      ms_awdWeapons[i].pszResName);
-               sResult	= -1;
+               sResult   = -1;
             }
          }
       }
@@ -4097,7 +4097,7 @@ void CDoofus::ReleaseResources(void)
    if (--ms_lWeaponResRefCount == 0)
    {
       // Release the actual resources.
-      short	i;
+      short i;
       for (i = 0; i < NumWeaponTypes; i++)
       {
          if (ms_aanimWeapons[i].m_pmeshes)

@@ -20,22 +20,22 @@
 // ProcessGui.H
 //
 // History:
-//		07/03/97 JMI	Started.
+//      07/03/97 JMI   Started.
 //
-//		07/03/97	JMI	Had not implemented the update func to the feature level
-//							the comments implied.  Implemented.
+//      07/03/97   JMI   Had not implemented the update func to the feature level
+//                     the comments implied.  Implemented.
 //
-//		07/03/97	JMI	Ammended miscomment.
+//      07/03/97   JMI   Ammended miscomment.
 //
-//		07/03/97	JMI	Added Init() and Kill().  Init() is called by the con-
-//							structor.  Kill() is called by the destructor.  The de-
-//							structor used to call Unprepare() but the problem with
-//							that was that Unprepare() did more than just deallocate
-//							the dynamic stuff and that stuff shouldn't have been done
-//							upon destruction.  So now Unprepare() and the destructor
-//							call Kill() to take care of dynamic items.
+//      07/03/97   JMI   Added Init() and Kill().  Init() is called by the con-
+//                     structor.  Kill() is called by the destructor.  The de-
+//                     structor used to call Unprepare() but the problem with
+//                     that was that Unprepare() did more than just deallocate
+//                     the dynamic stuff and that stuff shouldn't have been done
+//                     upon destruction.  So now Unprepare() and the destructor
+//                     call Kill() to take care of dynamic items.
 //
-//		09/01/97	JMI	Added special behavior flags, m_flags.
+//      09/01/97   JMI   Added special behavior flags, m_flags.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -91,11 +91,11 @@ class RProcessGui
 public:
 typedef S32 (*UpdateFunc)(       // Returns a non-zero ID to abort or zero
                                  // to continue.
-   RInputEvent*	pie);             // Out: Next input event to process.
+   RInputEvent*   pie);             // Out: Next input event to process.
 
 typedef enum
 {
-   NoCleanScreen	= 0x0001          // Don't clean the dest buffer when exiting.
+   NoCleanScreen   = 0x0001          // Don't clean the dest buffer when exiting.
 } Flags;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ void Unprepare(void);         // Returns nothing.
 
 // Setup GUI to notify this class of presses.
 void SetGuiToNotify(          // Returns nothing.
-   RGuiItem*	pgui);         // In:  GUI item to setup to notify this class
+   RGuiItem*   pgui);         // In:  GUI item to setup to notify this class
                               // of presses.
 
 // Set all unclaimed GUIs' callbacks to go through this class.
@@ -197,24 +197,24 @@ protected:
 
 // Callback for pressed GUIs.
 static void PressedCall(         // Returns nothing.
-   RGuiItem*		pgui);         // In:  Pressed GUI.
+   RGuiItem*      pgui);         // In:  Pressed GUI.
 
 ///////////////////////////////////////////////////////////////////////////
 // Instantiable data.
 ///////////////////////////////////////////////////////////////////////////
 public:
 
-RDirtyRects	m_drl;               // List of dirtied areas.
+RDirtyRects m_drl;                 // List of dirtied areas.
 RImage m_imEraser;               // Erase image.
-RImage*		m_pimLastDst;        // Last composite buffer (used
-                                 // in Unprepare() to clean up display).
-RGuiItem*	m_pguiOk;            // GUI activated by ENTER.
-RGuiItem*	m_pguiCancel;        // GUI activated by ESCAPE.
+RImage*      m_pimLastDst;        // Last composite buffer (used
+                                  // in Unprepare() to clean up display).
+RGuiItem*   m_pguiOk;            // GUI activated by ENTER.
+RGuiItem*   m_pguiCancel;        // GUI activated by ESCAPE.
 
 UpdateFunc m_fnUpdate;           // Callback to do updates, if not using
                                  // default handling.
 
-short	m_sFlags;                  // See Flags.
+short m_sFlags;                    // See Flags.
 
 ///////////////////////////////////////////////////////////////////////////
 // Static data.
@@ -225,7 +225,7 @@ public:
 static S32 ms_lPressedId;
 };
 
-#endif	// PROCESSGUI_H
+#endif   // PROCESSGUI_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

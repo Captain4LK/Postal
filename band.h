@@ -20,36 +20,36 @@
 //
 // History:
 //
-//		03/04/97 BRH	Started the marching band guy based on CDoofus so that it
-//							can use the NavNet and which is now derived from CCharacter.
-//							This will be the first guy written based on CCharacter
-//							that will use many of the CCharacter functions for updating.
+//      03/04/97 BRH   Started the marching band guy based on CDoofus so that it
+//                     can use the NavNet and which is now derived from CCharacter.
+//                     This will be the first guy written based on CCharacter
+//                     that will use many of the CCharacter functions for updating.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/18/97	JMI	Added m_idChildItem to handle the storage of child items.
-//							Also, uncommented Render() proto.
+//      03/18/97   JMI   Added m_idChildItem to handle the storage of child items.
+//                     Also, uncommented Render() proto.
 //
-//		03/18/97	JMI	Added proto for OnDead() override.
+//      03/18/97   JMI   Added proto for OnDead() override.
 //
-//		06/04/97	JMI	Now aborts ms_pBandSongSound, if not NULL, in destructor.
-//							Also, added ms_bDonePlaying so marchers know when to not
-//							restart ms_pBandSongSound.
+//      06/04/97   JMI   Now aborts ms_pBandSongSound, if not NULL, in destructor.
+//                     Also, added ms_bDonePlaying so marchers know when to not
+//                     restart ms_pBandSongSound.
 //
-//		06/08/97	JMI	Added override for WhileDying() and WhileShot().
+//      06/08/97   JMI   Added override for WhileDying() and WhileShot().
 //
-//		06/24/97	JMI	Removed m_sRotateDir member of CBand (it is already defined
-//							in CDoofus base class).
+//      06/24/97   JMI   Removed m_sRotateDir member of CBand (it is already defined
+//                     in CDoofus base class).
 //
-//		07/17/97	JMI	Changed ms_pBandSongSound to ms_siBandSongInstance.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed ms_pBandSongSound to ms_siBandSongInstance.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		07/31/97 BRH	Set the default value of the destination bouy to 1 in
-//							the constructor.
+//      07/31/97 BRH   Set the default value of the destination bouy to 1 in
+//                     the constructor.
 //
-//		08/12/97	JMI	Now one band member maintains the volume for the band
-//							sample.
+//      08/12/97   JMI   Now one band member maintains the volume for the band
+//                     sample.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef BAND_H
@@ -72,7 +72,7 @@ protected:
 protected:
 CCharacter::State m_ePreviousState;       // State variable to remember what he was
                                           // Doing before he was shot, etc.
-CAnim3D*	m_pPreviousAnim;                 // Previous state's animation
+CAnim3D*   m_pPreviousAnim;                 // Previous state's animation
 
 CAnim3D m_animStand;                      // Stand animation
 CAnim3D m_animMarch;                      // Marching animation
@@ -100,7 +100,7 @@ static U16 ms_idBandLeader;               // The person who adjusts the band sou
 
 
 // This value indicates whether the marchers have stopped playing in this level.
-static bool	ms_bDonePlaying;
+static bool ms_bDonePlaying;
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -112,7 +112,7 @@ CBand(CRealm* pRealm)
 {
    m_ucNextBouyID = 1;
    m_ucDestBouyID = 1;
-   m_idChildItem	= CIdBank::IdNil;
+   m_idChildItem   = CIdBank::IdNil;
    m_bCivilian = true;
 }
 
@@ -131,7 +131,7 @@ public:
    if (ms_siBandSongInstance != 0)
    {
       AbortSample(ms_siBandSongInstance);
-      ms_siBandSongInstance	= 0;
+      ms_siBandSongInstance   = 0;
    }
 }
 
@@ -185,7 +185,7 @@ short EditNew(short sX, short sY, short sZ);
 // Called by editor to modify object
 short EditModify(void);                               // Returns 0 if successfull, non-zero otherwise
 // Called by editor to render object
-//		void EditRender(void);
+//      void EditRender(void);
 
 //---------------------------------------------------------------------------
 // Message handlers that are called by CCharacter ProcessMessage().  These

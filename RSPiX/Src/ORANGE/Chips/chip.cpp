@@ -17,9 +17,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 //
-//	CHIP.CPP
+//   CHIP.CPP
 //
-//	Created on 1/31/96	JMI
+//   Created on 1/31/96   JMI
 //
 //////////////////////////////////////////////////////////////////////
 //
@@ -47,10 +47,10 @@
 //////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////
-#define MAX_CHIPS	4096
+#define MAX_CHIPS   4096
 
-#define BASE		(m_pimChip->lHeight)
-#define THICKNESS	0.50F
+#define BASE      (m_pimChip->lHeight)
+#define THICKNESS   0.50F
 
 //////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -63,12 +63,12 @@
 //////////////////////////////////////////////////////////////////////
 // Module specific (static) vars.
 //////////////////////////////////////////////////////////////////////
-RSList<CChip, float>	CChip::ms_slistChips;   // List of all
-                                             // chips sorted by
-                                             // each chip's Z
-                                             // position.
-RImage*	CChip::ms_pimView		= NULL;  // Background for all chips.
-RImage*	CChip::ms_pimStack		= NULL;  // Stack for all chips.
+RSList<CChip, float>   CChip::ms_slistChips;   // List of all
+                                               // chips sorted by
+                                               // each chip's Z
+                                               // position.
+RImage*   CChip::ms_pimView      = NULL;  // Background for all chips.
+RImage*   CChip::ms_pimStack      = NULL;  // Stack for all chips.
 
 //////////////////////////////////////////////////////////////////////
 // Functions.
@@ -126,11 +126,11 @@ CChip::~CChip()
 //////////////////////////////////////////////////////////////////////
 void CChip::SetPosition(S32 lX, S32 lY, S32 lZ)
 {
-   float	fOldZ	= m_fZ;
+   float fOldZ   = m_fZ;
 
-   m_fX	= (float)lX;
-   m_fY	= (float)lY;
-   m_fZ	= (float)lZ;
+   m_fX   = (float)lX;
+   m_fY   = (float)lY;
+   m_fZ   = (float)lZ;
 
    // If the z position changed . . .
    if (fOldZ != m_fZ)
@@ -151,17 +151,17 @@ void CChip::SetPosition(S32 lX, S32 lY, S32 lZ)
 //////////////////////////////////////////////////////////////////////
 short CChip::Slide(S32 lX, S32 lY, S32 lZ, S32 lRate)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Store destination position.
-   m_sDestX	= (short)lX;
-   m_sDestY	= (short)lY;
-   m_sDestZ	= (short)lZ;
+   m_sDestX   = (short)lX;
+   m_sDestY   = (short)lY;
+   m_sDestZ   = (short)lZ;
 
-   m_sRate	= (short)lRate;
+   m_sRate   = (short)lRate;
 
    // Success.
-   m_sSliding	= TRUE;
+   m_sSliding   = TRUE;
 
    return sRes;
 }
@@ -185,25 +185,25 @@ void CChip::Reset(void)
 //////////////////////////////////////////////////////////////////////
 short CChip::Update(void)
 {
-   short	sDeleted	= 0;  // Assume normal ops.
+   short sDeleted   = 0;    // Assume normal ops.
 
    if (m_sSliding == TRUE)
    {
-      m_fX	+= ((float)m_sDestX - m_fX) / (float)m_sRate;
-      m_fY	+= ((float)m_sDestY - m_fY) / (float)m_sRate;
-      m_fZ	+= ((float)m_sDestZ - m_fZ) / (float)m_sRate;
+      m_fX   += ((float)m_sDestX - m_fX) / (float)m_sRate;
+      m_fY   += ((float)m_sDestY - m_fY) / (float)m_sRate;
+      m_fZ   += ((float)m_sDestZ - m_fZ) / (float)m_sRate;
 
       m_sRate--;
       ASSERT(m_sRate >= 0);
 
-      if (	(short)m_fX == m_sDestX
-            &&	(short)m_fY	== m_sDestY
-            && (short)m_fZ	== m_sDestZ)
+      if (   (short)m_fX == m_sDestX
+             &&   (short)m_fY   == m_sDestY
+             && (short)m_fZ   == m_sDestZ)
       {
          // Done.
-         m_sSliding	= FALSE;
+         m_sSliding   = FALSE;
          // Stack if necessary.
-         sDeleted	= Stack();
+         sDeleted   = Stack();
       }
    }
 
@@ -227,12 +227,12 @@ void CChip::Draw(void)
       // Put'er there!  NOTE: ItoBKD is a real time macro containing
       // merely 2 dereferences, worst case.
       rspBlit(m_pimChip, ms_pimView, m_fX, m_fY);
-//		BLT_FItoBKD(m_pimChip, ms_pimView, (short)m_fX, (short)m_fY);
+//      BLT_FItoBKD(m_pimChip, ms_pimView, (short)m_fX, (short)m_fY);
    }
    else
    {
       // Otherwise, display a stack.
-      short	sHeight	= (short)(THICKNESS * (float)GetSize());
+      short sHeight   = (short)(THICKNESS * (float)GetSize());
 
       // The smallest stack should look like a stack.
       if (sHeight < 1)
@@ -242,7 +242,7 @@ void CChip::Draw(void)
 
       for (short s = 0; s < sHeight; s++)
       {
-//			BLT_FItoBKD(m_pimChip, ms_pimView, (short)m_fX, (short)m_fY - s);
+//         BLT_FItoBKD(m_pimChip, ms_pimView, (short)m_fX, (short)m_fY - s);
          rspBlit(m_pimChip, ms_pimView, m_fX, m_fY - s);
       }
    }
@@ -270,16 +270,16 @@ void CChip::Draw(void)
 //////////////////////////////////////////////////////////////////////
 void CChip::Critical(void)
 {
-   RQueue<CChip, MAX_CHIPS>	qChips;
+   RQueue<CChip, MAX_CHIPS>   qChips;
 
    // Step 1: Traverse the Z sorted list updating all chips and
    // adding those that change their Z position to a queue of chips
    // to be repositioned.
-   CChip*	pchip	= ms_slistChips.GetHead();
-   float	fOldZ;
+   CChip*   pchip   = ms_slistChips.GetHead();
+   float fOldZ;
    while (pchip != NULL)
    {
-      fOldZ	= pchip->m_fZ;
+      fOldZ   = pchip->m_fZ;
 
       // If not deleted during update . . .
       if (pchip->Update() == 0)
@@ -293,11 +293,11 @@ void CChip::Critical(void)
       }
 
       // Get the next chip to move.
-      pchip	= ms_slistChips.GetNext();
+      pchip   = ms_slistChips.GetNext();
    }
 
    // Step 2: Empty the queue resorting each chip.
-   pchip	= qChips.DeQ();
+   pchip   = qChips.DeQ();
    while (pchip != NULL)
    {
       // Reposition this chip in the sorted list since its Z position
@@ -308,7 +308,7 @@ void CChip::Critical(void)
    }
 
    // Step 3: Blt the chips in order.
-   pchip	= ms_slistChips.GetHead();
+   pchip   = ms_slistChips.GetHead();
    while (pchip != NULL)
    {
       pchip->Draw();
@@ -325,7 +325,7 @@ void CChip::Critical(void)
 //////////////////////////////////////////////////////////////////////
 void CChip::DeleteAll(void)
 {
-   CChip*	pchip	= ms_slistChips.GetHead();
+   CChip*   pchip   = ms_slistChips.GetHead();
 
    while (pchip != NULL)
    {
@@ -335,7 +335,7 @@ void CChip::DeleteAll(void)
       // Destructor pulls off of list.
       delete pchip;
 
-      pchip	= ms_slistChips.GetNext();
+      pchip   = ms_slistChips.GetNext();
    }
 }
 
@@ -347,18 +347,18 @@ void CChip::DeleteAll(void)
 //////////////////////////////////////////////////////////////////////
 short CChip::Stack(void)
 {
-   short	sDeleted	= 0;  // Assume normal ops.
+   short sDeleted   = 0;    // Assume normal ops.
 
    if (m_sStackable != FALSE)
    {
       // If we are near a chip that's not sliding . . .
-      CChip* pchip	= IsColliding(FALSE);
+      CChip* pchip   = IsColliding(FALSE);
       if (pchip != NULL)
       {
          // Add this chip/stack to that stack.
          pchip->Add(this);
 
-         sDeleted	= TRUE;
+         sDeleted   = TRUE;
 
          // It's important that we delete this chip and
          // add to the other as, if we are in one of
@@ -381,9 +381,9 @@ short CChip::Stack(void)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////
-short CChip::Add(CChip*	pchip)
+short CChip::Add(CChip*   pchip)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Take stack's size and add to this one's.
    m_sNumChips += pchip->GetSize();
@@ -399,13 +399,13 @@ short CChip::Add(CChip*	pchip)
 //////////////////////////////////////////////////////////////////////
 CChip* CChip::Sub(short sNum)
 {
-   CChip*	pchip	= NULL;  // Assume failure.
+   CChip*   pchip   = NULL;  // Assume failure.
 
    // If we have sNum to give up . . .
    if (sNum < GetSize())
    {
       // Create a new chip/stack for these.
-      pchip	= new CChip;
+      pchip   = new CChip;
       // Make it empty for now.
       pchip->SetSize(0);
    }
@@ -414,7 +414,7 @@ CChip* CChip::Sub(short sNum)
       if (sNum == GetSize())
       {
          // Use this chip.
-         pchip	= this;
+         pchip   = this;
       }
    }
 
@@ -445,17 +445,17 @@ CChip* CChip::Sub(short sNum)
 // the one with the greatest Y, is found.
 //
 //////////////////////////////////////////////////////////////////////
-CChip* CChip::IsColliding(short sTop /*	= FALSE*/)
+CChip* CChip::IsColliding(short sTop /*   = FALSE*/)
 {
-   CChip*	pchip	= NULL;           // Assume not found.
-   CChip*	pchipHighest	= NULL;  // If sTop is TRUE, this is used
+   CChip*   pchip   = NULL;           // Assume not found.
+   CChip*   pchipHighest   = NULL;  // If sTop is TRUE, this is used
                                     // to store the chip with the
                                     // lowest Y.
 
    for (short i = 0; i < 2 && (pchip == NULL || sTop == TRUE); i++)
    {
       // Search back from this one . . .
-      pchip	= (i == 0	? ms_slistChips.GetPrev(this)
+      pchip   = (i == 0   ? ms_slistChips.GetPrev(this)
                         : ms_slistChips.GetNext(this));
 
       while (pchip != NULL && pchip != this)
@@ -463,18 +463,18 @@ CChip* CChip::IsColliding(short sTop /*	= FALSE*/)
          // Is it outside the Z range?
          // NOTE: If this check stops the search, it can screw up in the
          // event that another chip has a different size.
-         if (	pchip->m_fZ + (float)pchip->m_pimChip->m_sHeight < m_fZ
-               ||	pchip->m_fZ > m_fZ + (float)m_pimChip->m_sHeight)
+         if (   pchip->m_fZ + (float)pchip->m_pimChip->m_sHeight < m_fZ
+                ||   pchip->m_fZ > m_fZ + (float)m_pimChip->m_sHeight)
          {
             // Outside.
-            pchip	= NULL;
+            pchip   = NULL;
          }
          else
          {
             // Is it outside the X range?
             // NOTE: this check has the same limitation as above.
-            if (	pchip->m_fX + pchip->m_pimChip->m_sWidth < m_fX
-                  ||	pchip->m_fX > m_fX + (float)m_pimChip->m_sWidth)
+            if (   pchip->m_fX + pchip->m_pimChip->m_sWidth < m_fX
+                   ||   pchip->m_fX > m_fX + (float)m_pimChip->m_sWidth)
             {
                // Outside.
             }
@@ -492,13 +492,13 @@ CChip* CChip::IsColliding(short sTop /*	= FALSE*/)
                   {
                      if (pchipHighest == NULL)
                      {
-                        pchipHighest	= pchip;
+                        pchipHighest   = pchip;
                      }
                      else
                      {
                         if (pchip->m_fY < pchipHighest->m_fY)
                         {
-                           pchipHighest	= pchip;
+                           pchipHighest   = pchip;
                         }
                      }
                   }
@@ -509,7 +509,7 @@ CChip* CChip::IsColliding(short sTop /*	= FALSE*/)
                }
             }
 
-            pchip = (i == 0	? ms_slistChips.GetPrev()
+            pchip = (i == 0   ? ms_slistChips.GetPrev()
                               : ms_slistChips.GetNext() );
          }
       }
@@ -534,13 +534,13 @@ CChip* CChip::IsColliding(short sTop /*	= FALSE*/)
 //////////////////////////////////////////////////////////////////////
 CChip* CChip::GetChipIn(S32 lX, S32 lY, S32 lW, S32 lH)
 {
-   CChip*	pchip	= ms_slistChips.GetHead();
+   CChip*   pchip   = ms_slistChips.GetHead();
    while (pchip != NULL)
    {
-      if (	(S32)pchip->m_fX < lX
-            ||	(S32)pchip->m_fX > lX + lW
-            || (S32)pchip->m_fY < lY
-            ||	(S32)pchip->m_fY > lY + lH)
+      if (   (S32)pchip->m_fX < lX
+             ||   (S32)pchip->m_fX > lX + lW
+             || (S32)pchip->m_fY < lY
+             ||   (S32)pchip->m_fY > lY + lH)
       {
          // No match.
          pchip = ms_slistChips.GetNext();
@@ -566,23 +566,23 @@ CChip* CChip::GetChipIn(S32 lX, S32 lY, S32 lW, S32 lH)
 //////////////////////////////////////////////////////////////////////
 void CChip::Init(void)
 {
-   m_fX		= 0.0F;
-   m_fY		= 0.0F;
-   m_fZ		= 0.0F;
+   m_fX      = 0.0F;
+   m_fY      = 0.0F;
+   m_fZ      = 0.0F;
 
-   m_sDestX	= 0;
-   m_sDestY	= 0;
-   m_sDestZ	= 0;
+   m_sDestX   = 0;
+   m_sDestY   = 0;
+   m_sDestZ   = 0;
 
-   m_sRate	= 0;
+   m_sRate   = 0;
 
-   m_pimChip	= NULL;
+   m_pimChip   = NULL;
 
-   m_sSliding	= FALSE;
+   m_sSliding   = FALSE;
 
-   m_sStackable	= TRUE;
+   m_sStackable   = TRUE;
 
-   m_sNumChips		= 1;
+   m_sNumChips      = 1;
 }
 
 //////////////////////////////////////////////////////////////////////

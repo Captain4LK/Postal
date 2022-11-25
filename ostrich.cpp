@@ -18,72 +18,72 @@
 // ostrich.cpp
 // Project: Postal
 //
-//	This module implements the ostrich.
+//   This module implements the ostrich.
 //
 // History:
 //
-//		05/09/97 BRH	Started the ostrich from the band member logic.
+//      05/09/97 BRH   Started the ostrich from the band member logic.
 //
-//		05/22/97 BRH	Render skips the Doofus render and goes right to the
-//							Character render since its not using the m_dAnimRot.
+//      05/22/97 BRH   Render skips the Doofus render and goes right to the
+//                     Character render since its not using the m_dAnimRot.
 //
-//		05/26/97 BRH	Changed the call to OnDead to the Doofus version
-//							rather than the Character version.
+//      05/26/97 BRH   Changed the call to OnDead to the Doofus version
+//                     rather than the Character version.
 //
-//		05/29/97	JMI	Changed instance of REALM_ATTR_FLOOR_MASK to
-//							REALM_ATTR_NOT_WALKABLE.
+//      05/29/97   JMI   Changed instance of REALM_ATTR_FLOOR_MASK to
+//                     REALM_ATTR_NOT_WALKABLE.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
-//							a shadow sprite.
+//      06/25/97   JMI   Now calls PrepareShadow() in Init() which loads and sets up
+//                     a shadow sprite.
 //
-//		06/30/97 MJR	Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
+//      06/30/97 MJR   Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
 //
-//		06/30/97 BRH	Cached the sound samples in static portion of Load
-//							function so that the sound effects will be ready
-//							whenever this item is used on a level.
+//      06/30/97 BRH   Cached the sound samples in static portion of Load
+//                     function so that the sound effects will be ready
+//                     whenever this item is used on a level.
 //
-//		07/01/97	JMI	Replaced GetFloorMapValue() with GetHeightAndNoWalk() call.
+//      07/01/97   JMI   Replaced GetFloorMapValue() with GetHeightAndNoWalk() call.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/12/97 BRH	Changed panic motion to the same as the base class, but
-//							it still didn't fix the problem of them going through the
-//							wall of the train car on the farm level.  Also increased
-//							their hit points, and made them not die in one shot.
+//      07/12/97 BRH   Changed panic motion to the same as the base class, but
+//                     it still didn't fix the problem of them going through the
+//                     wall of the train car on the farm level.  Also increased
+//                     their hit points, and made them not die in one shot.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/21/97 BRH	Changed the burning state so that the ostrich will burn
-//							S32er.
+//      07/21/97 BRH   Changed the burning state so that the ostrich will burn
+//                     S32er.
 //
-//		08/06/97 BRH	Changed smash bits to zero when dying starts so that things
-//							won't hit him as he falls slowly, and so you can shoot
-//							past him.  Also allows the shot animation restart when shot
-//							to get a little more reaction since his shot animation
-//							is so S32.
+//      08/06/97 BRH   Changed smash bits to zero when dying starts so that things
+//                     won't hit him as he falls slowly, and so you can shoot
+//                     past him.  Also allows the shot animation restart when shot
+//                     to get a little more reaction since his shot animation
+//                     is so S32.
 //
-//		08/10/97	JMI	Commented out the code that deleted all the sound things in
-//							a realm when the ostriches paniced.
+//      08/10/97   JMI   Commented out the code that deleted all the sound things in
+//                     a realm when the ostriches paniced.
 //
-//		08/12/97 BRH	Set the flag for victim rather than hostile so that
-//							the score will display the correct numbers of each
-//							type.
+//      08/12/97 BRH   Set the flag for victim rather than hostile so that
+//                     the score will display the correct numbers of each
+//                     type.
 //
-//		09/03/97	JMI	Replaced Good Smash bit with Civilian.
+//      09/03/97   JMI   Replaced Good Smash bit with Civilian.
 //
-//		09/03/97 BRH	Put in the real ostrich sounds.
+//      09/03/97 BRH   Put in the real ostrich sounds.
 //
-//		09/04/97 BRH	Added ostrich dying sound.
+//      09/04/97 BRH   Added ostrich dying sound.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define OSTRICH_CPP
@@ -103,15 +103,15 @@
 #define NUM_ELEMENTS(a) (sizeof(a) / sizeof(a[0]) )
 
 // Notification message lParm1's.
-#define BLOOD_POOL_DONE_NOTIFICATION	1  // Blood pool is done animating.
+#define BLOOD_POOL_DONE_NOTIFICATION   1  // Blood pool is done animating.
 
 // Random amount the blood splat can adjust.
-#define BLOOD_SPLAT_SWAY		10
+#define BLOOD_SPLAT_SWAY      10
 
 // Gets a random between -range / 2 and range / 2.
-#define RAND_SWAY(sway)	((GetRandom() % sway) - sway / 2)
+#define RAND_SWAY(sway)   ((GetRandom() % sway) - sway / 2)
 
-#define GUI_ID_OK						1
+#define GUI_ID_OK                  1
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -247,7 +247,7 @@ short COstrich::Load(               // Returns 0 if successfull, non-zero otherw
    short sResult = 0;
 
    // Call the base class load to get the instance ID, position, motion etc.
-   sResult	= CDoofus::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CDoofus::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load common data just once per file (not with each object)
@@ -344,7 +344,7 @@ short COstrich::Init(void)
    short sResult = 0;
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	= PrepareShadow();
+   sResult   = PrepareShadow();
 
    // Init position, rotation and velocity
    m_dVel = 0.0;
@@ -354,8 +354,8 @@ short COstrich::Init(void)
    m_lTimer = m_pRealm->m_time.GetGameTime() + 500;
    m_sBrightness = 0;   // Default brightness
 
-   m_smash.m_bits		= CSmash::Civilian | CSmash::Character;
-   m_smash.m_pThing	= this;
+   m_smash.m_bits      = CSmash::Civilian | CSmash::Character;
+   m_smash.m_pThing   = this;
 
    m_lAnimTime = 0;
    m_panimCur = &m_animStand;
@@ -421,7 +421,7 @@ void COstrich::Update(void)
 
 //-----------------------------------------------------------------------
 // Stand or Hide - Either one waits in the current position for the
-//						 random timer to expire.
+//                   random timer to expire.
 //-----------------------------------------------------------------------
 
       case State_Stand:
@@ -451,9 +451,9 @@ void COstrich::Update(void)
             {
                // Update Values /////////////////////////////////////////////////////////
 
-               m_dX	= dNewX;
-               m_dY	= dNewY;
-               m_dZ	= dNewZ;
+               m_dX   = dNewX;
+               m_dY   = dNewY;
+               m_dZ   = dNewZ;
 
                UpdateFirePosition();
             }
@@ -461,7 +461,7 @@ void COstrich::Update(void)
             {
                // Restore Values ////////////////////////////////////////////////////////
 
-               m_dVel			-= m_dDeltaVel;
+               m_dVel         -= m_dDeltaVel;
             }
 
             // If he didn't move at all, then turn him so he will
@@ -481,7 +481,7 @@ void COstrich::Update(void)
 
 //-----------------------------------------------------------------------
 // Panic - Pick a random bouy and run to it.  When you are there, pick
-//			  a different random bouy and run to it.
+//           a different random bouy and run to it.
 //-----------------------------------------------------------------------
 
       case State_Panic:
@@ -491,38 +491,38 @@ void COstrich::Update(void)
          DeluxeUpdatePosVel(dSeconds);
 /*
 
-				m_dAcc = ms_dAccUser;
-				UpdateVelocities(dSeconds, ms_dMaxRunVel, ms_dMaxRunVel);
-				GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
+            m_dAcc = ms_dAccUser;
+            UpdateVelocities(dSeconds, ms_dMaxRunVel, ms_dMaxRunVel);
+            GetNewPosition(&dNewX, &dNewY, &dNewZ, dSeconds);
 
-				// Get height and 'no walk' status at new position.
-				bool		bNoWalk;
-				sHeight	= m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
+            // Get height and 'no walk' status at new position.
+            bool      bNoWalk;
+            sHeight   = m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
 
-				// If too big a height difference or completely not walkable . . .
-				if (bNoWalk == true
-					|| (sHeight - dNewY > 10) )// && m_bAboveTerrain == false && m_dExtHorzVel == 0.0))
-				{
-					TRACE("****** - loose ostrish\n");
-				// Move like smoke
-				}
+            // If too big a height difference or completely not walkable . . .
+            if (bNoWalk == true
+               || (sHeight - dNewY > 10) )// && m_bAboveTerrain == false && m_dExtHorzVel == 0.0))
+            {
+               TRACE("****** - loose ostrish\n");
+            // Move like smoke
+            }
 
-				if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, 10) == true)
-				{
-				// Update Values /////////////////////////////////////////////////////////
+            if (MakeValidPosition(&dNewX, &dNewY, &dNewZ, 10) == true)
+            {
+            // Update Values /////////////////////////////////////////////////////////
 
-					m_dX	= dNewX;
-					m_dY	= dNewY;
-					m_dZ	= dNewZ;
+               m_dX   = dNewX;
+               m_dY   = dNewY;
+               m_dZ   = dNewZ;
 
-					UpdateFirePosition();
-				}
-				else
-				{
-				// Restore Values ////////////////////////////////////////////////////////
+               UpdateFirePosition();
+            }
+            else
+            {
+            // Restore Values ////////////////////////////////////////////////////////
 
-					m_dVel			-= m_dDeltaVel;
-				}
+               m_dVel         -= m_dDeltaVel;
+            }
 */
          // If he didn't move at all, then turn him so he will
          // avoid the wall
@@ -623,12 +623,12 @@ void COstrich::Update(void)
 
       }
 
-      m_smash.m_sphere.sphere.X			= m_dX;
+      m_smash.m_sphere.sphere.X         = m_dX;
       // Fudge center of sphere as half way up the dude.
       // Doesn't work if dude's feet leave the origin.
-      m_smash.m_sphere.sphere.Y			= m_dY + m_sprite.m_sRadius;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Y         = m_dY + m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -671,7 +671,7 @@ short COstrich::EditNew(                           // Returns 0 if successfull, 
       sResult = GetResources();
       if (sResult == SUCCESS)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
 
@@ -780,7 +780,7 @@ short COstrich::FreeResources(void)                // Returns 0 if successfull, 
 void COstrich::ProcessMessages(void)
 {
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       ProcessMessage(&msg);
@@ -812,7 +812,7 @@ void COstrich::OnShotMsg(Shot_Message* pMessage)
    m_stockpile.m_sHitPoints -= pMessage->sDamage;
 
    if (m_state != State_BlownUp &&
-//	    m_state != State_Shot &&
+//       m_state != State_Shot &&
        m_state != State_Die &&
        m_state != State_Dead)
    {
@@ -847,7 +847,7 @@ void COstrich::OnExplosionMsg(Explosion_Message* pMessage)
 
       // Explosion kills the guy
       m_stockpile.m_sHitPoints = 0;
-//		m_dExtVertVel = ms_dExplosionVelocity;
+//      m_dExtVertVel = ms_dExplosionVelocity;
       m_state = State_BlownUp;
       m_lAnimTime = 0;
       m_panimCur = &m_animBlownup;
@@ -910,13 +910,13 @@ void COstrich::OnPanicMsg(Panic_Message* pMessage)
 
 void COstrich::AlertFlock(void)
 {
-//	CThing::Things::iterator iNext;
+//   CThing::Things::iterator iNext;
    CThing* pThing;
    GameMessage msg;
-//	GameMessage msgStopSound;
+//   GameMessage msgStopSound;
 
-//	msgStopSound.msg_ObjectDelete.eType = typeObjectDelete;
-//	msgStopSound.msg_ObjectDelete.sPriority = 0;
+//   msgStopSound.msg_ObjectDelete.eType = typeObjectDelete;
+//   msgStopSound.msg_ObjectDelete.sPriority = 0;
 
    msg.msg_Panic.eType = typePanic;
    msg.msg_Panic.sPriority = 0;
@@ -930,8 +930,8 @@ void COstrich::AlertFlock(void)
       pThing = pNext->m_powner;
       if (pThing->GetClassID() == COstrichID && pThing != this)
          SendThingMessage(&msg, pThing);
-//		else if (pThing->GetClassID() == CSoundThingID)
-//			SendThingMessage(&msgStopSound, pThing);
+//      else if (pThing->GetClassID() == CSoundThingID)
+//         SendThingMessage(&msgStopSound, pThing);
       pNext = pNext->m_pnNext;
    }
 }

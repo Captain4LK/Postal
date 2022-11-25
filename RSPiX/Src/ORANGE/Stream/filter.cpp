@@ -20,11 +20,11 @@
 // Filter.CPP
 //
 // History:
-//		09/20/95 JMI	Started.
+//      09/20/95 JMI   Started.
 //
-//		09/21/95	JMI	Moved the feature that concatenates buffers into one
-//							chunk before calling the user func from CDispatch to
-//							here to ease suffering.
+//      09/21/95   JMI   Moved the feature that concatenates buffers into one
+//                     chunk before calling the user func from CDispatch to
+//                     here to ease suffering.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -39,7 +39,7 @@
 // ALLOC_FILTERFUNC is provided).  By not managing the data allocation, we
 // allow the user ultimate flexibility in how their data is stored.
 //
-// IMPORTANT:	If you provide an ALLOC_FILTERFUNC, you SHOULD provide a
+// IMPORTANT:   If you provide an ALLOC_FILTERFUNC, you SHOULD provide a
 // FREE_FILTERFUNC to deallocate a buffer.  This module will attempt to free
 // data if an error occurs causing a buffer to become only partially filled.
 // If no ALLOC_FILTERFUNC is provided, it will use free (since it allocated
@@ -81,13 +81,13 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
-#define HEADERSIZE		(sizeof(UCHAR)    /* Channel		*/ \
-                         + sizeof(UCHAR)  /* Flags			*/ \
-                         + sizeof(USHORT) /* Type			*/ \
-                         + sizeof(S32)    /* ID				*/ \
-                         + sizeof(S32)    /* Buffer size	*/ \
-                         + sizeof(S32)    /* Chunk size	*/ \
-                         + sizeof(S32)) /* Time stamp	*/
+#define HEADERSIZE      (sizeof(UCHAR)    /* Channel      */ \
+                         + sizeof(UCHAR)  /* Flags         */ \
+                         + sizeof(USHORT) /* Type         */ \
+                         + sizeof(S32)    /* ID            */ \
+                         + sizeof(S32)    /* Buffer size   */ \
+                         + sizeof(S32)    /* Chunk size   */ \
+                         + sizeof(S32)) /* Time stamp   */
 
 //#define ALIGNTO(n,a)   (((n) + ((a)-1)) & ~((a)-1))
 #define ALIGNTO(n, a)   ((((n) + ((a) - 1)) / (a)) * (a))
@@ -136,17 +136,17 @@ CFilter::~CFilter()
 //////////////////////////////////////////////////////////////////////////////
 void CFilter::Set(void)
 {
-   m_fnAlloc				= NULL;
-   m_fnFree					= NULL;
-   m_fnUse					= NULL;
+   m_fnAlloc            = NULL;
+   m_fnFree               = NULL;
+   m_fnUse               = NULL;
 
-   m_ulFilter				= 0;
+   m_ulFilter            = 0;
 
-   m_lPadSize				= 0L;
-   m_lBufRemaining		= 0L;
-   m_pChunk					= NULL;
+   m_lPadSize            = 0L;
+   m_lBufRemaining      = 0L;
+   m_pChunk               = NULL;
 
-   m_pfw						= NULL;
+   m_pfw                  = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -159,14 +159,14 @@ void CFilter::Reset(void)
    if (m_listPartial.IsEmpty() == FALSE)
    {
       TRACE("Reset(): There are partial buffers.  Deallocating.\n");
-      PRTCHUNK	pChunk	= m_listPartial.GetHead();
+      PRTCHUNK pChunk   = m_listPartial.GetHead();
       while (pChunk != NULL)
       {
          FreeChunk(pChunk->puc, pChunk->usType, pChunk->ucFlags);
 
          RemoveChunk(pChunk);
 
-         pChunk	= m_listPartial.GetNext();
+         pChunk   = m_listPartial.GetNext();
       }
    }
 
@@ -179,22 +179,22 @@ void CFilter::Reset(void)
 // the filter (and are not global).  This function is very dependent on both
 // the panes and the chunks being HEADERSIZE byte aligned.
 // This function deals with TWO types of fragmentation:
-//	1) File window pane fragmentation:
-//		The current buffer may span past the current pane (lBufSize is the size
-//		of the buffer, lTotalBufSize is the size of the buffer plus padding).
+//   1) File window pane fragmentation:
+//      The current buffer may span past the current pane (lBufSize is the size
+//      of the buffer, lTotalBufSize is the size of the buffer plus padding).
 //
-//	2) Chunk fragmentation:
-//		The current buffer may be one of many buffers that make up the total
-//		chunk (lChunkSize is the size of the chunk).
+//   2) Chunk fragmentation:
+//      The current buffer may be one of many buffers that make up the total
+//      chunk (lChunkSize is the size of the chunk).
 //
 //////////////////////////////////////////////////////////////////////////////
 void CFilter::WinCall(PPANE ppane)
 {
-   short	sError	= 0;
+   short sError   = 0;
 
-   ASSERT(ppane->lSize		>= 0);
+   ASSERT(ppane->lSize      >= 0);
    // MUST be 4 byte aligned.
-   ASSERT(ppane->lSize % HEADERSIZE	== 0);
+   ASSERT(ppane->lSize % HEADERSIZE   == 0);
 
    if (ppane->lSize > 0L)
    {
@@ -202,9 +202,9 @@ void CFilter::WinCall(PPANE ppane)
       CNFile file;
       if (file.Open(ppane->puc, ppane->lSize, ENDIAN_BIG) == 0)
       {
-         UCHAR	ucChannel;
+         UCHAR ucChannel;
          USHORT usType;
-         UCHAR	ucFlags;
+         UCHAR ucFlags;
          S32 lId;
          S32 lBufSize;
          S32 lChunkSize;
@@ -243,7 +243,7 @@ void CFilter::WinCall(PPANE ppane)
                }
                else
                {
-                  lAmt	= MIN(m_lBufRemaining, ppane->lSize - file.Tell());
+                  lAmt   = MIN(m_lBufRemaining, ppane->lSize - file.Tell());
                   // Seek past.
                   if (file.Seek(lAmt, SEEK_CUR) == 0)
                   {
@@ -269,17 +269,17 @@ void CFilter::WinCall(PPANE ppane)
                if (file.Read(&lTime) == 1L)
                {
                   // Must be aligned to header size.
-                  m_lPadSize			= ALIGNTO(lBufSize, HEADERSIZE) - lBufSize;
-                  m_lBufRemaining	= lBufSize;
+                  m_lPadSize         = ALIGNTO(lBufSize, HEADERSIZE) - lBufSize;
+                  m_lBufRemaining   = lBufSize;
 
                   // If w/i mask or global . . .
                   if (ucChannel == 0 || ((1L << (ucChannel - 1)) & m_ulFilter) )
                   {
-                     m_pChunk	= GetChunk(lId);
+                     m_pChunk   = GetChunk(lId);
                      // If no such chunk . . .
                      if (m_pChunk == NULL)
                      {
-                        m_pChunk	= AddChunk(lChunkSize, usType, ucFlags, lId, lTime);
+                        m_pChunk   = AddChunk(lChunkSize, usType, ucFlags, lId, lTime);
                         if (m_pChunk != NULL)
                         {
                            // Success.
@@ -296,16 +296,16 @@ void CFilter::WinCall(PPANE ppane)
                   else
                   {
                      // Skip chunk.
-                     m_pChunk	= NULL;
+                     m_pChunk   = NULL;
                   }
 
                   // If chunk is to be skipped . . .
                   if (m_pChunk == NULL)
                   {
                      // Lump the padding in with the amount to be skipped.
-                     m_lBufRemaining	+= m_lPadSize;
+                     m_lBufRemaining   += m_lPadSize;
                      // Clear pad size.
-                     m_lPadSize			= 0L;
+                     m_lPadSize         = 0L;
                   }
                }
                else
@@ -321,7 +321,7 @@ void CFilter::WinCall(PPANE ppane)
       else
       {
          TRACE("WinCall(): Error opening memory file.\n");
-         sError	= 1;
+         sError   = 1;
       }
    }
 
@@ -353,7 +353,7 @@ void CFilter::WinCallStatic(PPANE ppane, CFilter* pFilter)
 //////////////////////////////////////////////////////////////////////////////
 PRTCHUNK CFilter::GetChunk(S32 lId)
 {
-   PRTCHUNK	pChunk	= m_listPartial.GetHead();
+   PRTCHUNK pChunk   = m_listPartial.GetHead();
 
    while (pChunk != NULL)
    {
@@ -377,8 +377,8 @@ PRTCHUNK CFilter::GetChunk(S32 lId)
 PRTCHUNK CFilter::AddChunk(S32 lSize, USHORT usType, UCHAR ucFlags, S32 lId,
                            S32 lTime)
 {
-   short	sError	= 0;
-   PRTCHUNK	pChunk	= NULL;
+   short sError   = 0;
+   PRTCHUNK pChunk   = NULL;
 
    // Attempt to allocate chunk . . .
    UCHAR* puc;
@@ -391,13 +391,13 @@ PRTCHUNK CFilter::AddChunk(S32 lSize, USHORT usType, UCHAR ucFlags, S32 lId,
          if (pChunk != NULL)
          {
             // Set fields.
-            pChunk->puc			= puc;
-            pChunk->lPos		= 0L;
-            pChunk->lSize		= lSize;
-            pChunk->usType		= usType;
-            pChunk->ucFlags	= ucFlags;
-            pChunk->lId			= lId;
-            pChunk->lTime		= lTime;
+            pChunk->puc         = puc;
+            pChunk->lPos      = 0L;
+            pChunk->lSize      = lSize;
+            pChunk->usType      = usType;
+            pChunk->ucFlags   = ucFlags;
+            pChunk->lId         = lId;
+            pChunk->lTime      = lTime;
 
             // Add to list.
             if (m_listPartial.Add(pChunk) == 0)
@@ -445,7 +445,7 @@ PRTCHUNK CFilter::AddChunk(S32 lSize, USHORT usType, UCHAR ucFlags, S32 lId,
 //////////////////////////////////////////////////////////////////////////////
 short CFilter::RemoveChunk(PRTCHUNK pChunk)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (m_listPartial.Remove(pChunk) == 0)
    {
@@ -468,14 +468,14 @@ short CFilter::RemoveChunk(PRTCHUNK pChunk)
 // Returns amount added.
 //
 //////////////////////////////////////////////////////////////////////////////
-S32 CFilter::AddToChunk(	CNFile*	pfile,      // File pointer.
+S32 CFilter::AddToChunk(   CNFile*   pfile,      // File pointer.
                            S32 lBufSize)        // Size of piece to add.
 {
    S32 lRes  = 0;
 
-   ASSERT(m_pChunk			!= NULL);
+   ASSERT(m_pChunk         != NULL);
 
-   lRes	= pfile->Read(m_pChunk->puc + m_pChunk->lPos, lBufSize);
+   lRes   = pfile->Read(m_pChunk->puc + m_pChunk->lPos, lBufSize);
 
    // Move to next position.
    m_pChunk->lPos += lRes;
@@ -489,8 +489,8 @@ S32 CFilter::AddToChunk(	CNFile*	pfile,      // File pointer.
       // Call user callback.
       ASSERT(m_fnUse != NULL)
 
-         (*m_fnUse)(	m_pChunk->puc, m_pChunk->lSize, m_pChunk->usType,
-                     m_pChunk->ucFlags, m_pChunk->lTime, m_lUser);
+         (*m_fnUse)(   m_pChunk->puc, m_pChunk->lSize, m_pChunk->usType,
+                       m_pChunk->ucFlags, m_pChunk->lTime, m_lUser);
 
       // Remove chunk header from the list.
       if (RemoveChunk(m_pChunk) != 0)
@@ -512,10 +512,10 @@ S32 CFilter::AddToChunk(	CNFile*	pfile,      // File pointer.
 // If this gets a malloc failure, that is considered an error.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CFilter::AllocChunk(	UCHAR** ppuc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags)
+short CFilter::AllocChunk(   UCHAR** ppuc, S32 lSize, USHORT usType,
+                             UCHAR ucFlags)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (m_fnAlloc != NULL)
    {

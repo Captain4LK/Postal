@@ -17,14 +17,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	UnixSystem.h
+//   UnixSystem.h
 //
 // History:
-//		06/01/04 RCG    Added.
+//      06/01/04 RCG    Added.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	This file provides typedefs, macros, pragmas, etc. for Unix systems.
+//   This file provides typedefs, macros, pragmas, etc. for Unix systems.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef UNIXSYSTEM_H
@@ -94,12 +94,12 @@ typedef char *PSZ;
 
 // The world's most specific types < S | U > < # >
 // S == signed, U == unsigned, # == number of bits
-//typedef signed		char		S8;
-//typedef unsigned	char		U8;
-//typedef signed		short		S16;
-//typedef unsigned	short		U16;
-//typedef signed		S32		S32;
-//typedef unsigned	S32		U32;
+//typedef signed      char      S8;
+//typedef unsigned   char      U8;
+//typedef signed      short      S16;
+//typedef unsigned   short      U16;
+//typedef signed      S32      S32;
+//typedef unsigned   S32      U32;
 //typedef signed S32 S32 S64;
 //typedef U32 S32 U64;
 typedef int8_t S8;
@@ -123,7 +123,7 @@ typedef struct
    U64 lo;
    U64 hi;
 } U128;
-   #else	// defined(SYS_ENDIAN_BIG)
+   #else   // defined(SYS_ENDIAN_BIG)
 
 typedef struct
 {
@@ -139,18 +139,18 @@ typedef struct
 
 
 // Ranges for basic RSPiX types
-/*#define	S8_MIN	((S8) 0x80)
-	#define	S8_MAX	((S8) 0x7F)
-	#define	U8_MIN	((U8) 0x0)
-	#define	U8_MAX	((U8) 0xFF)
-	#define	S16_MIN	((S16) 0x8000)
-	#define	S16_MAX	((S16) 0x7FFF)
-	#define	U16_MIN	((U16) 0x0)
-	#define	U16_MAX	((U16) 0xFFFF)
-	#define	S32_MIN	((S32) 0x80000000L)
-	#define	S32_MAX	((S32) 0x7FFFFFFFL)
-	#define	U32_MIN	((U32) 0x0)
-	#define	U32_MAX	((U32) 0xFFFFFFFFUL)*/
+/*#define   S8_MIN   ((S8) 0x80)
+   #define   S8_MAX   ((S8) 0x7F)
+   #define   U8_MIN   ((U8) 0x0)
+   #define   U8_MAX   ((U8) 0xFF)
+   #define   S16_MIN   ((S16) 0x8000)
+   #define   S16_MAX   ((S16) 0x7FFF)
+   #define   U16_MIN   ((U16) 0x0)
+   #define   U16_MAX   ((U16) 0xFFFF)
+   #define   S32_MIN   ((S32) 0x80000000L)
+   #define   S32_MAX   ((S32) 0x7FFFFFFFL)
+   #define   U32_MIN   ((U32) 0x0)
+   #define   U32_MAX   ((U32) 0xFFFFFFFFUL)*/
    #define S8_MIN INT8_MIN
    #define U8_MIN 0
    #define S8_MAX INT8_MAX
@@ -169,16 +169,16 @@ typedef U8 RPixel;
 typedef U16 RPixel16;
 typedef struct
 {
-   U8	u8Red;
-   U8	u8Green;
-   U8	u8Blue;
+   U8 u8Red;
+   U8 u8Green;
+   U8 u8Blue;
 } RPixel24;
 typedef struct
 {
-   U8	u8Alpha;
-   U8	u8Red;
-   U8	u8Green;
-   U8	u8Blue;
+   U8 u8Alpha;
+   U8 u8Red;
+   U8 u8Green;
+   U8 u8Blue;
 } RPixel32;
 inline bool operator==(const RPixel24& lhs, const RPixel24& rhs)
 { return ((lhs.u8Blue == rhs.u8Blue) && (lhs.u8Green == rhs.u8Green) && (lhs.u8Red == rhs.u8Red)) ? true : false; }
@@ -192,23 +192,23 @@ inline bool operator==(const RPixel32& lhs, const RPixel32& rhs)
 // Handy macros.
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef TRUE
-#define TRUE	1
+#define TRUE   1
 #endif
 
 #ifndef FALSE
-#define FALSE	0
+#define FALSE   0
 #endif
 
 #ifndef NULL
-#define NULL	0
+#define NULL   0
 #endif
 
 #ifndef SUCCESS
-#define SUCCESS	0
+#define SUCCESS   0
 #endif
 
 #ifndef FAILURE
-#define FAILURE	-1
+#define FAILURE   -1
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////

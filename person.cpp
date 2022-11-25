@@ -19,247 +19,247 @@
 // Project: Postal
 //
 // This module implements the CPerson class which is mostly a test object
-//	the the most basic functionality of the enemy guys derrived from CDoofus.
+//   the the most basic functionality of the enemy guys derrived from CDoofus.
 //
 // History:
 //
-//		04/28/97 BRH	Started this person to be the generic Enemy/Victim
-//							that will use the structures set up in
-//							Personatorium to determine the abilities and
-//							desired logic.
+//      04/28/97 BRH   Started this person to be the generic Enemy/Victim
+//                     that will use the structures set up in
+//                     Personatorium to determine the abilities and
+//                     desired logic.
 //
-//		04/30/97 BRH	Fixed up the EditModify dialog box to select any type
-//							of personality and any type of weapon.  Modified the
-//							Update to shoot any weapon.
+//      04/30/97 BRH   Fixed up the EditModify dialog box to select any type
+//                     of personality and any type of weapon.  Modified the
+//                     Update to shoot any weapon.
 //
-//		05/11/97 BRH	Imported the Update function from CDoofus.  CDoofus will
-//							most likely make its Update funciton pure virtual so that
-//							it is up to the derived classes to move from state to
-//							state.
+//      05/11/97 BRH   Imported the Update function from CDoofus.  CDoofus will
+//                     most likely make its Update funciton pure virtual so that
+//                     it is up to the derived classes to move from state to
+//                     state.
 //
-//		05/12/97 BRH	Added the crawling special case for the Cop and Gunner in
-//							Logic_Writhing.  Added the logic for the circle fight
-//							and retreat in CDoofus.
+//      05/12/97 BRH   Added the crawling special case for the Cop and Gunner in
+//                     Logic_Writhing.  Added the logic for the circle fight
+//                     and retreat in CDoofus.
 //
-//		05/19/97	JMI	Added ms_u16IdLogAI and EditModify() code to check and
-//							change it.
+//      05/19/97   JMI   Added ms_u16IdLogAI and EditModify() code to check and
+//                     change it.
 //
-//		05/19/97	JMI	Added m_szLogicFile, m_sShowState, and Render() override.
-//							Can change m_szLogicFile and m_sShowState in EditModify().
+//      05/19/97   JMI   Added m_szLogicFile, m_sShowState, and Render() override.
+//                     Can change m_szLogicFile and m_sShowState in EditModify().
 //
-//		05/19/97 BRH	Saved the m_sShowState variable so that it works during
-//							play mode.  Changed the name of the logic file to an
-//							RString and added the RString load and save to the
-//							CPerson load and save functions.
+//      05/19/97 BRH   Saved the m_sShowState variable so that it works during
+//                     play mode.  Changed the name of the logic file to an
+//                     RString and added the RString load and save to the
+//                     CPerson load and save functions.
 //
-//		05/20/97 BRH	Making the high level actions more concrete by adding
-//							Actions as a higher level concept than the states.  Each
-//							action may consist of several pre-programmed state
-//							sequences.  At good evaluation points in each action,
-//							it will check the suggested logic action and change states
-//							to perform that action.
+//      05/20/97 BRH   Making the high level actions more concrete by adding
+//                     Actions as a higher level concept than the states.  Each
+//                     action may consist of several pre-programmed state
+//                     sequences.  At good evaluation points in each action,
+//                     it will check the suggested logic action and change states
+//                     to perform that action.
 //
-//		05/21/97 BRH	Added Resource management for ShootRun animation.
+//      05/21/97 BRH   Added Resource management for ShootRun animation.
 //
-//		05/22/97	JMI	FreeResources() was releasing m_pLogicTable in g_resmgrGame
-//							instead of g_resmgrRes (which is where it was
-//							rspGetResource'ed from).
+//      05/22/97   JMI   FreeResources() was releasing m_pLogicTable in g_resmgrGame
+//                     instead of g_resmgrRes (which is where it was
+//                     rspGetResource'ed from).
 //
-//		05/23/97	JMI	Added NULLs for new pszEventName parameter to
-//							CAnim3D::Get()s indicating to load no events.
+//      05/23/97   JMI   Added NULLs for new pszEventName parameter to
+//                     CAnim3D::Get()s indicating to load no events.
 //
-//		05/25/97 BRH	Added Release calls for the new animations.
+//      05/25/97 BRH   Added Release calls for the new animations.
 //
-//		05/25/97	JMI	Changed "Personality.GUI" to "Person.GUI".
+//      05/25/97   JMI   Changed "Personality.GUI" to "Person.GUI".
 //
-//		05/26/97 BRH	Calls CDoofus::OnDead rather than the CCharacter version.
+//      05/26/97 BRH   Calls CDoofus::OnDead rather than the CCharacter version.
 //
-//		06/02/97 BRH	Added case for State_HuntHold.
+//      06/02/97 BRH   Added case for State_HuntHold.
 //
-//		06/04/97 BRH	Fixed Writing crawl to use the m_AnimRot so that it faces
-//							the correct direction.
+//      06/04/97 BRH   Fixed Writing crawl to use the m_AnimRot so that it faces
+//                     the correct direction.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/10/97 BRH	Sends Death certificate to CDemon.
+//      06/10/97 BRH   Sends Death certificate to CDemon.
 //
-//		06/10/97 BRH	Added Search and Crouch animations to Get and Free Resources
+//      06/10/97 BRH   Added Search and Crouch animations to Get and Free Resources
 //
-//		06/13/97	JMI	Now GetResources() loads events for animations that need
-//							them.
+//      06/13/97   JMI   Now GetResources() loads events for animations that need
+//                     them.
 //
-//		06/15/97 BRH	Adjusted the time and comment count so people don't
-//							speak as often.
+//      06/15/97 BRH   Adjusted the time and comment count so people don't
+//                     speak as often.
 //
-//		06/16/97 BRH	Tried Aborting any shot sounds if it wasn't done playing.
-//							If it doesn sound good, then we will just verify that
-//							the previous sample is done before playing the next one.
-//							We were thinking that it may sound cool if he interrupted
-//							"My leg" before saying "Ug".
+//      06/16/97 BRH   Tried Aborting any shot sounds if it wasn't done playing.
+//                     If it doesn sound good, then we will just verify that
+//                     the previous sample is done before playing the next one.
+//                     We were thinking that it may sound cool if he interrupted
+//                     "My leg" before saying "Ug".
 //
-//		06/16/97 BRH	Switched to IsSamplePlaying rather than aborting, because
-//							the phrases were rarely finished before aborting so you
-//							never got to hear them if you kept shooting.
+//      06/16/97 BRH   Switched to IsSamplePlaying rather than aborting, because
+//                     the phrases were rarely finished before aborting so you
+//                     never got to hear them if you kept shooting.
 //
-//		06/17/97 BRH	Took out IsSamplePlaying because it screws up the network
-//							mode because the Sample can play for different intervals
-//							on different systems.
+//      06/17/97 BRH   Took out IsSamplePlaying because it screws up the network
+//                     mode because the Sample can play for different intervals
+//                     on different systems.
 //
-//		06/18/97 BRH	Enabled the Shooting sounds.
+//      06/18/97 BRH   Enabled the Shooting sounds.
 //
-//		06/18/97	JMI	Changed PlaySoundWrithing() to return the duration of the
-//							played sample.
+//      06/18/97   JMI   Changed PlaySoundWrithing() to return the duration of the
+//                     played sample.
 //
-//		06/18/97 BRH	Changed to using GetRandom();
+//      06/18/97 BRH   Changed to using GetRandom();
 //
-//		06/18/97	JMI	Now uses the sample duration returned from PlaySample()
-//							instead of getting it from the RSnd.
+//      06/18/97   JMI   Now uses the sample duration returned from PlaySample()
+//                     instead of getting it from the RSnd.
 //
-//		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
-//							a shadow sprite.
+//      06/25/97   JMI   Now calls PrepareShadow() in Init() which loads and sets up
+//                     a shadow sprite.
 //
-//		06/27/97	JMI	Now shows weapon type when in edit mode via EditRender().
+//      06/27/97   JMI   Now shows weapon type when in edit mode via EditRender().
 //
-//		06/30/97 BRH	Changed the random type sounds to play and then purge to
-//							save memory.  Cached the other sound effects during the
-//							load for each different person type loaded so that their
-//							sounds won't pause the game when they are first shot,
-//							set on fire, etc.
-//
-//		07/03/97	JMI	Converted calls to rspOpen/SaveBox() to new parm
-//							conventions.
-//
-//		07/04/97 BRH	Changed run and shoot prefix from run45rt to 45rt to
-//							match the exported names.  Also added a substitution of
-//							the run animation if there is no onfire animation since
-//							the victims don't yet have an onfire animaiton.
-//
-//		07/06/97 BRH	Added new victim states to the Update function.
-//
-//		07/08/97 BRH	Changed run backwards animation name to runbackwr since
-//							some of the filenames were too S32 for the delicate
-//							MacOS.
-//
-//		07/17/97 BRH	Added delay shoot case in update.
-//
-//		07/17/97	JMI	Changed RSnd*'s to SampleMaster::SoundInstances.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
-//
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
-//
-//		07/21/97	JMI	Now Update() calls CCharacter version (note that this is
-//							skipping CDoofus::Update() ).
-//
-//		07/23/97 BRH	Checks for a live dude before making a random comment so
-//							that they don't say stupid things after the CDude is dead.
+//      06/30/97 BRH   Changed the random type sounds to play and then purge to
+//                     save memory.  Cached the other sound effects during the
+//                     load for each different person type loaded so that their
+//                     sounds won't pause the game when they are first shot,
+//                     set on fire, etc.
+//
+//      07/03/97   JMI   Converted calls to rspOpen/SaveBox() to new parm
+//                     conventions.
+//
+//      07/04/97 BRH   Changed run and shoot prefix from run45rt to 45rt to
+//                     match the exported names.  Also added a substitution of
+//                     the run animation if there is no onfire animation since
+//                     the victims don't yet have an onfire animaiton.
+//
+//      07/06/97 BRH   Added new victim states to the Update function.
+//
+//      07/08/97 BRH   Changed run backwards animation name to runbackwr since
+//                     some of the filenames were too S32 for the delicate
+//                     MacOS.
+//
+//      07/17/97 BRH   Added delay shoot case in update.
+//
+//      07/17/97   JMI   Changed RSnd*'s to SampleMaster::SoundInstances.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
+//
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
+//
+//      07/21/97   JMI   Now Update() calls CCharacter version (note that this is
+//                     skipping CDoofus::Update() ).
+//
+//      07/23/97 BRH   Checks for a live dude before making a random comment so
+//                     that they don't say stupid things after the CDude is dead.
 //
-//		07/26/97 BRH	Changed the initial setting of hit points from the CThing3D
-//							default value to using the new value in the personatorium.
-//
-//		08/01/97 BRH	Enemies now upgrade their weapons if the game is set
-//							on difficulty 11.  Guns are upgraded to Assault Weapons
-//							and rockets are upgraded to heatseekers.  Also added
-//							case for State_AvoidFire and State_DangerNear.
-//
-//		08/06/97	JMI	Now loads execution target points for writhing mode.
-//							Also, now uses CDoofus's PositionSmash() for positioning
-//							the main smash.
-//
-//		08/07/97	JMI	Now loads new resname gotten from Personatorium for the
-//							linkpoint/rigid-body for the person's hand.
-//							Now calls CDoofus' GetResources()/ReleaseResources() to
-//							get and release resources for weapons.
-//
-//		08/08/97	JMI	Now does not display the mines in the EditModify().
-//
-//		08/08/97	JMI	Upgraded to use all the new weapons.
-//							Now does the weapon upgrade for difficulty 11 in only
-//							when editing flag is set to false in the realm so it does
-//							not occur in the editor.
-//
-//		08/09/97 BRH	Added TRACE message for invalid state type - so if it
-//							it happens sgain where a state is not accounted for in
-//							the Update switch statement, it will print the number
-//							and them attempt to print the description of the state
-//							for debugging purposes.
-//
-//		08/10/97 BRH	Fixed problem with executions when people yelled
-//							things like ah my leg when they were being executed.
-//							Changed this to a generic grunt that should work
-//							for all people.
-//
-//		08/11/97	JMI	Now sets backup weapon type based on personatorium.
-//							Also, added case for State_WalkNext to Update()'s logic
-//							switch.
-//
-//		08/12/97	JMI	Now loads main event for all animations.
-//
-//		08/12/97 BRH	Added missing case statement for Hide and HideBegin.
-//							Also upped the number of random comments for the victims
-//							(the ones in panic mode so that they will scream and
-//							yell more often when in panic mode).  Also added
-//							special case for shot sound effects where the first
-//							shot sound will be the comment, and the other 3 just
-//							noises.  Once the comment is played (randomly chosen)
-//							the m_bHitComment will be set so it doesn't get played
-//							again.
-//
-//		08/14/97	JMI	Switched references to g_GameSettings.m_sDifficulty to
-//							m_pRealm->m_flags.sDifficulty.
-//
-//		08/17/97 BRH	Slowed writhing crawl velocity from 5 to 2.5
-//
-//		08/20/97 BRH	Changed the sound categories from voice to voice and
-//							the new pain and suffering categories.
-//
-//		08/24/97	JMI	Also, now the gunner type of motion (PushBack) also dies
-//							when it hits something.
-//							Now checks a point that should be the person's furthest
-//							extremity when he's writhing and if that point goes into
-//							anything he acts the same as if his main attrib check area
-//							hit it except he ignores the height (that is, he treats it
-//							all as no walk)
-//
-//		08/24/97 BRH	The PlaySound functions now set the new doofus m_siPlaying
-//							sound instance so that it can be aborted when the guy is
-//							killed so he doesn't keep making noises, especially after
-//							being executed.
-//
-//		08/25/97	JMI	When I added the last change on checking their heads'
-//							while writhing, I inadvertently took out the check to kill
-//							them if they're feet hit something.  Since there moving
-//							in the direction of their head, this shouldn't've been a
-//							problem, but it's worth fixing.  Fixed.
-//
-//		08/26/97 BRH	Added special case for the people who have a description
-//							starting with "Kid".  The Kids smash bits are set to zero
-//							so that they cannot be hit by weapons for the final
-//							scene.
-//
-//		08/28/97 BRH	Fixed the push back code in Logic_Writhing
-//
-//		08/29/97 BRH	Added static variable for the logic table to use to set
-//							group motions.
-//
-//		09/03/97	JMI	Civilians now use Civilian Smash bit instead of Bad.
-//
-//		10/24/97	JMI	Added Mac specific code to make sure browsed-for logic
-//							files are relative paths.
-//
-//		01/14/98	JMI	Added more descriptive alert (than the ASSERT(0) ) for
-//							unexpected states in the main switch() based on the TRACEs
-//							Bill had.
-//
-//		10/03/99	JMI	Now launches TexEdit when Edit Textures... chosen.
-//
-//		10/06/99	JMI	Now only adds the sTextureScheme if it is non-negative.
-//							Now passes the hood lights to the texture editor.
+//      07/26/97 BRH   Changed the initial setting of hit points from the CThing3D
+//                     default value to using the new value in the personatorium.
+//
+//      08/01/97 BRH   Enemies now upgrade their weapons if the game is set
+//                     on difficulty 11.  Guns are upgraded to Assault Weapons
+//                     and rockets are upgraded to heatseekers.  Also added
+//                     case for State_AvoidFire and State_DangerNear.
+//
+//      08/06/97   JMI   Now loads execution target points for writhing mode.
+//                     Also, now uses CDoofus's PositionSmash() for positioning
+//                     the main smash.
+//
+//      08/07/97   JMI   Now loads new resname gotten from Personatorium for the
+//                     linkpoint/rigid-body for the person's hand.
+//                     Now calls CDoofus' GetResources()/ReleaseResources() to
+//                     get and release resources for weapons.
+//
+//      08/08/97   JMI   Now does not display the mines in the EditModify().
+//
+//      08/08/97   JMI   Upgraded to use all the new weapons.
+//                     Now does the weapon upgrade for difficulty 11 in only
+//                     when editing flag is set to false in the realm so it does
+//                     not occur in the editor.
+//
+//      08/09/97 BRH   Added TRACE message for invalid state type - so if it
+//                     it happens sgain where a state is not accounted for in
+//                     the Update switch statement, it will print the number
+//                     and them attempt to print the description of the state
+//                     for debugging purposes.
+//
+//      08/10/97 BRH   Fixed problem with executions when people yelled
+//                     things like ah my leg when they were being executed.
+//                     Changed this to a generic grunt that should work
+//                     for all people.
+//
+//      08/11/97   JMI   Now sets backup weapon type based on personatorium.
+//                     Also, added case for State_WalkNext to Update()'s logic
+//                     switch.
+//
+//      08/12/97   JMI   Now loads main event for all animations.
+//
+//      08/12/97 BRH   Added missing case statement for Hide and HideBegin.
+//                     Also upped the number of random comments for the victims
+//                     (the ones in panic mode so that they will scream and
+//                     yell more often when in panic mode).  Also added
+//                     special case for shot sound effects where the first
+//                     shot sound will be the comment, and the other 3 just
+//                     noises.  Once the comment is played (randomly chosen)
+//                     the m_bHitComment will be set so it doesn't get played
+//                     again.
+//
+//      08/14/97   JMI   Switched references to g_GameSettings.m_sDifficulty to
+//                     m_pRealm->m_flags.sDifficulty.
+//
+//      08/17/97 BRH   Slowed writhing crawl velocity from 5 to 2.5
+//
+//      08/20/97 BRH   Changed the sound categories from voice to voice and
+//                     the new pain and suffering categories.
+//
+//      08/24/97   JMI   Also, now the gunner type of motion (PushBack) also dies
+//                     when it hits something.
+//                     Now checks a point that should be the person's furthest
+//                     extremity when he's writhing and if that point goes into
+//                     anything he acts the same as if his main attrib check area
+//                     hit it except he ignores the height (that is, he treats it
+//                     all as no walk)
+//
+//      08/24/97 BRH   The PlaySound functions now set the new doofus m_siPlaying
+//                     sound instance so that it can be aborted when the guy is
+//                     killed so he doesn't keep making noises, especially after
+//                     being executed.
+//
+//      08/25/97   JMI   When I added the last change on checking their heads'
+//                     while writhing, I inadvertently took out the check to kill
+//                     them if they're feet hit something.  Since there moving
+//                     in the direction of their head, this shouldn't've been a
+//                     problem, but it's worth fixing.  Fixed.
+//
+//      08/26/97 BRH   Added special case for the people who have a description
+//                     starting with "Kid".  The Kids smash bits are set to zero
+//                     so that they cannot be hit by weapons for the final
+//                     scene.
+//
+//      08/28/97 BRH   Fixed the push back code in Logic_Writhing
+//
+//      08/29/97 BRH   Added static variable for the logic table to use to set
+//                     group motions.
+//
+//      09/03/97   JMI   Civilians now use Civilian Smash bit instead of Bad.
+//
+//      10/24/97   JMI   Added Mac specific code to make sure browsed-for logic
+//                     files are relative paths.
+//
+//      01/14/98   JMI   Added more descriptive alert (than the ASSERT(0) ) for
+//                     unexpected states in the main switch() based on the TRACEs
+//                     Bill had.
+//
+//      10/03/99   JMI   Now launches TexEdit when Edit Textures... chosen.
+//
+//      10/06/99   JMI   Now only adds the sTextureScheme if it is non-negative.
+//                     Now passes the hood lights to the texture editor.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define PERSON_CPP
@@ -274,8 +274,8 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define NEAR_DEATH_HITPOINTS	20
-#define MS_BETWEEN_SAMPLES		100
+#define NEAR_DEATH_HITPOINTS   20
+#define MS_BETWEEN_SAMPLES      100
 #define PERSONALITY_ITEM_ID_BASE 200
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ S32 CPerson::ms_lCommentTimeVariance = 35000;// Random amount added on.
 S32 CPerson::ms_lRandomAvoidTime = 200;      // Time to wander before looking again
 S32 CPerson::ms_lReseekTime = 1000;       // Do a 'find' again
 S32 CPerson::ms_lWatchWaitTime = 5000;    // Time to watch shot go
-S32 CPerson::ms_lReselectDudeTime	= 3000;  // Time to go without finding a dude
+S32 CPerson::ms_lReselectDudeTime   = 3000;  // Time to go without finding a dude
                                              // before calling SelectDude() to find
                                              // possibly a closer one.
 short CPerson::ms_sLogTabUserGlobal = 0;     // Logic table variable for group effects
@@ -307,9 +307,9 @@ short CPerson::ms_sFileCount;
 U16 CPerson::ms_u16IdLogAI  = CIdBank::IdNil;
 
 // The max amount a guy and step up while writhing.
-#define WRITHING_VERTICAL_TOLERANCE		(MaxStepUpThreshold / 2)
+#define WRITHING_VERTICAL_TOLERANCE      (MaxStepUpThreshold / 2)
 
-#define ID_GUI_EDIT_TEXTURES				900
+#define ID_GUI_EDIT_TEXTURES            900
 
 //#ifdef MOBILE
 extern bool demoCompat;
@@ -500,7 +500,7 @@ short CPerson::Init(void)
    short sResult = 0;
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	= PrepareShadow();
+   sResult   = PrepareShadow();
 
    // Clear the hit comment
    m_bHitComment = false;
@@ -522,7 +522,7 @@ short CPerson::Init(void)
    m_stockpile.m_sHitPoints = g_apersons[m_ePersonType].sInitialHitPoints;
 
    // Get back up weapon type.
-   m_eFallbackWeaponType	= g_apersons[m_ePersonType].Weapon.idWeapon1;
+   m_eFallbackWeaponType   = g_apersons[m_ePersonType].Weapon.idWeapon1;
 
    // If not civilian . . .
    if (g_apersons[m_ePersonType].eLifestyle != Personatorium::Civilian)
@@ -612,10 +612,10 @@ void CPerson::Update(void)
       }
 
       // See if there are any pylons nearby that he wants to use.
-//		if (m_state == State_Idle ||
-//		    m_state == State_Wait ||
-//			 m_state == State_Hunt)
-//			Logic_PylonDetect();
+//      if (m_state == State_Idle ||
+//          m_state == State_Wait ||
+//          m_state == State_Hunt)
+//         Logic_PylonDetect();
 
       switch (m_state)
       {
@@ -835,10 +835,10 @@ void CPerson::Render(void)
       m_rstrLogicName += "/";
       m_rstrLogicName += ms_apszActionNames[m_eCurrentAction];
       m_sprite.m_pszText = (char*) m_rstrLogicName;
-//		m_sprite.m_pszText = ms_apszStateNames[m_state];
+//      m_sprite.m_pszText = ms_apszStateNames[m_state];
    }
    else
-      m_sprite.m_pszText		= NULL;
+      m_sprite.m_pszText      = NULL;
 
    CDoofus::Render();
 }
@@ -853,29 +853,29 @@ void CPerson::EditRender(void)
 
    if (m_sShowState != FALSE)
    {
-      m_rstrLogicName	+= "/";
-      WeaponDetails*	pwd	= GetWeaponDetails(m_eWeaponType);
+      m_rstrLogicName   += "/";
+      WeaponDetails*   pwd   = GetWeaponDetails(m_eWeaponType);
       if (pwd)
       {
-         m_rstrLogicName	+= pwd->pszName;
+         m_rstrLogicName   += pwd->pszName;
       }
       else
       {
-         m_rstrLogicName	+= "Invalid weapon";
+         m_rstrLogicName   += "Invalid weapon";
       }
 
       m_sprite.m_pszText = (char*) m_rstrLogicName;
    }
    else
    {
-      WeaponDetails*	pwd	= GetWeaponDetails(m_eWeaponType);
+      WeaponDetails*   pwd   = GetWeaponDetails(m_eWeaponType);
       if (pwd)
       {
-         m_sprite.m_pszText	= pwd->pszName;
+         m_sprite.m_pszText   = pwd->pszName;
       }
       else
       {
-         m_sprite.m_pszText	= NULL;
+         m_sprite.m_pszText   = NULL;
       }
    }
 }
@@ -886,11 +886,11 @@ void CPerson::EditRender(void)
 
 void CPerson::Logic_Writhing(void)
 {
-//	m_dAnimRot = m_dRot;
+//   m_dAnimRot = m_dRot;
 
    CDoofus::Logic_Writhing();
 
-//	if (m_ePersonType == Personatorium::Cop || m_ePersonType == Personatorium::Gunner)
+//   if (m_ePersonType == Personatorium::Cop || m_ePersonType == Personatorium::Gunner)
    if (g_apersons[m_ePersonType].eWrithingMotion != Personatorium::Still)
    {
       double dX = m_dX;
@@ -907,9 +907,9 @@ void CPerson::Logic_Writhing(void)
       {
          // Update Values /////////////////////////////////////////////////////////
 
-         m_dX	= dNewX;
-         m_dY	= dNewY;
-         m_dZ	= dNewZ;
+         m_dX   = dNewX;
+         m_dY   = dNewY;
+         m_dZ   = dNewZ;
 
          UpdateFirePosition();
       }
@@ -917,25 +917,25 @@ void CPerson::Logic_Writhing(void)
       {
          // Restore Values ////////////////////////////////////////////////////////
 
-         m_dVel			-= m_dDeltaVel;
+         m_dVel         -= m_dDeltaVel;
       }
 
 #if 1
       // Get radius.
-      short	sRadius			= m_sprite.m_sRadius;
+      short sRadius         = m_sprite.m_sRadius;
       // Determine pseudo-head point.
-      short	sRot				= rspMod360(m_dAnimRot);
-      short	sPseudoHeadX	= m_dX + COSQ[sRot] * sRadius;
-      short	sPseudoHeadY	= m_dZ - SINQ[sRot] * sRadius;
+      short sRot            = rspMod360(m_dAnimRot);
+      short sPseudoHeadX   = m_dX + COSQ[sRot] * sRadius;
+      short sPseudoHeadY   = m_dZ - SINQ[sRot] * sRadius;
       // Check pseudo-head point.
       U16 u16Attrib   = 0;    // Safety.
-      short	sHeight		= 0;  // Safety.
+      short sHeight      = 0;    // Safety.
       GetFloorAttributes(sPseudoHeadX, sPseudoHeadY, &u16Attrib, &sHeight);
       if ( (u16Attrib & REALM_ATTR_NOT_WALKABLE) || sHeight > m_dY + WRITHING_VERTICAL_TOLERANCE
            || (dX == m_dX && dZ == m_dZ) )
       {
          // Die real soon.
-         m_stockpile.m_sHitPoints	= 0;
+         m_stockpile.m_sHitPoints   = 0;
       }
       else
       {
@@ -949,7 +949,7 @@ void CPerson::Logic_Writhing(void)
          }
       }
 #else
-//		if (m_ePersonType == Personatorium::Gunner)
+//      if (m_ePersonType == Personatorium::Gunner)
       if (g_apersons[m_ePersonType].eWrithingMotion == Personatorium::PushBack)
       {
    #if 1
@@ -1024,7 +1024,7 @@ short CPerson::EditNew(                         // Returns 0 if successfull, non
       sResult = GetResources();
       if (sResult == SUCCESS)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
    else
@@ -1041,7 +1041,7 @@ short CPerson::EditNew(                         // Returns 0 if successfull, non
 static void LogicUserBrowse(  // Returns nothing
    RGuiItem* pgui)            // In: GUI pressed.
 {
-   RGuiItem* pguiLogicFileName	= (RGuiItem*)pgui->m_ulUserInstance;
+   RGuiItem* pguiLogicFileName   = (RGuiItem*)pgui->m_ulUserInstance;
    ASSERT(pguiLogicFileName != NULL);
 
    // Get the logic file name . . .
@@ -1089,9 +1089,9 @@ short CPerson::EditModify(void)
       REdit* peditStartBouy = (REdit*) pGui->GetItemFromId(300);
       REdit* peditEndBouy   = (REdit*) pGui->GetItemFromId(301);
       RBtn* pbtnLogicUserBrowse = (RBtn*) pGui->GetItemFromId(101);
-      if (	pWeaponList && pPersonalityList && pmbtnLogAI
-            &&	pmbtnShowState && peditLogicFile && pbtnLogicUserBrowse &&
-            peditStartBouy && peditEndBouy)
+      if (   pWeaponList && pPersonalityList && pmbtnLogAI
+             &&   pmbtnShowState && peditLogicFile && pbtnLogicUserBrowse &&
+             peditStartBouy && peditEndBouy)
       {
          // Verify these are the type we think they are before accessing type specific
          // members.
@@ -1119,7 +1119,7 @@ short CPerson::EditModify(void)
          pPersonalityList->AdjustContents();
 
          // Show currently selected personality type
-         pGuiItem	= pGui->GetItemFromId(PERSONALITY_ITEM_ID_BASE + m_ePersonType);
+         pGuiItem   = pGui->GetItemFromId(PERSONALITY_ITEM_ID_BASE + m_ePersonType);
          if (pGuiItem)
          {
             pPersonalityList->SetSel(pGuiItem);
@@ -1133,18 +1133,18 @@ short CPerson::EditModify(void)
          // Fill in the list box with current available weapons.
          for (i = 0; i < NumWeaponTypes; i++)
          {
-            if (	(i != DeathWad || CStockPile::ms_sEnableDeathWad) &&
-                  (i != DoubleBarrel || CStockPile::ms_sEnableDoubleBarrel) &&
-                  (i != ProximityMine) &&
-                  (i != TimedMine) &&
-                  (i != RemoteControlMine) &&
-                  (i != BouncingBettyMine) )
+            if (   (i != DeathWad || CStockPile::ms_sEnableDeathWad) &&
+                   (i != DoubleBarrel || CStockPile::ms_sEnableDoubleBarrel) &&
+                   (i != ProximityMine) &&
+                   (i != TimedMine) &&
+                   (i != RemoteControlMine) &&
+                   (i != BouncingBettyMine) )
             {
-               pGuiItem	= pWeaponList->AddString(ms_awdWeapons[i].pszName);
+               pGuiItem   = pWeaponList->AddString(ms_awdWeapons[i].pszName);
                if (pGuiItem != NULL)
                {
                   // Store class ID so we can determine user selection
-                  pGuiItem->m_lId	= ms_awdWeapons[i].id;
+                  pGuiItem->m_lId   = ms_awdWeapons[i].id;
                }
             }
          }
@@ -1152,7 +1152,7 @@ short CPerson::EditModify(void)
          pWeaponList->AdjustContents();
 
          // Show which weapon is currently selected
-         pGuiItem	= pGui->GetItemFromId(m_eWeaponType);
+         pGuiItem   = pGui->GetItemFromId(m_eWeaponType);
          if (pGuiItem)
          {
             pWeaponList->SetSel(pGuiItem);
@@ -1160,7 +1160,7 @@ short CPerson::EditModify(void)
          }
 
          // Set current state for AI log check box, if this is the guy being logged.
-         pmbtnLogAI->m_sState	= (ms_u16IdLogAI == GetInstanceID()) ? 2 : 1;
+         pmbtnLogAI->m_sState   = (ms_u16IdLogAI == GetInstanceID()) ? 2 : 1;
          // Reflect changes.
          pmbtnLogAI->Compose();
 
@@ -1183,9 +1183,9 @@ short CPerson::EditModify(void)
          peditEndBouy->Compose();
 
          // Set callback for logic browser button.
-         pbtnLogicUserBrowse->m_bcUser	= LogicUserBrowse;
+         pbtnLogicUserBrowse->m_bcUser   = LogicUserBrowse;
          // Set instance data to GUI to query/update.
-         pbtnLogicUserBrowse->m_ulUserInstance	= (intptr_t)peditLogicFile;
+         pbtnLogicUserBrowse->m_ulUserInstance   = (intptr_t)peditLogicFile;
 
          SetGuiToNotify(pGui->GetItemFromId(ID_GUI_EDIT_TEXTURES) );
 
@@ -1198,7 +1198,7 @@ short CPerson::EditModify(void)
             RGuiItem* pSelection = pWeaponList->GetSel();
             if (pSelection)
             {
-               m_eWeaponType	= pSelection->m_lId;
+               m_eWeaponType   = pSelection->m_lId;
             }
             pSelection = pPersonalityList->GetSel();
             if (pSelection)
@@ -1217,7 +1217,7 @@ short CPerson::EditModify(void)
             if (pmbtnLogAI->m_sState == 2)
             {
                // This is the guy who gets his AI logged.
-               ms_u16IdLogAI	= GetInstanceID();
+               ms_u16IdLogAI   = GetInstanceID();
             }
             else
             {
@@ -1225,12 +1225,12 @@ short CPerson::EditModify(void)
                if (ms_u16IdLogAI == GetInstanceID() )
                {
                   // No one is logging.
-                  ms_u16IdLogAI	= CIdBank::IdNil;
+                  ms_u16IdLogAI   = CIdBank::IdNil;
                }
             }
 
             // Determine whether or not to display state on screen.
-            m_sShowState	= (pmbtnShowState->m_sState	== 2) ? TRUE : FALSE;
+            m_sShowState   = (pmbtnShowState->m_sState   == 2) ? TRUE : FALSE;
 
             // Copy logic file to use.
             m_rstrLogicFile.Grow(256);
@@ -1245,13 +1245,13 @@ short CPerson::EditModify(void)
             {
                // Form save name.
                RString strFile;
-               strFile	= g_resmgrGame.GetBasePath();
-               strFile	+= g_apersons[m_ePersonType].Anim.pszBaseName;
+               strFile   = g_resmgrGame.GetBasePath();
+               strFile   += g_apersons[m_ePersonType].Anim.pszBaseName;
                if (g_apersons[m_ePersonType].Anim.sTextureScheme >= 0)
-                  strFile	+= g_apersons[m_ePersonType].Anim.sTextureScheme;
-               strFile	+= ".tex";
+                  strFile   += g_apersons[m_ePersonType].Anim.sTextureScheme;
+               strFile   += ".tex";
 
-               CTexEdit	te;
+               CTexEdit te;
                te.DoModal(&m_animStand, m_pRealm->m_phood->m_pltAmbient, m_pRealm->m_phood->m_pltSpot, strFile);
             }
             break;
@@ -1641,7 +1641,7 @@ short CPerson::GetResources(void)                  // Returns 0 if successfull, 
    // Get execution target points -- NOT essential.
    char szExeTargetResName[RSP_MAX_PATH];
    sprintf(szExeTargetResName, "%s_writhing_exe.trans", g_apersons[m_ePersonType].Anim.pszBaseName);
-   sLoadResult	= rspGetResource(&g_resmgrGame, szExeTargetResName, &m_ptransExecutionTarget);
+   sLoadResult   = rspGetResource(&g_resmgrGame, szExeTargetResName, &m_ptransExecutionTarget);
    if (sLoadResult == 0)
    {
       m_ptransExecutionTarget->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
@@ -1700,7 +1700,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundWrithing(
    S32* plDuration)                    // Out:  Duration of sample, if not NULL.
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
 //#ifdef MOBILE //Reduce annoying comments when dying
    if ((demoCompat) || (++m_usCommentCounter % 5 == 0) )
@@ -1709,19 +1709,19 @@ SampleMaster::SoundInstance CPerson::PlaySoundWrithing(
       switch (GetRandom() % 4)
       {
       case 0:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidSuffering1;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidSuffering1;
          break;
 
       case 1:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidSuffering2;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidSuffering2;
          break;
 
       case 2:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidSuffering3;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidSuffering3;
          break;
 
       case 3:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidSuffering4;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidSuffering4;
          break;
       }
 
@@ -1746,7 +1746,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundWrithing(
 SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
    S32 lThisTime = m_pRealm->m_time.GetGameTime();
    S32 lSampleDuration   = 0;    // Safety.
 
@@ -1770,21 +1770,21 @@ SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
             }
             else
             {
-               psmid	= g_apersons[m_ePersonType].Sample.psmidShot1;
+               psmid   = g_apersons[m_ePersonType].Sample.psmidShot1;
                m_bHitComment = true;
             }
             break;
 
          case 1:
-            psmid	= g_apersons[m_ePersonType].Sample.psmidShot2;
+            psmid   = g_apersons[m_ePersonType].Sample.psmidShot2;
             break;
 
          case 2:
-            psmid	= g_apersons[m_ePersonType].Sample.psmidShot3;
+            psmid   = g_apersons[m_ePersonType].Sample.psmidShot3;
             break;
 
          case 3:
-            psmid	= g_apersons[m_ePersonType].Sample.psmidShot4;
+            psmid   = g_apersons[m_ePersonType].Sample.psmidShot4;
             break;
          }
       }
@@ -1819,16 +1819,16 @@ SampleMaster::SoundInstance CPerson::PlaySoundShot(void)
 SampleMaster::SoundInstance CPerson::PlaySoundBlownup(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
    switch (GetRandom() % 2)
    {
    case 0:
-      psmid	= g_apersons[m_ePersonType].Sample.psmidBlownup1;
+      psmid   = g_apersons[m_ePersonType].Sample.psmidBlownup1;
       break;
 
    case 1:
-      psmid	= g_apersons[m_ePersonType].Sample.psmidBlownup2;
+      psmid   = g_apersons[m_ePersonType].Sample.psmidBlownup2;
       break;
    }
 
@@ -1850,16 +1850,16 @@ SampleMaster::SoundInstance CPerson::PlaySoundBlownup(void)
 SampleMaster::SoundInstance CPerson::PlaySoundBurning(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
    switch (GetRandom() % 2)
    {
    case 0:
-      psmid	= g_apersons[m_ePersonType].Sample.psmidBurning1;
+      psmid   = g_apersons[m_ePersonType].Sample.psmidBurning1;
       break;
 
    case 1:
-      psmid	= g_apersons[m_ePersonType].Sample.psmidBurning2;
+      psmid   = g_apersons[m_ePersonType].Sample.psmidBurning2;
       break;
    }
 
@@ -1881,26 +1881,26 @@ SampleMaster::SoundInstance CPerson::PlaySoundBurning(void)
 SampleMaster::SoundInstance CPerson::PlaySoundShooting(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
    if (++m_usCommentCounter % 10 == 0 && m_idDude != CIdBank::IdNil)
    {
       switch (GetRandom() % 4)
       {
       case 0:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidShooting1;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidShooting1;
          break;
 
       case 1:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidShooting2;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidShooting2;
          break;
 
       case 2:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidShooting3;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidShooting3;
          break;
 
       case 3:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidShooting4;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidShooting4;
          break;
       }
    }
@@ -1923,18 +1923,18 @@ SampleMaster::SoundInstance CPerson::PlaySoundShooting(void)
 SampleMaster::SoundInstance CPerson::PlaySoundDying(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
    if (++m_usCommentCounter % 4 == 0)
    {
       switch (GetRandom() % 2)
       {
       case 0:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidDying1;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidDying1;
          break;
 
       case 1:
-         psmid	= g_apersons[m_ePersonType].Sample.psmidDying2;
+         psmid   = g_apersons[m_ePersonType].Sample.psmidDying2;
          break;
       }
    }
@@ -1957,7 +1957,7 @@ SampleMaster::SoundInstance CPerson::PlaySoundDying(void)
 SampleMaster::SoundInstance CPerson::PlaySoundRandom(void)
 {
    m_siPlaying = 0;
-   SampleMasterID*	psmid	= &g_smidNil;
+   SampleMasterID*   psmid   = &g_smidNil;
 
 //#ifdef MOBILE //reduce NPC random comments
    int n;
@@ -1982,19 +1982,19 @@ SampleMaster::SoundInstance CPerson::PlaySoundRandom(void)
                switch (GetRandom() % 4)
                {
                case 0:
-                  psmid	= g_apersons[m_ePersonType].Sample.psmidRandom1;
+                  psmid   = g_apersons[m_ePersonType].Sample.psmidRandom1;
                   break;
 
                case 1:
-                  psmid	= g_apersons[m_ePersonType].Sample.psmidRandom2;
+                  psmid   = g_apersons[m_ePersonType].Sample.psmidRandom2;
                   break;
 
                case 2:
-                  psmid	= g_apersons[m_ePersonType].Sample.psmidRandom3;
+                  psmid   = g_apersons[m_ePersonType].Sample.psmidRandom3;
                   break;
 
                case 3:
-                  psmid	= g_apersons[m_ePersonType].Sample.psmidRandom4;
+                  psmid   = g_apersons[m_ePersonType].Sample.psmidRandom4;
                   break;
                }
 

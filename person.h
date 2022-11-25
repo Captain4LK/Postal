@@ -20,59 +20,59 @@
 //
 // History:
 //
-//		04/28/97 BRH	Started this generic enemy/victim class that will use
-//							logic in CDoofus and an information strucutre in
-//							Personatorium to determine the abilities and desired
-//							logic for this person.
+//      04/28/97 BRH   Started this generic enemy/victim class that will use
+//                     logic in CDoofus and an information strucutre in
+//                     Personatorium to determine the abilities and desired
+//                     logic for this person.
 //
-//		04/29/97 BRH	Added m_ePersonType value which is the only thing that
-//							needs to be loaded and saved.
+//      04/29/97 BRH   Added m_ePersonType value which is the only thing that
+//                     needs to be loaded and saved.
 //
-//		05/09/97 BRH	Moved took out m_lNextGroanTime and just used m_lTimer
-//							since it is not being used in the Writhing state.
+//      05/09/97 BRH   Moved took out m_lNextGroanTime and just used m_lTimer
+//                     since it is not being used in the Writhing state.
 //
-//		05/11/97 BRH	Added an override to Logic_Writhing so that I can
-//							do a special case for the cop since he crawls aS32
-//							the ground.
+//      05/11/97 BRH   Added an override to Logic_Writhing so that I can
+//                     do a special case for the cop since he crawls aS32
+//                     the ground.
 //
-//		05/19/97	JMI	Added ms_u16IdLogAI.
+//      05/19/97   JMI   Added ms_u16IdLogAI.
 //
-//		05/19/97	JMI	Added m_szLogicFile, m_sShowState, and Render() override.
+//      05/19/97   JMI   Added m_szLogicFile, m_sShowState, and Render() override.
 //
-//		05/19/97 BRH	Added logic table pointer.  Changed the string for the
-//							logic file from a char* to an RString so it can be
-//							loaded and saved easily.
+//      05/19/97 BRH   Added logic table pointer.  Changed the string for the
+//                     logic file from a char* to an RString so it can be
+//                     loaded and saved easily.
 //
-//		05/20/97 BRH	Added logic table variables as friend classes so their
-//							Get functions can access the protected members via the
-//							CPerson pointer.
+//      05/20/97 BRH   Added logic table variables as friend classes so their
+//                     Get functions can access the protected members via the
+//                     CPerson pointer.
 //
-//		06/14/97 BRH	Added functions to choose and play various sound effects
-//							using the sounds defined in the personatorium for each
-//							person type.
+//      06/14/97 BRH   Added functions to choose and play various sound effects
+//                     using the sounds defined in the personatorium for each
+//                     person type.
 //
-//		06/18/97	JMI	Changed PlaySoundWrithing() to return the duration of the
-//							played sample.
+//      06/18/97   JMI   Changed PlaySoundWrithing() to return the duration of the
+//                     played sample.
 //
-//					MJR	Added ResetLogAI() to reset AI logging feature.
+//               MJR   Added ResetLogAI() to reset AI logging feature.
 //
-//		06/27/97	JMI	Now hooks EditRender().
+//      06/27/97   JMI   Now hooks EditRender().
 //
-//		07/06/97 BRH	Added another friend class for the logic table
+//      07/06/97 BRH   Added another friend class for the logic table
 //
-//		07/17/97	JMI	Changed RSnd*'s to SampleMaster::SoundInstances.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed RSnd*'s to SampleMaster::SoundInstances.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		08/03/97 BRH	Added logic table friend class.
+//      08/03/97 BRH   Added logic table friend class.
 //
-//		08/12/97 BRH	Added m_bHitComment flag so that the comment made
-//							when shot is only said once, and noises are used
-//							for the rest of the shot reactions.
+//      08/12/97 BRH   Added m_bHitComment flag so that the comment made
+//                     when shot is only said once, and noises are used
+//                     for the rest of the shot reactions.
 //
-//		08/29/97 BRH	Added a static variable for the logic tables to use
-//							to set set the state of all of the kids for the
-//							ending level.
+//      08/29/97 BRH   Added a static variable for the logic tables to use
+//                     to set set the state of all of the kids for the
+//                     ending level.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef PERSON_H
@@ -126,7 +126,7 @@ CLogTab<CPerson*>* m_pLogicTable;
 RString m_rstrLogicFile;
 
 // If TRUE, the guy's state is shown by his hotspot.
-short	m_sShowState;
+short m_sShowState;
 
 // This is a high level state variable for logic tables.
 short m_sUserState1;
@@ -174,9 +174,9 @@ CPerson(CRealm* pRealm)
    m_ePersonType = Personatorium::Grenader;
    m_eWeaponType = CThing::CGrenadeID;
    m_panimCur = m_panimPrev = NULL;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_rstrLogicFile = "res/logics/default.lgk";
-   m_sShowState		= FALSE;
+   m_sShowState      = FALSE;
    m_sUserState1 = 0;       // Uninitialized
    m_bHitComment = false;
 }

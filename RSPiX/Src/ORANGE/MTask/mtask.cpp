@@ -22,7 +22,7 @@
 // Multitasking module for game run routines.
 //
 // This multitasking module allows you to write character
-//	logic in a more linear fashion.  Traditionally run routines
+//   logic in a more linear fashion.  Traditionally run routines
 // were written as a series of switch statements based on
 // some saved state for that character.  They would run
 // through the logic, going through the switch statement
@@ -42,20 +42,20 @@
 // is time for your task to run again, it will resume with
 // its state restored, right after the MTaskWait call.
 //
-// Created On:	10/18/96 BRH
+// Created On:   10/18/96 BRH
 // Implemented:10/17/96 BRH
 //
 // History:
 //
-//	10/17/96 BRH	Started a test version in another file to
-//						try the stack swapping and task switching.
+//   10/17/96 BRH   Started a test version in another file to
+//                  try the stack swapping and task switching.
 //
-// 10/18/96 BRH	Started this file and imported the test
-//						functions dealing with the Multitasking.
-//						Renamed all of the functions for the
-//						Multitasking module MTask____.
+// 10/18/96 BRH   Started this file and imported the test
+//                  functions dealing with the Multitasking.
+//                  Renamed all of the functions for the
+//                  Multitasking module MTask____.
 //
-//	11/08/96	JMI	Changed CList to RList in one location.
+//   11/08/96   JMI   Changed CList to RList in one location.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -72,7 +72,7 @@
 #else
    #include "MTASK.H"
 
-#endif	//PATHS_IN_INCLUDES
+#endif   //PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 // "Member" variables (Globals)
@@ -101,21 +101,21 @@ static void MTaskReturnCatcher(void);
 
 //////////////////////////////////////////////////////////////////////
 //
-//	MTaskManager
+//   MTaskManager
 //
 // Description:
-//		This is the routine that is called in the main loop of
-//		the application.  It will run through all allocated
-//		tasks and switch the stack for the task and let it
-//		continue running where it left off.  Once all of the
-//		tasks have been processed once, the manager will return
-//		back to the main loop of the application.
+//      This is the routine that is called in the main loop of
+//      the application.  It will run through all allocated
+//      tasks and switch the stack for the task and let it
+//      continue running where it left off.  Once all of the
+//      tasks have been processed once, the manager will return
+//      back to the main loop of the application.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -147,24 +147,24 @@ void MTaskManager(void)
 //
 // MTaskAdd
 //
-//	Description:
-//		Adds a new task to the list of tasks to be processed.  Note
-//		that functions passed to this routine need to be specifically
-//		designed to work with that task manager.  That means that they
-//		must periodically call MTaskWait to give up time to other
-//		tasks, otherwise they will end up being the only task ever to
-//		run.  Also, they must never return.  Once they are added
-//		with MTaskAdd, they should run until they are no S32er
-//		needed at which time they should call MTaskKill to take them
-//		off of the task list.  If a task ever issues a return,
-//		this module will catch it and ASSERT the failure.
+//   Description:
+//      Adds a new task to the list of tasks to be processed.  Note
+//      that functions passed to this routine need to be specifically
+//      designed to work with that task manager.  That means that they
+//      must periodically call MTaskWait to give up time to other
+//      tasks, otherwise they will end up being the only task ever to
+//      run.  Also, they must never return.  Once they are added
+//      with MTaskAdd, they should run until they are no S32er
+//      needed at which time they should call MTaskKill to take them
+//      off of the task list.  If a task ever issues a return,
+//      this module will catch it and ASSERT the failure.
 //
 // Parameters:
-//		void* pFunction = pointer to the task you wish to add.
+//      void* pFunction = pointer to the task you wish to add.
 //
 // Returns:
-//		SUCCESS if a task was allocated and added
-//		FAILURE if memory could not be allocated for the task
+//      SUCCESS if a task was allocated and added
+//      FAILURE if memory could not be allocated for the task
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -210,24 +210,24 @@ short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize)
 // MTaskKill
 //
 // Description:
-//		Removes the task from the list.  This should only be called
-//		from within the currently running task.  It calls this when
-//		it is done running, for example, if the task is a run
-//		routine for character logic and the character dies, then
-//		it would call this funtion to take it off of the task list.
-//		This funcition kills the ptiCurrentTask.
+//      Removes the task from the list.  This should only be called
+//      from within the currently running task.  It calls this when
+//      it is done running, for example, if the task is a run
+//      routine for character logic and the character dies, then
+//      it would call this funtion to take it off of the task list.
+//      This funcition kills the ptiCurrentTask.
 //
-//		This function is called in place of a normal MTaskWait,
-//		and therefore returns the current tasks's stack pointer.
-//		This routine always returns 0 to indicate that the task
-//		should be killed which is actually cleaned up in the
-//		MTaskManager routine when it gets a return SP valuie of 0.
+//      This function is called in place of a normal MTaskWait,
+//      and therefore returns the current tasks's stack pointer.
+//      This routine always returns 0 to indicate that the task
+//      should be killed which is actually cleaned up in the
+//      MTaskManager routine when it gets a return SP valuie of 0.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		0 to indicate that the task should be deleted
+//      0 to indicate that the task should be deleted
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -236,7 +236,7 @@ __declspec(naked) S32* TaskKill(void)
    __asm
    {
       mov esp, m_lMainProgramStack; restore the program 's stack
-		pop	ebp							;restore programs's stack frame
+      pop   ebp                     ;restore programs's stack frame
       mov eax, 0h; return NULL to flag as
              mov dx, 0h; ready to delete
              ret
@@ -248,19 +248,19 @@ __declspec(naked) S32* TaskKill(void)
 // MTaskWait
 //
 // Description:
-//		Switches back to the program's main stack and returns
-//		to MTaskManager where it left off in the loop after it
-//		called MTaskRun.  The MTaskManager calls the MTaskRun
-//		which switches stacks and resumes the task.  Then the
-//		task calls this function which switches back to the main
-//		program stack and returns the task's stack pointer to
-//		MTaskManager which then can switch to the next task.
+//      Switches back to the program's main stack and returns
+//      to MTaskManager where it left off in the loop after it
+//      called MTaskRun.  The MTaskManager calls the MTaskRun
+//      which switches stacks and resumes the task.  Then the
+//      task calls this function which switches back to the main
+//      program stack and returns the task's stack pointer to
+//      MTaskManager which then can switch to the next task.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		SP pointer location for the task just run
+//      SP pointer location for the task just run
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -269,9 +269,9 @@ __declspec(naked) S32* MTaskWait(void)
    __asm
    {
       push ebp; save task 's frame pointer
-		mov	m_lTaskStack,esp			;Save task's stack pointer
+      mov   m_lTaskStack,esp         ;Save task's stack pointer
       mov esp, m_lMainProgramStack; restore the program 's main stack
-		pop	ebp							;restore Real Stack's frame pointer
+      pop   ebp                     ;restore Real Stack's frame pointer
       mov eax, m_lTaskStack; put current stack in ax
       mov edx, m_lTaskStack; put current stack in dx
       shr edx, 16; move high word to low word of register
@@ -284,17 +284,17 @@ __declspec(naked) S32* MTaskWait(void)
 // MTaskRun
 //
 // Description:
-//		Switches from the main stack to the task's stack and
-//		then returns to where the task was last running.
+//      Switches from the main stack to the task's stack and
+//      then returns to where the task was last running.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		Note: The function seems to return a S32 of the
-//			   task's stack pointer, but in fact, the return
-//				value does not come from this function, but from
-//				MTaskWait or MTaskKill.
+//      Note: The function seems to return a S32 of the
+//            task's stack pointer, but in fact, the return
+//            value does not come from this function, but from
+//            MTaskWait or MTaskKill.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -303,11 +303,11 @@ __declspec(naked) S32* MTaskRun(void)
    __asm
    {
       push ebp; Save Real Stack 's frame pointer
-		mov	m_lMainProgramStack,esp		;Save current stack
-		mov	esp,m_lTaskStack				;Set task's stack
+      mov   m_lMainProgramStack,esp      ;Save current stack
+      mov   esp,m_lTaskStack            ;Set task's stack
       pop ebp; restore task 's frame pointer
-		ret
-	}
+      ret
+   }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -315,25 +315,25 @@ __declspec(naked) S32* MTaskRun(void)
 // MTaskReturnCatcher
 //
 // Description:
-//		Catches tasks that have returned when they were not
-//		supposed to.  Because we are switching tasks and stacks, 
-//		if a task returns, it would not clean up its stack and
-//		free its task.  Therefore tasks should never return.  They
-//		should call MTaskKill when they are done to clean up
-//		their task and stack.  If they do accidently return, they
-//		will come here, where the program will hang and report
-//		an error.
+//      Catches tasks that have returned when they were not
+//      supposed to.  Because we are switching tasks and stacks, 
+//      if a task returns, it would not clean up its stack and
+//      free its task.  Therefore tasks should never return.  They
+//      should call MTaskKill when they are done to clean up
+//      their task and stack.  If they do accidently return, they
+//      will come here, where the program will hang and report
+//      an error.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		never returns;
+//      never returns;
 //
 //////////////////////////////////////////////////////////////////////
 
 void MTaskReturnCatcher(void)
 {
-	TRACE("MTask - The task %s has returned rather than calling MTaskKill\n", ptiCurrentTask->pszFunctionName);
-	ASSERT(FALSE);
+   TRACE("MTask - The task %s has returned rather than calling MTaskKill\n", ptiCurrentTask->pszFunctionName);
+   ASSERT(FALSE);
 }

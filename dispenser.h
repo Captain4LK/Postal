@@ -18,35 +18,35 @@
 // dispenser.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		03/19/97	JMI	Started this dispenser item class using CItem3d as a
-//							template.
+//   History:
+//      03/19/97   JMI   Started this dispenser item class using CItem3d as a
+//                     template.
 //
-//		03/20/97	JMI	Added m_ulFileVersion, InstantiateDispensee(), and
-//							SaveDispensee() members.  Removed m_idDispensee.
+//      03/20/97   JMI   Added m_ulFileVersion, InstantiateDispensee(), and
+//                     SaveDispensee() members.  Removed m_idDispensee.
 //
-//		03/21/97	JMI	Added ms_sDispenseeFileCount.
+//      03/21/97   JMI   Added ms_sDispenseeFileCount.
 //
-//		04/23/97	JMI	Added new logic type Exists and added a max for the number
-//							of dispensees and a current number of dispensees dispensed.
+//      04/23/97   JMI   Added new logic type Exists and added a max for the number
+//                     of dispensees and a current number of dispensees dispensed.
 //
-//		06/14/97	JMI	Made default logic type Timed.
+//      06/14/97   JMI   Made default logic type Timed.
 //
-//		06/27/97	JMI	Added m_imRender and m_bEditMode.
+//      06/27/97   JMI   Added m_imRender and m_bEditMode.
 //
-//		06/28/97	JMI	Added a function to render the dispensee,
-//							RenderDisipensee().
+//      06/28/97   JMI   Added a function to render the dispensee,
+//                     RenderDisipensee().
 //
-//		06/30/97	JMI	m_sDispenseeHotSpotX, m_sDispenseeHotSpotY, and
-//							m_rcDispensee.
+//      06/30/97   JMI   m_sDispenseeHotSpotX, m_sDispenseeHotSpotY, and
+//                     m_rcDispensee.
 //
-//		07/10/97	JMI	Added GetClosestDude().
-//							Also, added new logic type DistanceToDude.
+//      07/10/97   JMI   Added GetClosestDude().
+//                     Also, added new logic type DistanceToDude.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		07/28/97	JMI	Changed m_lLogicParm1,2,3 to m_alLogicParms[4] (adding one
-//							logic parm while changing the storage technique).
+//      07/28/97   JMI   Changed m_lLogicParm1,2,3 to m_alLogicParms[4] (adding one
+//                     logic parm while changing the storage technique).
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef DISPENSER_H
@@ -77,14 +77,14 @@ typedef enum
 
 typedef enum
 {
-   NumParms	= 4
+   NumParms   = 4
 } Macros;
 
 typedef struct
 {
-   char*	pszName;                   // Name of logic (for list box).
-   char*	apszParms[NumParms];       // Parm descriptions or NULL for none.
-   char*	pszDescription;            // Description of logic (for text box).
+   char*   pszName;                   // Name of logic (for list box).
+   char*   apszParms[NumParms];       // Parm descriptions or NULL for none.
+   char*   pszDescription;            // Description of logic (for text box).
 } LogicInfo;
 
 //---------------------------------------------------------------------------
@@ -92,29 +92,29 @@ typedef struct
 //---------------------------------------------------------------------------
 public:
 
-CSprite2	m_sprite;                                 // 2D sprite.
-RImage*		m_pim;                                 // 2D image resource ptr.
+CSprite2 m_sprite;                                   // 2D sprite.
+RImage*      m_pim;                                 // 2D image resource ptr.
 RImage m_imRender;                                 // Used to render dispenser
                                                    // and dispensee in edit mode.
 
-ClassIDType	m_idDispenseeType;                     // Type of object to dispense.
-RFile	m_fileDispensee;                             // Mem file representing
-                                                   // dispensee.
+ClassIDType m_idDispenseeType;                       // Type of object to dispense.
+RFile m_fileDispensee;                               // Mem file representing
+                                                     // dispensee.
 U32 m_ulFileVersion;                               // File version of data stored
                                                    // in m_fileDispensee.
 
-short	m_sX;                                        // Location of this object,
-short	m_sY;                                        // the dispenser, which is
-short	m_sZ;                                        // also the location at which
-                                                   // we will dispense the
-                                                   // dispensee.
+short m_sX;                                          // Location of this object,
+short m_sY;                                          // the dispenser, which is
+short m_sZ;                                          // also the location at which
+                                                     // we will dispense the
+                                                     // dispensee.
 
 LogicType m_logictype;                             // Logic used for dispensing.
 S32 m_alLogicParms[NumParms];                      // Generic parameters for logic.
 
-short	m_sMaxDispensees;                            // Maximum number of dispensees.
-short	m_sNumDispensees;                            // Number of dispensees already
-                                                   // dispensed.
+short m_sMaxDispensees;                              // Maximum number of dispensees.
+short m_sNumDispensees;                              // Number of dispensees already
+                                                     // dispensed.
 
 U16 m_u16IdDispensee;                              // ID of the last dispensee
                                                    // we created.
@@ -124,11 +124,11 @@ S32 m_lNextUpdate;                                 // Time of next update.
 bool m_bEditMode;                                  // true, if in edit mode, false
                                                    // otherwise.
 
-short	m_sDispenseeHotSpotX;                        // Hotspot of dispensee.
-short	m_sDispenseeHotSpotY;                        // Hotspot of dispensee.
-RRect	m_rcDispensee;                               // Rect of dispensee.
+short m_sDispenseeHotSpotX;                          // Hotspot of dispensee.
+short m_sDispenseeHotSpotY;                          // Hotspot of dispensee.
+RRect m_rcDispensee;                                 // Rect of dispensee.
 
-short	m_sSuspend;
+short m_sSuspend;
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -152,17 +152,17 @@ protected:
 CDispenser(CRealm* pRealm)
    : CThing(pRealm, CDispenserID)
 {
-   m_pim					= NULL;
-   m_idDispenseeType	= TotalIDs;             // This means none.
-   m_sSuspend			= FALSE;
+   m_pim               = NULL;
+   m_idDispenseeType   = TotalIDs;             // This means none.
+   m_sSuspend         = FALSE;
    memset(m_alLogicParms, 0, sizeof(m_alLogicParms) );
-   m_sMaxDispensees	= 10;
-   m_sNumDispensees	= 0;
-   m_u16IdDispensee	= CIdBank::IdNil;
-   m_logictype			= Timed;
-   m_bEditMode			= false;
-   m_sDispenseeHotSpotX	= 0;
-   m_sDispenseeHotSpotY	= 0;
+   m_sMaxDispensees   = 10;
+   m_sNumDispensees   = 0;
+   m_u16IdDispensee   = CIdBank::IdNil;
+   m_logictype         = Timed;
+   m_bEditMode         = false;
+   m_sDispenseeHotSpotX   = 0;
+   m_sDispenseeHotSpotY   = 0;
 }
 
 public:
@@ -254,20 +254,20 @@ void EditRect(RRect* pRect);
 // Called by editor to get the hotspot of an object in 2D.
 // (virtual (Overridden here)).
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return (double)m_sX; }
+double GetX(void)   { return (double)m_sX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return (double)m_sY; }
+double GetY(void)   { return (double)m_sY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return (double)m_sZ; }
+double GetZ(void)   { return (double)m_sZ; }
 
 //---------------------------------------------------------------------------
 // Other functions
@@ -295,16 +295,16 @@ void FreeResources(void);
 
 // Create a dispensee from the memfile, if open.
 short InstantiateDispensee(         // Returns 0 on success.
-   CThing**	ppthing,                // Out: New thing loaded from m_fileDispensee.
+   CThing**   ppthing,                // Out: New thing loaded from m_fileDispensee.
    bool bEditMode);                 // In:  true if in edit mode.
 
 // Write dispensee to the memfile.
 short SaveDispensee(          // Returns 0 on success.
-   CThing*	pthing);          // In:  Instance of Dispensee to save.
+   CThing*   pthing);          // In:  Instance of Dispensee to save.
 
 // Render dispensee to m_imRender.
 short RenderDispensee(        // Returns 0 on success.
-   CThing*	pthing);          // In:  Instance of Dispensee to render.
+   CThing*   pthing);          // In:  Instance of Dispensee to render.
 
 // Get the closest dude.
 short GetClosestDudeDistance(       // Returns 0 on success.  Fails, if no dudes.
@@ -312,7 +312,7 @@ short GetClosestDudeDistance(       // Returns 0 on success.  Fails, if no dudes
 
 // Destroy an instantiated dispensee.
 void DestroyDispensee(        // Returns nothing.
-   CThing**	ppthing);         // In:  Ptr to the instance.
+   CThing**   ppthing);         // In:  Ptr to the instance.
 };
 
 

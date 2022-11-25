@@ -19,43 +19,43 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/24/97 MJR	Stole infrastructure from Jon's AnimThing.
+//      02/24/97 MJR   Stole infrastructure from Jon's AnimThing.
 //
-//		03/07/97	JMI	Added m_psndChannel member and ProcessMessages() and
-//							m_state (with enums).
+//      03/07/97   JMI   Added m_psndChannel member and ProcessMessages() and
+//                     m_state (with enums).
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		07/17/97	JMI	Changed RSnd*'s to SampleMaster::SoundInstances.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed RSnd*'s to SampleMaster::SoundInstances.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
-//							Also, added user edittable member m_lVolumeHalfLife.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
+//                     Also, added user edittable member m_lVolumeHalfLife.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		08/01/97	JMI	Added looping parameters.
+//      08/01/97   JMI   Added looping parameters.
 //
-//		08/04/97	JMI	Now defaults to enabled.
+//      08/04/97   JMI   Now defaults to enabled.
 //
-//		08/04/97	JMI	Added m_sAmbient indicating whether or not this sound
-//							is ambient (i.e., non-essential).
-//							Also, implemented a special random number generator
-//							strictly for sound things so they can be merry and random
-//							and not de-synchronize.
+//      08/04/97   JMI   Added m_sAmbient indicating whether or not this sound
+//                     is ambient (i.e., non-essential).
+//                     Also, implemented a special random number generator
+//                     strictly for sound things so they can be merry and random
+//                     and not de-synchronize.
 //
-//		08/11/97	JMI	Added RelayVolume() and m_lCollectiveVolume so
-//							CSoundRelays can update their CSoundThing parents.
+//      08/11/97   JMI   Added RelayVolume() and m_lCollectiveVolume so
+//                     CSoundRelays can update their CSoundThing parents.
 //
-//		09/24/97	JMI	Now initializes bFemalePain member of m_id.  This member
-//							indicates whether the sample is of a female in pain which
-//							some countries (so far just UK) don't want in the game.
+//      09/24/97   JMI   Now initializes bFemalePain member of m_id.  This member
+//                     indicates whether the sample is of a female in pain which
+//                     some countries (so far just UK) don't want in the game.
 //
-//		10/07/97	JMI	Changed bFemalePain to usDescFlags.
+//      10/07/97   JMI   Changed bFemalePain to usDescFlags.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -119,7 +119,7 @@ short m_sWhichTime;
 bool m_bEnabled;
 bool m_bRepeats;
 
-short	m_sUseLooping;                      // TRUE, to use looping parameters.
+short m_sUseLooping;                        // TRUE, to use looping parameters.
 S32 m_lStopLoopingTime;                   // Time that we stop looping the sample.
 S32 m_lNumLoopBacks;                      // Number of times to play loop area of sample.
 S32 m_lLoopBackTo;                        // Where to loop back to.
@@ -127,13 +127,13 @@ S32 m_lLoopBackFrom;                      // Where to loop back from.
 
 short m_sSuspend;                         // Suspend flag
 
-State	m_state;                            // Current state.
+State m_state;                              // Current state.
 
 S32 m_lVolumeHalfLife;                    // Half life of the current sound.
 
-short	m_sPurgeSampleWhenDone;             // TRUE, to purge sample when done.
+short m_sPurgeSampleWhenDone;               // TRUE, to purge sample when done.
 
-short	m_sAmbient;                         // TRUE, if ambient (i.e., non-essential) sound.
+short m_sAmbient;                           // TRUE, if ambient (i.e., non-essential) sound.
 
 S32 m_lCollectiveVolume;                  // Collective volume from this object and
                                           // its child satellites.
@@ -160,7 +160,7 @@ CSoundThing(CRealm* pRealm)
    m_szResName[0] = 0;
 
    m_id.pszId = m_szResName;
-   m_id.usDescFlags	= SMDF_NO_DESCRIPT;
+   m_id.usDescFlags   = SMDF_NO_DESCRIPT;
 
    m_pImage = 0;
 
@@ -172,23 +172,23 @@ CSoundThing(CRealm* pRealm)
 
    m_sSuspend = 0;
 
-   m_siChannel	= 0;
+   m_siChannel   = 0;
 
-   m_state	= State_Happy;
+   m_state   = State_Happy;
 
-   m_lVolumeHalfLife	= 1000;
+   m_lVolumeHalfLife   = 1000;
 
-   m_sUseLooping			= FALSE;
-   m_lStopLoopingTime	= 0;
-   m_lNumLoopBacks		= 0;
-   m_lLoopBackTo			= 0;
-   m_lLoopBackFrom		= 0;
+   m_sUseLooping         = FALSE;
+   m_lStopLoopingTime   = 0;
+   m_lNumLoopBacks      = 0;
+   m_lLoopBackTo         = 0;
+   m_lLoopBackFrom      = 0;
 
-   m_sPurgeSampleWhenDone	= FALSE;
+   m_sPurgeSampleWhenDone   = FALSE;
 
-   m_sAmbient				= TRUE;
+   m_sAmbient            = TRUE;
 
-   m_lCollectiveVolume	= 0;
+   m_lCollectiveVolume   = 0;
 }
 
 public:
@@ -274,14 +274,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -292,13 +292,13 @@ void EditRender(void);
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // External functions

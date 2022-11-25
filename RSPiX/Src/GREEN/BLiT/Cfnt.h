@@ -40,7 +40,7 @@ public:
 //---------------
 RFont();
 ~RFont();
-void	EraseAll();
+void   EraseAll();
 //---------------
 //---------------
 class RFontSet
@@ -52,7 +52,7 @@ RFontSet();
 //---------------
 
 RImage** m_ppimCharacters;       // FSPR1 has all kerning info inside
-short	m_sCellHeight;
+short m_sCellHeight;
 short m_sMaxWidth;
 RFontSet* m_pNext;
 };
@@ -70,7 +70,7 @@ short AddLetter(RImage* pimLetter,    // if FSPR1, don't need other arguements
 // pdScale will be <= 1.0
 RFontSet* FindSize(short sCellH, double *pdScale);
 
-short	DeleteSet(RFontSet* pRemove);    // will NOT delete the last FontSet!
+short   DeleteSet(RFontSet* pRemove);    // will NOT delete the last FontSet!
 //---------------
 short m_sMaxCellHeight;
 short m_sMaxCellWidth;

@@ -35,10 +35,10 @@
 // Encapsulate our buffer and info.
 typedef struct
 {
-   UCHAR*	puc;        // Beginning of chunk.
+   UCHAR*   puc;        // Beginning of chunk.
    S32 lSize;           // Total size of chunk (puc).
    USHORT usType;       // Type of buffer.
-   UCHAR	ucFlags;       // Flags for buffer.
+   UCHAR ucFlags;         // Flags for buffer.
    S32 lId;             // Id of buffer.
    S32 lTime;           // Time buffer is supposed to arrive.
    S32 lPos;            // Position for next piece.
@@ -46,17 +46,17 @@ typedef struct
 
 // This type is used to call the user to allow them to allocate space for the
 // data and pass it back to be filled.
-typedef UCHAR* (*ALLOC_FILTERFUNC)(	S32 lSize, USHORT usType, UCHAR ucFlags,
-                                    S32 lUser);
+typedef UCHAR* (*ALLOC_FILTERFUNC)(   S32 lSize, USHORT usType, UCHAR ucFlags,
+                                      S32 lUser);
 
 // This type is used to call the user to allow them to DEallocate space al-
 // located by a previous call to their ALLOC_FILTERFUNC.
-typedef void (*FREE_FILTERFUNC)(	UCHAR* puc, USHORT usType, UCHAR ucFlags,
-                                 S32 lUser);
+typedef void (*FREE_FILTERFUNC)(   UCHAR* puc, USHORT usType, UCHAR ucFlags,
+                                   S32 lUser);
 
 // This type is used to pass the copied chunk to the user ready to be used.
-typedef void (*USE_FILTERFUNC)(	UCHAR* puc, S32 lSize, USHORT usType,
-                                 UCHAR ucFlags, S32 lTime, S32 lUser);
+typedef void (*USE_FILTERFUNC)(   UCHAR* puc, S32 lSize, USHORT usType,
+                                  UCHAR ucFlags, S32 lTime, S32 lUser);
 
 class CFilter
 {
@@ -77,8 +77,8 @@ void SetFileWin(CFileWin* pfw)
    {
       // Point callback at our CFileWin callback dispatcher (calls
       // implied this version (WinCall)).
-      m_pfw->m_call			= (FWFUNC)WinCallStatic;
-      m_pfw->m_lUser			= (S32)this;
+      m_pfw->m_call         = (FWFUNC)WinCallStatic;
+      m_pfw->m_lUser         = (S32)this;
    }
 }
 
@@ -129,7 +129,7 @@ void FreeChunk(UCHAR* puc, USHORT usType, UCHAR ucFlags);
 public:        // Members.
 ALLOC_FILTERFUNC m_fnAlloc;            // Where to ask for data allocation.
 FREE_FILTERFUNC m_fnFree;              // Where to ask for data DEallocation.
-USE_FILTERFUNC	m_fnUse;                // Where to pass completed chunks.
+USE_FILTERFUNC m_fnUse;                  // Where to pass completed chunks.
 S32 m_lUser;                           // User defined value.
 
 
@@ -137,9 +137,9 @@ protected:     // Members.
 U32 m_ulFilter;                        // Channels allowed to pass.
 S32 m_lPadSize;                        // Size of current padding.
 S32 m_lBufRemaining;                   // Amount of current buffer remaining.
-PRTCHUNK	m_pChunk;                     // Current chunk.
-CFileWin*	m_pfw;                     // File window.
-CList	<RTCHUNK>	m_listPartial;       // List of partial buffers.
+PRTCHUNK m_pChunk;                       // Current chunk.
+CFileWin*   m_pfw;                     // File window.
+CList   <RTCHUNK>   m_listPartial;       // List of partial buffers.
 };
 
 

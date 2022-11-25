@@ -30,7 +30,7 @@
 // Typedefs.
 //////////////////////////////////////////////////////////////////////////////
 // Forward define class.
-class	CRes;
+class CRes;
 
 class CResItem
 {
@@ -52,11 +52,11 @@ short Lock(void);
 short Unlock(void);
 
 public:     // Members.
-char*		m_pszName;           // Resource name.
-UCHAR*	m_puc;               // Resource data.
+char*      m_pszName;           // Resource name.
+UCHAR*   m_puc;               // Resource data.
 S32 m_lSize;                  // Resource size.
-short	m_sRefCnt;              // Number of items using this resource.
-CRes*		m_pRes;              // Res Manager that owns this resource.
+short m_sRefCnt;                // Number of items using this resource.
+CRes*      m_pRes;              // Res Manager that owns this resource.
 };
 
 typedef CResItem* PRESITEM;

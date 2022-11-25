@@ -17,21 +17,21 @@
 //
 // prefs.h
 //
-//		12/11/96	JPW	Implemented reading and writing of ini files,
-//							functionallity to get/set variables, and delete/create
-//							sections and variables.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
-//							should have been const's.
+//      12/11/96   JPW   Implemented reading and writing of ini files,
+//                     functionallity to get/set variables, and delete/create
+//                     sections and variables.
+//      12/16/96   JPW   Fixed so it will work with the STL stuff that comes with
+//                     MSVC 4.1 or newer.  Also fixed a few psz parameters that
+//                     should have been const's.
 //
-//		03/28/97	JMI	Fixed so this'll work with MSVC 4.2.
+//      03/28/97   JMI   Fixed so this'll work with MSVC 4.2.
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
-//							Also moved the ranges for RSPiX types into xxxsystem.h.
+//                     Also moved the ranges for RSPiX types into xxxsystem.h.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef PREFS_H
@@ -50,24 +50,24 @@ typedef enum ePrefs
 };
 
 private:
-FILE*						m_pFile;                // Currently open file, or NULL if none
-short	m_sReadOnly;                           // Read-only flag (1 = read-only, 0 = not)
-short	m_sErrorStatus;                        // Error status (non-zero = error, 0 = not)
-short	m_sModified;                           //	Indicates if ini in memory has been modified
-short	m_sDidRead;                            // Indicates if ini file has been read yet
-short	m_sUseCRLF;                            // Indicates if ini file is using CR/LF pairs
-char						*m_pszFileName;         // Name of file
-char						*m_pszFileMode;         // Mode file was opened in
-RPrefsLineList	m_pllLines;                   // List of lines read from ini file.
+FILE*                  m_pFile;                // Currently open file, or NULL if none
+short m_sReadOnly;                             // Read-only flag (1 = read-only, 0 = not)
+short m_sErrorStatus;                          // Error status (non-zero = error, 0 = not)
+short m_sModified;                             //   Indicates if ini in memory has been modified
+short m_sDidRead;                              // Indicates if ini file has been read yet
+short m_sUseCRLF;                              // Indicates if ini file is using CR/LF pairs
+char                  *m_pszFileName;         // Name of file
+char                  *m_pszFileMode;         // Mode file was opened in
+RPrefsLineList m_pllLines;                     // List of lines read from ini file.
 
 // Get iterator to a variable
-short	GetIteratorToVariable(                 // Returns 0 if successfull, non-zero otherwise
+short   GetIteratorToVariable(                 // Returns 0 if successfull, non-zero otherwise
    const char* pszSection,                   // In:  Section name (without brackets)
    const char* pszVariable,                  // In:  Variable name
    RPrefsLineList::Pointer* i);              // Out: iterator to line in list
 
 // Get iterator to a section
-short	GetIteratorToSection(                  // Returns 0 if successfull, non-zero otherwise
+short   GetIteratorToSection(                  // Returns 0 if successfull, non-zero otherwise
    const char* pszSection,                   // In:  Section name (without brackets)
    RPrefsLineList::Pointer* i);              // Out: iterator to line in list
 

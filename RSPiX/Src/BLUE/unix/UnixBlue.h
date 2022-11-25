@@ -22,7 +22,7 @@
 // This header defines the Unix implementation of the RSPiX BLUE layer.
 //
 // History:
-//		06/01/04 RCG    Added.
+//      06/01/04 RCG    Added.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -40,9 +40,9 @@ extern short rspInitBlue(void);
 
 extern void rspKillBlue(void);
 
-#define RSP_DOSYSTEM_HOGCPU		0
-#define RSP_DOSYSTEM_TOLERATEOS	1
-#define RSP_DOSYSTEM_SLEEP			2
+#define RSP_DOSYSTEM_HOGCPU      0
+#define RSP_DOSYSTEM_TOLERATEOS   1
+#define RSP_DOSYSTEM_SLEEP         2
 
 extern void rspSetDoSystemMode(
    short sMode);                          // In:  Mode (use RSP_DOSYSTEM_* macros)
@@ -88,20 +88,20 @@ extern S32 macReserveMemBytes;
 
 #if defined(_DEBUG) || defined(TRACENASSERT)
 // TRACE macro, the preferred method of sending output to debug window
-   #define STRACE			rspTrace
-   #define TRACE			STRACE("%s(%d):", __FILE__, __LINE__), STRACE
+   #define STRACE         rspTrace
+   #define TRACE         STRACE("%s(%d):", __FILE__, __LINE__), STRACE
 
 // ASSERT macro, the preferred method of asserting that expressions are true.
-//#define ASSERT(a)		while (!(a))  \
-//								if (rspAssert(__FILE__, __LINE__, #a) == 0)  \
-//									break
+//#define ASSERT(a)      while (!(a))  \
+//                        if (rspAssert(__FILE__, __LINE__, #a) == 0)  \
+//                           break
     #define ASSERT SDL_assert
 #else
 // This causes the compiler to "optimize" out the data and the function call.
 // We can't simply define TRACE as nothing (like ASSERT) because it takes
 // a variable number of arguments.  So, this is the next best thing.
-   #define STRACE			1 ? (void)0 : rspTrace
-   #define TRACE			STRACE
+   #define STRACE         1 ? (void)0 : rspTrace
+   #define TRACE         STRACE
 
 // Simply remove the function and it's paramters.
    #define ASSERT(a)
@@ -127,16 +127,16 @@ extern short rspAssert( // Returns result.
 ////////////////////////////////////////////////////////////////////////////////
 
 // Macros for GetMouseEvent, GetLastMouseEvent.
-#define RSP_MB_NONE				0  // No mouse event
-#define RSP_MB0_RELEASED		1  // Mouse button 0 was released
-#define RSP_MB0_PRESSED			2  // Mouse button 0 was pressed
-#define RSP_MB0_DOUBLECLICK	3  // Mouse button 0 was double clicked
-#define RSP_MB1_RELEASED		4  // Defined for compile-campatibility with PC!
-#define RSP_MB1_PRESSED			5  // Defined for compile-campatibility with PC!
-#define RSP_MB1_DOUBLECLICK	6  // Defined for compile-campatibility with PC!
-#define RSP_MB2_RELEASED		7  // Defined for compile-campatibility with PC!
-#define RSP_MB2_PRESSED			8  // Defined for compile-campatibility with PC!
-#define RSP_MB2_DOUBLECLICK	9  // Defined for compile-campatibility with PC!
+#define RSP_MB_NONE            0  // No mouse event
+#define RSP_MB0_RELEASED      1  // Mouse button 0 was released
+#define RSP_MB0_PRESSED         2  // Mouse button 0 was pressed
+#define RSP_MB0_DOUBLECLICK   3  // Mouse button 0 was double clicked
+#define RSP_MB1_RELEASED      4  // Defined for compile-campatibility with PC!
+#define RSP_MB1_PRESSED         5  // Defined for compile-campatibility with PC!
+#define RSP_MB1_DOUBLECLICK   6  // Defined for compile-campatibility with PC!
+#define RSP_MB2_RELEASED      7  // Defined for compile-campatibility with PC!
+#define RSP_MB2_PRESSED         8  // Defined for compile-campatibility with PC!
+#define RSP_MB2_DOUBLECLICK   9  // Defined for compile-campatibility with PC!
 
 extern void rspGetMouse(
    short* psX,          // X position returned here (unless NULL)
@@ -225,9 +225,9 @@ extern U8* rspGetKeyStatusArray(void); // Returns pointer to 128-byte key status
 extern S32 rspGetToggleKeyStates(void);   // Returns toggle key state flags
 
 // Flags used to test value returned by rspGetToggleKeyStates()
-#define RSP_CAPS_LOCK_ON			0x00000001
-#define RSP_NUM_LOCK_ON				0x00000002
-#define RSP_SCROLL_LOCK_ON			0x00000004
+#define RSP_CAPS_LOCK_ON         0x00000001
+#define RSP_NUM_LOCK_ON            0x00000002
+#define RSP_SCROLL_LOCK_ON         0x00000004
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -238,53 +238,53 @@ extern S32 rspGetToggleKeyStates(void);   // Returns toggle key state flags
 
 // Joy button flags for pu32Buttons parameter to rspGetJoyState() and
 // rspGetJoyPrevState().
-#define RSP_JOY_BUT_1			0x00000001
-#define RSP_JOY_BUT_2			0x00000002
-#define RSP_JOY_BUT_3			0x00000004
-#define RSP_JOY_BUT_4			0x00000008
-#define RSP_JOY_BUT_5			0x00000010
-#define RSP_JOY_BUT_6			0x00000020
-#define RSP_JOY_BUT_7			0x00000040
-#define RSP_JOY_BUT_8			0x00000080
-#define RSP_JOY_BUT_9			0x00000100
-#define RSP_JOY_BUT_10			0x00000200
-#define RSP_JOY_BUT_11			0x00000400
-#define RSP_JOY_BUT_12			0x00000800
-#define RSP_JOY_BUT_13			0x00001000
-#define RSP_JOY_BUT_14			0x00002000
-#define RSP_JOY_BUT_15			0x00004000
-#define RSP_JOY_BUT_16			0x00008000
-#define RSP_JOY_BUT_17			0x00010000
-#define RSP_JOY_BUT_18			0x00020000
-#define RSP_JOY_BUT_19			0x00040000
-#define RSP_JOY_BUT_20			0x00080000
-#define RSP_JOY_BUT_21			0x00100000
-#define RSP_JOY_BUT_22			0x00200000
-#define RSP_JOY_BUT_23			0x00400000
-#define RSP_JOY_BUT_24			0x00800000
-#define RSP_JOY_BUT_25			0x01000000
-#define RSP_JOY_BUT_26			0x02000000
-#define RSP_JOY_BUT_27			0x04000000
-#define RSP_JOY_BUT_28			0x08000000
-#define RSP_JOY_BUT_29			0x10000000
-#define RSP_JOY_BUT_30			0x20000000
-#define RSP_JOY_BUT_31			0x40000000
-#define RSP_JOY_BUT_32			0x80000000
+#define RSP_JOY_BUT_1         0x00000001
+#define RSP_JOY_BUT_2         0x00000002
+#define RSP_JOY_BUT_3         0x00000004
+#define RSP_JOY_BUT_4         0x00000008
+#define RSP_JOY_BUT_5         0x00000010
+#define RSP_JOY_BUT_6         0x00000020
+#define RSP_JOY_BUT_7         0x00000040
+#define RSP_JOY_BUT_8         0x00000080
+#define RSP_JOY_BUT_9         0x00000100
+#define RSP_JOY_BUT_10         0x00000200
+#define RSP_JOY_BUT_11         0x00000400
+#define RSP_JOY_BUT_12         0x00000800
+#define RSP_JOY_BUT_13         0x00001000
+#define RSP_JOY_BUT_14         0x00002000
+#define RSP_JOY_BUT_15         0x00004000
+#define RSP_JOY_BUT_16         0x00008000
+#define RSP_JOY_BUT_17         0x00010000
+#define RSP_JOY_BUT_18         0x00020000
+#define RSP_JOY_BUT_19         0x00040000
+#define RSP_JOY_BUT_20         0x00080000
+#define RSP_JOY_BUT_21         0x00100000
+#define RSP_JOY_BUT_22         0x00200000
+#define RSP_JOY_BUT_23         0x00400000
+#define RSP_JOY_BUT_24         0x00800000
+#define RSP_JOY_BUT_25         0x01000000
+#define RSP_JOY_BUT_26         0x02000000
+#define RSP_JOY_BUT_27         0x04000000
+#define RSP_JOY_BUT_28         0x08000000
+#define RSP_JOY_BUT_29         0x10000000
+#define RSP_JOY_BUT_30         0x20000000
+#define RSP_JOY_BUT_31         0x40000000
+#define RSP_JOY_BUT_32         0x80000000
 
 // Joy dir flags for pu32Axes parameter to rspGetJoyState() and
 // rspGetJoyPrevState().
-#define RSP_JOY_X_POS			0x00000001
-#define RSP_JOY_X_NEG			0x00000002
-#define RSP_JOY_Y_POS			0x00000004
-#define RSP_JOY_Y_NEG			0x00000008
-#define RSP_JOY_Z_POS			0x00000010
-#define RSP_JOY_Z_NEG			0x00000020
-#define RSP_JOY_W_POS			0x00000040
-#define RSP_JOY_W_NEG			0x00000080
-#define RSP_JOY_U_POS			0x00000100
-#define RSP_JOY_U_NEG			0x00000200
-#define RSP_JOY_V_POS			0x00000400
-#define RSP_JOY_V_NEG			0x00000800
+#define RSP_JOY_X_POS         0x00000001
+#define RSP_JOY_X_NEG         0x00000002
+#define RSP_JOY_Y_POS         0x00000004
+#define RSP_JOY_Y_NEG         0x00000008
+#define RSP_JOY_Z_POS         0x00000010
+#define RSP_JOY_Z_NEG         0x00000020
+#define RSP_JOY_W_POS         0x00000040
+#define RSP_JOY_W_NEG         0x00000080
+#define RSP_JOY_U_POS         0x00000100
+#define RSP_JOY_U_NEG         0x00000200
+#define RSP_JOY_V_POS         0x00000400
+#define RSP_JOY_V_NEG         0x00000800
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,25 +344,25 @@ extern void rspGetJoyPrevPos(
 // This function returns directions in a digital format (up, down, centered).
 extern void rspGetJoyState(
    short sJoy,             // In:  Joystick to query.
-   U32*	pu32Buttons,      // Out: Buttons that are down, if not NULL.
-                           // An RSP_JOY_BUT_## bit field that is set indicates
-                           // that button is down.
-   U32*	pu32Axes = NULL); // Out: Directions that are specificed, if not NULL.
-                           // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
-                           // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
-                           // If neither is set for ? axis, that axis is 0.
+   U32*   pu32Buttons,      // Out: Buttons that are down, if not NULL.
+                            // An RSP_JOY_BUT_## bit field that is set indicates
+                            // that button is down.
+   U32*   pu32Axes = NULL); // Out: Directions that are specificed, if not NULL.
+                            // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
+                            // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
+                            // If neither is set for ? axis, that axis is 0.
 
 // Reads the joystick sJoy's previous state.
 // This function returns directions in a digital format (up, down, centered).
 extern void rspGetJoyPrevState(
    short sJoy,             // In:  Joystick to query.
-   U32*	pu32Buttons,      // Out: Buttons that are down, if not NULL.
-                           // An RSP_JOY_BUT_## bit field that is set indicates
-                           // that button is down.
-   U32*	pu32Axes = NULL); // Out: Directions that are specificed, if not NULL.
-                           // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
-                           // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
-                           // If neither is set for ? axis, that axis is 0.
+   U32*   pu32Buttons,      // Out: Buttons that are down, if not NULL.
+                            // An RSP_JOY_BUT_## bit field that is set indicates
+                            // that button is down.
+   U32*   pu32Axes = NULL); // Out: Directions that are specificed, if not NULL.
+                            // An RSP_JOY_?_POS bit set indicates the ? axis is positive.
+                            // An RSP_JOY_?_NEG bit set indicates the ? axis is negative.
+                            // If neither is set for ? axis, that axis is 0.
 
 
 extern bool GetDudeFireAngle(double* d_Angle);
@@ -382,19 +382,19 @@ extern U32 MouseIndexToBitfield(short index);
 // the video profile.  It is up to the user to voluntarily call the profile function
 // to determine the fastest update method and set it accordingly.  Otherwise,
 // the default method will be determined by profiling fullscreen updates.
-#define RSP_MAC_VIDEO_COPYBITS	0     // Use the Mac OS copybits for drawing to screen.
-#define RSP_MAC_VIDEO_DIRECT		1     // Use RSPiX direct-to-screen routines.
+#define RSP_MAC_VIDEO_COPYBITS   0     // Use the Mac OS copybits for drawing to screen.
+#define RSP_MAC_VIDEO_DIRECT      1     // Use RSPiX direct-to-screen routines.
 
 extern S32 rspMacVideoProfile(         // Returns average time per update.
-   short	sX,                           // In:  X coord of rectangle region to profile
-   short	sY,                           // In:  Y coord of rectangle region to profile
-   short	sWidth,                       // In:  Width of the rectangle region
-   short	sHeight,                      // In:  Height of the rectangle region
+   short sX,                             // In:  X coord of rectangle region to profile
+   short sY,                             // In:  Y coord of rectangle region to profile
+   short sWidth,                         // In:  Width of the rectangle region
+   short sHeight,                        // In:  Height of the rectangle region
    S32 lTimeProfile,                   // In:  Duration of time to do the update profile
-   short	sMethod);                     // In:  Method to perform the profile.
+   short sMethod);                       // In:  Method to perform the profile.
 
 extern void rspSetMacVideoUpdateOptions(
-   short	sMethod,                      // In:  Method to be used
+   short sMethod,                        // In:  Method to be used
    short sByteAlignment);              // In:  Byte alignment to be used
 
 extern void rspQueryVideoModeReset(void);
@@ -427,30 +427,30 @@ extern short rspSetVideoMode(          // Returns 0 if successfull, non-zero oth
 extern void rspKillVideoMode(void);
 
 extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero otherwise
-   short	sDepth,                       // In:  Required depth
-   short	sWidth,                       // In:  Requested width
-   short	sHeight,                      // In:  Requested height
-   short	sPages,                       // In:  Required pages
-   short	sScaling,                     // In:  Requested scaling
-   short*	psDeviceWidth = NULL,      // Out: Suggested device width (unless NULL)
-   short*	psDeviceHeight = NULL,     // Out: Suggested device height (unless NULL)
-   short*	psScaling = NULL);         // Out: Suggested scaling (unless NULL)
+   short sDepth,                         // In:  Required depth
+   short sWidth,                         // In:  Requested width
+   short sHeight,                        // In:  Requested height
+   short sPages,                         // In:  Required pages
+   short sScaling,                       // In:  Requested scaling
+   short*   psDeviceWidth = NULL,      // Out: Suggested device width (unless NULL)
+   short*   psDeviceHeight = NULL,     // Out: Suggested device height (unless NULL)
+   short*   psScaling = NULL);         // Out: Suggested scaling (unless NULL)
 
 extern short rspLockVideoPage(         // Returns 0 if successfull, non-zero otherwise
-   void**	ppvMemory,                 // Out: Pointer to video page or NULL
-   S32*		plPitch);                  // Out: Pitch of video page
+   void**   ppvMemory,                 // Out: Pointer to video page or NULL
+   S32*      plPitch);                  // Out: Pitch of video page
 
 extern void rspUnlockVideoPage(void);
 
 extern short rspLockVideoFlipPage(     // Returns 0 if successfull, non-zero otherwise
-   void**	ppvMemory,                 // Out: Pointer to video flip page or NULL
-   S32*		plPitch);                  // Out: Pitch of video flip page
+   void**   ppvMemory,                 // Out: Pointer to video flip page or NULL
+   S32*      plPitch);                  // Out: Pitch of video flip page
 
 extern void rspUnlockVideoFlipPage(void);
 
 extern short rspLockVideoBuffer(       // Returns 0 if successfull, non-zero otherwise
-   void**	ppvBuffer,                 // Out: Pointer to video buffer or NULL
-   S32*		plPitch);                  // Out: Pitch of video buffer
+   void**   ppvBuffer,                 // Out: Pointer to video buffer or NULL
+   S32*      plPitch);                  // Out: Pitch of video buffer
 
 extern void rspUnlockVideoBuffer(void);
 
@@ -555,8 +555,8 @@ extern void rspShieldMouseCursor(void);
 
 extern void rspUnshieldMouseCursor(void);
 
-#define RSP_WHITE_INDEX		0
-#define RSP_BLACK_INDEX		255
+#define RSP_WHITE_INDEX      0
+#define RSP_BLACK_INDEX      255
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -576,7 +576,7 @@ extern S64 rspGetAppMicroseconds(void);   // Returns microseconds since app star
 ////////////////////////////////////////////////////////////////////////////////
 
 // Callback returns 0 if successfull, non-zero if no data was returned
-typedef short (*RSP_SND_CALLBACK)(UCHAR*	pucBuffer,  // Data buffer to be filled
+typedef short (*RSP_SND_CALLBACK)(UCHAR*   pucBuffer,  // Data buffer to be filled
                                   S32 lSize,          // Size of buffer (must fill
                                                       // entire bufffer - pad with
                                                       // silence if necessary)

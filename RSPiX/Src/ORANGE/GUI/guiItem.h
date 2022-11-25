@@ -20,87 +20,87 @@
 // GuiItem.H
 //
 // History:
-//		01/13/97 JMI	Started tracking history of this file.
-//							Added ListBox to Type enum.
-//							Added CopyParms().
+//      01/13/97 JMI   Started tracking history of this file.
+//                     Added ListBox to Type enum.
+//                     Added CopyParms().
 //
-//		01/14/97	JMI	Added IsDynamic().
+//      01/14/97   JMI   Added IsDynamic().
 //
-//		01/16/97	JMI	Added IsClicked(), SetClicked(), and m_sClicked.
+//      01/16/97   JMI   Added IsClicked(), SetClicked(), and m_sClicked.
 //
-//		01/18/97	JMI	Added static DoFocus() to handle simple input focus. Also,
-//							converted Do() to taking an RInputEvent* instead of a
-//							S32*.
+//      01/18/97   JMI   Added static DoFocus() to handle simple input focus. Also,
+//                     converted Do() to taking an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/20/97	JMI	Added GetItemFromPoint() to get a GUI from the tree that
-//							contains the specified point.
+//      01/20/97   JMI   Added GetItemFromPoint() to get a GUI from the tree that
+//                     contains the specified point.
 //
-//		01/21/97	JMI	Added static array of strings describing types.
+//      01/21/97   JMI   Added static array of strings describing types.
 //
-//		01/23/97	JMI	Added new member m_sFocusPos which dictates where
-//							(relative to the client x, y) to draw the focus
-//							rectangle.
-//							Added this functionality to inline DrawFocus().
-//							Also, changed SetEventArea() so it includes more than
-//							just the client by default.
+//      01/23/97   JMI   Added new member m_sFocusPos which dictates where
+//                     (relative to the client x, y) to draw the focus
+//                     rectangle.
+//                     Added this functionality to inline DrawFocus().
+//                     Also, changed SetEventArea() so it includes more than
+//                     just the client by default.
 //
-//		01/26/97	JMI	Altered static HotCall to accept an RHot* instead of a
-//							U32 'as per' new RHot callbacks.
+//      01/26/97   JMI   Altered static HotCall to accept an RHot* instead of a
+//                     U32 'as per' new RHot callbacks.
 //
-//		02/05/97	JMI	Added enum for new PushBtn (RPushBtn).
+//      02/05/97   JMI   Added enum for new PushBtn (RPushBtn).
 //
-//		02/05/97	JMI	Now SetParent() calls OnLoseChild() for parent losing
-//							child and OnGainChild() for parent gaining child.
+//      02/05/97   JMI   Now SetParent() calls OnLoseChild() for parent losing
+//                     child and OnGainChild() for parent gaining child.
 //
-//		03/10/97	JMI	Added TopPosToClient() and ClientPosToTop().
+//      03/10/97   JMI   Added TopPosToClient() and ClientPosToTop().
 //
-//		03/13/97	JMI	Added SetText(S32 lId, char* pszFrmt, ...);
-//							Added GetVal(S32 lId) and GetText(S32 lId, char*);
+//      03/13/97   JMI   Added SetText(S32 lId, char* pszFrmt, ...);
+//                     Added GetVal(S32 lId) and GetText(S32 lId, char*);
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		04/01/97	JMI	Changed short m_sCanBeFocused (TRUE, FALSE) to
-//							m_targetFocus (Self, Parent, Sibling).
-//							Also, now FocusNext() and FocusPrev() will only focus
-//							items that are activated (i.e., IsActivated() != FALSE).
+//      04/01/97   JMI   Changed short m_sCanBeFocused (TRUE, FALSE) to
+//                     m_targetFocus (Self, Parent, Sibling).
+//                     Also, now FocusNext() and FocusPrev() will only focus
+//                     items that are activated (i.e., IsActivated() != FALSE).
 //
-//		04/10/97	JMI	Added components for background resource.
-//							Added font cell height member.
+//      04/10/97   JMI   Added components for background resource.
+//                     Added font cell height member.
 //
-//		04/10/97	JMI	Added enum MultiBtn for RMultiBtn.
+//      04/10/97   JMI   Added enum MultiBtn for RMultiBtn.
 //
-//		04/24/97	JMI	Added m_u32TextShadowColor.
+//      04/24/97   JMI   Added m_u32TextShadowColor.
 //
-//		06/08/97 MJR	Removed tests for NULL pointers from Destroy().  This
-//							was originally intended to avoid getting an obnoxious
-//							TRACE message from RImage and RPal.  The problem was
-//							that the RImage's special data was not getting freed
-//							as a result of this test.  The solution was to get rid
-//							of the tests as well as the pointless TRACE messages
-//							in RImage and RPal.
+//      06/08/97 MJR   Removed tests for NULL pointers from Destroy().  This
+//                     was originally intended to avoid getting an obnoxious
+//                     TRACE message from RImage and RPal.  The problem was
+//                     that the RImage's special data was not getting freed
+//                     as a result of this test.  The solution was to get rid
+//                     of the tests as well as the pointless TRACE messages
+//                     in RImage and RPal.
 //
-//		06/30/97 MJR	Moved SetVisible() into .cpp because the declaration of
-//							a static inside of it was causing problems with mac
-//							precompiled headers.
+//      06/30/97 MJR   Moved SetVisible() into .cpp because the declaration of
+//                     a static inside of it was causing problems with mac
+//                     precompiled headers.
 //
-//					MJR	Added RSP_SAFE_GUI_REF() and RSP_SAFE_GUI_REF_VOID().
+//               MJR   Added RSP_SAFE_GUI_REF() and RSP_SAFE_GUI_REF_VOID().
 //
-//		07/01/97	JMI	Moved a bunch of functions (some that cannot be
-//							inlined (b/c they are virtual) ) into the guiItem.cpp.
+//      07/01/97   JMI   Moved a bunch of functions (some that cannot be
+//                     inlined (b/c they are virtual) ) into the guiItem.cpp.
 //
-//		07/04/97	JMI	Added IsChild().
+//      07/04/97   JMI   Added IsChild().
 //
-//		07/07/97	JMI	Added TextEffectsFlags, m_sTextShadowOffsetX,
-//							and m_sTextShadowOffsetY.
-//							Also, added SetTextEffects().
+//      07/07/97   JMI   Added TextEffectsFlags, m_sTextShadowOffsetX,
+//                     and m_sTextShadowOffsetY.
+//                     Also, added SetTextEffects().
 //
-//		09/12/97	JMI	Made ReadMembers() and WriteMembers() public.
+//      09/12/97   JMI   Made ReadMembers() and WriteMembers() public.
 //
-//					JMI	Added GetCurrentFileVersion().
+//               JMI   Added GetCurrentFileVersion().
 //
-//		10/06/99	JMI	Added m_fnInputEvent.
+//      10/06/99   JMI   Added m_fnInputEvent.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -148,10 +148,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define GUI_MAX_STR	1024
+#define GUI_MAX_STR   1024
 
-#define RSP_SAFE_GUI_REF_VOID(pgui, ref)	((pgui) ? (pgui)->ref : (void)0)
-#define RSP_SAFE_GUI_REF(pgui, ref)			((pgui) ? (pgui)->ref : 0)
+#define RSP_SAFE_GUI_REF_VOID(pgui, ref)   ((pgui) ? (pgui)->ref : (void)0)
+#define RSP_SAFE_GUI_REF(pgui, ref)         ((pgui) ? (pgui)->ref : 0)
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -182,10 +182,10 @@ typedef enum            // Values for member flags.
 typedef enum
 {
    // Values for m_sTextEffects.
-   Shadow		= 0x0001,         // Shadows text by m_sTextShadowOffsetX, m_sTextShadowOffsetY.
-   Bold			= 0x0002,         // Bold text (NYI).
-   Italic		= 0x0004,         // Italicized text (NYI).
-   ThreeD		= 0x0008,         // 3D (NYI; NSIEWB (not sure if ever will be)).
+   Shadow      = 0x0001,         // Shadows text by m_sTextShadowOffsetX, m_sTextShadowOffsetY.
+   Bold         = 0x0002,         // Bold text (NYI).
+   Italic      = 0x0004,         // Italicized text (NYI).
+   ThreeD      = 0x0008,         // 3D (NYI; NSIEWB (not sure if ever will be)).
 
 } TextEffectsFlags;
 
@@ -212,8 +212,8 @@ typedef enum         // Target.
 {
    // Note that Parent and Self are assigned values that
    // aid in backward compatability with older file versions.
-   Parent	= FALSE,       // Target this item's parent for action.
-   Self		= TRUE,        // Target this item for action.
+   Parent   = FALSE,       // Target this item's parent for action.
+   Self      = TRUE,        // Target this item for action.
    Sibling,                // Target a sibling of this item.
    Child,                  // Target first child of this item.
 
@@ -223,8 +223,8 @@ typedef enum         // Target.
 
 typedef enum         // Placement type.
 {
-   Center	= 0x01,        // Center item or center tiled block of item.
-   Tile		= 0x02,        // Tile item.
+   Center   = 0x01,        // Center item or center tiled block of item.
+   Tile      = 0x02,        // Tile item.
 
    // Insert new
 } Placement;
@@ -249,8 +249,8 @@ typedef void (*BtnUpCall)(       // Returns nothing.  Called on button released 
 
 // User callback on any input event directed to GUI via it's RHot (m_hot).
 typedef void (*InputEventCall)(        // Returns nothing.
-   RGuiItem*		pgui,                // In:  this.
-   RInputEvent*	pie);                // In:  Input event that motivated callback.
+   RGuiItem*      pgui,                // In:  this.
+   RInputEvent*   pie);                // In:  Input event that motivated callback.
                                        // Out: Typically pie->sUsed = TRUE if used.
                                        // NOTE: sPosX and sPosY are already mapped
                                        // into pgui's coordinate system.
@@ -330,8 +330,8 @@ void Destroy(void);        // Returns nothing.
 virtual                       // If you override this, call this base if possible.
 short Draw(                   // Returns 0 on success.
    RImage* pimDst,            // Destination image.
-   short sDstX	= 0,           // X position in destination.
-   short sDstY	= 0,           // Y position in destination.
+   short sDstX   = 0,           // X position in destination.
+   short sDstY   = 0,           // Y position in destination.
    short sSrcX = 0,           // X position in source.
    short sSrcY = 0,           // Y position in source.
    short sW = 0,              // Amount to draw.
@@ -341,8 +341,8 @@ short Draw(                   // Returns 0 on success.
 // Pass up a message to redraw the specified region.
 virtual                    // If you override this, call this base if possible.
 short Redraw(              // Returns 0 on success.
-   short	sSrcX = 0,        // X position to start drawing from.
-   short	sSrcY = 0,        // Y position to start drawing from.
+   short sSrcX = 0,          // X position to start drawing from.
+   short sSrcY = 0,          // Y position to start drawing from.
    short sW = 0,           // Amount to draw.
    short sH = 0);          // Amount to draw.
 
@@ -366,7 +366,7 @@ short DrawText(               // Returns 0 on success.
    short sX,                  // X position in image.
    short sY,                  // Y position in image.
    short sW = 0,              // Width of text area.
-   short	sH = 0,              // Height of test area.
+   short sH = 0,                // Height of test area.
    RImage* pim = NULL);       // Destination image.  NULL == use m_im.
 
 // Ask user to erase area specified.
@@ -418,13 +418,13 @@ void SetParent(RGuiItem* pguiParent);
 // Draw border.
 virtual                    // If you override this, call this base if possible.
 void DrawBorder(           // Returns nothing.
-   RImage* pim	= NULL,              // Dest image, uses m_im if NULL.
-   short sInvert	= FALSE);         // Inverts border if TRUE.
+   RImage* pim   = NULL,              // Dest image, uses m_im if NULL.
+   short sInvert   = FALSE);         // Inverts border if TRUE.
 
 // Draw background.  Calls user callback m_backcall if provided.
 virtual                    // If you override this, call this base if possible.
 void DrawBackground(             // Returns nothing.
-   RImage* pim	= NULL);          // Dest image, uses m_im if NULL.
+   RImage* pim   = NULL);          // Dest image, uses m_im if NULL.
 
 // Draw background resource, if one is specified.
 // Utilizes m_*BkdRes* parameters to get, place, and BLiT the resource.
@@ -464,12 +464,12 @@ void CopyParms(               // Returns nothing.
 // Called by SetParent() when a GUI is losing a child item.
 virtual                 // If you override this, call this base, if possible.
 void OnLoseChild(                // Returns nothing.
-   RGuiItem*	pguiChild);       // Child item we're about to lose.
+   RGuiItem*   pguiChild);       // Child item we're about to lose.
 
 // Called by SetParent() when a GUI is gaining a child item.
 virtual                 // If you override this, call this base, if possible.
 void OnGainChild(                // Returns nothing.
-   RGuiItem*	pguiChild);       // Child item we're about to gain.
+   RGuiItem*   pguiChild);       // Child item we're about to gain.
 
 // This will open the specified file with read access in an RFile and
 // pass it to Load(RFile*).
@@ -489,7 +489,7 @@ short Load(                   // Returns 0 on success.
 // See LoadInstance(RFile*).
 virtual                       // If you override this, call this base if possible.
 short Load(                   // Returns 0 on success.
-   RFile*	pfile);           // RFile open with read access to load from.
+   RFile*   pfile);           // RFile open with read access to load from.
 
 // This will open the specified file with write access in an RFile and
 // pass it to Save(RFile*).
@@ -501,7 +501,7 @@ short Save(                   // Returns 0 on success.
 // to have it save the base class members.
 virtual                       // If you override this, call this base if possible.
 short Save(                   // Returns 0 on success.
-   RFile*	pfile);           // RFile open with write access to save to.
+   RFile*   pfile);           // RFile open with write access to save to.
 
 // Sets the 'clicked' status.
 void SetClicked(              // Returns nothing.
@@ -511,8 +511,8 @@ void SetClicked(              // Returns nothing.
 virtual                       // If you override this, call this base if possible.
 void DrawFocus(               // Returns nothing.
    RImage* pimDst,            // Destination image.
-   short sDstX	= 0,           // X offset in destination.
-   short sDstY	= 0,           // Y offset in destination.
+   short sDstX   = 0,           // X offset in destination.
+   short sDstY   = 0,           // Y offset in destination.
    RRect* prc = NULL);        // Clip to.
 
 // Called by the static implementation of SetFocus() on the item gaining
@@ -555,7 +555,7 @@ public:     // Static
 // NOTE:  Eventually, this function may do more, so it is better to call
 // it than simply setting ms_pguiFocus to your gui.
 static RGuiItem* SetFocus(          // Returns pointer to GUI losing the focus.
-   RGuiItem*	pguiNewFocus);       // New item to focus or NULL for none.
+   RGuiItem*   pguiNewFocus);       // New item to focus or NULL for none.
 
 // Moves the focus to the next GUI at the same level as the current
 // ms_pguiFocus.  Does not affect current focus for top-level guis.
@@ -587,32 +587,32 @@ static RGuiItem* CreateGuiItem(        // Returns the allocated type on success.
 // when you do not know the type of the object.  Note this only works
 // for standard types.
 static void DestroyGuiItem(            // Returns nothing.
-   RGuiItem*	pgui);                  // Pointer to gui to deallocate.
+   RGuiItem*   pgui);                  // Pointer to gui to deallocate.
 
 // Instantiate a GUI tree from a file.  Allocates a GUI item of the
 // proper (specified in the file) type and loads it using the specified
 // file.
 static RGuiItem* LoadInstantiate(         // Returns newly allocated GUI item
                                           // on success or NULL on failure.
-   char*	pszFileName);                    // Name of file to instantiate from.
+   char*   pszFileName);                    // Name of file to instantiate from.
 
 // Instantiate a GUI tree from a file.  Allocates a GUI item of the
 // proper (specified in the file) type and loads it using the specified
 // file.
 static RGuiItem* LoadInstantiate(         // Returns newly allocated GUI item
                                           // on success or NULL on failure.
-   RFile*	pfile);                       // Pointer to open GUI file.
+   RFile*   pfile);                       // Pointer to open GUI file.
 
 // Read item's members from file.
 virtual                 // If you override this, call this base if possible.
 short ReadMembers(               // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version);              // File format version to use.
 
 // Write item's members to file.
 virtual                 // If you override this, call this base if possible.
 short WriteMembers(              // Returns 0 on success.
-   RFile*	pfile);              // File to write to.
+   RFile*   pfile);              // File to write to.
 
 public:
 ////////////////////////////////////////////////////////////////////////
@@ -689,11 +689,11 @@ void ClientPosToTop(       // Returns nothing.
    short* psY)             // In: Client pos, Out: Top level pos.
 {
    // Get client position.
-   short	sClientX, sClientY;
+   short sClientX, sClientY;
    GetClient(&sClientX, &sClientY, NULL, NULL);
    // Offset.
-   *psX	+= sClientX;
-   *psY	+= sClientY;
+   *psX   += sClientX;
+   *psY   += sClientY;
    // Convert to top.
    ChildPosToTop(psX, psY);
 }
@@ -706,11 +706,11 @@ void TopPosToClient(       // Returns nothing.
    // Convert to child.
    TopPosToChild(psX, psY);
    // Get client position.
-   short	sClientX, sClientY;
+   short sClientX, sClientY;
    GetClient(&sClientX, &sClientY, NULL, NULL);
    // Offset.
-   *psX	-= sClientX;
-   *psY	-= sClientY;
+   *psX   -= sClientX;
+   *psY   -= sClientY;
 }
 
 // Get the first item with the supplied ID from this among RGuiItem and
@@ -719,25 +719,25 @@ RGuiItem* GetItemFromId(         // Returns pointer to RGuiItem, if found;
                                  // otherwise, returns NULL.
    S32 lId)                   // ID of RGuiItem to find.
 {
-   RGuiItem*	pguiRes	= NULL;        // Assume not found.
+   RGuiItem*   pguiRes   = NULL;        // Assume not found.
 
    // First check this item . . .
    if (m_lId != lId)
    {
       // Check children.
-      RGuiItem*	pgui	= m_listguiChildren.GetHead();
+      RGuiItem*   pgui   = m_listguiChildren.GetHead();
       while (pgui != NULL && pguiRes == NULL)
       {
          // Check pgui and its children.
-         pguiRes	= pgui->GetItemFromId(lId);
+         pguiRes   = pgui->GetItemFromId(lId);
 
-         pgui		= m_listguiChildren.GetNext();
+         pgui      = m_listguiChildren.GetNext();
       }
    }
    else
    {
       // This item is it.
-      pguiRes	= this;
+      pguiRes   = this;
    }
 
    return pguiRes;
@@ -747,26 +747,26 @@ RGuiItem* GetItemFromId(         // Returns pointer to RGuiItem, if found;
 // specified parameters.
 RGuiItem* GetItemFromPoint(         // Returns item ptr, if item found;
                                     // NULL on failure.
-   short	sPosX,                     // X position.
-   short	sPosY,                     // Y position.
-   short	sActive = TRUE,            // If TRUE, only searches active items.
-                                    // If FALSE, searches all items.
+   short sPosX,                       // X position.
+   short sPosY,                       // Y position.
+   short sActive = TRUE,              // If TRUE, only searches active items.
+                                      // If FALSE, searches all items.
    short sEventArea = TRUE);        // If TRUE, only checks items' event areas.
                                     // If FALSE, checks items' entire hot regions.
 
 // Gets the child depth (i.e., how many ancestors until top-level).
 short GetChildDepth(void)        // Returns child depth.
 {
-   short	sDepth	= 0;
+   short sDepth   = 0;
 
-   RGuiItem*	pguiParent	= GetParent();
+   RGuiItem*   pguiParent   = GetParent();
    while (pguiParent != NULL)
    {
       // Increase depth.
       sDepth++;
 
       // Get parent of this parent.
-      pguiParent	= pguiParent->GetParent();
+      pguiParent   = pguiParent->GetParent();
    }
 
    return sDepth;
@@ -777,18 +777,18 @@ short IsAncestor(          // Returns TRUE if pgui is an ancestor of this item.
                            // Returns FALSE otherwise.
    RGuiItem* pgui)         // GUI that may be an ancestor.
 {
-   short	sRes	= FALSE;
+   short sRes   = FALSE;
 
-   RGuiItem*	pguiParent =	GetParent();
+   RGuiItem*   pguiParent =   GetParent();
    while (pguiParent != NULL && sRes == FALSE)
    {
       if (pguiParent == pgui)
       {
          // Found item is an ancestor.
-         sRes	= TRUE;
+         sRes   = TRUE;
       }
 
-      pguiParent =	pguiParent->GetParent();
+      pguiParent =   pguiParent->GetParent();
    }
 
    return sRes;
@@ -843,67 +843,67 @@ protected:     // Internal functions.
 
 // Pass callbacks from RHot on to appropriate instance.
 static void HotCall(
-   RHot*	phot,             // In:  Ptr to RHot that generated event.
+   RHot*   phot,             // In:  Ptr to RHot that generated event.
    RInputEvent* pie)       // In:  Most recent user input event.
                            // Out: pie->sUsed = TRUE, if used.
 { ((RGuiItem*)(phot->m_ulUser))->HotCall(pie); }
 
 // Read header for this GUI item.
 static short ReadHeader(         // Returns 0 on success.
-   RFile*	pfile,               // In:  File to read from.
-   U32*	pu32Version,            // Out: File format version.
-   Type*	ptype);                 // Out: Type of GUI item stored.
+   RFile*   pfile,               // In:  File to read from.
+   U32*   pu32Version,            // Out: File format version.
+   Type*   ptype);                 // Out: Type of GUI item stored.
 
 // Save item's children to the specified file.
 virtual
 short SaveChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to save to.
+   RFile*   pfile);        // File to save to.
 
 // Load item's children from the specified file.
 virtual
 short LoadChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to load from.
+   RFile*   pfile);        // File to load from.
 
 //////////////////////////////////////////////////////////////////////////////
 
 public:     // Member variables.
 RImage m_im;                        // RImage representing this item
                                     // visually.
-RList<RGuiItem>	m_listguiChildren;         // List of items "inside" this item.
-short	m_sX;                         // X position.  0 on construction.
-short	m_sY;                         // Y position.  0 on construction.
+RList<RGuiItem>   m_listguiChildren;         // List of items "inside" this item.
+short m_sX;                           // X position.  0 on construction.
+short m_sY;                           // Y position.  0 on construction.
 
-RPrint*				m_pprint;         // Used to display text.  Also,
-                                    // stores font settings.  By default,
-                                    // this points to &ms_print, but it
-                                    // can be changed to point to a dif-
-                                    // ferent one.
-short	m_sFontCellHeight;                     // Cell height for text.
+RPrint*            m_pprint;         // Used to display text.  Also,
+                                     // stores font settings.  By default,
+                                     // this points to &ms_print, but it
+                                     // can be changed to point to a dif-
+                                     // ferent one.
+short m_sFontCellHeight;                       // Cell height for text.
 char m_szText[GUI_MAX_STR];                     // Text for this item.
 
-short	m_sEventAreaX;                   // X coord of area in which we care
-                                       // about cursor events.
-short	m_sEventAreaY;                   // Y coord of area in which we care
-                                       // about cursor events.
-short	m_sEventAreaW;                   // Width of area in which we care
-                                       // about cursor events.
-short	m_sEventAreaH;                   // Height of area in which we care
-                                       // about cursor events.
+short m_sEventAreaX;                     // X coord of area in which we care
+                                         // about cursor events.
+short m_sEventAreaY;                     // Y coord of area in which we care
+                                         // about cursor events.
+short m_sEventAreaW;                     // Width of area in which we care
+                                         // about cursor events.
+short m_sEventAreaH;                     // Height of area in which we care
+                                         // about cursor events.
 
 RHot m_hot;                            // Area in which we get clickage.
 
-short	m_sPressed;                   // TRUE if our hot area is currently
-                                    // pressed.
+short m_sPressed;                     // TRUE if our hot area is currently
+                                      // pressed.
 
-DrawCall	m_drawcall;                // User callback to draw/erase a region.
-BackCall	m_backcall;                // User callback to draw background in
-                                    // item.
+DrawCall m_drawcall;                  // User callback to draw/erase a region.
+BackCall m_backcall;                  // User callback to draw background in
+                                      // item.
 BtnUpCall m_bcUser;                 // User callback on button up in m_hot
                                     // when active.
 
-InputEventCall	m_fnInputEvent;            // User callback when input event
-                                          // is directed at this GUI via its
-                                          // RHot (m_hot).
+InputEventCall m_fnInputEvent;              // User callback when input event
+                                            // is directed at this GUI via its
+                                            // RHot (m_hot).
 
 
 
@@ -916,12 +916,12 @@ U32 m_u32TextColor;                             // 0 indicates transparency.
 U32 m_u32BackColor;
 U32 m_u32TextShadowColor;
 
-short	m_sTextEffects;                           // Flags for text effects.
+short m_sTextEffects;                             // Flags for text effects.
 
-short	m_sTextShadowOffsetX;                     // Offset aS32 X axis for text shadow.
-short	m_sTextShadowOffsetY;                     // Offset aS32 Y axis for text shadow.
+short m_sTextShadowOffsetX;                       // Offset aS32 X axis for text shadow.
+short m_sTextShadowOffsetY;                       // Offset aS32 Y axis for text shadow.
 
-short	m_sBorderThickness;
+short m_sBorderThickness;
 
 Justification m_justification;            // { RGuiItem::Right, RGuiItem::Center, RGuiItem::Left }
 
@@ -934,17 +934,17 @@ uintptr_t m_ulUserData;          // Space that can be used in any way by
 // the user and has no particular intended
 // use.
 
-short	m_sInvertedBorder;                     // TRUE if border is inverted; FALSE
-                                             // otherwise.
+short m_sInvertedBorder;                       // TRUE if border is inverted; FALSE
+                                               // otherwise.
 
 Type m_type;                              // Indicates type of GUI item.
 
-short	m_sTransparent;                     // TRUE, if this should be blt'ed via
-                                          // a transparent blit call; FALSE,
-                                          // otherwise.  Note that this cannot
-                                          // override transparent Image formats
-                                          // (e.g., FSPR8 will always be blt'ed
-                                          // with transparency).
+short m_sTransparent;                       // TRUE, if this should be blt'ed via
+                                            // a transparent blit call; FALSE,
+                                            // otherwise.  Note that this cannot
+                                            // override transparent Image formats
+                                            // (e.g., FSPR8 will always be blt'ed
+                                            // with transparency).
 
 U32 m_u32TransparentColor;                      // Color used for transparency
                                                 // when using transparent blit
@@ -955,66 +955,66 @@ intptr_t m_lId;                  // ID.  Used to identify this RGuiItem
 
 Target m_targetFocus;                     // Target when focus received.
 
-short	m_sShowFocus;                       // TRUE if this item shows feedback,
-                                          // usually via DrawFocus(), when it
-                                          // has the focus.
+short m_sShowFocus;                         // TRUE if this item shows feedback,
+                                            // usually via DrawFocus(), when it
+                                            // has the focus.
 
-short	m_sFocusPos;                        // Position at which DrawFocus() will
-                                          // draw the focus rectangle relative
-                                          // to the client area.  For example,
-                                          // -1 would but it just outside the
-                                          // client area.
+short m_sFocusPos;                          // Position at which DrawFocus() will
+                                            // draw the focus rectangle relative
+                                            // to the client area.  For example,
+                                            // -1 would but it just outside the
+                                            // client area.
 
 U32 m_u32FocusColor;                      // Color to draw focus with.
 
-short	m_sClicked;                         // TRUE if this item is considered
-                                          // 'Clicked'.  For example, the default
-                                          // implementation makes this TRUE if
-                                          // the cursor was pressed AND released
-                                          // within this item's hot area.
+short m_sClicked;                           // TRUE if this item is considered
+                                            // 'Clicked'.  For example, the default
+                                            // implementation makes this TRUE if
+                                            // the cursor was pressed AND released
+                                            // within this item's hot area.
 
 char m_szBkdResName[RSP_MAX_PATH];                    // Name of background res
                                                       // file to get into
                                                       // m_pimBkdRes.
-short	m_sBkdResTransparent;                     // TRUE, if m_pimBkdRes is to be
-                                                // BLiT'ed transparently; FALSE,
-                                                // otherwise.
+short m_sBkdResTransparent;                       // TRUE, if m_pimBkdRes is to be
+                                                  // BLiT'ed transparently; FALSE,
+                                                  // otherwise.
 U32 m_u32BkdResTransparentColor;                      // Transparency color for
                                                       // m_pimBkdRes when
                                                       // BLiT'ed transparently.
-short	m_sBkdResPlacement;                    // Combination of |'ed
-                                             // Placement enum values.
-RImage*				m_pimBkdRes;               // Background resource image.
+short m_sBkdResPlacement;                      // Combination of |'ed
+                                               // Placement enum values.
+RImage*            m_pimBkdRes;               // Background resource image.
 
 
 GetResCall m_fnGetRes;                    // User callback to get background res
                                           // (m_pimBkdRes).
-ReleaseResCall	m_fnReleaseRes;            // User callback to release background
-                                          // res (m_pimBkdRes).
+ReleaseResCall m_fnReleaseRes;              // User callback to release background
+                                            // res (m_pimBkdRes).
 
 // These members should be changed only via SetVisible() and SetActive().
-short	m_sVisible;                         // TRUE if Draw() is to draw this item
-                                          // and its children; FALSE, otherwise.
-short	m_sActive;                          // TRUE if the RHot is to be activated
-                                          // when visible.
+short m_sVisible;                           // TRUE if Draw() is to draw this item
+                                            // and its children; FALSE, otherwise.
+short m_sActive;                            // TRUE if the RHot is to be activated
+                                            // when visible.
 
 protected:     // Internal typedefs.
 
 protected:     // Protected member variables.
-RGuiItem*			m_pguiParent;
+RGuiItem*         m_pguiParent;
 
 //////////////////// Statics ////////////////////////////////////////////
 public:
 static RPrint ms_print;                   // This is the main RPrint that all
                                           // GUI items default to.
-static RGuiItem*	ms_pguiFocus;           // Higher level APIs can use this as
-                                          // their current point of input
-                                          // focus.
-static char*		ms_apszTypes[NumGuiTypes];       // Array of strings
+static RGuiItem*   ms_pguiFocus;           // Higher level APIs can use this as
+                                           // their current point of input
+                                           // focus.
+static char*      ms_apszTypes[NumGuiTypes];       // Array of strings
                                                    // indexed by type.
 };
 
 #endif // GUIITEM_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

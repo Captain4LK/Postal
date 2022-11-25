@@ -17,45 +17,45 @@
 //
 //////////////////////////////////////////////////////////////////////
 //
-//	IMAGETYP.H
+//   IMAGETYP.H
 //
-//	Created on     09/28/95	BRH
+//   Created on     09/28/95   BRH
 // Implemented on 09/28/95 BRH
 //
-// 09/28/95	BRH	Started this file with the defines for the standard
-//						types of images and palettes.
+// 09/28/95   BRH   Started this file with the defines for the standard
+//                  types of images and palettes.
 //
-//	03/06/96	JMI	Added FLX8_888 and PFLX enums.
+//   03/06/96   JMI   Added FLX8_888 and PFLX enums.
 //
-//	07/22/96	JMI	Added BMP8RLE enum.
+//   07/22/96   JMI   Added BMP8RLE enum.
 //
-// 08/01/96 BRH	Added static array of image type names for use
-//						in utilities.  For example, it will be used in
-//						the AnimCreate utility to initialize a listbox of
-//						image type names from which the user can select
-//						a destination type for the images.
+// 08/01/96 BRH   Added static array of image type names for use
+//                  in utilities.  For example, it will be used in
+//                  the AnimCreate utility to initialize a listbox of
+//                  image type names from which the user can select
+//                  a destination type for the images.
 //
-//	09/04/96	JMI	Added BMP1, monochrome bitmap.  No palette
-//						(1 == Black, 0 == White).
+//   09/04/96   JMI   Added BMP1, monochrome bitmap.  No palette
+//                  (1 == Black, 0 == White).
 //
-//	10/30/96	JMI	Removed all the cool stuff from this file and
-//						put it in pal.h, pal.cpp, image.h, & image.cpp.
-//						Although it is a bit more clumsy to add types
-//						in that everything is not all in one place any-
-//						more, these things are now more strictly
-//						associated with CPal and CImage.  Also, by moving
-//						the astrImageTypeNames to w/i CImage, there is
-//						now only one copy of that array (ms_astrTypeNames).
-//						Before, there was an individual static copy of
-//						the array for every module that included it
-//						(whether included directly or indirectly through
-//						image.h and/or rspix.h).
+//   10/30/96   JMI   Removed all the cool stuff from this file and
+//                  put it in pal.h, pal.cpp, image.h, & image.cpp.
+//                  Although it is a bit more clumsy to add types
+//                  in that everything is not all in one place any-
+//                  more, these things are now more strictly
+//                  associated with CPal and CImage.  Also, by moving
+//                  the astrImageTypeNames to w/i CImage, there is
+//                  now only one copy of that array (ms_astrTypeNames).
+//                  Before, there was an individual static copy of
+//                  the array for every module that included it
+//                  (whether included directly or indirectly through
+//                  image.h and/or rspix.h).
 //
-//	10/30/96	JMI	Added a message indicating this was obsoleted as it doesn't
-//						do anything anymore.
+//   10/30/96   JMI   Added a message indicating this was obsoleted as it doesn't
+//                  do anything anymore.
 //
-//	This file contains the registered CImage types that are currently
-//	supported.  Any new image type can be added to this file by
+//   This file contains the registered CImage types that are currently
+//   supported.  Any new image type can be added to this file by
 // checking it out and adding a define for the type and adding
 // a conversion function to the array.  Your conversion function
 // needs to be able to convert from one of the standard types to
@@ -101,7 +101,7 @@
 // to CDynaLinks.  Since the function typedefs and the friends
 // were the same, the only options left were to either store them
 // in the same array or do this.
-#define MAX_IMAGE_TOCONVERTORS	(END_OF_TYPES)
-#define MAX_IMAGE_FROMCONVERTORS	(END_OF_TYPES + 1)
+#define MAX_IMAGE_TOCONVERTORS   (END_OF_TYPES)
+#define MAX_IMAGE_FROMCONVERTORS   (END_OF_TYPES + 1)
 
 #endif //IMAGETYP_H

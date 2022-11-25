@@ -19,18 +19,18 @@
 // Project: RSPiX
 //
 // History:
-//		09/01/97 MJR	Nearing the end of a major overhaul.
+//      09/01/97 MJR   Nearing the end of a major overhaul.
 //
-//		09/02/97 MJR	Changed so browse end now does the periodic broadcast
-//							and hosts merely respond to them.  This saves bandwidth
-//							on the host end, and in fact cuts down overall network
-//							traffic because we'll only be generating these messages
-//							when we're browsing, as opposed to having the hosts
-//							constantly spew out messages, regardless of whether
-//							anyone is listening.
+//      09/02/97 MJR   Changed so browse end now does the periodic broadcast
+//                     and hosts merely respond to them.  This saves bandwidth
+//                     on the host end, and in fact cuts down overall network
+//                     traffic because we'll only be generating these messages
+//                     when we're browsing, as opposed to having the hosts
+//                     constantly spew out messages, regardless of whether
+//                     anyone is listening.
 //
-//		09/06/97 MJR	Fixed so that it will properly drop hosts that no S32er
-//							exist.
+//      09/06/97 MJR   Fixed so that it will properly drop hosts that no S32er
+//                     exist.
 //
 ////////////////////////////////////////////////////////////////////////////////
 

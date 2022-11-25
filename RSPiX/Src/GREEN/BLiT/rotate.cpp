@@ -63,12 +63,12 @@ short   ConvertFromROTBUF(RImage* pImage);
 
 // Will delete pSpecial
 //
-short		DeleteROTBUF(RImage* pImage);
+short      DeleteROTBUF(RImage* pImage);
 
-const short	csFlag = -32767;
+const short csFlag = -32767;
 short gsCX = csFlag, gsCY = csFlag; // Will be reset each time to csFlag! (A default code)
 
-void	rspSetConvertToROTBUF(short sCenterX, short sCenterY)
+void   rspSetConvertToROTBUF(short sCenterX, short sCenterY)
 {
    gsCX = sCenterX;
    gsCY = sCenterY;
@@ -101,12 +101,12 @@ short   ConvertToROTBUF(RImage* pImage)
 
    // The theme for this type of extended buffer is as follows:
    //
-   //	S32		lBufferWidth; // Width of ROTATING buffer = 2 * sC!!!!!
+   //   S32      lBufferWidth; // Width of ROTATING buffer = 2 * sC!!!!!
    // sC = sqrt2 * R, sP = sL = sqrt2 * sR
-   //	S32		lBufferHeight;// Same number as above
-   //	S32		lXPos;		  // Position of image in the buffer
-   //	S32		lYPos;		  // Position of image in the buffer
-   // void*		pSpecial;		// This holds the previous data type!
+   //   S32      lBufferHeight;// Same number as above
+   //   S32      lXPos;        // Position of image in the buffer
+   //   S32      lYPos;        // Position of image in the buffer
+   // void*      pSpecial;      // This holds the previous data type!
    RImage imTemp;   // this will hold the new image!
 
    // Get the coordinates of the center of rotation!
@@ -151,7 +151,7 @@ short   ConvertToROTBUF(RImage* pImage)
            pImage->m_sWidth, pImage->m_sHeight);
 
    // Now transfer it ALL back to the original buffer!
-   UCHAR	*pBuf = NULL, *pMem = NULL;
+   UCHAR   *pBuf = NULL, *pMem = NULL;
    imTemp.DetachData((void**)&pMem, (void**)&pBuf);
    // Kill Old:
    pImage->DestroyData();
@@ -160,7 +160,7 @@ short   ConvertToROTBUF(RImage* pImage)
    pImage->m_pData = pBuf;
 
    // Validate the new Image, and save the old parameters:
-   RSaveOld*	pSave = new RSaveOld;
+   RSaveOld*   pSave = new RSaveOld;
    pSave->m_type = pImage->m_type;
    pSave->sW = pImage->m_sWidth;
    pSave->sH = pImage->m_sHeight;
@@ -202,7 +202,7 @@ short   ConvertFromROTBUF(RImage* pImage)
 
 // Will delete pSpecial
 //
-short		DeleteROTBUF(RImage* pImage)
+short      DeleteROTBUF(RImage* pImage)
 {
    delete pImage->m_pSpecial;
    return 0;
@@ -210,13 +210,13 @@ short		DeleteROTBUF(RImage* pImage)
 
 //************* This will be incorporated into REAL commands later:
 
-typedef	struct	tagPt
+typedef   struct   tagPt
 {
-   short	x; short	y;
+   short x; short y;
 } Pt;
 
 // a 2D line based on 2D coordinates
-typedef	struct	tagLine1
+typedef   struct   tagLine1
 {
    S32 lNumX;     // Fractional accumulator
    S32 lNumY;
@@ -229,10 +229,10 @@ typedef	struct	tagLine1
    S32 lCurY;
    S32 lPitchX;   // Conditional adding to current position
    S32 lPitchY;
-}	Line1;
+}   Line1;
 
 // A 2D line based on a single memory pointer...
-typedef	struct	tagLine2
+typedef   struct   tagLine2
 {
    S32 lNumX;     // Fractional accumulator
    S32 lNumY;
@@ -240,16 +240,16 @@ typedef	struct	tagLine2
    S32 lIncY;
    S32 lDel;      // Default Integral Increment for slopes > 1 as
    S32 lDen;
-   UCHAR*	pCur; // Current point position
+   UCHAR*   pCur; // Current point position
    S32 lPitchX;   // Conditional adding to current position
    S32 lPitchY;
-}	Line2;
+}   Line2;
 
 // Initialize the integral calculus
 // Overload the init function for each type of line:
 
 // d = the number of steps from pt 1 to pt 2...
-inline void initLine(Line1*	pLine,
+inline void initLine(Line1*   pLine,
                      S32 x1, S32 y1, S32 x2, S32 y2, S32 d)
 {
    S32 lDelX = x2 - x1, lDelY = y2 - y1;
@@ -269,7 +269,7 @@ inline void initLine(Line1*	pLine,
 }
 
 // d = the number of steps from pt 1 to pt 2...
-inline void initLine(Line2*	pLine, UCHAR*   pBase, S32	lPitch,
+inline void initLine(Line2*   pLine, UCHAR*   pBase, S32 lPitch,
                      S32 x1, S32 y1, S32 x2, S32 y2, S32 d)
 {
    S32 lDelX = x2 - x1, lDelY = y2 - y1;
@@ -308,20 +308,20 @@ inline void  incLine(Line2& Line)
 }
 
 // FLIPPING FLAGS:
-#define    PRE_FLIP_H		1
-#define    PRE_FLIP_V		2
-#define    POST_FLIP_H		4
-#define    POST_FLIP_V		8
+#define    PRE_FLIP_H      1
+#define    PRE_FLIP_V      2
+#define    POST_FLIP_H      4
+#define    POST_FLIP_V      8
 
 
-#define	PtSwap(a, b) temp = a; a = b; b = temp
+#define   PtSwap(a, b) temp = a; a = b; b = temp
 
 //
 // It currently just clips to the destination buffer:
 //
-void	_RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
-                    short sDstX, short sDstY, short sDstW, short sDstH, // = 2R = lBufferWidth
-                    short sFlipCode)
+void   _RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
+                     short sDstX, short sDstY, short sDstW, short sDstH, // = 2R = lBufferWidth
+                     short sFlipCode)
 {
 #ifdef _DEBUG
 
@@ -340,7 +340,7 @@ void	_RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
 #endif
    //****************** Destination Clipper ***********************
 
-   short	sClip = 0, sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
+   short sClip = 0, sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
    short gsClipX, gsClipY, gsClipW, gsClipH;
 
    // Init clip rect:
@@ -364,21 +364,21 @@ void	_RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
       double dCos = cos(dRad);
       double dSin = sin(dRad);
       double x, y;
-      short	i, j;
-      Pt	pCorners[4];
-      Line1	l1Left, l1Right;
-      Line2	l2Across; // need 3 lines...
+      short i, j;
+      Pt pCorners[4];
+      Line1 l1Left, l1Right;
+      Line2 l2Across;   // need 3 lines...
       S32 lP = pimDst->m_lPitch;
-      UCHAR	*pDst, *pDstLine;
+      UCHAR   *pDst, *pDstLine;
       Pt temp;
-      UCHAR	pixel;   // ERROR 8-bit color!
+      UCHAR pixel;     // ERROR 8-bit color!
 
       pDst = pimDst->m_pData + (S32)sDstX + ((S32)(sDstY)) * lP;
 
       pDstLine = pDst;
 
-      short	sR = (short)((pimSrc->m_sWinWidth >> 1)); // rotating box half side...
-      short	sC = (short)(sqrt2 * sR); // buffer half side...
+      short sR = (short)((pimSrc->m_sWinWidth >> 1));   // rotating box half side...
+      short sC = (short)(sqrt2 * sR);   // buffer half side...
 
       x = y = (double)-sR;
       //sDstW /= sqrt2;// crude patch
@@ -477,7 +477,7 @@ void	_RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
    // Partially clipped:
    TRACE("Rotate BLit:  Clipping BLiT NYI!\n");
    //BLT_ProtoRotAndClip(pfrSrc,sDeg,pbkdDst,sDstX,sDstY,sDstW,sDstH,
-   //			sClipL,sClipR,sClipT,sClipB,sFlipCode,sAF);
+   //         sClipL,sClipR,sClipT,sClipB,sFlipCode,sAF);
 }
 
 
@@ -496,74 +496,74 @@ void	_RotateShrink(float fDeg, RImage* pimSrc, RImage* pimDst,
 // and the old strafe will probably be dropped!
 //
 /*
-CStrafe*	BLT_RotStrafe(CImage* pimSrc,short sHotX,short sHotY,short sNumInc,
-						  short sDstH,short sNumLinks,short *psX, short* psY)
-	{
-	/*
-#ifdef	_DEBUG
-	if (!pimSrc) {TRACE("BLT_STRAFE: null src image!\n"); return NULL;}
-	if (sNumInc < 1)  {TRACE("BLT_STRAFE: no frames specified!\n"); return NULL;}
-	if (sNumLinks && (!psX || !psY))
-		{TRACE("BLT_STRAFE: null links passed!\n"); return NULL;}
-	if (sDstH > (short)pimSrc->lHeight)
-		{TRACE("BLT_STRAFE: magnification not currently supported!\n"); return NULL;}
+CStrafe*   BLT_RotStrafe(CImage* pimSrc,short sHotX,short sHotY,short sNumInc,
+                    short sDstH,short sNumLinks,short *psX, short* psY)
+   {
+   /*
+#ifdef   _DEBUG
+   if (!pimSrc) {TRACE("BLT_STRAFE: null src image!\n"); return NULL;}
+   if (sNumInc < 1)  {TRACE("BLT_STRAFE: no frames specified!\n"); return NULL;}
+   if (sNumLinks && (!psX || !psY))
+      {TRACE("BLT_STRAFE: null links passed!\n"); return NULL;}
+   if (sDstH > (short)pimSrc->lHeight)
+      {TRACE("BLT_STRAFE: magnification not currently supported!\n"); return NULL;}
 #endif
 
-	Strafe* pStrafe = (Strafe*) calloc(1,sizeof(Strafe));
-	pStrafe->sNumFrames = sNumInc;
-	pStrafe->sNumLinks = sNumLinks;
-	pStrafe->pFrame = (StrafeFrame*) calloc(sNumInc,sizeof(StrafeFrame) );
+   Strafe* pStrafe = (Strafe*) calloc(1,sizeof(Strafe));
+   pStrafe->sNumFrames = sNumInc;
+   pStrafe->sNumLinks = sNumLinks;
+   pStrafe->pFrame = (StrafeFrame*) calloc(sNumInc,sizeof(StrafeFrame) );
 
-	short i,j;
+   short i,j;
 
-	for (i=0;i<sNumLinks;i++)
-		{
-		psX[i] -= sHotX;	// get position relative to hot spot:
-		psY[i] -= sHotY;
-		}
+   for (i=0;i<sNumLinks;i++)
+      {
+      psX[i] -= sHotX;   // get position relative to hot spot:
+      psY[i] -= sHotY;
+      }
 
-	for (i=0;i<sNumInc;i++)
-		{
-		pStrafe->pFrame[i].pfspr = pimSrc; // pt to original
-		pStrafe->pFrame[i].sHotX = 0;
-		pStrafe->pFrame[i].sHotY = 0;
-		pStrafe->pFrame[i].sCurDeg = 0;
-		if (sNumLinks == 0) pStrafe->pFrame[i].psLinkX = pStrafe->pFrame[i].psLinkY = NULL;
-		else // create space for links:
-			{
-			pStrafe->pFrame[i].psLinkX = (short*)calloc(sNumLinks,sizeof(short));
-			pStrafe->pFrame[i].psLinkY = (short*)calloc(sNumLinks,sizeof(short));
-			// Set all the links:
-			for (j=0;j<sNumLinks;j++)
-				{
-				pStrafe->pFrame[i].psLinkX[j] = psX[j]; // same links!
-				pStrafe->pFrame[i].psLinkY[j] = psX[j];
-				}
-			}
-		}
+   for (i=0;i<sNumInc;i++)
+      {
+      pStrafe->pFrame[i].pfspr = pimSrc; // pt to original
+      pStrafe->pFrame[i].sHotX = 0;
+      pStrafe->pFrame[i].sHotY = 0;
+      pStrafe->pFrame[i].sCurDeg = 0;
+      if (sNumLinks == 0) pStrafe->pFrame[i].psLinkX = pStrafe->pFrame[i].psLinkY = NULL;
+      else // create space for links:
+         {
+         pStrafe->pFrame[i].psLinkX = (short*)calloc(sNumLinks,sizeof(short));
+         pStrafe->pFrame[i].psLinkY = (short*)calloc(sNumLinks,sizeof(short));
+         // Set all the links:
+         for (j=0;j<sNumLinks;j++)
+            {
+            pStrafe->pFrame[i].psLinkX[j] = psX[j]; // same links!
+            pStrafe->pFrame[i].psLinkY[j] = psX[j];
+            }
+         }
+      }
 
-	return pStrafe;
-	}
+   return pStrafe;
+   }
 */
 
 /*
-void	BLT_FreeStrafe(Strafe* pStrafe)
-	{
-	if (pStrafe == NULL) return;
-	short i;
+void   BLT_FreeStrafe(Strafe* pStrafe)
+   {
+   if (pStrafe == NULL) return;
+   short i;
 
-	for (i=0;i<pStrafe->sNumFrames;i++)
-		{
-		if (pStrafe->pFrame != NULL)
-			{
-			if (pStrafe->pFrame[i].psLinkX != NULL)
-				free(pStrafe->pFrame[i].psLinkX);
+   for (i=0;i<pStrafe->sNumFrames;i++)
+      {
+      if (pStrafe->pFrame != NULL)
+         {
+         if (pStrafe->pFrame[i].psLinkX != NULL)
+            free(pStrafe->pFrame[i].psLinkX);
 
-			if (pStrafe->pFrame[i].psLinkY != NULL)
-				free(pStrafe->pFrame[i].psLinkY);
-			}
-		}
-	}
+         if (pStrafe->pFrame[i].psLinkY != NULL)
+            free(pStrafe->pFrame[i].psLinkY);
+         }
+      }
+   }
 */
 
 // In this version, You must supply the host structure, which you may define, but which

@@ -23,142 +23,142 @@
 //
 // History:
 //
-//		03/03/97	BRH,JMI	Started this generic thing3d object to reduce the
-//							amount of redundant code.
+//      03/03/97   BRH,JMI   Started this generic thing3d object to reduce the
+//                     amount of redundant code.
 //
-//		03/17/97	JMI	Turned most of the CCharacter class into this CThing3d
-//							class.
+//      03/17/97   JMI   Turned most of the CCharacter class into this CThing3d
+//                     class.
 //
-//		03/18/97	JMI	Added DetachChild() and m_u16IdParent.
+//      03/18/97   JMI   Added DetachChild() and m_u16IdParent.
 //
-//		03/18/97	JMI	Made On and While functions virtual.
+//      03/18/97   JMI   Made On and While functions virtual.
 //
-//		03/19/97	JMI	Added m_dExtRotVelY, m_dExtRotVelZ, and m_dRotZ.
-//							Also, DetachChild() now returns a pointer to the detached
-//							child.
+//      03/19/97   JMI   Added m_dExtRotVelY, m_dExtRotVelZ, and m_dRotZ.
+//                     Also, DetachChild() now returns a pointer to the detached
+//                     child.
 //
-//		03/21/97	JMI	Added State_Launch, State_LaunchRelease, State_LaunchFinish,
-//							and State_LaunchDone.
+//      03/21/97   JMI   Added State_Launch, State_LaunchRelease, State_LaunchFinish,
+//                     and State_LaunchDone.
 //
-//		03/27/97	JMI	Added State_GetUp, State_Duck, State_Rise.
+//      03/27/97   JMI   Added State_GetUp, State_Duck, State_Rise.
 //
-//		04/02/97	JMI	Removed m_pFire.
+//      04/02/97   JMI   Removed m_pFire.
 //
-//		04/07/97	JMI	Added State_Jump, State_JumpForward, State_Fall,
-//							State_Land, and State_LandForward.
+//      04/07/97   JMI   Added State_Jump, State_JumpForward, State_Fall,
+//                     State_Land, and State_LandForward.
 //
-//		04/10/97 BRH	Changed GetAttributes to two functions for the new
-//							multi layred attribute maps.  Now there is a
-//							GetFloorAttributes and GetEffectAttributes that do
-//							lookups on the two different attribute maps.
+//      04/10/97 BRH   Changed GetAttributes to two functions for the new
+//                     multi layred attribute maps.  Now there is a
+//                     GetFloorAttributes and GetEffectAttributes that do
+//                     lookups on the two different attribute maps.
 //
-//		04/21/97	JMI	Made MakeValidPosition() virtual.
+//      04/21/97   JMI   Made MakeValidPosition() virtual.
 //
-//		04/23/97 BRH	Added a few states for new enemy logic.
+//      04/23/97 BRH   Added a few states for new enemy logic.
 //
-//		04/25/97	JMI	Added State_Writhing for pre-execute dying dudes.
+//      04/25/97   JMI   Added State_Writhing for pre-execute dying dudes.
 //
-//		04/25/97	JMI	Added a state for executing dudes, State_Execute.
+//      04/25/97   JMI   Added a state for executing dudes, State_Execute.
 //
-//		04/29/97	JMI	Added State_PutOutFire, State_PickUp, and State_PutDown.
+//      04/29/97   JMI   Added State_PutOutFire, State_PickUp, and State_PutDown.
 //
-//		05/06/97 BRH	Added intermediate states for Popout and Run & Shoot
+//      05/06/97 BRH   Added intermediate states for Popout and Run & Shoot
 //
-//		05/09/97 BRH	Added walk and hide states for ostriches and others.
+//      05/09/97 BRH   Added walk and hide states for ostriches and others.
 //
-//		05/12/97 BRH	Added a few more states for enemy logic.
+//      05/12/97 BRH   Added a few more states for enemy logic.
 //
-//		05/14/97	JMI	Added generic form of DetachChild(...).
-//							Also, added generic PositionChild(...).
+//      05/14/97   JMI   Added generic form of DetachChild(...).
+//                     Also, added generic PositionChild(...).
 //
-//		05/19/97 BRH	Added StateNames array so that the names of the states
-//							can be shown for thought balloons and refernced for
-//							the logic tables.
+//      05/19/97 BRH   Added StateNames array so that the names of the states
+//                     can be shown for thought balloons and refernced for
+//                     the logic tables.
 //
-//		05/20/97 BRH	Added a few more states for victim logic.
+//      05/20/97 BRH   Added a few more states for victim logic.
 //
-//		05/21/97 BRH	Added ShootRun state for an alternative to the shoot
-//							animation.  They will use this state when shooting while
-//							running.
+//      05/21/97 BRH   Added ShootRun state for an alternative to the shoot
+//                     animation.  They will use this state when shooting while
+//                     running.
 //
-//		05/26/97 BRH	Doubled the Default Hit Points to make the enemy guys
-//							stronger.
+//      05/26/97 BRH   Doubled the Default Hit Points to make the enemy guys
+//                     stronger.
 //
-//		05/29/97	JMI	Added GetLayer().
+//      05/29/97   JMI   Added GetLayer().
 //
-//		05/30/97	JMI	Added a generic function for adding a force vector to
-//							the external force.
+//      05/30/97   JMI   Added a generic function for adding a force vector to
+//                     the external force.
 //
-//		06/02/97 BRH	Added another state for Hunting.
+//      06/02/97 BRH   Added another state for Hunting.
 //
-//		06/02/97	JMI	Added State_Climb.
+//      06/02/97   JMI   Added State_Climb.
 //
-//		06/05/97	JMI	Removed m_sHitPoints and added a CStockPile, m_stockpile,
-//							instead.
+//      06/05/97   JMI   Removed m_sHitPoints and added a CStockPile, m_stockpile,
+//                     instead.
 //
-//		06/13/97	JMI	Added State_ObjectReleased.
+//      06/13/97   JMI   Added State_ObjectReleased.
 //
-//		06/15/97	JMI	CThing3d() now Zero()s the m_stockpile b/c I removed its
-//							constructor b/c I wanted CStockPile to be an aggregate type.
+//      06/15/97   JMI   CThing3d() now Zero()s the m_stockpile b/c I removed its
+//                     constructor b/c I wanted CStockPile to be an aggregate type.
 //
-//		06/25/97 BRH	Added 2D shadow sprite which will be drawn if there
-//							is a resource for it and it is visible.  Derived classes
-//							can call PrepareShadow to load the default shadow and
-//							make it visible.  PrepareShadow will first check the
-//							shadow sprite's image to make sure it is NULL before
-//							loading the default shadow so that you can lad a different
-//							shadow resource beforehand.
+//      06/25/97 BRH   Added 2D shadow sprite which will be drawn if there
+//                     is a resource for it and it is visible.  Derived classes
+//                     can call PrepareShadow to load the default shadow and
+//                     make it visible.  PrepareShadow will first check the
+//                     shadow sprite's image to make sure it is NULL before
+//                     loading the default shadow so that you can lad a different
+//                     shadow resource beforehand.
 //
-//		06/27/97	JMI	Added GetSprite() which returns this thing's sprite or
-//							NULL.
+//      06/27/97   JMI   Added GetSprite() which returns this thing's sprite or
+//                     NULL.
 //
-//		07/01/97	JMI	Changed DetachChild() and PositionChild() to receive the
-//							rigid body transform as a parameter rather than assume it
-//							is m_panimCur->m_transRigid.
-//							Also, added GetLinkPoint().
+//      07/01/97   JMI   Changed DetachChild() and PositionChild() to receive the
+//                     rigid body transform as a parameter rather than assume it
+//                     is m_panimCur->m_transRigid.
+//                     Also, added GetLinkPoint().
 //
-//		07/06/97 BRH	Added a few states for victims to use.
+//      07/06/97 BRH   Added a few states for victims to use.
 //
-//		07/09/97	JMI	Added MaxStepUpThreshold, MaxForeVel, and MaxBackVel macro
-//							enums.
+//      07/09/97   JMI   Added MaxStepUpThreshold, MaxForeVel, and MaxBackVel macro
+//                     enums.
 //
-//		07/17/97 BRH	Added DelayShoot state.
+//      07/17/97 BRH   Added DelayShoot state.
 //
-//		07/18/97	JMI	Added PlaySample() that will hook existing PlaySample()
-//							calls in CThing3d derived classes and map them to
-//							PlaySample() and, if they don't specify a volume, it will
-//							use this object's distance to the ear.
+//      07/18/97   JMI   Added PlaySample() that will hook existing PlaySample()
+//                     calls in CThing3d derived classes and map them to
+//                     PlaySample() and, if they don't specify a volume, it will
+//                     use this object's distance to the ear.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		08/01/97 BRH	Added new state - AvoidFire and DangerNear
+//      08/01/97 BRH   Added new state - AvoidFire and DangerNear
 //
-//		08/02/97 BRH	Added virtual OnHelpMsg function.
+//      08/02/97 BRH   Added virtual OnHelpMsg function.
 //
-//		08/03/97 BRH	Changed DangerNear to Helping state.
+//      08/03/97 BRH   Changed DangerNear to Helping state.
 //
-//		08/06/97 JRD	Added tri-axial local scaling to render process
+//      08/06/97 JRD   Added tri-axial local scaling to render process
 //
-//		08/08/97 BRH	Added virtual GetSmash() function to return the smash
-//							of a thing.  Also added MarchNext state.
+//      08/08/97 BRH   Added virtual GetSmash() function to return the smash
+//                     of a thing.  Also added MarchNext state.
 //
-//		08/11/97 BRH	Walk to next bouy.
+//      08/11/97 BRH   Walk to next bouy.
 //
-//		08/12/97 BRH	Initialized timers.
+//      08/12/97 BRH   Initialized timers.
 //
-//		08/18/97	JMI	Moved StartAnim() from CDude to CThing3d so more things
-//							could use it.
+//      08/18/97   JMI   Moved StartAnim() from CDude to CThing3d so more things
+//                     could use it.
 //
-//		08/18/97	JMI	Added m_sLayerOverride which directs Render() to use the
-//							specified layer rather than the one based on the
-//							attributes.
+//      08/18/97   JMI   Added m_sLayerOverride which directs Render() to use the
+//                     specified layer rather than the one based on the
+//                     attributes.
 //
-//		08/24/97	JMI	Changed ms_apt3dAttribCheck to ms_apt2dAttribCheckMedium[]
-//							and added ms_apt2dAttribCheckSmall[],
-//							ms_apt2dAttribCheckLarge[], and ms_apt2dAttribCheckHuge[].
-//							Also, added pointer so that each object can choose one,
-//							m_pap2dAttribCheckPoints.
-//							Also, changed type of these arrays to local type Point2D.
+//      08/24/97   JMI   Changed ms_apt3dAttribCheck to ms_apt2dAttribCheckMedium[]
+//                     and added ms_apt2dAttribCheckSmall[],
+//                     ms_apt2dAttribCheckLarge[], and ms_apt2dAttribCheckHuge[].
+//                     Also, added pointer so that each object can choose one,
+//                     m_pap2dAttribCheckPoints.
+//                     Also, changed type of these arrays to local type Point2D.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef THING3D_H
@@ -181,11 +181,11 @@ public:
 // Macro within CThing3d namespace.
 enum
 {
-   MaxStepUpThreshold	= 15,          // In realm units.
-   MaxForeVel				= 80,          // In realm units per second.
-   MaxBackVel				= -60,         // In realm units per second.
-   DefHitPoints			= 125,
-   SoundHalfLife			= 1000         // Default sound half life.
+   MaxStepUpThreshold   = 15,          // In realm units.
+   MaxForeVel            = 80,          // In realm units per second.
+   MaxBackVel            = -60,         // In realm units per second.
+   DefHitPoints         = 125,
+   SoundHalfLife         = 1000         // Default sound half life.
 };
 
 typedef enum
@@ -205,7 +205,7 @@ typedef enum
    State_Throw,                  // Throwing.
    State_ThrowRelease,           // Release thrown object.
    State_ThrowFinish,            // Already released, finishing animation.
-   State_ThrowDone,              // Throw done, ready to move on.	 Transitional.
+   State_ThrowDone,              // Throw done, ready to move on.    Transitional.
    State_Run,                    // Running.
    State_Shooting,               // Shoot.
    State_RunAndShoot,            // Run and shoot.
@@ -291,8 +291,8 @@ typedef enum
 // A 2D point.  Used by the attrib check arrays.
 typedef struct
 {
-   short	sX;
-   short	sZ;
+   short sX;
+   short sZ;
 } Point2D;
 
 //---------------------------------------------------------------------------
@@ -332,21 +332,21 @@ short m_sSuspend;                      // Suspend flag
 U16 m_u16IdFire;                       // ID of fire to carry around when you are burning.
 
 CSprite3 m_sprite;                     // 3D Sprite used to render the 3D Thing.
-CSprite2	m_spriteShadow;               // 2D shadow sprite to be shown on the ground
+CSprite2 m_spriteShadow;                 // 2D shadow sprite to be shown on the ground
 
 CSmash m_smash;                        // Smash for collision detection.
 
 // Animation specific variables.
-CAnim3D*	m_panimCur;                   // Pointer to current animation.
+CAnim3D*   m_panimCur;                   // Pointer to current animation.
 S32 m_lAnimTime;                       // Time from start of animation.
 S32 m_lAnimPrevUpdateTime;             // Last time m_lAnimTime was updated.
                                        // Used to determine the delta time to add
                                        // to m_lAnimTime.
 RTransform m_trans;                    // Transform to apply on Render.
 
-State	m_state;                         // Current state of this thing3d.
+State m_state;                           // Current state of this thing3d.
 
-short	m_sBrightness;                   // Normal brightness level or dark if burnt
+short m_sBrightness;                     // Normal brightness level or dark if burnt
 
 bool m_bAboveTerrain;                  // true, if in the air, false if on terrain.
 
@@ -354,11 +354,11 @@ U16 m_u16IdParent;                     // Instance ID of parent.
 
 CStockPile m_stockpile;                // Stockpile of ammo and health.
 
-short	m_sLayerOverride;                // Layer override.  If > 0, used instead of
-                                       // layer dictated by attributes.
+short m_sLayerOverride;                  // Layer override.  If > 0, used instead of
+                                         // layer dictated by attributes.
 
-const Point2D*	m_pap2dAttribCheckPoints;        // Points to the ms_apt3dAttribCheck*[]
-                                                // that best reflects this object.
+const Point2D*   m_pap2dAttribCheckPoints;        // Points to the ms_apt3dAttribCheck*[]
+                                                  // that best reflects this object.
 
 
 //---------------------------------------------------------------------------
@@ -368,15 +368,15 @@ public:
 static double ms_dDefaultSurfaceDrag;        // Default drag aS32 surfaces.
 static double ms_dDefaultAirDrag;            // Default drag due to air friction.
 static short ms_sBurntBrightness;            // Brightness level after being burnt
-static char*	ms_apszStateNames[];          // Strings describing states, indexed by
+static char*   ms_apszStateNames[];          // Strings describing states, indexed by
                                              // the state enum.
 
 // These are arrays of pts to be checked on the attribute map for various
 // size of CThing3d derived things.
-static const Point2D	ms_apt2dAttribCheckSmall[];
-static const Point2D	ms_apt2dAttribCheckMedium[];
-static const Point2D	ms_apt2dAttribCheckLarge[];
-static const Point2D	ms_apt2dAttribCheckHuge[];
+static const Point2D ms_apt2dAttribCheckSmall[];
+static const Point2D ms_apt2dAttribCheckMedium[];
+static const Point2D ms_apt2dAttribCheckLarge[];
+static const Point2D ms_apt2dAttribCheckHuge[];
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -390,38 +390,38 @@ CThing3d(CRealm* pRealm, CThing::ClassIDType id)
    // no constructor.
    m_stockpile.Zero();
 
-   m_state				= State_Idle;
-   m_panimCur			= NULL;
-   m_dExtHorzVel		= 0.0;
-   m_dExtHorzRot		= 0.0;
-   m_dExtHorzDrag		= 0.0;
-   m_dExtVertVel		= 0.0;
-   m_dExtRotVelY		= 0.0;
-   m_dExtRotVelZ		= 0.0;
-   m_dVel				= 0.0;
-   m_dAcc				= 0.0;
-   m_dRot				= 0.0;
-   m_dRotZ				= 0.0;
-   m_dScaleX			= 1.0;
-   m_dScaleY			= 1.0;
-   m_dScaleZ			= 1.0;
-   m_dDrag				= 0.0;
-   m_sprite.m_pthing	= this;
-   m_sSuspend			= 0;
-   m_sBrightness		= 0;
-   m_u16IdFire			= CIdBank::IdNil;
-   m_bAboveTerrain	= false;
-   m_stockpile.m_sHitPoints	= DefHitPoints;
-   m_u16IdParent		= CIdBank::IdNil;
+   m_state            = State_Idle;
+   m_panimCur         = NULL;
+   m_dExtHorzVel      = 0.0;
+   m_dExtHorzRot      = 0.0;
+   m_dExtHorzDrag      = 0.0;
+   m_dExtVertVel      = 0.0;
+   m_dExtRotVelY      = 0.0;
+   m_dExtRotVelZ      = 0.0;
+   m_dVel            = 0.0;
+   m_dAcc            = 0.0;
+   m_dRot            = 0.0;
+   m_dRotZ            = 0.0;
+   m_dScaleX         = 1.0;
+   m_dScaleY         = 1.0;
+   m_dScaleZ         = 1.0;
+   m_dDrag            = 0.0;
+   m_sprite.m_pthing   = this;
+   m_sSuspend         = 0;
+   m_sBrightness      = 0;
+   m_u16IdFire         = CIdBank::IdNil;
+   m_bAboveTerrain   = false;
+   m_stockpile.m_sHitPoints   = DefHitPoints;
+   m_u16IdParent      = CIdBank::IdNil;
    m_spriteShadow.m_sInFlags = CSprite::InHidden;
    m_spriteShadow.m_pImage = NULL;
    m_spriteShadow.m_pthing = this;
    m_lAnimTime = 0;
    m_lTimer = 0;
-   m_sLayerOverride	= -1;
+   m_sLayerOverride   = -1;
 
    // Default to the standard.
-   m_pap2dAttribCheckPoints	= ms_apt2dAttribCheckMedium;
+   m_pap2dAttribCheckPoints   = ms_apt2dAttribCheckMedium;
 }
 
 public:
@@ -501,9 +501,9 @@ void EditRect(RRect* pRect);
 // Called by editor to get the hotspot of an object in 2D.
 // (virtual (Overridden here)).
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the sprite for this thing.  If there's more than one, pick one
@@ -514,13 +514,13 @@ CSprite* GetSprite(void)         // Returns the sprite for this thing or NULL.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 // Returns a pointer to the smash
 virtual
@@ -632,16 +632,16 @@ void UpdateVelocities(           // Returns nothing.
 
 // Applies velocities to positions.
 void GetNewPosition(                   // Returns nothing.
-   double*	pdNewX,                    // Out: New x position.
-   double*	pdNewY,                    // Out: New y position.
-   double*	pdNewZ,                    // Out: New z position.
+   double*   pdNewX,                    // Out: New x position.
+   double*   pdNewY,                    // Out: New y position.
+   double*   pdNewZ,                    // Out: New z position.
    double dSeconds);                   // Seconds since last update.
 //#ifdef MOBILE
 // Applies velocities to positions, but take in angle of movement
 void GetNewPositionAngle(                 // Returns nothing.
-   double*	pdNewX,                       // Out: New x position.
-   double*	pdNewY,                       // Out: New y position.
-   double*	pdNewZ,                       // Out: New z position.
+   double*   pdNewX,                       // Out: New x position.
+   double*   pdNewY,                       // Out: New y position.
+   double*   pdNewZ,                       // Out: New z position.
    double dSeconds,                          // Seconds since last update.
    double dAngle
    );
@@ -651,13 +651,13 @@ virtual              // Override to implement additional functionality.
                      // Call base class to get default functionality.
 bool MakeValidPosition(                // Returns true, if new position was validitable.
                                        // Returns false, if could not reach new position.
-   double*	pdNewX,                    // In:  x position to validate.
-                                       // Out: New x position.
-   double*	pdNewY,                    // In:  y position to validate.
-                                       // Out: New y position.
-   double*	pdNewZ,                    // In:  z position to validate.
-                                       // Out: New z position.
-   short	sVertTolerance = 0);          // Vertical tolerance.
+   double*   pdNewX,                    // In:  x position to validate.
+                                        // Out: New x position.
+   double*   pdNewY,                    // In:  y position to validate.
+                                        // Out: New y position.
+   double*   pdNewZ,                    // In:  z position to validate.
+                                        // Out: New z position.
+   short sVertTolerance = 0);            // Vertical tolerance.
 
 // Deluxe does all for updating position.
 void DeluxeUpdatePosVel(         // Returns nothing.
@@ -690,43 +690,43 @@ void GetLayer(
 virtual              // Override to implement additional functionality.
                      // Call base class to get default functionality.
 CThing3d* DetachChild(              // Returns ptr to the child or NULL, if none.
-   U16*		pu16InstanceId,         // In:  Instance ID of child to detach.
-                                    // Out: CIdBank::IdNil.
-   RTransform*	ptrans);             // In:  Transform for positioning child.
+   U16*      pu16InstanceId,         // In:  Instance ID of child to detach.
+                                     // Out: CIdBank::IdNil.
+   RTransform*   ptrans);             // In:  Transform for positioning child.
 
 // Detach the specified child sprite (can be any sprite type).
 virtual              // Override to implement additional functionality.
                      // Call base class to get default functionality.
 void DetachChild(                   // Returns nothing.
-   CSprite*		psprite,             // In:  Child sprite to detach.
-   RTransform*	ptrans,              // In:  Transform for positioning child.
-   double*		pdX,                 // Out: New position of child.
-   double*		pdY,                 // Out: New position of child.
-   double*		pdZ);                // Out: New position of child.
+   CSprite*      psprite,             // In:  Child sprite to detach.
+   RTransform*   ptrans,              // In:  Transform for positioning child.
+   double*      pdX,                 // Out: New position of child.
+   double*      pdY,                 // Out: New position of child.
+   double*      pdZ);                // Out: New position of child.
 
 
 // Position the specified child sprite (can be any sprite type).
 virtual              // Override to implement additional functionality.
                      // Call base class to get default functionality.
 void PositionChild(                 // Returns nothing.
-   CSprite*	psprite,                // In:  Child sprite to detach.
-   RTransform*	ptrans,              // In:  Transform for positioning child.
-   double*	pdX,                    // Out: New position of child.
-   double*	pdY,                    // Out: New position of child.
-   double*	pdZ);                   // Out: New position of child.
+   CSprite*   psprite,                // In:  Child sprite to detach.
+   RTransform*   ptrans,              // In:  Transform for positioning child.
+   double*   pdX,                    // Out: New position of child.
+   double*   pdY,                    // Out: New position of child.
+   double*   pdZ);                   // Out: New position of child.
 
 // Get the link point specified by the provided transform.
 void GetLinkPoint(                  // Returns nothing.
-   RTransform*	ptrans,              // In:  Transform specifying point.
-   double*	pdX,                    // Out: Point speicfied.
-   double*	pdY,                    // Out: Point speicfied.
-   double*	pdZ);                   // Out: Point speicfied.
+   RTransform*   ptrans,              // In:  Transform specifying point.
+   double*   pdX,                    // Out: Point speicfied.
+   double*   pdY,                    // Out: Point speicfied.
+   double*   pdZ);                   // Out: Point speicfied.
 
 
 // Add a force vector to this thing's external horizontal velocity vector.
 void AddForceVector(             // Returns nothing.
    double dAddVel,               // In:  Magnitude of additional vector.
-   short	sRot);                  // In:  Direction (in degrees) of additional vector.
+   short sRot);                    // In:  Direction (in degrees) of additional vector.
 
 // Load the default shadow resource unless one has already been loaded
 // and set the shadow to visible
@@ -740,15 +740,15 @@ short PrepareShadow(void);       // Returns SUCCESS if set successfully
 // Also, if no initial volume is specified, the distance to the ear is used.
 void PlaySample(                                   // Returns nothing.
                                                    // Does not fail.
-   SampleMasterID	id,                              // In:  Identifier of sample you want played.
+   SampleMasterID id,                                // In:  Identifier of sample you want played.
    SampleMaster::SoundCategory eType,              // In:  Sound Volume Category for user adjustment
-   short	sInitialVolume	= -1,                      // In:  Initial Sound Volume (0 - 255)
-                                                   // Negative indicates to use the distance to the
-                                                   // ear to determine the volume.
-   SampleMaster::SoundInstance*	psi = NULL,       // Out: Handle for adjusting sound volume
+   short sInitialVolume   = -1,                        // In:  Initial Sound Volume (0 - 255)
+   // Negative indicates to use the distance to the
+   // ear to determine the volume.
+   SampleMaster::SoundInstance*   psi = NULL,       // Out: Handle for adjusting sound volume
    S32* plSampleDuration = NULL,                // Out: Sample duration in ms, if not NULL.
    S32 lLoopStartTime = -1,                        // In:  Where to loop back to in milliseconds.
-                                                   //	-1 indicates no looping (unless m_sLoop is
+                                                   //   -1 indicates no looping (unless m_sLoop is
                                                    // explicitly set).
    S32 lLoopEndTime = 0,                           // In:  Where to loop back from in milliseconds.
                                                    // In:  If less than 1, the end + lLoopEndTime is used.
@@ -758,15 +758,15 @@ void PlaySample(                                   // Returns nothing.
 // Start a CAnimThing.
 CAnimThing* StartAnim(                    // Returns ptr to CAnimThing on success; NULL otherwise.
    char* pszAnimResName,                  // In:  Animation's resource name.
-   short	sX,                              // In:  Position.
-   short	sY,                              // In:  Position.
-   short	sZ,                              // In:  Position.
+   short sX,                                // In:  Position.
+   short sY,                                // In:  Position.
+   short sZ,                                // In:  Position.
    bool bLoop);                           // In:  true to loop animation.
 
 
 };
 
-#endif	// THING3D_H
+#endif   // THING3D_H
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF

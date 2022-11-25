@@ -19,14 +19,14 @@
 //
 // MULTIGRIDINDIRECT.CPP
 //
-// Created on	05/01/97 JRD
-// Implemented	05/01/97 JRD
+// Created on   05/01/97 JRD
+// Implemented   05/01/97 JRD
 //
-//		05/08/97	JMI	Added #include <string.h> for strcmp*().  I guess
-//							that, in VC <= 4.1, the strcmp*() protos are not
-//							in stdlib.h.
+//      05/08/97   JMI   Added #include <string.h> for strcmp*().  I guess
+//                     that, in VC <= 4.1, the strcmp*() protos are not
+//                     in stdlib.h.
 //
-//		06/28/97 MJR	Minor changes to get it working on the mac.
+//      06/28/97 MJR   Minor changes to get it working on the mac.
 //
 //////////////////////////////////////////////////////////////////////
 #include <stdlib.h>
@@ -39,7 +39,7 @@
 #else
    #include "MULTIGRID.H"
    #include "MULTIGRIDINDIRECT.H"
-#endif	//PATHS_IN_INCLUDES
+#endif   //PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -87,7 +87,7 @@
 
 // Produce a valid OR mask to se a plane number
 // (ZERO IS A VALID PLANE NUMBER)
-short	RMultiGridIndirect::ms_asColorToPlane[MGI_MAX_PLANES] =
+short RMultiGridIndirect::ms_asColorToPlane[MGI_MAX_PLANES] =
 {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384};
 //  0 1 2 3  4  5  6   7   8   9   10   11   12   13    14
 // PLANE NUMBER ^ ^ ^ ^ ^
@@ -112,7 +112,7 @@ void RMultiGridIndirect::DumpPalette(RImage* pimDst, short sSrcX, short sSrcY, s
 
 // Low level alloc, JUST of the palette grid.
 // Width and height should match that of the RMultiGrid
-short	RMultiGridIndirect::Alloc(short sW, short sH, short sMaxPlanes,
+short RMultiGridIndirect::Alloc(short sW, short sH, short sMaxPlanes,
                                 short sTileW, short sTileH)
 {
    ASSERT(!m_pucPalette);
@@ -133,7 +133,7 @@ short	RMultiGridIndirect::Alloc(short sW, short sH, short sMaxPlanes,
    ASSERT(m_ppucAccessY);
 
    // Populate the pointer list:
-   UCHAR*	pY = m_pucPalette;
+   UCHAR*   pY = m_pucPalette;
    S32 lOffset = S32(sGridW) * sMaxPlanes;
    short i, j;
 
@@ -323,12 +323,12 @@ void RMultiGridIndirect::TileOR(UCHAR ucKey, USHORT usValueOR, short sDstX, shor
 
    S32 lDstP = m_pmg->m_sWidth;      // (in shorts)
    S32 lSrcP = m_sTileW;
-   UCHAR*	pSrc, *pSrcLine = m_pimTempTile->m_pData;
+   UCHAR*   pSrc, *pSrcLine = m_pimTempTile->m_pData;
    USHORT*  pDst, *pDstLine = (USHORT*)m_pmg->m_psGrid;
 
    // Adjust for actual coordinates!!!!
    pDstLine += S32(m_pmg->m_sWidth) * sDstY + sDstX;
-   short	i, j;
+   short i, j;
 
    for (j = 0; j < sH; j++, pSrcLine += lSrcP, pDstLine += lDstP)
    {
@@ -406,7 +406,7 @@ short RMultiGridIndirect::Load(RFile* fp)
    ASSERT(m_ppucAccessY);
 
    // Populate the pointer list:
-   UCHAR*	pY = m_pucPalette;
+   UCHAR*   pY = m_pucPalette;
    S32 lOffset = S32(m_sGridW) * m_sMaxPlanes;
 
    short i, j;

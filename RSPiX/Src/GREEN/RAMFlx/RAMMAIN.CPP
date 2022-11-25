@@ -35,7 +35,7 @@ void BlitFlx(CRamFlx *pFlx, short sTrans);
 void DumpHeader(FLX_FILE_HDR* pfilehdr);
 
 int SmartHeap_far_malloc;
-static CImage*		m_pBuf;     // The image buffer where background and flx are combined
+static CImage*      m_pBuf;     // The image buffer where background and flx are combined
 static CPalImage m_Back;      // The background image
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,27 +141,27 @@ void BlitFlx(CRamFlx *pFlx, short sTrans)
    // Blit the image to the buffer
    CPalImage* ppi = pFlx->GetBuffer();
    if (sTrans)
-      Blit_Combine(	ppi,
-                     0,
-                     0,
-                     &m_Back,
-                     0,
-                     0,
-                     m_pBuf,
-                     0,
-                     0,
-                     ppi->image.lWidth,
-                     ppi->image.lHeight);
+      Blit_Combine(   ppi,
+                      0,
+                      0,
+                      &m_Back,
+                      0,
+                      0,
+                      m_pBuf,
+                      0,
+                      0,
+                      ppi->image.lWidth,
+                      ppi->image.lHeight);
    else
-      Blit_Copy(	ppi,
-                  0,
-                  0,
-                  m_pBuf,
-                  0,
-                  0,
-                  ppi->image.lWidth,
-                  ppi->image.lHeight,
-                  sTrans);
+      Blit_Copy(   ppi,
+                   0,
+                   0,
+                   m_pBuf,
+                   0,
+                   0,
+                   ppi->image.lWidth,
+                   ppi->image.lHeight,
+                   sTrans);
 
    // Update screen from buffer
    Blu_UpdateDisplay(0,       // buffer x

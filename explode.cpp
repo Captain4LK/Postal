@@ -19,113 +19,113 @@
 // Project: Postal
 //
 // This module implements the CExplode weapon class which is an unguided
-//	rocket missile.
+//   rocket missile.
 //
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		01/23/97 BRH	Updated the time to GetGameTime rather than using
-//							real time.
+//      01/23/97 BRH   Updated the time to GetGameTime rather than using
+//                     real time.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/06/97 BRH	Added RAnimSprite animation of the explosion for now.
-//							We are going to do an Alpha effect on the explosion, so
-//							there are two animations, one of the image and one of
-//							the Alpha information stored as a BMP8 animation.  When
-//							the Alpha effect is ready, we will pass a frame from
-//							each animation to a function to draw it.
+//      02/06/97 BRH   Added RAnimSprite animation of the explosion for now.
+//                     We are going to do an Alpha effect on the explosion, so
+//                     there are two animations, one of the image and one of
+//                     the Alpha information stored as a BMP8 animation.  When
+//                     the Alpha effect is ready, we will pass a frame from
+//                     each animation to a function to draw it.
 //
-//		02/06/97 BRH	Fixed problem with timer.  Since all Explosion objects
-//							are using the same resource managed animation, they cannot
-//							use the animation timer, they have to do the timing
-//							themselves.
+//      02/06/97 BRH   Fixed problem with timer.  Since all Explosion objects
+//                     are using the same resource managed animation, they cannot
+//                     use the animation timer, they have to do the timing
+//                     themselves.
 //
-//		02/07/97 BRH	Changed the sprite from CSprite2 to CSpriteAlpha2 for
-//							the Alpha Blit effect.
+//      02/07/97 BRH   Changed the sprite from CSprite2 to CSpriteAlpha2 for
+//                     the Alpha Blit effect.
 //
-//		02/10/97	JMI	rspReleaseResource() now takes a ptr to a ptr.
+//      02/10/97   JMI   rspReleaseResource() now takes a ptr to a ptr.
 //
-//		02/18/97 BRH	Changed the explosion to use the Channel Animations
-//							rather than the RAnimSprite animations.
+//      02/18/97 BRH   Changed the explosion to use the Channel Animations
+//                     rather than the RAnimSprite animations.
 //
-//		02/19/97 BRH	Empties the message queue in update so it doesn't fill up.
-//							Also checks for collisions with other Characters and sends
-//							them an explosion message.
+//      02/19/97 BRH   Empties the message queue in update so it doesn't fill up.
+//                     Also checks for collisions with other Characters and sends
+//                     them an explosion message.
 //
-//		02/23/97 BRH	Explosion now checks for all things that it blew up, not
-//							just the first thing in the list.
+//      02/23/97 BRH   Explosion now checks for all things that it blew up, not
+//                     just the first thing in the list.
 //
-//		02/23/97 BRH	Added Preload() function so that explosions are cached
-//							by the resource manager before play begins.
+//      02/23/97 BRH   Added Preload() function so that explosions are cached
+//                     by the resource manager before play begins.
 //
-//		02/24/97 BRH	Added Map3Dto2D so that the explosions were mapping the Y
-//							coordinate also, before they were assuming they were on the
-//							ground so explosions in the air weren't working correctly.
+//      02/24/97 BRH   Added Map3Dto2D so that the explosions were mapping the Y
+//                     coordinate also, before they were assuming they were on the
+//                     ground so explosions in the air weren't working correctly.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		03/05/97 BRH	Added center of and velocity of explosion to the explosion
-//							message.
+//      03/05/97 BRH   Added center of and velocity of explosion to the explosion
+//                     message.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/17/97	JMI	Now includes CSmash::Item in the things that can be
-//							exploded.
+//      03/17/97   JMI   Now includes CSmash::Item in the things that can be
+//                     exploded.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/20/97 BRH	Added an additional parameter to Setup to allow the
-//							explosion to use different animations. In this case we
-//							want the standard explosion for rockets and barrels, and
-//							a special one for the grenades.  This will allow you to
-//							pass a number to incicate which animation to use.
+//      04/20/97 BRH   Added an additional parameter to Setup to allow the
+//                     explosion to use different animations. In this case we
+//                     want the standard explosion for rockets and barrels, and
+//                     a special one for the grenades.  This will allow you to
+//                     pass a number to incicate which animation to use.
 //
-//		04/21/97 BRH	Added second animation file and changed filename of second
-//							asset to match.
+//      04/21/97 BRH   Added second animation file and changed filename of second
+//                     asset to match.
 //
-//		04/23/97	JMI	CExplode no S32er puts it's m_smash in the smashatorium.
-//							Now sends messages to Characters, Miscs, Barrels, and
-//							Mines.
+//      04/23/97   JMI   CExplode no S32er puts it's m_smash in the smashatorium.
+//                     Now sends messages to Characters, Miscs, Barrels, and
+//                     Mines.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/07/97 BRH	Added smoke to the end of all explosions.
+//      06/07/97 BRH   Added smoke to the end of all explosions.
 //
-//		06/11/97 BRH	Pass the shooter ID on through the explosion message.
+//      06/11/97 BRH   Pass the shooter ID on through the explosion message.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/26/97 BRH	Added CSmash::AlmostDead bits to the explosion check
-//							so that writhing guys can be blown up.
+//      06/26/97 BRH   Added CSmash::AlmostDead bits to the explosion check
+//                     so that writhing guys can be blown up.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/27/97	JMI	Changed to use Z position (i.e., X/Z plane) instead of
-//							Y2 position (i.e., viewing plane) position for draw
-//							priority.
+//      07/27/97   JMI   Changed to use Z position (i.e., X/Z plane) instead of
+//                     Y2 position (i.e., viewing plane) position for draw
+//                     priority.
 //
-//		07/30/97	JMI	Added m_u16ExceptID (an ID to except when sending
-//							explosion messages).
+//      07/30/97   JMI   Added m_u16ExceptID (an ID to except when sending
+//                     explosion messages).
 //
-//		08/15/97 BRH	Fixed problem with stationary smoke which had been
-//							started under ground.
+//      08/15/97 BRH   Fixed problem with stationary smoke which had been
+//                     started under ground.
 //
-//		08/28/97 BRH	Now caches the grenade explosion animation as well in
-//							its Preload function.
+//      08/28/97 BRH   Now caches the grenade explosion animation as well in
+//                     its Preload function.
 //
-//		09/02/97	JMI	Now targets CSmash::Sentry too.
+//      09/02/97   JMI   Now targets CSmash::Sentry too.
 //
-//		09/03/97	JMI	Now marks Civilian as a dont care bit.
+//      09/03/97   JMI   Now marks Civilian as a dont care bit.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define EXPLODE_CPP
@@ -143,15 +143,15 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-//#define IMAGE_FILE			"res\\explode.bmp"
-//#define ANIM_FILE				"2d/explode.anm"
-//#define ALPHA_FILE			"2d/explode_a.anm"
+//#define IMAGE_FILE         "res\\explode.bmp"
+//#define ANIM_FILE            "2d/explode.anm"
+//#define ALPHA_FILE         "2d/explode_a.anm"
 
 // Minimum elapsed time (in milliseconds)
-//#define MIN_ELAPSED_TIME	10
+//#define MIN_ELAPSED_TIME   10
 
-#define AA_FILE				"explo.aan"
-#define GE_FILE				"GExplo.aan"
+#define AA_FILE            "explo.aan"
+#define GE_FILE            "GExplo.aan"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -228,7 +228,7 @@ short CExplode::Save(                              // Returns 0 if successfull, 
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Save common data just once per file (not with each object)
@@ -339,8 +339,8 @@ void CExplode::Render(void)
       m_sprite.m_sInFlags = 0; //CSprite::InXrayable;
 
       // Map from 3d to 2d coords
-//		m_sprite.m_sX2 = m_dX + pAnim->m_sX;
-//		m_sprite.m_sY2 = m_dZ + pAnim->m_sY;
+//      m_sprite.m_sX2 = m_dX + pAnim->m_sX;
+//      m_sprite.m_sY2 = m_dZ + pAnim->m_sY;
       Map3Dto2D((short) (m_dX + pAnim->m_sX), (short) m_dY, (short) (m_dZ + pAnim->m_sY), &m_sprite.m_sX2, &m_sprite.m_sY2);
 
       // Priority is based on our Z position.
@@ -364,7 +364,7 @@ void CExplode::Render(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Setup - Called by the object that is creating this explosion to set its
-//			  position and initial settings
+//           position and initial settings
 ////////////////////////////////////////////////////////////////////////////////
 
 short CExplode::Setup(                          // Returns 0 if successfull, non-zero otherwise
@@ -388,17 +388,17 @@ short CExplode::Setup(                          // Returns 0 if successfull, non
    sResult = GetResources(sAnim);
 
    // Update sphere.
-   m_smash.m_sphere.sphere.X			= m_dX;
-   m_smash.m_sphere.sphere.Y			= m_dY;
-   m_smash.m_sphere.sphere.Z			= m_dZ;
-   m_smash.m_sphere.sphere.lRadius	= ms_sBlastRadius;
+   m_smash.m_sphere.sphere.X         = m_dX;
+   m_smash.m_sphere.sphere.Y         = m_dY;
+   m_smash.m_sphere.sphere.Z         = m_dZ;
+   m_smash.m_sphere.sphere.lRadius   = ms_sBlastRadius;
 
    // Update the smash.
    ASSERT (m_pRealm != NULL);
-//	m_pRealm->m_smashatorium.Update(&m_smash);
+//   m_pRealm->m_smashatorium.Update(&m_smash);
 
-   m_smash.m_bits		= 0;
-   m_smash.m_pThing	= this;
+   m_smash.m_bits      = 0;
+   m_smash.m_pThing   = this;
 
    // See who we blew up and send them a message
    CSmash* pSmashed = NULL;
@@ -528,8 +528,8 @@ short CExplode::FreeResources(void)                // Returns 0 if successfull, 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching a CExplode
-//				 animation before play begins so that when an explosion occurs for
-//				 the first time, there won't be a delay.
+//             animation before play begins so that when an explosion occurs for
+//             the first time, there won't be a delay.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CExplode::Preload(

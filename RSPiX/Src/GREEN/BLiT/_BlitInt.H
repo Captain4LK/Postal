@@ -36,14 +36,14 @@ extern short gsBufferLocked;
 //
 inline short ImageIsCompressed(U32 ulType) // an image type
 {
-   short	sRet = 0; // 0 if it is NOT a supported compressed type, else 1!
+   short sRet = 0;   // 0 if it is NOT a supported compressed type, else 1!
 
    switch(ulType)
    {
-   case	RImage::FSPR1:
-   case	RImage::FSPR8:
-   case	RImage::FSPR16:
-   case	RImage::FSPR32:
+   case   RImage::FSPR1:
+   case   RImage::FSPR8:
+   case   RImage::FSPR16:
+   case   RImage::FSPR32:
       sRet = 1;
    }
    return sRet;
@@ -53,7 +53,7 @@ inline short ImageIsCompressed(U32 ulType) // an image type
 //
 inline short ImageIsUncompressed(U32 ulType) // an image type
 {
-   short	sRet = 0; // 0 if it is NOT a supported uncompressed type, else 1!
+   short sRet = 0;   // 0 if it is NOT a supported uncompressed type, else 1!
 
    switch(ulType)
    {
@@ -77,27 +77,27 @@ inline short ImageIsUncompressed(U32 ulType) // an image type
 /*
 // Not a complete descriptor -> just replaces the pData of an uncompressed buffer.
 class CCompressedMono // only a 96-bit header!
-	{
+   {
 public:
-	USHORT	usASCII;	// = ascii value
-	USHORT	usSourceType;	// uncompressed Image pre-compressed type
-	UCHAR*	pCode;		// It's all in one buffer for this one
-	U32		ulSize;		// Size of compressed buffer
+   USHORT   usASCII;   // = ascii value
+   USHORT   usSourceType;   // uncompressed Image pre-compressed type
+   UCHAR*   pCode;      // It's all in one buffer for this one
+   U32      ulSize;      // Size of compressed buffer
 
-	CCompressedMono()
-		{
-		usASCII = usSourceType = 0;
-		pCode = NULL;
-		ulSize = 0;
-		}
+   CCompressedMono()
+      {
+      usASCII = usSourceType = 0;
+      pCode = NULL;
+      ulSize = 0;
+      }
 
-	~CCompressedMono()
-		{
-		if (pCode) free(pCode);
-		}
+   ~CCompressedMono()
+      {
+      if (pCode) free(pCode);
+      }
 
-	};
-	*/
+   };
+   */
 
 extern void _rspBLiT(UCHAR ucColor, RImage* pimSrc, RImage* pimDst,
                      short sDstX, short sDstY);

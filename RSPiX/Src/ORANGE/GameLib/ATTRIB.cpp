@@ -22,7 +22,7 @@
 //
 // History:
 //
-//		02/21/95	BH		Started this file, based on the
+//      02/21/95   BH      Started this file, based on the
 //
 //*****************************************************************************
 
@@ -109,20 +109,20 @@ void CAttribute::ToBlock()
 // PutBlock
 //
 // Description:
-//		Get the block number of the block, match the block number from
-//		m_sAttrRewardFrom and put the new block (from m_sAttrRewardTo).
+//      Get the block number of the block, match the block number from
+//      m_sAttrRewardFrom and put the new block (from m_sAttrRewardTo).
 //
 // Input:
-//		sX = world x coordinate of point to be used
-//		sY = world y coordinate of point to be used
+//      sX = world x coordinate of point to be used
+//      sY = world y coordinate of point to be used
 //
 // Uses:
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -134,24 +134,24 @@ void CAttribute::PutBlock()
 // GetPointAttrib
 //
 // Description:
-//		This routine checks the BG attributes for a specific point.
+//      This routine checks the BG attributes for a specific point.
 //
-//		If the specified point is not on the map, then $0000 is used
-//		as the attribute.
+//      If the specified point is not on the map, then $0000 is used
+//      as the attribute.
 //
 // Input:
-//		sX = world x coordinate of point to be checked
-//		sY = world y coordinate of point to be checked
+//      sX = world x coordinate of point to be checked
+//      sY = world y coordinate of point to be checked
 //
 // Uses:
-//		m_pAttribMap
-//		m_pAttribCont
+//      m_pAttribMap
+//      m_pAttribCont
 //
 // Output:
-//		sAttribute = attribute for the block that the point falls into
+//      sAttribute = attribute for the block that the point falls into
 //
 // Return:
-//		TRUE if the attribute applies to the point, FALSE otherwise
+//      TRUE if the attribute applies to the point, FALSE otherwise
 //
 //*****************************************************************************
 
@@ -200,24 +200,24 @@ BOOL CAttribute::GetPointAttrib(short sX, short sY, WORD* pwAttribute)
 // GetPointSurface
 //
 // Description:
-//		This routine tries to find the surface directly above or below a given
-//		point.  We will only go as far as 1 block above or 1 block below
-//		because further than that will not help anyway.
-//		It only deals with the solid/hollow attribute and any other types of
-//		attributes are regarded as air.
+//      This routine tries to find the surface directly above or below a given
+//      point.  We will only go as far as 1 block above or 1 block below
+//      because further than that will not help anyway.
+//      It only deals with the solid/hollow attribute and any other types of
+//      attributes are regarded as air.
 //
 // Input:
-//		sX = world x coordinate of point to be checked
-//		sY = world y coordinate of point to be checked
+//      sX = world x coordinate of point to be checked
+//      sY = world y coordinate of point to be checked
 //
 // Uses:
-//		m_pAttribMap
-//		m_pAttribCont
+//      m_pAttribMap
+//      m_pAttribCont
 //
 // Output:
-//		sYSurface = world y coordinate of the surface at the given x
-//		sAttribute = attribute description flags for the given block
-//						 (ie, SOLID, HOLLOW etc.)
+//      sYSurface = world y coordinate of the surface at the given x
+//      sAttribute = attribute description flags for the given block
+//                   (ie, SOLID, HOLLOW etc.)
 //
 // Return:
 //
@@ -230,12 +230,12 @@ short CAttribute::GetPointSurface(short sX, short sY)
    short sPixelX = sX % 16;
    short sPixelY = sY % 16;
    short sSurfaceY = sY;
-//	CONTOUR cCurrent;
+//   CONTOUR cCurrent;
    CONTOUR cAdjacent;
 
    WORD wAttribute = m_pAttribMap[sBlockY * m_sMapWidth + sBlockX];
 
-//	cCurrent = m_pAttribCont[wAttribute & CONTOUR_MASK];
+//   cCurrent = m_pAttribCont[wAttribute & CONTOUR_MASK];
 
 //-----------------------------------------------------------------------------
 // See if the surface is in the current block by checking the top and
@@ -255,7 +255,7 @@ short CAttribute::GetPointSurface(short sX, short sY)
 
 
 //
-//	*pwAttribute = wAttribute & ATTRIBUTE_MASK;
+//   *pwAttribute = wAttribute & ATTRIBUTE_MASK;
 
    CONTOUR cCurrent = m_pAttribCont[wAttribute & CONTOUR_MASK];
 

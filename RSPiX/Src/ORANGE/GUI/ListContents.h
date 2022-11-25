@@ -20,10 +20,10 @@
 // ListContents.H
 //
 // History:
-//		01/21/97 JMI	Started.
+//      01/21/97 JMI   Started.
 //
-//		02/05/97	JMI	Added override for OnLoseChild() to pass it on to
-//							parent, if it is an RListBox.
+//      02/05/97   JMI   Added override for OnLoseChild() to pass it on to
+//                     parent, if it is an RListBox.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -88,10 +88,10 @@ public:     // Methods.
 // Called by SetParent() when a GUI is losing a child item.
 virtual                 // Overridden here.
 void OnLoseChild(                // Returns nothing.
-   RGuiItem*	pguiChild)        // Child item we're about to lose.
+   RGuiItem*   pguiChild)        // Child item we're about to lose.
 {
    // Let parent (RListBox know).
-   RGuiItem*	pguiParent	= GetParent();
+   RGuiItem*   pguiParent   = GetParent();
    // If there is a parent (safety) . . .
    if (pguiParent != NULL)
    {
@@ -122,12 +122,12 @@ protected:     // Internal functions.
 // Save item's children to the specified file.
 virtual                    // Overridden here.
 short SaveChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to save to.
+   RFile*   pfile);        // File to save to.
 
 // Load item's children from the specified file.
 virtual                    // Overridden here.
 short LoadChildren(        // Returns 0 on success.
-   RFile*	pfile);        // File to load from.
+   RFile*   pfile);        // File to load from.
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -141,5 +141,5 @@ protected:     // Protected member variables.
 
 #endif // LISTCONTENTS_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

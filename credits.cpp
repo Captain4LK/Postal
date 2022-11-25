@@ -21,73 +21,73 @@
 // This module deals with displaying the credits.
 //
 // History:
-//		12/05/96 MJR	Started.
+//      12/05/96 MJR   Started.
 //
-//		12/19/96	JMI	Scope error in Credits().  Loop was waiting for terminators
-//							one of which was lKey.  The lKey was being set via a call
-//							to rspGetKey(&lKey).  But there were two lKeys.  One inside
-//							and one outside the loop.  The one on the outside was
-//							evaluated and the one on the inside was being set to the
-//							current key.
+//      12/19/96   JMI   Scope error in Credits().  Loop was waiting for terminators
+//                     one of which was lKey.  The lKey was being set via a call
+//                     to rspGetKey(&lKey).  But there were two lKeys.  One inside
+//                     and one outside the loop.  The one on the outside was
+//                     evaluated and the one on the inside was being set to the
+//                     current key.
 //
-//		02/17/97	JMI	Making this obey rspGetQuitStatus().
+//      02/17/97   JMI   Making this obey rspGetQuitStatus().
 //
-//		07/05/97 MJR	Changed to RSP_BLACK_INDEX instead of 0.
+//      07/05/97 MJR   Changed to RSP_BLACK_INDEX instead of 0.
 //
-//		07/16/97 BRH	Changed the credits screen to the "What's in the
-//							release version of postal preview" screen for the
-//							demo.  Took out blah blah blah, yada yada yada.
+//      07/16/97 BRH   Changed the credits screen to the "What's in the
+//                     release version of postal preview" screen for the
+//                     demo.  Took out blah blah blah, yada yada yada.
 //
-//		08/11/97	JRD	Transforming this module into a device for scolling text
-//							which is intended to be used both by credits and by story.
-//							It wil operate similar to cutscene in that all of it's
-//							assets and memory usage is assumed temporary.  It will still
-//							use the shell sak for assets.
+//      08/11/97   JRD   Transforming this module into a device for scolling text
+//                     which is intended to be used both by credits and by story.
+//                     It wil operate similar to cutscene in that all of it's
+//                     assets and memory usage is assumed temporary.  It will still
+//                     use the shell sak for assets.
 //
-//		08/11/97	JRD	Created a class for the purpose of accessing generic files
-//							from within a sak directory.  Used to read in credits metafile.
+//      08/11/97   JRD   Created a class for the purpose of accessing generic files
+//                     from within a sak directory.  Used to read in credits metafile.
 //
-//		08/20/97 BRH	Added music to credits. Unfortunately, I hardwired the music in
-//							the function ScrollPage instead of Credits(), so the mustic will
-//							play in any part of the game where text is scrolled.  Man, was I
-//							"stupid" when I did that.
+//      08/20/97 BRH   Added music to credits. Unfortunately, I hardwired the music in
+//                     the function ScrollPage instead of Credits(), so the mustic will
+//                     play in any part of the game where text is scrolled.  Man, was I
+//                     "stupid" when I did that.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/22/97	JRD	Attempted to make the credits locking safe.
+//      08/22/97   JRD   Attempted to make the credits locking safe.
 //
-//		08/22/97	JMI	Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//							since we no S32er need UpdateDisplay() now that we are
-//							using rspLock/Unlock* functions properly.
+//      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
+//                     since we no S32er need UpdateDisplay() now that we are
+//                     using rspLock/Unlock* functions properly.
 //
-//		08/26/97	JRD	Moved the credit music into the credits function from the
-//							text scrolling function.
+//      08/26/97   JRD   Moved the credit music into the credits function from the
+//                     text scrolling function.
 //
-//		08/27/97	JRD	Moved end sound out of Scroll Page.  Made Scroll page not clear screen
-//							at end.  Added special credit ending.
+//      08/27/97   JRD   Moved end sound out of Scroll Page.  Made Scroll page not clear screen
+//                     at end.  Added special credit ending.
 //
-//		08/27/97 JRD	Removed text dependency on windows colors.  Made it so if credits
-//							are aborted, ending is not shown.
+//      08/27/97 JRD   Removed text dependency on windows colors.  Made it so if credits
+//                     are aborted, ending is not shown.
 //
-//		08/28/97	JRD	Altered Credits() to allow varying the resources so
-//							different music could play in the final scene than
-//							in the normal credits.
+//      08/28/97   JRD   Altered Credits() to allow varying the resources so
+//                     different music could play in the final scene than
+//                     in the normal credits.
 //
-//		09/08/97 JRD	Had Bill add rspGetQuitStaus() to the list of keys and
-//							mouse buttons that abort the credits.  Boy, did I look
-//							"stupid" when someone hit Alt-F4 during the ending
-//							sequence only to get stuck on the credits.  Thanks for
-//							fixing that Bill, I owe you another trip to Las Vegas.
+//      09/08/97 JRD   Had Bill add rspGetQuitStaus() to the list of keys and
+//                     mouse buttons that abort the credits.  Boy, did I look
+//                     "stupid" when someone hit Alt-F4 during the ending
+//                     sequence only to get stuck on the credits.  Thanks for
+//                     fixing that Bill, I owe you another trip to Las Vegas.
 //
-//		09/17/97 BRH	Added in a conditional compile optionfor the credits so
-//							the shareware version will show the coming soon screen
-//							instead of the credits.
+//      09/17/97 BRH   Added in a conditional compile optionfor the credits so
+//                     the shareware version will show the coming soon screen
+//                     instead of the credits.
 //
-//		06/24/01 MJR	Changed from obsolete macro to SHOW_EXIT_SCREEN as a way
-//							to control what gets displayed when the player exits from
-//							the game.  Also renamed macro to EXIT_BG and changed the
-//							filename to "exit.bmp".
+//      06/24/01 MJR   Changed from obsolete macro to SHOW_EXIT_SCREEN as a way
+//                     to control what gets displayed when the player exits from
+//                     the game.  Also renamed macro to EXIT_BG and changed the
+//                     filename to "exit.bmp".
 //
 ////////////////////////////////////////////////////////////////////////////////
 // SCROLL PAGE HACK:  CURRENTLY USES COLOR 244 = {128,0,0}, 245 = {255,0,0}
@@ -112,20 +112,20 @@
 // default credits parameters... (serve as emergency backups...)
 char g_szBackground[256] = "credits/pile640.bmp";
 char g_szCredits[256] = "credits/credits.txt";
-SampleMasterID*	g_psmidMusic = &g_smidCreditsMusak;
+SampleMasterID*   g_psmidMusic = &g_smidCreditsMusak;
 
-#define BG_X			(g_pimScreenBuf->m_sWidth / 2 - pimBackground->m_sWidth / 2)
-#define BG_Y			(g_pimScreenBuf->m_sHeight / 2 - pimBackground->m_sHeight / 2)
+#define BG_X         (g_pimScreenBuf->m_sWidth / 2 - pimBackground->m_sWidth / 2)
+#define BG_Y         (g_pimScreenBuf->m_sHeight / 2 - pimBackground->m_sHeight / 2)
 
-#define CREDIT_TIME	30000
+#define CREDIT_TIME   30000
 
-#define LEFT_X			200
-#define SPACE_Y		30
+#define LEFT_X         200
+#define SPACE_Y      30
 
-#define MUSAK_START_TIME	0
-#define MUSAK_END_TIME		0
+#define MUSAK_START_TIME   0
+#define MUSAK_END_TIME      0
 
-#define	MIN_SCOLL_FRAME_MILLI	14    // Cap at 40 fps
+#define   MIN_SCOLL_FRAME_MILLI   14    // Cap at 40 fps
 
 
 extern int wideScreenWidth;
@@ -146,24 +146,24 @@ static SampleMaster::SoundInstance ms_siMusak;
 ////////////////////////////////////////////////////////////////////////////////
 #define MAX_BACKGROUNDS 10
 
-class	CBackgroundChange
+class CBackgroundChange
 {
 public:
-RImage*	m_pimPrevBackground;
-RImage*	m_pimNewBackground;
-short	m_sImageCacheIndex;
+RImage*   m_pimPrevBackground;
+RImage*   m_pimNewBackground;
+short m_sImageCacheIndex;
 char m_szNewName[64];            // resource name
 bool m_bActive;
 // All times in milliseconds...
 S32 m_lActivationTime;           // also delay time
-S32 m_lFadeOutTime;              //	also in delta time form
-S32 m_lBlackTime;                //	also in delta time form
-S32 m_lFadeInTime;               //	also in delta time form
-UCHAR	m_TransitionPalette[1024];
+S32 m_lFadeOutTime;              //   also in delta time form
+S32 m_lBlackTime;                //   also in delta time form
+S32 m_lFadeInTime;               //   also in delta time form
+UCHAR m_TransitionPalette[1024];
 typedef enum { Inactive, FadeOut, Black, FadeIn } BackState;
 BackState m_eState;
 typedef enum { OnEnter, OnExit } ActivationType;
-ActivationType	m_eType;
+ActivationType m_eType;
 //--------------------------------------------------------
 void Clear()
 {
@@ -186,7 +186,7 @@ CBackgroundChange()
    Clear();
 }
 //--------------------------------------------------------
-void	Activate(RImage* pimCurBack, RImage* pBackgrounds[])
+void   Activate(RImage* pimCurBack, RImage* pBackgrounds[])
 {
    // set current times as delta from current:
    m_lActivationTime += rspGetMilliseconds();
@@ -202,19 +202,19 @@ void	Activate(RImage* pimCurBack, RImage* pBackgrounds[])
 }
 };
 
-class	CTextPhrase
+class CTextPhrase
 {
 public:
 
-short	m_sColorIndex;
-short	m_sFontSize;
-short	m_sLocalX;
+short m_sColorIndex;
+short m_sFontSize;
+short m_sLocalX;
 short m_sLocalY;
-typedef	enum	{Left, Right, Center} Justify;
+typedef   enum   {Left, Right, Center} Justify;
 Justify m_eJust;
 char m_szText[128];
-CTextPhrase*	m_pNext;
-CTextPhrase*	m_pPrev;
+CTextPhrase*   m_pNext;
+CTextPhrase*   m_pPrev;
 //------------------------------
 CTextPhrase()
 {
@@ -230,18 +230,18 @@ CTextPhrase()
 
 // Will actually create an image of itself
 //
-class	CTextChunk
+class CTextChunk
 {
 public:
 S32 m_lNumPhrases;
 CTextPhrase m_tHead;    // bookends
 CTextPhrase m_tTail;
-short	m_sGlobalTopY;
-short	m_sGlobalBottomY;
+short m_sGlobalTopY;
+short m_sGlobalBottomY;
 RImage* m_pimCache;
-CTextChunk*	m_pNext;
+CTextChunk*   m_pNext;
 CTextChunk* m_pPrev;
-CBackgroundChange*	m_pChangeBackground;
+CBackgroundChange*   m_pChangeBackground;
 //--------------------------
 CTextChunk()
 {
@@ -271,7 +271,7 @@ CTextChunk()
 }
 //--------------------------
 // Must insert at tail to maintain order
-void	AddPhrase(CTextPhrase* pNew)
+void   AddPhrase(CTextPhrase* pNew)
 {
    m_lNumPhrases++;
    pNew->m_pNext = &m_tTail;
@@ -281,7 +281,7 @@ void	AddPhrase(CTextPhrase* pNew)
 }
 
 // WILL NOT DELETE!
-void	RemovePhrase(CTextPhrase* pGone)
+void   RemovePhrase(CTextPhrase* pGone)
 {
    m_lNumPhrases--;
    pGone->m_pPrev->m_pNext = pGone->m_pNext;
@@ -290,7 +290,7 @@ void	RemovePhrase(CTextPhrase* pGone)
    pGone->m_pNext = pGone->m_pPrev = NULL;
 }
 //------------------------------------
-void	RenderChunk(short sW, RPrint* pPrint)
+void   RenderChunk(short sW, RPrint* pPrint)
 {
    if (m_pimCache)
    {
@@ -361,7 +361,7 @@ void	RenderChunk(short sW, RPrint* pPrint)
    m_pimCache->Convert(RImage::FSPR8);    // for testing.
 }
 
-void	FreeChunk()
+void   FreeChunk()
 {
    // Keep 'em for now...
    if (m_pimCache) delete m_pimCache;
@@ -370,7 +370,7 @@ void	FreeChunk()
 
 };
 
-char*	pct = g_szCredits;
+char*   pct = g_szCredits;
 extern void SetAll();
 
 // The highest level:
@@ -381,18 +381,18 @@ S32 m_lGlobalHeight;
 S32 m_lCurrentTopY;
 S32 m_lCurrentBottomY;
 S32 m_lTotalChunks;
-CTextChunk*	m_pTopActiveChunk;
-CTextChunk*	m_pBottomActiveChunk;
+CTextChunk*   m_pTopActiveChunk;
+CTextChunk*   m_pBottomActiveChunk;
 S32 m_lActivationTime;
-RRect	m_rDisplay;
+RRect m_rDisplay;
 double m_dScrollRate;         // screens/sec
 
 CTextChunk m_cHead;     // bookends:
 CTextChunk m_cTail;
 
-short	m_sNumBackgrounds;
+short m_sNumBackgrounds;
 char m_szBackgroundNames[MAX_BACKGROUNDS][64];
-RImage*	m_pimBackgrounds[MAX_BACKGROUNDS];
+RImage*   m_pimBackgrounds[MAX_BACKGROUNDS];
 
 CBackgroundChange* m_pCurSceneChange;
 //--------------------------------------
@@ -432,14 +432,14 @@ CScrollMaster()
    }
 }
 
-void	Configure(double dScrollRate, RRect* prWindow = NULL)
+void   Configure(double dScrollRate, RRect* prWindow = NULL)
 {
    if (dScrollRate > 0.0) m_dScrollRate = dScrollRate;
    if (prWindow) m_rDisplay = *prWindow;
 }
 
 //--------------------------------
-void	AddChunk(CTextChunk* pNew)
+void   AddChunk(CTextChunk* pNew)
 {
    m_lTotalChunks++;
    pNew->m_pNext = &m_cTail;
@@ -450,7 +450,7 @@ void	AddChunk(CTextChunk* pNew)
    m_lGlobalHeight = pNew->m_sGlobalBottomY + 1;
 }
 //--------------------------------
-void	Start(RPrint* pPrint)
+void   Start(RPrint* pPrint)
 {
    // Try to load all the extra bmps from memory:
    short i;
@@ -515,7 +515,7 @@ short Update(RPrint* pPrint)
 
 // will overlay the text onto your bitmap with the designated clip rectangle:
 // NOTE: script coordinates are relative to upper left clipping corner...
-void	Render(RImage* pimDst)
+void   Render(RImage* pimDst)
 {
    // Draw each chunk separately:
    CTextChunk* pCur;
@@ -538,7 +538,7 @@ void	Render(RImage* pimDst)
 }
 //-------------------------------------------------------------
 // returns the index number for the resource bmp:
-short	AddBackground(char* pszName)
+short   AddBackground(char* pszName)
 {
    ASSERT(pszName);
    ASSERT(m_sNumBackgrounds < MAX_BACKGROUNDS);
@@ -555,10 +555,10 @@ extern short sLoaded;
 ////////////////////////////////////////////////////////////////////////////////
 // This is cheesy, but right now I'm using a global stream to load into.
 ////////////////////////////////////////////////////////////////////////////////
-//CScrollMaster*	gpCurStream = NULL;
+//CScrollMaster*   gpCurStream = NULL;
 
 // For Res managing an ANSI file:
-class	CFileTextInput
+class CFileTextInput
 {
 public:
 
@@ -575,9 +575,9 @@ CFileTextInput()
    if (m_pStream) delete m_pStream;
 };
 //-----------------------
-short	ParseTextInput(FILE* fp);
+short   ParseTextInput(FILE* fp);
 //-----------------------
-short	Load(RFile* pFile)    // so res manager can hook it!
+short   Load(RFile* pFile)    // so res manager can hook it!
 {
    FILE* fp = pFile->m_fs;
    //--------------------- do my load:
@@ -587,7 +587,7 @@ short	Load(RFile* pFile)    // so res manager can hook it!
    return SUCCESS;
 }
 
-short	Load(FILE* fp)    // so res manager can hook it!
+short   Load(FILE* fp)    // so res manager can hook it!
 {
    //--------------------- do my load:
 
@@ -600,17 +600,17 @@ CScrollMaster* m_pStream;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-//	Tokenizing the script file into absolute strips:
+//   Tokenizing the script file into absolute strips:
 ////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 //  ASSUME A VALID FILE STREAM
 //
-//	 This will parse and tokenize the incoming text...
+//    This will parse and tokenize the incoming text...
 //  It will not actually render it.
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	CFileTextInput::ParseTextInput(FILE* fp)
+short CFileTextInput::ParseTextInput(FILE* fp)
 {
    if (m_pStream)
    {
@@ -631,15 +631,15 @@ short	CFileTextInput::ParseTextInput(FILE* fp)
    short sGlobalY = 0;
    short sLocalY = 0;
    short sCurStripTop = 0;
-   short	sMaxH = 0;
+   short sMaxH = 0;
    bool bNewChunk = true;
 
    short sCurFontSize = 0;
-   short	sCurTabX = 0;
+   short sCurTabX = 0;
    CTextPhrase::Justify eCurJust = CTextPhrase::Left;
    short sCurColor = 255;
 
-   CTextChunk*	pChunk = new CTextChunk;
+   CTextChunk*   pChunk = new CTextChunk;
    CTextPhrase* pCurPhrase = new CTextPhrase;
 
    pChunk->m_sGlobalTopY = sCurStripTop;
@@ -697,7 +697,7 @@ short	CFileTextInput::ParseTextInput(FILE* fp)
       {
          pCurPhrase->m_sLocalX = sCurTabX = atoi(m_bf.NextToken());
 
-         switch	(*pszToken)
+         switch   (*pszToken)
          {
          case 'l': eCurJust = pCurPhrase->m_eJust = CTextPhrase::Left; break;
          case 'r': eCurJust = pCurPhrase->m_eJust = CTextPhrase::Right; break;
@@ -855,13 +855,13 @@ short	CFileTextInput::ParseTextInput(FILE* fp)
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	General scrolling text screens: Returns FAILURE if assets couldn't load
+//   General scrolling text screens: Returns FAILURE if assets couldn't load
 // OR returns FAILURE if use aborts!
 //
-//	All resources are assumed from the shell sak.
+//   All resources are assumed from the shell sak.
 //
 ////////////////////////////////////////////////////////////////////////////////
-short	ScrollPage(char* pszBackground, char* pszScrollScript, double dScrollRate, RRect *prWindow)
+short   ScrollPage(char* pszBackground, char* pszScrollScript, double dScrollRate, RRect *prWindow)
 {
    // Try to load resources:
    short sResult;
@@ -875,7 +875,7 @@ short	ScrollPage(char* pszBackground, char* pszScrollScript, double dScrollRate,
    rspUpdateDisplay();
 
    // Load background
-   RImage*	pimBackground;
+   RImage*   pimBackground;
    if (rspGetResource(&g_resmgrShell, pszBackground, &pimBackground) != SUCCESS)
    {
       TRACE("ScrollPage: Couldn't load background %s\n", pszBackground);
@@ -896,7 +896,7 @@ short	ScrollPage(char* pszBackground, char* pszScrollScript, double dScrollRate,
    rspUpdatePalette();
 
    // Load text script:
-   CFileTextInput*	pScript = NULL;   // must free it myself!
+   CFileTextInput*   pScript = NULL;   // must free it myself!
 
    // Try to override with our own file, because I'm too lazy to figure out how to regenerate .sak files.
    FILE *nonsak = fopen(FindCorrectFile("res/credits.txt", "rb"), "rb");
@@ -1050,7 +1050,7 @@ short Credits(SampleMasterID* pMusic,
 
 #ifdef SHOW_EXIT_SCREEN
 
-   RImage*	pimBackground;
+   RImage*   pimBackground;
    sResult = rspGetResource(&g_resmgrShell, EXIT_BG, &pimBackground);
    if (sResult == 0)
    {
@@ -1084,7 +1084,7 @@ short Credits(SampleMasterID* pMusic,
    // Wait a while or until user input
    S32 lKey = 0;
    short sButtons = 0;
-   do	{
+   do   {
       UpdateSystem();
 
       // Get key and mouse button inputs
@@ -1102,7 +1102,7 @@ short Credits(SampleMasterID* pMusic,
 
 #else
 
-   SampleMasterID*	psmidMusic;
+   SampleMasterID*   psmidMusic;
    char szBackground[256];
    char szCredits[256];
 
@@ -1125,7 +1125,7 @@ short Credits(SampleMasterID* pMusic,
       &ms_siMusak,                        // Out: Handle for adjusting sound volume
       NULL,                               // Out: Sample duration in ms, if not NULL.
       MUSAK_START_TIME,                   // In:  Where to loop back to in milliseconds.
-                                          //	-1 indicates no looping (unless m_sLoop is
+                                          //   -1 indicates no looping (unless m_sLoop is
                                           // explicitly set).
       MUSAK_END_TIME,                     // In:  Where to loop back from in milliseconds.
                                           // In:  If less than 1, the end + lLoopEndTime is used.
@@ -1146,7 +1146,7 @@ short Credits(SampleMasterID* pMusic,
          // Cut it off.
          AbortSample(ms_siMusak);
          // Clear.
-         ms_siMusak	= 0;
+         ms_siMusak   = 0;
          // Play final sample that completes the cut off sound. ***
       }
 
@@ -1232,7 +1232,7 @@ short Credits(SampleMasterID* pMusic,
       // Cut it off.
       AbortSample(ms_siMusak);
       // Clear.
-      ms_siMusak	= 0;
+      ms_siMusak   = 0;
       // Play final sample that completes the cut off sound. ***
    }
 
@@ -1251,7 +1251,7 @@ short Credits(SampleMasterID* pMusic,
       // Cut it off.
       AbortSample(siLaughter);
       // Clear.
-      siLaughter	= 0;
+      siLaughter   = 0;
       // Play final sample that completes the cut off sound. ***
    }
 

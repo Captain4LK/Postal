@@ -21,9 +21,9 @@
 // This module with a mechanism to log network traffic created by the game
 //
 // History:
-//		12/05/97 AJC	Started.
+//      12/05/97 AJC   Started.
 //
-//		12/23/97 SPA	Moved from Play.cpp to seperate file
+//      12/23/97 SPA   Moved from Play.cpp to seperate file
 ////////////////////////////////////////////////////////////////////////////////
 #include "RSPiX.h"
 #include "game.h"
@@ -33,8 +33,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // OpenLogFile()
-//			Open a file for logging
-//		global variables used:		g_GameSettings
+//         Open a file for logging
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 short OpenLogFile()
 {
@@ -62,8 +62,8 @@ short OpenLogFile()
 
 ////////////////////////////////////////////////////////////////////////////////
 // CloseLogFile()
-//			Close a file for logging
-//		global variables used:		g_GameSettings
+//         Close a file for logging
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 short CloseLogFile()
 {
@@ -82,8 +82,8 @@ short CloseLogFile()
 
 ////////////////////////////////////////////////////////////////////////////////
 // WriteTimeStamp()
-//			Write the network time log
-//		global variables used:		g_GameSettings
+//         Write the network time log
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 extern
 short WriteTimeStamp(char *pszCaller,                 // Name of calling routine
@@ -92,7 +92,7 @@ short WriteTimeStamp(char *pszCaller,                 // Name of calling routine
                      Net::SEQ seqStart,               // Beginning sequent sent/received
                      S32 sNum,                        // Number of seq's sent/received
                      char bReceived,                     // a received or a sent message? TRUE if received
-                     U16 u16PackageID /*=0*/)          // Uniquely identifiable package id																		//		True if receiving, false if sending
+                     U16 u16PackageID /*=0*/)          // Uniquely identifiable package id                                                      //      True if receiving, false if sending
 {
    short sResult = 0;
    char *szCallerMsg;
@@ -289,8 +289,8 @@ short WriteTimeStamp(char *pszCaller,                 // Name of calling routine
 /*** 12/7/97 AJC ***/
 ////////////////////////////////////////////////////////////////////////////////
 // WriteInputData()
-//			Write the network input data to network sync log
-//		global variables used:		g_GameSettings
+//         Write the network input data to network sync log
+//      global variables used:      g_GameSettings
 ////////////////////////////////////////////////////////////////////////////////
 extern
 short WriteInputData(U32 *input)

@@ -18,68 +18,68 @@
 // netmsgr.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		05/21/97 MJR	Started.
+//   History:
+//      05/21/97 MJR   Started.
 //
-//		05/25/97	JMI	Integrated CBufQ's; finished NetMsg union; and filled in
-//							CNetMsgr functions.
+//      05/25/97   JMI   Integrated CBufQ's; finished NetMsg union; and filled in
+//                     CNetMsgr functions.
 //
-//		05/25/97	JMI	Made pumping in Update() loop until conditions dictate that
-//							no more data can be received/sent without blocking during
-//							the current Update().
+//      05/25/97   JMI   Made pumping in Update() loop until conditions dictate that
+//                     no more data can be received/sent without blocking during
+//                     the current Update().
 //
-//		05/26/97 MJR	Moved some functions from here to .cpp file.
-//							Took out "friend" stuff, made two members public instead.
+//      05/26/97 MJR   Moved some functions from here to .cpp file.
+//                     Took out "friend" stuff, made two members public instead.
 //
-//		05/26/97	JMI	Added 1 to NetMsgr::Chat::Len.
+//      05/26/97   JMI   Added 1 to NetMsgr::Chat::Len.
 //
-//		06/11/97	JMI	Added FINISH_REALM and FINISHED_REALM net messages.
+//      06/11/97   JMI   Added FINISH_REALM and FINISHED_REALM net messages.
 //
-//		06/14/97 MJR	Removed LOAD_REALM and FINISHED_REALM messages and
-//							modified START_GAME message.
+//      06/14/97 MJR   Removed LOAD_REALM and FINISHED_REALM messages and
+//                     modified START_GAME message.
 //
-//		06/15/97 MJR	Added new reason for denying a join request.
+//      06/15/97 MJR   Added new reason for denying a join request.
 //
-//		08/13/97 MJR	Added difficulty to startGame message.
-//					MJR	Added support for getting/putting mac addresses.
+//      08/13/97 MJR   Added difficulty to startGame message.
+//               MJR   Added support for getting/putting mac addresses.
 //
-//		08/15/97 MJR	Fixed bug in how prototype was being read & written.
+//      08/15/97 MJR   Fixed bug in how prototype was being read & written.
 //
-//		08/18/97 MJR	Added "ChangeReq" and "Changed" messages.
-//							Added more parameters to JoinReq and Joined messages.
+//      08/18/97 MJR   Added "ChangeReq" and "Changed" messages.
+//                     Added more parameters to JoinReq and Joined messages.
 //
-//		08/23/97 MJR	Added Reset().
+//      08/23/97 MJR   Added Reset().
 //
-//		09/01/97 MJR	Lots of changes as part of overall network overhaul.
+//      09/01/97 MJR   Lots of changes as part of overall network overhaul.
 //
-//		09/02/97 MJR	Tested and tuned alot, and fixed a bunch of bugs.  Now
-//							appears to be very stable.
+//      09/02/97 MJR   Tested and tuned alot, and fixed a bunch of bugs.  Now
+//                     appears to be very stable.
 //
-//		09/07/97 MJR	Added "Proceed" message and renamed some error types.
+//      09/07/97 MJR   Added "Proceed" message and renamed some error types.
 //
-//		09/09/97 MJR	Changed Connect() so it returns the error that
-//							RSocket::Open() returned (if there is an error).
+//      09/09/97 MJR   Changed Connect() so it returns the error that
+//                     RSocket::Open() returned (if there is an error).
 //
-//		11/20/97	JMI	Added sCoopLevels & sCoopMode to SetupGame and
-//							StartGame.
+//      11/20/97   JMI   Added sCoopLevels & sCoopMode to SetupGame and
+//                     StartGame.
 //
-//		11/24/97	JMI	Upped MinVersionNum and CurVersionNum to 0x0002 for PCs and
-//							0x1002 for Macs. Also, added MacVersionBit (0x1000).
-//							Also, changed VersionMismatchError to
-//							ServerVersionMismatchError and added
-//							ClientVersionMismatchError, ServerPlatformMismatchError,
-//							and ClientPlatformMismatchError.
-//							Also, added ulParam for a generic parameter for messages
-//							(currently used by Client/ServerVersionMismatchError to
-//							communicate the other machine's Postal net version number).
+//      11/24/97   JMI   Upped MinVersionNum and CurVersionNum to 0x0002 for PCs and
+//                     0x1002 for Macs. Also, added MacVersionBit (0x1000).
+//                     Also, changed VersionMismatchError to
+//                     ServerVersionMismatchError and added
+//                     ClientVersionMismatchError, ServerPlatformMismatchError,
+//                     and ClientPlatformMismatchError.
+//                     Also, added ulParam for a generic parameter for messages
+//                     (currently used by Client/ServerVersionMismatchError to
+//                     communicate the other machine's Postal net version number).
 //
-//		10/11/99	JMI	Upped net version number to 3.  This causes the version 3
-//							_client_ to reject connections from server versions 1 & 2.
-//							Client versions 1 & 2 will reject connections to version 3
-//							servers.  This works this way due to issues explained in
-//							NetClient.cpp in the comment in the function Update() in
-//							the case for handling LOGIN_ACCEPT when in
-//							WaitForLoginResponse state.
+//      10/11/99   JMI   Upped net version number to 3.  This causes the version 3
+//                     _client_ to reject connections from server versions 1 & 2.
+//                     Client versions 1 & 2 will reject connections to version 3
+//                     servers.  This works this way due to issues explained in
+//                     NetClient.cpp in the comment in the function Update() in
+//                     the case for handling LOGIN_ACCEPT when in
+//                     WaitForLoginResponse state.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NETMSGR_H
@@ -163,8 +163,8 @@ inline void PutSocketAddress(
 ////////////////////////////////////////////////////////////////////////////////
 class NetMsg
 {
-//	// forward declaration
-//	class CNetComm;
+//   // forward declaration
+//   class CNetComm;
 
 //------------------------------------------------------------------------------
 // Types, enums, etc.
@@ -289,7 +289,7 @@ typedef struct Nothing
 
    S32 lSize;                                         // Size of message for variable-sized messages
                                                       // This is not an integral part of the Nothing
-                                                      //	message, but rather it's a way for us to
+                                                      //   message, but rather it's a way for us to
                                                       // generically access the size member of a
                                                       // variable-sized message.  For those messages,
                                                       // the size always follows the type.
@@ -330,7 +330,7 @@ typedef struct Err
 {
    enum { Size = 1 + sizeof(Error) + sizeof(U32) };
    unsigned char ucType;                              // Message type
-   Error	error;                                       // error value
+   Error error;                                         // error value
    U32 ulParam;                                       // Miscellaneous param for errors.
                                                       // For *VersionMismatchError, used
                                                       // for other system's version for
@@ -440,7 +440,7 @@ typedef struct JoinReq
    char acName[Net::MaxPlayerNameSize];                // Name
    unsigned char ucColor;                             // Color number
    unsigned char ucTeam;                              // Team number
-   short	sBandwidth;                                  // Bandwidth
+   short sBandwidth;                                    // Bandwidth
 
    static void Read(NetMsg* pmsg, CBufQ* pBuf)
    {
@@ -509,7 +509,7 @@ typedef struct Joined
    char acName[Net::MaxPlayerNameSize];                // Name
    unsigned char ucColor;                             // Color number
    unsigned char ucTeam;                              // Team number
-   short	sBandwidth;                                  // Bandwidth
+   short sBandwidth;                                    // Bandwidth
 
    static void Read(NetMsg* pmsg, CBufQ* pBuf)
    {
@@ -723,7 +723,7 @@ typedef struct InputData
    Net::SEQ seqStart;                                 // Starting seq of range
    short sNum;                                        // Number of seq's in range
    UINPUT* pInputs;                                   // Pointer used to read/write actual input data
-   U8*		pFrameTimes;                                 // Pointer to read/write actual frame time data *SPA
+   U8*      pFrameTimes;                                 // Pointer to read/write actual frame time data *SPA
 
    static void Read(NetMsg* pmsg, CBufQ* pBuf)
    {
@@ -836,14 +836,14 @@ typedef struct SetupGame
    enum { Size = 1 + 2 + Net::MaxRealmNameSize + 2 + 2 + 2 + 2 + 2 + 2 };
 
    unsigned char ucType;                              // Message type
-   short	sRealmNum;                                   // Starting realm number or -1 to use name
+   short sRealmNum;                                     // Starting realm number or -1 to use name
    char acRealmFile[Net::MaxRealmNameSize];                // Name of realm file to load
-   short	sDifficulty;                                 // Difficulty level
-   short	sRejuvenate;
-   short	sTimeLimit;
-   short	sKillLimit;
-   short	sCoopLevels;                                 // Non-zero for cooperative levels, zero for deathmatch levels.
-   short	sCoopMode;                                   // Non-zero for cooperative mode, zero for deathmatch mode.
+   short sDifficulty;                                   // Difficulty level
+   short sRejuvenate;
+   short sTimeLimit;
+   short sKillLimit;
+   short sCoopLevels;                                   // Non-zero for cooperative levels, zero for deathmatch levels.
+   short sCoopMode;                                     // Non-zero for cooperative mode, zero for deathmatch mode.
 
    static void Read(NetMsg* pmsg, CBufQ* pBuf)
    {
@@ -878,16 +878,16 @@ typedef struct StartGame
    enum { Size = 1 + 1 + 2 + Net::MaxRealmNameSize + 2 + 2 + 2 + 2 + 2 + sizeof(Net::SEQ) + 2 + 2};
    unsigned char ucType;                                          // Message type
    Net::ID idServer;                                              // Server's ID
-   short	sRealmNum;                                               // Starting realm number or -1 to use name
+   short sRealmNum;                                                 // Starting realm number or -1 to use name
    char acRealmFile[Net::MaxRealmNameSize];                       // Name of realm file to load
-   short	sDifficulty;                                             // Difficulty level
-   short	sRejuvenate;
-   short	sTimeLimit;
-   short	sKillLimit;
-   short	sCoopLevels;                                             // Non-zero for cooperative levels, zero for deathmatch levels.
-   short	sCoopMode;                                               // Non-zero for cooperative mode, zero for deathmatch mode.
-   short	sFrameTime;                                              // Milliseconds per frame
-   Net::SEQ	seqMaxAhead;                                          // Max ahead for input versus frame seq
+   short sDifficulty;                                               // Difficulty level
+   short sRejuvenate;
+   short sTimeLimit;
+   short sKillLimit;
+   short sCoopLevels;                                               // Non-zero for cooperative levels, zero for deathmatch levels.
+   short sCoopMode;                                                 // Non-zero for cooperative mode, zero for deathmatch mode.
+   short sFrameTime;                                                // Milliseconds per frame
+   Net::SEQ seqMaxAhead;                                            // Max ahead for input versus frame seq
 
    static void Read(NetMsg* pmsg, CBufQ* pBuf)
    {
@@ -1134,20 +1134,20 @@ union
    Nothing nothing;
    Stat stat;
    Err err;
-   Login	login;
-   LoginAccept	loginAccept;
+   Login login;
+   LoginAccept loginAccept;
    LoginDeny loginDeny;
    Logout logout;
    JoinReq joinReq;
    JoinAccept joinAccept;
-   JoinDeny	joinDeny;
+   JoinDeny joinDeny;
    Joined joined;
    ChangeReq changeReq;
    Changed changed;
    DropReq dropReq;
    Dropped dropped;
    DropAck dropAck;
-   InputReq	inputReq;
+   InputReq inputReq;
    InputData inputData;
    InputMark inputMark;
    ChatReq chatReq;
@@ -1156,7 +1156,7 @@ union
    StartGame startGame;
    AbortGame abortGame;
    ReadyRealm readyRealm;
-   BadRealm	badRealm;
+   BadRealm badRealm;
    StartRealm startRealm;
    HaltRealm haltRealm;
    NextRealm nextRealm;
@@ -1175,7 +1175,7 @@ protected:
 // This is not sent as part of the message.  It is used by variable-length
 // messages that require a separate memory block for their data.  Note that
 // the size refers to the size of this data, not the whole msg.
-U8*	m_pVarData;
+U8*   m_pVarData;
 S32 m_lVarSize;
 
 //------------------------------------------------------------------------------
@@ -1265,10 +1265,10 @@ public:
 // Miscellaneous values
 typedef enum
 {
-   MagicNum				= 0x5655595a,                    // Magic number
-   MacVersionBit		= 0x1000,                        // Bit that indicates a Mac platform.
-   MinVersionNum		= 0x0003,                        // Minimum version number we can support
-   CurVersionNum		= 0x0003                         // Current version number
+   MagicNum            = 0x5655595a,                    // Magic number
+   MacVersionBit      = 0x1000,                        // Bit that indicates a Mac platform.
+   MinVersionNum      = 0x0003,                        // Minimum version number we can support
+   CurVersionNum      = 0x0003                         // Current version number
 };
 
 // States
@@ -1290,7 +1290,7 @@ typedef void (*FUNC_READ)(NetMsg* pmsg, CBufQ* pBuf);       // Pointer to read f
 typedef void (*FUNC_WRITE)(NetMsg* pmsg, CBufQ* pBuf);         // Pointer to write function
 typedef struct
 {
-   UCHAR	ucType;                                      // Type (used only for debug ASSERTs)
+   UCHAR ucType;                                        // Type (used only for debug ASSERTs)
    size_t size;                                       // Size of data to read/write (bytes)
    FUNC_READ funcRead;                                // Pointer to read function
    FUNC_WRITE funcWrite;                              // Pointer to write function
@@ -1300,18 +1300,18 @@ typedef struct
 // Variables
 //------------------------------------------------------------------------------
 protected:
-State	m_state;                                        // Current state
+State m_state;                                          // Current state
 RSocket m_socket;                                     // Socket
 RSocket::Address m_address;                           // Address we're connected to
-CBufQ	m_bufIn;                                        // Input buffer
-CBufQ	m_bufOut;                                       // Output buffer
+CBufQ m_bufIn;                                          // Input buffer
+CBufQ m_bufOut;                                         // Output buffer
 S32 m_lMsgRecvTime;                                   // When most-recent message was recieved
 S32 m_lMsgSentTime;                                   // When most-recent message was sent
 NetMsg::Error m_error;                                // Error value.
 
 // Made public by JMB for TAPI access
 public:
-static InfoMsg	ms_aInfoMsg[NetMsg::NumMessages];            // Information about the message structs
+static InfoMsg ms_aInfoMsg[NetMsg::NumMessages];              // Information about the message structs
 
 //------------------------------------------------------------------------------
 // Functions

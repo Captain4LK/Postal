@@ -20,7 +20,7 @@
 // RTVIDC.CPP
 //
 // History:
-//		11/13/95 JMI	Started.
+//      11/13/95 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -57,8 +57,8 @@
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
 // Types of chunks.
-#define VIDC_CHUNK_HEADER	RT_FLAG_INIT
-#define VIDC_CHUNK_PALETTE	RT_FLAG_USER1
+#define VIDC_CHUNK_HEADER   RT_FLAG_INIT
+#define VIDC_CHUNK_PALETTE   RT_FLAG_USER1
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -103,15 +103,15 @@ CRtVidc::~CRtVidc()
 //////////////////////////////////////////////////////////////////////////////
 void CRtVidc::Set(void)
 {
-   m_pdispatch		= NULL;
+   m_pdispatch      = NULL;
    for (short i = 0; i < MAX_VID_CHANNELS; i++)
    {
-      m_avidchdrs[i].sNumFrames		= 0;
-      m_avidchdrs[i].pImage			= NULL;
-      m_avidchdrs[i].callbackHeader	= NULL;
-      m_avidchdrs[i].callbackBefore	= NULL;
-      m_avidchdrs[i].callbackAfter	= NULL;
-      m_avidchdrs[i].hic				= NULL;
+      m_avidchdrs[i].sNumFrames      = 0;
+      m_avidchdrs[i].pImage         = NULL;
+      m_avidchdrs[i].callbackHeader   = NULL;
+      m_avidchdrs[i].callbackBefore   = NULL;
+      m_avidchdrs[i].callbackAfter   = NULL;
+      m_avidchdrs[i].hic            = NULL;
    }
 }
 
@@ -129,7 +129,7 @@ void CRtVidc::Reset(void)
 // Returns number of bytes read on success, negative on error.
 //
 //////////////////////////////////////////////////////////////////////////////
-S32 ReadBitmapInfo(	BITMAPINFO*	pbmi, CNFile* pfile)
+S32 ReadBitmapInfo(   BITMAPINFO*   pbmi, CNFile* pfile)
 {
    // Remember current position.
    S32 lPos  = pfile->Tell();
@@ -153,7 +153,7 @@ S32 ReadBitmapInfo(	BITMAPINFO*	pbmi, CNFile* pfile)
    // Must be complete RGBQUADs.
    ASSERT(lNumColors % 4 == 0);
    // Convert to number of colors left.
-   lNumColors	/= 4L;
+   lNumColors   /= 4L;
    for (S32 l = 0; l < lNumColors; l++)
    {
       pfile->Read(&pbmi->bmiColors[l].rgbBlue);
@@ -171,21 +171,21 @@ S32 ReadBitmapInfo(	BITMAPINFO*	pbmi, CNFile* pfile)
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtVidc::DecompressFrame(	PVIDC_RT_HDR pvidchdr, CNFile* pfile,
-                                 U32 ulFlags, PBMI pbmiIn, PBMI pbmiOut)
+short CRtVidc::DecompressFrame(   PVIDC_RT_HDR pvidchdr, CNFile* pfile,
+                                  U32 ulFlags, PBMI pbmiIn, PBMI pbmiOut)
 
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Get data in compression native format.
    BMI bmiTempOut = *pbmiIn;
-   bmiTempOut.bmiHeader.biCompression	= BI_RGB;
+   bmiTempOut.bmiHeader.biCompression   = BI_RGB;
 
    // Attempt to decompress . . .
-//	if (ICDecompress(	pvidchdr->hic, ulFlags,
-//							(BITMAPINFOHEADER*)pbmiIn, pfile->GetMemory() + pfile->Tell(),
-//							(BITMAPINFOHEADER*)pbmiOut, pvidchdr->pImage->pData)
-//		== ICERR_OK)
+//   if (ICDecompress(   pvidchdr->hic, ulFlags,
+//                     (BITMAPINFOHEADER*)pbmiIn, pfile->GetMemory() + pfile->Tell(),
+//                     (BITMAPINFOHEADER*)pbmiOut, pvidchdr->pImage->pData)
+//      == ICERR_OK)
    HBITMAP hbm   = (HBITMAP)ICImageDecompress( pvidchdr->hic, 0L, (BITMAPINFO*)pbmiIn,
                                                pfile->GetMemory() + pfile->Tell(),
                                                (BITMAPINFO*)&bmiTempOut);
@@ -195,11 +195,11 @@ short CRtVidc::DecompressFrame(	PVIDC_RT_HDR pvidchdr, CNFile* pfile,
       HDC hDC   = GetDC(NULL);
       if (hDC != NULL)
       {
-         pbmiOut->bmiHeader.biSize			= sizeof(pbmiOut->bmiHeader);
-         pbmiOut->bmiHeader.biSizeImage	= 0;
+         pbmiOut->bmiHeader.biSize         = sizeof(pbmiOut->bmiHeader);
+         pbmiOut->bmiHeader.biSizeImage   = 0;
          // Reformat.
-         if (GetDIBits(	hDC, hbm, 0, pvidchdr->pImage->lHeight,
-                        pvidchdr->pImage->pData, (BITMAPINFO*)&pbmiOut, DIB_RGB_COLORS) != FALSE)
+         if (GetDIBits(   hDC, hbm, 0, pvidchdr->pImage->lHeight,
+                          pvidchdr->pImage->pData, (BITMAPINFO*)&pbmiOut, DIB_RGB_COLORS) != FALSE)
          {
             // Success.
          }
@@ -223,7 +223,7 @@ short CRtVidc::DecompressFrame(	PVIDC_RT_HDR pvidchdr, CNFile* pfile,
    else
    {
       TRACE("DecompressFrame(): ICDecompress failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -235,14 +235,14 @@ short CRtVidc::DecompressFrame(	PVIDC_RT_HDR pvidchdr, CNFile* pfile,
 // Returns RET_FREE if done with data on return, RET_DONTFREE otherwise.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-                     S32 lTime)
+short CRtVidc::Use(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                      S32 lTime)
 {
-   short	sRes		= RET_FREE; // Always free.
-   short	sError	= 0;
+   short sRes      = RET_FREE;   // Always free.
+   short sError   = 0;
 
-   ASSERT(usType	== RT_TYPE_VIDC);
-   ASSERT(puc		!= NULL);
+   ASSERT(usType   == RT_TYPE_VIDC);
+   ASSERT(puc      != NULL);
 
    CNFile file;
    file.Open(puc, lSize, ENDIAN_LITTLE);
@@ -278,14 +278,14 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
       ASSERT(file.Error() == FALSE);
 
       // Initialize frame counter.
-      pvidchdr->sCurFrame			= 0;
-      pvidchdr->sColorsModified	= FALSE;
+      pvidchdr->sCurFrame         = 0;
+      pvidchdr->sColorsModified   = FALSE;
       // Default to one frame's worth of lag before skipping frames.
-      pvidchdr->lMaxLag				= pvidchdr->lMilliPerFrame;
+      pvidchdr->lMaxLag            = pvidchdr->lMilliPerFrame;
 
       // Attempt to open desired compressor/decompressor . . .
-//		pvidchdr->hic	= ICOpen(ICTYPE_VIDEO, pvidchdr->ulFCCHandler,
-//										ICMODE_FASTDECOMPRESS);
+//      pvidchdr->hic   = ICOpen(ICTYPE_VIDEO, pvidchdr->ulFCCHandler,
+//                              ICMODE_FASTDECOMPRESS);
 
       // If there is a callback for the header . . .
       if (pvidchdr->callbackHeader != NULL)
@@ -306,9 +306,9 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
       // Decompress into image if supplied.
       if (pvidchdr->pImage != NULL)
       {
-         ASSERT(pvidchdr->pImage->pData				!= NULL);
-         ASSERT(pvidchdr->pImage->pPalette			!= NULL);
-         ASSERT(pvidchdr->pImage->pPalette->pData	!= NULL);
+         ASSERT(pvidchdr->pImage->pData            != NULL);
+         ASSERT(pvidchdr->pImage->pPalette         != NULL);
+         ASSERT(pvidchdr->pImage->pPalette->pData   != NULL);
 
          U32 ulFlags  = 0;
          if (ucFlags & RT_FLAG_TAG)
@@ -317,13 +317,13 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          }
          else
          {
-            ulFlags	|= ICDECOMPRESS_NOTKEYFRAME;
+            ulFlags   |= ICDECOMPRESS_NOTKEYFRAME;
          }
 
          // If we've exceeded the maximum lag . . .
          if (m_pdispatch->GetTime() - lTime > pvidchdr->lMaxLag)
          {
-            ulFlags	|= ICDECOMPRESS_HURRYUP;
+            ulFlags   |= ICDECOMPRESS_HURRYUP;
          }
 
          BMI bmiIn;
@@ -332,19 +332,19 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          ReadBitmapInfo((BITMAPINFO*)&bmiOut, &file);
 
          // TEMP
-         bmiOut.bmiHeader.biHeight		= bmiIn.bmiHeader.biHeight;
-         bmiOut.bmiHeader.biSizeImage	= (pvidchdr->pImage->lPitch
-                                          * bmiOut.bmiHeader.biHeight
-                                          * bmiOut.bmiHeader.biBitCount)
-                                         / 8;
+         bmiOut.bmiHeader.biHeight      = bmiIn.bmiHeader.biHeight;
+         bmiOut.bmiHeader.biSizeImage   = (pvidchdr->pImage->lPitch
+                                           * bmiOut.bmiHeader.biHeight
+                                           * bmiOut.bmiHeader.biBitCount)
+                                          / 8;
          // END TEMP
 
          if (pvidchdr->hic == NULL)
          {
-            pvidchdr->hic	= ICLocate(	ICTYPE_VIDEO, pvidchdr->ulFCCHandler,
-                                       &bmiIn.bmiHeader,
-                                       &bmiOut.bmiHeader,
-                                       ICMODE_FASTDECOMPRESS);
+            pvidchdr->hic   = ICLocate(   ICTYPE_VIDEO, pvidchdr->ulFCCHandler,
+                                          &bmiIn.bmiHeader,
+                                          &bmiOut.bmiHeader,
+                                          ICMODE_FASTDECOMPRESS);
 
             if (pvidchdr->hic != NULL)
             {
@@ -381,20 +381,20 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
             {
                if (ucFlags & VIDC_CHUNK_PALETTE)
                {
-                  ASSERT(pvidchdr->pImage->pData				!= NULL);
-                  ASSERT(pvidchdr->pImage->pPalette			!= NULL);
-                  ASSERT(pvidchdr->pImage->pPalette->pData	!= NULL);
+                  ASSERT(pvidchdr->pImage->pData            != NULL);
+                  ASSERT(pvidchdr->pImage->pPalette         != NULL);
+                  ASSERT(pvidchdr->pImage->pPalette->pData   != NULL);
 
                   CPal pal;
-                  pal.ulType					= PDIB;
-                  pal.ulSize					= bmiOut.bmiHeader.biSize - sizeof(bmiOut.bmiHeader);
-                  pal.sPalEntrySize			= sizeof(bmiOut.bmiColors[0]);
-                  pal.pData					= (UCHAR*)bmiOut.bmiColors;
+                  pal.ulType               = PDIB;
+                  pal.ulSize               = bmiOut.bmiHeader.biSize - sizeof(bmiOut.bmiHeader);
+                  pal.sPalEntrySize         = sizeof(bmiOut.bmiColors[0]);
+                  pal.pData               = (UCHAR*)bmiOut.bmiColors;
                   // Attach the palette to an empty image.
                   CImage imageEmpty;
-                  imageEmpty.ulSize			= 0L;
-                  imageEmpty.ulType			= BMP8;
-                  imageEmpty.pPalette		= &pal;
+                  imageEmpty.ulSize         = 0L;
+                  imageEmpty.ulType         = BMP8;
+                  imageEmpty.pPalette      = &pal;
 
                   // If necessary . . .
                   if (pal.ulType != pvidchdr->pImage->pPalette->ulType)
@@ -413,19 +413,19 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
                   }
 
                   // Copy converted data that the user cares about.
-                  memcpy(	pvidchdr->pImage->pPalette->pData,
-                           pal.pData	+ pvidchdr->pImage->pPalette->sStartIndex
-                           * pvidchdr->pImage->pPalette->sPalEntrySize,
-                           pvidchdr->pImage->pPalette->sNumEntries
-                           * pvidchdr->pImage->pPalette->sPalEntrySize);
+                  memcpy(   pvidchdr->pImage->pPalette->pData,
+                            pal.pData   + pvidchdr->pImage->pPalette->sStartIndex
+                            * pvidchdr->pImage->pPalette->sPalEntrySize,
+                            pvidchdr->pImage->pPalette->sNumEntries
+                            * pvidchdr->pImage->pPalette->sPalEntrySize);
 
-                  imageEmpty.pPalette	= NULL;
+                  imageEmpty.pPalette   = NULL;
 
-                  pvidchdr->sColorsModified	= TRUE;
+                  pvidchdr->sColorsModified   = TRUE;
                }
                else
                {
-                  pvidchdr->sColorsModified	= FALSE;
+                  pvidchdr->sColorsModified   = FALSE;
                }
             }
             else
@@ -462,7 +462,7 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          if (pvidchdr->hic != NULL)
          {
             ICClose(pvidchdr->hic);
-            pvidchdr->hic	= NULL;
+            pvidchdr->hic   = NULL;
          }
       }
 
@@ -481,8 +481,8 @@ short CRtVidc::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtVidc::UseStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags, S32 lTime, S32 l_pRtVidc)
+short CRtVidc::UseStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                            UCHAR ucFlags, S32 lTime, S32 l_pRtVidc)
 {
    return ((CRtVidc*)l_pRtVidc)->Use(puc, lSize, usType, ucFlags, lTime);
 }
@@ -504,7 +504,7 @@ void CRtVidc::SetDispatcher(CDispatch* pdispatch)
       m_pdispatch->SetDataHandler(RT_TYPE_VIDC, NULL);
    }
 
-   m_pdispatch	= pdispatch;
+   m_pdispatch   = pdispatch;
 
    if (m_pdispatch != NULL)
    {
@@ -533,7 +533,7 @@ void CRtVidc::SetCallbackHeader(RTVIDC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtVidc::SetCallbackHeader(RTVIDC_CALL callback, short sChannel)
 {
-   m_avidchdrs[sChannel].callbackHeader	= callback;
+   m_avidchdrs[sChannel].callbackHeader   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -556,7 +556,7 @@ void CRtVidc::SetCallbackBefore(RTVIDC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtVidc::SetCallbackBefore(RTVIDC_CALL callback, short sChannel)
 {
-   m_avidchdrs[sChannel].callbackBefore	= callback;
+   m_avidchdrs[sChannel].callbackBefore   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -579,7 +579,7 @@ void CRtVidc::SetCallbackAfter(RTVIDC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtVidc::SetCallbackAfter(RTVIDC_CALL callback, short sChannel)
 {
-   m_avidchdrs[sChannel].callbackAfter	= callback;
+   m_avidchdrs[sChannel].callbackAfter   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////

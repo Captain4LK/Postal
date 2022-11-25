@@ -19,18 +19,18 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		08/11/97 JMI	Stole infrastructure from SoundThing.
+//      08/11/97 JMI   Stole infrastructure from SoundThing.
 //
-//		08/11/97	JMI	Now verifies that the parent ID is that of a CSoundThing
-//							before using it.  Don't know what would happen otherwise
-//							but I'm sure it would suck.
+//      08/11/97   JMI   Now verifies that the parent ID is that of a CSoundThing
+//                     before using it.  Don't know what would happen otherwise
+//                     but I'm sure it would suck.
 //
-//		09/27/99	JMI	Eliminated boolean performance warnings.
+//      09/27/99   JMI   Eliminated boolean performance warnings.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // This CThing-derived class will relay sound volumes based on
-//	DistanceToVolume() (i.e., the distance to the ear (usually the local dude))
+//   DistanceToVolume() (i.e., the distance to the ear (usually the local dude))
 // to the selected CSoundThing.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -55,15 +55,15 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"soundSatellite.bmp"
+#define IMAGE_FILE         "soundSatellite.bmp"
 
-#define GUI_FILE_NAME		"res/editor/SndRelay.gui"
+#define GUI_FILE_NAME      "res/editor/SndRelay.gui"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Class statics.
 ////////////////////////////////////////////////////////////////////////////////
 
-short	CSndRelay::ms_sFileCount			= 0;  // File count.
+short CSndRelay::ms_sFileCount         = 0;    // File count.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -80,7 +80,7 @@ short CSndRelay::Load(                       // Returns 0 if successfull, non-ze
       // If new file . . .
       if (sFileCount != ms_sFileCount)
       {
-         ms_sFileCount	= sFileCount;
+         ms_sFileCount   = sFileCount;
 
          // Do one time stuff.
       }
@@ -138,7 +138,7 @@ short CSndRelay::Load(                       // Returns 0 if successfull, non-ze
 
          S32 lBool;
          pFile->Read(&lBool);
-         m_bInitiallyEnabled	= lBool ? true : false;
+         m_bInitiallyEnabled   = lBool ? true : false;
 
          pFile->Read(&m_idParent);
 
@@ -168,7 +168,7 @@ short CSndRelay::Save(                             // Returns 0 if successfull, 
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       pFile->Write(m_dX);
@@ -178,7 +178,7 @@ short CSndRelay::Save(                             // Returns 0 if successfull, 
       pFile->Write(m_idParent);
 
       // Make sure there were no file errors
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
 
    return sResult;
@@ -232,7 +232,7 @@ void CSndRelay::Update(void)
       if (m_bEnabled == true)
       {
          // Attempt to get ptr to our parent . . .
-         CSoundThing*	pst	= NULL;  // Safety.
+         CSoundThing*   pst   = NULL;  // Safety.
          if (m_pRealm->m_idbank.GetThingByID((CThing**)&pst, m_idParent) == 0)
          {
             // Make sure this is what we think it is . . .
@@ -288,7 +288,7 @@ short CSndRelay::EditNew(                       // Returns 0 if successfull, non
    m_dY = (double)sY;
    m_dZ = (double)sZ;
 
-   sResult	= EditModify();
+   sResult   = EditModify();
 
    return sResult;
 }
@@ -297,11 +297,11 @@ short CSndRelay::EditNew(                       // Returns 0 if successfull, non
 // Helper function/macro for changing a GUIs text value.
 ////////////////////////////////////////////////////////////////////////////////
 inline void SetGuiItemVal( // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  GUI Root.
+   RGuiItem*   pguiRoot,   // In:  GUI Root.
    S32 lId,                // In:  ID of item whose text we'll change.
    S32 lVal)               // In:  New value.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui)
    {
       pgui->SetText("%ld", lVal);
@@ -313,23 +313,23 @@ inline void SetGuiItemVal( // Returns nothing.
 // Callback from multibtn checkbox.
 ////////////////////////////////////////////////////////////////////////////////
 static void CheckEnableGuiCall(  // Returns nothing.
-   RGuiItem*	pgui_pmb)         // In:  GUI pointer to the multi button that was
+   RGuiItem*   pgui_pmb)         // In:  GUI pointer to the multi button that was
                                  // pressed.
 {
    ASSERT(pgui_pmb->m_type == RGuiItem::MultiBtn);
 
-   RMultiBtn*	pmb	= (RMultiBtn*)pgui_pmb;
+   RMultiBtn*   pmb   = (RMultiBtn*)pgui_pmb;
 
    // Show based on value stored in GUI.
-   short	sVisible	= pmb->m_ulUserData;
+   short sVisible   = pmb->m_ulUserData;
    // If unchecked . . .
    if (pmb->m_sState == 1)
    {
       // Opposite show/hide state.
-      sVisible	= !sVisible;
+      sVisible   = !sVisible;
    }
 
-   RGuiItem*	pguiLoopSettingsContainer	= pmb->GetParent()->GetItemFromId(pmb->m_ulUserInstance);
+   RGuiItem*   pguiLoopSettingsContainer   = pmb->GetParent()->GetItemFromId(pmb->m_ulUserInstance);
    if (pguiLoopSettingsContainer)
    {
       pguiLoopSettingsContainer->SetVisible(sVisible);
@@ -341,7 +341,7 @@ static void CheckEnableGuiCall(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 short CSndRelay::EditModify(void)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    // Load gui dialog
    RGuiItem* pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
@@ -372,17 +372,17 @@ short CSndRelay::EditModify(void)
       if (DoGui(pgui) == 1)
       {
          // Get new values from dialog
-         m_idParent	= (U16)peditParentId->GetVal();
+         m_idParent   = (U16)peditParentId->GetVal();
          if (m_idParent == 0)
          {
-            m_idParent	= CIdBank::IdNil;
+            m_idParent   = CIdBank::IdNil;
          }
 
          m_bInitiallyEnabled = (pmbEnable->m_sState == 2) ? true : false;
       }
       else
       {
-         sResult	= 1;
+         sResult   = 1;
       }
 
       // Done with GUI.
@@ -390,7 +390,7 @@ short CSndRelay::EditModify(void)
    }
    else
    {
-      sResult	= -1;
+      sResult   = -1;
    }
 
    // If everything's okay, init using new values
@@ -418,10 +418,10 @@ short CSndRelay::EditMove(                         // Returns 0 if successfull, 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the clickable pos/area of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CSndRelay::EditRect(  // Returns nothiing.
-   RRect*	prc)           // Out: Clickable pos/area of object.
+   RRect*   prc)           // Out: Clickable pos/area of object.
 {
    Map3Dto2D(
       m_dX,
@@ -430,36 +430,36 @@ void CSndRelay::EditRect(  // Returns nothiing.
       &(prc->sX),
       &(prc->sY) );
 
-   prc->sW	= 10; // Safety.
-   prc->sH	= 10; // Safety.
+   prc->sW   = 10; // Safety.
+   prc->sH   = 10; // Safety.
 
    if (m_sprite.m_pImage)
    {
-      prc->sW	= m_sprite.m_pImage->m_sWidth;
-      prc->sH	= m_sprite.m_pImage->m_sHeight;
+      prc->sW   = m_sprite.m_pImage->m_sWidth;
+      prc->sH   = m_sprite.m_pImage->m_sHeight;
    }
 
-   prc->sX	-= prc->sW / 2;
-   prc->sY	-= prc->sH;
+   prc->sX   -= prc->sW / 2;
+   prc->sY   -= prc->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CSndRelay::EditHotSpot(  // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY)              // Out: Y coord of 2D hotspot relative to
+   short*   psY)              // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 {
-   *psX	= 5;  // Safety.
-   *psY	= 5;  // Safety.
+   *psX   = 5;  // Safety.
+   *psY   = 5;  // Safety.
 
    if (m_sprite.m_pImage)
    {
-      *psX	= m_sprite.m_pImage->m_sWidth / 2;
-      *psY	= m_sprite.m_pImage->m_sHeight;
+      *psX   = m_sprite.m_pImage->m_sWidth / 2;
+      *psY   = m_sprite.m_pImage->m_sHeight;
    }
 }
 
@@ -489,8 +489,8 @@ void CSndRelay::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_sprite.m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_sprite.m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_sprite.m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_sprite.m_pImage->m_sHeight;
 
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
@@ -549,13 +549,13 @@ short CSndRelay::Kill(void)                     // Returns 0 if successfull, non
 void CSndRelay::ProcessMessages(void)
 {
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       switch(msg.msg_Generic.eType)
       {
       case typeObjectDelete:
-         m_state	= State_Delete;
+         m_state   = State_Delete;
          break;
       }
 

@@ -22,63 +22,63 @@
 // for most other game objects.
 //
 // History:
-//		12/18/96 MJR	Started.
+//      12/18/96 MJR   Started.
 //
-//		01/19/97	JMI	Now EditNew() actually loads and puts up a dialog.
+//      01/19/97   JMI   Now EditNew() actually loads and puts up a dialog.
 //
-//		01/23/97	JMI	The positioning in Render() for Y was + sY / 2.  Changed to
-//							- sY.
+//      01/23/97   JMI   The positioning in Render() for Y was + sY / 2.  Changed to
+//                     - sY.
 //
-//		01/27/97	JMI	Added override for EditRect() to make this object clickable.
+//      01/27/97   JMI   Added override for EditRect() to make this object clickable.
 //
-//		01/29/97	JMI	Now Load() and Save() call the base class versions.
+//      01/29/97   JMI   Now Load() and Save() call the base class versions.
 //
-//		02/02/97	JMI	Added EditHotSpot().
+//      02/02/97   JMI   Added EditHotSpot().
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/06/97	JMI	Made this from a 2D object to a 3D one.
+//      02/06/97   JMI   Made this from a 2D object to a 3D one.
 //
-//		02/07/97	JMI	Removed m_pipeline and associated members and setup since
-//							the CScene now owns the pipeline.
+//      02/07/97   JMI   Removed m_pipeline and associated members and setup since
+//                     the CScene now owns the pipeline.
 //
-//		02/11/97	JMI	Fixed bug in EditHotSpot.
+//      02/11/97   JMI   Fixed bug in EditHotSpot.
 //
-//		02/23/97	JMI	In progress, do not use.
+//      02/23/97   JMI   In progress, do not use.
 //
-//		02/23/97	JMI	Brought up to date so we can continue to use this as a
-//							test object.
+//      02/23/97   JMI   Brought up to date so we can continue to use this as a
+//                     test object.
 //
-//		02/24/97	JMI	For the gravity bounce, I was reversing the current
-//							velocity but setting the last known position.  This caused
-//							one extra iteration of acceleration.  Now I use both the
-//							old position and the old velocity.
+//      02/24/97   JMI   For the gravity bounce, I was reversing the current
+//                     velocity but setting the last known position.  This caused
+//                     one extra iteration of acceleration.  Now I use both the
+//                     old position and the old velocity.
 //
-//		02/24/97	JMI	AdjustPosVel() now uses default param (gravity).
+//      02/24/97   JMI   AdjustPosVel() now uses default param (gravity).
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		03/06/97	JMI	Upgraded to current rspMod360 usage.
+//      03/06/97   JMI   Upgraded to current rspMod360 usage.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/10/97 BRH	Changed ball to use new multi layer attribute maps and the
-//							helper functions that go with them.
+//      04/10/97 BRH   Changed ball to use new multi layer attribute maps and the
+//                     helper functions that go with them.
 //
-//		05/29/97	JMI	Got rid of 'old way' of using attributes and put in the
-//							new.
+//      05/29/97   JMI   Got rid of 'old way' of using attributes and put in the
+//                     new.
 //
-//		06/29/97	JMI	Converted EditRect(), EditRender(), and/or Render() to
-//							use Map3Dto2D().
-//							Also, fixed priority.
+//      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to
+//                     use Map3Dto2D().
+//                     Also, fixed priority.
 //
-//		07/01/97	JMI	Replaced use of GetTerrainAttributes() with
-//							GetHeightAndNoWalk().
+//      07/01/97   JMI   Replaced use of GetTerrainAttributes() with
+//                     GetHeightAndNoWalk().
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define BALL_CPP
@@ -95,20 +95,20 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define BALL_SOP_FILE			"3d/ball.sop"
-#define BALL_MSH_FILE			"3d/ball.msh"
-#define BALL_TEX_FILE			"3d/ball.tex"
+#define BALL_SOP_FILE         "3d/ball.sop"
+#define BALL_MSH_FILE         "3d/ball.msh"
+#define BALL_TEX_FILE         "3d/ball.tex"
 
-#define BALL_3D_FILE				"3d/ball.dat"
+#define BALL_3D_FILE            "3d/ball.dat"
 
-#define BALL_GUI_FILE			"res/editor/ball.gui"
+#define BALL_GUI_FILE         "res/editor/ball.gui"
 
 // GUI IDs.
-#define GUI_ID_OK					1
-#define GUI_ID_CANCEL			2
-#define GUI_ID_X_OFFSET			3
-#define GUI_ID_Y_OFFSET			4
-#define GUI_ID_Z_OFFSET			5
+#define GUI_ID_OK               1
+#define GUI_ID_CANCEL         2
+#define GUI_ID_X_OFFSET         3
+#define GUI_ID_Y_OFFSET         4
+#define GUI_ID_Z_OFFSET         5
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -118,7 +118,7 @@ short CBall::ms_sFileCount;
 
 /// Standing Animation Files ////////////////////////////////////////////////////
 // An array of pointers to res names (one for each animation component).
-static char*	ms_apszAnimNames[]	=
+static char*   ms_apszAnimNames[]   =
 {
    "3d/main_bobbing.sop",
    "3d/main_bobbing.mesh",
@@ -144,7 +144,7 @@ short CBall::Load(                              // Returns 0 if successfull, non
    short sResult = 0;
 
    // In most cases, the base class Load() should be called.
-   sResult	= CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load common data just once per file (not with each object)
@@ -157,7 +157,7 @@ short CBall::Load(                              // Returns 0 if successfull, non
          {
          default:
          case 1:
-            //	pFile->Read(ms_acImageName);
+            //   pFile->Read(ms_acImageName);
             break;
          }
       }
@@ -206,7 +206,7 @@ short CBall::Save(                              // Returns 0 if successfull, non
    short sResult = 0;
 
    // In most cases, the base class Save() should be called.
-   sResult	= CThing::Save(pFile, sFileCount);
+   sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Save common data just once per file (not with each object)
@@ -215,7 +215,7 @@ short CBall::Save(                              // Returns 0 if successfull, non
          ms_sFileCount = sFileCount;
 
          // Save static data
-         //	pFile->Write(ms_acImageName);
+         //   pFile->Write(ms_acImageName);
       }
 
       // Save object data
@@ -226,7 +226,7 @@ short CBall::Save(                              // Returns 0 if successfull, non
       pFile->Write(&m_dDY);
       pFile->Write(&m_dDZ);
 
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
    else
    {
@@ -242,16 +242,16 @@ short CBall::Save(                              // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 short CBall::Startup(void)                      // Returns 0 if successfull, non-zero otherwise
 {
-   short	sResult	= 0;  // Assume success.
+   short sResult   = 0;    // Assume success.
 
    // At this point we can assume the CHood was loaded, so we init our height
    m_sPrevHeight = m_pRealm->GetHeight(m_dX, m_dZ);
 
    // HARD-WIRED CODE ALERT!
    // Eventually, this should be set via the bounding sphere radius.
-   m_sCurRadius	= 64;
+   m_sCurRadius   = 64;
 
-   m_lPrevTime		= m_pRealm->m_time.GetGameTime();
+   m_lPrevTime      = m_pRealm->m_time.GetGameTime();
 
    return sResult;
 }
@@ -262,7 +262,7 @@ short CBall::Startup(void)                      // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 short CBall::Shutdown(void)                     // Returns 0 if successfull, non-zero otherwise
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    m_trans.Make1();
 
@@ -296,7 +296,7 @@ void CBall::Update(void)
    if (!m_sSuspend)
    {
       S32 lCurTime          = m_pRealm->m_time.GetGameTime();
-      double dDeltaSeconds		= (lCurTime - m_lPrevTime) / 1000.0;
+      double dDeltaSeconds      = (lCurTime - m_lPrevTime) / 1000.0;
 
       // Adjust vertical velocity and calculate new position.
       double dNewY    = m_dY;
@@ -311,7 +311,7 @@ void CBall::Update(void)
 
       // Get height and 'no walk' status at new position.
       bool bNoWalk;
-      short	sHeight	= m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
+      short sHeight   = m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
 
       // If new Y position is less than terrain height or 'no walk' zone . . .
       if (dNewY < sHeight || bNoWalk == true)
@@ -336,7 +336,7 @@ void CBall::Update(void)
             dNewDY = -m_dDY;
 
             // Restore previous position to avoid getting embedded in anything
-            dNewY	= m_dY;
+            dNewY   = m_dY;
          }
       }
 
@@ -349,10 +349,10 @@ void CBall::Update(void)
       m_dZ = dNewZ;
 
       // Update velocities.
-      m_dDY	= dNewDY;
+      m_dDY   = dNewDY;
 
       // Store time.
-      m_lPrevTime	= lCurTime;
+      m_lPrevTime   = lCurTime;
    }
 }
 
@@ -384,16 +384,16 @@ void CBall::Render(void)
    m_trans.Ry(rspMod360(m_dDX));
    m_trans.Rz(rspMod360(m_dDZ));
 
-   S32 lTime	= m_pRealm->m_time.GetGameTime();
+   S32 lTime   = m_pRealm->m_time.GetGameTime();
 
-   m_sprite.m_pmesh		= (RMesh*)m_anim.m_pmeshes->GetAtTime(lTime);
-   m_sprite.m_psop		= (RSop*)m_anim.m_psops->GetAtTime(lTime);
-   m_sprite.m_ptex		= (RTexture*)m_anim.m_ptextures->GetAtTime(lTime);
-   m_sprite.m_psphere	= (RP3d*)m_anim.m_pbounds->GetAtTime(lTime);
+   m_sprite.m_pmesh      = (RMesh*)m_anim.m_pmeshes->GetAtTime(lTime);
+   m_sprite.m_psop      = (RSop*)m_anim.m_psops->GetAtTime(lTime);
+   m_sprite.m_ptex      = (RTexture*)m_anim.m_ptextures->GetAtTime(lTime);
+   m_sprite.m_psphere   = (RP3d*)m_anim.m_pbounds->GetAtTime(lTime);
 
-   m_sprite.m_ptrans	= &m_trans;
+   m_sprite.m_ptrans   = &m_trans;
 
-   m_sprite.m_sRadius	= m_sCurRadius;
+   m_sprite.m_sRadius   = m_sCurRadius;
 
    // Update sprite in scene
    m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -418,11 +418,11 @@ short CBall::EditNew(                           // Returns 0 if successfull, non
    sResult = GetResources();
    if (sResult == 0)
    {
-      sResult	= Shutdown();
+      sResult   = Shutdown();
       if (sResult == 0)
       {
          // Attempt to startup as if in a real play . . .
-         sResult	= Startup();
+         sResult   = Startup();
       }
    }
 
@@ -438,22 +438,22 @@ short CBall::EditModify(void)
    short sResult = 0;
 
    // Load GUI . . .
-   RGuiItem*	pguiRoot	= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, BALL_GUI_FILE) );
+   RGuiItem*   pguiRoot   = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, BALL_GUI_FILE) );
    if (pguiRoot != NULL)
    {
       // Modal loop.
       rspClearAllInputEvents();
 
       // Get the two items that can cause donage.
-      RGuiItem*	pguiOk		= pguiRoot->GetItemFromId(GUI_ID_OK);
-      RGuiItem*	pguiCancel	= pguiRoot->GetItemFromId(GUI_ID_CANCEL);
+      RGuiItem*   pguiOk      = pguiRoot->GetItemFromId(GUI_ID_OK);
+      RGuiItem*   pguiCancel   = pguiRoot->GetItemFromId(GUI_ID_CANCEL);
 
       if (pguiOk != NULL && pguiCancel != NULL)
       {
          // Prepare values.
          // These should definitely check to make sure they exist.
          // A nice inline helper function that takes varargs would do.
-         RGuiItem*	pguiEditX	= pguiRoot->GetItemFromId(GUI_ID_X_OFFSET);
+         RGuiItem*   pguiEditX   = pguiRoot->GetItemFromId(GUI_ID_X_OFFSET);
          if (pguiEditX != NULL)
          {
             pguiEditX->SetText("%g", m_dDX);
@@ -461,7 +461,7 @@ short CBall::EditModify(void)
             pguiEditX->Compose();
          }
 
-         RGuiItem*	pguiEditY	= pguiRoot->GetItemFromId(GUI_ID_Y_OFFSET);
+         RGuiItem*   pguiEditY   = pguiRoot->GetItemFromId(GUI_ID_Y_OFFSET);
          if (pguiEditY != NULL)
          {
             pguiEditY->SetText("%g", m_dDY);
@@ -469,7 +469,7 @@ short CBall::EditModify(void)
             pguiEditY->Compose();
          }
 
-         RGuiItem*	pguiEditZ	= pguiRoot->GetItemFromId(GUI_ID_Z_OFFSET);
+         RGuiItem*   pguiEditZ   = pguiRoot->GetItemFromId(GUI_ID_Z_OFFSET);
          if (pguiEditZ != NULL)
          {
             pguiEditZ->SetText("%g", m_dDZ);
@@ -485,33 +485,33 @@ short CBall::EditModify(void)
             // Set values.
             if (pguiEditX != NULL)
             {
-               m_dDX	= strtod(pguiEditX->m_szText, NULL);
+               m_dDX   = strtod(pguiEditX->m_szText, NULL);
             }
             if (pguiEditY != NULL)
             {
-               m_dDY	= strtod(pguiEditY->m_szText, NULL);
+               m_dDY   = strtod(pguiEditY->m_szText, NULL);
             }
             if (pguiEditZ != NULL)
             {
-               m_dDZ	= strtod(pguiEditZ->m_szText, NULL);
+               m_dDZ   = strtod(pguiEditZ->m_szText, NULL);
             }
 
             // Load resources.
             sResult = GetResources();
             if (sResult == 0)
             {
-               sResult	= Shutdown();
+               sResult   = Shutdown();
                if (sResult == 0)
                {
                   // Attempt to startup as if in a real play . . .
-                  sResult	= Startup();
+                  sResult   = Startup();
                }
             }
          }
          else
          {
             // User aborted.
-            sResult	= 3;
+            sResult   = 3;
          }
 
          rspClearAllInputEvents();
@@ -521,7 +521,7 @@ short CBall::EditModify(void)
          TRACE("EditNew(): GUI missing item(s) with ID %d or %d.\n",
                GUI_ID_OK,
                GUI_ID_CANCEL);
-         sResult	= 2;
+         sResult   = 2;
       }
 
       // Done with GUIs.
@@ -530,7 +530,7 @@ short CBall::EditModify(void)
    else
    {
       TRACE("EditNew(): Failed to load GUI file \"%s\".\n", BALL_GUI_FILE);
-      sResult	= 1;
+      sResult   = 1;
    }
 
    return sResult;
@@ -574,10 +574,10 @@ void CBall::EditRender(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the clickable pos/area of an object.
-//	(virtual (Overridden here)).
+//   (virtual (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CBall::EditRect(   // Returns nothiing.
-   RRect*	prc)        // Out: Clickable pos/area of object.
+   RRect*   prc)        // Out: Clickable pos/area of object.
 {
    Map3Dto2D(
       m_dX,
@@ -597,13 +597,13 @@ void CBall::EditRect(   // Returns nothiing.
 // (virtual (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CBall::EditHotSpot(         // Returns nothiing.
-   short*	psX,                 // Out: X coord of 2D hotspot relative to
+   short*   psX,                 // Out: X coord of 2D hotspot relative to
                                  // EditRect() pos.
-   short*	psY)                 // Out: Y coord of 2D hotspot relative to
+   short*   psY)                 // Out: Y coord of 2D hotspot relative to
                                  // EditRect() pos.
 {
-   *psX	= m_sCurRadius;
-   *psY	= m_sCurRadius;
+   *psX   = m_sCurRadius;
+   *psY   = m_sCurRadius;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -613,7 +613,7 @@ short CBall::GetResources(void)                 // Returns 0 if successfull, non
 {
    short sResult = 0;
 
-   sResult	= m_anim.Get(
+   sResult   = m_anim.Get(
       ms_apszAnimNames,
       RChannel_LoopAtStart | RChannel_LoopAtEnd);
 

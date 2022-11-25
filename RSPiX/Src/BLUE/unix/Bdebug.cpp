@@ -17,45 +17,45 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bdebug.cpp
+//   bdebug.cpp
 //
 // History:
-//		05/30/96 JMI	Started.
+//      05/30/96 JMI   Started.
 //
-//		07/08/96	JMI	Now using exit(0) instead of FatalAppExit so that
-//							atexit functions will get called.  Took out asm int 3
-//							since I already had DebugBreak().
+//      07/08/96   JMI   Now using exit(0) instead of FatalAppExit so that
+//                     atexit functions will get called.  Took out asm int 3
+//                     since I already had DebugBreak().
 //
-//		07/08/96	JMI	EXIT_SUCCESS now passed to exit instead of 0.
+//      07/08/96   JMI   EXIT_SUCCESS now passed to exit instead of 0.
 //
-//		07/12/96	JMI	Removed excess param sExpr passed rspAssert.
+//      07/12/96   JMI   Removed excess param sExpr passed rspAssert.
 //
-//		07/16/96	JMI	Removed #if'd outness of this file in release mode.
+//      07/16/96   JMI   Removed #if'd outness of this file in release mode.
 //
-//		10/18/96	JMI	szOutput in rspTrace is now static so it doesn't use
-//							any stack space.  Changed str size for szOutput to
-//							1024 bytes.  Changed ASSERT's string to same.
+//      10/18/96   JMI   szOutput in rspTrace is now static so it doesn't use
+//                     any stack space.  Changed str size for szOutput to
+//                     1024 bytes.  Changed ASSERT's string to same.
 //
-//		11/19/97	JMI	Added more debug output options via macros:
-//							RSP_DEBUG_OUT_MESSAGEBOX, RSP_DEBUG_OUT_FILE,
-//							RSP_DEBUG_ASSERT_PASSIVE, & RSP_TRACE_LOG_NAME.
-//							See below for details.
+//      11/19/97   JMI   Added more debug output options via macros:
+//                     RSP_DEBUG_OUT_MESSAGEBOX, RSP_DEBUG_OUT_FILE,
+//                     RSP_DEBUG_ASSERT_PASSIVE, & RSP_TRACE_LOG_NAME.
+//                     See below for details.
 //
-//		11/19/97	JMI	sSem was being decremented in the wrong spot.
+//      11/19/97   JMI   sSem was being decremented in the wrong spot.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // Does all Windows specific debug stuff.
 //
-//	NOTE:  Define the following Macros at the compiler settings level to get
+//   NOTE:  Define the following Macros at the compiler settings level to get
 // other than default behavior:
 //
-//	- RSP_DEBUG_OUT_MESSAGEBOX	-- Use an rspMsgBox() for all TRACE calls.
-// - RSP_DEBUG_OUT_FILE			-- Use a file for all TRACE calls.
-// - RSP_DEBUG_ASSERT_PASSIVE	-- Just TRACE (do NOT show messagebox) for all
-//										ASSERT failures -- Assumes user option 'Ignore'.
-// - RSP_TRACE_LOG_NAME			-- Override the default name for the TRACE log
-//										file.
+//   - RSP_DEBUG_OUT_MESSAGEBOX   -- Use an rspMsgBox() for all TRACE calls.
+// - RSP_DEBUG_OUT_FILE         -- Use a file for all TRACE calls.
+// - RSP_DEBUG_ASSERT_PASSIVE   -- Just TRACE (do NOT show messagebox) for all
+//                              ASSERT failures -- Assumes user option 'Ignore'.
+// - RSP_TRACE_LOG_NAME         -- Override the default name for the TRACE log
+//                              file.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -74,14 +74,14 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define MAX_TRACE_STR	1024
-#define MAX_ASSERT_STR	1024
+#define MAX_TRACE_STR   1024
+#define MAX_ASSERT_STR   1024
 
 #if defined(RSP_DEBUG_OUT_FILE)
    #if !defined(RSP_TRACE_LOG_NAME)
-      #define RSP_TRACE_LOG_NAME	"TRACE.txt"
-   #endif	// RSP_TRACE_LOG_NAME
-#endif	// RSP_DEBUG_OUT_FILE
+      #define RSP_TRACE_LOG_NAME   "TRACE.txt"
+   #endif   // RSP_TRACE_LOG_NAME
+#endif   // RSP_DEBUG_OUT_FILE
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -131,15 +131,15 @@ void rspTrace(char *frmt, ... )
 #endif
 
 #if defined(RSP_DEBUG_OUT_FILE)
-      static FILE*	fs	= NULL;  // NOTE that we never fclose this so we can get
-                                 // EVERY LAST TRACE -- so this may show up as
-                                 // a leak.  The system will close it though.
+      static FILE*   fs   = NULL;  // NOTE that we never fclose this so we can get
+                                   // EVERY LAST TRACE -- so this may show up as
+                                   // a leak.  The system will close it though.
       // If not yet open . . .
       if (fs == NULL)
       {
          // Attempt to open (Note that we never close this -- the system does).
          // This will probably show up as a leak.
-         fs	= fopen(RSP_TRACE_LOG_NAME, "wt");
+         fs   = fopen(RSP_TRACE_LOG_NAME, "wt");
          if (fs)
          {
             fprintf(fs, "======== Postal Plus build %s %s ========\n", __DATE__, __TIME__);
@@ -155,7 +155,7 @@ void rspTrace(char *frmt, ... )
          vsnprintf(szOutput, 512, frmt, varp);
          fprintf(fs, szOutput);
       }
-#endif	// RSP_DEBUG_OUT_FILE
+#endif   // RSP_DEBUG_OUT_FILE
 
       va_end(varp);
 
@@ -170,7 +170,7 @@ void rspTrace(char *frmt, ... )
          DebugBreak();
          exit(EXIT_SUCCESS);
       }
-#endif	// RSP_DEBUG_OUT_MESSAGEBOX
+#endif   // RSP_DEBUG_OUT_MESSAGEBOX
    }
 
    // Remember to reduce.

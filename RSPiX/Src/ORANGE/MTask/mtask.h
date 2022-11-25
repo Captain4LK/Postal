@@ -23,7 +23,7 @@
 //
 // Multitasking module for game run routines
 //
-// Created On:	10/18/96	BRH
+// Created On:   10/18/96   BRH
 // Implemented:10/18/96 BRH
 //
 //////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@
 #endif // PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
-//	Task Info Structure
+//   Task Info Structure
 //////////////////////////////////////////////////////////////////////
 
 typedef struct tag_TaskInfo
@@ -63,8 +63,8 @@ void MTaskManager(void);
 // periodically.
 short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize = 1024);
 
-#define MTaskAddwSize(fnTask, sStackSz)	MTaskAddFunc(fnTask, #fnTask, sStackSz)
-#define MTaskAdd(fnTask)						MTaskAddFunc(fnTask, #fnTask);
+#define MTaskAddwSize(fnTask, sStackSz)   MTaskAddFunc(fnTask, #fnTask, sStackSz)
+#define MTaskAdd(fnTask)                  MTaskAddFunc(fnTask, #fnTask);
 
 // This is used to remove tasks from the task list.
 // Only call this function from within the task's process

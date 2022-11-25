@@ -20,13 +20,13 @@
 // Dlg.H
 //
 // History:
-//		01/18/97 JMI	Started tracking history of this file.
-//							Converted Do() to take an RInputEvent* instead of a
-//							S32*.
+//      01/18/97 JMI   Started tracking history of this file.
+//                     Converted Do() to take an RInputEvent* instead of a
+//                     S32*.
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -140,5 +140,5 @@ protected:     // Protected member variables.
 
 #endif // DLG_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

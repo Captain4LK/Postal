@@ -106,7 +106,7 @@ public:
 // The following member variables are safe to tamper with from outside
 // this function, and that is why they're public.
 
-TaskFunc	m_fnTask;               // User specified task function.
+TaskFunc m_fnTask;                 // User specified task function.
 U32 m_ulUser;                    // User specified parm to task function.
 
 S32 m_lInterval;                 // User specified timer interval.
@@ -116,13 +116,13 @@ protected:
 // The following member variables are NOT safe to tamper with from
 // outside this function, and that is why they're protected.
 
-short	m_sActive;                 // TRUE if active (in list), FALSE otherwise.
-TimeFunc	m_fnTime;               // Custom time function.
+short m_sActive;                   // TRUE if active (in list), FALSE otherwise.
+TimeFunc m_fnTime;                 // Custom time function.
 S32 m_lTimeUser;                 // Custom time function user value.
 
 
 /////////////////////// Static members /////////////////////////////////
-static RList<RTask>	ms_listActive;       // List of tasks to be called.
+static RList<RTask>   ms_listActive;       // List of tasks to be called.
 
 };
 

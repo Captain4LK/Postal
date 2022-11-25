@@ -19,35 +19,35 @@
 // Project: Postal
 //
 // History:
-//		08/04/97 BRH	Started.
+//      08/04/97 BRH   Started.
 //
-//		08/06/97 BRH	Debugged - restored to working order.
-//					MJR
+//      08/06/97 BRH   Debugged - restored to working order.
+//               MJR
 //
-//		08/07/97 BRH	Fixed error message that referred to RSocket
+//      08/07/97 BRH   Fixed error message that referred to RSocket
 //
-//		08/08/97 MJR	Upgraded to latest revision of plugin stuff.
+//      08/08/97 MJR   Upgraded to latest revision of plugin stuff.
 //
-//		08/09/97 MJR	Added broadcast support.
+//      08/09/97 MJR   Added broadcast support.
 //
-//		08/14/97 MJR	Fixed GetAddress() to avoid database function when
-//							working with a dotted address.
+//      08/14/97 MJR   Fixed GetAddress() to avoid database function when
+//                     working with a dotted address.
 //
-//		08/18/97 MJR	Fixed stupid error in GetAddress() that caused crashes.
+//      08/18/97 MJR   Fixed stupid error in GetAddress() that caused crashes.
 //
-//		08/20/97 MJR	Added support for setting whether socket blocks or not.
+//      08/20/97 MJR   Added support for setting whether socket blocks or not.
 //
-//		09/02/97 MJR	Got rid of TRACE() on "would block" situations.
+//      09/02/97 MJR   Got rid of TRACE() on "would block" situations.
 //
-//					MJR	Fixed serious bug that caused functions to return -1
-//							as the number of actual bytes sent/received if an
-//							error occurred -- they now properly return 0 instead.
+//               MJR   Fixed serious bug that caused functions to return -1
+//                     as the number of actual bytes sent/received if an
+//                     error occurred -- they now properly return 0 instead.
 //
-//		09/09/97 MJR	Added RSocket::errNotSupported return value to Open().
+//      09/09/97 MJR   Added RSocket::errNotSupported return value to Open().
 //
-//		11/18/97	JMI	Added message and Close() in destructor for case when
-//							an opened socket is never closed.  Trying to find memory
-//							leak but this was apparently not the problem.
+//      11/18/97   JMI   Added message and Close() in destructor for case when
+//                     an opened socket is never closed.  Trying to find memory
+//                     leak but this was apparently not the problem.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -102,9 +102,9 @@
 //
 // PUSH Bit Interpretation
 // By default, Windows NT versions 4.0 and 3.5x complete a recv() call when:
-// ·	Data arrives with the PUSH bit set.
-// ·	The user recv() buffer is full.
-// ·	0.5 seconds have elapsed since any data arrived.
+// ·   Data arrives with the PUSH bit set.
+// ·   The user recv() buffer is full.
+// ·   0.5 seconds have elapsed since any data arrived.
 // If a client program is run on a computer with a TCP/IP implementation that
 // does not set the PUSH bit on sends, response delays may result.  It’s best
 //  to correct this on the client side; however, a configuration parameter
@@ -117,8 +117,8 @@
 // to implementing delayed acknowledgments. The following conditions cause
 // an acknowledgment to be sent as data is received by TCP on a given
 // connection:
-// ·	No ACK is sent for the previous received segment.
-// ·	Segment is received, and no other segment arrives within 200ms for that connection.
+// ·   No ACK is sent for the previous received segment.
+// ·   Segment is received, and no other segment arrives within 200ms for that connection.
 // In summary, normally an ACK is sent for every other TCP segment received
 // on a connection, unless the delayed ACK timer (200ms) expires. There is no
 // configuration parameter to disable delayed ACKs.
@@ -166,7 +166,7 @@ bool RProtocolBSDIP::ms_bWSAStartup;
 #ifdef WIN32
 bool RProtocolBSDIP::ms_bWSASetBlockingHook;
 RSocket::FuncNum RProtocolBSDIP::ms_funcnum;
-RSocket::BLOCK_CALLBACK	RProtocolBSDIP::ms_callback;
+RSocket::BLOCK_CALLBACK RProtocolBSDIP::ms_callback;
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -218,10 +218,10 @@ void RProtocolBSDIP::Init(void)
 
 
 //////////////////////////////////////////////////////////////////////////////
-//	Startup socket API.  This is normally called from the socket's Startup
+//   Startup socket API.  This is normally called from the socket's Startup
 // function.  Since we have multiple protocols using the same winsock
 // code, the Startup and Shutdown will have to be called after creating
-//	an RSocket and before calling Open()
+//   an RSocket and before calling Open()
 //////////////////////////////////////////////////////////////////////////////
 short RProtocolBSDIP::Startup(void)
 {
@@ -285,10 +285,10 @@ short RProtocolBSDIP::Startup(void)
 
 
 //////////////////////////////////////////////////////////////////////////////
-//	Shutdown socket API.  This is normally called from the socket's Startup
+//   Shutdown socket API.  This is normally called from the socket's Startup
 // function.  Since we have multiple protocols using the same winsock
 // code, the Startup and Shutdown will have to be called after creating
-//	an RSocket and before calling Open()
+//   an RSocket and before calling Open()
 //////////////////////////////////////////////////////////////////////////////
 void RProtocolBSDIP::Shutdown(void)
 {

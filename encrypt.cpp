@@ -15,26 +15,26 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
-//	Module Name:	Encrypt.cpp
+//   Module Name:   Encrypt.cpp
 //
-// Description:	This is the encryption module of Syndicated Game Shell.
+// Description:   This is the encryption module of Syndicated Game Shell.
 //
 // History:
 //
-//		03/25/96 AJM		Created.
+//      03/25/96 AJM      Created.
 //
-//		07/10/97 BRH		Commented out #include AppMain.h so that
-//								it will work with Postal.  It doesn't seem to
-//								need that file.
+//      07/10/97 BRH      Commented out #include AppMain.h so that
+//                        it will work with Postal.  It doesn't seem to
+//                        need that file.
 //
-//		07/10/97 BRH		Branched this version of encrypt to use
-//								Postal's GetRandom() rather than rand();
+//      07/10/97 BRH      Branched this version of encrypt to use
+//                        Postal's GetRandom() rather than rand();
 //
-//		07/11/97 BRH		Changed Encrypt to return the length of
-//								the buffer that needs to be stored, and
-//								changed Decrypt to subtract 2 from that
-//								length to use as the number of bytes to
-//								decrypt.
+//      07/11/97 BRH      Changed Encrypt to return the length of
+//                        the buffer that needs to be stored, and
+//                        changed Decrypt to subtract 2 from that
+//                        length to use as the number of bytes to
+//                        decrypt.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
@@ -54,9 +54,9 @@
 //////////////////////////////////////////////////////////////////////////////////////
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////////////
-#define NUM_KEYS					10
-#define KEY_LENGTH				128
-#define MAX_STRING_LENGTH		256
+#define NUM_KEYS               10
+#define KEY_LENGTH            128
+#define MAX_STRING_LENGTH      256
 
 #define CRCPOLY  0xA001  /* ANSI CRC-16 */
                          /* CCITT: 0x8408 */
@@ -99,21 +99,21 @@ void MakeCRCTable();
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
-// Function Name:	Encrypt
+// Function Name:   Encrypt
 //
-//	Description:	This is the string encryption function.
+//   Description:   This is the string encryption function.
 //
-//	Input:			char*: string to be encrypted
-//						char*: returned encrypted string
+//   Input:         char*: string to be encrypted
+//                  char*: returned encrypted string
 //
-//	Output:			0 on success
+//   Output:         0 on success
 //
-//	History:			03/25/97, AJM,		Created.
+//   History:         03/25/97, AJM,      Created.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 short Encrypt(char* szInputString, char* szOutputString, short sSourceLength)
 {
-   short	rc = 0,           // assume success
+   short rc = 0,             // assume success
          sIndex = 0,
          sStartIndex = GetRandom() % KEY_LENGTH,
          sCurrentKey = GetRandom() % NUM_KEYS,
@@ -163,16 +163,16 @@ short Encrypt(char* szInputString, char* szOutputString, short sSourceLength)
 
 //////////////////////////////////////////////////////////////////////////////////////
 //
-// Function Name:	Decrypt
+// Function Name:   Decrypt
 //
-//	Description:	This is the string decryption function.
+//   Description:   This is the string decryption function.
 //
-//	Input:			char*: string to be decrypted
-//						char*: returned decrypted string
+//   Input:         char*: string to be decrypted
+//                  char*: returned decrypted string
 //
-//	Output:			0 on success
+//   Output:         0 on success
 //
-//	History:			03/25/97, AJM,		Created.
+//   History:         03/25/97, AJM,      Created.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 short Decrypt(char* szInputString, char* szOutputString, short sSourceLength)
@@ -240,16 +240,16 @@ short Decrypt(char* szInputString, char* szOutputString, short sSourceLength)
 
 //////////////////////////////////////////////////////////////////////////////////////
 //
-// Function Name:	Encrypt
+// Function Name:   Encrypt
 //
-//	Description:	This is the file encryption function.
+//   Description:   This is the file encryption function.
 //
-//	Input:			char*: name of file to encrypt to,
-//						char*: NULL terminated plaintext to encrypt
+//   Input:         char*: name of file to encrypt to,
+//                  char*: NULL terminated plaintext to encrypt
 //
-//	Output:			0 on success.
+//   Output:         0 on success.
 //
-//	History:			03/25/97, AJM,		Created.
+//   History:         03/25/97, AJM,      Created.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 short Encrypt(char* szFileName, char* szInputString)
@@ -286,16 +286,16 @@ short Encrypt(char* szFileName, char* szInputString)
 
 //////////////////////////////////////////////////////////////////////////////////////
 //
-// Function Name:	Decrypt
+// Function Name:   Decrypt
 //
-//	Description:	This is the file decryption function.
+//   Description:   This is the file decryption function.
 //
-//	Input:			char*: name of file to be decrypted
-//						char*: text to decrypt into
+//   Input:         char*: name of file to be decrypted
+//                  char*: text to decrypt into
 //
-//	Output:			0 on success.
+//   Output:         0 on success.
 //
-//	History:			03/25/97, AJM,		Created.
+//   History:         03/25/97, AJM,      Created.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 short Decrypt(char* szFileName, char* szOutputString)
@@ -325,16 +325,16 @@ short Decrypt(char* szFileName, char* szOutputString)
 
 //////////////////////////////////////////////////////////////////////////////////////
 //
-// Function Name:	Verify
+// Function Name:   Verify
 //
-//	Description:	This verifys that the data in the encrypted string hasnt been corrupted
+//   Description:   This verifys that the data in the encrypted string hasnt been corrupted
 //
-//	Input:			char*: string to insert checksums into
-//						short: length of string
+//   Input:         char*: string to insert checksums into
+//                  short: length of string
 //
-//	Output:			none
+//   Output:         none
 //
-//	History:			03/25/97, AJM,		Created.
+//   History:         03/25/97, AJM,      Created.
 //
 //////////////////////////////////////////////////////////////////////////////////////
 short Verify(char *szSource, short sLength, unsigned short usCRC)

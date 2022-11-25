@@ -18,51 +18,51 @@
 // weapon.h
 // Project: Postal
 //
-//	History:
+//   History:
 //
-//		02/28/97 BRH	Started this base class for weapons.  Will change several
-//							of the current weapons to derive from this base class.
+//      02/28/97 BRH   Started this base class for weapons.  Will change several
+//                     of the current weapons to derive from this base class.
 //
-//		03/03/97 BRH	Added a few states from the Rocket and Napalm.
+//      03/03/97 BRH   Added a few states from the Rocket and Napalm.
 //
-//		03/03/97 BRH	Added 3d sprite to the weapon to make it more universal.
-//							A weapon that is 2d or uses no sprite will be a special
-//							case where it will add a 2d sprite to its derived class,
-//							or ignore the sprite entirely.
+//      03/03/97 BRH   Added 3d sprite to the weapon to make it more universal.
+//                     A weapon that is 2d or uses no sprite will be a special
+//                     case where it will add a 2d sprite to its derived class,
+//                     or ignore the sprite entirely.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/19/97 BRH	Added virtual functions for processing messages and
-//							virtual OnMessage handler functions so that it follows
-//							the model of the CThing3d base class object.
+//      03/19/97 BRH   Added virtual functions for processing messages and
+//                     virtual OnMessage handler functions so that it follows
+//                     the model of the CThing3d base class object.
 //
-//		04/29/97	JMI	Removed the m_sprite (was a CSprite3) so we could instead
-//							make this data part of the descended class.  Since C++ does
-//							not support virtual data, we had to replace the base class
-//							m_sprite with a pure virtual GetSprite() that returns the
-//							appropriate sprite for the class.
+//      04/29/97   JMI   Removed the m_sprite (was a CSprite3) so we could instead
+//                     make this data part of the descended class.  Since C++ does
+//                     not support virtual data, we had to replace the base class
+//                     m_sprite with a pure virtual GetSprite() that returns the
+//                     appropriate sprite for the class.
 //
-//		05/09/97 BRH	Added SetRangeToTarget function to vary the velocity
-//							of the weapon before it is shot in order to hit
-//							your target.
+//      05/09/97 BRH   Added SetRangeToTarget function to vary the velocity
+//                     of the weapon before it is shot in order to hit
+//                     your target.
 //
-//		06/25/97 BRH	Added m_spriteShadow and PrepareShadow() for shadow
-//							support for weapons.
+//      06/25/97 BRH   Added m_spriteShadow and PrepareShadow() for shadow
+//                     support for weapons.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		07/31/97 BRH	Added remote control state.
+//      07/31/97 BRH   Added remote control state.
 //
-//		08/14/97 BRH	Added a virtual function SetCollideBits so that weapons
-//							that use collision bits can overload it to set their
-//							bit fields.  Others that don't use it won't overload it
-//							and the call will be ignored.
+//      08/14/97 BRH   Added a virtual function SetCollideBits so that weapons
+//                     that use collision bits can overload it to set their
+//                     bit fields.  Others that don't use it won't overload it
+//                     and the call will be ignored.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
-//							Also, changed MineSndHalfLife to 150 (was 500).
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
+//                     Also, changed MineSndHalfLife to 150 (was 500).
 //
-//		08/24/97 BRH	Added SetDetectionBits function like the SetCollideBits
-//							which the heatseeker will override to set its bits.
+//      08/24/97 BRH   Added SetDetectionBits function like the SetCollideBits
+//                     which the heatseeker will override to set its bits.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef WEAPON_H
@@ -83,12 +83,12 @@ typedef unsigned char CWeaponState;
 
 typedef enum
 {
-   LaunchSndHalfLife			= 1000,
-   ExplosionSndHalfLife		= 1000,
-   SideEffectSndHalfLife	= 1000,     // Grenade bounce or similar.
-   FireBombSndHalfLife		= 1000,
-   NapalmSndHalfLife			= 1000,
-   MineSndHalfLife			= 80
+   LaunchSndHalfLife         = 1000,
+   ExplosionSndHalfLife      = 1000,
+   SideEffectSndHalfLife   = 1000,     // Grenade bounce or similar.
+   FireBombSndHalfLife      = 1000,
+   NapalmSndHalfLife         = 1000,
+   MineSndHalfLife         = 80
 } Macros;
 
 typedef enum
@@ -127,14 +127,14 @@ U16 m_idParent;                        // Anyone can be this item's parent.
 
 U16 m_u16ShooterID;                    // Instance ID of the shooter (so that credit
                                        // for a kill can be determined)
-CSprite2	m_spriteShadow;               // 2D sprite for shadow on the ground
+CSprite2 m_spriteShadow;                 // 2D sprite for shadow on the ground
 
 protected:
 S32 m_lTimer;                          // Timer for explosion
 S32 m_lPrevTime;                       // Previous update time
 
 short m_sSuspend;                      // Suspend flag
-short	m_sCurRadius;                    // Radius of the dude's current frame.
+short m_sCurRadius;                      // Radius of the dude's current frame.
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -251,13 +251,13 @@ virtual void EditRect(RRect* pRect)
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 virtual short GetResources(void);
 
@@ -294,7 +294,7 @@ void ProcessMessage(          // Returns nothing.
 
 // This function provides a way to set the collision bits for
 // a specific weapon, if that weapon uses collision bits.  Rocket
-//	and Heatseeker will override this to set their collision bits,
+//   and Heatseeker will override this to set their collision bits,
 // but others like the cocktail don't use collision bits so they
 // will just rely on this version of the function to throw out
 // the request to set the bits.

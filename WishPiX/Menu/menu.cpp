@@ -18,90 +18,90 @@
 // menu.CPP
 //
 // History:
-//		11/27/96 JMI	Started.
+//      11/27/96 JMI   Started.
 //
-//		12/16/96	JMI	While not complete, this now contains most of the
-//							features discussed.
+//      12/16/96   JMI   While not complete, this now contains most of the
+//                     features discussed.
 //
-//		12/21/96	JMI	Now uses RResMgr for all loaded resources except
-//							ms_guiIndicator.m_im since it is not yet practical.
-//							Once there is a generic loadable type, such as RFile*
-//							or void*, this will be easier.  The possible work
-//							around for the meantime could be a func to load an
-//							image resource, allocate the gui via Create() to
-//							the size of that resource, rspBlit() the image resource
-//							into the gui, and Release() the image resource.
+//      12/21/96   JMI   Now uses RResMgr for all loaded resources except
+//                     ms_guiIndicator.m_im since it is not yet practical.
+//                     Once there is a generic loadable type, such as RFile*
+//                     or void*, this will be easier.  The possible work
+//                     around for the meantime could be a func to load an
+//                     image resource, allocate the gui via Create() to
+//                     the size of that resource, rspBlit() the image resource
+//                     into the gui, and Release() the image resource.
 //
-//		12/21/96	JMI	Now calls ms_msgbox.SetVisible(TRUE) to show and activate
-//							ms_msgbox and its children at the end of a successful
-//							StartMenu().  Also, calls ms_msgbox.SetVisible(FALSE) to
-//							hide and deactivate ms_msgbox and its children during
-//							StopMenu().
+//      12/21/96   JMI   Now calls ms_msgbox.SetVisible(TRUE) to show and activate
+//                     ms_msgbox and its children at the end of a successful
+//                     StartMenu().  Also, calls ms_msgbox.SetVisible(FALSE) to
+//                     hide and deactivate ms_msgbox and its children during
+//                     StopMenu().
 //
-//		01/19/97	JMI	Converted Do() to taking an RInputEvent* instead of a
-//							S32*.
+//      01/19/97   JMI   Converted Do() to taking an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/27/97	JMI	NextItem() was bailing out one too early when it thought
-//							it detected that there were no enabled menu items.
+//      01/27/97   JMI   NextItem() was bailing out one too early when it thought
+//                     it detected that there were no enabled menu items.
 //
-//		01/27/97	JMI	Now sets palette to background image.
+//      01/27/97   JMI   Now sets palette to background image.
 //
-//		01/30/97	JMI	Now callback can return non-zero aborting menu right
-//							away once started.
+//      01/30/97   JMI   Now callback can return non-zero aborting menu right
+//                     away once started.
 //
-//		02/02/97	JMI	Now the GUI can be set to use transparent BLiT'ing via
-//							the Menu struct.  Now MenuItemCall with -1 for sMenuItem
-//							indicates change of menu focus (but no choice yet made).
+//      02/02/97   JMI   Now the GUI can be set to use transparent BLiT'ing via
+//                     the Menu struct.  Now MenuItemCall with -1 for sMenuItem
+//                     indicates change of menu focus (but no choice yet made).
 //
-//		02/03/97	JMI	Split DoMenu() into DoMenuInput() and DoMenuOutput() so
-//							the input and output for menus can be done at different
-//							points in the user loop or whatever.
+//      02/03/97   JMI   Split DoMenu() into DoMenuInput() and DoMenuOutput() so
+//                     the input and output for menus can be done at different
+//                     points in the user loop or whatever.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/04/97	JMI	Callback on StopMenu() now occurs after all deallocations.
+//      02/04/97   JMI   Callback on StopMenu() now occurs after all deallocations.
 //
-//		02/10/97	JMI	rspReleaseResource() now takes a ptr to a ptr.
+//      02/10/97   JMI   rspReleaseResource() now takes a ptr to a ptr.
 //
-//		04/08/97	JMI	Now sucks up (and utilizes) Tab and Shift-Tab combos.
+//      04/08/97   JMI   Now sucks up (and utilizes) Tab and Shift-Tab combos.
 //
-//		04/11/97	JMI	Now sets the new m_sFontCellHeight field in each GUI
-//							that displays text in a menu.
+//      04/11/97   JMI   Now sets the new m_sFontCellHeight field in each GUI
+//                     that displays text in a menu.
 //
-//		04/21/97	JMI	Added pmenuBack to MenuAutoItems.
+//      04/21/97   JMI   Added pmenuBack to MenuAutoItems.
 //
-//		04/24/97	JMI	Now supports the centering flag for header text and
-//							two new flags for shadowing the header and the items.
-//							Now colors are specified as RGBA and background font
-//							color must be transparent (not offered as an option).
+//      04/24/97   JMI   Now supports the centering flag for header text and
+//                     two new flags for shadowing the header and the items.
+//                     Now colors are specified as RGBA and background font
+//                     color must be transparent (not offered as an option).
 //
-//		06/16/97	JMI	Now stores the current composite buffer contents on
-//							StartMenu() and restores them on StopMenu().
+//      06/16/97   JMI   Now stores the current composite buffer contents on
+//                     StartMenu() and restores them on StopMenu().
 //
-//		07/01/97	JMI	Added sBackItem to MenuAutoItems so when we use pmenuBack
-//							we can select the item last selected.
+//      07/01/97   JMI   Added sBackItem to MenuAutoItems so when we use pmenuBack
+//                     we can select the item last selected.
 //
-//		07/06/97	JMI	Added MenuColumnizeGuis to make the GUIs associated with
-//							menu items appear in their own column.
+//      07/06/97   JMI   Added MenuColumnizeGuis to make the GUIs associated with
+//                     menu items appear in their own column.
 //
-//		07/21/97	JMI	Now displays disabled items with shadow and text colors
-//							swapped.
+//      07/21/97   JMI   Now displays disabled items with shadow and text colors
+//                     swapped.
 //
-//		08/10/97	JMI	Made MAX_MENU_ITEMS based on sizeof ami array.
+//      08/10/97   JMI   Made MAX_MENU_ITEMS based on sizeof ami array.
 //
-//		08/14/97	JMI	MenuItemCall (fnChoice) now returns true to accept menu
-//							choice, false otherwise.
+//      08/14/97   JMI   MenuItemCall (fnChoice) now returns true to accept menu
+//                     choice, false otherwise.
 //
-//		08/22/97	JMI	Now locks the composite buffer before accessing it.
+//      08/22/97   JMI   Now locks the composite buffer before accessing it.
 //
-//		08/25/97	JMI	Added two new palette info entries for the range of
-//							mappable entries.
+//      08/25/97   JMI   Added two new palette info entries for the range of
+//                     mappable entries.
 //
-//		08/27/97	JMI	Now the cancel item cannot be disabled...good thing?
-//							Probably...otherwise menus cancelled by callbacks and
-//							such would have no where to go which was kind of worrying
-//							me before.  Also, Useful for having no actual cancel item.
+//      08/27/97   JMI   Now the cancel item cannot be disabled...good thing?
+//                     Probably...otherwise menus cancelled by callbacks and
+//                     such would have no where to go which was kind of worrying
+//                     me before.  Also, Useful for having no actual cancel item.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -164,38 +164,38 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)	(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)   (sizeof(a) / sizeof(a[0]) )
 
-#define MAX_MENU_ITEMS	short(NUM_ELEMENTS(ms_pmenu->ami) - 1)
+#define MAX_MENU_ITEMS   short(NUM_ELEMENTS(ms_pmenu->ami) - 1)
 
 // Determines the indicator's Y position based on the supplied menu item index.
-#define INDICATOR_POS_Y(sIndex)	(ms_asMenuItemPosY[sIndex] - \
-                                  ms_guiIndicator.m_im.m_sHeight / 2)
+#define INDICATOR_POS_Y(sIndex)   (ms_asMenuItemPosY[sIndex] - \
+                                   ms_guiIndicator.m_im.m_sHeight / 2)
 
 // Determines the indiator's X position based on the supplied menu item index.
-#define INDICATOR_POS_X(sIndex)	(ms_asMenuItemPosX[sIndex] - \
-                                  ms_guiIndicator.m_im.m_sWidth - \
-                                  ms_pmenu->menupos.sIndicatorSpacingX)
+#define INDICATOR_POS_X(sIndex)   (ms_asMenuItemPosX[sIndex] - \
+                                   ms_guiIndicator.m_im.m_sWidth - \
+                                   ms_pmenu->menupos.sIndicatorSpacingX)
 
 // Determines an item index from a positive index or a negative offset from
 // the number of items.
-#define ITEMINDEX(sIndex)	(((sIndex) < 0) ? ms_sNumMenuItems + (sIndex) : (sIndex))
+#define ITEMINDEX(sIndex)   (((sIndex) < 0) ? ms_sNumMenuItems + (sIndex) : (sIndex))
 
-#define INVALID_MENU_ITEM	0x7fff
+#define INVALID_MENU_ITEM   0x7fff
 
-#define SHADOW_X_PIXELS	1
-#define SHADOW_Y_PIXELS	1
+#define SHADOW_X_PIXELS   1
+#define SHADOW_Y_PIXELS   1
 
 #ifdef SYS_ENDIAN_LITTLE
-   #define ALPHA(u32)	((u32 & 0x000000FF) >> 0)
-   #define RED(u32)		((u32 & 0x0000FF00) >> 8)
-   #define GREEN(u32)	((u32 & 0x00FF0000) >> 16)
-   #define BLUE(u32)		((u32 & 0xFF000000) >> 24)
+   #define ALPHA(u32)   ((u32 & 0x000000FF) >> 0)
+   #define RED(u32)      ((u32 & 0x0000FF00) >> 8)
+   #define GREEN(u32)   ((u32 & 0x00FF0000) >> 16)
+   #define BLUE(u32)      ((u32 & 0xFF000000) >> 24)
 #else
-   #define ALPHA(u32)	((u32 & 0xFF000000) >> 24)
-   #define RED(u32)		((u32 & 0x00FF0000) >> 16)
-   #define GREEN(u32)	((u32 & 0x0000FF00) >> 8)
-   #define BLUE(u32)		((u32 & 0x000000FF) >> 0)
+   #define ALPHA(u32)   ((u32 & 0xFF000000) >> 24)
+   #define RED(u32)      ((u32 & 0x00FF0000) >> 16)
+   #define GREEN(u32)   ((u32 & 0x0000FF00) >> 8)
+   #define BLUE(u32)      ((u32 & 0x000000FF) >> 0)
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -212,23 +212,23 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-static Menu*		ms_pmenu	= NULL;        // Pointer to current menu.
+static Menu*      ms_pmenu   = NULL;        // Pointer to current menu.
 
-static RMsgBox	ms_msgbox;                 // Menu container.
+static RMsgBox ms_msgbox;                   // Menu container.
 
 static short ms_sNumMenuItems  = 0;       // Current number of menu items.
 
-static RFont*		ms_pfontItems	= NULL;  // Font for menu items.
-static RFont*		ms_pfontHeader	= NULL;  // Font for menu header.
+static RFont*      ms_pfontItems   = NULL;  // Font for menu items.
+static RFont*      ms_pfontHeader   = NULL;  // Font for menu header.
 
 static RPrint ms_printItems;              // Print used for guis.
 static RPrint ms_printHeader;             // Print used for header.
 
-static RImage*		ms_pimBackground	= NULL;  // Dlg's background image.
+static RImage*      ms_pimBackground   = NULL;  // Dlg's background image.
 
 static RGuiItem ms_guiIndicator;          // Current menu item indicator.
 
-static RTxt	ms_txtHeader;                 // Header text item.
+static RTxt ms_txtHeader;                   // Header text item.
 
 static short ms_sCurItem       = 0;       // Current menu item index.
 static short ms_sNextMenuItem  = INVALID_MENU_ITEM;      // Item to select on next
@@ -248,7 +248,7 @@ static short ms_sCancel        = FALSE;      // TRUE to cancel current menu.
 static short ms_sItemsX        = 0;          // X position of menu items.
 static short ms_sItemsY        = 0;          // Y position of menu items.
 
-static RResMgr*	ms_presmgr			= NULL;
+static RResMgr*   ms_presmgr         = NULL;
 
 static RImage ms_imPreMenu;               // Contents of composite buffer
                                           // before the menu was drawn.
@@ -256,7 +256,7 @@ static RImage ms_imPreMenu;               // Contents of composite buffer
 static short ms_sPreMenuX;                // Location of ms_imPreMenu on screen.
 static short ms_sPreMenuY;                // Location of ms_imPreMenu on screen.
 
-static RImage*		ms_pimComposite	= NULL;  // Composite buffer.
+static RImage*      ms_pimComposite   = NULL;  // Composite buffer.
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) protos.
@@ -309,19 +309,19 @@ static void BackCall(   // Returns nothing.
       if (ms_pmenu->menuflags & MenuBackTiled)
       {
          // Determine amount to offset to center tiled area.
-         short	sOffsetX	= (prc->sW % ms_pimBackground->m_sWidth) / 2;
-         short	sOffsetY	= (prc->sH % ms_pimBackground->m_sHeight) / 2;
-         short	sMaxX		= prc->sW - (prc->sW % ms_pimBackground->m_sWidth);
-         short	sMaxY		= prc->sH - (prc->sH % ms_pimBackground->m_sHeight);
+         short sOffsetX   = (prc->sW % ms_pimBackground->m_sWidth) / 2;
+         short sOffsetY   = (prc->sH % ms_pimBackground->m_sHeight) / 2;
+         short sMaxX      = prc->sW - (prc->sW % ms_pimBackground->m_sWidth);
+         short sMaxY      = prc->sH - (prc->sH % ms_pimBackground->m_sHeight);
          // Tile.
-         short	sX, sY;
-         for (	sY = prc->sY + sOffsetY;
-               sY < sMaxY;
-               sY += ms_pimBackground->m_sHeight)
+         short sX, sY;
+         for (   sY = prc->sY + sOffsetY;
+                 sY < sMaxY;
+                 sY += ms_pimBackground->m_sHeight)
          {
-            for (	sX = prc->sX + sOffsetX;
-                  sX < sMaxX;
-                  sX += ms_pimBackground->m_sWidth)
+            for (   sX = prc->sX + sOffsetX;
+                    sX < sMaxX;
+                    sX += ms_pimBackground->m_sWidth)
             {
                rspBlit(
                   ms_pimBackground,    // Source image.
@@ -369,12 +369,12 @@ static void BackCall(   // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void SetGuiAttributes(
-   RGuiItem*	pguiDst,       // Gui to set attributes to.
-   RGuiItem*	pguiSrc)       // Gui to get attributes from.
+   RGuiItem*   pguiDst,       // Gui to set attributes to.
+   RGuiItem*   pguiSrc)       // Gui to get attributes from.
 {
-   pguiDst->m_u32TextColor	= pguiSrc->m_u32TextColor;
-   pguiDst->m_u32BackColor	= pguiSrc->m_u32BackColor;
-   pguiDst->m_pprint			= pguiSrc->m_pprint;
+   pguiDst->m_u32TextColor   = pguiSrc->m_u32TextColor;
+   pguiDst->m_u32BackColor   = pguiSrc->m_u32BackColor;
+   pguiDst->m_pprint         = pguiSrc->m_pprint;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -396,21 +396,21 @@ inline bool NextItem(   // Returns true, if new item selected.
 
    ASSERT(ms_pmenu != NULL);
 
-   short	sNumItemsTraversed	= 0;
-   short	sOldItem					= ms_sCurItem;
+   short sNumItemsTraversed   = 0;
+   short sOldItem               = ms_sCurItem;
 
    do
    {
       // Move current item vertically.
-      ms_sCurItem	+= sDirVert;
+      ms_sCurItem   += sDirVert;
       // Move current item horizontally.
-      ms_sCurItem	+= (sDirHorz * ms_sItemsPerColumn);
+      ms_sCurItem   += (sDirHorz * ms_sItemsPerColumn);
 
       // If direction is 0 . . .
       if (sDirVert == 0 && sDirHorz == 0)
       {
          // Make sDir forward 1.
-         sDirVert	= 1;
+         sDirVert   = 1;
          // This feature allows the caller to have the current item checked
          // and, if disabled, the next enabled item will be chosen.
       }
@@ -420,53 +420,53 @@ inline bool NextItem(   // Returns true, if new item selected.
       }
 
       // Check bounds.
-      if (	(ms_sCurItem > ms_sNumMenuItems)
-            ||	(ms_sCurItem == ms_sNumMenuItems && sDirHorz) )
+      if (   (ms_sCurItem > ms_sNumMenuItems)
+             ||   (ms_sCurItem == ms_sNumMenuItems && sDirHorz) )
       {
          if (ms_sItemsPerColumn > 0)
          {
-            ms_sCurItem	= ms_sCurItem % ms_sItemsPerColumn;
+            ms_sCurItem   = ms_sCurItem % ms_sItemsPerColumn;
          }
          else
          {
-            ms_sCurItem	= 0;
+            ms_sCurItem   = 0;
          }
       }
       else if (ms_sCurItem == ms_sNumMenuItems)
       {
-         ms_sCurItem	= 0;
+         ms_sCurItem   = 0;
       }
-      else if (	(ms_sCurItem < -1)
-                  ||	(ms_sCurItem == -1 && sDirHorz) )
+      else if (   (ms_sCurItem < -1)
+                  ||   (ms_sCurItem == -1 && sDirHorz) )
       {
          if (ms_sItemsPerColumn > 0)
          {
 #if 0
-            short	sMaxMenuItem	= MAX(ms_sNumMenuItems - 1, 0);
-            ms_sCurItem	= MIN(
+            short sMaxMenuItem   = MAX(ms_sNumMenuItems - 1, 0);
+            ms_sCurItem   = MIN(
                sMaxMenuItem,
                short(sMaxMenuItem / ms_sItemsPerColumn * ms_sItemsPerColumn + (ms_sItemsPerColumn + ms_sCurItem) ) );
 #else
             // Determine location of item in next column.
-            short	sMaxMenuItem	= MAX(ms_sNumMenuItems - 1, 0);
-            ms_sCurItem	= sMaxMenuItem / ms_sItemsPerColumn * ms_sItemsPerColumn + (ms_sItemsPerColumn + ms_sCurItem);
+            short sMaxMenuItem   = MAX(ms_sNumMenuItems - 1, 0);
+            ms_sCurItem   = sMaxMenuItem / ms_sItemsPerColumn * ms_sItemsPerColumn + (ms_sItemsPerColumn + ms_sCurItem);
             // If too large . . .
             if (ms_sCurItem >= ms_sNumMenuItems)
             {
                ASSERT(sDirHorz < 0);
                // Go back another column.
-               ms_sCurItem	+= (sDirHorz * ms_sItemsPerColumn);
+               ms_sCurItem   += (sDirHorz * ms_sItemsPerColumn);
             }
 #endif
          }
          else
          {
-            ms_sCurItem	= 0;
+            ms_sCurItem   = 0;
          }
       }
       else if (ms_sCurItem == -1)
       {
-         ms_sCurItem	= MAX(ms_sNumMenuItems - 1, 0);
+         ms_sCurItem   = MAX(ms_sNumMenuItems - 1, 0);
       }
 
    } while (ms_pmenu->ami[ms_sCurItem].sEnabled == FALSE
@@ -476,7 +476,7 @@ inline bool NextItem(   // Returns true, if new item selected.
    if (sNumItemsTraversed > ms_sNumMenuItems)
    {
       // Cancel this menu.
-      ms_sCancel	= TRUE;
+      ms_sCancel   = TRUE;
    }
    else
    {
@@ -486,7 +486,7 @@ inline bool NextItem(   // Returns true, if new item selected.
          // If there was a change in the selected item . . .
          if (ms_sCurItem != sOldItem)
          {
-            bNewSelection	= true;
+            bNewSelection   = true;
             // Notify caller of change in focused item.
             (*(ms_pmenu->menucallbacks.fnChoice))(ms_pmenu, -1);
          }
@@ -540,13 +540,13 @@ bool MouseChooseItem(int x, int y)
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short StartMenu(          // Returns 0 on success.
-   Menu*	pmenu,                  // In:  Pointer to Menu describing menu.
+   Menu*   pmenu,                  // In:  Pointer to Menu describing menu.
    RResMgr* presmgr,             // In:  Resource manager ptr.
-   RImage*	pimDst)              // In:  Src for erase data.  Erase data is
-                                 // updated back over the menu on StopMenu()
-                                 // calls.
+   RImage*   pimDst)              // In:  Src for erase data.  Erase data is
+                                  // updated back over the menu on StopMenu()
+                                  // calls.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // End any existing menu.
    StopMenu();
@@ -558,19 +558,19 @@ extern short StartMenu(          // Returns 0 on success.
 
       U32 u32TextColor;
       U32 u32TextShadowColor;
-      short	sMapStartIndex;
-      short	sMapNumEntries;
+      short sMapStartIndex;
+      short sMapNumEntries;
 
       // Get composite buffer.
-      ms_pimComposite	= pimDst;
+      ms_pimComposite   = pimDst;
 
       // Set new menu.
-      ms_pmenu		= pmenu;
+      ms_pmenu      = pmenu;
 
-      ms_sCancel	= FALSE;
+      ms_sCancel   = FALSE;
 
       // Get info on composite buffer.
-      RImage*	pimComposite	= NULL;
+      RImage*   pimComposite   = NULL;
 
       rspNameBuffers(&pimComposite);
 
@@ -585,25 +585,25 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): StartMenu() aborted by callback.\n");
             // Abort right away.
-            ms_sCancel	= TRUE;
+            ms_sCancel   = TRUE;
          }
       }
 
       ASSERT(presmgr != NULL);
       // Store pointer to desired res mgr.
-      ms_presmgr	= presmgr;
+      ms_presmgr   = presmgr;
 
       // Determine number of menu items.
-      ms_sNumMenuItems	= 0;
+      ms_sNumMenuItems   = 0;
       while (pmenu->ami[ms_sNumMenuItems].pszText != NULL)
       {
          ms_sNumMenuItems++;
       }
 
-      ms_sNumMenuItems	= MIN(ms_sNumMenuItems, MAX_MENU_ITEMS);
+      ms_sNumMenuItems   = MIN(ms_sNumMenuItems, MAX_MENU_ITEMS);
 
       // Set GUI settings.
-      ms_msgbox.m_sTransparent	= ms_pmenu->menugui.sTransparent;
+      ms_msgbox.m_sTransparent   = ms_pmenu->menugui.sTransparent;
 
       // If there is a desired font for menu header . . .
       if (ms_pmenu->menuheader.pszFontFile != NULL)
@@ -621,7 +621,7 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): Unable to load font file \"%s\" via ms_presmgr->\n",
                   ms_pmenu->menuheader.pszFontFile);
-            sRes	= -2;
+            sRes   = -2;
 
             goto Done;
          }
@@ -642,7 +642,7 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): Menu does not specify a font and neither does "
                   "RGuiItem::ms_print.\n");
-            sRes	= -3;
+            sRes   = -3;
 
             goto Done;
          }
@@ -650,13 +650,13 @@ extern short StartMenu(          // Returns 0 on success.
 
       if (ms_pmenu->menuflags & MenuHeaderTextShadow)
       {
-         ms_txtHeader.m_sTextShadowOffsetX	= SHADOW_X_PIXELS;
-         ms_txtHeader.m_sTextShadowOffsetY	= SHADOW_Y_PIXELS;
-         ms_txtHeader.m_sTextEffects			= RGuiItem::Shadow;
+         ms_txtHeader.m_sTextShadowOffsetX   = SHADOW_X_PIXELS;
+         ms_txtHeader.m_sTextShadowOffsetY   = SHADOW_Y_PIXELS;
+         ms_txtHeader.m_sTextEffects         = RGuiItem::Shadow;
       }
       else
       {
-         ms_txtHeader.m_sTextEffects			= 0;
+         ms_txtHeader.m_sTextEffects         = 0;
       }
 
       // If there is a desired font for menu items . . .
@@ -675,7 +675,7 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): Unable to load font file \"%s\" via ms_presmgr->\n",
                   ms_pmenu->menuitemsfont.pszFile);
-            sRes	= -2;
+            sRes   = -2;
 
             goto Done;
          }
@@ -696,7 +696,7 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): Menu does not specify a font and neither does "
                   "RGuiItem::ms_print.\n");
-            sRes	= -3;
+            sRes   = -3;
 
             goto Done;
          }
@@ -704,48 +704,48 @@ extern short StartMenu(          // Returns 0 on success.
 
       // Set dlg's attributes based on ms_pmenu.
       // Set dlg's attributes that are not based on ms_pmenu.
-      ms_msgbox.m_sBorderThickness	= 0;  // No border.
+      ms_msgbox.m_sBorderThickness   = 0;  // No border.
       // Make sure dlg's background is drawn by this module.
-      ms_msgbox.m_backcall				= BackCall;
+      ms_msgbox.m_backcall            = BackCall;
       // Use our print.
-      ms_msgbox.m_pprint				= &ms_printItems;
+      ms_msgbox.m_pprint            = &ms_printItems;
       // Use this text height.
-      ms_msgbox.m_sFontCellHeight	= ms_pmenu->menuitemsfont.sHeight;
+      ms_msgbox.m_sFontCellHeight   = ms_pmenu->menuitemsfont.sHeight;
 
       // Set callback for iterative calls.
-      ms_msgbox.m_mbcUser				= CriticalCall;
+      ms_msgbox.m_mbcUser            = CriticalCall;
 
       // Compute position of dialog.
-      short	sX;
-      short	sY;
+      short sX;
+      short sY;
       short sW;
-      short	sH;
+      short sH;
 
       if (ms_pmenu->menuflags & MenuPosCenter)
       {
          // Centered menu.
-         sW	= ms_pmenu->menupos.sW;
-         sH	= ms_pmenu->menupos.sH;
-         sX	= pimComposite->m_sWidth / 2 - sW / 2;
-         sY	= pimComposite->m_sHeight / 2 - sH / 2;
+         sW   = ms_pmenu->menupos.sW;
+         sH   = ms_pmenu->menupos.sH;
+         sX   = pimComposite->m_sWidth / 2 - sW / 2;
+         sY   = pimComposite->m_sHeight / 2 - sH / 2;
       }
       else
       {
          if (ms_pmenu->menuflags & MenuPosFullscreen)
          {
             // Full screen menu.
-            sX	= 0;
-            sY	= 0;
-            sW	= pimComposite->m_sWidth;
-            sH	= pimComposite->m_sHeight;
+            sX   = 0;
+            sY   = 0;
+            sW   = pimComposite->m_sWidth;
+            sH   = pimComposite->m_sHeight;
          }
          else
          {
             // Menu at specified location.
-            sX	= ms_pmenu->menupos.sX;
-            sY	= ms_pmenu->menupos.sY;
-            sW	= ms_pmenu->menupos.sW;
-            sH	= ms_pmenu->menupos.sH;
+            sX   = ms_pmenu->menupos.sX;
+            sY   = ms_pmenu->menupos.sY;
+            sW   = ms_pmenu->menupos.sW;
+            sH   = ms_pmenu->menupos.sH;
          }
       }
 
@@ -762,8 +762,8 @@ extern short StartMenu(          // Returns 0 on success.
             // If paletted . . .
             if (ms_pimBackground->m_pPalette != NULL)
             {
-               short	sEntrySize	= ms_pimBackground->m_pPalette->m_sPalEntrySize;
-               short	sStartIndex	= ms_pmenu->menuback.sSetStartIndex;
+               short sEntrySize   = ms_pimBackground->m_pPalette->m_sPalEntrySize;
+               short sStartIndex   = ms_pmenu->menuback.sSetStartIndex;
 
                // Set palette.
                rspSetPaletteEntries(
@@ -782,16 +782,16 @@ extern short StartMenu(          // Returns 0 on success.
          {
             TRACE("StartMenu(): Unable to load \"%s\" via ms_presmgr.\n",
                   ms_pmenu->menuback.pszFile);
-            sRes	= -6;
+            sRes   = -6;
 
             goto Done;
          }
       }
 
       // Get color indices.
-      U8	au8Red[256];
-      U8	au8Green[256];
-      U8	au8Blue[256];
+      U8 au8Red[256];
+      U8 au8Green[256];
+      U8 au8Blue[256];
       rspGetPaletteEntries(
          0,          // Palette entry to start copying to (has no effect on source!)
          256,        // Number of palette entries to do
@@ -801,11 +801,11 @@ extern short StartMenu(          // Returns 0 on success.
          sizeof(U8)  // Number of bytes by which to increment pointers after each copy
          );
 
-      sMapStartIndex	= ms_pmenu->menuback.sMapStartIndex;
-      sMapNumEntries	= ms_pmenu->menuback.sMapNumEntries;
+      sMapStartIndex   = ms_pmenu->menuback.sMapStartIndex;
+      sMapNumEntries   = ms_pmenu->menuback.sMapNumEntries;
       if (sMapNumEntries == 0)
       {
-         sMapNumEntries	= 256;
+         sMapNumEntries   = 256;
       }
 
       u32TextColor
@@ -834,7 +834,7 @@ extern short StartMenu(          // Returns 0 on success.
               sizeof(U8)                                    // In:  Size to increment between each index in each table.
               );
 
-      ms_msgbox.m_u32BackColor		= 0;
+      ms_msgbox.m_u32BackColor      = 0;
 
       ms_txtHeader.m_u32TextColor
          = rspMatchColorRGB(                             // Out: Matched index.
@@ -862,7 +862,7 @@ extern short StartMenu(          // Returns 0 on success.
               sizeof(U8)                                 // In:  Size to increment between each index in each table.
               );
 
-      ms_txtHeader.m_u32BackColor		= 0;
+      ms_txtHeader.m_u32BackColor      = 0;
 
       // Create dialog . . .
       if (ms_msgbox.Create(sX, sY, sW, sH, pimComposite->m_sDepth) == 0)
@@ -872,70 +872,70 @@ extern short StartMenu(          // Returns 0 on success.
       else
       {
          TRACE("StartMenu(): Unable to create ms_msgbox.\n");
-         sRes	= -5;
+         sRes   = -5;
 
          goto Done;
       }
 
-      ms_sItemsX	= ms_pmenu->menupos.sItemX;
-      ms_sItemsY	= ms_pmenu->menupos.sItemY;
+      ms_sItemsX   = ms_pmenu->menupos.sItemX;
+      ms_sItemsY   = ms_pmenu->menupos.sItemY;
 
       // If negative . . .
       if (ms_sItemsX < 0)
       {
          // Offset from center.
-         ms_sItemsX	+= ms_msgbox.m_im.m_sWidth / 2;
+         ms_sItemsX   += ms_msgbox.m_im.m_sWidth / 2;
       }
 
       // If negative . . .
       if (ms_sItemsY < 0)
       {
          // Offset from center.
-         ms_sItemsY	+=	ms_msgbox.m_im.m_sHeight / 2;
+         ms_sItemsY   +=   ms_msgbox.m_im.m_sHeight / 2;
       }
 
       // If there is menu header text . . .
       if (ms_pmenu->menuheader.pszHeaderText[0] != '\0')
       {
-         short	sPosX	= ms_pmenu->menupos.sHeaderX;
-         short	sPosY	= ms_pmenu->menupos.sHeaderY;
+         short sPosX   = ms_pmenu->menupos.sHeaderX;
+         short sPosY   = ms_pmenu->menupos.sHeaderY;
 
          if (sPosX < 0)
          {
             // Offset from center.
-            sPosX	+=	ms_msgbox.m_im.m_sWidth / 2;
+            sPosX   +=   ms_msgbox.m_im.m_sWidth / 2;
          }
 
          if (sPosY < 0)
          {
             // Offset from center.
-            sPosY	+=	ms_msgbox.m_im.m_sHeight / 2;
+            sPosY   +=   ms_msgbox.m_im.m_sHeight / 2;
          }
 
-         ms_txtHeader.m_pprint					= &ms_printHeader;
-         ms_txtHeader.m_sBorderThickness		= 0;
-         ms_txtHeader.m_sFontCellHeight		= ms_pmenu->menuheader.sHeight;
+         ms_txtHeader.m_pprint               = &ms_printHeader;
+         ms_txtHeader.m_sBorderThickness      = 0;
+         ms_txtHeader.m_sFontCellHeight      = ms_pmenu->menuheader.sHeight;
 
          // Determine width for header . . .
          // Store text width.
-         short sTextWidth	= ms_txtHeader.m_pprint->GetWidth(ms_pmenu->menuheader.pszHeaderText);
+         short sTextWidth   = ms_txtHeader.m_pprint->GetWidth(ms_pmenu->menuheader.pszHeaderText);
          // Active when visible.
-         ms_txtHeader.m_sActive	= TRUE;
+         ms_txtHeader.m_sActive   = TRUE;
          ms_txtHeader.SetVisible(TRUE);
 
          // If centering specified . . .
          if (ms_pmenu->menuflags & MenuHeaderTextCenter)
          {
-            sPosX	= ms_msgbox.m_im.m_sWidth / 2 - sTextWidth / 2;
+            sPosX   = ms_msgbox.m_im.m_sWidth / 2 - sTextWidth / 2;
          }
 
          // Update header item.
          ms_txtHeader.SetText(ms_pmenu->menuheader.pszHeaderText);
-         ms_txtHeader.m_sX						= sPosX;
-         ms_txtHeader.m_sY						= sPosY;
+         ms_txtHeader.m_sX                  = sPosX;
+         ms_txtHeader.m_sY                  = sPosY;
 
          // Reserve space for borders, if there are any.
-         short sTotalBorderThickness	= ms_txtHeader.GetTopLeftBorderThickness()
+         short sTotalBorderThickness   = ms_txtHeader.GetTopLeftBorderThickness()
                                          + ms_txtHeader.GetBottomRightBorderThickness();
 
          // Create item . . .
@@ -946,67 +946,67 @@ extern short StartMenu(          // Returns 0 on success.
                 ms_msgbox.m_im.m_sDepth) == 0)
          {
             // Successfully created header item.
-            ms_txtHeader.m_sTransparent			= TRUE;
-            ms_txtHeader.m_u32TransparentColor	= 0;
+            ms_txtHeader.m_sTransparent         = TRUE;
+            ms_txtHeader.m_u32TransparentColor   = 0;
             // Add to msg box . . .
             ms_txtHeader.SetParent(&ms_msgbox);
          }
          else
          {
             TRACE("StartMenu(): ms_txtHeader.Create() failed.\n");
-            sRes	= -11;
+            sRes   = -11;
 
             goto Done;
          }
       }
 
-      ms_sItemsPerColumn	= 0;
+      ms_sItemsPerColumn   = 0;
 
       if (ms_sNumMenuItems > 0)
       {
-         short	sMaxItemX	= ms_pmenu->menupos.sMaxItemX;
-         short	sMaxItemY	= ms_pmenu->menupos.sMaxItemY;
+         short sMaxItemX   = ms_pmenu->menupos.sMaxItemX;
+         short sMaxItemY   = ms_pmenu->menupos.sMaxItemY;
 
          // If less than 1 . . .
          if (sMaxItemX < 1)
          {
-            sMaxItemX	+= ms_msgbox.m_im.m_sWidth;
+            sMaxItemX   += ms_msgbox.m_im.m_sWidth;
          }
 
          // If less than 1 . . .
          if (sMaxItemY < 1)
          {
-            sMaxItemY	+= ms_msgbox.m_im.m_sHeight;
+            sMaxItemY   += ms_msgbox.m_im.m_sHeight;
          }
 
-         short	sPosX				= ms_sItemsX;
-         short sIndex			= 0;
+         short sPosX            = ms_sItemsX;
+         short sIndex         = 0;
 
          while (sIndex < ms_sNumMenuItems && sPosX < sMaxItemX)
          {
-            short	sPosY					= ms_sItemsY;
-            short	sMaxGuiPosX			= sPosX;
-            short	sMaxItemExtentX	= sPosX;
-            short	sStartIndex			= sIndex;   // First index this column.
+            short sPosY               = ms_sItemsY;
+            short sMaxGuiPosX         = sPosX;
+            short sMaxItemExtentX   = sPosX;
+            short sStartIndex         = sIndex;     // First index this column.
 
-            RTxt*	ptxt;
+            RTxt*   ptxt;
             for ( ; sIndex < ms_sNumMenuItems; sIndex++)
             {
                // Color is based on whether the item is enabled or not.
                if (ms_pmenu->ami[sIndex].sEnabled)
                {
-                  ms_msgbox.m_u32TextColor			= u32TextColor;
-                  ms_msgbox.m_u32TextShadowColor	= u32TextShadowColor;
+                  ms_msgbox.m_u32TextColor         = u32TextColor;
+                  ms_msgbox.m_u32TextShadowColor   = u32TextShadowColor;
                }
                else
                {
-                  ms_msgbox.m_u32TextColor			= u32TextShadowColor;
-                  ms_msgbox.m_u32TextShadowColor	= u32TextColor;
+                  ms_msgbox.m_u32TextColor         = u32TextShadowColor;
+                  ms_msgbox.m_u32TextShadowColor   = u32TextColor;
                }
 
                // Add a text item and get a pointer to it.
                // Note that the item is stored and maintained by RMsgBox.
-               ptxt	= ms_msgbox.AddText(
+               ptxt   = ms_msgbox.AddText(
                   ms_pmenu->ami[sIndex].pszText,
                   sPosX, sPosY,
                   sIndex,
@@ -1018,20 +1018,20 @@ extern short StartMenu(          // Returns 0 on success.
                   // If shadow specified . . .
                   if (ms_pmenu->menuflags & MenuItemTextShadow)
                   {
-                     ptxt->m_sTextShadowOffsetX	= SHADOW_X_PIXELS;
-                     ptxt->m_sTextShadowOffsetY	= SHADOW_Y_PIXELS;
-                     ptxt->m_sTextEffects			= RGuiItem::Shadow;
+                     ptxt->m_sTextShadowOffsetX   = SHADOW_X_PIXELS;
+                     ptxt->m_sTextShadowOffsetY   = SHADOW_Y_PIXELS;
+                     ptxt->m_sTextEffects         = RGuiItem::Shadow;
                      // Compose with shadow.
                      ptxt->Compose();
                   }
 
                   // Remember pos of vertical center of this item.
-                  ms_asMenuItemPosY[sIndex]	= sPosY + ptxt->m_im.m_sHeight / 2;
+                  ms_asMenuItemPosY[sIndex]   = sPosY + ptxt->m_im.m_sHeight / 2;
                   // Remember x position of this item.
-                  ms_asMenuItemPosX[sIndex]	= sPosX;
+                  ms_asMenuItemPosX[sIndex]   = sPosX;
 #ifdef MOBILE
                   // Remember height of this item. Height of item + spacing between them
-                  ms_asMenuItemMouseHeight[sIndex]	= ptxt->m_im.m_sHeight + ms_pmenu->menupos.sItemSpacingY;
+                  ms_asMenuItemMouseHeight[sIndex]   = ptxt->m_im.m_sHeight + ms_pmenu->menupos.sItemSpacingY;
 #endif
                   // If there is a gui . . .
                   if (ms_pmenu->ami[sIndex].pgui != NULL)
@@ -1043,26 +1043,26 @@ extern short StartMenu(          // Returns 0 on success.
                         sPosY + ptxt->m_im.m_sHeight / 2 - ms_pmenu->ami[sIndex].pgui->m_im.m_sHeight / 2);
 
                      // Remember the position of the furthest GUI.
-                     sMaxGuiPosX	= MAX(sMaxGuiPosX, ms_pmenu->ami[sIndex].pgui->m_sX);
+                     sMaxGuiPosX   = MAX(sMaxGuiPosX, ms_pmenu->ami[sIndex].pgui->m_sX);
 
                      ms_pmenu->ami[sIndex].pgui->SetParent(&ms_msgbox);
                      ms_pmenu->ami[sIndex].pgui->SetVisible(TRUE);
 
                      // Remember the extent of the furthest item.
-                     sMaxItemExtentX	= MAX(
+                     sMaxItemExtentX   = MAX(
                         sMaxItemExtentX,
                         short(ms_pmenu->ami[sIndex].pgui->m_sX + ms_pmenu->ami[sIndex].pgui->m_im.m_sWidth) );
                   }
                   else
                   {
                      // Remember the extent of the furthest item.
-                     sMaxItemExtentX	= MAX(
+                     sMaxItemExtentX   = MAX(
                         sMaxItemExtentX,
                         short(ptxt->m_sX + ptxt->m_im.m_sWidth) );
                   }
 
-                  ptxt->m_sTransparent				= TRUE;
-                  ptxt->m_u32TransparentColor	= 0;
+                  ptxt->m_sTransparent            = TRUE;
+                  ptxt->m_u32TransparentColor   = 0;
 
                   // Move to pos for next item.
                   sPosY += ptxt->m_im.m_sHeight + ms_pmenu->menupos.sItemSpacingY;
@@ -1078,7 +1078,7 @@ extern short StartMenu(          // Returns 0 on success.
                {
                   TRACE("StartMenu(): ms_msgbox.AddText() failed for item %s.\n",
                         ms_pmenu->ami[sIndex].pszText);
-                  sRes	= -10;
+                  sRes   = -10;
 
                   goto Done;
                }
@@ -1086,7 +1086,7 @@ extern short StartMenu(          // Returns 0 on success.
 
             if (ms_sItemsPerColumn == 0)
             {
-               ms_sItemsPerColumn	= sIndex;
+               ms_sItemsPerColumn   = sIndex;
             }
 
             // If columnize GUIs specified . . .
@@ -1094,7 +1094,7 @@ extern short StartMenu(          // Returns 0 on success.
             {
                // End index EXCLUSIVE is either an entire column
                // or a partial (for the last column).
-               short	sEndIndex	= MIN(sIndex, short(sStartIndex + ms_sItemsPerColumn) );
+               short sEndIndex   = MIN(sIndex, short(sStartIndex + ms_sItemsPerColumn) );
 
                for (sIndex = sStartIndex; sIndex < sEndIndex; sIndex++)
                {
@@ -1110,11 +1110,11 @@ extern short StartMenu(          // Returns 0 on success.
             }
 
             // Next column.
-            sPosX	= sMaxItemExtentX + ms_pmenu->menupos.sIndicatorSpacingX + ms_guiIndicator.m_im.m_sWidth;
+            sPosX   = sMaxItemExtentX + ms_pmenu->menupos.sIndicatorSpacingX + ms_guiIndicator.m_im.m_sWidth;
          }
 
          // Store number of menu items that fit.
-         ms_sNumMenuItems	= sIndex;
+         ms_sNumMenuItems   = sIndex;
       }
 
       // If we went back to this menu . . .
@@ -1123,14 +1123,14 @@ extern short StartMenu(          // Returns 0 on success.
          // We don't need to use the ITEMINDEX macro if we set this
          // value, but just in case a callback decides to use the
          // extended indexing . . ..
-         ms_sCurItem	= ITEMINDEX(ms_sNextMenuItem);
+         ms_sCurItem   = ITEMINDEX(ms_sNextMenuItem);
          // Clear back item.
-         ms_sNextMenuItem	= INVALID_MENU_ITEM;
+         ms_sNextMenuItem   = INVALID_MENU_ITEM;
       }
       else
       {
          // Start at default item.
-         ms_sCurItem	= ITEMINDEX(ms_pmenu->menuautoitems.sDefaultItem);
+         ms_sCurItem   = ITEMINDEX(ms_pmenu->menuautoitems.sDefaultItem);
       }
 
       // If there is a menu indicator . . .
@@ -1141,7 +1141,7 @@ extern short StartMenu(          // Returns 0 on success.
          // instantiation of resources.  So, we must get the resource, allocate
          // ms_guiIndicator.m_im such that the indicator image will fit, and then blit
          // it in from the resource.
-         RImage*	pimIndicator;
+         RImage*   pimIndicator;
          if (rspGetResource(
                 ms_presmgr,
                 ms_pmenu->menuindicator.pszFile,
@@ -1178,14 +1178,14 @@ extern short StartMenu(          // Returns 0 on success.
                   {
                      TRACE("StartMenu(): Unable to convert indicator to desired image type (%s).\n",
                            RImage::ms_astrTypeNames[ms_pmenu->menuindicator.type]);
-                     sRes	= -8;
+                     sRes   = -8;
 
                      goto Done;
                   }
 
                   // Set indicator position.
-                  ms_guiIndicator.m_sX	= ms_sItemsX - ms_guiIndicator.m_im.m_sWidth
-                                         - ms_pmenu->menupos.sIndicatorSpacingX;
+                  ms_guiIndicator.m_sX   = ms_sItemsX - ms_guiIndicator.m_im.m_sWidth
+                                           - ms_pmenu->menupos.sIndicatorSpacingX;
 
                   // This will set ms_guiIndicator.m_sY and will skip to the first enabled entry
                   // which starting with ms_sCurItem.
@@ -1195,7 +1195,7 @@ extern short StartMenu(          // Returns 0 on success.
             else
             {
                TRACE("StartMenu(): Unable to load \"%s\".\n", ms_pmenu->menuindicator.pszFile);
-               sRes	= -7;
+               sRes   = -7;
 
                goto Done;
             }
@@ -1206,7 +1206,7 @@ extern short StartMenu(          // Returns 0 on success.
          else
          {
             TRACE("StartMenu(): Unabled to load \"%s\".\n", ms_pmenu->menuindicator.pszFile);
-            sRes	= -7;
+            sRes   = -7;
 
             goto Done;
          }
@@ -1252,7 +1252,7 @@ extern short StartMenu(          // Returns 0 on success.
          else
          {
             TRACE("StartMenu(): ms_imPreMenu.CreateImage() failed.\n");
-            sRes	= -20;
+            sRes   = -20;
 
             goto Done;
          }
@@ -1290,7 +1290,7 @@ extern void DoMenuInput(      // Returns nothing.
    // If there is a current menu . . .
    if (ms_pmenu != NULL)
    {
-      short	sChooseCurrent	= FALSE;
+      short sChooseCurrent   = FALSE;
 
       // If there is an unused key event . . .
       if (pie->sUsed == FALSE && pie->type == RInputEvent::Key)
@@ -1303,7 +1303,7 @@ extern void DoMenuInput(      // Returns nothing.
             if (NextItem(1, 0) == true)
             {
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
             }
 
             break;
@@ -1314,7 +1314,7 @@ extern void DoMenuInput(      // Returns nothing.
             if (NextItem(-1, 0) == true)
             {
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
             }
 
             break;
@@ -1323,7 +1323,7 @@ extern void DoMenuInput(      // Returns nothing.
             if (NextItem(0, -1) == true)
             {
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
             }
 
             break;
@@ -1332,24 +1332,24 @@ extern void DoMenuInput(      // Returns nothing.
             if (NextItem(0, 1) == true)
             {
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
             }
 
             break;
 
          case 27:
-            ms_sCancel	= TRUE;
+            ms_sCancel   = TRUE;
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
          case '\r':
-            sChooseCurrent	= TRUE;
+            sChooseCurrent   = TRUE;
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
          }
@@ -1415,28 +1415,28 @@ extern void DoMenuInput(      // Returns nothing.
             //Don't forget to subtract the messagebox position
             if (MouseChooseItem(pie->sPosX - ms_msgbox.m_sX, pie->sPosY -  ms_msgbox.m_sY))
             {
-               sChooseCurrent	= TRUE;
-               pie->sUsed	= TRUE;
+               sChooseCurrent   = TRUE;
+               pie->sUsed   = TRUE;
             }
          }
-         //pie->sUsed	= TRUE;
+         //pie->sUsed   = TRUE;
       }
 #endif
 
       // If cancelled . . .
       if (ms_sCancel != FALSE)
       {
-         short	sCancelItem	= ITEMINDEX(ms_pmenu->menuautoitems.sCancelItem);
+         short sCancelItem   = ITEMINDEX(ms_pmenu->menuautoitems.sCancelItem);
          // If enabled . . .
-//			if (ms_pmenu->ami[sCancelItem].sEnabled != FALSE)
+//         if (ms_pmenu->ami[sCancelItem].sEnabled != FALSE)
          {
             // Choose cancel item.
-            ms_sCurItem		= sCancelItem;
-            sChooseCurrent	= TRUE;
+            ms_sCurItem      = sCancelItem;
+            sChooseCurrent   = TRUE;
          }
 
          // Reset cancel flag.
-         ms_sCancel		= FALSE;
+         ms_sCancel      = FALSE;
       }
 
       if (sChooseCurrent != FALSE)
@@ -1456,7 +1456,7 @@ extern void DoMenuInput(      // Returns nothing.
             // If there is still a current menu . . .
             if (ms_pmenu != NULL)
             {
-               Menu*	pmenuNext	= ms_pmenu->ami[ms_sCurItem].pmenu;
+               Menu*   pmenuNext   = ms_pmenu->ami[ms_sCurItem].pmenu;
                // If this is the cancel item . . .
                if (ms_sCurItem == ITEMINDEX(ms_pmenu->menuautoitems.sCancelItem))
                {
@@ -1464,11 +1464,11 @@ extern void DoMenuInput(      // Returns nothing.
                   if (ms_pmenu->menuautoitems.pmenuBack != NULL)
                   {
                      // Start menu to go back to.
-                     pmenuNext			= ms_pmenu->menuautoitems.pmenuBack;
+                     pmenuNext         = ms_pmenu->menuautoitems.pmenuBack;
                      // Should we clear the go back menu item (pmenuBack)
                      // here? ***
                      // Set selection for new menu.
-                     ms_sNextMenuItem	= ms_pmenu->menuautoitems.sBackItem;
+                     ms_sNextMenuItem   = ms_pmenu->menuautoitems.sBackItem;
                   }
                }
                else
@@ -1476,9 +1476,9 @@ extern void DoMenuInput(      // Returns nothing.
                   if (pmenuNext != NULL)
                   {
                      // Store menu to go back to.
-                     pmenuNext->menuautoitems.pmenuBack	= ms_pmenu;
+                     pmenuNext->menuautoitems.pmenuBack   = ms_pmenu;
                      // Store item to go back to.
-                     pmenuNext->menuautoitems.sBackItem	= ms_sCurItem;
+                     pmenuNext->menuautoitems.sBackItem   = ms_sCurItem;
                   }
                }
 
@@ -1508,7 +1508,7 @@ extern void DoMenuInput(      // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 extern void DoMenuOutput(  // Returns nothing.
-   RImage*	pimDst)        // In:  Destination image for menu BLiTs.
+   RImage*   pimDst)        // In:  Destination image for menu BLiTs.
 {
    // If there is a current menu . . .
    if (ms_pmenu != NULL)
@@ -1539,7 +1539,7 @@ extern Menu* GetCurrentMenu(void)   // Returns the a pointer to the current
 //////////////////////////////////////////////////////////////////////////////
 extern short StopMenu(void)      // Returns 0 on success.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If we have a current menu . . .
    if (ms_pmenu != NULL)
@@ -1555,8 +1555,8 @@ extern short StopMenu(void)      // Returns 0 on success.
       // Hide and deactivate msg box and remaining children.
       ms_msgbox.SetVisible(FALSE);
 
-      short	sIndex;
-      for (sIndex	= 0; sIndex < ms_sNumMenuItems; sIndex++)
+      short sIndex;
+      for (sIndex   = 0; sIndex < ms_sNumMenuItems; sIndex++)
       {
          // If there is a gui . . .
          if (ms_pmenu->ami[sIndex].pgui != NULL)
@@ -1569,7 +1569,7 @@ extern short StopMenu(void)      // Returns 0 on success.
       if (ms_pimBackground != NULL)
       {
          ms_presmgr->Release(ms_pimBackground);
-         ms_pimBackground	= NULL;
+         ms_pimBackground   = NULL;
       }
 
       // Destroy indicator data.
@@ -1579,16 +1579,16 @@ extern short StopMenu(void)      // Returns 0 on success.
       if (ms_pfontItems != NULL)
       {
          ms_presmgr->Release(ms_pfontItems);
-         ms_pfontItems	= NULL;
+         ms_pfontItems   = NULL;
       }
 
       if (ms_pfontHeader != NULL)
       {
          ms_presmgr->Release(ms_pfontHeader);
-         ms_pfontHeader	= NULL;
+         ms_pfontHeader   = NULL;
       }
 
-      ms_sNumMenuItems	= 0;
+      ms_sNumMenuItems   = 0;
 
       // If there's a callback . . .
       if (ms_pmenu->menucallbacks.fnInit != NULL)
@@ -1598,7 +1598,7 @@ extern short StopMenu(void)      // Returns 0 on success.
       }
 
       // Clear current menu pointer.
-      ms_pmenu	= NULL;
+      ms_pmenu   = NULL;
 
       if (ms_pimComposite != NULL)
       {
@@ -1626,7 +1626,7 @@ extern short StopMenu(void)      // Returns 0 on success.
          ms_imPreMenu.DestroyData();
 
          // Clear pointer.
-         ms_pimComposite	= NULL;
+         ms_pimComposite   = NULL;
       }
 
       rspKeyRepeat(false);

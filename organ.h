@@ -18,7 +18,7 @@
 // Organ.h
 //
 // History:
-//		08/17/97 JMI	Started this header.
+//      08/17/97 JMI   Started this header.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -31,8 +31,8 @@
 
 // Choice callback from menu.
 extern bool Organ_MenuChoice( // Returns true to accept choice, false to deny.
-   Menu*	pmenuCurrent,        // Current menu.
-   short	sMenuItem);          // Item chosen.
+   Menu*   pmenuCurrent,        // Current menu.
+   short sMenuItem);            // Item chosen.
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

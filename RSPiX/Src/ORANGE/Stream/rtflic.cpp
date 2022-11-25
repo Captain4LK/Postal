@@ -20,11 +20,11 @@
 // RTFLIC.CPP
 //
 // History:
-//		10/30/95 JMI	Started.
+//      10/30/95 JMI   Started.
 //
-//		11/06/95	JMI	Added sPixelsModified and sColorsModified flags to mark
-//							when these changes occur.  Also added actual FLX decomp-
-//							ression using CRamFlx's new static functions.
+//      11/06/95   JMI   Added sPixelsModified and sColorsModified flags to mark
+//                     when these changes occur.  Also added actual FLX decomp-
+//                     ression using CRamFlx's new static functions.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -63,8 +63,8 @@
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
 // Types of chunks.
-#define FLX_CHUNK_HEADER	0
-#define FLX_CHUNK_DATA		1
+#define FLX_CHUNK_HEADER   0
+#define FLX_CHUNK_DATA      1
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -109,14 +109,14 @@ CRtFlic::~CRtFlic()
 //////////////////////////////////////////////////////////////////////////////
 void CRtFlic::Set(void)
 {
-   m_pdispatch		= NULL;
+   m_pdispatch      = NULL;
    for (short i = 0; i < MAX_VID_CHANNELS; i++)
    {
-      m_aflxhdrs[i].sNumFrames		= 0;
-      m_aflxhdrs[i].pImage				= NULL;
-      m_aflxhdrs[i].callbackHeader	= NULL;
-      m_aflxhdrs[i].callbackBefore	= NULL;
-      m_aflxhdrs[i].callbackAfter	= NULL;
+      m_aflxhdrs[i].sNumFrames      = 0;
+      m_aflxhdrs[i].pImage            = NULL;
+      m_aflxhdrs[i].callbackHeader   = NULL;
+      m_aflxhdrs[i].callbackBefore   = NULL;
+      m_aflxhdrs[i].callbackAfter   = NULL;
    }
 }
 
@@ -134,14 +134,14 @@ void CRtFlic::Reset(void)
 // Returns RET_FREE if done with data on return, RET_DONTFREE otherwise.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtFlic::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-                     S32 lTime)
+short CRtFlic::Use(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                      S32 lTime)
 {
-   short	sRes		= RET_FREE; // Always free.
-   short	sError	= 0;
+   short sRes      = RET_FREE;   // Always free.
+   short sError   = 0;
 
-   ASSERT(usType	== RT_TYPE_FLIC);
-   ASSERT(puc		!= NULL);
+   ASSERT(usType   == RT_TYPE_FLIC);
+   ASSERT(puc      != NULL);
 
    CNFile file;
    file.Open(puc, lSize, ENDIAN_LITTLE);
@@ -156,7 +156,7 @@ short CRtFlic::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
    ASSERT(usFlxId < MAX_VID_CHANNELS);
 
    // Get corresponding header.
-   PFLX_RT_HDR	pflxhdr	= &m_aflxhdrs[usFlxId];
+   PFLX_RT_HDR pflxhdr   = &m_aflxhdrs[usFlxId];
 
    // If this is a header chunk . . .
    if (ucFlags & RT_FLAG_INIT)
@@ -176,11 +176,11 @@ short CRtFlic::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
       ASSERT(file.Error() == FALSE);
 
       // Initialize frame counter.
-      pflxhdr->sCurFrame			= 0;
-      pflxhdr->sPixelsModified	= FALSE;
-      pflxhdr->sColorsModified	= FALSE;
+      pflxhdr->sCurFrame         = 0;
+      pflxhdr->sPixelsModified   = FALSE;
+      pflxhdr->sColorsModified   = FALSE;
       // Default to one frame's worth of lag before skipping frames.
-      pflxhdr->lMaxLag				= pflxhdr->lMilliPerFrame;
+      pflxhdr->lMaxLag            = pflxhdr->lMilliPerFrame;
 
 
       // If there is a callback for the header . . .
@@ -208,7 +208,7 @@ short CRtFlic::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          ASSERT(pflxhdr->pImage->pPalette->pData != NULL);
 
 
-         short	sDecompress	= TRUE;
+         short sDecompress   = TRUE;
          // If we this flx contains no deltas and this is not a key frame . . .
          if (pflxhdr->sNoDelta == TRUE && (ucFlags & RT_FLAG_TAG == 0))
          {
@@ -262,8 +262,8 @@ short CRtFlic::Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtFlic::UseStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags, S32 lTime, S32 l_pRtFlic)
+short CRtFlic::UseStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                            UCHAR ucFlags, S32 lTime, S32 l_pRtFlic)
 {
    return ((CRtFlic*)l_pRtFlic)->Use(puc, lSize, usType, ucFlags, lTime);
 }
@@ -285,7 +285,7 @@ void CRtFlic::SetDispatcher(CDispatch* pdispatch)
       m_pdispatch->SetDataHandler(RT_TYPE_FLIC, NULL);
    }
 
-   m_pdispatch	= pdispatch;
+   m_pdispatch   = pdispatch;
 
    if (m_pdispatch != NULL)
    {
@@ -314,7 +314,7 @@ void CRtFlic::SetCallbackHeader(RTFLIC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtFlic::SetCallbackHeader(RTFLIC_CALL callback, short sChannel)
 {
-   m_aflxhdrs[sChannel].callbackHeader	= callback;
+   m_aflxhdrs[sChannel].callbackHeader   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ void CRtFlic::SetCallbackBefore(RTFLIC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtFlic::SetCallbackBefore(RTFLIC_CALL callback, short sChannel)
 {
-   m_aflxhdrs[sChannel].callbackBefore	= callback;
+   m_aflxhdrs[sChannel].callbackBefore   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -360,7 +360,7 @@ void CRtFlic::SetCallbackAfter(RTFLIC_CALL callback)
 //////////////////////////////////////////////////////////////////////////////
 void CRtFlic::SetCallbackAfter(RTFLIC_CALL callback, short sChannel)
 {
-   m_aflxhdrs[sChannel].callbackAfter	= callback;
+   m_aflxhdrs[sChannel].callbackAfter   = callback;
 }
 
 //////////////////////////////////////////////////////////////////////////////

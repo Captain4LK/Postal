@@ -16,14 +16,14 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 //
-//	joy.cpp
+//   joy.cpp
 //
 // History:
-//		04/22/95 JMI	Started.
+//      04/22/95 JMI   Started.
 //
-//		10/10/97	JMI	Added temporarily directly to Postal but want to make
-//							this part of RSPiX soon (need to add event driven
-//							stuff for rspGetNextInpuEvent() ).
+//      10/10/97   JMI   Added temporarily directly to Postal but want to make
+//                     this part of RSPiX soon (need to add event driven
+//                     stuff for rspGetNextInpuEvent() ).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -42,14 +42,14 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define NUM_JOYSTICKS	2
+#define NUM_JOYSTICKS   2
 
-#define MID_THRESHOLD_PERCENT	((float)20) // In % (e.g., 25 would be 25%).
+#define MID_THRESHOLD_PERCENT   ((float)20) // In % (e.g., 25 would be 25%).
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
 //////////////////////////////////////////////////////////////////////////////
-static JOYCAPS	ms_ajoycaps[NUM_JOYSTICKS];      // Capabilities of each joy.
+static JOYCAPS ms_ajoycaps[NUM_JOYSTICKS];        // Capabilities of each joy.
 static USHORT ms_ausXmids[NUM_JOYSTICKS];       // Middle positions for x.
 static USHORT ms_ausYmids[NUM_JOYSTICKS];       // Middle positions for y.
 static USHORT ms_ausZmids[NUM_JOYSTICKS];       // Middle positions for z.
@@ -57,8 +57,8 @@ static USHORT ms_ausXThresh[NUM_JOYSTICKS];     // Center thresholds for x.
 static USHORT ms_ausYThresh[NUM_JOYSTICKS];     // Center thresholds for y.
 static USHORT ms_ausZThresh[NUM_JOYSTICKS];     // Center thresholds for z.
 
-static JOYINFO	ms_ajiCurr[NUM_JOYSTICKS];       // Current joystick info.
-static JOYINFO	ms_ajiPrev[NUM_JOYSTICKS];       // Previous joystick info.
+static JOYINFO ms_ajiCurr[NUM_JOYSTICKS];         // Current joystick info.
+static JOYINFO ms_ajiPrev[NUM_JOYSTICKS];         // Previous joystick info.
 
 static JOYSTATE ms_ajsCurr[NUM_JOYSTICKS];      // Current joystick state.
 static JOYSTATE ms_ajsPrev[NUM_JOYSTICKS];      // Previous joystick state.
@@ -91,17 +91,17 @@ extern void Joy_Init(void)
       {
       case JOYERR_NOERROR:
          // Calculate ranges.
-         usRangeX	= (ms_ajoycaps[i].wXmax - ms_ajoycaps[i].wXmin);
-         usRangeY	= (ms_ajoycaps[i].wYmax - ms_ajoycaps[i].wYmin);
-         usRangeZ	= (ms_ajoycaps[i].wZmax - ms_ajoycaps[i].wZmin);
+         usRangeX   = (ms_ajoycaps[i].wXmax - ms_ajoycaps[i].wXmin);
+         usRangeY   = (ms_ajoycaps[i].wYmax - ms_ajoycaps[i].wYmin);
+         usRangeZ   = (ms_ajoycaps[i].wZmax - ms_ajoycaps[i].wZmin);
 
          // Calculate middle.
-         ms_ausXmids[i]		= ms_ajoycaps[i].wXmin + usRangeX / 2;
-         ms_ausYmids[i]		= ms_ajoycaps[i].wYmin + usRangeY / 2;
-         ms_ausZmids[i]		= ms_ajoycaps[i].wZmin + usRangeZ / 2;
-         ms_ausXThresh[i]	= (float)usRangeX * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
-         ms_ausYThresh[i]	= (float)usRangeY * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
-         ms_ausZThresh[i]	= (float)usRangeZ * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
+         ms_ausXmids[i]      = ms_ajoycaps[i].wXmin + usRangeX / 2;
+         ms_ausYmids[i]      = ms_ajoycaps[i].wYmin + usRangeY / 2;
+         ms_ausZmids[i]      = ms_ajoycaps[i].wZmin + usRangeZ / 2;
+         ms_ausXThresh[i]   = (float)usRangeX * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
+         ms_ausYThresh[i]   = (float)usRangeY * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
+         ms_ausZThresh[i]   = (float)usRangeZ * (float)((float)MID_THRESHOLD_PERCENT / 100.0F);
 
 #if 0
          TRACE("wMid:\t0x%04X\n"
@@ -162,25 +162,25 @@ extern short Blu_UpdateJoy(short sJoy)
       // Success.  Set values.
 
       // Set previous joyinfo to current.
-      ms_ajiPrev[sJoy]	= ms_ajiCurr[sJoy];
+      ms_ajiPrev[sJoy]   = ms_ajiCurr[sJoy];
 
       // Set the current to the temp.
-      ms_ajiCurr[sJoy]	= jiTemp;
+      ms_ajiCurr[sJoy]   = jiTemp;
 
       // Set previous joy state to current.
-      ms_ajsPrev[sJoy]	= ms_ajsCurr[sJoy];
+      ms_ajsPrev[sJoy]   = ms_ajsCurr[sJoy];
 
       // Fill in new state fields.
-      ms_ajsCurr[sJoy].button1	= (((jiTemp.wButtons & JOY_BUTTON1) != 0) ? 1 : 0);
-      ms_ajsCurr[sJoy].button2	= (((jiTemp.wButtons & JOY_BUTTON2) != 0) ? 1 : 0);
-      ms_ajsCurr[sJoy].button3	= (((jiTemp.wButtons & JOY_BUTTON3) != 0) ? 1 : 0);
-      ms_ajsCurr[sJoy].button4	= (((jiTemp.wButtons & JOY_BUTTON4) != 0) ? 1 : 0);
-      ms_ajsCurr[sJoy].left		= (jiTemp.wXpos < (USHORT)(ms_ausXmids[sJoy] - ms_ausXThresh[sJoy]));
-      ms_ajsCurr[sJoy].right		= (jiTemp.wXpos > (USHORT)(ms_ausXmids[sJoy] + ms_ausXThresh[sJoy]));
-      ms_ajsCurr[sJoy].up			= (jiTemp.wYpos < (USHORT)(ms_ausYmids[sJoy] - ms_ausYThresh[sJoy]));
-      ms_ajsCurr[sJoy].down		= (jiTemp.wYpos > (USHORT)(ms_ausYmids[sJoy] + ms_ausYThresh[sJoy]));
-      ms_ajsCurr[sJoy].toward		= (jiTemp.wZpos < (USHORT)(ms_ausZmids[sJoy] - ms_ausZThresh[sJoy]));
-      ms_ajsCurr[sJoy].away		= (jiTemp.wZpos > (USHORT)(ms_ausZmids[sJoy] + ms_ausZThresh[sJoy]));
+      ms_ajsCurr[sJoy].button1   = (((jiTemp.wButtons & JOY_BUTTON1) != 0) ? 1 : 0);
+      ms_ajsCurr[sJoy].button2   = (((jiTemp.wButtons & JOY_BUTTON2) != 0) ? 1 : 0);
+      ms_ajsCurr[sJoy].button3   = (((jiTemp.wButtons & JOY_BUTTON3) != 0) ? 1 : 0);
+      ms_ajsCurr[sJoy].button4   = (((jiTemp.wButtons & JOY_BUTTON4) != 0) ? 1 : 0);
+      ms_ajsCurr[sJoy].left      = (jiTemp.wXpos < (USHORT)(ms_ausXmids[sJoy] - ms_ausXThresh[sJoy]));
+      ms_ajsCurr[sJoy].right      = (jiTemp.wXpos > (USHORT)(ms_ausXmids[sJoy] + ms_ausXThresh[sJoy]));
+      ms_ajsCurr[sJoy].up         = (jiTemp.wYpos < (USHORT)(ms_ausYmids[sJoy] - ms_ausYThresh[sJoy]));
+      ms_ajsCurr[sJoy].down      = (jiTemp.wYpos > (USHORT)(ms_ausYmids[sJoy] + ms_ausYThresh[sJoy]));
+      ms_ajsCurr[sJoy].toward      = (jiTemp.wZpos < (USHORT)(ms_ausZmids[sJoy] - ms_ausZThresh[sJoy]));
+      ms_ajsCurr[sJoy].away      = (jiTemp.wZpos > (USHORT)(ms_ausZmids[sJoy] + ms_ausZThresh[sJoy]));
       break;
    }
 

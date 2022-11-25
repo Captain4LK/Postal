@@ -20,36 +20,36 @@
 // channel.h
 // Project: RSPiX
 //
-//	History:
-//		01/??/97	MJR	Created.
+//   History:
+//      01/??/97   MJR   Created.
 //
-//		02/10/97	JMI	Changed Load() and Save() to use rspAnyLoad() and
-//							rspAnySave().
+//      02/10/97   JMI   Changed Load() and Save() to use rspAnyLoad() and
+//                     rspAnySave().
 //
-//		02/17/97 MJR	Added looping features, but the currently selected looping
-//							mode is not currently loaded or saved because we don't
-//							want to invalidate existing files.
+//      02/17/97 MJR   Added looping features, but the currently selected looping
+//                     mode is not currently loaded or saved because we don't
+//                     want to invalidate existing files.
 //
-//		02/18/97 MJR	Fixed stupid typo (LoopAtStart was set to 0 instead of 1).
+//      02/18/97 MJR   Fixed stupid typo (LoopAtStart was set to 0 instead of 1).
 //
-//		05/17/97	JMI	Made GetAtTime() in RChannelSpline return void* instead of
-//							datat b/c the base class defined it that way.  This didn't
-//							show up in VC 4.2 b/c it does not expand unused templates.
+//      05/17/97   JMI   Made GetAtTime() in RChannelSpline return void* instead of
+//                     datat b/c the base class defined it that way.  This didn't
+//                     show up in VC 4.2 b/c it does not expand unused templates.
 //
-//		06/27/97	JMI	#if 0'ed out RChannelSet which does not specify the
-//							template arguments to its base class RChannel.
+//      06/27/97   JMI   #if 0'ed out RChannelSet which does not specify the
+//                     template arguments to its base class RChannel.
 //
-//		07/12/97 MJR	Added file ID and version to file format while maintaining
-//							ability to load older files that don't have this info.
-//							Added new variation called RChannelCompressible.
-//							Now loads and saves looping variables.
+//      07/12/97 MJR   Added file ID and version to file format while maintaining
+//                     ability to load older files that don't have this info.
+//                     Added new variation called RChannelCompressible.
+//                     Now loads and saves looping variables.
 //
-//		07/13/97 MJR	Switched over to a whole new approach that shields the
-//							user from having to what type of channel to use ahead of
-//							time.  RChannel is now the only class used by the user,
-//							and it can handle uncompressed and compressed data.
+//      07/13/97 MJR   Switched over to a whole new approach that shields the
+//                     user from having to what type of channel to use ahead of
+//                     time.  RChannel is now the only class used by the user,
+//                     and it can handle uncompressed and compressed data.
 //
-//		09/04/97	JMI	~RChannel() was not delete'ing m_pcore.  Fixed.
+//      09/04/97   JMI   ~RChannel() was not delete'ing m_pcore.  Fixed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -426,10 +426,10 @@ void SetLooping(
 // File ID and version
 typedef enum
 {
-   RChannel_FileID		= 0x4E414843,  // ASCII for "CHAN" backwards (for little-endian files)
+   RChannel_FileID      = 0x4E414843,  // ASCII for "CHAN" backwards (for little-endian files)
    // For backwards compatibility, this must be > 65K.
    // See comment block above for details.
-   RChannel_FileVersion	= 1            // Version number (0 is reserved for original version)
+   RChannel_FileVersion   = 1            // Version number (0 is reserved for original version)
 } RChannel_FileHeader;
 
 // We need type information primarily so that we can instantiate the correct
@@ -728,8 +728,8 @@ void SetResolution(
 // cummulative overhead of storing "repeats" is not unreasonable.
 //
 // Federal Consumer Guidelines:
-//		Memory Overhead:	12 bytes per channel, 0 bytes per data item
-//		Time Complexity:	1 compare + 1 divide + 1 add
+//      Memory Overhead:   12 bytes per channel, 0 bytes per data item
+//      Time Complexity:   1 compare + 1 divide + 1 add
 //
 ////////////////////////////////////////////////////////////////////////////////
 template <class datat>
@@ -1105,8 +1105,8 @@ void Free(void)
 // intervals and may contain repeats.
 //
 // Federal Consumer Guidelines:
-//		Memory Overhead:	12 bytes per channel, 4 bytes per data item
-//		Time Complexity:	1 compare + 1 divide + 1 add + 1 dereference
+//      Memory Overhead:   12 bytes per channel, 4 bytes per data item
+//      Time Complexity:   1 compare + 1 divide + 1 add + 1 dereference
 //
 ////////////////////////////////////////////////////////////////////////////////
 template <class datat>

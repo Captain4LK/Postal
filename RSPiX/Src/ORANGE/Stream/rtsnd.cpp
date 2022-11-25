@@ -20,7 +20,7 @@
 // RTSND.CPP
 //
 // History:
-//		10/31/95 JMI	Started.
+//      10/31/95 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -58,17 +58,17 @@
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
 // Types of chunks.
-#define SND_CHUNK_HEADER	0
-#define SND_CHUNK_DATA		1
+#define SND_CHUNK_HEADER   0
+#define SND_CHUNK_DATA      1
 
 // Status flags.
-#define STATUS_OPENED	0x0001
-#define STATUS_STARTED	0x0002
-#define STATUS_DONE		0x0004
-#define STATUS_CLOSEME	0x0008
-#define STATUS_ERROR		0x8000
+#define STATUS_OPENED   0x0001
+#define STATUS_STARTED   0x0002
+#define STATUS_DONE      0x0004
+#define STATUS_CLOSEME   0x0008
+#define STATUS_ERROR      0x8000
 
-#define DATACHUNKHEADERSIZE	(sizeof(S32))
+#define DATACHUNKHEADERSIZE   (sizeof(S32))
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -77,7 +77,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
 //////////////////////////////////////////////////////////////////////////////
-CList<CRtSnd::SND_RT_HDR>	CRtSnd::ms_listSndhdrs;    // List of active channels.
+CList<CRtSnd::SND_RT_HDR>   CRtSnd::ms_listSndhdrs;    // List of active channels.
 
 //////////////////////////////////////////////////////////////////////////////
 // Construction/Destruction Functions.
@@ -114,11 +114,11 @@ CRtSnd::~CRtSnd()
 //////////////////////////////////////////////////////////////////////////////
 void CRtSnd::Set(void)
 {
-   m_pdispatch		= NULL;
+   m_pdispatch      = NULL;
 
    for (short i = 0; i < MAX_SND_CHANNELS; i++)
    {
-      m_asndhdrs[i].usStatus	= 0;
+      m_asndhdrs[i].usStatus   = 0;
    }
 }
 
@@ -139,11 +139,11 @@ void CRtSnd::Reset(void)
 short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
                   S32 lTime)
 {
-   short	sRes		= RET_FREE; // Always free.
-   short	sError	= 0;
+   short sRes      = RET_FREE;   // Always free.
+   short sError   = 0;
 
-   ASSERT(usType	== RT_TYPE_SND);
-   ASSERT(puc		!= NULL);
+   ASSERT(usType   == RT_TYPE_SND);
+   ASSERT(puc      != NULL);
 
    CNFile file;
    file.Open(puc, lSize, ENDIAN_LITTLE);
@@ -158,7 +158,7 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
    ASSERT(usSndId < MAX_SND_CHANNELS);
 
    // Get corresponding header.
-   PSND_RT_HDR	psndhdr	= &m_asndhdrs[usSndId];
+   PSND_RT_HDR psndhdr   = &m_asndhdrs[usSndId];
 
    // If this is a header chunk . . .
    if (ucFlags & RT_FLAG_INIT)
@@ -173,17 +173,17 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
       ASSERT(file.Error() == FALSE);
 
       // Initialize status.
-      psndhdr->usStatus		= 0;
+      psndhdr->usStatus      = 0;
       // Init dispatcher.
-      psndhdr->pdispatch	= m_pdispatch;
+      psndhdr->pdispatch   = m_pdispatch;
 
       // Attempt to open the mixer channel.
-      if (psndhdr->mix.OpenChannel(	psndhdr->lSamplesPerSec, psndhdr->sBitsPerSample,
-                                    psndhdr->sNumChannels) == 0)
+      if (psndhdr->mix.OpenChannel(   psndhdr->lSamplesPerSec, psndhdr->sBitsPerSample,
+                                      psndhdr->sNumChannels) == 0)
       {
          // Successfully opened mixer channel.
-         psndhdr->usStatus	|= STATUS_OPENED;
-         short	sWasEmpty	= ms_listSndhdrs.IsEmpty();
+         psndhdr->usStatus   |= STATUS_OPENED;
+         short sWasEmpty   = ms_listSndhdrs.IsEmpty();
          // Add to criticial list.
          if (ms_listSndhdrs.Add(psndhdr) == 0)
          {
@@ -211,7 +211,7 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
       else
       {
          TRACE("Use(): Unable to open mix channel.\n");
-         sError	= 1;
+         sError   = 1;
       }
    }
    else
@@ -227,10 +227,10 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          if (psb != NULL)
          {
             // Fill.
-            psb->puc		= puc;
-            psb->lSize	= lSize;
-            psb->lTime	= lTime + psndhdr->lLead;
-            psb->sLast	= ((ucFlags & RT_FLAG_LAST) ? TRUE : FALSE);
+            psb->puc      = puc;
+            psb->lSize   = lSize;
+            psb->lTime   = lTime + psndhdr->lLead;
+            psb->sLast   = ((ucFlags & RT_FLAG_LAST) ? TRUE : FALSE);
             // Add to queue . . .
             if (psndhdr->qsndbufs.EnQ(psb) == 0)
             {
@@ -286,7 +286,7 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
          }
       }
 
-      psndhdr->usStatus	= STATUS_ERROR;
+      psndhdr->usStatus   = STATUS_ERROR;
    }
 
    return sRes;
@@ -296,15 +296,15 @@ short CRtSnd::Use(UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
 //
 // Callback for mixer.
 // Returns new buffer to play or NULL if none.
-//	(static)
+//   (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void* CRtSnd::MixCall(	USHORT usMsg, void* pData, U32* pulBufSize,
-                        U32 ul_psndhdr)
+void* CRtSnd::MixCall(   USHORT usMsg, void* pData, U32* pulBufSize,
+                         U32 ul_psndhdr)
 {
-   PSND_RT_HDR	psndhdr	= (PSND_RT_HDR)ul_psndhdr;
+   PSND_RT_HDR psndhdr   = (PSND_RT_HDR)ul_psndhdr;
    PSNDBUF psb;
-   short	sLast		= FALSE;
+   short sLast      = FALSE;
    switch (usMsg)
    {
    case BLU_SNDMSG_PREPLAYERR:
@@ -315,7 +315,7 @@ void* CRtSnd::MixCall(	USHORT usMsg, void* pData, U32* pulBufSize,
       if (pData != NULL)
       {
          // Get buffer that's done.
-         psb	= psndhdr->qsndbufs.DeQ();
+         psb   = psndhdr->qsndbufs.DeQ();
          // Must get.
          ASSERT(psb != NULL)
          // Should match supplied.
@@ -323,7 +323,7 @@ void* CRtSnd::MixCall(	USHORT usMsg, void* pData, U32* pulBufSize,
             TRACE("MixCall(): Not the expected pointer.\n");
 
          // Set last flag.
-         sLast	= psb->sLast;
+         sLast   = psb->sLast;
 
          // Free buffer.
          free(psb->puc);
@@ -339,22 +339,22 @@ void* CRtSnd::MixCall(	USHORT usMsg, void* pData, U32* pulBufSize,
          if (psb != NULL)
          {
             // Set data pointer and size.
-            pData			= psb->puc		+ DATACHUNKHEADERSIZE;
-            *pulBufSize	= psb->lSize	- DATACHUNKHEADERSIZE;
+            pData         = psb->puc      + DATACHUNKHEADERSIZE;
+            *pulBufSize   = psb->lSize   - DATACHUNKHEADERSIZE;
          }
          else
          {
-            psndhdr->usStatus	|= STATUS_ERROR;
+            psndhdr->usStatus   |= STATUS_ERROR;
             TRACE("MixCall(): No buffers in queue!!\n");
-            pData	= NULL;
+            pData   = NULL;
          }
       }
       else
       {
          // We're done.  Let mixer know.
-         pData	= NULL;
+         pData   = NULL;
          // Mark channel as done.
-         psndhdr->usStatus	|= STATUS_DONE;
+         psndhdr->usStatus   |= STATUS_DONE;
       }
 
       // If we're going to return NULL . . .
@@ -411,11 +411,11 @@ void* CRtSnd::MixCall(	USHORT usMsg, void* pData, U32* pulBufSize,
 //////////////////////////////////////////////////////////////////////////////
 void CRtSnd::CritiCall(U32)
 {
-   PSND_RT_HDR	psndhdr	= ms_listSndhdrs.GetHead();
+   PSND_RT_HDR psndhdr   = ms_listSndhdrs.GetHead();
 
    while(psndhdr != NULL)
    {
-      short	sError	= 0;
+      short sError   = 0;
 
       S32 lTime = psndhdr->pdispatch->GetTime();
 
@@ -453,7 +453,7 @@ void CRtSnd::CritiCall(U32)
          psndhdr->usStatus |= STATUS_ERROR;
       }
 
-      psndhdr	= ms_listSndhdrs.GetNext();
+      psndhdr   = ms_listSndhdrs.GetNext();
    }
 }
 
@@ -463,7 +463,7 @@ void CRtSnd::CritiCall(U32)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-short CRtSnd::UseStatic(	UCHAR* puc, S32 lSize, USHORT usType,
+short CRtSnd::UseStatic(   UCHAR* puc, S32 lSize, USHORT usType,
                            UCHAR ucFlags, S32 lTime, S32 l_pRtSnd)
 {
    return ((CRtSnd*)l_pRtSnd)->Use(puc, lSize, usType, ucFlags, lTime);
@@ -486,7 +486,7 @@ void CRtSnd::SetDispatcher(CDispatch* pdispatch)
       m_pdispatch->SetDataHandler(RT_TYPE_SND, NULL);
    }
 
-   m_pdispatch	= pdispatch;
+   m_pdispatch   = pdispatch;
 
    if (m_pdispatch != NULL)
    {

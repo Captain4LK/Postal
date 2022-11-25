@@ -17,21 +17,21 @@
 //
 // prefline.h
 //
-//		12/11/96	JPW	RPrefsLine created to contain ini file lines, information
-//							on the type of lines, and to help in processing of lines.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
-//							should have been const's.
+//      12/11/96   JPW   RPrefsLine created to contain ini file lines, information
+//                     on the type of lines, and to help in processing of lines.
+//      12/16/96   JPW   Fixed so it will work with the STL stuff that comes with
+//                     MSVC 4.1 or newer.  Also fixed a few psz parameters that
+//                     should have been const's.
 //
-//		03/28/97	JMI	Fixed so this'll work with MSVC 4.2.
+//      03/28/97   JMI   Fixed so this'll work with MSVC 4.2.
 //
-//		05/17/97	JMI	Fixed so this'll work with MSVC 5.0 (removed rhetorical
-//							RPrefsLine:: namespace name.
+//      05/17/97   JMI   Fixed so this'll work with MSVC 5.0 (removed rhetorical
+//                     RPrefsLine:: namespace name.
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -61,8 +61,8 @@ typedef enum ePrefsLineType
 };
 
 private:
-ePrefsLineType	m_Type;                    // Type of line read from ini file
-char				*m_pszLine;                // Line read from ini file
+ePrefsLineType m_Type;                      // Type of line read from ini file
+char            *m_pszLine;                // Line read from ini file
 
 public:
 // Constructor.
@@ -72,7 +72,7 @@ RPrefsLine (ePrefsLineType Type, const char *pszLine);
 ~RPrefsLine ();
 
 // Get a constant pointer to the Line of text.
-const char*	GetLine (void);
+const char*   GetLine (void);
 
 // Get type of line.
 RPrefsLine::ePrefsLineType GetType();

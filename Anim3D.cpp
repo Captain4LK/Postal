@@ -19,31 +19,31 @@
 // Project: Postal
 //
 // History:
-//		05/23/97 JMI	Started.  Moved here from thing.h.
-//							Also, added events.
+//      05/23/97 JMI   Started.  Moved here from thing.h.
+//                     Also, added events.
 //
-//		08/01/97 BRH	Took out loading/releasing .hot channels since
-//							we aren't using them.
+//      08/01/97 BRH   Took out loading/releasing .hot channels since
+//                     we aren't using them.
 //
-//		08/07/97	JMI	Added m_ptransWeapon rigid body transforms channel for
-//							weapons.
-//							Also, added SetLooping().
-//							Also, removed all (including commented out) references to
-//							hots and floors.
+//      08/07/97   JMI   Added m_ptransWeapon rigid body transforms channel for
+//                     weapons.
+//                     Also, added SetLooping().
+//                     Also, removed all (including commented out) references to
+//                     hots and floors.
 //
-//		08/11/97	JMI	Now has TRACEs to complain when an animation fails to
-//							load.
-//							Also, on the first component to fail, no more are loaded.
-//							Also, if any fail to load, all that were loaded are
-//							released.
+//      08/11/97   JMI   Now has TRACEs to complain when an animation fails to
+//                     load.
+//                     Also, on the first component to fail, no more are loaded.
+//                     Also, if any fail to load, all that were loaded are
+//                     released.
 //
-//		08/12/97 BRH	Added yet another overloaded version of Get which
-//							takes a number of a texture file to be loaded.
+//      08/12/97 BRH   Added yet another overloaded version of Get which
+//                     takes a number of a texture file to be loaded.
 //
-//		12/17/97	JMI	Now if the sTextureScheme values is less than zero, no
-//							number is used (i.e., the default texture scheme is used).
+//      12/17/97   JMI   Now if the sTextureScheme values is less than zero, no
+//                     number is used (i.e., the default texture scheme is used).
 //
-//		10/07/99	JMI	Added conditional compile options for some error messages.
+//      10/07/99   JMI   Added conditional compile options for some error messages.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -76,13 +76,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 CAnim3D::CAnim3D()
 {
-   m_psops			= NULL;
-   m_pmeshes		= NULL;
-   m_ptextures		= NULL;
-   m_pbounds		= NULL;
-   m_ptransRigid	= NULL;
-   m_pevent			= NULL;
-   m_ptransWeapon	= NULL;
+   m_psops         = NULL;
+   m_pmeshes      = NULL;
+   m_ptextures      = NULL;
+   m_pbounds      = NULL;
+   m_ptransRigid   = NULL;
+   m_pevent         = NULL;
+   m_ptransWeapon   = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,37 +91,37 @@ CAnim3D::CAnim3D()
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(           // Returns 0 on success.
-   char**	ppszFileNames)    // Pointer to array of pointers to filenames.
+   char**   ppszFileNames)    // Pointer to array of pointers to filenames.
                               // These filenames should be in the order
                               // the members are listed in this class's
                               // definition.
 {
-   short	sRes;
-   short	sComplainIndex;   // If sRes is non-zero, this is the index of the
-                           // resname that could not load.
+   short sRes;
+   short sComplainIndex;     // If sRes is non-zero, this is the index of the
+                             // resname that could not load.
 
    // NOTE:  If you add any new channel loads here, please make sure
    // you maintain the order described above.
-   sComplainIndex	= 0;
-   sRes	=  rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_psops);
+   sComplainIndex   = 0;
+   sRes   =  rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_psops);
    if (sRes == 0)
    {
-      sComplainIndex	= 1;
-      sRes	= rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_pmeshes);
+      sComplainIndex   = 1;
+      sRes   = rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_pmeshes);
       if (sRes == 0)
       {
-         sComplainIndex	= 2;
-         sRes	= rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_ptextures);
+         sComplainIndex   = 2;
+         sRes   = rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_ptextures);
          if (sRes == 0)
          {
-            sComplainIndex	= 4;
-            sRes	= rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_pbounds);
+            sComplainIndex   = 4;
+            sRes   = rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_pbounds);
             if (sRes == 0)
             {
-               sComplainIndex	= 6;
+               sComplainIndex   = 6;
                if (ppszFileNames[sComplainIndex] != NULL)
                {
-                  sRes	= rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_ptransRigid);
+                  sRes   = rspGetResource(&g_resmgrGame, ppszFileNames[sComplainIndex], &m_ptransRigid);
                }
             }
          }
@@ -153,13 +153,13 @@ short CAnim3D::Get(           // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(           // Returns 0 on success.
-   char**	ppszFileNames,    // Pointer to array of pointers to filenames.
+   char**   ppszFileNames,    // Pointer to array of pointers to filenames.
                               // These filenames should be in the order
                               // the members are listed in this class's
                               // definition.
-   short	sLoopFlags)          // Looping flags to apply to all channels in this anim
+   short sLoopFlags)            // Looping flags to apply to all channels in this anim
 {
-   short	sRes	= Get(ppszFileNames);
+   short sRes   = Get(ppszFileNames);
    // If successful . . .
    if (sRes == 0)
    {
@@ -175,32 +175,32 @@ short CAnim3D::Get(           // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*		pszBaseFileName,     // In:  Base string for resource filenames.
-   char*		pszRigidName,        // In:  String to add for rigid transform channel,
-                                 // "", or NULL for none.
-   char*		pszEventName,        // In:  String to add for event states channel,
-                                 // "", or NULL for none.
-   char*		pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                 // "", or NULL for none.
-   short	sLoopFlags)             // In:  Looping flags to apply to all channels
-                                 // in this anim.
+   char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   char*      pszRigidName,        // In:  String to add for rigid transform channel,
+                                   // "", or NULL for none.
+   char*      pszEventName,        // In:  String to add for event states channel,
+                                   // "", or NULL for none.
+   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+                                   // "", or NULL for none.
+   short sLoopFlags)               // In:  Looping flags to apply to all channels
+                                   // in this anim.
 {
-   short	sRes;
+   short sRes;
    char szResName[RSP_MAX_PATH];
    sprintf(szResName, "%s.sop", pszBaseFileName);
-   sRes	=  rspGetResource(&g_resmgrGame, szResName, &m_psops);
+   sRes   =  rspGetResource(&g_resmgrGame, szResName, &m_psops);
    if (sRes == 0)
    {
       sprintf(szResName, "%s.mesh", pszBaseFileName);
-      sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
+      sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
       if (sRes == 0)
       {
          sprintf(szResName, "%s.tex", pszBaseFileName);
-         sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptextures);
+         sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptextures);
          if (sRes == 0)
          {
             sprintf(szResName, "%s.bounds", pszBaseFileName);
-            sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
+            sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
             if (sRes == 0)
             {
                if (pszRigidName != NULL)
@@ -208,7 +208,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                   if (*pszRigidName != '\0')
                   {
                      sprintf(szResName, "%s_%s.trans", pszBaseFileName, pszRigidName);
-                     sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
+                     sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
                   }
                }
 
@@ -219,7 +219,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                      if (*pszEventName != '\0')
                      {
                         sprintf(szResName, "%s_%s.event", pszBaseFileName, pszEventName);
-                        sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pevent);
+                        sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pevent);
                      }
                   }
 
@@ -230,7 +230,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                         if (*pszWeaponTransName != '\0')
                         {
                            sprintf(szResName, "%s_%s.trans", pszBaseFileName, pszWeaponTransName);
-                           sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptransWeapon);
+                           sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransWeapon);
                         }
                      }
                   }
@@ -263,16 +263,16 @@ short CAnim3D::Get(              // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*		pszBaseFileName,     // In:  Base string for resource filenames.
-   char*		pszVerb,             // In:  Action name to be appended to the base
-   char*		pszRigidName,        // In:  String to add for rigid transform channel,
-                                 // "", or NULL for none.
-   char*		pszEventName,        // In:  String to add for event states channel,
-                                 // "", or NULL for none.
-   char*		pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                 // "", or NULL for none.
-   short	sLoopFlags)             // In:  Looping flags to apply to all channels
-                                 // in this anim.
+   char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   char*      pszVerb,             // In:  Action name to be appended to the base
+   char*      pszRigidName,        // In:  String to add for rigid transform channel,
+                                   // "", or NULL for none.
+   char*      pszEventName,        // In:  String to add for event states channel,
+                                   // "", or NULL for none.
+   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+                                   // "", or NULL for none.
+   short sLoopFlags)               // In:  Looping flags to apply to all channels
+                                   // in this anim.
 {
    char szVerbedBaseName[RSP_MAX_PATH];
    sprintf(szVerbedBaseName, "%s_%s", pszBaseFileName, pszVerb);
@@ -285,29 +285,29 @@ short CAnim3D::Get(              // Returns 0 on success.
 // but load only 1 .tex file based on the color scheme number passed in.
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*		pszBaseFileName,     // In:  Base string for resource filenames.
-   short	sTextureScheme,         // In:  Number to append after name for texture file
-   char*		pszVerb,             // In:  Action name to be appended to the base
-   char*		pszRigidName,        // In:  String to add for rigid transform channel,
-                                 // "", or NULL for none.
-   char*		pszEventName,        // In:  String to add for event states channel,
-                                 // "", or NULL for none.
-   char*		pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                 // "", or NULL for none.
-   short	sLoopFlags)             // In:  Looping flags to apply to all channels
-                                 // in this anim.
+   char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   short sTextureScheme,           // In:  Number to append after name for texture file
+   char*      pszVerb,             // In:  Action name to be appended to the base
+   char*      pszRigidName,        // In:  String to add for rigid transform channel,
+                                   // "", or NULL for none.
+   char*      pszEventName,        // In:  String to add for event states channel,
+                                   // "", or NULL for none.
+   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+                                   // "", or NULL for none.
+   short sLoopFlags)               // In:  Looping flags to apply to all channels
+                                   // in this anim.
 {
    char szVerbedBaseName[RSP_MAX_PATH];
    sprintf(szVerbedBaseName, "%s_%s", pszBaseFileName, pszVerb);
 
-   short	sRes;
+   short sRes;
    char szResName[RSP_MAX_PATH];
    sprintf(szResName, "%s.sop", szVerbedBaseName);
-   sRes	=  rspGetResource(&g_resmgrGame, szResName, &m_psops);
+   sRes   =  rspGetResource(&g_resmgrGame, szResName, &m_psops);
    if (sRes == 0)
    {
       sprintf(szResName, "%s.mesh", szVerbedBaseName);
-      sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
+      sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
       if (sRes == 0)
       {
          // If there's an associated texture scheme . . .
@@ -320,11 +320,11 @@ short CAnim3D::Get(              // Returns 0 on success.
             sprintf(szResName, "%s.tex", szVerbedBaseName);
          }
 
-         sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptextures);
+         sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptextures);
          if (sRes == 0)
          {
             sprintf(szResName, "%s.bounds", szVerbedBaseName);
-            sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
+            sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
             if (sRes == 0)
             {
                if (pszRigidName != NULL)
@@ -332,7 +332,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                   if (*pszRigidName != '\0')
                   {
                      sprintf(szResName, "%s_%s.trans", szVerbedBaseName, pszRigidName);
-                     sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
+                     sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
                   }
                }
 
@@ -343,7 +343,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                      if (*pszEventName != '\0')
                      {
                         sprintf(szResName, "%s_%s.event", szVerbedBaseName, pszEventName);
-                        sRes	= rspGetResource(&g_resmgrGame, szResName, &m_pevent);
+                        sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pevent);
                      }
                   }
 
@@ -354,7 +354,7 @@ short CAnim3D::Get(              // Returns 0 on success.
                         if (*pszWeaponTransName != '\0')
                         {
                            sprintf(szResName, "%s_%s.trans", szVerbedBaseName, pszWeaponTransName);
-                           sRes	= rspGetResource(&g_resmgrGame, szResName, &m_ptransWeapon);
+                           sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransWeapon);
                         }
                      }
                   }
@@ -415,8 +415,8 @@ void CAnim3D::Release(void)   // Returns nothing.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 void CAnim3D::SetLooping(     // Returns nothing.
-   short	sLoopFlags)          // In:  Looping flags to apply to all channels
-                              // in this anim.
+   short sLoopFlags)            // In:  Looping flags to apply to all channels
+                                // in this anim.
 {
    m_psops->SetLooping(sLoopFlags);
    m_pmeshes->SetLooping(sLoopFlags);

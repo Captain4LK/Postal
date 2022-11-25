@@ -19,19 +19,19 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		03/31/97	JMI	Started.
+//      03/31/97   JMI   Started.
 //
-//		07/06/97	JMI	Changed pu8ScanKey parm in KeyDescriptionToValue
-//							call from a U8 to a short.
-//							Also, changed g_apszButtonDescriptions to
-//							g_apszMouseButtonDescriptions.
+//      07/06/97   JMI   Changed pu8ScanKey parm in KeyDescriptionToValue
+//                     call from a U8 to a short.
+//                     Also, changed g_apszButtonDescriptions to
+//                     g_apszMouseButtonDescriptions.
 //
-//		10/10/97	JMI	Added g_apszJoyButtonDescriptions and
-//							JoyButtonDescriptionToMask().
+//      10/10/97   JMI   Added g_apszJoyButtonDescriptions and
+//                     JoyButtonDescriptionToMask().
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Key stuff.  I'm not sure if this will ever amount to more than just the
+//   Key stuff.  I'm not sure if this will ever amount to more than just the
 // descriptions.
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,22 +50,22 @@ extern char* g_apszJoyButtonDescriptions[18];
 // Given a string, returns the appropriate key code.
 extern short KeyDescriptionToValue( // Returns 0 on success.  Returns non-zero, if
                                     // key not found.
-   char*		pszKeyDescriptor,       // In:  Description of key.
-   U32*	psScanKey);             // Out: Key value.
+   char*      pszKeyDescriptor,       // In:  Description of key.
+   U32*   psScanKey);             // Out: Key value.
 
 // Given a string, returns the appropriate button mask.
 extern short MouseButtonDescriptionToMask(   // Returns 0 on success.  Returns
                                              // non-zero, if description not
                                              // found.
-   char*		pszButtonDescriptor,             // In:  Description of button.
-   U32*	psButtonMask);                   // Out: Button mask.
+   char*      pszButtonDescriptor,             // In:  Description of button.
+   U32*   psButtonMask);                   // Out: Button mask.
 
 extern short JoyButtonDescriptionToMask(  // Returns 0 on success.  Returns
                                           // non-zero, if description not found.
-   char*		pszButtonDescriptor,          // In:  Description of button.
-   U32*	psButtonMask);                // Out: Button mask.
+   char*      pszButtonDescriptor,          // In:  Description of button.
+   U32*   psButtonMask);                // Out: Button mask.
 
-#endif	// KEYS_H
+#endif   // KEYS_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

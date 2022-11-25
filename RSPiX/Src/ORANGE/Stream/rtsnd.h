@@ -30,9 +30,9 @@
 //////////////////////////////////////////////////////////////////////////////
 // This value can be from 0 to 64K - 1.
 // The overhead per channel is sizeof(SND_RT_HDR) bytes.
-#define MAX_SND_CHANNELS	50
+#define MAX_SND_CHANNELS   50
 
-#define MAXBUFS				60
+#define MAXBUFS            60
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -58,11 +58,11 @@ void Reset();
 
 // Use handler for RtSnd buffers.
 // Returns RET_FREE if done with data on return, RET_DONTFREE otherwise.
-short Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-            S32 lTime);
+short Use(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+             S32 lTime);
 // Static entry point for above.
-static short UseStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                        UCHAR ucFlags, S32 lTime, S32 l_pRtSnd);
+static short UseStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                          UCHAR ucFlags, S32 lTime, S32 l_pRtSnd);
 
 // Callback for mixer.
 // Returns new buffer to play or NULL if none.
@@ -78,26 +78,26 @@ public:     // Internal typedefs.
 
 typedef struct
 {
-   UCHAR*	puc;           // Data.
+   UCHAR*   puc;           // Data.
    S32 lSize;              // Amount of data in bytes.
    S32 lTime;              // Time for chunk to be played.
-   short	sLast;            // TRUE if the last buffer, FALSE otherwise.
+   short sLast;              // TRUE if the last buffer, FALSE otherwise.
 } SNDBUF, *PSNDBUF;
 
 typedef struct
 {
    // Header info from stream.
    S32 lSamplesPerSec;              // Sample rate.
-   short	sBitsPerSample;            // Number of bits that constitute a sample.
-   short	sNumChannels;              // Number of channels: 1 == mono, 2 == stereo.
+   short sBitsPerSample;              // Number of bits that constitute a sample.
+   short sNumChannels;                // Number of channels: 1 == mono, 2 == stereo.
    S32 lLead;                       // Amount of time data is received of ahead
                                     // of being used.
 
    // Header info for our use.
    CMix mix;                                 // Mixer channel.
-   CQueue<SNDBUF, MAXBUFS>	qsndbufs;         // Queue of SNDBUFs for this channel.
+   CQueue<SNDBUF, MAXBUFS>   qsndbufs;         // Queue of SNDBUFs for this channel.
    USHORT usStatus;                          // Status of current channel.
-   CDispatch*		pdispatch;
+   CDispatch*      pdispatch;
 } SND_RT_HDR, *PSND_RT_HDR;
 
 public:        // Members.
@@ -106,9 +106,9 @@ public:        // Members.
 protected:     // Members.
 SND_RT_HDR m_asndhdrs[MAX_SND_CHANNELS];       // Info for each channel.
 USHORT m_usState;                         // The current state of this CRtSnd.
-CDispatch*	m_pdispatch;                  // The dispatcher for this CRtSnd.
+CDispatch*   m_pdispatch;                  // The dispatcher for this CRtSnd.
 
-static CList<SND_RT_HDR>	ms_listSndhdrs;         // List of active channels.
+static CList<SND_RT_HDR>   ms_listSndhdrs;         // List of active channels.
 
 };
 

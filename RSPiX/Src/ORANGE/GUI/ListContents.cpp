@@ -20,7 +20,7 @@
 // ListContents.CPP
 //
 // History:
-//		01/21/97 JMI	Started.
+//      01/21/97 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -86,27 +86,27 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 short RListContents::SaveChildren(  // Returns 0 on success.
-   RFile*	pfile)                  // File to save to.
+   RFile*   pfile)                  // File to save to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pfile->IsOpen() != FALSE);
 
    // Determine number of child items.
-   short	sNum	= 0;
-   RGuiItem*	pgui = m_listguiChildren.GetHead();
+   short sNum   = 0;
+   RGuiItem*   pgui = m_listguiChildren.GetHead();
    while (pgui != NULL)
    {
       sNum++;
 
-      pgui	= m_listguiChildren.GetNext();
+      pgui   = m_listguiChildren.GetNext();
    }
 
    // Write number of children.
    pfile->Write(sNum);
 
    // Save children in reverse order.
-   pgui	= m_listguiChildren.GetTail();
+   pgui   = m_listguiChildren.GetTail();
    while (pgui != NULL && sRes == 0 && pfile->Error() == FALSE)
    {
       // Before each item is a value indicating whether the item
@@ -114,9 +114,9 @@ short RListContents::SaveChildren(  // Returns 0 on success.
       pfile->Write((short)pgui->IsProp(ENCAPSULATOR_PROP_KEY) );
 
       // Save child.
-      sRes	= pgui->Save(pfile);
+      sRes   = pgui->Save(pfile);
 
-      pgui	= m_listguiChildren.GetPrev();
+      pgui   = m_listguiChildren.GetPrev();
    }
 
    return sRes;
@@ -129,31 +129,31 @@ short RListContents::SaveChildren(  // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
 short RListContents::LoadChildren(  // Returns 0 on success.
-   RFile*	pfile)                  // File to load from.
+   RFile*   pfile)                  // File to load from.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pfile->IsOpen() != FALSE);
    // Need to know parent.
    ASSERT(GetParent() != NULL);
 
-   short	sNum;
+   short sNum;
    // Read number of children.
    pfile->Read(&sNum);
 
    // Instantiate children.
    RGuiItem* pgui;
-   short	sCurChild;
-   short	sEncapsulator;
-   for (	sCurChild	= 0;
-         sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE;
-         sCurChild++)
+   short sCurChild;
+   short sEncapsulator;
+   for (   sCurChild   = 0;
+           sCurChild < sNum && sRes == 0 && pfile->Error() == FALSE;
+           sCurChild++)
    {
       // Before each item is a value indicating whether the item
       // is an encapsulator.
       pfile->Read(&sEncapsulator);
 
-      pgui	= LoadInstantiate(pfile);
+      pgui   = LoadInstantiate(pfile);
       if (pgui != NULL)
       {
          pgui->SetParent(this);
@@ -163,9 +163,9 @@ short RListContents::LoadChildren(  // Returns 0 on success.
             // Mark item as an encapsulator.
             pgui->SetProp(ENCAPSULATOR_PROP_KEY, TRUE);
             // Set callback.
-            pgui->m_bcUser				= RListBox::PressedCall;
+            pgui->m_bcUser            = RListBox::PressedCall;
             // Set instance to parent listbox.
-            pgui->m_ulUserInstance	= (uintptr_t)GetParent();
+            pgui->m_ulUserInstance   = (uintptr_t)GetParent();
             // If pushed in . . .
             if (pgui->m_sInvertedBorder != FALSE)
             {
@@ -177,7 +177,7 @@ short RListContents::LoadChildren(  // Returns 0 on success.
       else
       {
          TRACE("LoadChildren(): LoadInstantiate() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 

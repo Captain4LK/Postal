@@ -20,14 +20,14 @@
 // MultiBtn.h
 //
 // History:
-//		04/10/97 JMI	Started this using RPushBtn as a template.
+//      04/10/97 JMI   Started this using RPushBtn as a template.
 //
-//		04/17/97	JMI	Added Load and Save components.
+//      04/17/97   JMI   Added Load and Save components.
 //
-//		04/22/97	JMI	Added NextState().
+//      04/22/97   JMI   Added NextState().
 //
-//		09/22/97	JMI	Also, added friend class CMultiBtnPropPage for GUI
-//							editor.
+//      09/22/97   JMI   Also, added friend class CMultiBtnPropPage for GUI
+//                     editor.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -107,22 +107,22 @@ short SetNumStates(           // Returns 0 on success.
 // Set button state or feedback state image.
 // The feedback state image is always the first image.
 short SetState(            // Returns 0 on success.
-   RImage*	pim,           // In:  Image for state sState.
-   short	sState);          // In:  State to update (0 == feedback state,
-                           // 1..n == state number).
+   RImage*   pim,           // In:  Image for state sState.
+   short sState);            // In:  State to update (0 == feedback state,
+                             // 1..n == state number).
 
 // Set button state or feedback state image.
 // The feedback state image is always the first image.
 short SetState(               // Returns 0 on success.
-   char*	pszImageName,        // In:  File name of image for state sState.
-   short	sState);             // In:  State to update (0 == feedback state,
-                              // 1..n == state number).
+   char*   pszImageName,        // In:  File name of image for state sState.
+   short sState);               // In:  State to update (0 == feedback state,
+                                // 1..n == state number).
 
 // Clear button state or feedback state image.
 // The feedback state image is always the first image.
 void ClearState(              // Returns nothing.
-   short	sState);             // In:  State to clear (0 == feedback state,
-                              // 1..n == state number).
+   short sState);               // In:  State to clear (0 == feedback state,
+                                // 1..n == state number).
 
 // Go to the next logical state.
 short NextState(void);        // Returns new state.
@@ -134,8 +134,8 @@ short NextState(void);        // Returns new state.
 
 // Get the current image for the specified state.
 RImage* GetState(             // Returns image, if available; NULL, otherwise.
-   short	sState);             // In:  State to get (0 == feedback state,
-                              // 1..n == state number).
+   short sState);               // In:  State to get (0 == feedback state,
+                                // 1..n == state number).
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -155,22 +155,22 @@ void DestroyStates(void);        // Returns nothing.
 // Read item's members from file.
 virtual                 // Overridden here.
 short ReadMembers(               // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version);              // File format version to use.
 
 // Write item's members to file.
 virtual                 // Overridden here.
 short WriteMembers(              // Returns 0 on success.
-   RFile*	pfile);              // File to write to.
+   RFile*   pfile);              // File to write to.
 
 //////////////////////////////////////////////////////////////////////////////
 
 public:     // Member variables.
 
-short	m_sState;               // The button's current state, 0..m_sNumStates - 1.
-short	m_sNumStates;           // Number of button states.
-RImage**	m_papimStates;       // Ptr to array of m_sNumStates + 1 ptrs to button
-                              // state images.
+short m_sState;                 // The button's current state, 0..m_sNumStates - 1.
+short m_sNumStates;             // Number of button states.
+RImage**   m_papimStates;       // Ptr to array of m_sNumStates + 1 ptrs to button
+                                // state images.
 
 protected:     // Internal typedefs.
 
@@ -185,5 +185,5 @@ friend class CMultiBtnPropPage;
 
 #endif // MULTIBTN_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

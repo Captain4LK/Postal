@@ -19,27 +19,27 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		04/08/97 JMI	Started.
+//      04/08/97 JMI   Started.
 //
-//		05/25/97	JMI	Integrated newest TCP/IP CNetServer/Client interface.
-//							Still need to detect when the game is starting.
-//							GUI could still use a little cleaning up.
+//      05/25/97   JMI   Integrated newest TCP/IP CNetServer/Client interface.
+//                     Still need to detect when the game is starting.
+//                     GUI could still use a little cleaning up.
 //
-//		05/26/97	JMI	Removed psNumPlayers and psMyPlayerNum parameters.
+//      05/26/97   JMI   Removed psNumPlayers and psMyPlayerNum parameters.
 //
-//		06/13/97 MJR	Changed function prototypes.
+//      06/13/97 MJR   Changed function prototypes.
 //
-//		06/16/97 MJR	Added use of watchdog timer for network blocking callbacks.
+//      06/16/97 MJR   Added use of watchdog timer for network blocking callbacks.
 //
-//		08/02/97	JMI	Added an icon to watchdog timer for network blocking
-//							callbacks and made it generally callable.
+//      08/02/97   JMI   Added an icon to watchdog timer for network blocking
+//                     callbacks and made it generally callable.
 //
-//		08/10/97 MJR	Added browse parameter to DoNetGameDialog().
+//      08/10/97 MJR   Added browse parameter to DoNetGameDialog().
 //
-//		08/27/97	JMI	Changed NetProbIcons functions to NetProbGui functions.
-//							Also, instead of a DrawNetProbGui() there's a
-//							GetNetProbGui() so you can draw it, move it, change the
-//							text, etc.
+//      08/27/97   JMI   Changed NetProbIcons functions to NetProbGui functions.
+//                     Also, instead of a DrawNetProbGui() there's a
+//                     GetNetProbGui() so you can draw it, move it, change the
+//                     text, etc.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NETDLG_H
@@ -53,9 +53,9 @@
 // More than one module needs to know the "standard" abort key for the "NetProb"
 // gui that this module defines.  This gives both types of rspix codes for the
 // key aS32 with the descriptive text for that key.
-#define NET_PROB_GUI_ABORT_GK_KEY		RSP_GK_F9
-#define NET_PROB_GUI_ABORT_SK_KEY		RSP_SK_F9
-#define NET_PROB_GUI_ABORT_KEY_TEXT		"F9"
+#define NET_PROB_GUI_ABORT_GK_KEY      RSP_GK_F9
+#define NET_PROB_GUI_ABORT_SK_KEY      RSP_SK_F9
+#define NET_PROB_GUI_ABORT_KEY_TEXT      "F9"
 
 // This is a general message for the "NetProb" gui that works for general
 // cases of "network not responding".
@@ -68,9 +68,9 @@ extern char* g_pszNetProb_General;
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern short DoNetGameDialog(                   // Returns 0 if successfull, non-zero otherwise.
-   CNetClient*	pclient,                         // I/O: Client interface
+   CNetClient*   pclient,                         // I/O: Client interface
    bool bBrowse,                                // In:  Whether to browse (true) or connect (false)
-   CNetServer*	pserver,                         // I/O: Server interface or NULL if not server
+   CNetServer*   pserver,                         // I/O: Server interface or NULL if not server
    NetMsg* pmsgOut);                            // Out: NetMsg::NOTHING or NetMsg::START_GAME
 
 
@@ -147,7 +147,7 @@ extern bool IsNetProb(void);  // Returns true, if net problem; false otherwise.
 //////////////////////////////////////////////////////////////////////////////
 extern void ClearNetProb(void);  // Returns nothing.
 
-#endif	// NETDLG_H
+#endif   // NETDLG_H
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////

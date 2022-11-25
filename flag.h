@@ -18,14 +18,14 @@
 // flag.h
 // Project: Postal
 //
-//	History:
+//   History:
 //
-//		06/30/97 BRH	Started this file to contain the Capture the flag object.
-//							The flag is the thing that can be carried to the base.
+//      06/30/97 BRH   Started this file to contain the Capture the flag object.
+//                     The flag is the thing that can be carried to the base.
 //
-//		07/06/97 BRH	Added Time bonus for the time bonus challenge levels.
+//      07/06/97 BRH   Added Time bonus for the time bonus challenge levels.
 //
-//		07/12/97 BRH	Added m_u16FlagID to match flags and bases.
+//      07/12/97 BRH   Added m_u16FlagID to match flags and bases.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef FLAG_H
@@ -55,7 +55,7 @@ typedef enum
 // Variables
 //---------------------------------------------------------------------------
 public:
-CAnim3D*		m_panimCurBase;                     // current animation for the base
+CAnim3D*      m_panimCurBase;                     // current animation for the base
 U16 m_u16FlagID;                                // Used to match flag & base
 
 protected:
@@ -66,9 +66,9 @@ U32 m_u32ExcludeBits;                           // Bits to exclude for Smash col
 S32 m_lTimeBonus;                               // Flag stores a time bonus for
                                                 // special game play modes.
 U16 m_u16FlagColor;                             // Color of flag;
-short	m_sSavedX;                                // Save the position of the flagbase
-short	m_sSavedY;                                // Save the position of the flagbase
-short	m_sSavedZ;                                // Save the position of the flagbase
+short m_sSavedX;                                  // Save the position of the flagbase
+short m_sSavedY;                                  // Save the position of the flagbase
+short m_sSavedZ;                                  // Save the position of the flagbase
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -88,7 +88,7 @@ CFlag(CRealm* pRealm)
    m_dRot = 0;
    m_dX = m_dY = m_dZ = m_dVel = m_dAcc = 0;
    m_panimCur = NULL;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_u16FlagID = 1;
    m_lTimeBonus = 0;
    m_u16FlagColor = Red;
@@ -174,9 +174,9 @@ void EditRect(RRect* pRect);
 // Called by editor to get the hotspot of an object in 2D.
 // (virtual (Overridden here)).
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 //---------------------------------------------------------------------------

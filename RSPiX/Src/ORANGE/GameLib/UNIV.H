@@ -32,19 +32,19 @@
 #include "event.h"
 #include "attrib.h"
 
-#define	VERTICAL		0
-#define	HORIZONTAL	1
+#define   VERTICAL      0
+#define   HORIZONTAL   1
 
-#define UNIVERSE_CANT_OPEN_FILE	1
-#define UNIVERSE_INVALID_WORLD	2
-#define UNIVERSE_INVALID_STAGE	3
-#define UNIVERSE_INVALID_SECTION	4
-#define UNIVERSE_OFFSET_ERROR		5
-#define UNIVERSE_INVALID_LEVEL	6
-#define UNIVERSE_WRONG_FILETYPE	7
+#define UNIVERSE_CANT_OPEN_FILE   1
+#define UNIVERSE_INVALID_WORLD   2
+#define UNIVERSE_INVALID_STAGE   3
+#define UNIVERSE_INVALID_SECTION   4
+#define UNIVERSE_OFFSET_ERROR      5
+#define UNIVERSE_INVALID_LEVEL   6
+#define UNIVERSE_WRONG_FILETYPE   7
 
-#define UNIVERSE_MAX_FILENAME		32
-#define UNIVERSE_MAX_PATHNAME		512
+#define UNIVERSE_MAX_FILENAME      32
+#define UNIVERSE_MAX_PATHNAME      512
 
 #define UNIVERSE_MAXSTAGES 5
 #define UNIVERSE_MAXWORLDS 5
@@ -63,32 +63,32 @@ typedef short ORIENT;
 
 // Here is a sample of the section data in the file
 //stage0sect0
-//	da	sprite_pal	;sprite palette
-//	da	monday_anim_set_bld	;sprite build data
-//	da	monday_pal	;background palette
-//	da	meal_bg_set_bld	;background build data
-//	dw	0	;bg1 orientation
-//	dw	1792	;bg1 width in pixels
-//	dw	256	;bg1 height in pixels
-//	dw	256	;bg1 horizontal motion ratio*256
-//	dw	256	;bg1 vertical motion ratio*256
-//	dw	2	;bg1 unit number
-//	da	bg_unit0_attribute	;bg1 unit attribute table
-//	da	brk1_evt	;bg1 event data
+//   da   sprite_pal   ;sprite palette
+//   da   monday_anim_set_bld   ;sprite build data
+//   da   monday_pal   ;background palette
+//   da   meal_bg_set_bld   ;background build data
+//   dw   0   ;bg1 orientation
+//   dw   1792   ;bg1 width in pixels
+//   dw   256   ;bg1 height in pixels
+//   dw   256   ;bg1 horizontal motion ratio*256
+//   dw   256   ;bg1 vertical motion ratio*256
+//   dw   2   ;bg1 unit number
+//   da   bg_unit0_attribute   ;bg1 unit attribute table
+//   da   brk1_evt   ;bg1 event data
 
 typedef struct tag_SECTION
 {
-   PALETTE*	pSpritePal;          // sprite palette
-   ANIM*		pAnimBuildSet;       // animation data
-   PALETTE*	pBackgroundPal;      // background palette
-   BG*		pBackgroundBuildSet; // background data
+   PALETTE*   pSpritePal;          // sprite palette
+   ANIM*      pAnimBuildSet;       // animation data
+   PALETTE*   pBackgroundPal;      // background palette
+   BG*      pBackgroundBuildSet; // background data
    ORIENT orBGOrientation;       // vertical or horizontal world flag
-   short	sBGWidth;               // background width in pixels
-   short	sBGHeight;              // background height in pixels
-   short	sBGHorzMotionRatio;     //	background horizontal motion ratio*256
-   short	sBGVertMotionRatio;     // background vertical motion ratio*256
-   ATTRIB*	pAttribute;          // background attribute data
-   EVENT*	pEvent;              // background event data
+   short sBGWidth;                 // background width in pixels
+   short sBGHeight;                // background height in pixels
+   short sBGHorzMotionRatio;       //   background horizontal motion ratio*256
+   short sBGVertMotionRatio;       // background vertical motion ratio*256
+   ATTRIB*   pAttribute;          // background attribute data
+   EVENT*   pEvent;              // background event data
 } SECTION;
 
 
@@ -98,8 +98,8 @@ typedef struct tag_SECTION
 
 // Here is a sample from the file
 //stage0
-//	dw	1
-//	da	stage0sect0
+//   dw   1
+//   da   stage0sect0
 
 typedef struct tag_STAGE
 {
@@ -114,10 +114,10 @@ typedef struct tag_STAGE
 
 // Here is a sample from the file
 //World0
-//	dw	3
-//	da	stage0
-//	da	stage1
-//	da	stage2
+//   dw   3
+//   da   stage0
+//   da   stage1
+//   da   stage2
 
 typedef struct tag_WORLD
 {
@@ -132,9 +132,9 @@ typedef struct tag_WORLD
 
 // Here is a sample from the file
 //Universe
-//	dw 2
-//	da	world0
-//	da world1
+//   dw 2
+//   da   world0
+//   da world1
 
 typedef struct tag_UNIVERSE
 {
@@ -166,19 +166,19 @@ void SetAnimOffsets(ANIM*);      // resolve Anim offset to pointers
 void SetZonesetOffsets(ZONESET*);       // resolve Zoneset offsets to pointers
 
 protected:
-WORLD*	m_pWorld;               // ??
-STAGE*	m_pStage;               // ??
+WORLD*   m_pWorld;               // ??
+STAGE*   m_pStage;               // ??
 SECTION* m_pSection;             // ??Pointer to the current section structure
 
-ANIMSET*	m_pAnimData;            // Pointer to Animation build data
-BG*		m_pBackData;            // Pointer to Background build data
-PALETTE*	m_pSpritePal;           // Pointer to sprite palette
+ANIMSET*   m_pAnimData;            // Pointer to Animation build data
+BG*      m_pBackData;            // Pointer to Background build data
+PALETTE*   m_pSpritePal;           // Pointer to sprite palette
 PALETTE* m_pBackgroundPal;       // Pointer to background palette
-WORD*		m_pAttrMap;             // Pointer to background attribute map
-short	m_sMapWidth;               // Width of attribute map
-CONTOUR*	m_pAttrCont;            // Pointer to arrays of attribute contours
-EVENT*	m_pEventData;           // Pointer to background event data
-IMAGE*	m_pImageData;           // Pointer to animation images
+WORD*      m_pAttrMap;             // Pointer to background attribute map
+short m_sMapWidth;                 // Width of attribute map
+CONTOUR*   m_pAttrCont;            // Pointer to arrays of attribute contours
+EVENT*   m_pEventData;           // Pointer to background event data
+IMAGE*   m_pImageData;           // Pointer to animation images
 
 
 public:
@@ -197,14 +197,14 @@ short SetSection(             // Load a section structure from file to memory
 // These access functions return pointers to various parts of the
 // SECTION structure.
 
-ANIMSET*	GetAnim() {return m_pAnimData;};
-BG*		GetBG() {return m_pBackData;};                   // Background data
+ANIMSET*   GetAnim() {return m_pAnimData;};
+BG*      GetBG() {return m_pBackData;};                   // Background data
 PALETTE* GetAnimPal() {return m_pSpritePal;};             // Animation palette
 PALETTE* GetBGPal() {return m_pBackgroundPal;};           // Background palette
-EVENT*	GetEvents() {return m_pEventData;};              // Event data
-void		GetAttributes(WORD* pwMap,                       // Attribute data
-                       CONTOUR* pContour,
-                       short* psWidth)
+EVENT*   GetEvents() {return m_pEventData;};              // Event data
+void      GetAttributes(WORD* pwMap,                       // Attribute data
+                        CONTOUR* pContour,
+                        short* psWidth)
 {
    pwMap = m_pAttrMap;
    pContour = (CONTOUR*) m_pAttrCont;

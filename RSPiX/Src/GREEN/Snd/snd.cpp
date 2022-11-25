@@ -17,75 +17,75 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	snd.cpp
+//   snd.cpp
 //
 // History:
-//		04/28/95 JMI	Started.
+//      04/28/95 JMI   Started.
 //
-//		05/22/95	JMI	Added GetPos().
+//      05/22/95   JMI   Added GetPos().
 //
-//		06/08/95	JMI	Added GetTime().
+//      06/08/95   JMI   Added GetTime().
 //
-//		06/14/95	JMI	Added ability to use any number of buffers to stream.
-//							This is limited, of course, by the capabilities of BLUE.
+//      06/14/95   JMI   Added ability to use any number of buffers to stream.
+//                     This is limited, of course, by the capabilities of BLUE.
 //
-//		07/15/95	JMI	Added loop ability through public member m_sLoop.
+//      07/15/95   JMI   Added loop ability through public member m_sLoop.
 //
-//		07/31/96	JMI	Now responds to BLU_SNDMSG_DATA instead of
-//							RSP_SNDMSG_OK/PREPLAYERR/POSTPLAYERR.
+//      07/31/96   JMI   Now responds to BLU_SNDMSG_DATA instead of
+//                     RSP_SNDMSG_OK/PREPLAYERR/POSTPLAYERR.
 //
-//		08/26/96	JMI	Changed BLU_SNDMSG_* to RSP_SNDMSG_*.  Removed
-//							lPrimeInterval parm from play.  It has not been used
-//							since 07/15/95, I think.
+//      08/26/96   JMI   Changed BLU_SNDMSG_* to RSP_SNDMSG_*.  Removed
+//                     lPrimeInterval parm from play.  It has not been used
+//                     since 07/15/95, I think.
 //
-//		08/30/96	JMI	Abort() now calls m_mix.Suspend() as it should have been.
+//      08/30/96   JMI   Abort() now calls m_mix.Suspend() as it should have been.
 //
-//		09/03/96	JMI	Adapted to newest revision of Blue Sound API (which
-//							removed rspStart/StopSoundOutCallbacks,
-//							rspIsSoundOutCallingBack, and callback messages
-//							(RSP_SNDMSG_DONE and RSP_SNDMSG_DATA).
+//      09/03/96   JMI   Adapted to newest revision of Blue Sound API (which
+//                     removed rspStart/StopSoundOutCallbacks,
+//                     rspIsSoundOutCallingBack, and callback messages
+//                     (RSP_SNDMSG_DONE and RSP_SNDMSG_DATA).
 //
-//		10/27/96 MJR	Fixed "unused variable" warnings.
+//      10/27/96 MJR   Fixed "unused variable" warnings.
 //
-//		10/28/96	JMI	Removed unused variable lPrimeInterval.
+//      10/28/96   JMI   Removed unused variable lPrimeInterval.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CMix				RMix
-//							RSnd				RSnd
-//							MIX_STATE_*		*
-//							MIX_MSG_*		*
-//							SND_STATE_*		*				Macros changed to enum.
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CMix            RMix
+//                     RSnd            RSnd
+//                     MIX_STATE_*      *
+//                     MIX_MSG_*      *
+//                     SND_STATE_*      *            Macros changed to enum.
 //
-//		01/29/97	JMI	Added callback on done.
+//      01/29/97   JMI   Added callback on done.
 //
-//		04/02/97	JMI	When I added the callback, I forgot to initialize it in
-//							Init().  Fixed.
+//      04/02/97   JMI   When I added the callback, I forgot to initialize it in
+//                     Init().  Fixed.
 //
-//		05/09/97	JMI	Added ability to loop sub samples.
+//      05/09/97   JMI   Added ability to loop sub samples.
 //
-//		05/13/97	JMI	Casted instances of warning C4018 (signed/unsigned mismatch)
-//							to make MSVC 4.1(Alpha) happy (these seem to fall under
-//							Warning Level 3 in 4.1(Alpha) but not in 4.2(Intel)).
+//      05/13/97   JMI   Casted instances of warning C4018 (signed/unsigned mismatch)
+//                     to make MSVC 4.1(Alpha) happy (these seem to fall under
+//                     Warning Level 3 in 4.1(Alpha) but not in 4.2(Intel)).
 //
-//		07/15/97 JRD	Added members to hold sound volume information.  Made
-//							sure callbacks updated volume levels and all levels
-//							were passed on.
+//      07/15/97 JRD   Added members to hold sound volume information.  Made
+//                     sure callbacks updated volume levels and all levels
+//                     were passed on.
 //
-//		07/30/97	JMI	Added ASSERTs so stupid people (let's call one of them
-//							JMI) don't pass loop points that exceed the overall size
-//							of the sample buffer causing cool music.
-//							Also, added if's to check these in non-TRACENASSERT mode.
+//      07/30/97   JMI   Added ASSERTs so stupid people (let's call one of them
+//                     JMI) don't pass loop points that exceed the overall size
+//                     of the sample buffer causing cool music.
+//                     Also, added if's to check these in non-TRACENASSERT mode.
 //
-//		08/01/97	JMI	End loop time parameter to Play() was not working as
-//							stated for 0 case b/c it had a < 0 instead of < 1.
+//      08/01/97   JMI   End loop time parameter to Play() was not working as
+//                     stated for 0 case b/c it had a < 0 instead of < 1.
 //
-//		08/11/97	JMI	Placed Sound Done callback such that the user can still
-//							access the sample safely, if desired.
+//      08/11/97   JMI   Placed Sound Done callback such that the user can still
+//                     access the sample safely, if desired.
 //
-//		09/25/97	JMI	Now PlayCall() only calls the callback if Abort() was
-//							not called (Abort() calls the callback).
+//      09/25/97   JMI   Now PlayCall() only calls the callback if Abort() was
+//                     not called (Abort() calls the callback).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -113,8 +113,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define SND_TYPE_UNKNOWN	0x0000
-#define SND_TYPE_WAVE		0x0001
+#define SND_TYPE_UNKNOWN   0x0000
+#define SND_TYPE_WAVE      0x0001
 
 //////////////////////////////////////////////////////////////////////////////
 // Functions.
@@ -155,16 +155,16 @@ RSnd::~RSnd()
 void RSnd::Init(void)
 {
    // Initialize members.
-   m_lBufSize			= 0L;
-   m_sState				= Stopped;
-   m_psample			= NULL;
-   m_sOwnSample		= FALSE;
-   m_sLoop				= FALSE;
-   m_dcUser				= NULL;
-   m_lLoopStartPos	= 0;
-   m_lLoopEndPos		= 0;
-   m_sTypeVolume		= 255;   // should be overwritten by Play
-   m_sChannelVolume	= 255;   // should be overwritten by Play
+   m_lBufSize         = 0L;
+   m_sState            = Stopped;
+   m_psample         = NULL;
+   m_sOwnSample      = FALSE;
+   m_sLoop            = FALSE;
+   m_dcUser            = NULL;
+   m_lLoopStartPos   = 0;
+   m_lLoopEndPos      = 0;
+   m_sTypeVolume      = 255;   // should be overwritten by Play
+   m_sChannelVolume   = 255;   // should be overwritten by Play
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,8 +213,8 @@ void RSnd::Reset(void)
 // (public)
 //
 ///////////////////////////////////////////////////////////////////////////////
-short RSnd::Stream(	char* pszSampleName, S32 lPlayBufSize, S32 lReadBufSize,
-                     UCHAR	ucMainVolume /* = 255 */, UCHAR ucVolume2 /* = 255 */)
+short RSnd::Stream(   char* pszSampleName, S32 lPlayBufSize, S32 lReadBufSize,
+                      UCHAR ucMainVolume /* = 255 */, UCHAR ucVolume2 /* = 255 */)
 {
    short sRes = 0;
 
@@ -226,21 +226,21 @@ short RSnd::Stream(	char* pszSampleName, S32 lPlayBufSize, S32 lReadBufSize,
    if (m_psample != NULL)
    {
       // Remember we're responsible for de-allocating this RSample.
-      m_sOwnSample	= TRUE;
+      m_sOwnSample   = TRUE;
       if (m_psample->Open(pszSampleName, lReadBufSize) > 0L)
       {
          // Attempt to open a sound channel . . .
-         if (m_mix.OpenChannel(	m_psample->m_lSamplesPerSec,
-                                 m_psample->m_sBitsPerSample,
-                                 m_psample->m_sNumChannels) == 0)
+         if (m_mix.OpenChannel(   m_psample->m_lSamplesPerSec,
+                                  m_psample->m_sBitsPerSample,
+                                  m_psample->m_sNumChannels) == 0)
          {
             // Store the buffer size to stream with.
-            m_lBufSize	= lPlayBufSize;
+            m_lBufSize   = lPlayBufSize;
             // Attempt to start the mixing . . .
             if (m_mix.Start(StreamCallStatic, (uintptr_t)this) == 0)
             {
                // Success.  Set state to starting.
-               m_sState	= Starting;
+               m_sState   = Starting;
             }
             else
             {
@@ -298,10 +298,10 @@ short RSnd::Stream(	char* pszSampleName, S32 lPlayBufSize, S32 lReadBufSize,
 // (this is the size of the chunks sent to RMix).
 // (public)
 // Note on looping:
-//	 Start																		  End
-//		1-----------------------------------------------------------4
-//				2=======================================3
-//			lLoopStartTime									lLoopEndTime
+//    Start                                                        End
+//      1-----------------------------------------------------------4
+//            2=======================================3
+//         lLoopStartTime                           lLoopEndTime
 //
 // In a looping scenario, 1..2 of the sample is played, then 2..3
 // is repeated until m_sLoop is FALSE, at which time, once 3 is reached,
@@ -311,10 +311,10 @@ short RSnd::Stream(	char* pszSampleName, S32 lPlayBufSize, S32 lReadBufSize,
 short RSnd::Play(                // Returns 0 on success.
    RSample* psample,             // In:  Sample to play.
    S32 lPlayBufSize,          // In:  Size of play buffer in bytes.
-   UCHAR	ucMainVolume /* = 255 */,// In:  Primary Volume (0 - 255)
+   UCHAR ucMainVolume /* = 255 */,  // In:  Primary Volume (0 - 255)
    UCHAR ucVolume2 /* = 255 */,  // In:  Secondary Volume (0 - 255)
    S32 lLoopStartTime /* = -1*/,  // In:  Where to loop back to in milliseconds.
-                                  //	-1 indicates no looping (unless m_sLoop is
+                                  //   -1 indicates no looping (unless m_sLoop is
                                   // explicitly set).
    S32 lLoopEndTime /* = 0*/)     // In:  Where to loop back from in milliseconds.
                                   // In:  If less than 1, the end + lLoopEndTime is used.
@@ -325,17 +325,17 @@ short RSnd::Play(                // Returns 0 on success.
    ASSERT(GetState() == Stopped);
 
    // Use supplied sample.
-   m_psample		= psample;
+   m_psample      = psample;
    // Remember we're not responsible for this buffer (i.e., freeing it).
-   m_sOwnSample	= FALSE;
+   m_sOwnSample   = FALSE;
 
    // Attempt to lock sample . . .
    if (m_psample->Lock() == 0)
    {
       // Attempt to open a sound channel . . .
-      if (m_mix.OpenChannel(	m_psample->m_lSamplesPerSec,
-                              m_psample->m_sBitsPerSample,
-                              m_psample->m_sNumChannels) == 0)
+      if (m_mix.OpenChannel(   m_psample->m_lSamplesPerSec,
+                               m_psample->m_sBitsPerSample,
+                               m_psample->m_sNumChannels) == 0)
       {
          // Store the buffer size to stream with.
          m_lBufSize = lPlayBufSize;
@@ -343,18 +343,18 @@ short RSnd::Play(                // Returns 0 on success.
          if (m_mix.Start(PlayCallStatic, (uintptr_t)this, ucMainVolume, ucVolume2) == 0)
          {
             // Success.  Set state to starting.
-            m_sState				= Starting;
+            m_sState            = Starting;
             if (lLoopStartTime > -1)
             {
                // Set looping parameters.
-               m_sLoop				= TRUE;
-               m_lLoopStartPos	= psample->GetPos(lLoopStartTime);
-               m_lLoopEndPos		= psample->GetPos(lLoopEndTime);
+               m_sLoop            = TRUE;
+               m_lLoopStartPos   = psample->GetPos(lLoopStartTime);
+               m_lLoopEndPos      = psample->GetPos(lLoopEndTime);
                // If using the end . . .
                if (lLoopEndTime < 1)
                {
                   // Use the duration plus the specified negative time.
-                  m_lLoopEndPos		+= psample->m_lBufSize;
+                  m_lLoopEndPos      += psample->m_lBufSize;
                }
 
                // Cannot be off end of buffer or beginning of buffer.
@@ -389,9 +389,9 @@ short RSnd::Play(                // Returns 0 on success.
                // If m_sLoop was set . . .
                if (m_sLoop != FALSE)
                {
-                  m_lLoopStartPos	= 0;
+                  m_lLoopStartPos   = 0;
                   // Use end of sample as loop back point.
-                  m_lLoopEndPos		= psample->m_lBufSize;
+                  m_lLoopEndPos      = psample->m_lBufSize;
                }
             }
          }
@@ -481,7 +481,7 @@ short RSnd::Abort(void)
    }
    else
    {
-//		TRACE("Abort(): No current RSample.\n");
+//      TRACE("Abort(): No current RSample.\n");
       sRes = -1;
    }
 
@@ -517,7 +517,7 @@ S32 RSnd::GetTime(void)
 // Returns pointer to next buffer to play or NULL to end.
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::StreamCall(RMix::Msg	msg,
+void* RSnd::StreamCall(RMix::Msg msg,
                        void*    pData,
                        U32*  pulBufSize,
                        uintptr_t ulUser,
@@ -549,7 +549,7 @@ void* RSnd::StreamCall(RMix::Msg	msg,
             if (m_sState == Queueing)
             {
                // Switch state to playing.
-               m_sState	= Playing;
+               m_sState   = Playing;
             }
          }
          else
@@ -576,7 +576,7 @@ void* RSnd::StreamCall(RMix::Msg	msg,
       if (pData == NULL)
       {
          // Set state to ending.
-         m_sState	= Ending;
+         m_sState   = Ending;
       }
       break;
 
@@ -616,7 +616,7 @@ void* RSnd::StreamCall(RMix::Msg	msg,
       }
 
       // Set state to stopped.
-      m_sState	= Stopped;
+      m_sState   = Stopped;
 
       break;
    }
@@ -638,10 +638,10 @@ void* RSnd::StreamCall(RMix::Msg	msg,
 //
 //////////////////////////////////////////////////////////////////////////////
 void* RSnd::PlayCall(RMix::Msg msg,
-                     void*			pData,
-                     U32*		pulBufSize,
-                     UCHAR*		pucVolume,
-                     UCHAR*		pucVol2)
+                     void*         pData,
+                     U32*      pulBufSize,
+                     UCHAR*      pucVolume,
+                     UCHAR*      pucVol2)
 {
    switch (msg)
    {
@@ -655,9 +655,9 @@ void* RSnd::PlayCall(RMix::Msg msg,
             // Switch to queueing.
             m_sState = Queueing;
             // Set remaining amount of data to play.
-            m_ulRemaining	= (m_sLoop == FALSE) ? m_psample->m_lBufSize : m_lLoopEndPos;
+            m_ulRemaining   = (m_sLoop == FALSE) ? m_psample->m_lBufSize : m_lLoopEndPos;
             // Set size of data to play.
-            m_ulSampleSize	= m_ulRemaining;
+            m_ulSampleSize   = m_ulRemaining;
          }
 
          // Move to next buffer.
@@ -675,7 +675,7 @@ void* RSnd::PlayCall(RMix::Msg msg,
             if (m_sState == Queueing)
             {
                // Switch state to playing.
-               m_sState	= Playing;
+               m_sState   = Playing;
             }
          }
          else
@@ -687,44 +687,44 @@ void* RSnd::PlayCall(RMix::Msg msg,
                if (m_ulSampleSize == (U32)m_psample->m_lBufSize)
                {
                   // Clear pointer.
-                  pData		= NULL;
+                  pData      = NULL;
                }
                else
                {
                   // Play the rest.
                   // Set remaining amount of data to play.
-                  m_ulRemaining	= m_psample->m_lBufSize - m_lLoopEndPos;
+                  m_ulRemaining   = m_psample->m_lBufSize - m_lLoopEndPos;
                   // Set size of data to play.
-                  m_ulSampleSize	= m_psample->m_lBufSize;
+                  m_ulSampleSize   = m_psample->m_lBufSize;
 
                   // Recurse.
-                  pData	= PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
+                  pData   = PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
                }
             }
             else
             {
                // Restart at loop pos.
                // Set remaining amount of data to play.
-               m_ulRemaining	= m_lLoopEndPos - m_lLoopStartPos;
+               m_ulRemaining   = m_lLoopEndPos - m_lLoopStartPos;
                // Set size of data to play.
-               m_ulSampleSize	= m_lLoopEndPos;
+               m_ulSampleSize   = m_lLoopEndPos;
 
                // Recurse.
-               pData	= PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
+               pData   = PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
             }
          }
       }
       else
       {
          // Clear pointer.
-         pData	= NULL;
+         pData   = NULL;
       }
 
       // If done or aborted . . .
       if (pData == NULL)
       {
          // Set state to ending.
-         m_sState	= Ending;
+         m_sState   = Ending;
       }
       break;
 
@@ -760,7 +760,7 @@ void* RSnd::PlayCall(RMix::Msg msg,
 #endif
 
       // Set state to stopped.
-      m_sState	= Stopped;
+      m_sState   = Stopped;
 
       // Clear sample.  No S32er needed.
       m_psample = NULL;
@@ -786,12 +786,12 @@ void* RSnd::PlayCall(RMix::Msg msg,
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void* RSnd::StreamCallStatic(	RMix::Msg msg,
-                              void*			pData,
-                              U32*		pulBufSize,
-                              uintptr_t ulUser,
-                              UCHAR*		pucVolume,
-                              UCHAR*		pucVol2)
+void* RSnd::StreamCallStatic(   RMix::Msg msg,
+                                void*         pData,
+                                U32*      pulBufSize,
+                                uintptr_t ulUser,
+                                UCHAR*      pucVolume,
+                                UCHAR*      pucVol2)
 {
    return ((PSND)ulUser)->StreamCall(msg, pData, pulBufSize, ulUser, pucVolume, pucVol2);
 }
@@ -805,11 +805,11 @@ void* RSnd::StreamCallStatic(	RMix::Msg msg,
 //
 //////////////////////////////////////////////////////////////////////////////
 void* RSnd::PlayCallStatic(RMix::Msg msg,
-                           void*			pData,
-                           U32*		pulBufSize,
+                           void*         pData,
+                           U32*      pulBufSize,
                            uintptr_t ulUser,
-                           UCHAR*		pucVolume,
-                           UCHAR*		pucVol2)
+                           UCHAR*      pucVolume,
+                           UCHAR*      pucVol2)
 {
    return ((PSND)ulUser)->PlayCall(msg, pData, pulBufSize, pucVolume, pucVol2);
 }

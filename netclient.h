@@ -18,11 +18,11 @@
 // netclient.h
 // Project: RSPiX
 //
-//	History:
-//		08/30/97 MJR	Started.
+//   History:
+//      08/30/97 MJR   Started.
 //
-//		11/25/97	JMI	Changed m_error to m_msgError so we could store a whole
-//							error message instead of just the error type.
+//      11/25/97   JMI   Changed m_error to m_msgError so we could store a whole
+//                     error message instead of just the error type.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NETCLIENT_H
@@ -88,23 +88,23 @@ enum
 // Variables
 //------------------------------------------------------------------------------
 public:
-State	m_state;                                                 // State
+State m_state;                                                   // State
 RSocket::Address m_address;                                    // Address
 char m_acName[Net::MaxPlayerNameSize];                         // Name
 unsigned char m_ucColor;                                       // Color number
 unsigned char m_ucTeam;                                        // Team number
-short	m_sBandwidth;                                            // Net::Bandwidth
+short m_sBandwidth;                                              // Net::Bandwidth
 
 CNetInput m_netinput;                                          // Sliding window of inputs
-Net::SEQ	m_seqLastActive;                                      // Last active sequence (only if dropped)
+Net::SEQ m_seqLastActive;                                        // Last active sequence (only if dropped)
 bool m_bInactive;                                              // True after last active sequence was used
-//				Net::SEQ				m_seqWhatHeNeeds;						// What input seq he needs from me
-//				Net::SEQ				m_seqWhatINeed;						// What input seq I need from him
-//				S32					m_lNextSendTime;						// When to next send inputs to him
+//            Net::SEQ            m_seqWhatHeNeeds;                  // What input seq he needs from me
+//            Net::SEQ            m_seqWhatINeed;                  // What input seq I need from him
+//            S32               m_lNextSendTime;                  // When to next send inputs to him
 S32 m_lLastReceiveTime;                                        // When we last got data from him *SPA
 
-//				FQueue<S32, NumAvgItems>	m_qPings;					// Queue of ping times for running average
-//				S32					m_lRunnigAvgPing;						// Running average
+//            FQueue<S32, NumAvgItems>   m_qPings;               // Queue of ping times for running average
+//            S32               m_lRunnigAvgPing;                  // Running average
 
 U16 m_idDude;                                                  // Dude's ID
 
@@ -134,25 +134,25 @@ CPeer()
 ////////////////////////////////////////////////////////////////////////////////
 void Reset(void)
 {
-   m_state						= Unused;
+   m_state                  = Unused;
    m_address.Reset();
-   m_acName[0]					= 0;
-   m_ucColor					= 0;
-   m_ucTeam						= 0;
-   m_sBandwidth				= Net::FirstBandwidth;
+   m_acName[0]               = 0;
+   m_ucColor               = 0;
+   m_ucTeam                  = 0;
+   m_sBandwidth            = Net::FirstBandwidth;
 
    m_netinput.Reset();
-   m_seqLastActive			= 0;
-   m_bInactive					= false;
-//					m_seqWhatHeNeeds			= 0;
-//					m_seqWhatINeed				= 0;
-//					m_lNextSendTime			= 0;
-   m_lLastReceiveTime		= 0;             // *SPA
+   m_seqLastActive         = 0;
+   m_bInactive               = false;
+//               m_seqWhatHeNeeds         = 0;
+//               m_seqWhatINeed            = 0;
+//               m_lNextSendTime         = 0;
+   m_lLastReceiveTime      = 0;             // *SPA
 
-//					m_qPings.Reset();
-//					m_lRunnigAvgPing			= 0;
+//               m_qPings.Reset();
+//               m_lRunnigAvgPing         = 0;
 
-   m_idDude						= CIdBank::IdNil;
+   m_idDude                  = CIdBank::IdNil;
 }
 };
 
@@ -174,36 +174,36 @@ typedef enum
 // Variables
 //------------------------------------------------------------------------------
 protected:
-CNetMsgr	m_msgr;                                      // Messenger to server
+CNetMsgr m_msgr;                                        // Messenger to server
 RSocket m_socketPeers;                                // Socket used to communicate with peers
 RSocket::Address m_addressServer;                     // Server's address (with base port)
 RSocket::Address m_addressServerListen;               // Server's address (listen port)
 RSocket::BLOCK_CALLBACK m_callback;
 
-State	m_state;                                        // My state
+State m_state;                                          // My state
 NetMsg m_msgError;                                    // Error type
-NetMsg::Status	m_status;                              // Status type
+NetMsg::Status m_status;                                // Status type
 S32 m_lTimeOut;                                       // Timer used to detect time-outs
 
 Net::ID m_id;                                         // My id
 Net::ID m_idServer;                                   // Server's client's ID
-short	m_sNumJoined;                                   // Number of joined players
+short m_sNumJoined;                                     // Number of joined players
 
 bool m_bGameStarted;                                  // Whether game has started
 bool m_bPlaying;                                      // true means playing, false means stopped
 bool m_bUseHaltFrame;                                 // Whether to use m_seqStopFrame
 bool m_bReachedHaltFrame;                             // Whether we've reached the halt frame
-Net::SEQ	m_seqHaltFrame;                              // Stop when we reach this frame seq
-Net::SEQ	m_seqInput;                                  // My input sequence
-Net::SEQ	m_seqFrame;                                  // My frame sequence
-Net::SEQ	m_seqMaxAhead;                               // Max ahead for input versus frame
-Net::SEQ	m_seqInputNotYetSent;                        // Input seq that we did NOT send yet
+Net::SEQ m_seqHaltFrame;                                // Stop when we reach this frame seq
+Net::SEQ m_seqInput;                                    // My input sequence
+Net::SEQ m_seqFrame;                                    // My frame sequence
+Net::SEQ m_seqMaxAhead;                                 // Max ahead for input versus frame
+Net::SEQ m_seqInputNotYetSent;                          // Input seq that we did NOT send yet
 CNetInput m_netinput;                                    // My input buffer
 S32 m_lFrameTime;                                     // Current frame time
 S32 m_lNextLocalInputTime;                            // When to get next local input
 bool m_bNextRealmPending;                             // Whether next realm is pending
 
-CPeer	m_aPeers[Net::MaxNumIDs];                       // Array of peers
+CPeer m_aPeers[Net::MaxNumIDs];                         // Array of peers
 /** SPA **/
 S32 m_lStartTime;                                     // The start from which time to calculate the frame delta
 S32 m_alAvgFrameTimes[8];                             // Array to hold the last several average frame times
@@ -248,9 +248,9 @@ void Reset(void)
    m_callback = 0;
 
    m_state = Nothing;
-   m_msgError.msg.err.ucType	= NetMsg::ERR;
-   m_msgError.msg.err.error	= NetMsg::NoError;
-   m_msgError.msg.err.ulParam	= 0;
+   m_msgError.msg.err.ucType   = NetMsg::ERR;
+   m_msgError.msg.err.error   = NetMsg::NoError;
+   m_msgError.msg.err.ulParam   = 0;
 
    m_status = NetMsg::NoStatus;
    m_lTimeOut = 0;

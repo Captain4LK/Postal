@@ -20,24 +20,24 @@
 // listbase.h
 //
 // History:
-//		07/09/96 JMI	Started.  Copied from list.h.  Making version of CBList
-//							that basically supports types that aren't pointers.  This
-//							requires a different calling interface.  CList will be
-//							based on this.
+//      07/09/96 JMI   Started.  Copied from list.h.  Making version of CBList
+//                     that basically supports types that aren't pointers.  This
+//                     requires a different calling interface.  CList will be
+//                     based on this.
 //
-//		10/09/96	JMI	CBList() constructor now has option to skip initialization
-//							and automatic dealloaction.
+//      10/09/96   JMI   CBList() constructor now has option to skip initialization
+//                     and automatic dealloaction.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CBList			RBList
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CBList         RBList
 //
-//		01/05/97	JMI	Added standard forms of GetLogicalNext()/Prev().
+//      01/05/97   JMI   Added standard forms of GetLogicalNext()/Prev().
 //
-//		03/31/97	JMI	Remove() had default parameter that was inappropriate for
-//							other than pointer types.  Changed it to overload with
-//							no parameters.
+//      03/31/97   JMI   Remove() had default parameter that was inappropriate for
+//                     other than pointer types.  Changed it to overload with
+//                     no parameters.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -62,11 +62,11 @@ template <class T> class RBList
 protected:     // Internal types.
 typedef T LISTDATA, *PLISTDATA;
 
-typedef struct	tagNODE
+typedef struct   tagNODE
 {
-   LISTDATA	ldData;
-   tagNODE*	pNext;
-   tagNODE*	pPrev;
+   LISTDATA ldData;
+   tagNODE*   pNext;
+   tagNODE*   pPrev;
 } NODE, *PNODE, *NODELIST;
 
 public:
@@ -94,17 +94,17 @@ short AddTail(LISTDATA ldNew)
       else
       {
          // Make the new's previous NULL.
-         pnNew->pPrev	= NULL;
+         pnNew->pPrev   = NULL;
          // Make the head the tail, since, if no tail exists,
          // there is no head.
-         m_pnHead			= pnNew;
+         m_pnHead         = pnNew;
       }
 
       // Update current node info.
-      m_pnPrev		= pnNew->pPrev;
+      m_pnPrev      = pnNew->pPrev;
       m_pnCurrent = pnNew;
-      m_pnNext		= pnNew->pNext;
-      m_pnTail		= pnNew;
+      m_pnNext      = pnNew->pNext;
+      m_pnTail      = pnNew;
    }
    else
    {
@@ -145,10 +145,10 @@ short InsertHead(LISTDATA ldNew)
       }
 
       // Update current node info.
-      m_pnHead		= pnNew;
-      m_pnPrev		= pnNew->pPrev;
+      m_pnHead      = pnNew;
+      m_pnPrev      = pnNew->pPrev;
       m_pnCurrent = pnNew;
-      m_pnNext		= pnNew->pNext;
+      m_pnNext      = pnNew->pNext;
    }
    else
    {
@@ -198,9 +198,9 @@ short InsertAfter(LISTDATA ldAfter, LISTDATA ldNew)
             // Have the node to insert after's next point to the new.
             pnAfter->pNext = pnNew;
             // Update current info.
-            m_pnPrev		= pnNew->pPrev;
+            m_pnPrev      = pnNew->pPrev;
             m_pnCurrent = pnNew;
-            m_pnNext		= pnNew->pNext;
+            m_pnNext      = pnNew->pNext;
          }
          else
          {
@@ -261,9 +261,9 @@ short InsertBefore(LISTDATA ldBefore, LISTDATA ldNew)
             pnBefore->pPrev = pnNew;
 
             // Update current info.
-            m_pnPrev		= pnNew->pPrev;
+            m_pnPrev      = pnNew->pPrev;
             m_pnCurrent = pnNew;
-            m_pnNext		= pnNew->pNext;
+            m_pnNext      = pnNew->pNext;
          }
          else
          {
@@ -315,7 +315,7 @@ short Remove(LISTDATA ldRem)
 short GetHead(             // Returns 0 on success.
    PLISTDATA pldHead)         // Where to store head data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    m_pnCurrent = m_pnHead;
    // If there is a head . . .
@@ -325,7 +325,7 @@ short GetHead(             // Returns 0 on success.
       m_pnNext = m_pnCurrent->pNext;
 
       // Store.
-      *pldHead	= m_pnCurrent->ldData;
+      *pldHead   = m_pnCurrent->ldData;
    }
    else
    {
@@ -338,7 +338,7 @@ short GetHead(             // Returns 0 on success.
 short GetTail(             // Returns 0 on success.
    PLISTDATA pldTail)         // Where to store tail data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // If there is a tail . . .
    m_pnCurrent = m_pnTail;
@@ -347,7 +347,7 @@ short GetTail(             // Returns 0 on success.
       m_pnPrev = m_pnCurrent->pPrev;
       m_pnNext = m_pnCurrent->pNext;
 
-      *pldTail	= m_pnCurrent->ldData;
+      *pldTail   = m_pnCurrent->ldData;
    }
    else
    {
@@ -361,7 +361,7 @@ short GetTail(             // Returns 0 on success.
 short GetNext(             // Returns 0 on success.
    PLISTDATA pldNext)         // Where to store next data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    m_pnCurrent = m_pnNext;
    if (m_pnCurrent != NULL)
@@ -369,7 +369,7 @@ short GetNext(             // Returns 0 on success.
       m_pnPrev = m_pnCurrent->pPrev;
       m_pnNext = m_pnCurrent->pNext;
 
-      *pldNext	= m_pnCurrent->ldData;
+      *pldNext   = m_pnCurrent->ldData;
    }
    else
    {
@@ -384,7 +384,7 @@ short GetNext(             // Returns 0 on success.
    LISTDATA ldData,        // Node to get next of.
    PLISTDATA pldNext)         // Where to store next data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Make sure the list is not empty
    if (IsEmpty() == FALSE)
@@ -395,14 +395,14 @@ short GetNext(             // Returns 0 on success.
       if (pn != NULL)
       {
          // Make global previous node found.
-         m_pnPrev		= pn;
+         m_pnPrev      = pn;
          // Make global current node's next.
          m_pnCurrent = pn->pNext;
          // If new current exists . . .
          if (m_pnCurrent != NULL)
          {
             // Make global next current's next.
-            m_pnNext	= m_pnCurrent->pNext;
+            m_pnNext   = m_pnCurrent->pNext;
             // Return current's data.
             *pldNext = m_pnCurrent->ldData;
          }
@@ -431,10 +431,10 @@ short GetNext(             // Returns 0 on success.
 short GetLogicalNext(         // Returns 0 on success.
    PLISTDATA pldNext)         // Where to store next data.
 {
-   short	sRes	= GetNext(pldNext);
+   short sRes   = GetNext(pldNext);
    if (sRes != 0)
    {
-      sRes	= GetHead(pldNext);
+      sRes   = GetHead(pldNext);
    }
 
    return sRes;
@@ -445,10 +445,10 @@ short GetLogicalNext(         // Returns 0 on success.
    LISTDATA ldData,           // Node to get next of.
    PLISTDATA pldNext)         // Where to store next data.
 {
-   short	sRes	= GetNext(ldData, pldNext);
+   short sRes   = GetNext(ldData, pldNext);
    if (sRes != 0)
    {
-      sRes	= GetHead(pldNext);
+      sRes   = GetHead(pldNext);
    }
 
    return sRes;
@@ -458,7 +458,7 @@ short GetLogicalNext(         // Returns 0 on success.
 short GetPrev(             // Returns 0 on success.
    PLISTDATA pldPrev)         // Where to store previous data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    m_pnCurrent = m_pnPrev;
    if (m_pnCurrent != NULL)
@@ -466,7 +466,7 @@ short GetPrev(             // Returns 0 on success.
       m_pnPrev = m_pnCurrent->pPrev;
       m_pnNext = m_pnCurrent->pNext;
 
-      *pldPrev	= m_pnCurrent->ldData;
+      *pldPrev   = m_pnCurrent->ldData;
    }
    else
    {
@@ -481,7 +481,7 @@ short GetPrev(             // Returns 0 on success.
    LISTDATA ldData,        // Node to get previous of.
    PLISTDATA pldPrev)         // Where to store previous data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Make sure the list is not empty.
    if (IsEmpty() == FALSE)
@@ -492,33 +492,33 @@ short GetPrev(             // Returns 0 on success.
       if (pn != NULL)
       {
          // Make global next found node.
-         m_pnNext		= pn;
+         m_pnNext      = pn;
          // Make global current node's previous.
          m_pnCurrent = pn->pPrev;
          // If new current exists . . .
          if (m_pnCurrent)
          {
             // Make global previous current's previous.
-            m_pnPrev	= m_pnCurrent->pPrev;
+            m_pnPrev   = m_pnCurrent->pPrev;
             // Return current's data.
-            *pldPrev	= m_pnCurrent->ldData;
+            *pldPrev   = m_pnCurrent->ldData;
          }
          else
          {
             // There is no previous to supplied node.
-            sRes	= 1;
+            sRes   = 1;
          }
       }
       else
       {
          TRACE("RBList::GetPrev():  Unable to find supplied node.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
    else
    {
       TRACE("RBList::GetPrev():  The list is empty.\n");
-      sRes	= -2;
+      sRes   = -2;
    }
 
    return sRes;
@@ -529,10 +529,10 @@ short GetPrev(             // Returns 0 on success.
 short GetLogicalPrev(         // Returns 0 on success.
    PLISTDATA pldPrev)         // Where to store prev data.
 {
-   short	sRes	= GetPrev(pldPrev);
+   short sRes   = GetPrev(pldPrev);
    if (sRes != 0)
    {
-      sRes	= GetTail(pldPrev);
+      sRes   = GetTail(pldPrev);
    }
 
    return sRes;
@@ -543,10 +543,10 @@ short GetLogicalPrev(         // Returns 0 on success.
    LISTDATA ldData,           // Node to get prev of.
    PLISTDATA pldPrev)         // Where to store prev data.
 {
-   short	sRes	= GetPrev(ldData, pldPrev);
+   short sRes   = GetPrev(ldData, pldPrev);
    if (sRes != 0)
    {
-      sRes	= GetTail(pldPrev);
+      sRes   = GetTail(pldPrev);
    }
 
    return sRes;
@@ -555,11 +555,11 @@ short GetLogicalPrev(         // Returns 0 on success.
 short GetCurrent(          // Returns 0 on success.
    PLISTDATA pldCur)          // Where to store current data.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    if (m_pnCurrent != NULL)
    {
-      *pldCur	= m_pnCurrent->ldData;
+      *pldCur   = m_pnCurrent->ldData;
    }
    else
    {
@@ -595,20 +595,20 @@ void Reset(void)
 
 public:
 RBList(
-   short sInitialize	= TRUE)        // If this flag is FALSE, no initialization
-                                    // or freeing will be done.  It will be the
-                                    // user's responsibility!
+   short sInitialize   = TRUE)        // If this flag is FALSE, no initialization
+                                      // or freeing will be done.  It will be the
+                                      // user's responsibility!
 {
    if (sInitialize != FALSE)
    {
       m_pnHead    = NULL;
-      m_pnPrev		= NULL;
+      m_pnPrev      = NULL;
       m_pnCurrent = NULL;
-      m_pnNext		= NULL;
+      m_pnNext      = NULL;
       m_pnTail    = NULL;
    }
 
-   m_sInitialize	= sInitialize;
+   m_sInitialize   = sInitialize;
 }
 
 ~RBList()
@@ -624,9 +624,9 @@ protected:
 
 // Removes supplied node.
 short Remove(              // Returns 0 on success.
-   NODE*	pn)               // In:  Node to remove.
+   NODE*   pn)               // In:  Node to remove.
 {
-   short	sRes	= 0;
+   short sRes   = 0;
 
    // Make sure the list is not empty
    if (IsEmpty() == FALSE)
@@ -659,9 +659,9 @@ short Remove(              // Returns 0 on success.
          }
 
          // Update current info.
-         m_pnPrev		= pn->pPrev;
+         m_pnPrev      = pn->pPrev;
          m_pnCurrent = NULL;
-         m_pnNext		= pn->pNext;
+         m_pnNext      = pn->pNext;
 
          delete pn;
       }
@@ -697,19 +697,19 @@ void Free(void)
 
    // Clear all node pointers.
    m_pnHead    = NULL;
-   m_pnPrev		= NULL;
+   m_pnPrev      = NULL;
    m_pnCurrent = NULL;
-   m_pnNext		= NULL;
+   m_pnNext      = NULL;
    m_pnTail    = NULL;
 }
 
-PNODE	m_pnHead;
-PNODE	m_pnPrev;
-PNODE	m_pnCurrent;
-PNODE	m_pnNext;
-PNODE	m_pnTail;
-short	m_sInitialize;             // TRUE if this item should handle intializing
-                                 // and freeing the list and members.
+PNODE m_pnHead;
+PNODE m_pnPrev;
+PNODE m_pnCurrent;
+PNODE m_pnNext;
+PNODE m_pnTail;
+short m_sInitialize;               // TRUE if this item should handle intializing
+                                   // and freeing the list and members.
 };
 
 #endif // H_LISTBASE

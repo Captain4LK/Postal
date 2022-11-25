@@ -19,24 +19,24 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/23/97 JMI	Started.
+//      02/23/97 JMI   Started.
 //
-//		02/23/97	JMI	Changed calling convention making acceleration functions
-//							less tied to gravity and, therefore, more versatile.
+//      02/23/97   JMI   Changed calling convention making acceleration functions
+//                     less tied to gravity and, therefore, more versatile.
 //
-//		02/23/97	JMI	Accidentally mixed distance and velocity in Accelerate().
+//      02/23/97   JMI   Accidentally mixed distance and velocity in Accelerate().
 //
-//		02/24/97	JMI	For the gravity constant I had calculated the equivalent
-//							of a meter in pixels but forgot to multiply by 9.8.
-//							What a dumb ass?!
+//      02/24/97   JMI   For the gravity constant I had calculated the equivalent
+//                     of a meter in pixels but forgot to multiply by 9.8.
+//                     What a dumb ass?!
 //
-//		02/24/97	JMI	Changed accel to dAccel (a double instead of a templated
-//							parameter) so it could be defaulted.
-//							Also, changed Accel() to AdjustVel().
+//      02/24/97   JMI   Changed accel to dAccel (a double instead of a templated
+//                     parameter) so it could be defaulted.
+//                     Also, changed Accel() to AdjustVel().
 //
-//		02/24/97	JMI	Now Map2DTo3D can take two different templated types.
+//      02/24/97   JMI   Now Map2DTo3D can take two different templated types.
 //
-//		06/26/97	JMI	Moved Map2DTo3D from here to CRealm.
+//      06/26/97   JMI   Moved Map2DTo3D from here to CRealm.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -73,7 +73,7 @@
 
 // I figure a meter is about half a man's height.  Our man is about 50 pixels
 // tall.
-const double g_dAccelerationDueToGravity	= -(25 * 9.8); // Pixels/(sec^2) upward.
+const double g_dAccelerationDueToGravity   = -(25 * 9.8); // Pixels/(sec^2) upward.
 
 ///////////////////////////////////////////////////////////////////////////////
 // Protos.
@@ -95,7 +95,7 @@ void AdjustVel(         // Returns nothing.
    double dAccel = g_dAccelerationDueToGravity) // In:  Acceleration value
                                                 // to apply (in Pixels/Sec^2).
 {
-   *pvel	+= (VelT)(dAccel * dDeltaTime);
+   *pvel   += (VelT)(dAccel * dDeltaTime);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,13 +118,13 @@ void AdjustPosVel(      // Returns nothing.
 
    // On the average during this duration, the position was affected
    // by the average velocity change (hence velDelta / 2).
-   *ppos	+= (*pvel + velDelta / 2) * dDeltaTime;
+   *ppos   += (*pvel + velDelta / 2) * dDeltaTime;
 
    // Adjust velocity.
    *pvel += velDelta;
 }
 
-#endif	// REALITY_H
+#endif   // REALITY_H
 ///////////////////////////////////////////////////////////////////////////////
 // EOF
 ///////////////////////////////////////////////////////////////////////////////

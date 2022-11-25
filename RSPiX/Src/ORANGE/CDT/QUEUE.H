@@ -19,26 +19,26 @@
 // queue.h
 //
 // History:
-//		06/12/94 MR		Added this comment block and made things safe
-//							for interrupt-driven usage.
+//      06/12/94 MR      Added this comment block and made things safe
+//                     for interrupt-driven usage.
 //
-//		06/14/94 MR		Added function to remove the item at the tail of
-//							the queue.
+//      06/14/94 MR      Added function to remove the item at the tail of
+//                     the queue.
 //
-//		06/15/94 MR		Cleaned up the overall documentation to explain
-//							how interrupt-driven usage works with the queue.
+//      06/15/94 MR      Cleaned up the overall documentation to explain
+//                     how interrupt-driven usage works with the queue.
 //
-//		06/13/95	JMI	Converted to a template in attempt to make this class
-//							more useful.  This class used to be defined in a .CPP
-//							but that proves too cumbersome for templates.
+//      06/13/95   JMI   Converted to a template in attempt to make this class
+//                     more useful.  This class used to be defined in a .CPP
+//                     but that proves too cumbersome for templates.
 //
-//		07/25/96	JMI	PeekTail had a bug where it was returning the next after
-//							the tail.
+//      07/25/96   JMI   PeekTail had a bug where it was returning the next after
+//                     the tail.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CQueue			RQueue
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CQueue         RQueue
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -93,14 +93,14 @@
 #define QUEUE_H
 
 // Size of our queue.
-#define QSIZE			(sizeof(m_aptQ) / sizeof(m_aptQ[0]))
+#define QSIZE         (sizeof(m_aptQ) / sizeof(m_aptQ[0]))
 
 // When given a queue index, these macro return the "next" or "previous" index,
 // taking warp-around into account.  Note that the given index must NEVER be
 // modified, even temporarily, because that could cause bugs when the queue is
 // used by interrupt-driven and normal code at the same time.
-#define QNEXT(i)		(((i) + (short)1) >= QSIZE ? (short)0 : ((i) + (short)1))
-#define QPREV(i)		(((i) - (short)1) >= 0 ? ((i) - (short)1) : (QSIZE - (short)1))
+#define QNEXT(i)      (((i) + (short)1) >= QSIZE ? (short)0 : ((i) + (short)1))
+#define QPREV(i)      (((i) - (short)1) >= 0 ? ((i) - (short)1) : (QSIZE - (short)1))
 
 template <class T, short sSize> class RQueue
 {
@@ -218,7 +218,7 @@ T* PeekTail(void) { return (IsNotEmpty() ? m_aptQ[QPREV(m_sTail)] : NULL); }
 protected:
 volatile short m_sHead;          // volatile since it could change on interrupt!
 volatile short m_sTail;          // volatile since it could change on interrupt!
-T*					m_aptQ[sSize + 1];
+T*               m_aptQ[sSize + 1];
 };
 
 #endif // QUEUE_H

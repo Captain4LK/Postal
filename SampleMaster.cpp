@@ -18,140 +18,140 @@
 // SampleMaster.cpp
 //
 // History:
-//		01/29/97 JMI	Started.
+//      01/29/97 JMI   Started.
 //
-//		02/02/97	JMI	Added functions to determine if samples are playing.
+//      02/02/97   JMI   Added functions to determine if samples are playing.
 //
-//		02/04/97	JMI	Updated to new rspGetResource().
+//      02/04/97   JMI   Updated to new rspGetResource().
 //
-//		02/10/97	JMI	rspReleaseResource() now takes a ptr to a ptr.
+//      02/10/97   JMI   rspReleaseResource() now takes a ptr to a ptr.
 //
-//		02/10/97	JMI	Increased NUM_CHANNELS from 32 to 64.
+//      02/10/97   JMI   Increased NUM_CHANNELS from 32 to 64.
 //
-//		02/18/97	JMI	Made ms_resmgr g_resmgrSamples and made it globally
-//							accessible.
+//      02/18/97   JMI   Made ms_resmgr g_resmgrSamples and made it globally
+//                     accessible.
 //
-//		03/07/97	JMI	Now PlaySample() returns the RSnd* it played the sample
-//							on which can be querried and/or passed to AbortSample().
+//      03/07/97   JMI   Now PlaySample() returns the RSnd* it played the sample
+//                     on which can be querried and/or passed to AbortSample().
 //
-//		03/07/97	JMI	Decreased play buffer size to 4096.
+//      03/07/97   JMI   Decreased play buffer size to 4096.
 //
-//		03/24/97	JMI	Now, PlaySample(), if RSnd::Play() fails, does not
-//							complain.  RSnd::Play() will complain anyways.
+//      03/24/97   JMI   Now, PlaySample(), if RSnd::Play() fails, does not
+//                     complain.  RSnd::Play() will complain anyways.
 //
-//		04/22/97	JMI	AbortSample() was causing the RSnd ptr passed to the done
-//							callback to no S32er contain a sample.  This means the
-//							resource had to released immediately after the call to
-//							the abort.
+//      04/22/97   JMI   AbortSample() was causing the RSnd ptr passed to the done
+//                     callback to no S32er contain a sample.  This means the
+//                     resource had to released immediately after the call to
+//                     the abort.
 //
-//		04/29/97	JMI	Added g_smidNil, a way of specifying to SampleMaster that
-//							it should not bother with this sample.  This is useful
-//							for things that require a sample ID.
+//      04/29/97   JMI   Added g_smidNil, a way of specifying to SampleMaster that
+//                     it should not bother with this sample.  This is useful
+//                     for things that require a sample ID.
 //
-//		05/09/97	JMI	PlaySample() now takes optional looping parameters which
-//							are passed directly on to RSnd::Play().
+//      05/09/97   JMI   PlaySample() now takes optional looping parameters which
+//                     are passed directly on to RSnd::Play().
 //
-//		06/04/97	JMI	Added AbortAllSamples() which aborts all currently
-//							playing samples.
+//      06/04/97   JMI   Added AbortAllSamples() which aborts all currently
+//                     playing samples.
 //
-//		06/11/97 BRH	Added PlaySampleThenPurge function which is a convenient
-//							way to pass a new purge parameter to PlaySample.  It then
-//							uses the new resource manager's ReleaseAndPurge function
-//							rather than the regular release.  This will allow you to
-//							purge single samples that you don't want to stay in the
-//							cache.
+//      06/11/97 BRH   Added PlaySampleThenPurge function which is a convenient
+//                     way to pass a new purge parameter to PlaySample.  It then
+//                     uses the new resource manager's ReleaseAndPurge function
+//                     rather than the regular release.  This will allow you to
+//                     purge single samples that you don't want to stay in the
+//                     cache.
 //
-//		06/12/97	JMI	PlaySample() function was only using
-//							rspReleaseAndPurgeResource() if an error occurred
-//							during startup.
-//							Added an rspReleaseAndPurgeResource() in the SndDoneCall
-//							so that when the sample was actually done playing, it
-//							would release and purge.
+//      06/12/97   JMI   PlaySample() function was only using
+//                     rspReleaseAndPurgeResource() if an error occurred
+//                     during startup.
+//                     Added an rspReleaseAndPurgeResource() in the SndDoneCall
+//                     so that when the sample was actually done playing, it
+//                     would release and purge.
 //
-//		06/16/97	JMI	Added a version of IsSamplePlaying() that allows one to
-//							specify the sound channel to check.
-//							Also, removed ASSERTs on psnd in AbortSample().
+//      06/16/97   JMI   Added a version of IsSamplePlaying() that allows one to
+//                     specify the sound channel to check.
+//                     Also, removed ASSERTs on psnd in AbortSample().
 //
-//		06/17/97	JMI	PlaySample() (and PlaySampleThenPurge() ) now always
-//							return an RSnd* (even if they fail) and also, optionally,
-//							can return the length of the sample to play.
+//      06/17/97   JMI   PlaySample() (and PlaySampleThenPurge() ) now always
+//                     return an RSnd* (even if they fail) and also, optionally,
+//                     can return the length of the sample to play.
 //
-//		07/01/97	JMI	Added g_smidMenuItemChange.
+//      07/01/97   JMI   Added g_smidMenuItemChange.
 //
-//		07/09/97	JMI	Added g_smidTitle.
+//      07/09/97   JMI   Added g_smidTitle.
 //
-//		07/13/97	JMI	Removed 'sound/' from all sample names.  Now that these
-//							sounds are stored in folders named for their sample type
-//							it seemed rhetorical and annoying.
+//      07/13/97   JMI   Removed 'sound/' from all sample names.  Now that these
+//                     sounds are stored in folders named for their sample type
+//                     it seemed rhetorical and annoying.
 //
-//		07/15/97	JRD	Added support for local sound volume by channel and
-//							category
+//      07/15/97   JRD   Added support for local sound volume by channel and
+//                     category
 //
-//		07/17/97 JRD	Moved sound category information out of RSND and into
-//							sample master for a more appropriate app vs rspix division.
+//      07/17/97 JRD   Moved sound category information out of RSND and into
+//                     sample master for a more appropriate app vs rspix division.
 //
-//		07/17/97 JRD	Provided a backwards compatible PlaySample stub so old code
-//							will simply compile.
+//      07/17/97 JRD   Provided a backwards compatible PlaySample stub so old code
+//                     will simply compile.
 //
-//		07/17/97	JMI	Changed VolumeCode to SampleMaster::SoundInstance.  Trying
-//							to make it a generic playing sample identifier.
-//							Also, PlaySample() no S32er returns a ptr to the RSnd
-//							reducing the chances we rely on sound for synch.
+//      07/17/97   JMI   Changed VolumeCode to SampleMaster::SoundInstance.  Trying
+//                     to make it a generic playing sample identifier.
+//                     Also, PlaySample() no S32er returns a ptr to the RSnd
+//                     reducing the chances we rely on sound for synch.
 //
-//		07/17/97	JRD	Added functionality to calculate volume based on 3d
-//							distance.
+//      07/17/97   JRD   Added functionality to calculate volume based on 3d
+//                     distance.
 //
-//		07/18/97	JMI	Added StopLoopingSample() to reduce the need for
-//							GetInstanceChannel().
+//      07/18/97   JMI   Added StopLoopingSample() to reduce the need for
+//                     GetInstanceChannel().
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/20/97	JMI	DistanceToVolume() now always returns 255, if that
-//							feature is off.
+//      07/20/97   JMI   DistanceToVolume() now always returns 255, if that
+//                     feature is off.
 //
-//		08/05/97	JMI	Added PauseAllSamples() and ResumeAllSamples().
+//      08/05/97   JMI   Added PauseAllSamples() and ResumeAllSamples().
 //
-//		08/05/97 JRD	Added CSoundCatalogue and automated the listing
-//							of sounds for use with organ.
+//      08/05/97 JRD   Added CSoundCatalogue and automated the listing
+//                     of sounds for use with organ.
 //
-//		08/20/97 BRH	Added new pain and suffering volume categories.  Also
-//							changed Music to Soundtrack, and Voice to Comments.
+//      08/20/97 BRH   Added new pain and suffering volume categories.  Also
+//                     changed Music to Soundtrack, and Voice to Comments.
 //
-//		08/25/97	JMI	Added default volumes for each category in each quality
-//							via the ms_asQualityCategoryAdjustors.
-//							Also, added macro enums for UserDefaultVolume,
-//							UserMaxVolume, and MaxVolume.
+//      08/25/97   JMI   Added default volumes for each category in each quality
+//                     via the ms_asQualityCategoryAdjustors.
+//                     Also, added macro enums for UserDefaultVolume,
+//                     UserMaxVolume, and MaxVolume.
 //
-//		09/05/97	JMI	Lowered adjustor volumes on 22KHz 16bit b/c the source
-//							volumes are so loud that they hose when they mix.
-//							Unfortunately, 8 bit could use this as well but it sounds
-//							bad when we use the volume scaling so either way it sucks.
+//      09/05/97   JMI   Lowered adjustor volumes on 22KHz 16bit b/c the source
+//                     volumes are so loud that they hose when they mix.
+//                     Unfortunately, 8 bit could use this as well but it sounds
+//                     bad when we use the volume scaling so either way it sucks.
 //
-//		09/17/97	JMI	Now gets sound category names from Localize.
+//      09/17/97   JMI   Now gets sound category names from Localize.
 //
-//		09/17/97	JMI	Even though I'd swear I compiled and tested this before
-//							it was not compiling with the new array assignment I
-//							added.  Perhaps I did the conditional compilation
-//							wrong...fixed.
+//      09/17/97   JMI   Even though I'd swear I compiled and tested this before
+//                     it was not compiling with the new array assignment I
+//                     added.  Perhaps I did the conditional compilation
+//                     wrong...fixed.
 //
-//		09/24/97	JMI	Added bFemalePain member to SampleMasterID.  This field
-//							is true if the sample is of a female in pain.  If this
-//							field is true, SampleMaster.cpp won't play the sample
-//							if the LOCALE is that of a country that does not allow
-//							such things in games (currently all but the US).
+//      09/24/97   JMI   Added bFemalePain member to SampleMasterID.  This field
+//                     is true if the sample is of a female in pain.  If this
+//                     field is true, SampleMaster.cpp won't play the sample
+//                     if the LOCALE is that of a country that does not allow
+//                     such things in games (currently all but the US).
 //
-//		10/07/97	JMI	Changed bFemalePain to usDescFlags, a bits field of flags
-//							describing the sound so we can know which ones to filter
-//							out for various languages.
+//      10/07/97   JMI   Changed bFemalePain to usDescFlags, a bits field of flags
+//                     describing the sound so we can know which ones to filter
+//                     out for various languages.
 //
-//		01/05/98	JMI	Changed default volumes for SQ_22050_8, SQ_11025_8, and
-//							SQ_11025_16.
+//      01/05/98   JMI   Changed default volumes for SQ_22050_8, SQ_11025_8, and
+//                     SQ_11025_16.
 //
-//		09/27/99	JMI	Changed to allow "violent" sounds in any locale
-//							satisfying the CompilerOptions macro VIOLENT_LOCALE.
+//      09/27/99   JMI   Changed to allow "violent" sounds in any locale
+//                     satisfying the CompilerOptions macro VIOLENT_LOCALE.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -199,20 +199,20 @@
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
 
-#define NUM_CHANNELS		64 // Max number of sample channels usable at once.
-#define CHANNEL_MASK		63 // Used to store channel number as part of sample UID
+#define NUM_CHANNELS      64 // Max number of sample channels usable at once.
+#define CHANNEL_MASK      63 // Used to store channel number as part of sample UID
 
-#define PLAY_BUF_SIZE	4096  // In bytes.
+#define PLAY_BUF_SIZE   4096  // In bytes.
 
-#define SET(ptr, val)	((ptr) ? *(ptr) = val : 0)
+#define SET(ptr, val)   ((ptr) ? *(ptr) = val : 0)
 
 // If not a violent locale . . .
 #if !VIOLENT_LOCALE
 // No sounds indicating females are in pain or including police references can be played.
-   #define CAN_PLAY_SAMPLE(id)	( (id.usDescFlags & (SMDF_FEMALE_PAIN | SMDF_POLICE_REF) ) == 0)
+   #define CAN_PLAY_SAMPLE(id)   ( (id.usDescFlags & (SMDF_FEMALE_PAIN | SMDF_POLICE_REF) ) == 0)
 #else
 // All sounds can be played.
-   #define CAN_PLAY_SAMPLE(id)	(1)
+   #define CAN_PLAY_SAMPLE(id)   (1)
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -233,7 +233,7 @@ short CSoundCatalogue::ms_sRefCount = 0;
 SampleMasterID** CSoundCatalogue::ms_ppsmNameList = NULL;
 
 // Sound channels for playing samples.
-static RSnd	ms_asndChannels[NUM_CHANNELS];
+static RSnd ms_asndChannels[NUM_CHANNELS];
 
 // Unique Sample IDs used in identifying playing sample/channel combos (without channel bits set)
 static SampleMaster::SoundInstance ms_aSoundInstances[NUM_CHANNELS] = {0, };
@@ -245,7 +245,7 @@ static short ms_asCategoryVolumes[SampleMaster::MAX_NUM_SOUND_CATEGORIES] = {255
 static SampleMaster::SoundCategory ms_aeSoundTypes[NUM_CHANNELS] = {SampleMaster::Unspecified, };
 
 // Sound channel for failures.
-static RSnd	ms_sndFailure;
+static RSnd ms_sndFailure;
 
 // Module local storage for current 3d location for the sound
 static float fSoundX = 0., fSoundY = 0., fSoundZ = 0.;
@@ -253,7 +253,7 @@ static float fSoundX = 0., fSoundY = 0., fSoundZ = 0.;
 //////////////////////////////////////////////////////////////
 // These are the names for the corresponding SoundCategory
 // used as an index.
-char* SampleMaster::ms_apszSoundCategories[SampleMaster::MAX_NUM_SOUND_CATEGORIES]	=
+char* SampleMaster::ms_apszSoundCategories[SampleMaster::MAX_NUM_SOUND_CATEGORIES]   =
 {
    g_apszSoundCategories[Unspecified],
    g_apszSoundCategories[BackgroundMusic],
@@ -270,7 +270,7 @@ char* SampleMaster::ms_apszSoundCategories[SampleMaster::MAX_NUM_SOUND_CATEGORIE
 //////////////////////////////////////////////////////////////
 // These are the default volumes for each category in each
 // quality.
-short SampleMaster::ms_asQualityCategoryAdjustors[NumSoundQualities][MAX_NUM_SOUND_CATEGORIES]	=
+short SampleMaster::ms_asQualityCategoryAdjustors[NumSoundQualities][MAX_NUM_SOUND_CATEGORIES]   =
 {
    // SQ_11025_8:
    {
@@ -377,13 +377,13 @@ SampleMaster::SoundInstance g_siEndingMusak = 0;
 //
 //////////////////////////////////////////////////////////////////////////////
 void SndDoneCall(    // Returns nothing.
-   RSnd*	psnd);      // This RSnd.
+   RSnd*   psnd);      // This RSnd.
 
 void SndDoneCall(    // Returns nothing.
-   RSnd*	psnd)       // This RSnd.
+   RSnd*   psnd)       // This RSnd.
 {
    ASSERT(psnd != NULL);
-   RSample*	psample	= psnd->GetSample();
+   RSample*   psample   = psnd->GetSample();
    if (psample != NULL)
    {
       // Reduce ResMgr ref count.
@@ -406,7 +406,7 @@ void SndDoneCall(    // Returns nothing.
 // This goes through the RSnd array and recalibrates the samples as well
 // returns SUCCESS if input is valid
 //////////////////////////////////////////////////////////////////////////////
-short	SetCategoryVolume(
+short   SetCategoryVolume(
    SampleMaster::SoundCategory eType,
    short sVolume /* = SampleMaster::UserMaxVolume*/)
 {
@@ -423,11 +423,11 @@ short	SetCategoryVolume(
    // Set the new volume for that sound type adjusted through
    // the quality's category volume adjustor.
    // This means we're scaling it TWICE and that is why there are two ratios.
-   // Ratio1:				AdjustorVolume to MaxUserVolume			Ratio2: UserVolume to SampleMasterVolume.
+   // Ratio1:            AdjustorVolume to MaxUserVolume         Ratio2: UserVolume to SampleMasterVolume.
    //
-   //						ms_asQualityCategoryAdjustors[qual][cat]					SampleMaster::VolumeMax
-   //	sVolume	*	============================================= *	=============================================
-   //									(UserMaxVolume)											(UserMaxVolume)
+   //                  ms_asQualityCategoryAdjustors[qual][cat]               SampleMaster::VolumeMax
+   //   sVolume   *   ============================================= *   =============================================
+   //                           (UserMaxVolume)                                 (UserMaxVolume)
    //
    // For the sake of using integer math, we don't do these operations in the above order.
    //
@@ -449,7 +449,7 @@ short	SetCategoryVolume(
 // Get the volume for a category of sounds (0-UserMaxVolume)
 // returns category volume, ( 0 - MaxUserVolume ) or -1 if category is invalid.
 //////////////////////////////////////////////////////////////////////////////
-short	GetCategoryVolume(
+short   GetCategoryVolume(
    SampleMaster::SoundCategory eType /*  = SampleMaster::SoundCategory::Unspecified */)
 {
    if ((eType < SampleMaster::Unspecified) || (eType >= SampleMaster::MAX_NUM_SOUND_CATEGORIES))
@@ -460,11 +460,11 @@ short	GetCategoryVolume(
    // Get the new volume for that sound type dejusted through
    // the quality's category volume adjustor.
    // This means we're scaling it TWICE and that is why there are two ratios.
-   // Ratio1:				AdjustorVolume to MaxUserVolume			Ratio2: UserVolume to SampleMasterVolume.
+   // Ratio1:            AdjustorVolume to MaxUserVolume         Ratio2: UserVolume to SampleMasterVolume.
    //
-   //									(UserVolumeRange)											(UserVolumeRange)
-   //	sVolume	*	============================================= *	=============================================
-   //						ms_asQualityCategoryAdjustors[qual][cat]					SampleMaster::VolumeRange
+   //                           (UserVolumeRange)                                 (UserVolumeRange)
+   //   sVolume   *   ============================================= *   =============================================
+   //                  ms_asQualityCategoryAdjustors[qual][cat]               SampleMaster::VolumeRange
    //
    // For the sake of using integer math, we don't do these operations in the above order.
    //
@@ -480,7 +480,7 @@ short	GetCategoryVolume(
 //
 // Returns SUCCESS or FAILURE
 //////////////////////////////////////////////////////////////////////////////
-short	SetInstanceVolume(
+short   SetInstanceVolume(
    SampleMaster::SoundInstance si,           // make sure it is YOUR sound
    short sVolume /* = 255 */) // 0 - 255
 {
@@ -509,22 +509,22 @@ short	SetInstanceVolume(
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//		Calculate volume based on 3d distance... [ 1 / (R*R) ]
-//		Distance is relative to the current sound position, which
-//		is set independently by the App.
+//      Calculate volume based on 3d distance... [ 1 / (R*R) ]
+//      Distance is relative to the current sound position, which
+//      is set independently by the App.
 //
-//		The attenuation radius is the distance at which volume is
-//		half the original level.  (Very soft, but still audible)
+//      The attenuation radius is the distance at which volume is
+//      half the original level.  (Very soft, but still audible)
 //
-//		Returns 0-255 for volume (255 = epicenter), or -1 on error
-//		Returns 255 if this feature is off.
+//      Returns 0-255 for volume (255 = epicenter), or -1 on error
+//      Returns 255 if this feature is off.
 //
 //////////////////////////////////////////////////////////////////////////////
-short	DistanceToVolume(float fX,    // in Postal 3d coordinates
-                       float fY,
-                       float fZ,
-                       float fR     // Sound half life
-                       )
+short   DistanceToVolume(float fX,    // in Postal 3d coordinates
+                         float fY,
+                         float fZ,
+                         float fR   // Sound half life
+                         )
 {
    ASSERT(fR >= 1.0);
 
@@ -550,7 +550,7 @@ short	DistanceToVolume(float fX,    // in Postal 3d coordinates
 //////////////////////////////////////////////////////////////////////////////
 //  Set the current 3d center of the sound being played
 //////////////////////////////////////////////////////////////////////////////
-void	SetSoundLocation(float fX, float fY, float fZ)
+void   SetSoundLocation(float fX, float fY, float fZ)
 {
    fSoundX = fX;  // global static
    fSoundY = fY;
@@ -566,11 +566,11 @@ void	SetSoundLocation(float fX, float fY, float fZ)
 //
 //////////////////////////////////////////////////////////////////////////////
 void CacheSample(       // Returns nothing.
-   SampleMasterID	id)   // Identifier of sample you want played.
+   SampleMasterID id)     // Identifier of sample you want played.
 {
    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id) )
    {
-      RSample*	psample;
+      RSample*   psample;
       // Get it into memory.
       // If successful . . .
       if (rspGetResource(
@@ -597,25 +597,25 @@ void CacheSample(       // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 void PlaySample(                                   // Returns nothing.
                                                    // Does not fail.
-   SampleMasterID	id,                              // In:  Identifier of sample you want played.
+   SampleMasterID id,                                // In:  Identifier of sample you want played.
    SampleMaster::SoundCategory eType,              // In:  Sound Volume Category for user adjustment
-   short	sInitialVolume /* = 255 */,               // In:  Initial Sound Volume (0 - 255)
-   SampleMaster::SoundInstance*	psi /* = NULL */,  // Out: Handle for adjusting sound volume
+   short sInitialVolume /* = 255 */,                 // In:  Initial Sound Volume (0 - 255)
+   SampleMaster::SoundInstance*   psi /* = NULL */,  // Out: Handle for adjusting sound volume
    S32* plSampleDuration /* = NULL */,          // Out: Sample duration in ms, if not NULL.
    S32 lLoopStartTime /* = -1 */,                  // In:  Where to loop back to in milliseconds.
-                                                   //	-1 indicates no looping (unless m_sLoop is
+                                                   //   -1 indicates no looping (unless m_sLoop is
                                                    // explicitly set).
    S32 lLoopEndTime /* = 0 */,                     // In:  Where to loop back from in milliseconds.
                                                    // In:  If less than 1, the end + lLoopEndTime is used.
    bool bPurgeSample /* = false */)                // In:  Call ReleaseAndPurge rather than Release after playing
 {
-   short	sError	= 0;              // Assume no error.
-   RSnd*		psnd	= &ms_sndFailure; // Default to failure case.
+   short sError   = 0;                // Assume no error.
+   RSnd*      psnd   = &ms_sndFailure; // Default to failure case.
    if (psi) *psi = 0;               // Default to failure case.
 
    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id) )
    {
-      RSample*	psample;
+      RSample*   psample;
       // Get the sample . . .
       if (rspGetResource(
              &g_resmgrSamples,
@@ -627,7 +627,7 @@ void PlaySample(                                   // Returns nothing.
          SET(plSampleDuration, psample->GetDuration() );
 
          // Brute force search to find open channel.
-         short	i;
+         short i;
          for (i = 0; i < NUM_CHANNELS; i++)
          {
             if (ms_asndChannels[i].GetState() == RSnd::Stopped)
@@ -640,19 +640,19 @@ void PlaySample(                                   // Returns nothing.
          if (i < NUM_CHANNELS)
          {
             // Release sample when done via this callback.
-            ms_asndChannels[i].m_dcUser	= SndDoneCall;
-            ms_asndChannels[i].m_sLoop		= FALSE;    // Safety.
-            ms_asndChannels[i].m_ulUser	= bPurgeSample;
+            ms_asndChannels[i].m_dcUser   = SndDoneCall;
+            ms_asndChannels[i].m_sLoop      = FALSE;    // Safety.
+            ms_asndChannels[i].m_ulUser   = bPurgeSample;
             // Set volume in RSound assuming success:
-            ms_aeSoundTypes[i]	= eType;
-            ms_asndChannels[i].m_sTypeVolume		= ms_asCategoryVolumes[eType];
+            ms_aeSoundTypes[i]   = eType;
+            ms_asndChannels[i].m_sTypeVolume      = ms_asCategoryVolumes[eType];
             ms_asndChannels[i].m_sChannelVolume = sInitialVolume;
             // Atttempt to play sample . . .
             if (ms_asndChannels[i].Play(psample, PLAY_BUF_SIZE, ms_asndChannels[i].m_sChannelVolume,
                                         ms_asndChannels[i].m_sTypeVolume, lLoopStartTime, lLoopEndTime) == 0)
             {
                // Success.  Give user access to this channel.
-               psnd	= &(ms_asndChannels[i]);
+               psnd   = &(ms_asndChannels[i]);
                // Set return ID so user can tweak the volume:
                ms_aSoundInstances[i] += NUM_CHANNELS; // It is a new sound now!
                // Reserve the lower mask bits for the channel number
@@ -660,15 +660,15 @@ void PlaySample(                                   // Returns nothing.
             }
             else
             {
-               //				TRACE("PlaySample(): RSnd::Play() failed for sample.\n");
-               sError	= 3;
+               //            TRACE("PlaySample(): RSnd::Play() failed for sample.\n");
+               sError   = 3;
             }
          }
          else
          {
             TRACE("PlaySample(): No available sound channels.  Increase NUM_CHANNELS"
                   " or like it.\n");
-            sError	= 2;
+            sError   = 2;
          }
 
          // If an error occurred . . .
@@ -685,7 +685,7 @@ void PlaySample(                                   // Returns nothing.
       else
       {
          TRACE("PlaySample(): Could not get sample \"%s\".\n", id.pszId);
-         sError	= 1;
+         sError   = 1;
       }
    }
 }
@@ -698,11 +698,11 @@ void PlaySample(                                   // Returns nothing.
 
 void PlaySample(                       // Returns nothing.
                                        // Does not fail.
-   SampleMasterID	id,                  // In:  Identifier of sample you want played.
+   SampleMasterID id,                    // In:  Identifier of sample you want played.
 
    S32* plSampleDuration /* = NULL*/,  // Out: Sample duration in ms, if not NULL.
    S32 lLoopStartTime /* = -1 */,      // In:  Where to loop back to in milliseconds.
-                                       //	-1 indicates no looping (unless m_sLoop is
+                                       //   -1 indicates no looping (unless m_sLoop is
                                        // explicitly set).
    S32 lLoopEndTime /* = 0 */,         // In:  Where to loop back from in milliseconds.
                                        // In:  If less than 1, the end + lLoopEndTime is used.
@@ -717,16 +717,16 @@ void PlaySample(                       // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 void PlaySampleThenPurge(              // Returns nothing.
                                        // Does not fail.
-   SampleMasterID	id,                  // In:  Identifier of sample you want played.
+   SampleMasterID id,                    // In:  Identifier of sample you want played.
 
-   SampleMaster::SoundInstance*	psi /* = NULL */,    // Out: Handle for adjusting sound volume
+   SampleMaster::SoundInstance*   psi /* = NULL */,    // Out: Handle for adjusting sound volume
    SampleMaster::SoundCategory eType /* =
       SampleMaster::SoundCategory::Unspecified */, // In:  Sound Volume Category for user adjustment
-   short	sInitialVolume /* = 255 */,   // In:  Initial Sound Volume (0 - 255)
+   short sInitialVolume /* = 255 */,     // In:  Initial Sound Volume (0 - 255)
 
    S32* plSampleDuration /* = NULL */,// Out: Sample duration in ms, if not NULL.
    S32 lLoopStartTime /* = -1 */,      // In:  Where to loop back to in milliseconds.
-                                       //	-1 indicates no looping (unless m_sLoop is
+                                       //   -1 indicates no looping (unless m_sLoop is
                                        // explicitly set).
    S32 lLoopEndTime /* = 0 */)         // In:  Where to loop back from in milliseconds.
                                        // In:  If less than 1, the end + lLoopEndTime is used.
@@ -745,13 +745,13 @@ void PlaySampleThenPurge(              // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 bool IsSamplePlaying(   // Returns true, if the sample is playing,
                         // false otherwise.
-   SampleMasterID	id)   // Identifier of sample to be checked.
+   SampleMasterID id)     // Identifier of sample to be checked.
 {
    bool bRes  = false;  // Assume not playing.
 
    if (id.pszId != NULL && CAN_PLAY_SAMPLE(id) )
    {
-      RSample*	psample;
+      RSample*   psample;
       // Get it into memory.
       // If successful . . .
       if (rspGetResource(
@@ -762,7 +762,7 @@ bool IsSamplePlaying(   // Returns true, if the sample is playing,
          // Check if it is locked.
          if (psample->IsLocked() != FALSE)
          {
-            bRes	= true;
+            bRes   = true;
          }
 
          // Release it, so the next purge will remove this sample from RAM.
@@ -801,7 +801,7 @@ bool IsSamplePlaying(   // Returns true, if the sample is playing,
          if (ms_asndChannels[sChannel].GetState() != RSnd::Stopped)
          {
             // Yes, it is.
-            bPlaying	= true;
+            bPlaying   = true;
          }
       }
    }
@@ -825,12 +825,12 @@ bool IsSamplePlaying(void)    // Returns true, if a sample is playing,
 
    // Check all channels.
    // Brute force search to find open channel.
-   short	i;
+   short i;
    for (i = 0; i < NUM_CHANNELS; i++)
    {
       if (ms_asndChannels[i].GetState() != RSnd::Stopped)
       {
-         bRes	= true;
+         bRes   = true;
          break;
       }
    }
@@ -846,7 +846,7 @@ bool IsSamplePlaying(void)    // Returns true, if a sample is playing,
 short AbortSample(      // Returns 0 if sample aborted, 1 if not.
    SampleMaster::SoundInstance si)     // In:  Identifies play instance.
 {
-   short	sRes	= 1;  // Assume failure.
+   short sRes   = 1;    // Assume failure.
 
    // Get the channel number from the lowest bits:
    short sChannel = si & CHANNEL_MASK;
@@ -862,7 +862,7 @@ short AbortSample(      // Returns 0 if sample aborted, 1 if not.
             if (ms_asndChannels[sChannel].Abort() == 0)
             {
                // Success.
-               sRes	= 0;
+               sRes   = 0;
                // Do we have to release it?  Should get a callback.
             }
             else
@@ -900,7 +900,7 @@ void PurgeSamples(void) // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 void PurgeSample(       // Returns nothing.
-   SampleMasterID	id)   // Identifier of sample you want played.
+   SampleMasterID id)     // Identifier of sample you want played.
 {
    TRACE("PurgeSample(): NYI.\n");
 }
@@ -912,7 +912,7 @@ void PurgeSample(       // Returns nothing.
 void AbortAllSamples(void) // Returns nothing.
 {
    // Check all channels.
-   short	i;
+   short i;
    for (i = 0; i < NUM_CHANNELS; i++)
    {
       if (ms_asndChannels[i].GetState() != RSnd::Stopped)
@@ -928,7 +928,7 @@ void AbortAllSamples(void) // Returns nothing.
 extern void PauseAllSamples(void)
 {
    // Pause all active channels.
-   short	i;
+   short i;
    for (i = 0; i < NUM_CHANNELS; i++)
    {
       if (ms_asndChannels[i].GetState() != RSnd::Stopped)
@@ -944,7 +944,7 @@ extern void PauseAllSamples(void)
 extern void ResumeAllSamples(void)
 {
    // Resume all active channels.
-   short	i;
+   short i;
    for (i = 0; i < NUM_CHANNELS; i++)
    {
       if (ms_asndChannels[i].IsPaused() )
@@ -961,8 +961,8 @@ extern void ResumeAllSamples(void)
 void StopLoopingSample(                // Returns nothing.
    SampleMaster::SoundInstance si)     // In:  Identifies play instance.
 {
-   RSnd*	psndInstance		= GetInstanceChannel(si);  // Does not fail.
-   psndInstance->m_sLoop	= FALSE;
+   RSnd*   psndInstance      = GetInstanceChannel(si);  // Does not fail.
+   psndInstance->m_sLoop   = FALSE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -977,7 +977,7 @@ RSnd* GetInstanceChannel(              // Returns ptr to an RSnd.  Yours, if
                                        // A generic one, otherwise.
    SampleMaster::SoundInstance si)     // In:  Identifies play instance.
 {
-   RSnd*	psndInstance	= &ms_sndFailure; // Assume S32 gone.
+   RSnd*   psndInstance   = &ms_sndFailure; // Assume S32 gone.
 
    // Get the channel number from the lowest bits:
    short sChannel = si & CHANNEL_MASK;
@@ -989,7 +989,7 @@ RSnd* GetInstanceChannel(              // Returns ptr to an RSnd.  Yours, if
       {
          if (ms_asndChannels[sChannel].GetState() != RSnd::Stopped)
          {
-            psndInstance	= &(ms_asndChannels[sChannel]);
+            psndInstance   = &(ms_asndChannels[sChannel]);
          }
       }
    }

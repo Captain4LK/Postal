@@ -19,43 +19,43 @@
 // Project: Postal
 //
 // History:
-//		05/19/97 BRH	Started.
+//      05/19/97 BRH   Started.
 //
-//		05/19/97 BRH	Added the first few logic variables.
+//      05/19/97 BRH   Added the first few logic variables.
 //
-//		05/20/97 BRH	Changed real states to suggested Actions.  Also added
-//							Pylon availability variables.
+//      05/20/97 BRH   Changed real states to suggested Actions.  Also added
+//                     Pylon availability variables.
 //
-//		05/26/97 BRH	Added IsTriggered variable so that you can distinguish
-//							between a Dude nearby and a Dude nearby who is also
-//							standing on the trigger area for your pylon based logic.
+//      05/26/97 BRH   Added IsTriggered variable so that you can distinguish
+//                     between a Dude nearby and a Dude nearby who is also
+//                     standing on the trigger area for your pylon based logic.
 //
-//		05/27/97 BRH	Added Recently Shot variable.  Tuned the distances.
+//      05/27/97 BRH   Added Recently Shot variable.  Tuned the distances.
 //
-//		05/31/97	JMI	Changed usage from CDoofus::m_pDude to CDoofus::m_idDude
-//							(see doofus.cpp comment with same date for info).
-//							PLEASE NOTE:  I could not help but notice that
-//							CLogTabVar_DudeHealth::GetVal() calls pPerson->SelectDude()
-//							without first checking if that person was already
-//							tracking a dude.  I just though this was bad as it could
-//							cause inconsistent behavior between the same states with
-//							different logic tables and/or values for logic tables.
+//      05/31/97   JMI   Changed usage from CDoofus::m_pDude to CDoofus::m_idDude
+//                     (see doofus.cpp comment with same date for info).
+//                     PLEASE NOTE:  I could not help but notice that
+//                     CLogTabVar_DudeHealth::GetVal() calls pPerson->SelectDude()
+//                     without first checking if that person was already
+//                     tracking a dude.  I just though this was bad as it could
+//                     cause inconsistent behavior between the same states with
+//                     different logic tables and/or values for logic tables.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		07/06/97 BRH	Added panic variable so the logic table can decide if
-//							a person should panic based on other people choosing to
-//							panic.
+//      07/06/97 BRH   Added panic variable so the logic table can decide if
+//                     a person should panic based on other people choosing to
+//                     panic.
 //
-//		08/09/97 BRH	Made a minor change to the IsPanic variable.
+//      08/09/97 BRH   Made a minor change to the IsPanic variable.
 //
-//		08/29/97 BRH	Added a Statis user variable for the people so that
-//							a logic table for one person can set this variable
-//							that others can then use.  This will be used for the
-//							kids where one kid will trigger the others into doing
-//							their group attack logic.
+//      08/29/97 BRH   Added a Statis user variable for the people so that
+//                     a logic table for one person can set this variable
+//                     that others can then use.  This will be used for the
+//                     kids where one kid will trigger the others into doing
+//                     their group attack logic.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -147,11 +147,11 @@ short GetVal(CPerson* pPerson)
    // You cannot evaluate < lowest or > highest!
 
    // LOWER BOUNDS OF RANGE!
-         #define	DIST_VERY_CLOSE_2 (0 * 0)   // the lowest measure
-         #define	DIST_CLOSE_2 (80 * 80)
-         #define	DIST_MEDIUM_2 (180 * 180)
-         #define	DIST_FAR_2 (400 * 400)
-         #define	DIST_OFF_SCREEN_2 (800 * 800)
+         #define   DIST_VERY_CLOSE_2 (0 * 0)   // the lowest measure
+         #define   DIST_CLOSE_2 (80 * 80)
+         #define   DIST_MEDIUM_2 (180 * 180)
+         #define   DIST_FAR_2 (400 * 400)
+         #define   DIST_OFF_SCREEN_2 (800 * 800)
 
    double dSqDist = pPerson->SQDistanceToDude();
    if (dSqDist > DIST_OFF_SCREEN_2)
@@ -348,7 +348,7 @@ short GetVal(CPerson* pPerson)
 
    if (pPerson->SelectDude() == SUCCESS)
    {
-      CDude*	pdude;
+      CDude*   pdude;
       if (pPerson->m_pRealm->m_idbank.GetThingByID((CThing**)&pdude, pPerson->m_idDude) == 0)
       {
          short sHitPoints = pdude->GetHealth();

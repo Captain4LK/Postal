@@ -21,9 +21,9 @@
 // This module impliments the CTrigger class -> holds trigger attributes
 //
 // History:
-//		12/25/96 MJR	Started.
+//      12/25/96 MJR   Started.
 //
-//		05/12/97	JRD	Turned this into a CTrigger to load the trigger attributes
+//      05/12/97   JRD   Turned this into a CTrigger to load the trigger attributes
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +90,7 @@ short CTrigger::Load(                        // Returns 0 if successfull, non-ze
    short sResult = 0;
 
    // In most cases, the base class Load() should be called.
-   sResult	= CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load object data
@@ -161,10 +161,10 @@ short CTrigger::Save(                        // Returns 0 if successfull, non-ze
    RFile* pFile,                          // In:  File to save to
    short sFileCount)                      // In:  File count (unique per file, never 0)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    // In most cases, the base class Save() should be called.
-   sResult	= CThing::Save(pFile, sFileCount);
+   sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Save object data
@@ -196,7 +196,7 @@ short CTrigger::Save(                        // Returns 0 if successfull, non-ze
          }
       }
 
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
       if (sResult == 0)
       {}
       else

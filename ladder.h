@@ -19,7 +19,7 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		06/02/97 JMI	Started.
+//      06/02/97 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -51,8 +51,8 @@ double m_dX;
 double m_dY;
 double m_dZ;
 
-short	m_sLen;                             // Length of ladder.
-short	m_sHeight;                          // Height of ladder.
+short m_sLen;                               // Length of ladder.
+short m_sHeight;                            // Height of ladder.
 short m_sRotY;                            // Rotation around Y axis (i.e.,
                                           // direction on X/Z plane).
 
@@ -64,10 +64,10 @@ CSmash m_smashTop;                        // Collision smash for the top of the
 CSmash m_smashBottom;                     // Collision smash for the bottom of the
                                           // ladder.
 
-CSprite2	m_sprite;                        // Sprite.
+CSprite2 m_sprite;                          // Sprite.
 
-CCharacter*	m_pcharLadderBoy;             // Character currently using the
-                                          // ladder.
+CCharacter*   m_pcharLadderBoy;             // Character currently using the
+                                            // ladder.
 
 protected:
 
@@ -84,17 +84,17 @@ public:
 CLadder(CRealm* pRealm)
    : CThing(pRealm, CLadderID)
 {
-   m_sSuspend					= 0;
+   m_sSuspend               = 0;
 
-   m_sprite.m_pthing			= this;
-   m_smashTop.m_pThing		= this;
-   m_smashBottom.m_pThing	= this;
+   m_sprite.m_pthing         = this;
+   m_smashTop.m_pThing      = this;
+   m_smashBottom.m_pThing   = this;
 
-   m_sLen						= 0;
-   m_sHeight					= 0;
-   m_sRotY						= 0;
+   m_sLen                  = 0;
+   m_sHeight               = 0;
+   m_sRotY                  = 0;
 
-   m_pcharLadderBoy			= NULL;
+   m_pcharLadderBoy         = NULL;
 }
 
 public:
@@ -183,14 +183,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -220,12 +220,12 @@ void GetOff(void);            // Returns nothing.
 
 // Get the next position on the ladder.
 void GetNextPos(              // Returns nothing.
-   double*	pdX,              // In:  Current x position.
-                              // Out: New x position.
-   double*	pdY,              // In:  Current y position.
-                              // Out: New y position.
-   double*	pdZ,              // In:  Current z position.
-                              // Out: New z position.
+   double*   pdX,              // In:  Current x position.
+                               // Out: New x position.
+   double*   pdY,              // In:  Current y position.
+                               // Out: New y position.
+   double*   pdZ,              // In:  Current z position.
+                               // Out: New z position.
    double dDistance);         // In:  Distance to travel. Positive is up.
 
 //---------------------------------------------------------------------------

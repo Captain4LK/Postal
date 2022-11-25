@@ -19,79 +19,79 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		07/03/97 JMI	Started.
+//      07/03/97 JMI   Started.
 //
-//		07/03/97	JMI	Checking in for work at home.
+//      07/03/97   JMI   Checking in for work at home.
 //
-//		07/04/97	JMI	Added a whole fancy (in that it's quite simple) way of
-//							doing all the settings from one dialog with a scroll view
-//							(a transparent listbox) but having them call together
-//							makes the interface clunky for the mouse and the joystick.
-//							So I'm checking this in to have it but I plan to rewrite
-//							more the way Mike originally pictured which, as it turns
-//							out, will probably be rather simple via the menus combined
-//							with the current way of getting the input.
+//      07/04/97   JMI   Added a whole fancy (in that it's quite simple) way of
+//                     doing all the settings from one dialog with a scroll view
+//                     (a transparent listbox) but having them call together
+//                     makes the interface clunky for the mouse and the joystick.
+//                     So I'm checking this in to have it but I plan to rewrite
+//                     more the way Mike originally pictured which, as it turns
+//                     out, will probably be rather simple via the menus combined
+//                     with the current way of getting the input.
 //
-//		07/06/97	JMI	Added new version that uses the menu system for most
-//							of the interface.
-//							Also, changed m_asPlayButtons to m_asPlayMouseButtons.
-//							Removed EditKeySettings() and EditMouseSetings().
+//      07/06/97   JMI   Added new version that uses the menu system for most
+//                     of the interface.
+//                     Also, changed m_asPlayButtons to m_asPlayMouseButtons.
+//                     Removed EditKeySettings() and EditMouseSetings().
 //
-//		07/07/97	JMI	Now checks to make sure the listen mode hasn't been
-//							cancelled before listening for input in ListenForInput().
+//      07/07/97   JMI   Now checks to make sure the listen mode hasn't been
+//                     cancelled before listening for input in ListenForInput().
 //
-//		07/07/97	JMI	Now InputSettingsDlg_InitMenu() sets up the 'Go back'
-//							(cancel) menu item no matter what so that, if it aborts
-//							the menu for some reason, the menu system knows how to
-//							go back to the previous.
+//      07/07/97   JMI   Now InputSettingsDlg_InitMenu() sets up the 'Go back'
+//                     (cancel) menu item no matter what so that, if it aborts
+//                     the menu for some reason, the menu system knows how to
+//                     go back to the previous.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/21/97	JMI	Was not setting the default GUIs' font.  This implied
-//							it was relying on other things to set this.  Since this
-//							can feasibly no S32er happen before this menu/dlg comes
-//							up, it now has to set the the font itself.
+//      07/21/97   JMI   Was not setting the default GUIs' font.  This implied
+//                     it was relying on other things to set this.  Since this
+//                     can feasibly no S32er happen before this menu/dlg comes
+//                     up, it now has to set the the font itself.
 //
-//		08/10/97	JMI	Now sets sEnabled in each dynamically created menu item.
-//							Also, ASSERTs if not enough menu items.
+//      08/10/97   JMI   Now sets sEnabled in each dynamically created menu item.
+//                     Also, ASSERTs if not enough menu items.
 //
-//		08/17/97 MJR	Now uses g_resmgrShell to load its gui item.
+//      08/17/97 MJR   Now uses g_resmgrShell to load its gui item.
 //
-//		08/18/97	JMI	Added ms_au8UnmappableKeys[] for the keys that the user
-//							is not allowed to map to.
+//      08/18/97   JMI   Added ms_au8UnmappableKeys[] for the keys that the user
+//                     is not allowed to map to.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/22/97	JMI	Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//							since we no S32er need UpdateDisplay() now that we are
-//							using rspLock/Unlock* functions properly.
+//      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
+//                     since we no S32er need UpdateDisplay() now that we are
+//                     using rspLock/Unlock* functions properly.
 //
-//		08/27/97	JMI	Now uses g_fontPostal instead of g_fontBig.
+//      08/27/97   JMI   Now uses g_fontPostal instead of g_fontBig.
 //
-//		08/27/97	JMI	Now uses g_fontBig instead of g_fontPostal.
+//      08/27/97   JMI   Now uses g_fontBig instead of g_fontPostal.
 //
-//		08/27/97	JMI	Now does not actually create a back item but sets the
-//							cancel item to just beyond the last item.
+//      08/27/97   JMI   Now does not actually create a back item but sets the
+//                     cancel item to just beyond the last item.
 //
-//		08/27/97	JMI	The program no S32er sets the text fore and shadow
-//							colors (also does not set the shadow effect).  Instead
-//							uses all Artie's settings.
+//      08/27/97   JMI   The program no S32er sets the text fore and shadow
+//                     colors (also does not set the shadow effect).  Instead
+//                     uses all Artie's settings.
 //
-//		09/26/97	JMI	Now uses the 'Restore defaults' string from localize.
+//      09/26/97   JMI   Now uses the 'Restore defaults' string from localize.
 //
-//		10/10/97	JMI	Filled in portions that poll joystick (since no event
-//							driven stuff is yet available).
+//      10/10/97   JMI   Filled in portions that poll joystick (since no event
+//                     driven stuff is yet available).
 //
-//		11/05/97	JMI	Converted to new joystick API.
+//      11/05/97   JMI   Converted to new joystick API.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
 // Deals with input settings dialogs.  There is an interface for both the
-//	keyboard and mouse dialogs that deals heavily with user input, and GUI
+//   keyboard and mouse dialogs that deals heavily with user input, and GUI
 // output.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -120,16 +120,16 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
-#define INPUT_ITEM_GUI				"menu/InputItm.gui"
+#define INPUT_ITEM_GUI            "menu/InputItm.gui"
 
-#define TEXT_LISTEN_COLOR			251
+#define TEXT_LISTEN_COLOR         251
 
 // How often to flash in ms.
-#define FLASH_TIMEOUT				250
+#define FLASH_TIMEOUT            250
 
-#define FONT_HEIGHT					15
+#define FONT_HEIGHT               15
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -140,13 +140,13 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 
-static bool	ms_bListenForInput	= false;       // true, when listening for input
-                                                // to set for current input function.
+static bool ms_bListenForInput   = false;         // true, when listening for input
+                                                  // to set for current input function.
 
 static U32 ms_u32OrigTextColor;
 
-static bool	ms_bMenuDone			= false;       // true, when the current menu
-                                                // is done.
+static bool ms_bMenuDone         = false;         // true, when the current menu
+                                                  // is done.
 
 static short ms_sResetItem;                     // Index of item that restores
                                                 // the default inputs.
@@ -204,33 +204,33 @@ static U8 ms_au8UnmappableKeys[]  =
 extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
    Menu* pmenu)                           // In:  Menu to setup.
 {
-   short	sRes				= 0;        // Assume success.
-   short	sInputIndex		= 0;        // Safety.
-   U32*	pasPlayInputs	= NULL;  // Input value array.
-   char**	papszInputDescriptions	= NULL;  // Descriptions of input values.
+   short sRes            = 0;          // Assume success.
+   short sInputIndex      = 0;          // Safety.
+   U32*   pasPlayInputs   = NULL;  // Input value array.
+   char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
    bool bIsJoystick = false;
 
    switch (pmenu->u32Id)
    {
    case KEYBOARD_MENU_ID:
       // Use keys.
-      pasPlayInputs				= g_InputSettings.m_asPlayKeys;
-      papszInputDescriptions	= g_apszKeyDescriptions;
+      pasPlayInputs            = g_InputSettings.m_asPlayKeys;
+      papszInputDescriptions   = g_apszKeyDescriptions;
       break;
    case MOUSE_MENU_ID:
       // Use mouse buttons.
-      pasPlayInputs				= g_InputSettings.m_asPlayMouseButtons;
-      papszInputDescriptions	= g_apszMouseButtonDescriptions;
+      pasPlayInputs            = g_InputSettings.m_asPlayMouseButtons;
+      papszInputDescriptions   = g_apszMouseButtonDescriptions;
       break;
    case JOYSTICK_MENU_ID:
       // Use joy buttons.
-      pasPlayInputs				= g_InputSettings.m_asPlayJoyButtons;
-      papszInputDescriptions	= g_apszJoyButtonDescriptions;
+      pasPlayInputs            = g_InputSettings.m_asPlayJoyButtons;
+      papszInputDescriptions   = g_apszJoyButtonDescriptions;
       bIsJoystick = true;
       break;
    default:
       TRACE("InptuSettingsDlg_InitMenu(): Unsupported menu.\n");
-      sRes	= -1;
+      sRes   = -1;
       break;
    }
 
@@ -245,16 +245,16 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
    for (sInputIndex = 0; sInputIndex < CInputSettings::NumInputFunctions && sRes == 0; sInputIndex++)
    {
       // Set text describing input function for this menu item.
-      pmenu->ami[sInputIndex].pszText	= CInputSettings::ms_ainputinfo[sInputIndex].pszDescription;
+      pmenu->ami[sInputIndex].pszText   = CInputSettings::ms_ainputinfo[sInputIndex].pszDescription;
       // Enable item.
-      pmenu->ami[sInputIndex].sEnabled	= TRUE;
+      pmenu->ami[sInputIndex].sEnabled   = TRUE;
       // Load GUI for input method description.
 
-      RGuiItem*	pgui;
+      RGuiItem*   pgui;
       if (rspGetResourceInstance(&g_resmgrShell, INPUT_ITEM_GUI, (RTxt**)(&pgui)) == 0)
       {
          // Let the menu know about the GUI.
-         pmenu->ami[sInputIndex].pgui	= pgui;
+         pmenu->ami[sInputIndex].pgui   = pgui;
          // Set the GUIs text to the corresponding input description and recompose.
          if (bIsJoystick)
             pgui->SetText("%s", papszInputDescriptions[JoyBitfieldToIndex(pasPlayInputs[sInputIndex])]);
@@ -263,28 +263,28 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
          else
             pgui->SetText("%s", papszInputDescriptions[pasPlayInputs[sInputIndex]]);
          // Remember associated input function index.
-         pgui->m_ulUserData	= sInputIndex;
+         pgui->m_ulUserData   = sInputIndex;
          // TEMP until the GUI editor can setup shadow text.
-//			pgui->m_sTextEffects	= RGuiItem::Shadow;
-//			pgui->m_u32TextColor			= GetCurrentMenuBox()->m_u32TextColor;
-//			pgui->m_u32TextShadowColor	= GetCurrentMenuBox()->m_u32TextShadowColor;
+//         pgui->m_sTextEffects   = RGuiItem::Shadow;
+//         pgui->m_u32TextColor         = GetCurrentMenuBox()->m_u32TextColor;
+//         pgui->m_u32TextShadowColor   = GetCurrentMenuBox()->m_u32TextShadowColor;
          // END TEMP
          pgui->Compose();
       }
       else
       {
          TRACE("InputSettingsDlg_InitMenu(): LoadInstantiate() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
    // Remember the reset item index.
-   ms_sResetItem	= sInputIndex;
+   ms_sResetItem   = sInputIndex;
 
    // Add reset.
-   pmenu->ami[sInputIndex].pszText	= g_pszRotationSetupMenu_RestoreDefaults;
+   pmenu->ami[sInputIndex].pszText   = g_pszRotationSetupMenu_RestoreDefaults;
    // Enable item.
-   pmenu->ami[sInputIndex].sEnabled	= TRUE;
+   pmenu->ami[sInputIndex].sEnabled   = TRUE;
 
    // Next item please.
    sInputIndex++;
@@ -301,7 +301,7 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
    sInputIndex++;
 
    // Make the back the cancel item.
-   pmenu->menuautoitems.sCancelItem	= sInputIndex;
+   pmenu->menuautoitems.sCancelItem   = sInputIndex;
 
    return sRes;
 }
@@ -312,9 +312,9 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
 extern short InputSettingsDlg_KillMenu(   // Returns 0 on success.
    Menu* pmenu)                           // In:  Menu to clean up.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   short	sInputIndex;
+   short sInputIndex;
    // Delete the loaded GUIs.
    for (sInputIndex = 0; sInputIndex < CInputSettings::NumInputFunctions && sRes == 0; sInputIndex++)
    {
@@ -323,7 +323,7 @@ extern short InputSettingsDlg_KillMenu(   // Returns 0 on success.
    }
 
    // Flag the looper that we're done.
-   ms_bMenuDone	= true;
+   ms_bMenuDone   = true;
 
    return sRes;
 }
@@ -334,39 +334,39 @@ extern short InputSettingsDlg_KillMenu(   // Returns 0 on success.
 // setttings menu.
 //////////////////////////////////////////////////////////////////////////////
 void InputSettingsDlg_Choice( // Returns nothing.
-   Menu*	pmenu,               // In:  Current menu.
+   Menu*   pmenu,               // In:  Current menu.
    short sMenuItem)           // In:  Menu item chosen or -1 if selection
                               // change.
 {
-   static U8*	pau8KeyStatusArray	= rspGetKeyStatusArray();
+   static U8*   pau8KeyStatusArray   = rspGetKeyStatusArray();
 
-   short	sError    = 0;
+   short sError    = 0;
 
    if (sMenuItem > -1)
    {
       // If the specified item has a GUI . . .
       if (pmenu->ami[sMenuItem].pgui)
       {
-         ms_bListenForInput	= true;
+         ms_bListenForInput   = true;
          // Clear input array for key type.
          memset(pau8KeyStatusArray, 0, 128);
          // Clear buttons status for mouse type.
-         ms_sMouseButtons	= 0;
+         ms_sMouseButtons   = 0;
          // Clear buttons tatus for joy type.
-         ms_sJoyButtons		= 0;
+         ms_sJoyButtons      = 0;
          // Get GUI.
-         RGuiItem*	pgui	= pmenu->ami[sMenuItem].pgui;
+         RGuiItem*   pgui   = pmenu->ami[sMenuItem].pgui;
          // Note original color.
-         ms_u32OrigTextColor	= pgui->m_u32TextColor;
+         ms_u32OrigTextColor   = pgui->m_u32TextColor;
          // Reset flash timer.
-         ms_lFlashTimer			= rspGetMilliseconds() + FLASH_TIMEOUT;
+         ms_lFlashTimer         = rspGetMilliseconds() + FLASH_TIMEOUT;
 
          switch (pmenu->u32Id)
          {
          case KEYBOARD_MENU_ID:
             break;
          case MOUSE_MENU_ID:
-            g_InputSettings.m_asPlayMouseButtons[pgui->m_ulUserData]	= ms_sMouseButtons;
+            g_InputSettings.m_asPlayMouseButtons[pgui->m_ulUserData]   = ms_sMouseButtons;
             pgui->SetText("%s", g_apszMouseButtonDescriptions[MouseBitfieldToIndex(ms_sMouseButtons)]);
             pgui->Compose();
             break;
@@ -382,51 +382,51 @@ void InputSettingsDlg_Choice( // Returns nothing.
          if (sMenuItem == ms_sResetItem
              || sMenuItem == ms_sResetItemOld)
          {
-            U32*	pasPlayInputs	= NULL;           // Input value array.
-            char**	papszInputDescriptions	= NULL;  // Descriptions of input values.
+            U32*   pasPlayInputs   = NULL;           // Input value array.
+            char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
 
             switch (pmenu->u32Id)
             {
             case KEYBOARD_MENU_ID:
                // Use keys.
-               pasPlayInputs				= g_InputSettings.m_asPlayKeys;
-               papszInputDescriptions	= g_apszKeyDescriptions;
+               pasPlayInputs            = g_InputSettings.m_asPlayKeys;
+               papszInputDescriptions   = g_apszKeyDescriptions;
                break;
             case MOUSE_MENU_ID:
                // Use mouse buttons.
-               pasPlayInputs				= g_InputSettings.m_asPlayMouseButtons;
-               papszInputDescriptions	= g_apszMouseButtonDescriptions;
+               pasPlayInputs            = g_InputSettings.m_asPlayMouseButtons;
+               papszInputDescriptions   = g_apszMouseButtonDescriptions;
                break;
             case JOYSTICK_MENU_ID:
                // Use joy buttons.
-               pasPlayInputs				= g_InputSettings.m_asPlayJoyButtons;
-               papszInputDescriptions	= g_apszJoyButtonDescriptions;
+               pasPlayInputs            = g_InputSettings.m_asPlayJoyButtons;
+               papszInputDescriptions   = g_apszJoyButtonDescriptions;
                break;
             default:
                TRACE("InputSettingsDlg_Choice(): Unsupported menu.\n");
-               sError	= 1;
+               sError   = 1;
                break;
             }
 
-            short	sInputIndex;
-            RGuiItem*	pgui;
+            short sInputIndex;
+            RGuiItem*   pgui;
             for (sInputIndex = 0; sInputIndex < CInputSettings::NumInputFunctions && sError == 0; sInputIndex++)
             {
-               pgui	= pmenu->ami[sInputIndex].pgui;
+               pgui   = pmenu->ami[sInputIndex].pgui;
                // Restore input default.
                switch (pmenu->u32Id)
                {
                case KEYBOARD_MENU_ID:
                   // Use keys.
-                  pasPlayInputs[sInputIndex]			= sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].u8DefaultKey : CInputSettings::ms_ainputinfo[sInputIndex].u8DefaultKey;
+                  pasPlayInputs[sInputIndex]         = sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].u8DefaultKey : CInputSettings::ms_ainputinfo[sInputIndex].u8DefaultKey;
                   break;
                case MOUSE_MENU_ID:
                   // Use mouse buttons.
-                  pasPlayInputs[sInputIndex]			= sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].sDefMouseButtons : CInputSettings::ms_ainputinfo[sInputIndex].sDefMouseButtons;
+                  pasPlayInputs[sInputIndex]         = sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].sDefMouseButtons : CInputSettings::ms_ainputinfo[sInputIndex].sDefMouseButtons;
                   break;
                case JOYSTICK_MENU_ID:
                   // Use joy buttons.
-                  pasPlayInputs[sInputIndex]			= sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].sDefJoyButtons : CInputSettings::ms_ainputinfo[sInputIndex].sDefJoyButtons;
+                  pasPlayInputs[sInputIndex]         = sMenuItem == ms_sResetItemOld ? CInputSettings::ms_ainputinfoOld[sInputIndex].sDefJoyButtons : CInputSettings::ms_ainputinfo[sInputIndex].sDefJoyButtons;
                   break;
                }
 
@@ -448,18 +448,18 @@ void InputSettingsDlg_Choice( // Returns nothing.
 // Checks is a key is mappable as an input via ms_au8UnmappableKeys[].
 //////////////////////////////////////////////////////////////////////////////
 static bool IsMappable( // Returns true, if mappable, false otherwise.
-   U8	u8Key)            // In:  Key to check mappable status on.
+   U8 u8Key)              // In:  Key to check mappable status on.
 {
    bool bMappable   = true;
 
-   short	sIndex;
+   short sIndex;
    for (sIndex = 0; sIndex < NUM_ELEMENTS(ms_au8UnmappableKeys); sIndex++)
    {
       // If this is the specified key . . .
       if (ms_au8UnmappableKeys[sIndex] == u8Key)
       {
          // Not mappable.
-         bMappable	= false;
+         bMappable   = false;
          break;
       }
    }
@@ -472,11 +472,11 @@ static bool IsMappable( // Returns true, if mappable, false otherwise.
 // input array.
 //////////////////////////////////////////////////////////////////////////////
 inline void ListenForInput(   // Returns nothing.
-   RInputEvent*	pie)        // In:  Input event.
+   RInputEvent*   pie)        // In:  Input event.
 {
-   static U8*	pau8KeyStatusArray	= rspGetKeyStatusArray();
+   static U8*   pau8KeyStatusArray   = rspGetKeyStatusArray();
 
-   RGuiItem*	pgui	= RGuiItem::ms_pguiFocus;
+   RGuiItem*   pgui   = RGuiItem::ms_pguiFocus;
    bool bAffirmitiveFeedback = true;         // true to play affirmitive audible
                                              // feedback, false for negative.
 
@@ -485,12 +485,12 @@ inline void ListenForInput(   // Returns nothing.
    case RInputEvent::Key:
       if (pie->lKey == 27)
       {
-         ms_bListenForInput	= false;
-         bAffirmitiveFeedback	= false;
+         ms_bListenForInput   = false;
+         bAffirmitiveFeedback   = false;
       }
 
       // Don't allow menu to respond to any key events.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
    }
@@ -502,8 +502,8 @@ inline void ListenForInput(   // Returns nothing.
       {
       case KEYBOARD_MENU_ID:
       {
-         U8*	pu8Key = pau8KeyStatusArray;
-         short	i;
+         U8*   pu8Key = pau8KeyStatusArray;
+         short i;
          for (i = 0; i < 128; i++, pu8Key++)
          {
             // If pressed . . .
@@ -515,14 +515,14 @@ inline void ListenForInput(   // Returns nothing.
                   pgui->SetText("%s", g_apszKeyDescriptions[i]);
                   pgui->Compose();
 
-                  g_InputSettings.m_asPlayKeys[pgui->m_ulUserData]	= i;
+                  g_InputSettings.m_asPlayKeys[pgui->m_ulUserData]   = i;
                }
                else
                {
-                  bAffirmitiveFeedback	= false;
+                  bAffirmitiveFeedback   = false;
                }
 
-               ms_bListenForInput	= false;
+               ms_bListenForInput   = false;
 
                break;
             }
@@ -536,9 +536,9 @@ inline void ListenForInput(   // Returns nothing.
             if (pie->lKey == '\r')
             {
                // Done with mode.
-               ms_bListenForInput	= false;
+               ms_bListenForInput   = false;
 
-               g_InputSettings.m_asPlayMouseButtons[pgui->m_ulUserData]	= ms_sMouseButtons;
+               g_InputSettings.m_asPlayMouseButtons[pgui->m_ulUserData]   = ms_sMouseButtons;
 
                pgui->SetText("%s", g_apszMouseButtonDescriptions[ms_sMouseButtons]);
                pgui->Compose();
@@ -554,7 +554,7 @@ inline void ListenForInput(   // Returns nothing.
             case 1025:          // Yeah I dunno
             case 1027:
                // Stay in mode, just update status.
-               ms_sMouseButtons	|= pie->sButtons;
+               ms_sMouseButtons   |= pie->sButtons;
                break;
 
             case RSP_MB0_RELEASED:
@@ -562,7 +562,7 @@ inline void ListenForInput(   // Returns nothing.
             case RSP_MB2_RELEASED:
             case 1026:          // Yeah I dunno
                // Done with mode.
-               ms_bListenForInput	= false;
+               ms_bListenForInput   = false;
 
                g_InputSettings.m_asPlayMouseButtons[pgui->m_ulUserData] = ms_sMouseButtons;
                break;
@@ -580,7 +580,7 @@ inline void ListenForInput(   // Returns nothing.
             if (pie->lKey == '\r')
             {
                // Done with mode.
-               ms_bListenForInput	= false;
+               ms_bListenForInput   = false;
 
                g_InputSettings.m_asPlayJoyButtons[pgui->m_ulUserData] = JoyIndexToBitfield(ms_sJoyButtons);
 
@@ -599,8 +599,8 @@ inline void ListenForInput(   // Returns nothing.
                if (xis.ButtonState[i] == XInputState::Press)
                {
                   // Done with mode.
-                  ms_bListenForInput	= false;
-                  g_InputSettings.m_asPlayJoyButtons[pgui->m_ulUserData]	= JoyIndexToBitfield(i);
+                  ms_bListenForInput   = false;
+                  g_InputSettings.m_asPlayJoyButtons[pgui->m_ulUserData]   = JoyIndexToBitfield(i);
                   pgui->SetText("%s", g_apszJoyButtonDescriptions[i]);
                   pgui->Compose();
                   break;
@@ -619,35 +619,35 @@ inline void ListenForInput(   // Returns nothing.
             rspGetJoyState(0, &u32ButtonsCur);
 
             // If less buttons are down . . .
-            if (	(u32ButtonsPrev & RSP_JOY_BUT_1) > (u32ButtonsCur & RSP_JOY_BUT_1)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_2) > (u32ButtonsCur & RSP_JOY_BUT_2)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_3) > (u32ButtonsCur & RSP_JOY_BUT_3)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_4) > (u32ButtonsCur & RSP_JOY_BUT_4)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_5) > (u32ButtonsCur & RSP_JOY_BUT_5)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_6) > (u32ButtonsCur & RSP_JOY_BUT_6)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_7) > (u32ButtonsCur & RSP_JOY_BUT_7)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_8) > (u32ButtonsCur & RSP_JOY_BUT_8)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_9) > (u32ButtonsCur & RSP_JOY_BUT_9)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_10) > (u32ButtonsCur & RSP_JOY_BUT_10)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_11) > (u32ButtonsCur & RSP_JOY_BUT_11)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_12) > (u32ButtonsCur & RSP_JOY_BUT_12)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_13) > (u32ButtonsCur & RSP_JOY_BUT_13)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_14) > (u32ButtonsCur & RSP_JOY_BUT_14)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_15) > (u32ButtonsCur & RSP_JOY_BUT_15)
-                  ||	(u32ButtonsPrev & RSP_JOY_BUT_16) > (u32ButtonsCur & RSP_JOY_BUT_16)
-                  )
+            if (   (u32ButtonsPrev & RSP_JOY_BUT_1) > (u32ButtonsCur & RSP_JOY_BUT_1)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_2) > (u32ButtonsCur & RSP_JOY_BUT_2)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_3) > (u32ButtonsCur & RSP_JOY_BUT_3)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_4) > (u32ButtonsCur & RSP_JOY_BUT_4)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_5) > (u32ButtonsCur & RSP_JOY_BUT_5)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_6) > (u32ButtonsCur & RSP_JOY_BUT_6)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_7) > (u32ButtonsCur & RSP_JOY_BUT_7)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_8) > (u32ButtonsCur & RSP_JOY_BUT_8)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_9) > (u32ButtonsCur & RSP_JOY_BUT_9)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_10) > (u32ButtonsCur & RSP_JOY_BUT_10)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_11) > (u32ButtonsCur & RSP_JOY_BUT_11)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_12) > (u32ButtonsCur & RSP_JOY_BUT_12)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_13) > (u32ButtonsCur & RSP_JOY_BUT_13)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_14) > (u32ButtonsCur & RSP_JOY_BUT_14)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_15) > (u32ButtonsCur & RSP_JOY_BUT_15)
+                   ||   (u32ButtonsPrev & RSP_JOY_BUT_16) > (u32ButtonsCur & RSP_JOY_BUT_16)
+                   )
             {
                // Done with mode.
-               ms_bListenForInput	= false;
+               ms_bListenForInput   = false;
 
-               g_InputSettings.m_asPlayJoyButtons[pgui->m_ulUserData]	= JoyIndexToBitfield(ms_sJoyButtons);
+               g_InputSettings.m_asPlayJoyButtons[pgui->m_ulUserData]   = JoyIndexToBitfield(ms_sJoyButtons);
             }
             else
             {
                // Stay in mode, just update status.  Limit to four buttons due to
                // limitations imposed when joystick interface was four buttons.  Next time
                // we'll allow many, many buttons.
-               //ms_sJoyButtons	= (short)(u32ButtonsCur & (RSP_JOY_BUT_1 | RSP_JOY_BUT_2 | RSP_JOY_BUT_3 | RSP_JOY_BUT_4) );
+               //ms_sJoyButtons   = (short)(u32ButtonsCur & (RSP_JOY_BUT_1 | RSP_JOY_BUT_2 | RSP_JOY_BUT_3 | RSP_JOY_BUT_4) );
 
                ms_sJoyButtons = JoyBitfieldToIndex(u32ButtonsCur);
 
@@ -663,7 +663,7 @@ inline void ListenForInput(   // Returns nothing.
             else
                pgui->SetText("???");
             pgui->Compose();
-#endif	// defined(ALLOW_JOYSTICK)
+#endif   // defined(ALLOW_JOYSTICK)
             break;
          }
          }
@@ -684,7 +684,7 @@ inline void ListenForInput(   // Returns nothing.
       }
 
       // Make sure text color is restored.
-      pgui->m_u32TextColor	= ms_u32OrigTextColor;
+      pgui->m_u32TextColor   = ms_u32OrigTextColor;
       pgui->Compose();
    }
    else
@@ -695,17 +695,17 @@ inline void ListenForInput(   // Returns nothing.
          // Flash item.
          if (pgui->m_u32TextColor == ms_u32OrigTextColor)
          {
-            pgui->m_u32TextColor	= TEXT_LISTEN_COLOR;
+            pgui->m_u32TextColor   = TEXT_LISTEN_COLOR;
          }
          else
          {
-            pgui->m_u32TextColor	= ms_u32OrigTextColor;
+            pgui->m_u32TextColor   = ms_u32OrigTextColor;
          }
 
          pgui->Compose();
 
          // Reset flash timer.
-         ms_lFlashTimer			= rspGetMilliseconds() + FLASH_TIMEOUT;
+         ms_lFlashTimer         = rspGetMilliseconds() + FLASH_TIMEOUT;
       }
    }
 }
@@ -715,7 +715,7 @@ inline void ListenForInput(   // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 extern short EditInputSettings(void)   // Returns nothing.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
    bool bDeleteKeybind = false;  // If true, we want to delete the keybind we're on.
 
    // Menu is already started.
@@ -723,7 +723,7 @@ extern short EditInputSettings(void)   // Returns nothing.
    // Menu is only just starting.
    ms_bMenuDone = false;
 
-   RInputEvent	ie;
+   RInputEvent ie;
 
    // Until the menu exits.
    while (rspGetQuitStatus() == FALSE && ms_bMenuDone == false)
@@ -731,7 +731,7 @@ extern short EditInputSettings(void)   // Returns nothing.
       // Update the system, drive the audio, blah blah blah.
       UpdateSystem();
 
-      ie.type	= RInputEvent::None;
+      ie.type   = RInputEvent::None;
       rspGetNextInputEvent(&ie);
 
       switch (ie.type)
@@ -771,23 +771,23 @@ extern short EditInputSettings(void)   // Returns nothing.
             rspGetJoyState(0, &u32ButtonsCur);
 
             // If less buttons are up . . .
-            if (	(u32ButtonsCur & RSP_JOY_BUT_1) > (u32ButtonsPrev & RSP_JOY_BUT_1)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_2) > (u32ButtonsPrev & RSP_JOY_BUT_2)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_3) > (u32ButtonsPrev & RSP_JOY_BUT_3)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_4) > (u32ButtonsPrev & RSP_JOY_BUT_4)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_5) > (u32ButtonsPrev & RSP_JOY_BUT_5)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_6) > (u32ButtonsPrev & RSP_JOY_BUT_6)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_7) > (u32ButtonsPrev & RSP_JOY_BUT_7)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_8) > (u32ButtonsPrev & RSP_JOY_BUT_8)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_9) > (u32ButtonsPrev & RSP_JOY_BUT_9)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_10) > (u32ButtonsPrev & RSP_JOY_BUT_10)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_11) > (u32ButtonsPrev & RSP_JOY_BUT_11)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_12) > (u32ButtonsPrev & RSP_JOY_BUT_12)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_13) > (u32ButtonsPrev & RSP_JOY_BUT_13)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_14) > (u32ButtonsPrev & RSP_JOY_BUT_14)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_15) > (u32ButtonsPrev & RSP_JOY_BUT_15)
-                  ||	(u32ButtonsCur & RSP_JOY_BUT_16) > (u32ButtonsPrev & RSP_JOY_BUT_16)
-                  )
+            if (   (u32ButtonsCur & RSP_JOY_BUT_1) > (u32ButtonsPrev & RSP_JOY_BUT_1)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_2) > (u32ButtonsPrev & RSP_JOY_BUT_2)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_3) > (u32ButtonsPrev & RSP_JOY_BUT_3)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_4) > (u32ButtonsPrev & RSP_JOY_BUT_4)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_5) > (u32ButtonsPrev & RSP_JOY_BUT_5)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_6) > (u32ButtonsPrev & RSP_JOY_BUT_6)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_7) > (u32ButtonsPrev & RSP_JOY_BUT_7)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_8) > (u32ButtonsPrev & RSP_JOY_BUT_8)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_9) > (u32ButtonsPrev & RSP_JOY_BUT_9)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_10) > (u32ButtonsPrev & RSP_JOY_BUT_10)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_11) > (u32ButtonsPrev & RSP_JOY_BUT_11)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_12) > (u32ButtonsPrev & RSP_JOY_BUT_12)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_13) > (u32ButtonsPrev & RSP_JOY_BUT_13)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_14) > (u32ButtonsPrev & RSP_JOY_BUT_14)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_15) > (u32ButtonsPrev & RSP_JOY_BUT_15)
+                   ||   (u32ButtonsCur & RSP_JOY_BUT_16) > (u32ButtonsPrev & RSP_JOY_BUT_16)
+                   )
             {
                // Activate listen mode.
                InputSettingsDlg_Choice(
@@ -796,7 +796,7 @@ extern short EditInputSettings(void)   // Returns nothing.
             }
 #endif
          }
-#endif	// defined(ALLOW_JOYSTICK)
+#endif   // defined(ALLOW_JOYSTICK)
          break;
       }
 
@@ -821,7 +821,7 @@ extern short EditInputSettings(void)   // Returns nothing.
 
       if (bDeleteKeybind)
       {
-         RGuiItem*	pgui = RGuiItem::ms_pguiFocus;
+         RGuiItem*   pgui = RGuiItem::ms_pguiFocus;
          if (pgui)
          {
             if (GetCurrentMenu()->u32Id == KEYBOARD_MENU_ID)

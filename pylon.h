@@ -18,28 +18,28 @@
 // pylon.h
 // Project: Nostril (aka Postal)
 //
-//	History:
+//   History:
 //
-//		05/01/97 BRH	Started this object from the bouys.  It will take over
-//							the duty of logic suggestions and markers and the bouys
-//							will go back to strictly navigation.
+//      05/01/97 BRH   Started this object from the bouys.  It will take over
+//                     the duty of logic suggestions and markers and the bouys
+//                     will go back to strictly navigation.
 //
-//		06/17/97 MJR	Moved some vars that were CPylon statics into the realm
-//							so they could be instantiated on a realm-by-realm basis.
+//      06/17/97 MJR   Moved some vars that were CPylon statics into the realm
+//                     so they could be instantiated on a realm-by-realm basis.
 //
-//		06/30/97	JMI	Moved EditRect() and EditHotSpot() from pylon.h to
-//							pylon.cpp.
+//      06/30/97   JMI   Moved EditRect() and EditHotSpot() from pylon.h to
+//                     pylon.cpp.
 //
-//		07/08/97	JMI	Now removes its smash from the smashatorium in the
-//							destructor.
+//      07/08/97   JMI   Now removes its smash from the smashatorium in the
+//                     destructor.
 //
-//		07/14/97	JMI	Now memsets m_msg to 0s before initializing the few members
-//							that can be accessed via msg_Generic type.
+//      07/14/97   JMI   Now memsets m_msg to 0s before initializing the few members
+//                     that can be accessed via msg_Generic type.
 //
-//		07/17/97 BRH	Chagned Triggeed function to trigger only if the dude
-//							on the traget area is alive.
+//      07/17/97 BRH   Chagned Triggeed function to trigger only if the dude
+//                     on the traget area is alive.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef PYLON_H
@@ -67,7 +67,7 @@ public:
 // Variables
 //---------------------------------------------------------------------------
 public:
-UCHAR	m_ucID;                             // Pylon ID
+UCHAR m_ucID;                               // Pylon ID
 GameMessage m_msg;                        // Place for storing hint messages
 U16 m_u16TargetDudeID;                    // ID of dude you are supposed to attack;
 
@@ -223,20 +223,20 @@ void EditRect(RRect* pRect);
 
 // Called by editor to get the hotspot of an object in 2D.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 // Search the list of pylons and return a pointer to the one with the given ID
 CPylon* GetPylon(UCHAR ucPylonID);

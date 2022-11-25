@@ -22,9 +22,9 @@
 //
 // History:
 //
-//		10/31/96 BRH	Changed CSprite to RSprite to match new RSPiX
-//							naming convention.  Also changed references to
-//							other RSPiX classes to use the R prefix.
+//      10/31/96 BRH   Changed CSprite to RSprite to match new RSPiX
+//                     naming convention.  Also changed references to
+//                     other RSPiX classes to use the R prefix.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -58,22 +58,22 @@
 
 
 // These values are used to identify the sprite file
-#define SPRITE_COOKIE				0x54525053  // Looks like "SPRT" in file
-#define SPRITE_CURRENT_VERSION	3           // Change this whenever you must
+#define SPRITE_COOKIE            0x54525053  // Looks like "SPRT" in file
+#define SPRITE_CURRENT_VERSION   3           // Change this whenever you must
                                              // change the file format
 
 // These masks are used with the sprite flags
-#define SPRITE_FLAG_VISIBLE		0x0001   // 1=visible, 0=hidden
-#define SPRITE_FLAG_MODIFIED		0x0100   // 1=modified, 0=not
-#define SPRITE_FLAG_RENDERED		0x0200   // 1=rendered, 0=not yet
+#define SPRITE_FLAG_VISIBLE      0x0001   // 1=visible, 0=hidden
+#define SPRITE_FLAG_MODIFIED      0x0100   // 1=modified, 0=not
+#define SPRITE_FLAG_RENDERED      0x0200   // 1=rendered, 0=not yet
 // These masks are used with the collision flags.
 // (THESE ARE SAMPLES -- GET REAL ONES FROM SNES/GENESIS LIBRARY!)
-#define SPRITE_CX_TOP				0x0001
-#define SPRITE_CX_BOTTOM			0x0002
-#define SPRITE_CX_LEFT				0x0004
-#define SPRITE_CX_RIGHT				0x0008
+#define SPRITE_CX_TOP            0x0001
+#define SPRITE_CX_BOTTOM         0x0002
+#define SPRITE_CX_LEFT            0x0004
+#define SPRITE_CX_RIGHT            0x0008
 
-#define SPRITE_LOWPRI				80       // Lowest priority between sprites
+#define SPRITE_LOWPRI            80       // Lowest priority between sprites
 
 
 // Define the pre-display callback function.  This user-definable function
@@ -87,22 +87,22 @@ typedef void (*SPRITE_PREDISP)(RSprite* psprite);
 class RSprite
 {
 public:
-short	m_sX;                      // Sprite X
-short	m_sY;                      // Sprite Y
-short	m_sZ;                      // Sprite Z
-short	m_sHotSpotX;               // The offset from m_sX to the hotspot.
-                                 // This value would normally be subtracted from
-                                 // m_sX to get the destination (e.g., screen)
-                                 // position.
-short	m_sHotSpotY;               // The offset from m_sY to the hotspot.
-                                 // This value would normally be subtracted from
-                                 // m_sY to get the destination (e.g., screen)
-                                 // position.
-short	m_sHotSpotZ;               // The offset from m_sZ to the hotspot.
-                                 // This value would normally be subtracted from
-                                 // m_sZ to get the destination (e.g., screen)
-                                 // position.
-short	m_sAngle;                  // Angle of rotation
+short m_sX;                        // Sprite X
+short m_sY;                        // Sprite Y
+short m_sZ;                        // Sprite Z
+short m_sHotSpotX;                 // The offset from m_sX to the hotspot.
+                                   // This value would normally be subtracted from
+                                   // m_sX to get the destination (e.g., screen)
+                                   // position.
+short m_sHotSpotY;                 // The offset from m_sY to the hotspot.
+                                   // This value would normally be subtracted from
+                                   // m_sY to get the destination (e.g., screen)
+                                   // position.
+short m_sHotSpotZ;                 // The offset from m_sZ to the hotspot.
+                                   // This value would normally be subtracted from
+                                   // m_sZ to get the destination (e.g., screen)
+                                   // position.
+short m_sAngle;                    // Angle of rotation
 S32 m_lWidth;                    // Sprite's Desired Display Width (for scale blit)
 S32 m_lHeight;                   // Sprite's Desired Display Height (for scale blit)
 double m_dX;                     // Sprite X as a double (for motion)
@@ -115,12 +115,12 @@ double m_dXvel;                  // X Velocity
 double m_dYvel;                  // Y Velocity
 double m_dZvel;                  // Z Velocity
 U32 m_ulFlags;                   // Attribute and status flags
-RImage*	m_pImage;               // Image
+RImage*   m_pImage;               // Image
 RList<RRegion> m_clRegions;      // List of regions
-SPRITE_PREDISP	m_cbPreDisp;      // Pre-display callback function
-short	m_sOwnImage;               // TRUE if image was allocated by us; FALSE, otherwise.
-                                 // Basically, if this flag is TRUE, this will delete
-                                 // m_pImage when ~RSprite() is called.
+SPRITE_PREDISP m_cbPreDisp;        // Pre-display callback function
+short m_sOwnImage;                 // TRUE if image was allocated by us; FALSE, otherwise.
+                                   // Basically, if this flag is TRUE, this will delete
+                                   // m_pImage when ~RSprite() is called.
 
 static RSList<RSprite, short> SpriteList;
 

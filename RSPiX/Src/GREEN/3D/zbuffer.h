@@ -33,7 +33,7 @@
 //==================================================
 const short ZB_MIN_Z = -32768;
 
-class	RZBuffer // a 16-bit signed z-buffer
+class RZBuffer   // a 16-bit signed z-buffer
 {
 public:
 short m_sW;
@@ -41,7 +41,7 @@ short m_sH;
 S32 m_lP;    // pitch in WORDS! (Not a real pitch!)
 short* m_pBuf;    // for now, don't have great need for alignment!
 //----------------------------------------------
-void	Init();
+void   Init();
 RZBuffer();
 RZBuffer(short sW, short sH);
 short Create(short sW, short sH);

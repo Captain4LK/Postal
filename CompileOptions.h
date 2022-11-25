@@ -18,127 +18,127 @@
 // CompileOptions.h
 // Special compile options
 //
-//	History:
-//		07/21/97	JMI	Started tracking history of this file.
-//							Disabled DISABLE_EDITOR_SAVE_AND_PLAY.
+//   History:
+//      07/21/97   JMI   Started tracking history of this file.
+//                     Disabled DISABLE_EDITOR_SAVE_AND_PLAY.
 //
-//		07/23/97 BRH	Changed expiration date.
+//      07/23/97 BRH   Changed expiration date.
 //
-//		07/23/97	JMI	'Uncommented-out' or 'Commented-in' the
-//							DISABLE_EDITOR_SAVE_AND_PLAY as per Online Beta Demo Patch
-//							Marketing Extravaganza Fiasco blah blah blah.
+//      07/23/97   JMI   'Uncommented-out' or 'Commented-in' the
+//                     DISABLE_EDITOR_SAVE_AND_PLAY as per Online Beta Demo Patch
+//                     Marketing Extravaganza Fiasco blah blah blah.
 //
-//		07/28/97	JMI	Added MARKETING_RELEASE to indicate that it is, well, a
-//							marketing release.
+//      07/28/97   JMI   Added MARKETING_RELEASE to indicate that it is, well, a
+//                     marketing release.
 //
-//		08/17/97	JMI	Commented out CHECK_EXPIRATION_DATE.
+//      08/17/97   JMI   Commented out CHECK_EXPIRATION_DATE.
 //
-//		08/18/97	JMI	Added SALES_DEMO macro.
+//      08/18/97   JMI   Added SALES_DEMO macro.
 //
-//		09/03/97	JMI	Added USE_NEW_CHEATS which signifies to input that it
-//							should use the new cheats.
+//      09/03/97   JMI   Added USE_NEW_CHEATS which signifies to input that it
+//                     should use the new cheats.
 //
-//		09/04/97	JMI	Enabled USE_NEW_CHEATS as we should use it from now on.
+//      09/04/97   JMI   Enabled USE_NEW_CHEATS as we should use it from now on.
 //
-//		09/11/97	JMI	Modified ENABLE_PLAY_SPECIFIC_REALMS_ONLY to be
-//							"skirts.rlm".
-//							Also, added COMP_USA_RELEASE for Bill's changes to game.cpp.
+//      09/11/97   JMI   Modified ENABLE_PLAY_SPECIFIC_REALMS_ONLY to be
+//                     "skirts.rlm".
+//                     Also, added COMP_USA_RELEASE for Bill's changes to game.cpp.
 //
-//		09/11/97	JMI	Changed ENABLE_PLAY_SPECIFIC_REALMS_ONLY so it was a mere
-//							switch and not the realm name that can be played.
+//      09/11/97   JMI   Changed ENABLE_PLAY_SPECIFIC_REALMS_ONLY so it was a mere
+//                     switch and not the realm name that can be played.
 //
-//		09/11/97	JMI	Added commented out SHAREWARE_RELEASE.
+//      09/11/97   JMI   Added commented out SHAREWARE_RELEASE.
 //
-//		09/11/97 MJR	Added macros for specific realms.
+//      09/11/97 MJR   Added macros for specific realms.
 //
-//		09/12/97 MJR	Set macros for the "CompUsa" version
+//      09/12/97 MJR   Set macros for the "CompUsa" version
 //
-//		09/16/97 MJR	Renamed to the more-correct ONLINE_DEMO_RELEASE.
-//							Added conditional compilation for various options.
+//      09/16/97 MJR   Renamed to the more-correct ONLINE_DEMO_RELEASE.
+//                     Added conditional compilation for various options.
 //
-//		09/17/97	JMI	Setup correct options for ONLINE_DEMO_RELEASE (correctly
-//							known as SHAREWARE_RELEASE :) ).
-//							Also, added USE_LA_PALOMA_CHEATS which is like the 'DOS for
-//							Dummies' of cheats, allowing us to keep the 'real' cheats
-//							anonymous and make them easy for the editors' demo.
+//      09/17/97   JMI   Setup correct options for ONLINE_DEMO_RELEASE (correctly
+//                     known as SHAREWARE_RELEASE :) ).
+//                     Also, added USE_LA_PALOMA_CHEATS which is like the 'DOS for
+//                     Dummies' of cheats, allowing us to keep the 'real' cheats
+//                     anonymous and make them easy for the editors' demo.
 //
-//		09/17/97	JMI	Commented out USE_LA_PALOMA_CHEATS.
+//      09/17/97   JMI   Commented out USE_LA_PALOMA_CHEATS.
 //
-//		09/18/97	JMI	Added EXPIRATION_MSG_POSTAL_LAUNCH_WEEKEND.
+//      09/18/97   JMI   Added EXPIRATION_MSG_POSTAL_LAUNCH_WEEKEND.
 //
-//		09/18/97	JMI	Put all settings back to the online demo settings and
-//							tried to categorize a little.
+//      09/18/97   JMI   Put all settings back to the online demo settings and
+//                     tried to categorize a little.
 //
-//		09/23/97	JMI	Added localization macros.
+//      09/23/97   JMI   Added localization macros.
 //
-//		09/24/97	JMI	Commented out ONLINE_DEMO_RELEASE and
-//							ENABLE_PLAY_SPECIFIC_REALMS_ONLY.
+//      09/24/97   JMI   Commented out ONLINE_DEMO_RELEASE and
+//                     ENABLE_PLAY_SPECIFIC_REALMS_ONLY.
 //
-//		09/25/97	JMI	Commented out EDITOR_DISABLED.
+//      09/25/97   JMI   Commented out EDITOR_DISABLED.
 //
-//		10/10/97	JMI	Added ALLOW_JOYSTICK macro which enables joystick support.
+//      10/10/97   JMI   Added ALLOW_JOYSTICK macro which enables joystick support.
 //
-//		10/16/97	JMI	Added NO_MPATH macro which, when defined, causes exclusion
-//							of MPath in game.cpp.
+//      10/16/97   JMI   Added NO_MPATH macro which, when defined, causes exclusion
+//                     of MPath in game.cpp.
 //
-//		10/23/97	JMI	Uncommented out (i.e., commented in) NO_MPATH macro.
+//      10/23/97   JMI   Uncommented out (i.e., commented in) NO_MPATH macro.
 //
-//		11/21/97	JMI	Added ADD_ON_PACK macro.
+//      11/21/97   JMI   Added ADD_ON_PACK macro.
 //
-//		09/27/99	JMI	Temporarily (perhaps permanently) removed the must-be-on-cd
-//							and check-for-cd macros.
+//      09/27/99   JMI   Temporarily (perhaps permanently) removed the must-be-on-cd
+//                     and check-for-cd macros.
 //
-//					JMI	Added JAPAN and VIOLENT_LOCALE macros.
+//               JMI   Added JAPAN and VIOLENT_LOCALE macros.
 //
-//		10/07/99	JMI	Removed ADD_ON_PACK macro (from Special Delivery).
-//							Added comment on setup of JAPAN_ADD_ON and SUPER_POSTAL
-//							macros.
+//      10/07/99   JMI   Removed ADD_ON_PACK macro (from Special Delivery).
+//                     Added comment on setup of JAPAN_ADD_ON and SUPER_POSTAL
+//                     macros.
 //
-//							Changed JAPAN_ADD_ON and SUPER_POSTAL to work more like the
-//							LOCALE macro where there's a macro TARGET defined to either
-//							JAPAN_ADD_ON or SUPER_POSTAL.  JAPAN_ADD_ON and
-//							SUPER_POSTAL are defined in this file and TARGET is defined
-//							in the project settings.
+//                     Changed JAPAN_ADD_ON and SUPER_POSTAL to work more like the
+//                     LOCALE macro where there's a macro TARGET defined to either
+//                     JAPAN_ADD_ON or SUPER_POSTAL.  JAPAN_ADD_ON and
+//                     SUPER_POSTAL are defined in this file and TARGET is defined
+//                     in the project settings.
 //
-//		02/04/00 MJR	Added PROMPT_FOR_ORIGINAL_CD and enabled it in the case of
-//							the JAPAN_ADD_ON.
-//							Also cleaned up the whole file to make it easier to read.
+//      02/04/00 MJR   Added PROMPT_FOR_ORIGINAL_CD and enabled it in the case of
+//                     the JAPAN_ADD_ON.
+//                     Also cleaned up the whole file to make it easier to read.
 //
-//		03/30/00 MJR	Another huge clean up plus lots of new documentation.
-//							Added REQUIRE_POSTAL_CD as a subset of what CHECK_FOR_CD
-//							used to do.
-//							Added POSTAL_PLUS and added appropriate support for it.
-//							Moved APP_NAME and PREFS_FILE macros into here.
+//      03/30/00 MJR   Another huge clean up plus lots of new documentation.
+//                     Added REQUIRE_POSTAL_CD as a subset of what CHECK_FOR_CD
+//                     used to do.
+//                     Added POSTAL_PLUS and added appropriate support for it.
+//                     Moved APP_NAME and PREFS_FILE macros into here.
 //
-//							More docs and a few minor tweaks.
+//                     More docs and a few minor tweaks.
 //
-//							Cleaned up docs a bit more.
-//							Added START_MENU_ADDON_ITEM for POSTAL_PLUS.
+//                     Cleaned up docs a bit more.
+//                     Added START_MENU_ADDON_ITEM for POSTAL_PLUS.
 //
-//		06/24/01 MJR	Added DEMO macro to support the creation of demo
-//							versions of whatever TARGET is set to.  HOWEVER,
-//							I only paid attention to the POSTAL PLUS target, so
-//							demo version of other targets may or may not work!
+//      06/24/01 MJR   Added DEMO macro to support the creation of demo
+//                     versions of whatever TARGET is set to.  HOWEVER,
+//                     I only paid attention to the POSTAL PLUS target, so
+//                     demo version of other targets may or may not work!
 //
-//							Added SHOW_EXIT_SCREEN macro (see description below).
+//                     Added SHOW_EXIT_SCREEN macro (see description below).
 //
-//							Renamed some of the older macros to make it more clear
-//							what they do.  Only did this because they seemed related
-//							to the new DEMO macro, although in the end it turned out
-//							they were only vaguely related.
+//                     Renamed some of the older macros to make it more clear
+//                     what they do.  Only did this because they seemed related
+//                     to the new DEMO macro, although in the end it turned out
+//                     they were only vaguely related.
 //
-//							Got rid of the CompUSA macros, which are totally obsolete.
+//                     Got rid of the CompUSA macros, which are totally obsolete.
 //
-//							Added MULTIPLAYER_DISABLED macro (see description below).
+//                     Added MULTIPLAYER_DISABLED macro (see description below).
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
 // This file basically determines which game configuration will be built.
 //
 // There are three key macros that control the compilation of the game:
-//		TARGET
-//		LOCALE
-//		SPAWN
+//      TARGET
+//      LOCALE
+//      SPAWN
 // These macros should be set via the compiler preprocessor options.
 // They are described in detail in separate sections below.
 //
@@ -186,18 +186,18 @@
 
 // This is an add-on pack that adds Japanese voice and a couple of Japanese
 // levels to the original Postal.
-#define JAPAN_ADD_ON		1
+#define JAPAN_ADD_ON      1
 
 // This is a standalone product that used Japanese voice and included all the
 // original levels, Special Delivery levels, and two new Japanese levels.
-#define SUPER_POSTAL		2
+#define SUPER_POSTAL      2
 
 // This is a standalone product that combines the original levels and
 // Special Delivery levels.
-#define POSTAL_PLUS		3
+#define POSTAL_PLUS      3
 
 // Added a define for POSTAL_2015 (Steam version)
-#define POSTAL_2015		4
+#define POSTAL_2015      4
 
 // If it's defined, make sure it's valid.  See end of file for what
 // happens when it's not defined.
@@ -223,15 +223,15 @@
 // based on this macro.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define US					1
-#define UK					2
-#define ARIAN				3
-#define MIME				4
-#define JAPAN				5
+#define US               1
+#define UK               2
+#define ARIAN            3
+#define MIME            4
+#define JAPAN            5
 
 // Synomyms for the humor-impaired
-#define GERMAN				ARIAN
-#define FRENCH				MIME
+#define GERMAN            ARIAN
+#define FRENCH            MIME
 
 // If it's defined, make sure it's valid.  See end of file for what
 // happens when it's not defined.
@@ -249,11 +249,11 @@
 
 
 // This macro is true when the LOCALE allows the full level of violence
-#define VIOLENT_LOCALE	(LOCALE == US || LOCALE == JAPAN)
+#define VIOLENT_LOCALE   (LOCALE == US || LOCALE == JAPAN)
 
 
 // This macro is true when the LOCALE is okay with the use of English text
-#define ENGLISH_LOCALE	(LOCALE == US || LOCALE == UK || LOCALE == JAPAN)
+#define ENGLISH_LOCALE   (LOCALE == US || LOCALE == UK || LOCALE == JAPAN)
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -309,11 +309,11 @@
 // retrospect.  Now, the idea is to set them to match the product's consumer
 // name (which is probably different than its internal project name).
 //
-//		Note that these macros do NOT effect the executable name!  Use Project
-//		Settings to verify the executable name.  By default, it seems to be
-//		based on the Project (.dsp) name, but if it was ever modified manually
-//		then it may need to be updated manually.  And again, the executable
-//		name should be set to the product's consumer name.
+//      Note that these macros do NOT effect the executable name!  Use Project
+//      Settings to verify the executable name.  By default, it seems to be
+//      based on the Project (.dsp) name, but if it was ever modified manually
+//      then it may need to be updated manually.  And again, the executable
+//      name should be set to the product's consumer name.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -321,20 +321,20 @@
 
    #if TARGET == POSTAL_PLUS
       #if defined(SPAWN)
-         #define APP_NAME				"Postal Plus MP"
-         #define MAIN_MENU_TITLE		"POSTAL PLUS MP"
+         #define APP_NAME            "Postal Plus MP"
+         #define MAIN_MENU_TITLE      "POSTAL PLUS MP"
       #elif defined (DEMO)
-         #define APP_NAME				"Postal Plus Demo"
-         #define MAIN_MENU_TITLE		"POSTAL PLUS DEMO"
+         #define APP_NAME            "Postal Plus Demo"
+         #define MAIN_MENU_TITLE      "POSTAL PLUS DEMO"
       #else
-         #define APP_NAME				"Postal Plus"
-         #define MAIN_MENU_TITLE		"POSTAL PLUS"
+         #define APP_NAME            "Postal Plus"
+         #define MAIN_MENU_TITLE      "POSTAL PLUS"
       #endif
    #else
 // Prior to this point, all targets used the same name, so for
 // consistency sake, let's leave it that way.
-      #define APP_NAME				"Postal"
-      #define MAIN_MENU_TITLE		"POSTAL"
+      #define APP_NAME            "Postal"
+      #define MAIN_MENU_TITLE      "POSTAL"
    #endif
 
 #endif
@@ -349,30 +349,30 @@
    #if LOCALE == US
       #if TARGET == POSTAL_PLUS
          #if defined(SPAWN)
-            #define PREFS_FILE	"Postal Plus MP.ini"
+            #define PREFS_FILE   "Postal Plus MP.ini"
          #elif defined (DEMO)
-            #define PREFS_FILE	"Postal Plus Demo.ini"
+            #define PREFS_FILE   "Postal Plus Demo.ini"
          #else
             #if PLATFORM_UNIX
-               #define PREFS_FILE	"postal_plus.ini"
+               #define PREFS_FILE   "postal_plus.ini"
             #else
-               #define PREFS_FILE	"Postal Plus.ini"
+               #define PREFS_FILE   "Postal Plus.ini"
             #endif
          #endif
       #else
-         #define PREFS_FILE	"POSTAL.INI"
+         #define PREFS_FILE   "POSTAL.INI"
       #endif
    #elif LOCALE == UK
-      #define PREFS_FILE	"PostalUK.INI"
+      #define PREFS_FILE   "PostalUK.INI"
    #elif LOCALE == FRENCH
-      #define PREFS_FILE	"PostalFr.INI"
+      #define PREFS_FILE   "PostalFr.INI"
    #elif LOCALE == GERMAN
-      #define PREFS_FILE	"PostalGr.INI"
+      #define PREFS_FILE   "PostalGr.INI"
    #elif LOCALE == JAPAN
       #if TARGET == JAPAN_ADD_ON
-         #define PREFS_FILE	"Postal Japan Add On.ini"
+         #define PREFS_FILE   "Postal Japan Add On.ini"
       #elif TARGET == SUPER_POSTAL
-         #define PREFS_FILE	"Super Postal.ini"
+         #define PREFS_FILE   "Super Postal.ini"
       #endif
    #endif
 
@@ -383,70 +383,70 @@
 // The following macros can be defined in order to enable/disable various
 // features.
 //
-//		EDITOR_DISABLED			When defined, the editor item on the main menu is
-//										disabled, and much of the editor code is not
-//										included in the executable.
+//      EDITOR_DISABLED         When defined, the editor item on the main menu is
+//                              disabled, and much of the editor code is not
+//                              included in the executable.
 //
-//		REQUIRE_POSTAL_CD			When defined, the program will check to see if
-//										the CD appears to be the original Postal CD.  It
-//										does this by checking that one particular file
-//										exists and one other particular file doesn't
-//										exist.  This was designed to tell the difference
-//										between the Postal and Special Delivery CD's.
-//										Now that several other Postal-related CD's have
-//										been released, this particular test will not
-//										be able to properly tell them apart.  Therefore,
-//										this macro is pretty much obsolete.
+//      REQUIRE_POSTAL_CD         When defined, the program will check to see if
+//                              the CD appears to be the original Postal CD.  It
+//                              does this by checking that one particular file
+//                              exists and one other particular file doesn't
+//                              exist.  This was designed to tell the difference
+//                              between the Postal and Special Delivery CD's.
+//                              Now that several other Postal-related CD's have
+//                              been released, this particular test will not
+//                              be able to properly tell them apart.  Therefore,
+//                              this macro is pretty much obsolete.
 //
-//										Idea: If the need to differentiate CD's comes up
-//										again, we might be able to use the fact that
-//										newer versions (Japan and Postal Plus) have used
-//										specifically-named ini files.
+//                              Idea: If the need to differentiate CD's comes up
+//                              again, we might be able to use the fact that
+//                              newer versions (Japan and Postal Plus) have used
+//                              specifically-named ini files.
 //
-//		MUST_BE_ON_CD				When defined, the program makes sure that the
-//										drive refered to by the CD path is actually a
-//										CD-ROM drive as far as the operating system knows.
-//										This only works for Windows.
+//      MUST_BE_ON_CD            When defined, the program makes sure that the
+//                              drive refered to by the CD path is actually a
+//                              CD-ROM drive as far as the operating system knows.
+//                              This only works for Windows.
 //
-//		CHECK_FOR_COOKIE			When defined, the program will check for a
-//										"cookie" (special value) at a particular position
-//										in a particularly large file on the CD.  If the
-//										cookie is incorrect, the program will not operate
-//										correctly.  This would typically be used when you
-//										want an extra degree of anti-piracy.  This was
-//										used by the original Postal.
+//      CHECK_FOR_COOKIE         When defined, the program will check for a
+//                              "cookie" (special value) at a particular position
+//                              in a particularly large file on the CD.  If the
+//                              cookie is incorrect, the program will not operate
+//                              correctly.  This would typically be used when you
+//                              want an extra degree of anti-piracy.  This was
+//                              used by the original Postal.
 //
-//		DISABLE_EDITOR_SAVE_AND_PLAY	When defined, the editor's save and play
-//										features are both disabled.  This would typically
-//										be used for single-level demo releases, where you
-//										don't want players to be able to create their own
-//										levels because they haven't yet bought the game.
+//      DISABLE_EDITOR_SAVE_AND_PLAY   When defined, the editor's save and play
+//                              features are both disabled.  This would typically
+//                              be used for single-level demo releases, where you
+//                              don't want players to be able to create their own
+//                              levels because they haven't yet bought the game.
 //
-//		PROMPT_FOR_ORIGINAL_CD	When defined, the player is prompted (before the
-//										title screens even appear) to make sure the
-//										original CD is inserted.  No actual test is done
-//										to verify that the CD was inserted.  This would
-//										typically be used for "add-on packs" that require
-//										the original CD.
+//      PROMPT_FOR_ORIGINAL_CD   When defined, the player is prompted (before the
+//                              title screens even appear) to make sure the
+//                              original CD is inserted.  No actual test is done
+//                              to verify that the CD was inserted.  This would
+//                              typically be used for "add-on packs" that require
+//                              the original CD.
 //
-//		START_MENU_ADDON_ITEM	When defined, an additional item appears on the
-//										start menu that allows the user to start on the
-//										first add-on level.  If this macro is used, you
-//										must add customized text for the menu items
-//										in localize.cpp.
+//      START_MENU_ADDON_ITEM   When defined, an additional item appears on the
+//                              start menu that allows the user to start on the
+//                              first add-on level.  If this macro is used, you
+//                              must add customized text for the menu items
+//                              in localize.cpp.
 //
-//		TITLE_SHOW_DISTRIBUTOR	When defined, the distributor screen is shown.
-//										Otherwise, it is not.
+//      TITLE_SHOW_DISTRIBUTOR   When defined, the distributor screen is shown.
+//                              Otherwise, it is not.
 //
-//		SHOW_EXIT_SCREEN			When defined, we show a screen when the player
-//										chooses to exit the app.  The screen stays up
-//										until the player clicks or hits a button.
+//      SHOW_EXIT_SCREEN         When defined, we show a screen when the player
+//                              chooses to exit the app.  The screen stays up
+//                              until the player clicks or hits a button.
 //
-//		MULTIPLAYER_DISABLED		When defined, all multiplayer support is disabled.
+//      MULTIPLAYER_DISABLED      When defined, all multiplayer support is disabled.
 //
-//		ENABLE_PLAY_SPECIFIC_REALMS_ONLY		When defined, the game will only
-//										play specific realms.  See elsewhere for more
-//										info on how this works.
+//      ENABLE_PLAY_SPECIFIC_REALMS_ONLY      When defined, the game will only
+//                              play specific realms.  See elsewhere for more
+//                              info on how this works.
 //
 // The above macros should be defined below (as appropriate) based on the
 // current TARGET, LOCALE and SPAWN macros.
@@ -501,7 +501,7 @@
 // Define the character to be used as the separator in the audio sak filenames.
 //
 // This was originally hard-wired to "_" which gave us names like
-//		11025_16.sak
+//      11025_16.sak
 // where the separator is used between the rate and the number of bits.
 //
 // For the Japanese version of Postal, the audio was re-recorded in Japanese.
@@ -520,9 +520,9 @@
 #if defined(TARGET) && defined(LOCALE)
 
    #if LOCALE == JAPAN
-      #define AUDIO_SAK_SEPARATOR_CHAR		'j'
+      #define AUDIO_SAK_SEPARATOR_CHAR      'j'
    #else
-      #define AUDIO_SAK_SEPARATOR_CHAR		'_'
+      #define AUDIO_SAK_SEPARATOR_CHAR      '_'
    #endif
 
 #endif
@@ -570,17 +570,17 @@
 //
 // Dates are calculated using the following math:
 //
-//		Time to 1/1/97 from 1/1/70 = 852076800
-//		1/1/70 = 0
-//		1/1/97 = (365*27) + 7 extra leap year days) * 24 * 60 * 60 = 852076800
-//		7/17/97 = 198th day in the year = 198 * 24 * 60 * 60
-//		9/22/97 = 265th day in the year = 265 * 24 * 60 * 60 = 22896000
+//      Time to 1/1/97 from 1/1/70 = 852076800
+//      1/1/70 = 0
+//      1/1/97 = (365*27) + 7 extra leap year days) * 24 * 60 * 60 = 852076800
+//      7/17/97 = 198th day in the year = 198 * 24 * 60 * 60
+//      9/22/97 = 265th day in the year = 265 * 24 * 60 * 60 = 22896000
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define RELEASE_DATE						869443200   // Real release date - change before sending 7/20/97
-#define EXPIRATION_DATE					(22896000 + 852076800 - 1)  // 11:59pm Sepember 30, 1997 (day 273)
-#define SAFE_DATE							2047483000  // We'll all be dead.
+#define RELEASE_DATE                  869443200   // Real release date - change before sending 7/20/97
+#define EXPIRATION_DATE               (22896000 + 852076800 - 1)  // 11:59pm Sepember 30, 1997 (day 273)
+#define SAFE_DATE                     2047483000  // We'll all be dead.
 
 // These macros cause customized expiration messages to be displayed instead
 // of the standard expiration message.  These particular messages are obsolete,
@@ -605,9 +605,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #if defined(ENABLE_PLAY_SPECIFIC_REALMS_ONLY)
-   #define SPECIFIC_MP_REALM_TEXT			"Build Your Own Death"
-   #define SPECIFIC_MP_REALM_FILE			"res/levels/multi/mpconsit.rlm"
-   #define SPECIFIC_MP_REALM_NUM				10
+   #define SPECIFIC_MP_REALM_TEXT         "Build Your Own Death"
+   #define SPECIFIC_MP_REALM_FILE         "res/levels/multi/mpconsit.rlm"
+   #define SPECIFIC_MP_REALM_NUM            10
 #endif
 
 

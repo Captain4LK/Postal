@@ -19,7 +19,7 @@
 // Project: Postal
 //
 // History:
-//		08/04/97 BRH	Started.
+//      08/04/97 BRH   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -93,7 +93,7 @@ typedef struct tAddressIP
 public:
    RSocket::ProtoType prototype;                   // Type of protocol
    S32 lAddressLen;                                // Actual address length (always <= MaxAddressSize)
-   SOCKADDR_IN	address;                            // Address
+   SOCKADDR_IN address;                              // Address
 
    bool operator==(const tAddressIP& rhs) const
    {
@@ -113,7 +113,7 @@ public:
 //------------------------------------------------------------------------------
 public:
 SOCKET m_sock;                                  // Socket
-short	m_sType;                                  // Type of socket (RSocket::typ*)
+short m_sType;                                    // Type of socket (RSocket::typ*)
 
 //------------------------------------------------------------------------------
 // Static Variables

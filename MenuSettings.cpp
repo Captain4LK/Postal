@@ -19,19 +19,19 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		06/11/97 JMI	Started.
+//      06/11/97 JMI   Started.
 //
-//		07/18/97	JMI	Added more menus to those scanned.
+//      07/18/97   JMI   Added more menus to those scanned.
 //
-//		07/20/97	JMI	Added menuVideoOptions, menuAudioOptions, and
-//							menuPlayOptions.
+//      07/20/97   JMI   Added menuVideoOptions, menuAudioOptions, and
+//                     menuPlayOptions.
 //
-//		08/04/97	JMI	Added menuRotation.
+//      08/04/97   JMI   Added menuRotation.
 //
-//		08/27/97	JMI	Now section names are "Menu " instead of "Menu_" since
-//							RPrefs now supports spaces in vars and sections.
+//      08/27/97   JMI   Now section names are "Menu " instead of "Menu_" since
+//                     RPrefs now supports spaces in vars and sections.
 //
-//		06/28/01 MJR	Added menuChallenge.
+//      06/28/01 MJR   Added menuChallenge.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -61,7 +61,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@
 
 // Items pointed to by elements of this array are the ones that are checked
 // for settings.
-static Menu*	ms_apmenus[]	=
+static Menu*   ms_apmenus[]   =
 {
    &menuMain,
    &menuClientGame,
@@ -135,8 +135,8 @@ short CMenuSettings::LoadPrefs(
    short sResult = 0;
 
    // Check for entries for all our menus.
-   short	sMenu;
-   short	sMenuItem;
+   short sMenu;
+   short sMenuItem;
    char szSection[256];
    for (sMenu = 0; sMenu < NUM_ELEMENTS(ms_apmenus); sMenu++)
    {

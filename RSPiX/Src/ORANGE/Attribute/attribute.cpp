@@ -19,72 +19,72 @@
 //
 // ATTRIBUTE.CPP
 //
-// Created on	10/03/96 BRH
-// Implemented	10/03/96 BRH
+// Created on   10/03/96 BRH
+// Implemented   10/03/96 BRH
 //
-//	10/03/96 BRH	Started this class for use in the Postal
-//						demo to provide a way to load the attribute
-//						map and to access the data
+//   10/03/96 BRH   Started this class for use in the Postal
+//                  demo to provide a way to load the attribute
+//                  map and to access the data
 //
-// 10/14/96 BRH	Added scaling to the attribute map utility and
-//						changed the Load to read in the scale from
-//						the new version of the attribute map file, and
-//						changed GetAttribute functions to scale the
-//						real world coordinates to the scaled map size.
-//						This allows maps to be smaller and take less
-//						less memory.
+// 10/14/96 BRH   Added scaling to the attribute map utility and
+//                  changed the Load to read in the scale from
+//                  the new version of the attribute map file, and
+//                  changed GetAttribute functions to scale the
+//                  real world coordinates to the scaled map size.
+//                  This allows maps to be smaller and take less
+//                  less memory.
 //
-//	10/15/96 BRH	Expanded the attribute map to 16 bits.  The
-//						High 8 bits are for height rather than the
-//						simple walk/no walk attribute.  The lower 8
-//						bits are for flags.  Whenever an attribute
-//						for a region is returned, it is the ORed
-//						combination of the low 8 bits, and the max
-//						height in the high 8 bits.
+//   10/15/96 BRH   Expanded the attribute map to 16 bits.  The
+//                  High 8 bits are for height rather than the
+//                  simple walk/no walk attribute.  The lower 8
+//                  bits are for flags.  Whenever an attribute
+//                  for a region is returned, it is the ORed
+//                  combination of the low 8 bits, and the max
+//                  height in the high 8 bits.
 //
-//	10/22/96	JMI	Moved #include <stdlib.h> to before
-//						#include "System.h".
+//   10/22/96   JMI   Moved #include <stdlib.h> to before
+//                  #include "System.h".
 //
-//	10/28/96 MJR	Switched from __min and __max to MIN and MAX for
-//						compatibility with CodeWarrior.
+//   10/28/96 MJR   Switched from __min and __max to MIN and MAX for
+//                  compatibility with CodeWarrior.
 //
-// 10/31/96 BRH	Changed CAttributeMap to RAttributeMap which is
-//						the new RSPiX naming convention.
+// 10/31/96 BRH   Changed CAttributeMap to RAttributeMap which is
+//                  the new RSPiX naming convention.
 //
-//	11/01/96	JMI	Changed:
-//						Old label:		New label:
-//						=========		=========
-//						LITTLE_ENDIAN	RFile::LittleEndian
+//   11/01/96   JMI   Changed:
+//                  Old label:      New label:
+//                  =========      =========
+//                  LITTLE_ENDIAN   RFile::LittleEndian
 //
-//	11/20/96 BRH	Changed the load function to load the new attribute
-//						format which includes block maps and detail maps.
-//						Also changed the GetAttriubte functions to
-//						interpret the new format.
+//   11/20/96 BRH   Changed the load function to load the new attribute
+//                  format which includes block maps and detail maps.
+//                  Also changed the GetAttriubte functions to
+//                  interpret the new format.
 //
-//	11/21/96 BRH	Changed the GetAttribute rectangle version for the
-//						new attribute format.  It now loops through the
-//						rectangle but skips to the next block if the
-//						attribute from the block it just read contains
-//						all of the same attributes.   The height is now
-//						height and depth in the low 8 bits.  It can be
-//						cast to a signed char to get the value of the height
-//						or depth.  The attribute flag bits are in the upper 7
-//						bits of the attribute and the high bit is the
-//						flag to mark the map entry as a lookup or complete
-//						block with a single attribute.
+//   11/21/96 BRH   Changed the GetAttribute rectangle version for the
+//                  new attribute format.  It now loops through the
+//                  rectangle but skips to the next block if the
+//                  attribute from the block it just read contains
+//                  all of the same attributes.   The height is now
+//                  height and depth in the low 8 bits.  It can be
+//                  cast to a signed char to get the value of the height
+//                  or depth.  The attribute flag bits are in the upper 7
+//                  bits of the attribute and the high bit is the
+//                  flag to mark the map entry as a lookup or complete
+//                  block with a single attribute.
 //
-// 11/22/96 BRH	Fixed problem with casting the result of the
-//						attribute height/depth for the GetAttribute
-//						function.
+// 11/22/96 BRH   Fixed problem with casting the result of the
+//                  attribute height/depth for the GetAttribute
+//                  function.
 //
-// 01/14/97 BRH	Fixed problem of checking an attribute right on the
-//						right or bottom edge of the world.  If you called
-//						GetAttribute with a point one pixel past the edge
-//						of the world it would crash, if it were inside or
-//						further outside it was fine.
+// 01/14/97 BRH   Fixed problem of checking an attribute right on the
+//                  right or bottom edge of the world.  If you called
+//                  GetAttribute with a point one pixel past the edge
+//                  of the world it would crash, if it were inside or
+//                  further outside it was fine.
 //
-//	02/03/97 BRH	Added a Load that takes an RFile* in addition to
-//						the one that takes the filename as char*.
+//   02/03/97 BRH   Added a Load that takes an RFile* in addition to
+//                  the one that takes the filename as char*.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -99,21 +99,21 @@
    #include "ATTRIBUTE.H"
    #include "FILE.H"
 
-#endif	//PATHS_IN_INCLUDES
+#endif   //PATHS_IN_INCLUDES
 
 //////////////////////////////////////////////////////////////////////
 //
 // Constructor
 //
 // Description:
-//		Default contstuctor for the RAttributeMap class.  Initializes
-//		the map buffer pointer.
+//      Default contstuctor for the RAttributeMap class.  Initializes
+//      the map buffer pointer.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -138,15 +138,15 @@ RAttributeMap::RAttributeMap()
 // Constructor
 //
 // Description:
-//		This constructor takes the filename of the map to load and
-//		first initializes a RAttributeMap and then calls the load
-//		function.
+//      This constructor takes the filename of the map to load and
+//      first initializes a RAttributeMap and then calls the load
+//      function.
 //
 // Parameters:
-//		char* pszFilename = filename of map file to load
+//      char* pszFilename = filename of map file to load
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -172,14 +172,14 @@ RAttributeMap::RAttributeMap(char* pszFilename)
 // Destructor
 //
 // Description:
-//		General destructor for RAttributeMap class.  Frees the map
-//		pointer if one was allocated.
+//      General destructor for RAttributeMap class.  Frees the map
+//      pointer if one was allocated.
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -193,13 +193,13 @@ RAttributeMap::~RAttributeMap()
 // FreeMap
 //
 // Description:
-//		Frees the map buffer if one was allocated
+//      Frees the map buffer if one was allocated
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -222,14 +222,14 @@ void RAttributeMap::FreeMap()
 // AllocateMap
 //
 // Description:
-//		Allocates memory for a map of the given size
+//      Allocates memory for a map of the given size
 //
 // Parameters:
-//		U32 ulSize = size of buffer to allocate
+//      U32 ulSize = size of buffer to allocate
 //
 // Returns:
-//		SUCCESS if memory was allocated
-//		FAILURE otherwise
+//      SUCCESS if memory was allocated
+//      FAILURE otherwise
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -254,28 +254,28 @@ short RAttributeMap::AllocateMap(U32 ulSize, U32 ulDetailMapSize)
 // GetAttribute
 //
 // Description:
-//		This is the single point version which returns the attribute
-//		at the given position on the map.
+//      This is the single point version which returns the attribute
+//      at the given position on the map.
 //
 // Parameters:
-//		U32 ulX = x position of point
-//		U32 ulY = y position of point
+//      U32 ulX = x position of point
+//      U32 ulY = y position of point
 //
 // Returns:
-//		USHORT = attribute at the specified point
+//      USHORT = attribute at the specified point
 //
 //////////////////////////////////////////////////////////////////////
 /*
 USHORT RAttributeMap::GetAttribute(S32 lX, S32 lY)
 {
-	if ((lX/m_sScaleX) > m_lWidth || (lY/m_sScaleY) > m_lHeight || lX < 0 || lY < 0)
-		return ATTRIBUTE_NOT_WALKABLE;
+   if ((lX/m_sScaleX) > m_lWidth || (lY/m_sScaleY) > m_lHeight || lX < 0 || lY < 0)
+      return ATTRIBUTE_NOT_WALKABLE;
 
-	m_usLastAttribute = m_pusMap[(lY/m_sScaleY)*m_lWidth + (lX/m_sScaleX)];
-	m_ucFlags = (UCHAR) (m_usLastAttribute & 0x00ff);
-	m_ucMinHeight = m_ucMaxHeight = (UCHAR) ((m_usLastAttribute & 0xff00) >> 8);
+   m_usLastAttribute = m_pusMap[(lY/m_sScaleY)*m_lWidth + (lX/m_sScaleX)];
+   m_ucFlags = (UCHAR) (m_usLastAttribute & 0x00ff);
+   m_ucMinHeight = m_ucMaxHeight = (UCHAR) ((m_usLastAttribute & 0xff00) >> 8);
 
-	return m_usLastAttribute;
+   return m_usLastAttribute;
 }
 */
 
@@ -310,86 +310,86 @@ USHORT RAttributeMap::GetAttribute(S32 lX, S32 lY)
 // GetAttribute
 //
 // Description:
-//		This is the rectangle version which returns the ORed
-//		combination of the attributes within the rectangle.  The
-//		attribute bits have been arranged so that an ORed combination
-//		has a real meaning.  If any point within the rectnagle is
-//		non-walkable, then the non-walkable bit is set and the other
-//		bits pertain to shadow behind different layers, so the ORed
-//		combination will tell you each layer that the object is
-//		behind.  The coordinates given are scaled down to the map size.
-//		It converts the real world coordinates to map coordinates
-//		by dividing them by the scale for the Map.  The maps may be
-//		created such that a single map position refers to more than
-//		one pixel location.  This help saves memory by having smaller
-//		maps, and it also results in faster checking of this version
-//		of GetAttribute that takes the rectangular area to be checked.
+//      This is the rectangle version which returns the ORed
+//      combination of the attributes within the rectangle.  The
+//      attribute bits have been arranged so that an ORed combination
+//      has a real meaning.  If any point within the rectnagle is
+//      non-walkable, then the non-walkable bit is set and the other
+//      bits pertain to shadow behind different layers, so the ORed
+//      combination will tell you each layer that the object is
+//      behind.  The coordinates given are scaled down to the map size.
+//      It converts the real world coordinates to map coordinates
+//      by dividing them by the scale for the Map.  The maps may be
+//      created such that a single map position refers to more than
+//      one pixel location.  This help saves memory by having smaller
+//      maps, and it also results in faster checking of this version
+//      of GetAttribute that takes the rectangular area to be checked.
 //
-//		Note the rectangle is clipped to the map size if it happens
-//		to exceed the boundries.
+//      Note the rectangle is clipped to the map size if it happens
+//      to exceed the boundries.
 //
 // Parameters:
-//		ulTopCoord = top of box to check.
-//		ulBottomCoord = bottom of box to check
-//		ulLeftCoord = left size of box to check
-//		ulRightCoord = right side of box to check
+//      ulTopCoord = top of box to check.
+//      ulBottomCoord = bottom of box to check
+//      ulLeftCoord = left size of box to check
+//      ulRightCoord = right side of box to check
 //
 // Returns
-//		USHORT = ORed combination of attribute bits within this rectangle
+//      USHORT = ORed combination of attribute bits within this rectangle
 //
 //////////////////////////////////////////////////////////////////////
 
 /*
 USHORT RAttributeMap::GetAttribute(S32 lTopCoord, S32 lBottomCoord,
-											 S32 lLeftCoord, S32 lRightCoord)
+                                  S32 lLeftCoord, S32 lRightCoord)
 {
-	S32 lTop = lTopCoord / m_sScaleY;
-	S32 lBottom = lBottomCoord / m_sScaleY;
-	S32 lLeft = lLeftCoord / m_sScaleX;
-	S32 lRight = lRightCoord / m_sScaleX;
+   S32 lTop = lTopCoord / m_sScaleY;
+   S32 lBottom = lBottomCoord / m_sScaleY;
+   S32 lLeft = lLeftCoord / m_sScaleX;
+   S32 lRight = lRightCoord / m_sScaleX;
 
-	// Clip the box to the map size if necessary
-	if (lTop >= m_lHeight)
-		lTop = m_lHeight - 1;
-	if (lTop < 0)
-		lTop = 0;
-	if (lBottom >= m_lHeight)
-		lBottom = m_lHeight - 1;
-	if (lBottom < 0)
-		lBottom = 0;
-	if (lLeft >= m_lWidth)
-		lLeft = m_lWidth - 1;
-	if (lLeft < 0)
-		lLeft = 0;
-	if (lRight >= m_lWidth)
-		lRight = m_lWidth - 1;
-	if (lRight < 0)
-		lRight = 0;
+   // Clip the box to the map size if necessary
+   if (lTop >= m_lHeight)
+      lTop = m_lHeight - 1;
+   if (lTop < 0)
+      lTop = 0;
+   if (lBottom >= m_lHeight)
+      lBottom = m_lHeight - 1;
+   if (lBottom < 0)
+      lBottom = 0;
+   if (lLeft >= m_lWidth)
+      lLeft = m_lWidth - 1;
+   if (lLeft < 0)
+      lLeft = 0;
+   if (lRight >= m_lWidth)
+      lRight = m_lWidth - 1;
+   if (lRight < 0)
+      lRight = 0;
 
-	S32 lRow;
-	S32 lCol;
-	USHORT usResult = 0;
-	USHORT usAttrib = 0;
-	USHORT usMin = m_pusMap[lTop*m_lWidth + lLeft];
-	USHORT usMax = m_pusMap[lTop*m_lWidth + lLeft];
-	USHORT usFlags = 0;
+   S32 lRow;
+   S32 lCol;
+   USHORT usResult = 0;
+   USHORT usAttrib = 0;
+   USHORT usMin = m_pusMap[lTop*m_lWidth + lLeft];
+   USHORT usMax = m_pusMap[lTop*m_lWidth + lLeft];
+   USHORT usFlags = 0;
 
-	for (lRow = lTop; lRow <= lBottom; lRow++)
-		for (lCol = lLeft; lCol <= lRight; lCol++)
-		{
-			usAttrib = m_pusMap[lRow*m_lWidth + lCol];
-			usFlags |= usAttrib;
-			usMin = MIN(usMin, usAttrib);
-			usMax = MAX(usMax, usAttrib);
-		}
+   for (lRow = lTop; lRow <= lBottom; lRow++)
+      for (lCol = lLeft; lCol <= lRight; lCol++)
+      {
+         usAttrib = m_pusMap[lRow*m_lWidth + lCol];
+         usFlags |= usAttrib;
+         usMin = MIN(usMin, usAttrib);
+         usMax = MAX(usMax, usAttrib);
+      }
 
-	m_ucFlags = (UCHAR) (usFlags & 0x00ff);
-	m_ucMinHeight = (UCHAR) (usMin >> 8);
-	m_ucMaxHeight = (UCHAR) (usMax >> 8);
+   m_ucFlags = (UCHAR) (usFlags & 0x00ff);
+   m_ucMinHeight = (UCHAR) (usMin >> 8);
+   m_ucMaxHeight = (UCHAR) (usMax >> 8);
 
-	usResult = (usMax & 0xff00) | (usFlags & 0x00ff);
+   usResult = (usMax & 0xff00) | (usFlags & 0x00ff);
 
-	return usResult;
+   return usResult;
 }
 */
 
@@ -461,23 +461,23 @@ USHORT RAttributeMap::GetAttribute(S32 lTopCoord, S32 lBottomCoord,
 // Load
 //
 // Description:
-//		Loads the map file into a buffer.  Checks to make sure that
-//		the file is the right type and version before loading.
+//      Loads the map file into a buffer.  Checks to make sure that
+//      the file is the right type and version before loading.
 //
 // Parameters:
-//		char* pszFilename = filename of map file to be loaded
+//      char* pszFilename = filename of map file to be loaded
 //
 // Returns:
-//		SUCCESS if loaded correctly
-//		-1 if file not found
-//		-2 if wrong file type
-//		-3 if wrong version
-//		-4	if error reading width
-//		-5 if error reading height
-//		-6 if error reading X scale
-//		-7 if error reading Y scale
-//		-8 if error allocating memory for map buffer
-//		-9 if error reading map data
+//      SUCCESS if loaded correctly
+//      -1 if file not found
+//      -2 if wrong file type
+//      -3 if wrong version
+//      -4   if error reading width
+//      -5 if error reading height
+//      -6 if error reading X scale
+//      -7 if error reading Y scale
+//      -8 if error allocating memory for map buffer
+//      -9 if error reading map data
 //
 //////////////////////////////////////////////////////////////////////
 

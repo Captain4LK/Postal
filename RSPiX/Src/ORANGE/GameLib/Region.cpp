@@ -21,37 +21,37 @@
 //
 //
 // History:
-//		12/08/95	BRH	Started.
+//      12/08/95   BRH   Started.
 //
-//		06/10/96	JMI	Added some "return NO_COLLISION;" (i.e., virtually empty)
-//							function bodies for those that were actually empty.
-//							Also added TRACE messages stating that the function was
-//							NYI.
-//							Commented out some unused locals.
-//							Took some functions that were defined here and added
-//							their protos to region.h.
+//      06/10/96   JMI   Added some "return NO_COLLISION;" (i.e., virtually empty)
+//                     function bodies for those that were actually empty.
+//                     Also added TRACE messages stating that the function was
+//                     NYI.
+//                     Commented out some unused locals.
+//                     Took some functions that were defined here and added
+//                     their protos to region.h.
 //
-//		10/27/96 MJR	Fixed "unused variable" warnings.
+//      10/27/96 MJR   Fixed "unused variable" warnings.
 //
-//		10/31/96 BRH	Changed the class prefix C to R to match the new
-//							RSPiX naming convetion.
+//      10/31/96 BRH   Changed the class prefix C to R to match the new
+//                     RSPiX naming convetion.
 //
-//		11/04/96	JMI	Changed CRectangle to RRectangle and CCircle to RCircle.
+//      11/04/96   JMI   Changed CRectangle to RRectangle and CCircle to RCircle.
 //
-//		02/18/97	JMI	Filled in Spherical region's collide with 3D ray utilizing
-//							super fast code fragment del Jeff.
+//      02/18/97   JMI   Filled in Spherical region's collide with 3D ray utilizing
+//                     super fast code fragment del Jeff.
 //
-//		02/18/97	JMI	Changed the 3DLine intersection with a sphere back to
-//							2D on X and Z.
+//      02/18/97   JMI   Changed the 3DLine intersection with a sphere back to
+//                     2D on X and Z.
 //
-//		02/19/97	JMI	Was doing subtractions backwards in determining line's
-//							end point's distance from its start point in 3DLine
-//							intersection with sphere.
+//      02/19/97   JMI   Was doing subtractions backwards in determining line's
+//                     end point's distance from its start point in 3DLine
+//                     intersection with sphere.
 //
-//		02/19/97 BRH	Fixed bug in spherical region collision detect where a
-//							+ sign was typoed as = causing the distance to be off.
+//      02/19/97 BRH   Fixed bug in spherical region collision detect where a
+//                     + sign was typoed as = causing the distance to be off.
 //
-//		06/28/97 MJR	Changed __int64 to S64 for mac compatability.
+//      06/28/97 MJR   Changed __int64 to S64 for mac compatability.
 //
 //////////////////////////////////////////////////////////////////////////////
 #include <math.h>
@@ -64,17 +64,17 @@
 // Constructors
 //
 // Description:
-//		Three Constructors for RRectangularRegion
+//      Three Constructors for RRectangularRegion
 //
 // Parameters:
-//		type 1:	none
-//		type 2:  pRect = pointer to rectangle that will be used to initialize
-//					the rectangular region
-//		type 3:	lLeft, lRight, lTop, lBottom = Relative positions from the
-//					region's m_lAbs values
+//      type 1:   none
+//      type 2:  pRect = pointer to rectangle that will be used to initialize
+//               the rectangular region
+//      type 3:   lLeft, lRight, lTop, lBottom = Relative positions from the
+//               region's m_lAbs values
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -112,16 +112,16 @@ RRectangularRegion::RRectangularRegion(S32 lX, S32 lY,
 // Collide (point)
 //
 // Description:
-//		Checks to see if the given point is in the region
+//      Checks to see if the given point is in the region
 //
 // Parameters:
-//		pPoint = ponter to RPt to be checked against the region
+//      pPoint = ponter to RPt to be checked against the region
 // or
-//		lX, lY = X,Y of point to be checked
+//      lX, lY = X,Y of point to be checked
 //
 // Returns:
-//		NO_COLLISION if the point is not in or on the rectangle
-//		COLLISION if it is
+//      NO_COLLISION if the point is not in or on the rectangle
+//      COLLISION if it is
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +147,7 @@ short RRectangularRegion::Collide(R2DRay* /*pRay*/)
    TRACE("RRectangularRegion::Collide(R2DRay* pRay,...): NYI!\n");
    short sReturn = NO_COLLISION;
 
-//	S32 fx1, fx2, fy1, fy2;
+//   S32 fx1, fx2, fy1, fy2;
 
    // Check Left
 
@@ -194,20 +194,20 @@ short RRectangularRegion::Collide(RCircularRegion* /*pRegion*/, short /*bFullChe
 // Constructors
 //
 // Description:
-//		Three constructors for Cubic Regions
+//      Three constructors for Cubic Regions
 //
 // Parameters:
-//		type 1:	none
-//		type 2:  pPoint = originating point of region to which the sides
-//					         of the cube are relative
-//					pCube = RCube object used to initialize the region's cube
-//		type 3:	lX, lY = originating point of region to which the sides of
-//								the cube are relative
-//					lLeft, lRight, lTop, lBottom, lFront, lBack =
-//						Relative positions from the region's m_lAbs values
+//      type 1:   none
+//      type 2:  pPoint = originating point of region to which the sides
+//                        of the cube are relative
+//               pCube = RCube object used to initialize the region's cube
+//      type 3:   lX, lY = originating point of region to which the sides of
+//                        the cube are relative
+//               lLeft, lRight, lTop, lBottom, lFront, lBack =
+//                  Relative positions from the region's m_lAbs values
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -302,21 +302,21 @@ short RCubicRegion::Collide(RSphericalRegion* /*pRegion*/)
 // Constructors
 //
 // Description:
-//		Three Constructors for RCircularRegion
+//      Three Constructors for RCircularRegion
 //
 // Parameters:
-//		type 1:	none
-//		type 2:	pPoint = originating point of region to which the center of
-//								the circle is relative
-//					pCircle = RCircle object used to initialize the region's circle
-//		type 3:	lX, lY = originative point of region to which the center of
-//								the circle is relative
-//					lXCirc, lYCirc = center of the circle relative to the region's
-//										  position
-//					lRadius = Radius of the circle
+//      type 1:   none
+//      type 2:   pPoint = originating point of region to which the center of
+//                        the circle is relative
+//               pCircle = RCircle object used to initialize the region's circle
+//      type 3:   lX, lY = originative point of region to which the center of
+//                        the circle is relative
+//               lXCirc, lYCirc = center of the circle relative to the region's
+//                                position
+//               lRadius = Radius of the circle
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -389,21 +389,21 @@ short RCircularRegion::Collide(RRectangularRegion* /*pRegion*/)
 // Constructors
 //
 // Description:
-//		Three Constructors for RSphericalRegion
+//      Three Constructors for RSphericalRegion
 //
 // Parameters:
-//		type 1:	none
-//		type 2:	pPoint = originating point of region to which the center of
-//								the circle is relative
-//					pSphere = RSphere object used to initialize the region's sphere
-//		type 3:	lX, lY, lZ = originative point of region to which the center of
-//								    the circle is relative
-//					lXSphere, lYSphere, lZSphere = center of sphere relative to
-//															 the region's position
-//					lRadius = radius of the sphere
+//      type 1:   none
+//      type 2:   pPoint = originating point of region to which the center of
+//                        the circle is relative
+//               pSphere = RSphere object used to initialize the region's sphere
+//      type 3:   lX, lY, lZ = originative point of region to which the center of
+//                            the circle is relative
+//               lXSphere, lYSphere, lZSphere = center of sphere relative to
+//                                              the region's position
+//               lRadius = radius of the sphere
 //
 // Returns:
-//		none
+//      none
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -519,15 +519,15 @@ short RSphericalRegion::Collide(R3DLine* pline)
       }
 
    }
-#else	// 2D version on X and Z.
+#else   // 2D version on X and Z.
    //***************************** FUNCTION UINPUT **
    S32 lRelCenX = sphere.X - pline->X1;
-//	S32 lRelCenY = sphere.Y - pline->Y1;
+//   S32 lRelCenY = sphere.Y - pline->Y1;
    // JMI: Added Z component:
    S32 lRelCenZ = sphere.Z - pline->Z1;
 
    S32 lDelX = (pline->X2 - pline->X1);
-//	S32 lDelY = (pline->Y2 - pline->Y1);
+//   S32 lDelY = (pline->Y2 - pline->Y1);
    // JMI: Added Z component:
    S32 lDelZ = (pline->Z2 - pline->Z1);
    short sCirR = sphere.lRadius; // the circle radius

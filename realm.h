@@ -18,303 +18,303 @@
 // realm.h
 // Project: Postal
 //
-//	History:
-//		01/22/97	JMI	Added more LayerSpriteN, LayerOpaqueN, LayerAlphaN enums.
+//   History:
+//      01/22/97   JMI   Added more LayerSpriteN, LayerOpaqueN, LayerAlphaN enums.
 //
-//		01/23/97	JMI	Added macro enums LayerAttribMask and LayerAttribShift that
-//							can be used on an attribute to get the sprite layer flags
-//							indicated by the attribute.  This value can be mapped through
-//							the new static member ms_asAttribToLayer.  Or, you can just
-//							use the new inline static member CRealm::GetLayerFromAttrib().
+//      01/23/97   JMI   Added macro enums LayerAttribMask and LayerAttribShift that
+//                     can be used on an attribute to get the sprite layer flags
+//                     indicated by the attribute.  This value can be mapped through
+//                     the new static member ms_asAttribToLayer.  Or, you can just
+//                     use the new inline static member CRealm::GetLayerFromAttrib().
 //
-//		01/27/97	JMI	Now 4 bits are used from the attribute to determine the proper
-//							layer for dudes.
+//      01/27/97   JMI   Now 4 bits are used from the attribute to determine the proper
+//                     layer for dudes.
 //
-//		01/28/97	JMI	Added ms_apszLayerNames[] to access the names of the layers.
+//      01/28/97   JMI   Added ms_apszLayerNames[] to access the names of the layers.
 //
-//		01/29/97	JMI	Reordered Layers enum (fixed to the way Steve is doing it
-//							(the opaque layers are now before equivalent alpha layers)).
+//      01/29/97   JMI   Reordered Layers enum (fixed to the way Steve is doing it
+//                     (the opaque layers are now before equivalent alpha layers)).
 //
-//		02/02/97	JMI	Added m_resmgr to load resources for each realm instance.
+//      02/02/97   JMI   Added m_resmgr to load resources for each realm instance.
 //
-//		02/04/97 BRH	Added ms_pCurrentNavNet and GetCurrentNavNet() functiion
-//							to the realm.  Previously the current NavNet was stored
-//							in the editor which was OK for bouys but difficult to get
-//							for other game objects.
+//      02/04/97 BRH   Added ms_pCurrentNavNet and GetCurrentNavNet() functiion
+//                     to the realm.  Previously the current NavNet was stored
+//                     in the editor which was OK for bouys but difficult to get
+//                     for other game objects.
 //
-//		02/13/97	JMI	Added hood pointer to CRealm.
+//      02/13/97   JMI   Added hood pointer to CRealm.
 //
-//		02/17/97	JMI	Added set lists to CRealm.  Now there is a list for each
-//							set of Things.  The sets are enumerated in CThing.
+//      02/17/97   JMI   Added set lists to CRealm.  Now there is a list for each
+//                     set of Things.  The sets are enumerated in CThing.
 //
-//		02/18/97	JMI	Added GetNext*Collision() functions for a sphere and a
-//							line segment.
+//      02/18/97   JMI   Added GetNext*Collision() functions for a sphere and a
+//                     line segment.
 //
-//		02/19/97	JMI	Removed stuff having to do with old collision sets and
-//							added new Smashatorium for collision detection.
+//      02/19/97   JMI   Removed stuff having to do with old collision sets and
+//                     added new Smashatorium for collision detection.
 //
-//		02/23/97	JMI	Added m_iNext and m_bUpdating so RemoveThing() and
-//							AddThing() can make the necessary adjustments to the next
-//							iterator processed in the Update() loop.
+//      02/23/97   JMI   Added m_iNext and m_bUpdating so RemoveThing() and
+//                     AddThing() can make the necessary adjustments to the next
+//                     iterator processed in the Update() loop.
 //
-//		03/13/97	JMI	Upped FileVersion to 2 for new CDude stuff.
+//      03/13/97   JMI   Upped FileVersion to 2 for new CDude stuff.
 //
-//		03/14/97	JMI	Upped FileVersion to 3 for new CThing3d base class for
-//							CCharacter.
+//      03/14/97   JMI   Upped FileVersion to 3 for new CThing3d base class for
+//                     CCharacter.
 //
-//		03/18/97	JMI	Upped FileVersion to 4 for CBand, which now loads info
-//							for creating child items.
+//      03/18/97   JMI   Upped FileVersion to 4 for CBand, which now loads info
+//                     for creating child items.
 //
-//		04/15/97 BRH	Upped FileVersion to 5 for CMine, which now saves the
-//							fuse time for the timed mines.
+//      04/15/97 BRH   Upped FileVersion to 5 for CMine, which now saves the
+//                     fuse time for the timed mines.
 //
-//		04/17/97 BRH	Took timeout check out of Shutdown and Startup (it was
-//							already commented out of Startup).  The 1 second timeout
-//							when calling shutdown caused large levels like parade
-//							to abort before saving everything.
+//      04/17/97 BRH   Took timeout check out of Shutdown and Startup (it was
+//                     already commented out of Startup).  The 1 second timeout
+//                     when calling shutdown caused large levels like parade
+//                     to abort before saving everything.
 //
-//		04/20/97 BRH	Changed FileVersion to 6 for CBouy which now saves
-//							a message.
+//      04/20/97 BRH   Changed FileVersion to 6 for CBouy which now saves
+//                     a message.
 //
-//		04/21/97	JMI	Added m_sNumSuspends and IsSuspended().
+//      04/21/97   JMI   Added m_sNumSuspends and IsSuspended().
 //
-//		04/23/97	JMI	Upped file version to 7 for new CDispenser parameter,
-//							m_sMaxDispensees.
+//      04/23/97   JMI   Upped file version to 7 for new CDispenser parameter,
+//                     m_sMaxDispensees.
 //
-//		04/24/97	JMI	Upped file version to 8 for newly saved CBarrel parameter,
-//							m_dRot.
+//      04/24/97   JMI   Upped file version to 8 for newly saved CBarrel parameter,
+//                     m_dRot.
 //
-//		04/24/97	JMI	Upped file version to 9 for new CDude parameter,
-//							m_sNumShells.
+//      04/24/97   JMI   Upped file version to 9 for new CDude parameter,
+//                     m_sNumShells.
 //
-//		04/25/97	JMI	Upped file version to 10 for new CDude parameter,
-//							m_sNumFuel.
+//      04/25/97   JMI   Upped file version to 10 for new CDude parameter,
+//                     m_sNumFuel.
 //
-//		04/29/97	JMI	Changed GetHeight() to return 0 for the clipped case.
+//      04/29/97   JMI   Changed GetHeight() to return 0 for the clipped case.
 //
-//		04/30/97	JMI	Upped file version to 11 since CMine no S32er saves its
-//							type.  The type (which is now determined by the class ID)
-//							is saved by the base class CThing.
+//      04/30/97   JMI   Upped file version to 11 since CMine no S32er saves its
+//                     type.  The type (which is now determined by the class ID)
+//                     is saved by the base class CThing.
 //
-//		05/01/97 BRH	Updated FileVersion to 12 since its May Day.  (and because
-//							on May Day I removed the message saving from the Bouy)
+//      05/01/97 BRH   Updated FileVersion to 12 since its May Day.  (and because
+//                     on May Day I removed the message saving from the Bouy)
 //
-//		05/04/97 BRH	Removed the STL version since all of the lists seem to
-//							be working fine with the CListNode lists.
+//      05/04/97 BRH   Removed the STL version since all of the lists seem to
+//                     be working fine with the CListNode lists.
 //
-//		05/09/97 JRD	Added an attribute map for trigger regions and a pylon ID table
+//      05/09/97 JRD   Added an attribute map for trigger regions and a pylon ID table
 //
-//		05/13/97	JMI	Upped file version to 13 for new CDude parameters,
-//							m_sNumMines and m_sNumHeatseekers.
+//      05/13/97   JMI   Upped file version to 13 for new CDude parameters,
+//                     m_sNumMines and m_sNumHeatseekers.
 //
-//		05/13/97	JMI	Added IsPathClear() map functions to determine if a path
-//							is clear of terrain that cannot be surmounted.
+//      05/13/97   JMI   Added IsPathClear() map functions to determine if a path
+//                     is clear of terrain that cannot be surmounted.
 //
-//		05/16/97	JMI	Changed layer bits to be 8 bits (instead of 4).  This
-//							caused the REALM_ATTR_EFFECT_MASK to lose 4 bits and the
-//							REALM_ATTR_LIGHT_BIT to move up 4 bits (0x0010 to 0x0100).
-//							Also, the table ms_asAttribToLayer to be increased from
-//							16 entries to 256 entries.
-//							Also, removed GetLayerFromAttrib() which was left over from
-//							the pre RMultiGrid days.
+//      05/16/97   JMI   Changed layer bits to be 8 bits (instead of 4).  This
+//                     caused the REALM_ATTR_EFFECT_MASK to lose 4 bits and the
+//                     REALM_ATTR_LIGHT_BIT to move up 4 bits (0x0010 to 0x0100).
+//                     Also, the table ms_asAttribToLayer to be increased from
+//                     16 entries to 256 entries.
+//                     Also, removed GetLayerFromAttrib() which was left over from
+//                     the pre RMultiGrid days.
 //
-//		05/19/97 BRH	Changed file version to 14 to support thought balloon flag
-//							for the CPerson.
+//      05/19/97 BRH   Changed file version to 14 to support thought balloon flag
+//                     for the CPerson.
 //
-//		05/26/97 BRH	Added population variables to keep track of Numer of
-//							people killed, number of people alive etc.
+//      05/26/97 BRH   Added population variables to keep track of Numer of
+//                     people killed, number of people alive etc.
 //
-//		05/26/97	JMI	Added IsEndOfLevelGoalMet() based on population vars added
-//							above.
-//							Also, added DrawStatus().
-//							Also, increased file version to 15 so hood can save end of
-//							level goal.
+//      05/26/97   JMI   Added IsEndOfLevelGoalMet() based on population vars added
+//                     above.
+//                     Also, added DrawStatus().
+//                     Also, increased file version to 15 so hood can save end of
+//                     level goal.
 //
-//		05/29/97	JMI	Changed REALM_ATTR_LAYER_MASK to 0x7fff (was 0x00ff).
-//							Moved REALM_ATTR_EFFECT_MASK and REALM_ATTR_LIGHT_BIT to
-//							m_pTerrainMap (was in m_pAttrMap).  This required the light
-//							bit to go from 0x0100 to 0x0200 ('no walk' was already
-//							using 0x0100 in m_pTerrainMap).
-//							Changed all occurences of m_pAttrMap to m_pLayerMap.
-//							Changed all occurences of m_pHeightMap to m_pTerrainMap.
-//							Also, added CreateLayerMap() that creates the attribute
-//							to layer map now that it is so huge.
+//      05/29/97   JMI   Changed REALM_ATTR_LAYER_MASK to 0x7fff (was 0x00ff).
+//                     Moved REALM_ATTR_EFFECT_MASK and REALM_ATTR_LIGHT_BIT to
+//                     m_pTerrainMap (was in m_pAttrMap).  This required the light
+//                     bit to go from 0x0100 to 0x0200 ('no walk' was already
+//                     using 0x0100 in m_pTerrainMap).
+//                     Changed all occurences of m_pAttrMap to m_pLayerMap.
+//                     Changed all occurences of m_pHeightMap to m_pTerrainMap.
+//                     Also, added CreateLayerMap() that creates the attribute
+//                     to layer map now that it is so huge.
 //
-//		06/05/97	JMI	Upped FileVersion to 16 to accommodate new CStockPile,
-//							m_stockpile, in CThing3d.
+//      06/05/97   JMI   Upped FileVersion to 16 to accommodate new CStockPile,
+//                     m_stockpile, in CThing3d.
 //
-//		06/06/97	JMI	Upped FileVersion to 17 to accommodate new CStockPile,
-//							m_stockpile, in CPowerUp.
+//      06/06/97   JMI   Upped FileVersion to 17 to accommodate new CStockPile,
+//                     m_stockpile, in CPowerUp.
 //
-//		06/09/97	JMI	Upped FileVersion to 18 to allow CItem3d to save its
-//							rotation velocities.
+//      06/09/97   JMI   Upped FileVersion to 18 to allow CItem3d to save its
+//                     rotation velocities.
 //
-//		06/09/97	JMI	Upped FileVersion to 19 to allow CStockPile to save its
-//							new weapon flags.
+//      06/09/97   JMI   Upped FileVersion to 19 to allow CStockPile to save its
+//                     new weapon flags.
 //
-//		06/14/97	JMI	Upped FileVersion to 20 to allow CPowerUp to be descended
-//							from CThing3d (instead of CThing).
+//      06/14/97   JMI   Upped FileVersion to 20 to allow CPowerUp to be descended
+//                     from CThing3d (instead of CThing).
 //
-//		06/15/97	JMI	Upped FileVersion to 21 to allow CStockPile to load and
-//							save its new m_sKevlarLayers.
+//      06/15/97   JMI   Upped FileVersion to 21 to allow CStockPile to load and
+//                     save its new m_sKevlarLayers.
 //
-//		06/15/97	JMI	Upped FileVersion to 22 to allow CStockPile to load and
-//							save its new m_sBackpack.
+//      06/15/97   JMI   Upped FileVersion to 22 to allow CStockPile to load and
+//                     save its new m_sBackpack.
 //
-//		06/17/97 MJR	Moved some vars that were CPylon statics into the realm
-//							so they could be instantiated on a realm-by-realm basis.
+//      06/17/97 MJR   Moved some vars that were CPylon statics into the realm
+//                     so they could be instantiated on a realm-by-realm basis.
 //
-//		06/26/97 BRH	Changed the population scoring to go down as people get
-//							killed.
+//      06/26/97 BRH   Changed the population scoring to go down as people get
+//                     killed.
 //
-//		06/26/97	JMI	Moved Map2DTo3D from reality.h to here.
+//      06/26/97   JMI   Moved Map2DTo3D from reality.h to here.
 //
-//		06/28/97	JMI	Moved attribute access functions from realm.h to realm.cpp
-//							while we're getting all the conversion from 3D to the X/Z
-//							plane stuff right.  Compiling the entire project for any
-//							tweak just doesn't sound very fun.  Hopefully, though,
-//							there'll won't be many tweaks.
-//							Also, upped FileVersion to 23 so CHood can save its new
-//							m_sRealmRotX param.
+//      06/28/97   JMI   Moved attribute access functions from realm.h to realm.cpp
+//                     while we're getting all the conversion from 3D to the X/Z
+//                     plane stuff right.  Compiling the entire project for any
+//                     tweak just doesn't sound very fun.  Hopefully, though,
+//                     there'll won't be many tweaks.
+//                     Also, upped FileVersion to 23 so CHood can save its new
+//                     m_sRealmRotX param.
 //
-//		06/28/97 BRH	Added score variables for separate hostiles and civilians
-//							and changed the RegisterBirth, RegisterDeath functions
-//							to change the values for each different type.
+//      06/28/97 BRH   Added score variables for separate hostiles and civilians
+//                     and changed the RegisterBirth, RegisterDeath functions
+//                     to change the values for each different type.
 //
-//		06/29/97	JMI	Added version of ScaleZ() that takes shorts.
-//							Changed both versions of ScaleZ() to MapZ3DtoY2D()
-//							and added two versions of MapY2DtoZ3D().
+//      06/29/97   JMI   Added version of ScaleZ() that takes shorts.
+//                     Changed both versions of ScaleZ() to MapZ3DtoY2D()
+//                     and added two versions of MapY2DtoZ3D().
 //
-//		06/30/97	JMI	Upped file version to 24 so things can know whether to
-//							convert their cheezy 3D realm coords to real 3D realm
-//							coords.
+//      06/30/97   JMI   Upped file version to 24 so things can know whether to
+//                     convert their cheezy 3D realm coords to real 3D realm
+//                     coords.
 //
-//		06/30/97	JMI	Added GetRealmWidth() and GetRealmHeight() to get the
-//							realm's width and height on the X/Z plane.
+//      06/30/97   JMI   Added GetRealmWidth() and GetRealmHeight() to get the
+//                     realm's width and height on the X/Z plane.
 //
-//		06/30/97	JMI	Added bCheckExtents parm to IsPathClear().  See proto for
-//							details.
+//      06/30/97   JMI   Added bCheckExtents parm to IsPathClear().  See proto for
+//                     details.
 //
-//		07/01/97	JMI	Added MapY2DtoY3D() and MapY3DtoY2D().
-//							Also, added GetHeightAndNoWalk().
+//      07/01/97   JMI   Added MapY2DtoY3D() and MapY3DtoY2D().
+//                     Also, added GetHeightAndNoWalk().
 //
-//		07/01/97 BRH	Changed the file version for the Sentry gun since it now
-//							loads and saves the rotational velocity parameter.
+//      07/01/97 BRH   Changed the file version for the Sentry gun since it now
+//                     loads and saves the rotational velocity parameter.
 //
-//		07/01/97	JMI	Changed the file version for the Hood so it can load and
-//							save whether to use the attribute map heights with or
-//							without scaling based on the view angle.
-//							Also, added function to scale heights that checks the
-//							hood value.
+//      07/01/97   JMI   Changed the file version for the Hood so it can load and
+//                     save whether to use the attribute map heights with or
+//                     without scaling based on the view angle.
+//                     Also, added function to scale heights that checks the
+//                     hood value.
 //
-//		07/04/97 BRH	Added timer for Score to display and CGoalTimer to
-//							manipulate.
+//      07/04/97 BRH   Added timer for Score to display and CGoalTimer to
+//                     manipulate.
 //
-//		07/07/97 BRH	Added scoring modes to the realm so that they can more
-//							easily be set by options at the beginning of the game,
-//							changed by CThings, and read by the scoring module.
-//							Changed the file version for the realm so that it can
-//							save the new properties.
+//      07/07/97 BRH   Added scoring modes to the realm so that they can more
+//                     easily be set by options at the beginning of the game,
+//                     changed by CThings, and read by the scoring module.
+//                     Changed the file version for the realm so that it can
+//                     save the new properties.
 //
-//		07/09/97	JMI	Added function to get the full path for a 2D resource
-//							based on the current hood setting for 'Use top-view 2Ds'.
-//							Also, upped file version the hood can save this setting.
+//      07/09/97   JMI   Added function to get the full path for a 2D resource
+//                     based on the current hood setting for 'Use top-view 2Ds'.
+//                     Also, upped file version the hood can save this setting.
 //
-//		07/09/97 BRH	Increased the file version to add additional data to
-//							the realm file.
+//      07/09/97 BRH   Increased the file version to add additional data to
+//                     the realm file.
 //
-//		07/09/97	JMI	Moved m_s2dResPathIndex from CHood to CRealm b/c of order
-//							issues when loading.  Also, increased the file version so
-//							CHood can not load/save this data and CRealm can.
+//      07/09/97   JMI   Moved m_s2dResPathIndex from CHood to CRealm b/c of order
+//                     issues when loading.  Also, increased the file version so
+//                     CHood can not load/save this data and CRealm can.
 //
-//		07/10/97 BRH	Added m_sFlagsCaptured to keep track of the flag count
-//							for capture the flag and checkpoint games.  Also moved
-//							IsEndOfLevelGoalMet to the cpp file and added cases
-//							for the different scoring types.
+//      07/10/97 BRH   Added m_sFlagsCaptured to keep track of the flag count
+//                     for capture the flag and checkpoint games.  Also moved
+//                     IsEndOfLevelGoalMet to the cpp file and added cases
+//                     for the different scoring types.
 //
-//		07/12/97	JMI	Added m_bMultiplayer, which signifies whether this is
-//							a multi or single player game.
-//							Also, added Init().  See proto for details.
+//      07/12/97   JMI   Added m_bMultiplayer, which signifies whether this is
+//                     a multi or single player game.
+//                     Also, added Init().  See proto for details.
 //
-//		07/14/97 BRH	Added m_sFlagbaseCaptured for the levels were the flags
-//							must be returned to their proper base in order to count.
+//      07/14/97 BRH   Added m_sFlagbaseCaptured for the levels were the flags
+//                     must be returned to their proper base in order to count.
 //
-//		07/15/97 BRH	Added a parameter to IsEndOfLevelGoalMet which now takes
-//							a bool telling whether the end of level key has been
-//							hit, indicating that the user wants to go on if the
-//							standard play mode goal has been fulfilled.
+//      07/15/97 BRH   Added a parameter to IsEndOfLevelGoalMet which now takes
+//                     a bool telling whether the end of level key has been
+//                     hit, indicating that the user wants to go on if the
+//                     standard play mode goal has been fulfilled.
 //
-//		07/18/97	JMI	Upped the file version so CSoundThing can load its volume
-//							half life.
+//      07/18/97   JMI   Upped the file version so CSoundThing can load its volume
+//                     half life.
 //
-//		07/19/97	JMI	Upped the file version so CWarp can save the initial
-//							rotation for the warped in CDude.
+//      07/19/97   JMI   Upped the file version so CWarp can save the initial
+//                     rotation for the warped in CDude.
 //
-//		07/23/97	JMI	Changed file version so CStockPile can save new
-//							m_sNapalmLauncher member.
+//      07/23/97   JMI   Changed file version so CStockPile can save new
+//                     m_sNapalmLauncher member.
 //
-//		07/24/97 MJR	Changed file version so CSoundThing can save more members.
+//      07/24/97 MJR   Changed file version so CSoundThing can save more members.
 //
-//		07/27/97 BRH	Added a variable to save what the score timer was
-//							initially set to in order to determine the time
-//							elapsed for high score purposes.
+//      07/27/97 BRH   Added a variable to save what the score timer was
+//                     initially set to in order to determine the time
+//                     elapsed for high score purposes.
 //
-//		07/28/97	JMI	Upped file version to 35 so CDispenser could save an
-//							additional logic parm.
+//      07/28/97   JMI   Upped file version to 35 so CDispenser could save an
+//                     additional logic parm.
 //
-//		07/30/97 BRH	Added a string to hold the name of the realm which
-//							will be used for storing high scores for a particular
-//							realm.
+//      07/30/97 BRH   Added a string to hold the name of the realm which
+//                     will be used for storing high scores for a particular
+//                     realm.
 //
-//		07/30/97	JMI	Upped file version so CStockPile can save/load new member.
+//      07/30/97   JMI   Upped file version so CStockPile can save/load new member.
 //
-//		07/31/97 BRH	Changed file version so band member can save dest bouy.
+//      07/31/97 BRH   Changed file version so band member can save dest bouy.
 //
-//		08/01/97	JMI	Upped file version to 38 so CSoundThing can save new
-//							members.
+//      08/01/97   JMI   Upped file version to 38 so CSoundThing can save new
+//                     members.
 //
-//		08/03/07	JRD	Upped the verion to 39 to save 3d scale.  Note that this is
-//							the FINAL 3x version possible.  Soon we will move to 40 and
-//							32 bit code.
+//      08/03/07   JRD   Upped the verion to 39 to save 3d scale.  Note that this is
+//                     the FINAL 3x version possible.  Soon we will move to 40 and
+//                     32 bit code.
 //
-//		08/04/97	JMI	Upped file version to 40 so CSoundThing can save
-//							m_sAmbient.
+//      08/04/97   JMI   Upped file version to 40 so CSoundThing can save
+//                     m_sAmbient.
 //
-//		08/05/97	JMI	Added CRealm::Flags struct and an instance in CRealm,
-//							m_flags.
+//      08/05/97   JMI   Added CRealm::Flags struct and an instance in CRealm,
+//                     m_flags.
 //
-//		08/06/97	JMI	Upped file version to 41 so CStockPile can save/load new
-//							member.
+//      08/06/97   JMI   Upped file version to 41 so CStockPile can save/load new
+//                     member.
 //
-//		08/07/97	JMI	Upped file version to 42 so CItem3d can save/load new
-//							members.
+//      08/07/97   JMI   Upped file version to 42 so CItem3d can save/load new
+//                     members.
 //
-//		08/08/97 BRH	Upped file version to 43 to save extra special bouy data
-//							in the Doofus.
+//      08/08/97 BRH   Upped file version to 43 to save extra special bouy data
+//                     in the Doofus.
 //
-//		08/09/97	JMI	Added progress callback and components.  There is now a
-//							callback member that is called (when non-zero) that passes
-//							the number of items processed so far and the total number of
-//							items to process.  The return value of the callback dictates
-//							whether to proceed with the operation.  Although, this is
-//							meant to be generic so we can use it for any type of
-//							process, it is currently only used by Load() and Save().
+//      08/09/97   JMI   Added progress callback and components.  There is now a
+//                     callback member that is called (when non-zero) that passes
+//                     the number of items processed so far and the total number of
+//                     items to process.  The return value of the callback dictates
+//                     whether to proceed with the operation.  Although, this is
+//                     meant to be generic so we can use it for any type of
+//                     process, it is currently only used by Load() and Save().
 //
-//		08/10/97	JRD	Upped File Version to 44 to save shadow info.
+//      08/10/97   JRD   Upped File Version to 44 to save shadow info.
 //
-//		08/11/97 BRH	Upped File Version to 45 to save flag color info.
+//      08/11/97 BRH   Upped File Version to 45 to save flag color info.
 //
-//		08/15/97 BRH	Upped File version to save barrel special flag.
+//      08/15/97 BRH   Upped File version to save barrel special flag.
 //
-//		08/20/97	JMI	Made ms_apsz2dResPaths[] a static class member (was just
-//							defined at realm.cpp file scope) and added enum macro for
-//							number of elements.
+//      08/20/97   JMI   Made ms_apsz2dResPaths[] a static class member (was just
+//                     defined at realm.cpp file scope) and added enum macro for
+//                     number of elements.
 //
-//		11/21/97	JMI	Added bCoopMode flag indicating whether we're in cooperative
-//							or deathmatch mode when in multiplayer.
+//      11/21/97   JMI   Added bCoopMode flag indicating whether we're in cooperative
+//                     or deathmatch mode when in multiplayer.
 //
-//		12/02/97	JMI	Increased FileVersion to 47 so CDemon could save its new
-//							m_sSoundBank.
+//      12/02/97   JMI   Increased FileVersion to 47 so CDemon could save its new
+//                     m_sSoundBank.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef REALM_H
@@ -412,15 +412,15 @@
 
 // Masks and bits for m_pTerrainMap:
 // The height map contains the height, the 'no walk', and the light attributes.
-#define REALM_ATTR_HEIGHT_MASK	0x00ff
-#define REALM_ATTR_FLOOR_MASK		0xff00
-#define REALM_ATTR_EFFECT_MASK	0xff00
-#define REALM_ATTR_LIGHT_BIT		0x0200
-#define REALM_ATTR_NOT_WALKABLE	0x0100
+#define REALM_ATTR_HEIGHT_MASK   0x00ff
+#define REALM_ATTR_FLOOR_MASK      0xff00
+#define REALM_ATTR_EFFECT_MASK   0xff00
+#define REALM_ATTR_LIGHT_BIT      0x0200
+#define REALM_ATTR_NOT_WALKABLE   0x0100
 
 // Masks and bits for m_pLayerMap:
 // The attribute map contains only the layer bits.
-#define REALM_ATTR_LAYER_MASK		0x7fff
+#define REALM_ATTR_LAYER_MASK      0x7fff
 
 #define REALM_NONSTL 1
 
@@ -438,12 +438,12 @@ enum
 {
    FileID = 0x44434241,                               // File ID
    FileVersion = 49,                                  // File version
-   Num2dPaths	= 3                                    // Number of 2D res paths
+   Num2dPaths   = 3                                    // Number of 2D res paths
 };
 
 enum        // Macros.
 {
-   LayerAttribMask	= REALM_ATTR_LAYER_MASK       // Mask against attribute to
+   LayerAttribMask   = REALM_ATTR_LAYER_MASK       // Mask against attribute to
                                                    // get appropriate sprite
                                                    // layer.
 };
@@ -538,15 +538,15 @@ typedef struct
                                           // where one can create new objects, modify,
                                           // move them, etc.
    bool bEditPlay;                        // Playing a realm from within the editor.
-   short	sDifficulty;                     // Difficulty level.
+   short sDifficulty;                       // Difficulty level.
 } Flags;
 
 // Callback called by various processes in Realm (such as Load and Save)
 // to indicate current progress and allow a hook that can abort the process.
 typedef bool (*ProgressCall)(             // Returns true to continue; false to
                                           // abort operation.
-   short	sLastItemProcessed,              // In:  Number of items processed so far.
-   short	sTotalItemsToProcess);           // In:  Total items to process.
+   short sLastItemProcessed,                // In:  Number of items processed so far.
+   short sTotalItemsToProcess);             // In:  Total items to process.
 
 //---------------------------------------------------------------------------
 // Static variables
@@ -611,7 +611,7 @@ CTrigger* m_pTriggerMapHolder;         // This points to the CThing holding the 
 // there is only one and it is often access every iteration, this'll make
 // it a bit quicker.
 // The CHood should also clear this when it is destroyed.
-CHood*			m_phood;
+CHood*         m_phood;
 
 // Time object, which manages game time
 CTime m_time;
@@ -635,11 +635,11 @@ short m_sNumSuspends;
 
 // Pylon stuff
 USHORT m_asPylonUIDs[256];         // Complete Cheese!
-short	m_sNumPylons;
-UCHAR	m_ucNextPylonID;
+short m_sNumPylons;
+UCHAR m_ucNextPylonID;
 
 // Path index for 2D assets.
-short	m_s2dResPathIndex;
+short m_s2dResPathIndex;
 
 // Process progress callback.  See ProgressCall typedef for details.
 ProgressCall m_fnProgress;
@@ -673,15 +673,15 @@ S32 m_lLastStatusDrawTime;             // Last time the status was drawn.
 ScoringMode m_ScoringMode;             // Scoring mode that score module uses
                                        // to determine what to display.
 double m_dKillsPercentGoal;            // Kill Percent needed to end the level.
-short	m_sKillsGoal;                    // Kill number needed to end the level
-short	m_sFlagsGoal;                    // Number of flags needed to end the level
+short m_sKillsGoal;                      // Kill number needed to end the level
+short m_sFlagsGoal;                      // Number of flags needed to end the level
 
-short	m_sFlagsCaptured;                // Number of flags captured.
-short	m_sFlagbaseCaptured;             // Number of flags returned to proper base
+short m_sFlagsCaptured;                  // Number of flags captured.
+short m_sFlagbaseCaptured;               // Number of flags returned to proper base
 
 RString m_rsRealmString;               // Name of realm (currently full path of file)
 
-Flags	m_flags;                         // Realm flags.
+Flags m_flags;                           // Realm flags.
 
 bool m_bPressedEndLevelKey;         // True if the player pressed the key or controller button bound to "End Map"
 // Different from the hardcoded F1 key
@@ -752,32 +752,32 @@ bool IsEndOfLevelGoalMet(bool bEndLevelKey);       // Returns true, if end of le
                                                    // has been met.
 
 /*
-		// Add thing to realm
-		void AddThing(
-			CThing* pThing,										// In:  Pointer to thing to be added
-			CThing::ClassIDType id,								// In:  Thing's class ID
+      // Add thing to realm
+      void AddThing(
+         CThing* pThing,                              // In:  Pointer to thing to be added
+         CThing::ClassIDType id,                        // In:  Thing's class ID
 #if _MSC_VER >= 1020
-			CThing::Things::const_iterator* piterEvery,	// Out: Iterator into everything container
-			CThing::Things::const_iterator* piterClass)	// Out: Iterator into class container
+         CThing::Things::const_iterator* piterEvery,   // Out: Iterator into everything container
+         CThing::Things::const_iterator* piterClass)   // Out: Iterator into class container
 #else
-			CThing::Things::iterator* piterEvery,			// Out: Iterator into everything container
-			CThing::Things::iterator* piterClass)			// Out: Iterator into class container
+         CThing::Things::iterator* piterEvery,         // Out: Iterator into everything container
+         CThing::Things::iterator* piterClass)         // Out: Iterator into class container
 #endif
-			{
-			*piterEvery = m_everything.insert(m_everything.end(), pThing);
-			*piterClass = m_apthings[id]->insert(m_apthings[id]->end(), pThing);
+         {
+         *piterEvery = m_everything.insert(m_everything.end(), pThing);
+         *piterClass = m_apthings[id]->insert(m_apthings[id]->end(), pThing);
 
-			// If in the update loop . . .
-			if (m_bUpdating == true)
-				{
-				// If the next is the end . . .
-				if (m_iNext == m_everything.end())
-					{
-					// Get the added thing.
-					m_iNext	= *piterEvery;
-					}
-				}
-			}
+         // If in the update loop . . .
+         if (m_bUpdating == true)
+            {
+            // If the next is the end . . .
+            if (m_iNext == m_everything.end())
+               {
+               // Get the added thing.
+               m_iNext   = *piterEvery;
+               }
+            }
+         }
 */
 // Add thing to realm
 void AddThing(
@@ -804,31 +804,31 @@ void AddThing(
 
 // Remove thing from realm
 /*
-		void RemoveThing(
-			CThing::ClassIDType id,								// In:  Thing's class ID
+      void RemoveThing(
+         CThing::ClassIDType id,                        // In:  Thing's class ID
 #if _MSC_VER >= 1020
-			CThing::Things::const_iterator iterEvery,		// In: Thing's iterator into everything container
-			CThing::Things::const_iterator iterClass)		// In: Thing's iterator into class container
+         CThing::Things::const_iterator iterEvery,      // In: Thing's iterator into everything container
+         CThing::Things::const_iterator iterClass)      // In: Thing's iterator into class container
 #else
-			CThing::Things::iterator iterEvery,				// In: Thing's iterator into everything container
-			CThing::Things::iterator iterClass)				// In: Thing's iterator into class container
+         CThing::Things::iterator iterEvery,            // In: Thing's iterator into everything container
+         CThing::Things::iterator iterClass)            // In: Thing's iterator into class container
 #endif
-			{
-			// If in the update loop . . .
-			if (m_bUpdating == true)
-				{
-				// If the next is thing being removed . . .
-				if (m_iNext == iterEvery)
-					{
-					// This is safe b/c the end is always available and will
-					// never be removed.
-					m_iNext++;
-					}
-				}
+         {
+         // If in the update loop . . .
+         if (m_bUpdating == true)
+            {
+            // If the next is thing being removed . . .
+            if (m_iNext == iterEvery)
+               {
+               // This is safe b/c the end is always available and will
+               // never be removed.
+               m_iNext++;
+               }
+            }
 
-			m_everything.erase(iterEvery);
-			m_apthings[id]->erase(iterClass);
-			}
+         m_everything.erase(iterEvery);
+         m_apthings[id]->erase(iterClass);
+         }
 */
 // Remove thing from realm
 void RemoveThing(
@@ -920,7 +920,7 @@ short GetHeight(short sX, short sZ);
 
 short GetHeightAndNoWalk(        // Returns height at new location.
    short sX,                     // In:  X position to check on map.
-   short	sZ,                     // In:  Z position to check on map.
+   short sZ,                       // In:  Z position to check on map.
    bool* pbNoWalk);              // Out: true, if 'no walk'.
 
 short GetTerrainAttributes(short sX, short sZ);
@@ -940,7 +940,7 @@ bool IsPathClear(                      // Returns true, if the entire path is cl
                                        // Returns false, if only a portion of the path is clear.
                                        // (see *psX, *psY, *psZ).
    short sX,                           // In:  Starting X.
-   short	sY,                           // In:  Starting Y.
+   short sY,                             // In:  Starting Y.
    short sZ,                           // In:  Starting Z.
    short sRotY,                        // In:  Rotation around y axis (direction on X/Z plane).
    double dCrawlRate,                  // In:  Rate at which to scan ('crawl') path in pixels per
@@ -950,7 +950,7 @@ bool IsPathClear(                      // Returns true, if the entire path is cl
                                        // at only one pixel.
                                        // NOTE: We could change this to a speed in pixels per second
                                        // where we'd assume a certain frame rate.
-   short	sDistanceXZ,                  // In:  Distance on X/Z plane.
+   short sDistanceXZ,                    // In:  Distance on X/Z plane.
    short sVerticalTolerance = 0,       // In:  Max traverser can step up.
    short* psX = NULL,                  // Out: If not NULL, last clear point on path.
    short* psY = NULL,                  // Out: If not NULL, last clear point on path.
@@ -965,7 +965,7 @@ bool IsPathClear(                      // Returns true, if the entire path is cl
                                        // Returns false, if only a portion of the path is clear.
                                        // (see *psX, *psY, *psZ).
    short sX,                           // In:  Starting X.
-   short	sY,                           // In:  Starting Y.
+   short sY,                             // In:  Starting Y.
    short sZ,                           // In:  Starting Z.
    double dCrawlRate,                  // In:  Rate at which to scan ('crawl') path in pixels per
                                        // iteration.
@@ -974,8 +974,8 @@ bool IsPathClear(                      // Returns true, if the entire path is cl
                                        // at only one pixel.
                                        // NOTE: We could change this to a speed in pixels per second
                                        // where we'd assume a certain frame rate.
-   short	sDstX,                        // In:  Destination X.
-   short	sDstZ,                        // In:  Destination Z.
+   short sDstX,                          // In:  Destination X.
+   short sDstZ,                          // In:  Destination Z.
    short sVerticalTolerance = 0,       // In:  Max traverser can step up.
    short* psX = NULL,                  // Out: If not NULL, last clear point on path.
    short* psY = NULL,                  // Out: If not NULL, last clear point on path.
@@ -987,14 +987,14 @@ bool IsPathClear(                      // Returns true, if the entire path is cl
 // Gives this realm an opportunity and drawing surface to display its
 // current status.
 void DrawStatus(        // Returns nothing.
-   RImage*	pim,        // In:  Image in which to draw status.
-   RRect*	prc);       // In:  Rectangle in which to draw status.  Clips to.
+   RImage*   pim,        // In:  Image in which to draw status.
+   RRect*   prc);       // In:  Rectangle in which to draw status.  Clips to.
 
 // Maps a 3D coordinate onto the viewing plane.
 void Map3Dto2D(         // Returns nothing.
    short sX,            // In.
-   short	sY,            // In.
-   short	sZ,            // In.
+   short sY,              // In.
+   short sZ,              // In.
    short* psX,          // Out.
    short* psY);         // Out.
 
@@ -1010,59 +1010,59 @@ void Map3Dto2D(            // Returns nothing.
 // view angle (~angle of projection).
 void MapZ3DtoY2D(          // Returns nothing.
    double dZIn,            // In.
-   double*	pdYOut);       // Out.
+   double*   pdYOut);       // Out.
 
 // Scales a Z coordinate onto the viewing plane using the
 // view angle (~angle of projection).
 void MapZ3DtoY2D(          // Returns nothing.
-   short	sZIn,             // In.
-   short*	psYOut);       // Out.
+   short sZIn,               // In.
+   short*   psYOut);       // Out.
 
 // Scales a Y coordinate from the viewing plane using the
 // view angle (~angle of projection).
 void MapY2DtoZ3D(          // Returns nothing.
    double dYIn,            // In.
-   double*	pdZOut);       // Out.
+   double*   pdZOut);       // Out.
 
 // Scales a Y coordinate from the viewing plane using the
 // view angle (~angle of projection).
 void MapY2DtoZ3D(          // Returns nothing.
-   short	sYIn,             // In.
-   short*	psZOut);       // Out.
+   short sYIn,               // In.
+   short*   psZOut);       // Out.
 
 // Scales a Y coordinate onto the viewing plane using the
 // view angle (~angle of projection).
 void MapY3DtoY2D(          // Returns nothing.
    double dYIn,            // In.
-   double*	pdYOut);       // Out.
+   double*   pdYOut);       // Out.
 
 // Scales a Y coordinate onto the viewing plane using the
 // view angle (~angle of projection).
 void MapY3DtoY2D(          // Returns nothing.
-   short	sYIn,             // In.
-   short*	psYOut);       // Out.
+   short sYIn,               // In.
+   short*   psYOut);       // Out.
 
 // Scales a Y coordinate from the viewing plane using the
 // view angle (~angle of projection).
 void MapY2DtoY3D(          // Returns nothing.
    double dYIn,            // In.
-   double*	pdYOut);       // Out.
+   double*   pdYOut);       // Out.
 
 // Scales a Y coordinate from the viewing plane using the
 // view angle (~angle of projection).
 void MapY2DtoY3D(          // Returns nothing.
-   short	sYIn,             // In.
-   short*	psYOut);       // Out.
+   short sYIn,               // In.
+   short*   psYOut);       // Out.
 
 // If enabled, scales the specified height based on the view angle.
 void MapAttribHeight(         // Returns nothing.
-   short	sHIn,                // In.
-   short*	psHOut);          // Out.
+   short sHIn,                  // In.
+   short*   psHOut);          // Out.
 
 // Get dimension of realm on X/Z plane.
 short GetRealmWidth(void)        // Returns width of realm's X/Z plane.
 {
-   short	sRealmW;
+   short sRealmW;
    MapY2DtoZ3D(m_phood->GetWidth(), &sRealmW);
    return sRealmW;
 }
@@ -1070,7 +1070,7 @@ short GetRealmWidth(void)        // Returns width of realm's X/Z plane.
 // Get dimension of realm on X/Z plane.
 short GetRealmHeight(void)       // Returns height of realm's X/Z plane.
 {
-   short	sRealmH;
+   short sRealmH;
    MapY2DtoZ3D(m_phood->GetHeight(), &sRealmH);
    return sRealmH;
 }

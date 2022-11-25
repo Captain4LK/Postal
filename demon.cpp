@@ -19,74 +19,74 @@
 // Project: Postal
 //
 // History:
-//		06/09/97 BRH	Started this from from SoundThing.cpp
+//      06/09/97 BRH   Started this from from SoundThing.cpp
 //
-//		06/10/97 BRH	Added comments for deaths and added a comment counter
-//							so it doesn't say something all of the time.
+//      06/10/97 BRH   Added comments for deaths and added a comment counter
+//                     so it doesn't say something all of the time.
 //
-//		06/11/97 BRH	Changed the demon icon.
+//      06/11/97 BRH   Changed the demon icon.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/29/97	JMI	Converted EditRect(), EditRender(), and/or Render() to
-//							use Map3Dto2D().
+//      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to
+//                     use Map3Dto2D().
 //
-//		06/30/97 BRH	Took out the cache samples in the Preload function for
-//							now so that the sounds won't be preloaded.  If we
-//							decide to have a memory based setting for this as an
-//							option, then it can check it here and decide to load
-//							the samples or not.  Also changed the PlaySample
-//							calls to PlaySampleThenPurge to keep the memory usage
-//							down.
+//      06/30/97 BRH   Took out the cache samples in the Preload function for
+//                     now so that the sounds won't be preloaded.  If we
+//                     decide to have a memory based setting for this as an
+//                     option, then it can check it here and decide to load
+//                     the samples or not.  Also changed the PlaySample
+//                     calls to PlaySampleThenPurge to keep the memory usage
+//                     down.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/17/97	JMI	Changed m_psndChannel to m_siLastPlayInstance.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
-//							Then, removed m_psndChannel b/c this class really didn't
-//							use it.
+//      07/17/97   JMI   Changed m_psndChannel to m_siLastPlayInstance.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
+//                     Then, removed m_psndChannel b/c this class really didn't
+//                     use it.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/20/97 BRH	Changed weapon case statements to use the CDude's
-//							enumerated type so that if the keys are switched
-//							around again, the comments will still be correctly
-//							associated with their weapon type.
+//      07/20/97 BRH   Changed weapon case statements to use the CDude's
+//                     enumerated type so that if the keys are switched
+//                     around again, the comments will still be correctly
+//                     associated with their weapon type.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
-//		08/26/97 BRH	Got rid of a few phrases and added a few others in their
-//							place.  Now there is only one Going Postal instead of 4,
-//							and a few other phrases that weren't being used are now
-//							in.
+//      08/26/97 BRH   Got rid of a few phrases and added a few others in their
+//                     place.  Now there is only one Going Postal instead of 4,
+//                     and a few other phrases that weren't being used are now
+//                     in.
 //
-//		12/02/97	JMI	Added new m_sSoundBank member (edittable via EditModify()
-//							that allows one to specify a sound bank index for
-//							additional sounds).
-//							Also, removed unused vars:
-//							m_lNextStartTime, m_lLastStartTime, m_sWhichTime,
-//							m_bEnabled, m_bRepeats, m_bInitiallyEnabled,
-//							m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[],
-//							m_szResName, and m_id.
-//							Also, now loads the GUI off the HD b/c the Add On packs
-//							new assets (such as Demon.GUI) will have to be on the
-//							HD so we can require the user have the original Postal
-//							CD in the drive while playing.
-//							Also, now saves position and defaults to position on the
-//							the screen (that way older levels that didn't save the
-//							position will have the demon on the screen).
+//      12/02/97   JMI   Added new m_sSoundBank member (edittable via EditModify()
+//                     that allows one to specify a sound bank index for
+//                     additional sounds).
+//                     Also, removed unused vars:
+//                     m_lNextStartTime, m_lLastStartTime, m_sWhichTime,
+//                     m_bEnabled, m_bRepeats, m_bInitiallyEnabled,
+//                     m_bInitiallyRepeats, m_lMinTime[], m_lRndTime[],
+//                     m_szResName, and m_id.
+//                     Also, now loads the GUI off the HD b/c the Add On packs
+//                     new assets (such as Demon.GUI) will have to be on the
+//                     HD so we can require the user have the original Postal
+//                     CD in the drive while playing.
+//                     Also, now saves position and defaults to position on the
+//                     the screen (that way older levels that didn't save the
+//                     position will have the demon on the screen).
 //
-//		01/07/98 BRH	Added level specific new Demon sounds for the Add On Pack
+//      01/07/98 BRH   Added level specific new Demon sounds for the Add On Pack
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -101,10 +101,10 @@
 #include "dude.h"
 
 // To help identify the m_sSoundBank number for each new Add on level
-#define DEMON_SHANTY_LEVEL			1
-#define DEMON_RESORT_LEVEL			2
-#define DEMON_WALMART_LEVEL		3
-#define DEMON_EARTHQUAKE_LEVEL	4
+#define DEMON_SHANTY_LEVEL         1
+#define DEMON_RESORT_LEVEL         2
+#define DEMON_WALMART_LEVEL      3
+#define DEMON_EARTHQUAKE_LEVEL   4
 
 ////////////////////////////////////////////////////////////////////////////////
 // Static variables
@@ -114,7 +114,7 @@ S32 CDemon::ms_lMinIdleTime = 2000;    // Time before saying next thing
 S32 CDemon::ms_lBonusKillTime = 5000;     // Kill an amount in this time, get bonus
 
 // Sound banks of explosion comments indexed by m_sSoundBank.
-SampleMasterID* CDemon::ms_apsmidExplosion[NumSoundBanks][NumExplosionComments]	=
+SampleMasterID* CDemon::ms_apsmidExplosion[NumSoundBanks][NumExplosionComments]   =
 {
    {     // 0 == Normal.
       &g_smidDemonSlam,
@@ -173,7 +173,7 @@ SampleMasterID* CDemon::ms_apsmidExplosion[NumSoundBanks][NumExplosionComments]	
 };
 
 // Sound banks of burn comments indexed by m_sSoundBank.
-SampleMasterID* CDemon::ms_apsmidBurn[NumSoundBanks][NumBurnComments]	=
+SampleMasterID* CDemon::ms_apsmidBurn[NumSoundBanks][NumBurnComments]   =
 {
    {     // 0 == Normal.
       &g_smidDemonSmellChicken,
@@ -212,7 +212,7 @@ SampleMasterID* CDemon::ms_apsmidBurn[NumSoundBanks][NumBurnComments]	=
 };
 
 // Sound banks of suicide comments indexed by m_sSoundBank.
-SampleMasterID* CDemon::ms_apsmidSuicide[NumSoundBanks][NumSuicideComments]	=
+SampleMasterID* CDemon::ms_apsmidSuicide[NumSoundBanks][NumSuicideComments]   =
 {
    {     // 0 == Normal.
       &g_smidDemonNoRegrets,
@@ -236,7 +236,7 @@ SampleMasterID* CDemon::ms_apsmidSuicide[NumSoundBanks][NumSuicideComments]	=
 };
 
 // Sound banks of writhing comments indexed by m_sSoundBank.
-SampleMasterID* CDemon::ms_apsmidWrithing[NumSoundBanks][NumWrithingComments]	=
+SampleMasterID* CDemon::ms_apsmidWrithing[NumSoundBanks][NumWrithingComments]   =
 {
    {     // 0 == Normal.
       &g_smidDemonSissy1,
@@ -280,7 +280,7 @@ SampleMasterID* CDemon::ms_apsmidWrithing[NumSoundBanks][NumWrithingComments]	=
 };
 
 // Sound banks of kill series comments indexed by m_sSoundBank.
-SampleMasterID* CDemon::ms_apsmidKillSeries[NumSoundBanks][NumKillSeriesComments]	=
+SampleMasterID* CDemon::ms_apsmidKillSeries[NumSoundBanks][NumKillSeriesComments]   =
 {
    {     // 0 == Normal.
       &g_smidDemonTheMan,
@@ -337,11 +337,11 @@ SampleMasterID* CDemon::ms_apsmidKillSeries[NumSoundBanks][NumKillSeriesComments
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE		"demon.bmp"
+#define IMAGE_FILE      "demon.bmp"
 
-#define GUI_FILE_NAME	"res/editor/Demon.gui"
+#define GUI_FILE_NAME   "res/editor/Demon.gui"
 
-#define GUI_ID_BANK		1000
+#define GUI_ID_BANK      1000
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -502,7 +502,7 @@ short CDemon::Save(                             // Returns 0 if successfull, non
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       pFile->Write(m_sSoundBank);
@@ -511,7 +511,7 @@ short CDemon::Save(                             // Returns 0 if successfull, non
       pFile->Write(&m_dZ);
 
       // Make sure there were no file errors
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
 
    return sResult;
@@ -601,7 +601,7 @@ short CDemon::EditNew(                          // Returns 0 if successfull, non
 
    sResult = Init();
 
-//	sResult	= EditModify();
+//   sResult   = EditModify();
 
    return sResult;
 }
@@ -612,7 +612,7 @@ short CDemon::EditNew(                          // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 short CDemon::EditModify(void)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    // Load gui dialog
    RGuiItem* pgui = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_HD, GUI_FILE_NAME));
@@ -628,21 +628,21 @@ short CDemon::EditModify(void)
       if (DoGui(pgui) == 1)
       {
          // Get new values from dialog.
-         m_sSoundBank	= (short)pguiBankName->GetVal();
+         m_sSoundBank   = (short)pguiBankName->GetVal();
          // Keep it in range.
          if (m_sSoundBank < 0)
          {
-            m_sSoundBank	= 0;
+            m_sSoundBank   = 0;
          }
          else if (m_sSoundBank >= NumSoundBanks)
          {
-            m_sSoundBank	= NumSoundBanks - 1;
+            m_sSoundBank   = NumSoundBanks - 1;
          }
 
       }
       else
       {
-         sResult	= 1;
+         sResult   = 1;
       }
 
       // Done with GUI.
@@ -650,7 +650,7 @@ short CDemon::EditModify(void)
    }
    else
    {
-      sResult	= -1;
+      sResult   = -1;
    }
 
 #if 0 // No settins via dialog currently require re-Init()age.
@@ -680,10 +680,10 @@ short CDemon::EditMove(                         // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the clickable pos/area of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CDemon::EditRect(  // Returns nothiing.
-   RRect*	prc)           // Out: Clickable pos/area of object.
+   RRect*   prc)           // Out: Clickable pos/area of object.
 {
    Map3Dto2D(
       m_dX,
@@ -692,36 +692,36 @@ void CDemon::EditRect(  // Returns nothiing.
       &(prc->sX),
       &(prc->sY) );
 
-   prc->sW	= 10; // Safety.
-   prc->sH	= 10; // Safety.
+   prc->sW   = 10; // Safety.
+   prc->sH   = 10; // Safety.
 
    if (m_pImage)
    {
-      prc->sW	= m_pImage->m_sWidth;
-      prc->sH	= m_pImage->m_sHeight;
+      prc->sW   = m_pImage->m_sWidth;
+      prc->sH   = m_pImage->m_sHeight;
    }
 
-   prc->sX	-= prc->sW / 2;
-   prc->sY	-= prc->sH;
+   prc->sX   -= prc->sW / 2;
+   prc->sY   -= prc->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CDemon::EditHotSpot(  // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY)              // Out: Y coord of 2D hotspot relative to
+   short*   psY)              // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 {
-   *psX	= 5;  // Safety.
-   *psY	= 5;  // Safety.
+   *psX   = 5;  // Safety.
+   *psY   = 5;  // Safety.
 
    if (m_pImage)
    {
-      *psX	= m_pImage->m_sWidth / 2;
-      *psY	= m_pImage->m_sHeight;
+      *psX   = m_pImage->m_sWidth / 2;
+      *psY   = m_pImage->m_sHeight;
    }
 }
 
@@ -751,8 +751,8 @@ void CDemon::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
@@ -815,7 +815,7 @@ void CDemon::ProcessMessages(void)
    S32 lThisTime = m_pRealm->m_time.GetGameTime();
 
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       if (msg.msg_Generic.eType == typeCheater)
@@ -839,7 +839,7 @@ void CDemon::ProcessMessages(void)
          {
          // Delete Demon
          case typeObjectDelete:
-            m_state	= State_Delete;
+            m_state   = State_Delete;
             break;
 
          // Weapon Selector
@@ -1069,7 +1069,7 @@ void CDemon::ProcessMessages(void)
 #if 1
             ASSERT(m_sSoundBank < NumSoundBanks);
 
-            psmid	= ms_apsmidExplosion[m_sSoundBank][GetRand() % NumExplosionComments];
+            psmid   = ms_apsmidExplosion[m_sSoundBank][GetRand() % NumExplosionComments];
 #else
             switch (GetRand() % 8)
             {
@@ -1106,7 +1106,7 @@ void CDemon::ProcessMessages(void)
 #if 1
             ASSERT(m_sSoundBank < NumSoundBanks);
 
-            psmid	= ms_apsmidBurn[m_sSoundBank][GetRand() % NumBurnComments];
+            psmid   = ms_apsmidBurn[m_sSoundBank][GetRand() % NumBurnComments];
 #else
             switch (GetRand() % 4)
             {
@@ -1131,7 +1131,7 @@ void CDemon::ProcessMessages(void)
 #if 1
             ASSERT(m_sSoundBank < NumSoundBanks);
 
-            psmid	= ms_apsmidSuicide[m_sSoundBank][GetRand() % NumSuicideComments];
+            psmid   = ms_apsmidSuicide[m_sSoundBank][GetRand() % NumSuicideComments];
 #else
             psmid = &g_smidDemonNoRegrets;
 #endif
@@ -1150,7 +1150,7 @@ void CDemon::ProcessMessages(void)
 #if 1
             ASSERT(m_sSoundBank < NumSoundBanks);
 
-            psmid	= ms_apsmidWrithing[m_sSoundBank][GetRand() % NumWrithingComments];
+            psmid   = ms_apsmidWrithing[m_sSoundBank][GetRand() % NumWrithingComments];
 #else
             switch (GetRand() % 5)
             {
@@ -1190,7 +1190,7 @@ void CDemon::ProcessMessages(void)
 #if 1
          ASSERT(m_sSoundBank < NumSoundBanks);
 
-         psmid	= ms_apsmidKillSeries[m_sSoundBank][GetRand() % NumKillSeriesComments];
+         psmid   = ms_apsmidKillSeries[m_sSoundBank][GetRand() % NumKillSeriesComments];
 #else
          switch (GetRand() % 7)
          {

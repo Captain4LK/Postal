@@ -19,10 +19,10 @@
 //
 // MULTIGRIDINDIRECT.H
 //
-// Created on	05/01/97 JRD
-// Implemented	05/01/97 JRD
+// Created on   05/01/97 JRD
+// Implemented   05/01/97 JRD
 //
-//	History:
+//   History:
 //
 //
 //////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@
 
  #define MGI_COOKIE "_MultiGridIndirect_"
  #define MGI_CURRENT_VERSION 1
- #define	MGI_MAX_PLANES	15 // to work wwith multigrid 15-bit
+ #define   MGI_MAX_PLANES   15 // to work wwith multigrid 15-bit
 // NOTE: zero is NOT a valid palette value, but it IS a valid attribute value
 
 //////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@
 //
 // By turning off clipping, access speed is greatly enhanced
 //
-#define	MGI_CLIP	TRUE // undefine to turn off clip to world...
+#define   MGI_CLIP   TRUE // undefine to turn off clip to world...
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -97,16 +97,16 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-class	RMultiGridIndirect
+class RMultiGridIndirect
 {
 public:
 //////////////////////////////////////////////////////////////////////
 //  User members:
 //////////////////////////////////////////////////////////////////////
 
-short	m_sWidth;      // With compression, you might get huge objects!
-short	m_sHeight;
-short	m_sGridW;
+short m_sWidth;        // With compression, you might get huge objects!
+short m_sHeight;
+short m_sGridW;
 short m_sGridH;
 short m_sTileW;
 short m_sTileH;
@@ -121,7 +121,7 @@ short m_sTileH;
 // will recieve a NULL terminated string of dereferenced
 // palette hits for that point.
 //
-short	GetVal(UCHAR*	pszResult, short sX, short sY, char ucClipVal = -1)
+short   GetVal(UCHAR*   pszResult, short sX, short sY, char ucClipVal = -1)
 {
    //-----------------------------------------------------------------
    ASSERT(m_pmg);
@@ -156,19 +156,19 @@ short Save(RFile* prFile);
 // Returns SUCCESS or FAILURE
 // Sets up the UNCOMPRESSED data
 //
-short	Alloc(short sW, short sH, short sMaxPlanes, short sTileW, short sTileH);
+short   Alloc(short sW, short sH, short sMaxPlanes, short sTileW, short sTileH);
 
 //////////////////////////////////////////////////////////////////////
-//	GetPalette (entire palette for that tile)
+//   GetPalette (entire palette for that tile)
 //////////////////////////////////////////////////////////////////////
 // Low level palette access
 // Just get the current byte array of MGI_MAX_PLANES size:
 //
-UCHAR*	GetPalette(short sX, short sY, UCHAR* pucOnError = NULL)
+UCHAR*   GetPalette(short sX, short sY, UCHAR* pucOnError = NULL)
 {
    ASSERT(m_pucPalette);
 
-   #ifdef	MGI_CLIP
+   #ifdef   MGI_CLIP
    if ( (sX < 0) || (sY < 0) || (sX >= m_sWidth) || (sY >= m_sHeight) )
       return pucOnError;
    #endif
@@ -177,10 +177,10 @@ UCHAR*	GetPalette(short sX, short sY, UCHAR* pucOnError = NULL)
 }
 
 // This gives you the number of taken palette entries in a tile:
-short	NumPalEntries(short sX, short sY)
+short   NumPalEntries(short sX, short sY)
 {
    short sNumEntries = m_sMaxPlanes;    // A Full Palette
-   UCHAR*	pPal = GetPalette(sX, sY) + m_sMaxPlanes;
+   UCHAR*   pPal = GetPalette(sX, sY) + m_sMaxPlanes;
 
    while (sNumEntries && (!*--pPal)) sNumEntries--;
 
@@ -191,7 +191,7 @@ short	NumPalEntries(short sX, short sY)
 //  "Install" the RMultiGrid which holds the index data:
 // (This must not be compressed until it is done being written to)
 //////////////////////////////////////////////////////////////////////
-short	InstallMultiGrid(RMultiGrid* pmg)
+short   InstallMultiGrid(RMultiGrid* pmg)
 {
    ASSERT(!m_pmg);
    ASSERT(pmg);
@@ -204,16 +204,16 @@ short	InstallMultiGrid(RMultiGrid* pmg)
 }
 
 //////////////////////////////////////////////////////////////////////
-//	SetPalette (Set an entry in that tile's palette)
+//   SetPalette (Set an entry in that tile's palette)
 //////////////////////////////////////////////////////////////////////
 // Low level palette access
 // Just set the current byte palette entry
 //
-short	SetPalette(short sX, short sY, short sEntry, UCHAR ucVal)
+short   SetPalette(short sX, short sY, short sEntry, UCHAR ucVal)
 {
    ASSERT(m_pucPalette);
 
-   #ifdef	MGI_CLIP
+   #ifdef   MGI_CLIP
    if ( (sX < 0) || (sY < 0) || (sX >= m_sWidth) || (sY >= m_sHeight) )
       return -1;
    #endif
@@ -226,14 +226,14 @@ short	SetPalette(short sX, short sY, short sEntry, UCHAR ucVal)
 
 // A visual Debug View: (Uncompressed)
 //
-void	DumpPalette(RImage* pimDst, short sSrcX, short sSrcY, short sDstX, short sDstY,
-                  short sW, short sH);
+void   DumpPalette(RImage* pimDst, short sSrcX, short sSrcY, short sDstX, short sDstY,
+                   short sW, short sH);
 
 //////////////////////////////////////////////////////////////////////
 //  Internal methods:
 //////////////////////////////////////////////////////////////////////
 
-void	Clear()
+void   Clear()
 {
    m_sWidth = m_sHeight = m_sGridW = m_sGridH = m_sTileW = m_sTileH = 0;
    m_pmg = NULL;
@@ -245,7 +245,7 @@ void	Clear()
    m_pimBuffer = NULL;
 }
 
-void	Free()
+void   Free()
 {
    //if (m_pmg) delete m_pmg;// Let user delete MultiGrid
    if (m_pucPalette) free(m_pucPalette);
@@ -276,7 +276,7 @@ RMultiGridIndirect()
 
 // This clear the temp tile buffer first to allow the possibility of
 // source clipping:  (It does an opaque copy)
-void	CacheTile(RImage* pimSrc, short sSrcX, short sSrcY)
+void   CacheTile(RImage* pimSrc, short sSrcX, short sSrcY)
 {
    // 1) clear buffer tile:
    memset(m_pimTempTile->m_pData, 0, m_lTileLen);
@@ -287,7 +287,7 @@ void	CacheTile(RImage* pimSrc, short sSrcX, short sSrcY)
 }
 
 // This is a linear check to see if you have a null cache:
-short	Contains(UCHAR ucColor)
+short   Contains(UCHAR ucColor)
 {
    UCHAR *pTile = m_pimTempTile->m_pData;
    for (short i = 0; i < m_lTileLen; i++, pTile++)
@@ -300,8 +300,8 @@ short	Contains(UCHAR ucColor)
 // destination key:
 // It will only do RIGHT AND BOTTOM CLIPPING!
 //
-void	TileOR(UCHAR ucKey, USHORT usValueOR, short sDstX, short sDstY,
-             short sClip = 0); // you can turn off the half clipping:
+void   TileOR(UCHAR ucKey, USHORT usValueOR, short sDstX, short sDstY,
+              short sClip = 0); // you can turn off the half clipping:
 
 // Drop an FSPR1 into the Attribute map:
 //
@@ -313,13 +313,13 @@ public:
 //////////////////////////////////////////////////////////////////////
 //  Data Structures
 //////////////////////////////////////////////////////////////////////
-RMultiGrid*	m_pmg;         // The MultiGrid inherent under the system
-UCHAR*	m_pucPalette;     // Data holding the palette entries
-UCHAR**	m_ppucAccessY;    // Array of (GridH) pointers into the Palette
-U32*	m_plAccessX;      // Array of offsets into the Palette
-short	m_sMaxPlanes;        // Can be custom tailored to save memory
-RImage*	m_pimTempTile;    // For construction & easy writing.
-RImage*	m_pimBuffer;      // Large conversion buffer
+RMultiGrid*   m_pmg;         // The MultiGrid inherent under the system
+UCHAR*   m_pucPalette;     // Data holding the palette entries
+UCHAR**   m_ppucAccessY;    // Array of (GridH) pointers into the Palette
+U32*   m_plAccessX;      // Array of offsets into the Palette
+short m_sMaxPlanes;          // Can be custom tailored to save memory
+RImage*   m_pimTempTile;    // For construction & easy writing.
+RImage*   m_pimBuffer;      // Large conversion buffer
 S32 m_lTileLen;            // For linear operations
 static short ms_asColorToPlane[MGI_MAX_PLANES];
 };

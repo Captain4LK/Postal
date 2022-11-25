@@ -17,14 +17,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	flist.h
+//   flist.h
 //
 // History:
-//		06/29/97	MJR	Started.
+//      06/29/97   MJR   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	This file impliments a template for a fast linked list with little or no
+//   This file impliments a template for a fast linked list with little or no
 // error checking.  It assumes that memory allocations will never fail and the
 // interface is designed around the idea of an intelligent user.
 //

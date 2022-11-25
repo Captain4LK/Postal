@@ -20,28 +20,28 @@
 //
 // History:
 //
-//		06/11/97 BRH	Started this module
+//      06/11/97 BRH   Started this module
 //
-//		06/16/97 BRH	Added a scoreboard reset function to reset the scores
-//							and display time.
+//      06/16/97 BRH   Added a scoreboard reset function to reset the scores
+//                     and display time.
 //
-//		06/17/97 BRH	Increased max number of players to make sure there are
-//							enough entries for 16 or more players.
+//      06/17/97 BRH   Increased max number of players to make sure there are
+//                     enough entries for 16 or more players.
 //
-//		07/04/97 BRH	Added two more scoring modes.
+//      07/04/97 BRH   Added two more scoring modes.
 //
-//		07/07/97	JMI	Now ScoreUpdateDisplay() returns true if it drew into
-//							the passed in buffer and false otherwise.
+//      07/07/97   JMI   Now ScoreUpdateDisplay() returns true if it drew into
+//                     the passed in buffer and false otherwise.
 //
-//		07/22/97 BRH	Added ScoreDisplayHighScores.
+//      07/22/97 BRH   Added ScoreDisplayHighScores.
 //
-//		07/26/97 BRH	Added ScoreGetName to get the name of the player when
-//							they better one of the high scores.
+//      07/26/97 BRH   Added ScoreGetName to get the name of the player when
+//                     they better one of the high scores.
 //
-//		08/10/97	JRD	Added a hood to the score status to allow graphical
-//							backdrops behind the scoring status.
+//      08/10/97   JRD   Added a hood to the score status to allow graphical
+//                     backdrops behind the scoring status.
 //
-//		09/07/97	JMI	Now requires a pclient for MP scores.
+//      09/07/97   JMI   Now requires a pclient for MP scores.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -77,8 +77,8 @@ typedef enum
 //---------------------------------------------------------------------------
 public:
 
-short	m_asScores[Net::MaxNumIDs + 1];           // Score for each player
-//		U16	m_au16PlayerIDs[Net::MaxNumIDs+1];	// ID of each player
+short m_asScores[Net::MaxNumIDs + 1];             // Score for each player
+//      U16   m_au16PlayerIDs[Net::MaxNumIDs+1];   // ID of each player
 S32 m_lLastScoreDrawTime;                          // Time since last update
 S32 m_lLastStatusDrawTime;                         // Time since last update
 
@@ -96,7 +96,7 @@ CScoreboard()
    for (i = 0; i <= Net::MaxNumIDs; i++)
    {
       m_asScores[i] = 0;
-//				m_au16PlayerIDs[i] = 0;
+//            m_au16PlayerIDs[i] = 0;
    }
 }
 
@@ -109,16 +109,16 @@ CScoreboard()
 public:
 
 // Return the indes of the player or -1 if not found
-//		short GetPlayerIndex(U16 uInstanceID)
-//		{
-//			short sPlayerIndex = Net::MaxNumIDs;
+//      short GetPlayerIndex(U16 uInstanceID)
+//      {
+//         short sPlayerIndex = Net::MaxNumIDs;
 //
-//			CThing* pShooter = GetItemById(uInstanceID)
-//			if (pShooter && pShooter->m_id == CThing::CDudeID)
-//			{
-//				sPlayerIndex = MIN(((CDude*) pShooter)->m_sDudeNum, Net::MaxNumIDs);
-//			}
-//		}
+//         CThing* pShooter = GetItemById(uInstanceID)
+//         if (pShooter && pShooter->m_id == CThing::CDudeID)
+//         {
+//            sPlayerIndex = MIN(((CDude*) pShooter)->m_sDudeNum, Net::MaxNumIDs);
+//         }
+//      }
 
 void Reset(void)
 {
@@ -187,11 +187,11 @@ void ScoreDisplayStatus(CRealm* pRealm);
 
 // Call this function at the end of the level and if it is a challenge level,
 // it will display the high scores for that level and give the user a chance
-//	to enter their name if they beat one of the top scores.
+//   to enter their name if they beat one of the top scores.
 void ScoreDisplayHighScores(        // Returns nothing.
    CRealm* pRealm,                  // In:  Realm won.
-   CNetClient* pclient	= NULL,     // In:  Client ptr for MP mode, or NULL in SP mode.
-   S32 lMaxTimeOut	= -1);         // In:  Max time on score screen (quits after this
+   CNetClient* pclient   = NULL,     // In:  Client ptr for MP mode, or NULL in SP mode.
+   S32 lMaxTimeOut   = -1);         // In:  Max time on score screen (quits after this
                                     // duration, if not -1).
 
 // Get the name for a new high score

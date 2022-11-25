@@ -17,35 +17,35 @@
 //
 // COMMAND SUMMARY: - simple to use!
 
-// rspStartProfile("label");				// mark beginning of a timed code segment
-// rspEndProfile("label");					// mark the end of a time code segment
-// rspProfileOn();							// Start a profiling session
-// rspProfileOff();							// Suspend the Profiler
+// rspStartProfile("label");            // mark beginning of a timed code segment
+// rspEndProfile("label");               // mark the end of a time code segment
+// rspProfileOn();                     // Start a profiling session
+// rspProfileOff();                     // Suspend the Profiler
 // rspSetProfileOutput("filename.ext");// direct the output
-// #define RSP_PROFILE_ON					// activate profiling in this module,
+// #define RSP_PROFILE_ON               // activate profiling in this module,
 // or set in project settings
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	Profile.h
+//   Profile.h
 //
 // History:
-//		06/11/97 JRD	Started.
+//      06/11/97 JRD   Started.
 //
-//		06/12/97 JRD	Revamped user interfaceChanged to appear as though
-//							it's not really a class instance.  Worked on timing refinement
+//      06/12/97 JRD   Revamped user interfaceChanged to appear as though
+//                     it's not really a class instance.  Worked on timing refinement
 //
-//		06/13/97 JRD	Finally got 2nd order self timing working - accurate to 60ns.
-//							Added ability to have inside out (exclusions) loops.
+//      06/13/97 JRD   Finally got 2nd order self timing working - accurate to 60ns.
+//                     Added ability to have inside out (exclusions) loops.
 //
-//		06/14/97 JRD	Added multiple report sessions, min/max reporting,
-//							percentage of target (100%) reporting, error reporting,
-//							and error recovery.
+//      06/14/97 JRD   Added multiple report sessions, min/max reporting,
+//                     percentage of target (100%) reporting, error reporting,
+//                     and error recovery.
 //
-//		06/16/97	JRD	Optimized speed over consistency.
+//      06/16/97   JRD   Optimized speed over consistency.
 //
-//		07/08/97	JRD	Moved destructor into header so it can be turned on and
-//							off based on RSP_PROFILE_ON
+//      07/08/97   JRD   Moved destructor into header so it can be turned on and
+//                     off based on RSP_PROFILE_ON
 //
 //////////////////////////////////////////////////////////////////////////////
 //***********************  TUTORIAL and INFORMATION  *************************
@@ -70,7 +70,7 @@
 // to turn profiling on or off.
 //
 // (f) - Timing more accurate than conventional profilers, so very small
-//			non-repeating functions can be measured.
+//         non-repeating functions can be measured.
 //
 // - DISADVANTAGES OF USING THE RSPiX PROFILER -
 //
@@ -241,9 +241,9 @@ rspProfileOff();
 // If you use global tags to do an
 // profile_end, you will reduce overhead!
 
-#define PF_MAX_FIELDS	20
-#define PF_MAX_LEN	80 // no names more than this, please!
-typedef	enum {Inactive, Timing, DoneTiming, InError}	ProfileState;
+#define PF_MAX_FIELDS   20
+#define PF_MAX_LEN   80 // no names more than this, please!
+typedef   enum {Inactive, Timing, DoneTiming, InError}   ProfileState;
 
 #ifdef __GNUC__
 #define BIGS64(x) S64(x ## ll)
@@ -251,11 +251,11 @@ typedef	enum {Inactive, Timing, DoneTiming, InError}	ProfileState;
 #define BIGS64(x) S64(x)
 #endif
 
-class	RProfileNode
+class RProfileNode
 {
 public:
 //----------------------------
-void	Init()
+void   Init()
 {
    m_szFieldName[0] = 0;
    m_lNumCalls = m_lTotTime = m_lLastTime = m_lMaxTime = m_lWhenMin = m_lWhenMax = 0;
@@ -282,19 +282,19 @@ S64 m_lWhenMax;      // relative to begin
 
 ProfileState m_eState;     // parenthesis verification!
 
-#define PF_START_ERR	1
-#define PF_END_ERR	2
+#define PF_START_ERR   1
+#define PF_END_ERR   2
 
-short	m_sInError;    // parenthesis mismatch!
+short m_sInError;      // parenthesis mismatch!
 };
 
-class	RProfile
+class RProfile
 {
 public:
-void	StartProfile(char* pszFieldName);
-void	EndProfile(char* pszFieldName);
+void   StartProfile(char* pszFieldName);
+void   EndProfile(char* pszFieldName);
 //----------------------------
-void	SetOutput(char *pszOutput)
+void   SetOutput(char *pszOutput)
 {
    if (pszOutput) strcpy(m_szOutputFile, pszOutput);
 }
@@ -342,7 +342,7 @@ void ProfilingOff()
       */
 }
 
-//S64	DetermineTimeError();
+//S64   DetermineTimeError();
 
 void Report();    // tell it all!
 //----------------------------
@@ -374,13 +374,13 @@ S64 m_lFastTimeIn;
 S64 m_lFastTimeOut;
 //----------------------------
 
-short	m_sLastUnaccounted;   // Used for one frame lag timing of unknown overhead...
+short m_sLastUnaccounted;     // Used for one frame lag timing of unknown overhead...
 short m_sNumTracked;       // how many in count?
 short m_sCommandError;     // mismatched parenthesis
 short m_sMaxDepth;         // Used for third order error estimation
-short	m_sCurDepth;         // Used for third order error estimation
-short	m_sActive;           // suspend / resume profiling...
-short	m_sInternalError;    // Usually memory limits...
+short m_sCurDepth;           // Used for third order error estimation
+short m_sActive;             // suspend / resume profiling...
+short m_sInternalError;      // Usually memory limits...
 
 char m_szOutputFile[256];
 RProfileNode m_aList[PF_MAX_FIELDS];
@@ -399,21 +399,21 @@ extern RProfile rspProfileInstance;   // The one global instance
 inline void rspProfileOptimizeOut(char* a) {} // used to trick the compiler
 inline void rspProfileOptimizeOut() {} // used to trick the compiler
 
-#ifdef	RSP_PROFILE_ON
+#ifdef   RSP_PROFILE_ON
 /////////////////////////////////////////////////////////////////
-   #define	rspStartProfile(a)		rspProfileInstance.StartProfile(a)
-   #define	rspEndProfile(a)			rspProfileInstance.EndProfile(a)
-   #define	rspProfileOn()				rspProfileInstance.ProfilingOn()
-   #define	rspProfileOff()			rspProfileInstance.ProfilingOff()
-   #define	rspSetProfileOutput(a)	rspProfileInstance.SetOutput(a)
+   #define   rspStartProfile(a)      rspProfileInstance.StartProfile(a)
+   #define   rspEndProfile(a)         rspProfileInstance.EndProfile(a)
+   #define   rspProfileOn()            rspProfileInstance.ProfilingOn()
+   #define   rspProfileOff()         rspProfileInstance.ProfilingOff()
+   #define   rspSetProfileOutput(a)   rspProfileInstance.SetOutput(a)
 /////////////////////////////////////////////////////////////////
 #else
 /////////////////////////////////////////////////////////////////
-   #define	rspStartProfile(a)		1 ? (void)0 : rspProfileOptimizeOut(a)
-   #define	rspEndProfile(a)			1 ? (void)0 : rspProfileOptimizeOut(a)
-   #define	rspProfileOn()				1 ? (void)0 : rspProfileOptimizeOut()
-   #define	rspProfileOff()			1 ? (void)0 : rspProfileOptimizeOut()
-   #define	rspSetProfileOutput(a)	1 ? (void)0 : rspProfileOptimizeOut(a)
+   #define   rspStartProfile(a)      1 ? (void)0 : rspProfileOptimizeOut(a)
+   #define   rspEndProfile(a)         1 ? (void)0 : rspProfileOptimizeOut(a)
+   #define   rspProfileOn()            1 ? (void)0 : rspProfileOptimizeOut()
+   #define   rspProfileOff()         1 ? (void)0 : rspProfileOptimizeOut()
+   #define   rspSetProfileOutput(a)   1 ? (void)0 : rspProfileOptimizeOut(a)
 /////////////////////////////////////////////////////////////////
 #endif
 

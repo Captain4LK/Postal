@@ -33,12 +33,12 @@
 // used for S32, slow, color mappings.
 //==============================================
 // dProgress: A value between 0.0 (just started) and
-//					1.0 (done).  Use can display as he wishes.
+//               1.0 (done).  Use can display as he wishes.
 // RETURN: User should return 0 for CONTINUE, and
-//		-1 to ABORT the conversion early! (User hits cancel)
+//      -1 to ABORT the conversion early! (User hits cancel)
 //
 //
-typedef	short (*PDitherCallBack) (double dProgress);
+typedef   short (*PDitherCallBack) (double dProgress);
 
 //==============================================
 // You supply a general palette to match to,
@@ -58,9 +58,9 @@ extern short rspDither(
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc = 4,
    // User interaction
    PDitherCallBack func = NULL,
@@ -85,9 +85,9 @@ extern short rspSimpleMap(
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc = 4,
    // User interaction
    PDitherCallBack func = NULL,
@@ -114,9 +114,9 @@ extern short rspDither(
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc = 4,
    // User interaction
    PDitherCallBack func = NULL,
@@ -136,16 +136,16 @@ extern short rspDither(
 // Returns 0 for SUCCESS, -1 for ERROR, 1 for user cancel
 //==============================================
 //
-short	rspDither(
+short   rspDither(
    UCHAR ucForeAlpha,                  // lower limit for foreground
    UCHAR ucBack,                 // index to make BKGD
    RImage* pimSrc,               // MUST BE 24-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc = 4,
    // User interaction
    PDitherCallBack func = NULL,
@@ -168,16 +168,16 @@ short	rspDither(
 // treatment will occur.
 //==============================================
 //
-short	rspSimpleMap(
-   UCHAR	ucForeAlpha,               // alpha threshhold
+short   rspSimpleMap(
+   UCHAR ucForeAlpha,                 // alpha threshhold
    UCHAR ucBack,                    // map background to this index
    RImage* pimSrc,               // MUST BE 32-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc = 4,
    // User interaction
    PDitherCallBack func = NULL,

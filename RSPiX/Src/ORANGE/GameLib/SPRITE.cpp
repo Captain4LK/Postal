@@ -20,45 +20,45 @@
 // SPRITE.CPP
 //
 // History:
-//		01/22/95	MR		Sample stuff. (IsZoneCollision)
-//		01/23/95 BH		Constructor, Destructor, SetZ
-//		12/08/95	BH		Changed sprite for use with Jeff's Blit routines.
-//							Now that the CImage has been settled and because
-//							there are many different Blit routines, the drawing
-//							functions have been removed from sprite and instead
-//							will be handled by another module in conjunction with
-//							the blit routines.  A few variables were addes to sprites
-//							to make them compatible with Jeff's sprite format.
+//      01/22/95   MR      Sample stuff. (IsZoneCollision)
+//      01/23/95 BH      Constructor, Destructor, SetZ
+//      12/08/95   BH      Changed sprite for use with Jeff's Blit routines.
+//                     Now that the CImage has been settled and because
+//                     there are many different Blit routines, the drawing
+//                     functions have been removed from sprite and instead
+//                     will be handled by another module in conjunction with
+//                     the blit routines.  A few variables were addes to sprites
+//                     to make them compatible with Jeff's sprite format.
 //
-//		10/08/96	JMI	Added CreateImage() and DestroyImage() to allocate and
-//							deallocate the m_pImage.  Load() now calls CreateImage()
-//							and ~CSprite() now calls DestroyImage().
+//      10/08/96   JMI   Added CreateImage() and DestroyImage() to allocate and
+//                     deallocate the m_pImage.  Load() now calls CreateImage()
+//                     and ~CSprite() now calls DestroyImage().
 //
-//		10/09/96	JMI	Added Init() to initialize CSprites consistently no matter
-//							which constructor is used.
+//      10/09/96   JMI   Added Init() to initialize CSprites consistently no matter
+//                     which constructor is used.
 //
-//		10/09/96	JMI	Now passes FALSE to CSList constructor for SpriteList to
-//							tell it not to initalize or automatically deallocate.
+//      10/09/96   JMI   Now passes FALSE to CSList constructor for SpriteList to
+//                     tell it not to initalize or automatically deallocate.
 //
-//		10/10/96	JMI	Added m_sHotSpotX/Y offsets, serialization for such, and
-//							virtual Update() hook.
+//      10/10/96   JMI   Added m_sHotSpotX/Y offsets, serialization for such, and
+//                     virtual Update() hook.
 //
-//		10/15/96 BRH	Added ability to save sprites without an Image.  If the
-//							m_pImage pointer is NULL, then file is written without
-//							an image.  This change required a new version of the
-//							sprite file because a flag was added to specify whether
-//							the sprite file contained a CImage or not.  Also changed
-//							the reading and writing of doubles to work with the
-//							updated CNFile which now supports floats and doubles.
+//      10/15/96 BRH   Added ability to save sprites without an Image.  If the
+//                     m_pImage pointer is NULL, then file is written without
+//                     an image.  This change required a new version of the
+//                     sprite file because a flag was added to specify whether
+//                     the sprite file contained a CImage or not.  Also changed
+//                     the reading and writing of doubles to work with the
+//                     updated CNFile which now supports floats and doubles.
 //
-//		10/31/96 BRH	Changed CSprite to RSprite to match RSPiX naming
-//							convention.  Also changed references to other RSPiX
-//							classes from the C prefix to the R prefix.
+//      10/31/96 BRH   Changed CSprite to RSprite to match RSPiX naming
+//                     convention.  Also changed references to other RSPiX
+//                     classes from the C prefix to the R prefix.
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							ENDIAN_LITTLE	RFile::LittleEndian
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     ENDIAN_LITTLE   RFile::LittleEndian
 //
 //*****************************************************************************
 //
@@ -74,7 +74,7 @@
 
 ////////////////// Instantiate Static members ////////////////////////////////
 
-RSList<RSprite, short>	RSprite::SpriteList(FALSE);   // Master list of active sprites
+RSList<RSprite, short>   RSprite::SpriteList(FALSE);   // Master list of active sprites
 
 
 //*****************************************************************************
@@ -82,14 +82,14 @@ RSList<RSprite, short>	RSprite::SpriteList(FALSE);   // Master list of active sp
 // Constructor
 //
 // Description:
-//		Initializes the elements of this sprite and adds itself to the list
-//		static list of sprites
+//      Initializes the elements of this sprite and adds itself to the list
+//      static list of sprites
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -103,15 +103,15 @@ RSprite::RSprite()
 // Constructor
 //
 // Description:
-//		This constructor initializes the sprite with the parameters you supply
-//		and adds itself to the static list of sprites
+//      This constructor initializes the sprite with the parameters you supply
+//      and adds itself to the static list of sprites
 //
 // Parameters:
-//		pImage = pointer to RImage that goes with this image (NULL if none yet)
-//		ulFlags = sprite flags you want set
+//      pImage = pointer to RImage that goes with this image (NULL if none yet)
+//      ulFlags = sprite flags you want set
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -121,7 +121,7 @@ RSprite::RSprite(RImage* pImage, U32 ulFlags)
 
    m_pImage = pImage;
    m_ulFlags = ulFlags;
-   m_sOwnImage	= FALSE;
+   m_sOwnImage   = FALSE;
 }
 
 //*****************************************************************************
@@ -129,21 +129,21 @@ RSprite::RSprite(RImage* pImage, U32 ulFlags)
 // Constructor
 //
 // Description:
-//		This constructor initializes all values of the sprite with the
-//		parameters you supply and adds itself to the static list of sprites
+//      This constructor initializes all values of the sprite with the
+//      parameters you supply and adds itself to the static list of sprites
 //
 // Parameters:
-//		sX = starting x position
-//		sY = starting y position
-//		sZ = starting z position
-//		sAngle = starting angle of rotation
-//		lWidth = desired width of sprite image
-//		lHeight = desired height of sprite image
-//		ulFlags = initial sprite flags
-//		pImage = RImage for the sprite
+//      sX = starting x position
+//      sY = starting y position
+//      sZ = starting z position
+//      sAngle = starting angle of rotation
+//      lWidth = desired width of sprite image
+//      lHeight = desired height of sprite image
+//      ulFlags = initial sprite flags
+//      pImage = RImage for the sprite
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -172,35 +172,35 @@ RSprite::RSprite(short sX, short sY, short sZ, short sAngle,
 // Init
 //
 // Description:
-//		Initializes the members to the basic defaults.
-//		Should not be called after CreateImage() unless DestroyImage() is called
-//		or special care is taken with the *m_pImage data.
+//      Initializes the members to the basic defaults.
+//      Should not be called after CreateImage() unless DestroyImage() is called
+//      or special care is taken with the *m_pImage data.
 //
 // Parameters:
-//		none
+//      none
 //
-//	Affects:
-//		m_pImage, m_sOwnImage, m_sX, m_sY, m_sZ, m_sAngle, SpriteList
+//   Affects:
+//      m_pImage, m_sOwnImage, m_sX, m_sY, m_sZ, m_sAngle, SpriteList
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
 void RSprite::Init(void)
 {
    m_pImage = NULL;
-   m_sOwnImage	= FALSE;
+   m_sOwnImage   = FALSE;
    m_ulFlags = 0;
    m_sX = m_sY = m_sZ = m_sAngle = 0;
    m_lWidth = m_lHeight = 0;
 
-   m_sHotSpotX	= 0;
-   m_sHotSpotY	= 0;
-   m_sHotSpotZ	= 0;
+   m_sHotSpotX   = 0;
+   m_sHotSpotY   = 0;
+   m_sHotSpotZ   = 0;
 
    RSprite::SpriteList.Insert(this, &m_sZ);
-//	TRACE("RSprite::RSprite - adding sprite to list\n");
+//   TRACE("RSprite::RSprite - adding sprite to list\n");
    if (RSprite::SpriteList.IsEmpty())
       TRACE("but the list is empty or something\n");
 }
@@ -210,14 +210,14 @@ void RSprite::Init(void)
 // Destructor
 //
 // Description:
-//		Removes this sprite from the static list of sprites before
-//		destroying itself.  Also frees the list of regions if any
+//      Removes this sprite from the static list of sprites before
+//      destroying itself.  Also frees the list of regions if any
 //
 // Parameters:
-//		none
+//      none
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -231,7 +231,7 @@ RSprite::~RSprite()
    DestroyImage();
 
    // Remove yourself from the list of sprites
-//	if (RSprite::SpriteList.IsEmpty())
+//   if (RSprite::SpriteList.IsEmpty())
    RSprite::SpriteList.Remove(this);
 }
 
@@ -240,35 +240,35 @@ RSprite::~RSprite()
 // CreateImage
 //
 // Description:
-//		Allocates an image pointed to by m_pImage.  Use DestroyImage() to
-//		destroy.
+//      Allocates an image pointed to by m_pImage.  Use DestroyImage() to
+//      destroy.
 //
 // Parameters:
-//		none
+//      none
 //
-//	Affects:
-//		m_pImage, m_sOwnImage, dynamic memory allocation
+//   Affects:
+//      m_pImage, m_sOwnImage, dynamic memory allocation
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
 short RSprite::CreateImage(void) // Returns 0 on success.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   m_pImage	= new RImage;
+   m_pImage   = new RImage;
    if (m_pImage != NULL)
    {
       // Succesfully allocated an image.
       // Remember we allocated it.
-      m_sOwnImage	= TRUE;
+      m_sOwnImage   = TRUE;
    }
    else
    {
       TRACE("CreateImage(): Failed to allocate new RImage.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -279,17 +279,17 @@ short RSprite::CreateImage(void) // Returns 0 on success.
 // DestroyImage
 //
 // Description:
-//		Destroys an image previously allocated by CreateImage().  If m_pImage
-//		is NULL or m_sOwnImage is FALSE, this function does nothing.
+//      Destroys an image previously allocated by CreateImage().  If m_pImage
+//      is NULL or m_sOwnImage is FALSE, this function does nothing.
 //
 // Parameters:
-//		none
+//      none
 //
-//	Affects:
-//		m_pImage, m_sOwnImage, dynamic memory deallocation
+//   Affects:
+//      m_pImage, m_sOwnImage, dynamic memory deallocation
 //
 // Returns:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -298,8 +298,8 @@ void RSprite::DestroyImage(void) // Returns nothing.
    if (m_pImage != NULL && m_sOwnImage != FALSE)
    {
       delete m_pImage;
-      m_pImage		= NULL;
-      m_sOwnImage	= FALSE;
+      m_pImage      = NULL;
+      m_sOwnImage   = FALSE;
    }
 }
 
@@ -308,18 +308,18 @@ void RSprite::DestroyImage(void) // Returns nothing.
 // Save
 //
 // Description:
-//		This version of the function takes a filename and creates a new
-//		file in which to save the sprite data.  It then calls the other
-//		save function with the open RFile pointers.  See next Save
-//		description for more details.
+//      This version of the function takes a filename and creates a new
+//      file in which to save the sprite data.  It then calls the other
+//      save function with the open RFile pointers.  See next Save
+//      description for more details.
 //
 // Parameters:
-//		pszFilename = filename of image to be saved
+//      pszFilename = filename of image to be saved
 //
 // Returns:
-//		SUCCESS if the file was saved successfully
-//		FAILURE if there was an error - TRACE message will help pinpoint
-//				  the failure
+//      SUCCESS if the file was saved successfully
+//      FAILURE if there was an error - TRACE message will help pinpoint
+//              the failure
 //
 //*****************************************************************************
 
@@ -346,22 +346,22 @@ short RSprite::Save(char* pszFilename)
 // Save
 //
 // Description:
-//		This version of the function takes an open RFile pointer and writes
-//		the sprite data to the current position in the file.  It saves the
-//		header for the sprite file and all of the current sprite information
-//		and then calls the RImage save funciton to save the image.  If the
-//		current format of the image does not have a save function, then it
-//		calls ConvertFrom to convert the image to one of the standard types and
-//		then calls save and sets the desitnation type to its original format so
-//		that the image will be automatically converted upon load.
+//      This version of the function takes an open RFile pointer and writes
+//      the sprite data to the current position in the file.  It saves the
+//      header for the sprite file and all of the current sprite information
+//      and then calls the RImage save funciton to save the image.  If the
+//      current format of the image does not have a save function, then it
+//      calls ConvertFrom to convert the image to one of the standard types and
+//      then calls save and sets the desitnation type to its original format so
+//      that the image will be automatically converted upon load.
 //
 // Parameters:
-//		pcf = pointer to open RFile where the data will be saved.
+//      pcf = pointer to open RFile where the data will be saved.
 //
 // Returns:
-//		SUCCESS if the file was saved
-//		FAILURE if there wan an error - TRACE messages will help pinpoint
-//				  the failure
+//      SUCCESS if the file was saved
+//      FAILURE if there wan an error - TRACE messages will help pinpoint
+//              the failure
 //
 //*****************************************************************************
 
@@ -583,18 +583,18 @@ short RSprite::Save(RFile* pcf)
 // Load
 //
 // Description:
-//		Loads the sprite data and the image.  This version of the function
-//		takes a filename and opens that file to read the sprite information.
-//		Once the file is open, it calls the other Load function to read the
-//		data from the open RFile.  See the next description for more info.
+//      Loads the sprite data and the image.  This version of the function
+//      takes a filename and opens that file to read the sprite information.
+//      Once the file is open, it calls the other Load function to read the
+//      data from the open RFile.  See the next description for more info.
 //
 // Parameters:
-//		pszFilename = name of file to open
+//      pszFilename = name of file to open
 //
 // Returns:
-//		SUCCESS if the file was loaded correctly
-//		FAILURE if there was an error - TRACE messages will help
-//				  pinpoint the failure.
+//      SUCCESS if the file was loaded correctly
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoint the failure.
 //
 //*****************************************************************************
 
@@ -621,19 +621,19 @@ short RSprite::Load(char* pszFilename)
 // Load
 //
 // Description:
-//		Loads the sprite data and the image.  This version of the function
-//		takes an open RFile pointer and reads the data from the current
-//		position.  It makes sure that the data is sprite data and if so,
-//		reads all of the fields of the sprite and then calls RImage::Load
-//		to read the image data for this sprite.
+//      Loads the sprite data and the image.  This version of the function
+//      takes an open RFile pointer and reads the data from the current
+//      position.  It makes sure that the data is sprite data and if so,
+//      reads all of the fields of the sprite and then calls RImage::Load
+//      to read the image data for this sprite.
 //
 // Parameters:
-//		pcf = open RFile pointer where the data is to be read
+//      pcf = open RFile pointer where the data is to be read
 //
 // Returns:
-//		SUCCESS if the file was read correctly
-//		FAILURE if there was an error - TRACE messages will help
-//				  pinpoing the failure.
+//      SUCCESS if the file was read correctly
+//      FAILURE if there was an error - TRACE messages will help
+//              pinpoing the failure.
 //
 //*****************************************************************************
 
@@ -871,20 +871,20 @@ short RSprite::Load(RFile* pcf)
 
 //*****************************************************************************
 //
-//	DoRegionsCollide
+//   DoRegionsCollide
 //
 // Description:
-//		Checks to see if the specified region of this sprite collide with
-//		the specified region type of another sprite
+//      Checks to see if the specified region of this sprite collide with
+//      the specified region type of another sprite
 //
 // Parameters:
-//		sThisRegionType = the region type of this sprite to check
-//		sOtherRegionType = the region type of the other sprite to check
-//		pSprite = the other sprite to check
+//      sThisRegionType = the region type of this sprite to check
+//      sOtherRegionType = the region type of the other sprite to check
+//      pSprite = the other sprite to check
 //
 // Returns:
-//		1 if regions collide
-//		0 otherwise
+//      1 if regions collide
+//      0 otherwise
 //
 //*****************************************************************************
 short RSprite::DoRegionsCollide(short /*sThisRegionType*/, short /*sOtherRegionType*/,
@@ -902,14 +902,14 @@ short RSprite::DoRegionsCollide(short /*sThisRegionType*/, short /*sOtherRegionT
 // AddRegion
 //
 // Description:
-//		Add a region to this sprite's region list
+//      Add a region to this sprite's region list
 //
 // Parameters:
-//		RRegion* = pointer to region to add
+//      RRegion* = pointer to region to add
 //
 // Returns:
-//		SUCCESS if the region was added
-//		FAILURE if there was a problem adding it to the list
+//      SUCCESS if the region was added
+//      FAILURE if there was a problem adding it to the list
 //
 //*****************************************************************************
 
@@ -923,14 +923,14 @@ short RSprite::AddRegion(RRegion* pRegion)
 // RemoveRegion
 //
 // Description:
-//		Remove a region from the sprite's region list
+//      Remove a region from the sprite's region list
 //
 // Parameters:
-//		RRegion* = pointer to region to be removed
+//      RRegion* = pointer to region to be removed
 //
 // Returns:
-//		SUCCESS if the region was found and removed from the list
-//		FAILURE if the region could not be found or removed
+//      SUCCESS if the region was found and removed from the list
+//      FAILURE if the region could not be found or removed
 //
 //*****************************************************************************
 

@@ -19,34 +19,34 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		03/03/97 BRH	Changed to be derived from CWeapon base class
+//      03/03/97 BRH   Changed to be derived from CWeapon base class
 //
-//		03/03/97 BRH	Moved the 3D sprite to the CWeapon base class.
+//      03/03/97 BRH   Moved the 3D sprite to the CWeapon base class.
 //
-//		03/03/97	JMI	Commented out dHorizVelocity and dVertVelocity parameters
-//							to Setup() so that this version would be a virtual over-
-//							ride of CWeapon's.
+//      03/03/97   JMI   Commented out dHorizVelocity and dVertVelocity parameters
+//                     to Setup() so that this version would be a virtual over-
+//                     ride of CWeapon's.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/29/97	JMI	Now defines m_sprite (as a CSprite3), which was previously
-//							defined in the base class CWeapon.
-//							Also, added GetSprite() virtual override to provide access
-//							to the sprite from a lower level.
+//      04/29/97   JMI   Now defines m_sprite (as a CSprite3), which was previously
+//                     defined in the base class CWeapon.
+//                     Also, added GetSprite() virtual override to provide access
+//                     to the sprite from a lower level.
 //
-//		05/09/97 BRH	Added SetRangeToTarget function to vary the velocity
-//							of the weapon before it is shot in order to hit
-//							your target.
+//      05/09/97 BRH   Added SetRangeToTarget function to vary the velocity
+//                     of the weapon before it is shot in order to hit
+//                     your target.
 //
-//		06/17/97 BRH	Fixed a bug in SetRangeToTarget where the min was not
-//							being limited correctly.
+//      06/17/97 BRH   Fixed a bug in SetRangeToTarget where the min was not
+//                     being limited correctly.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NAPALM_H
@@ -66,7 +66,7 @@ public:
 // Variables
 //---------------------------------------------------------------------------
 public:
-//		CSprite3		m_sprite;					// 3D Sprite
+//      CSprite3      m_sprite;               // 3D Sprite
 
 protected:
 double m_dFireX;                          // Last position of fire for comparision
@@ -74,7 +74,7 @@ double m_dFireZ;                          // Last position of fire for comparisi
 
 CAnim3D m_anim;                           // 3D animation
 RTransform m_trans;                       // Transform
-CSprite3	m_sprite;                        // 3D sprite to render this thing.
+CSprite3 m_sprite;                          // 3D sprite to render this thing.
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -94,7 +94,7 @@ protected:
 CNapalm(CRealm* pRealm)
    : CWeapon(pRealm, CNapalmID)
 {
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
 }
 
 public:
@@ -168,8 +168,8 @@ void Render(void);
 short Setup(
    short sX,                                          // In: New x coord
    short sY,                                          // In: New y coord
-   short sZ /*,												// In: New z coord
-         double dHorizVel = ms_dThrowHorizVel,			// In: Starting horizontal velocity
+   short sZ /*,                                    // In: New z coord
+         double dHorizVel = ms_dThrowHorizVel,         // In: Starting horizontal velocity
          double dVertVel = ms_dThrowVertVel*/);       // In: Starting vertical velocity
 
 // Get this class's sprite.  Note that the type will vary.

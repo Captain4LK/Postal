@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	joy.cpp
+//   joy.cpp
 //
 // History:
-//		08/29/95 JMI	Started.
+//      08/29/95 JMI   Started.
 //
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -43,11 +43,11 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define NUM_JOYSTICKS	2
+#define NUM_JOYSTICKS   2
 
-#define NUM_BUTTONS		4
+#define NUM_BUTTONS      4
 
-#define NUM_DIRS			6
+#define NUM_DIRS         6
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific (static) variables.
@@ -70,7 +70,7 @@ static UCHAR ms_aucDirKeys[NUM_JOYSTICKS][NUM_DIRS]    = { 0, };
 //////////////////////////////////////////////////////////////////////////////
 extern short Joy_SetKey(short sJoy, UCHAR ucKey, USHORT usState)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(sJoy >= 0 && sJoy < NUM_JOYSTICKS);
 
@@ -127,12 +127,12 @@ extern short Joy_Update(short sJoy)
       // Get new state.
       Blu_GetJoyState(sJoy, &ms_ajsCurr[sJoy]);
 
-      KEYBOARD	kb;
+      KEYBOARD kb;
       // Get key state.
       if (Blu_GetKeyboard(&kb) == 0)
       {
          // Update for keys.
-         UCHAR	uc;
+         UCHAR uc;
          // Buttons:
          for (short i = 0; i < sizeof(ms_aucButKeys[sJoy]); i++)
          {

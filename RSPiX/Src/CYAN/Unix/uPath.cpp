@@ -22,7 +22,7 @@
 //
 //
 // History:
-//		06/05/04	RCG	Started.
+//      06/05/04   RCG   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -152,7 +152,7 @@ extern char* rspPathFromSystem(     // Returns pointer to RSPiX path (static!!!)
 ////////////////////////////////////////////////////////////////////////////////
 extern short rspGetTempPath(        // Returns 0 on success, non-zero otherwise
    char* pszPath,                   // Out: Temp path returned here if available.
-   short	sMaxPathLen)               // In:  Max path length (to avoid overwrites)
+   short sMaxPathLen)                 // In:  Max path length (to avoid overwrites)
 {
    ASSERT(pszPath != NULL);
    ASSERT(sMaxPathLen > 0);

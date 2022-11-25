@@ -18,10 +18,10 @@
 // CtrlBuf.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		05/26/97 MJR	Started.
+//   History:
+//      05/26/97 MJR   Started.
 //
-//		06/15/97 MJR	Added Reset().
+//      06/15/97 MJR   Added Reset().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CTRLBUF_H

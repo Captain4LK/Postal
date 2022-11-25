@@ -24,10 +24,10 @@
 // vectors and matrices.
 //
 // History:
-//		??/??/?? JRD	Started.
+//      ??/??/?? JRD   Started.
 //
-//		02/11/97	JMI	Added Load() and Save() for compatability with RChannel,
-//							RResMgr, and other such file-based thingers.
+//      02/11/97   JMI   Added Load() and Save() for compatability with RChannel,
+//                     RResMgr, and other such file-based thingers.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef VECTOR_MATH_H
@@ -54,26 +54,26 @@ inline void rspMakeUnit(RP3d& p)
 inline REAL rspDot(RP3d& a,RP3d& b)
 inline void rspCross(RP3d& a,RP3d& b,RP3d& c) // c = a x b
 RTransform
-	{ T[16],
-	RTransform() // init to an identity transform
-	RTransform(REAL* M) // init to a copy of another transform
-	void Make1()
-	void Make0()
-	void PreMulBy(REAL* M)
-	void Mul(REAL* A,REAL* B) // 4x4 transforms:
-	void Transform(RP3d &p)
-	void TransformInto(RP3d &XF, RP3d& p) XF = this x p
-	void Trans(REAL x,REAL y,REAL z)
-	void Scale(REAL a,REAL b, REAL c)
-	void Rz(short sDeg) // CCW!
-	void Rx(short sDeg) // CCW!
-	void Ry(short sDeg) // CCW!
-	void MakeScreenXF(
-		REAL x1,REAL y1,REAL w1,REAL h1,
-		REAL x2,REAL y2,REAL w2,REAL h2)
-	void MakeRotTo(RP3d point,RP3d up)
-	void MakeRotFrom(RP3d point,RP3d up)
-	}
+   { T[16],
+   RTransform() // init to an identity transform
+   RTransform(REAL* M) // init to a copy of another transform
+   void Make1()
+   void Make0()
+   void PreMulBy(REAL* M)
+   void Mul(REAL* A,REAL* B) // 4x4 transforms:
+   void Transform(RP3d &p)
+   void TransformInto(RP3d &XF, RP3d& p) XF = this x p
+   void Trans(REAL x,REAL y,REAL z)
+   void Scale(REAL a,REAL b, REAL c)
+   void Rz(short sDeg) // CCW!
+   void Rx(short sDeg) // CCW!
+   void Ry(short sDeg) // CCW!
+   void MakeScreenXF(
+      REAL x1,REAL y1,REAL w1,REAL h1,
+      REAL x2,REAL y2,REAL w2,REAL h2)
+   void MakeRotTo(RP3d point,RP3d up)
+   void MakeRotFrom(RP3d point,RP3d up)
+   }
 //=================================*/
 
 #define REAL float // float conserves internal memory..
@@ -450,7 +450,7 @@ void MakeRotFrom(RP3d point, RP3d up)
 // Loads instance data for this Transform from the specified
 // file.
 short Load(             // Returns 0 on success.
-   RFile*	pfile)      // In:  Ptr to file to load from.  Must be open with
+   RFile*   pfile)      // In:  Ptr to file to load from.  Must be open with
                         // read access.
 {
    // Read the entire matrix in one kerchunk.  Bang!  I mean Kerchunk!
@@ -463,7 +463,7 @@ short Load(             // Returns 0 on success.
 // Saves instance data for this Transform to the specified
 // file.
 short Save(             // Returns 0 on success.
-   RFile*	pfile)      // In:  Ptr to file to save to.  Must be open with
+   RFile*   pfile)      // In:  Ptr to file to save to.  Must be open with
                         // write access.
 {
    // Write the entire matrix in one kerchunk.  Bang!  I mean Kerchunk!

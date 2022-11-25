@@ -83,9 +83,9 @@ short rspBlitToMono(
    }
 
 
-   UCHAR	*pDst, *pDstLine, *pCode, ucCount;
+   UCHAR   *pDst, *pDstLine, *pCode, ucCount;
    pDstLine = pimDst->m_pData + lDstP * sDstY + (sDstX >> 3);
-   RSpecialFSPR1*	pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
+   RSpecialFSPR1*   pHead = (RSpecialFSPR1*)(pimSrc->m_pSpecial);
    pCode = pHead->m_pCode;
    const UCHAR FF = (UCHAR)255;
 
@@ -105,7 +105,7 @@ short rspBlitToMono(
    S32 *alDstSkip = (S32*)calloc(sizeof(S32), afrSkipY[1].mod + 2);
    for (i = 1; i<(afrSkipY[1].mod + 2); i++)
       alDstSkip[i] = alDstSkip[i - 1] + lDstP;
-   UCHAR	bits[] = {128, 64, 32, 16, 8, 4, 2, 1};
+   UCHAR bits[] = {128, 64, 32, 16, 8, 4, 2, 1};
    short sBit;
    frInitX.mod = (sDstX & 7);
 
@@ -212,7 +212,7 @@ short rspRectToMono(U32 ulColor, RImage* pimDst, short sX, short sY,
 
    S32 lP = pimDst->m_lPitch;
 
-   UCHAR	ucStart = 0, ucEnd = 0;
+   UCHAR ucStart = 0, ucEnd = 0;
    UCHAR *pDst, *pDstLine;
    short sMidCount, sStart, sEnd, i, j;
 

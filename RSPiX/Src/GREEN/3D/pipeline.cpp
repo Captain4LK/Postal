@@ -26,10 +26,10 @@
 // It is the highest level control -> it decides how 3d pts map to 2d.
 // You can customize 3d efects by instantiating your own versions of the 3d pipeline!
 ///////////////////////////////////////////////////////////////
-//	PIPELINE - History
+//   PIPELINE - History
 ///////////////////////////////////////////////////////////////
 //
-//	07/23/97	JRD	Added support for generating shadows
+//   07/23/97   JRD   Added support for generating shadows
 //
 ///////////////////////////////////////////////////////////////
 
@@ -422,7 +422,7 @@ void RPipeLine::BoundingSphereToScreen(RP3d& ptCenter, RP3d& ptRadius,
    m_sCenY = short(ptCen.y);
    m_sCenZ = short(ptCen.z / 256.0); // Scale Z's by 256 for lighting later
 
-   short	sScreenRadius = short(dScreenRadius + 1);
+   short sScreenRadius = short(dScreenRadius + 1);
 
    m_sX = m_sCenX - sScreenRadius;
    m_sY = m_sCenY - sScreenRadius;

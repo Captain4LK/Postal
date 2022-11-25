@@ -19,141 +19,141 @@
 #define IMAGE_H
 //////////////////////////////////////////////////////////////////////
 //
-//	IMAGE.H
+//   IMAGE.H
 //
-//	Created on     4/20/95	MR
-// Implemented on 4/21/95	JW
-// 05/08/95	JMI	Took out CDib dependency and added internal method
-//						for loading BMPs.
+//   Created on     4/20/95   MR
+// Implemented on 4/21/95   JW
+// 05/08/95   JMI   Took out CDib dependency and added internal method
+//                  for loading BMPs.
 //
-//	05/10/95	JMI	Added prototype for conversion function Convert in
-//						CPal that converts from current type to others.
+//   05/10/95   JMI   Added prototype for conversion function Convert in
+//                  CPal that converts from current type to others.
 //
-//	05/10/95	JMI	Added member to store whether it's okay to free
-//						the palette data (i.e., we allocated it in CPal).
+//   05/10/95   JMI   Added member to store whether it's okay to free
+//                  the palette data (i.e., we allocated it in CPal).
 //
-//	09/26/95 BRH	Completely changed the CImage class to a new
-//						version that is compatible with Jeff's Blit modules
-//						and includes expandability for future image types.
-//						This is the new standard image which each new image
-//						type will be required to understand and be able to
-//						convert to/from.  This CImage will complete the missing
-//						link between the app level image format and Jeff's
-//						Blit library.  There is no CPalImage anymore, but the
-//						more general CImage may have a valid CPal pointer or
-//						NULL if there is no palette.
+//   09/26/95 BRH   Completely changed the CImage class to a new
+//                  version that is compatible with Jeff's Blit modules
+//                  and includes expandability for future image types.
+//                  This is the new standard image which each new image
+//                  type will be required to understand and be able to
+//                  convert to/from.  This CImage will complete the missing
+//                  link between the app level image format and Jeff's
+//                  Blit library.  There is no CPalImage anymore, but the
+//                  more general CImage may have a valid CPal pointer or
+//                  NULL if there is no palette.
 //
-// 02/27/96 BRH	Changed the Convert functions from using DYNALINK
-//						to the friend class CImageSpecialFunc which includes
-//						ConvertTo, ConvertFrom, Load, Save, Alloc, and Delete.
-//						It became necessary to load and save special formats
-//						like fast sprite so that the images could be on the
-//						disk in the final form used in the game rather than
-//						loading bitmaps and converting them in the game code.
-//						It was also necessary to add alloc/delete functions
-//						so that special image types that may allocate structures
-//						or classes associated with the pSpeical pointer could
-//						be freed properly when the CImage destructor was called,
-//						and similarly if someone wanted to create a new CImage
-//						of a special type with a structure or class, the constructor
-//						will call the special Alloc function to allocate the special
-//						data associated with the pSpecial pointer.
+// 02/27/96 BRH   Changed the Convert functions from using DYNALINK
+//                  to the friend class CImageSpecialFunc which includes
+//                  ConvertTo, ConvertFrom, Load, Save, Alloc, and Delete.
+//                  It became necessary to load and save special formats
+//                  like fast sprite so that the images could be on the
+//                  disk in the final form used in the game rather than
+//                  loading bitmaps and converting them in the game code.
+//                  It was also necessary to add alloc/delete functions
+//                  so that special image types that may allocate structures
+//                  or classes associated with the pSpeical pointer could
+//                  be freed properly when the CImage destructor was called,
+//                  and similarly if someone wanted to create a new CImage
+//                  of a special type with a structure or class, the constructor
+//                  will call the special Alloc function to allocate the special
+//                  data associated with the pSpecial pointer.
 //
-// 04/30/96	BRH	Added some new fields to the header of the CImage, thus
-//						invalidating the previous .IMG files but at this point they
-//						weren't in wide use.  The Blit routines required a few
-//						additional pieces of information so that they could avoid
-//						recreating the buffer as they needed it.  I added
-//						lBufferWidth, lBufferHeight, lXPos, lYPos to accomodate
-//						the Blit functions.  This way a buffer that is larger
-//						than the image can be created and the image can be
-//						located at a specific position in that buffer. Note that
-//						the whole buffer is not saved, just the image but the
-//						size of the buffer is saved so that upon load, the buffer
-//						can be recreated at its desired size.
-//						I also added ulDestinationType to accomodate image formats
-//						that may be saved as one type but are converted to another
-//						type once they are loaded.  For example, if you are using
-//						sprites and there is no save funciton for sprites, you can
-//						save the file with BMP8 type and a destination type of
-//						FAST_SPRITE so that when the file is loaded, it is
-//						read as a BMP8 format but automatically converted to
-//						the fast sprite type.  Then to avoid debugging problems
-//						when the CImage header is changed, I added a version number
-//						as a #define and write that to the file.  Then when a .IMG file
-//						is loaded, the version number is checked with the current
-//						version of CImage and if they are different it will return
-//						an error.
+// 04/30/96   BRH   Added some new fields to the header of the CImage, thus
+//                  invalidating the previous .IMG files but at this point they
+//                  weren't in wide use.  The Blit routines required a few
+//                  additional pieces of information so that they could avoid
+//                  recreating the buffer as they needed it.  I added
+//                  lBufferWidth, lBufferHeight, lXPos, lYPos to accomodate
+//                  the Blit functions.  This way a buffer that is larger
+//                  than the image can be created and the image can be
+//                  located at a specific position in that buffer. Note that
+//                  the whole buffer is not saved, just the image but the
+//                  size of the buffer is saved so that upon load, the buffer
+//                  can be recreated at its desired size.
+//                  I also added ulDestinationType to accomodate image formats
+//                  that may be saved as one type but are converted to another
+//                  type once they are loaded.  For example, if you are using
+//                  sprites and there is no save funciton for sprites, you can
+//                  save the file with BMP8 type and a destination type of
+//                  FAST_SPRITE so that when the file is loaded, it is
+//                  read as a BMP8 format but automatically converted to
+//                  the fast sprite type.  Then to avoid debugging problems
+//                  when the CImage header is changed, I added a version number
+//                  as a #define and write that to the file.  Then when a .IMG file
+//                  is loaded, the version number is checked with the current
+//                  version of CImage and if they are different it will return
+//                  an error.
 //
-//	10/21/96 BRH	Added file type and version to identify palette files.
+//   10/21/96 BRH   Added file type and version to identify palette files.
 //
-//	10/30/96	JMI	Pulled CPal stuff out of here and put it into pal.h.
-//						Pulled enum stuff out of imagetyp.h and put it here.
-//						Removed #include of imagtyp.h.
-//						Added #include of pal.h.
-//						Attempted to reword comment summary to reflect these
-//						changes.
-//						Note: I'm not positive but I think the references to
-//						imageafp.h are out of date.
+//   10/30/96   JMI   Pulled CPal stuff out of here and put it into pal.h.
+//                  Pulled enum stuff out of imagetyp.h and put it here.
+//                  Removed #include of imagtyp.h.
+//                  Added #include of pal.h.
+//                  Attempted to reword comment summary to reflect these
+//                  changes.
+//                  Note: I'm not positive but I think the references to
+//                  imageafp.h are out of date.
 //
-//	10/30/96	JMI	Changed:
-//						Old label:		New label:
-//						=========		=========
-//						CNFile			RFile
-//						CImage			RImage
-//						CPal				RPal
-//						U32 ulType	RImage::Type ulType
+//   10/30/96   JMI   Changed:
+//                  Old label:      New label:
+//                  =========      =========
+//                  CNFile         RFile
+//                  CImage         RImage
+//                  CPal            RPal
+//                  U32 ulType   RImage::Type ulType
 //
-//						Added a using directive to IMAGELINKLATE.
+//                  Added a using directive to IMAGELINKLATE.
 //
-//	10/31/96	JMI	Changed all members to be preceded by m_ (e.g., sDepth
-//						m_sDepth).  Changed all position members (i.e., lWidth,
-//						lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos) to
-//						be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
-//						m_sBufferHeight, m_sXPos, m_sYPos) and functions associated
-//						with these members reflect this change (e.g., S32 GetWidth()
-//						is now short GetWidth()).  Changed ulType to	m_type and
-//						ulDestinationType to m_typeDestination.  Increased file
-//						version to 5 since members converted to short will affect
-//						the file format.
+//   10/31/96   JMI   Changed all members to be preceded by m_ (e.g., sDepth
+//                  m_sDepth).  Changed all position members (i.e., lWidth,
+//                  lHeight, lBufferWidth, lBufferHeight, lXPos, & lYPos) to
+//                  be shorts (i.e., m_sWidth, m_sHeight, m_sBufferWidth,
+//                  m_sBufferHeight, m_sXPos, m_sYPos) and functions associated
+//                  with these members reflect this change (e.g., S32 GetWidth()
+//                  is now short GetWidth()).  Changed ulType to   m_type and
+//                  ulDestinationType to m_typeDestination.  Increased file
+//                  version to 5 since members converted to short will affect
+//                  the file format.
 //
-//	11/06/96 MJR	Got rid of "using" syntax in IMAGELINKLATE macro
-//						because that didn't work with CodeWarrior on the mac.
+//   11/06/96 MJR   Got rid of "using" syntax in IMAGELINKLATE macro
+//                  because that didn't work with CodeWarrior on the mac.
 //
-//	11/27/96 BRH	Changed names of the buffer and image width around
-//						to make the usage more clear and to make sure that
-//						code using the previous method would not quit working
-//						due to this change.  Previously the widht and height
-//						referred to the visible picture which may be stored
-//						in a larger buffer.  The BufferWidth and BufferHeight
-//						referred to the size of the memory in which the picture
-//						was being stored.  Now we will change the width and height
-//						to mean the entire memory area and the size of the picture
-//						will be referred to by WinWidth and WinHeight.  I am
-//						rearranging the order of the variables in the class so
-//						that I won't have to change the version of the file
-//						format and I will also change the order that these values
-//						are being written and read from the files so that old
-//						image files will continue to work.
+//   11/27/96 BRH   Changed names of the buffer and image width around
+//                  to make the usage more clear and to make sure that
+//                  code using the previous method would not quit working
+//                  due to this change.  Previously the widht and height
+//                  referred to the visible picture which may be stored
+//                  in a larger buffer.  The BufferWidth and BufferHeight
+//                  referred to the size of the memory in which the picture
+//                  was being stored.  Now we will change the width and height
+//                  to mean the entire memory area and the size of the picture
+//                  will be referred to by WinWidth and WinHeight.  I am
+//                  rearranging the order of the variables in the class so
+//                  that I won't have to change the version of the file
+//                  format and I will also change the order that these values
+//                  are being written and read from the files so that old
+//                  image files will continue to work.
 //
-//	12/18/96 BRH	Added overloaded versions of LoadDib and SaveDib that
-//						take an RFile* and can load or save to that rather than
-//						just the filename versions.  This was first used
-//						in the resource manager but is also otherwise
-//						generally useful.
+//   12/18/96 BRH   Added overloaded versions of LoadDib and SaveDib that
+//                  take an RFile* and can load or save to that rather than
+//                  just the filename versions.  This was first used
+//                  in the resource manager but is also otherwise
+//                  generally useful.
 //
-//	12/18/96	JMI	Added TOUCH macros to aid in dynamic linking.  See comment
-//						there for more detail.
+//   12/18/96   JMI   Added TOUCH macros to aid in dynamic linking.  See comment
+//                  there for more detail.
 //
-//	02/04/97	JMI	Added BMP_COOKIE for in detecting a .BMP formatted file.
-//						Made LoadDib() a private member.  Now Load() will load *.BMP
-//						or *.IMG formatted files.
+//   02/04/97   JMI   Added BMP_COOKIE for in detecting a .BMP formatted file.
+//                  Made LoadDib() a private member.  Now Load() will load *.BMP
+//                  or *.IMG formatted files.
 //
-//	04/16/97	JMI	Changed comment for operator= overload and parameter name.
+//   04/16/97   JMI   Changed comment for operator= overload and parameter name.
 //
-// 05/21/97 JRD	Fixed a bug in GetPitch.
+// 05/21/97 JRD   Fixed a bug in GetPitch.
 //
-//	Image.h contains the class RImage.  Pal.h contains RPal.  The RImage is used
+//   Image.h contains the class RImage.  Pal.h contains RPal.  The RImage is used
 // to store generic images either with or without palettes.  RPal can also be
 // used alone to store palettes.
 //
@@ -211,13 +211,13 @@
 #define WIDTHUCHAR(i)   (((i) + 3) & ~3)      // U32 aligned
 #define WIDTH128(i)      (((i) + 15) & ~15)  // 128-bit aligned
 
-#define IMAGE_COOKIE	0x20204d49 // Looks like "IM  " in the file
-#define IMAGE_CURRENT_VERSION	5 // Current file version.  Change
-                                // this number if you change the .IMG
-                                // file format.  It will be compared to
-                                // the version number in the file as a check
+#define IMAGE_COOKIE   0x20204d49 // Looks like "IM  " in the file
+#define IMAGE_CURRENT_VERSION   5 // Current file version.  Change
+                                  // this number if you change the .IMG
+                                  // file format.  It will be compared to
+                                  // the version number in the file as a check
 
-#define BMP_COOKIE	0x4d42      // Looks like "BM" in the file.
+#define BMP_COOKIE   0x4d42      // Looks like "BM" in the file.
 
 ///////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -251,7 +251,7 @@ typedef struct
 
 //////////////////////////////////////////////////////////////////////
 //
-//	RImage class
+//   RImage class
 //
 // RImage is a simple wrapper around various types of images.
 // This class does not understand any particular image types.
@@ -291,13 +291,13 @@ typedef enum eImageTypes
    ROTBUF,                    // Used with two current live roration/scale algorithms
    SPECIAL,                   // IMAGE needs a sophisticated convert call
    FLX8_888,                  // 8-bit buffer indexing a 256 color
-                              // R, G, B (in that order) palette.  JMI	03/06/96
+                              // R, G, B (in that order) palette.  JMI   03/06/96
    IMAGE_STUB,                // Use to make anything APPEAR to be an image
                               // special field = per stub info, buffers = NULL
    BMP8RLE,                   // 8-bit compressed (Windows RLE8 bitmap) format.
-                              // Uses PDIB for palette.  JMI	07/22/96
+                              // Uses PDIB for palette.  JMI   07/22/96
    BMP1,                      // Monochrome bitmap.  No palette
-                              // (1 == Black, 0 == White).  JMI	09/04/96
+                              // (1 == Black, 0 == White).  JMI   09/04/96
    END_OF_TYPES
 } Type;
 
@@ -307,33 +307,33 @@ Type m_type;                        // Image type
 Type m_typeDestination;             // Type to convert to upon load
                                     // (New version 2)
 U32 m_ulSize;                       // Image data's size
-short	m_sWinWidth;                  // Width of image
-short	m_sWinHeight;                 // Height of image
-short	m_sWidth;                     // Width of buffer   (new version 2)
-short	m_sHeight;                    // Height of buffer (new version 2)
-short	m_sWinX;                      // Position of image in the buffer
-short	m_sWinY;                      // Position of image in the buffer
+short m_sWinWidth;                    // Width of image
+short m_sWinHeight;                   // Height of image
+short m_sWidth;                       // Width of buffer   (new version 2)
+short m_sHeight;                      // Height of buffer (new version 2)
+short m_sWinX;                        // Position of image in the buffer
+short m_sWinY;                        // Position of image in the buffer
 
 S32 m_lPitch;                       // Pitch of image
-short	m_sDepth;                     // Color depth of image
-UCHAR*		m_pData;                // Pointer to data
-RPal*			m_pPalette;             // Pointer to palette class
-UCHAR*		m_pSpecial;             // Generic pointer for expandability
+short m_sDepth;                       // Color depth of image
+UCHAR*      m_pData;                // Pointer to data
+RPal*         m_pPalette;             // Pointer to palette class
+UCHAR*      m_pSpecial;             // Generic pointer for expandability
                                     // (other image formats)
-UCHAR*		m_pSpecialMem;          // Pointer to allocated special memory
-UCHAR*		m_pMem;                 // Pointer to the memory buffer
+UCHAR*      m_pSpecialMem;          // Pointer to allocated special memory
+UCHAR*      m_pMem;                 // Pointer to the memory buffer
                                     // (for alloc/dealloc of aligned data)
                                     // User access in lieu of an AttachData function
 
 // This array of type names should correspond to the above list of
 // enumerated types.  Whenever you add an image type and an enum,
 // you need to also insert that name into the corresponding place
-//	in this array in image.cpp.
+//   in this array in image.cpp.
 // Note that this uses END_OF_TYPES enum item to size the array.
 static char* ms_astrTypeNames[END_OF_TYPES];
 
 private:
-RPal*			m_pPalMem;           // Pointer to Image allocated palette
+RPal*         m_pPalMem;           // Pointer to Image allocated palette
 
 public:
 // Class initialization
@@ -370,11 +370,11 @@ short CreateData(       // Returns 0 if successful
 // Create IMAGE's data utilizing passed in fields.
 // Calls CreateData(U32) to do the allocation.
 short CreateImage(               // Returns 0 if successful.
-   short	sWidth,                 // Width of new buffer.
-   short	sHeight,                // Height of new buffer.
+   short sWidth,                   // Width of new buffer.
+   short sHeight,                  // Height of new buffer.
    Type type,              // Type of new buffer.
    S32 lPitch   = 0L,            // Pitch of new buffer or 0 to calculate.
-   short	sDepth	= 8);          // Color depth of new buffer.
+   short sDepth   = 8);            // Color depth of new buffer.
 
 // Detach the data from the Image.  This function returns a pointer
 // to the memory buffer which can and should be freed by whoever
@@ -446,19 +446,19 @@ short Load(RFile* pcf);
 Type Convert(Type typeNew);
 
 // Query functions
-short GetHeight(void)	{return m_sHeight;};
-short GetWidth(void)		{return m_sWidth;};
+short GetHeight(void)   {return m_sHeight;};
+short GetWidth(void)      {return m_sWidth;};
 static S32 GetPitch(short sWidth, short sDepth)
 {return ((S32)sWidth * ((S32)sDepth / 8L) + 0x0000000F) & 0xFFFFFFF0;}
-Type GetType(void)		{return m_type;};
+Type GetType(void)      {return m_type;};
 
 // Memory access functions
-UCHAR* GetBuffer(void)	{return m_pData;};
-UCHAR* GetMemory(void)	{return m_pMem;};
+UCHAR* GetBuffer(void)   {return m_pData;};
+UCHAR* GetMemory(void)   {return m_pMem;};
 
 private:
 // Loads a DIB into a standard RImage format.
-short	LoadDib(char* pszFilename);
+short   LoadDib(char* pszFilename);
 
 // Loads a DIB from an open RFile
 short LoadDib(RFile* pcf);
@@ -479,16 +479,16 @@ short ReadPixelData(RFile* pcf);
 // Initialize all members.  Calling this when m_pMem* is set is not a good idea.
 void InitMembers(void);
 
-//	To allocate memory for the data buffers of CPal
+//   To allocate memory for the data buffers of CPal
 static short sCreateMem(void **hMem, U32 ulSize);
 
-//	To allocate memory and return a pointer aligned to 128-bits
-//	for optimum blit speed.  This is the function used by
-//	CImage when it creates memory for the image buffers.
+//   To allocate memory and return a pointer aligned to 128-bits
+//   for optimum blit speed.  This is the function used by
+//   CImage when it creates memory for the image buffers.
 static short sCreateAlignedMem(void **hMem, void **hData, U32 ulSize);
 
-//	To free the data buffers of CPal and CImage that were created
-//	using either sCreateMem() or sCreateAlignedMem()
+//   To free the data buffers of CPal and CImage that were created
+//   using either sCreateMem() or sCreateAlignedMem()
 static short sDestroyMem(void **hMem);
 
 
@@ -503,7 +503,7 @@ friend class RImageFile;
 
 //////////////////////////////////////////////////////////////////////
 //
-//	RImageInit class
+//   RImageInit class
 //
 // This class is used to create several arrays of function pointers
 // for special image types.  A special image type may support,
@@ -569,12 +569,12 @@ friend class RImage;
 friend class RImageFile;
 
 protected:
-static CONVTOFUNC	ms_apfnConvTo[END_OF_TYPES];
+static CONVTOFUNC ms_apfnConvTo[END_OF_TYPES];
 static CONVFROMFUNC ms_apfnConvFrom[END_OF_TYPES];
 static LOADFUNC ms_apfnLoad[END_OF_TYPES];
 static SAVEFUNC ms_apfnSave[END_OF_TYPES];
 static ALLOCFUNC ms_apfnAlloc[END_OF_TYPES];
-static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
+static DELETEFUNC ms_apfnDelete[END_OF_TYPES];
 };
 
 
@@ -619,7 +619,7 @@ static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
 // list.  You must specify a function pointer for each of the 6 special
 // types or NULL if your special type does not require or support one
 // or more types.  For example, if you support convert to/from and
-//	save/load but do not require any additional buffers or data structures
+//   save/load but do not require any additional buffers or data structures
 // then you must provide the functions for convert to/from and load/save
 // and then specify NULL, NULL for the alloc and delete functions.
 //
@@ -627,24 +627,24 @@ static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
 // pTo = function pointer to your ConvertTo function
 // pFrom = function pointer to your ConvertFrom function
 // pLoad = function pointer to your Load function that reads just your
-//			  special data.  The standard RImage information is loaded by
-//			  the RImage::Load function and this function will be called
-//			  when it gets to the m_pSpecial data for your special image type
+//           special data.  The standard RImage information is loaded by
+//           the RImage::Load function and this function will be called
+//           when it gets to the m_pSpecial data for your special image type
 // pSave = function pointer to your Save function that writes just your
-//			  special data.  The standard RImage information is saved by
-//			  the CImgae::Save function and this function will be called
-//			  when it is time to write the m_pSpecial data.
+//           special data.  The standard RImage information is saved by
+//           the CImgae::Save function and this function will be called
+//           when it is time to write the m_pSpecial data.
 // pAlloc = function pointer to your special memory allocation function.
-//			   If your m_pSpecial data is a class or contains multiple
-//			   pointers to other data buffers, then you should provide a
-//				function that can allocate this data based on the standard
-//			   information in the RImage
+//            If your m_pSpecial data is a class or contains multiple
+//            pointers to other data buffers, then you should provide a
+//            function that can allocate this data based on the standard
+//            information in the RImage
 // pDelete = function pointer to your special memory deallocation
-//				 function.  If your m_pSpecial data is a class or contains
-//				 multiple pointers to other data buffers that need to be
-//				 freed when the RImage destructor is called, then you
-//				 should provide a function that will clean up your m_pSpecial
-//				 data.
+//             function.  If your m_pSpecial data is a class or contains
+//             multiple pointers to other data buffers that need to be
+//             freed when the RImage destructor is called, then you
+//             should provide a function that will clean up your m_pSpecial
+//             data.
 
 #define IMAGELINKLATE(type, pTo, pFrom, pLoad, pSave, pAlloc, pDel) \
    static RImageSpecialFunc imSpecial ## type(RImage::type, pTo, pFrom, pLoad, pSave, pAlloc, pDel)
@@ -664,7 +664,7 @@ static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
 // library code b/c of two problems:
 // 1) They cannot be used twice.  That is, no two modules can contain two
 // references to any *TOUCH(type) for the same type.
-//	2) They will only work if the module that contains the *TOUCH(type) is
+//   2) They will only work if the module that contains the *TOUCH(type) is
 // included in the exe.  A module that would otherwise be dropped from the exe
 // by the linker with a *TOUCH(type) will do no one any good.
 //
@@ -672,14 +672,14 @@ static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
 // type's equivalent ConvertTo, ConvertFrom, Save, Load, Alloc, and/or Delete
 // func to be included in your exe.
 //
-//	Non-standard func:						Equivalent TOUCH macro:
-//	=====================					========================
-//	ConvertToTYPE								CONVTOTOUCH(TYPE)
-//	ConvertFromTYPE							CONVFROMTOUCH(TYPE)
-//	SaveTYPE										SAVETOUCH(TYPE)
-//	LoadTYPE										LOADTOUCH(TYPE)
-//	AllocTYPE									ALLOCTOUCH(TYPE)
-//	DeleteTYPE									DELETETOUCH(TYPE)
+//   Non-standard func:                  Equivalent TOUCH macro:
+//   =====================               ========================
+//   ConvertToTYPE                        CONVTOTOUCH(TYPE)
+//   ConvertFromTYPE                     CONVFROMTOUCH(TYPE)
+//   SaveTYPE                              SAVETOUCH(TYPE)
+//   LoadTYPE                              LOADTOUCH(TYPE)
+//   AllocTYPE                           ALLOCTOUCH(TYPE)
+//   DeleteTYPE                           DELETETOUCH(TYPE)
 //
 // THIS METHOD HAS NOT BEEN TESTED WITH THE MAC COMPILER.  I presume the logic
 // for dropping stuff is the same.  There is another plausible solution for
@@ -687,37 +687,37 @@ static DELETEFUNC	ms_apfnDelete[END_OF_TYPES];
 // you!  Let me know if it does (that way I can remove this message).
 //
 ///////////////////////////////////////////////////////////////////////////////
-#define CONVTOTOUCH(TYPE)		extern void ReferenceConvTo ## TYPE(void)      \
+#define CONVTOTOUCH(TYPE)      extern void ReferenceConvTo ## TYPE(void)      \
    {                                         \
       extern short ConvertTo ## TYPE(RImage*);    \
       ConvertTo ## TYPE(NULL);                    \
    }
 
-#define CONVFROMTOUCH(TYPE)	extern void ReferenceConvFrom ## TYPE(void)    \
+#define CONVFROMTOUCH(TYPE)   extern void ReferenceConvFrom ## TYPE(void)    \
    {                                         \
       extern short ConvertFrom ## TYPE(RImage*);  \
       ConvertFrom ## TYPE(NULL);                  \
    }
 
-#define SAVETOUCH(TYPE)			extern void ReferenceSave ## TYPE(void)        \
+#define SAVETOUCH(TYPE)         extern void ReferenceSave ## TYPE(void)        \
    {                                         \
       extern short Save ## TYPE(RImage*, RFile*); \
       Save ## TYPE(NULL, NULL);                   \
    }
 
-#define LOADTOUCH(TYPE)			extern void ReferenceLoad ## TYPE(void)        \
+#define LOADTOUCH(TYPE)         extern void ReferenceLoad ## TYPE(void)        \
    {                                         \
       extern short Load ## TYPE(RImage*, RFile*); \
       Load ## TYPE(NULL, NULL);                   \
    }
 
-#define ALLOCTOUCH(TYPE)		extern void ReferenceAlloc ## TYPE(void)       \
+#define ALLOCTOUCH(TYPE)      extern void ReferenceAlloc ## TYPE(void)       \
    {                                         \
       extern short Alloc ## TYPE(RImage*);        \
       Alloc ## TYPE(NULL);                        \
    }
 
-#define DELETETOUCH(TYPE)		extern void ReferenceDelete ## TYPE(void)      \
+#define DELETETOUCH(TYPE)      extern void ReferenceDelete ## TYPE(void)      \
    {                                         \
       extern short Delete ## TYPE(RImage*);       \
       Delete ## TYPE(NULL);                       \

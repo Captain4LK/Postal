@@ -23,124 +23,124 @@
 //
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/11/97 BRH	Started the firebomb object from the grenade file
+//      02/11/97 BRH   Started the firebomb object from the grenade file
 //
-//		02/14/97 BRH	Now uses resource manager to get the image.
+//      02/14/97 BRH   Now uses resource manager to get the image.
 //
-//		02/19/97 BRH	Changed the main part of the weapon to 3D and left
-//							the fire fragments as 2D.  Also added some randomness
-//							to the pattern and increased the burn times.
+//      02/19/97 BRH   Changed the main part of the weapon to 3D and left
+//                     the fire fragments as 2D.  Also added some randomness
+//                     to the pattern and increased the burn times.
 //
-//		02/19/97 BRH	Added ProcessMessages function to check for
-//							ObjectDeleted messages.
+//      02/19/97 BRH   Added ProcessMessages function to check for
+//                     ObjectDeleted messages.
 //
-//		02/21/97 BRH	Changed fragments to be invisible controllers of the
-//							small fire animation rather than an 2d sprite.  This
-//							sort of hides the bounce effect which is bad so we may
-//							want to put it back.  Also uses the small fire for
-//							the fire fragments.
+//      02/21/97 BRH   Changed fragments to be invisible controllers of the
+//                     small fire animation rather than an 2d sprite.  This
+//                     sort of hides the bounce effect which is bad so we may
+//                     want to put it back.  Also uses the small fire for
+//                     the fire fragments.
 //
-//		02/23/97 BRH	Changed the coordinate system to x,-z
+//      02/23/97 BRH   Changed the coordinate system to x,-z
 //
-//		02/23/97 BRH	Added a static Preload() function which will be called
-//							before play begins to cache the resources needed for this
-//							object.
+//      02/23/97 BRH   Added a static Preload() function which will be called
+//                     before play begins to cache the resources needed for this
+//                     object.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		02/24/97 BRH	Changed to using reality.h motion templates.  Using new
-//							algorithm for detecting ground and walls.  Made the
-//							center fire more than 1 sprite and changed to thin
-//							fire.  Added sound effect for initial impact.
+//      02/24/97 BRH   Changed to using reality.h motion templates.  Using new
+//                     algorithm for detecting ground and walls.  Made the
+//                     center fire more than 1 sprite and changed to thin
+//                     fire.  Added sound effect for initial impact.
 //
-//		02/28/97 BRH	Derived this from the CWeapon base class.
+//      02/28/97 BRH   Derived this from the CWeapon base class.
 //
-//		03/03/97	JMI	Changed reference to CGrenade::State_Deleted to
-//							CWeapon::State_Deleted.
+//      03/03/97   JMI   Changed reference to CGrenade::State_Deleted to
+//                     CWeapon::State_Deleted.
 //
-//		03/06/97 BRH	Changed to using ID's for keeping track of the file
-//							and gettting the pointer from the ID each time.
+//      03/06/97 BRH   Changed to using ID's for keeping track of the file
+//                     and gettting the pointer from the ID each time.
 //
-//		03/13/97	JMI	Load()s now take a version number.
+//      03/13/97   JMI   Load()s now take a version number.
 //
-//		03/21/97 BRH	Changed this to ignore ATTRIBUTE_NOT_WALKABLE so that
-//							the cocktails won't bounce off of the edge of the world.
+//      03/21/97 BRH   Changed this to ignore ATTRIBUTE_NOT_WALKABLE so that
+//                     the cocktails won't bounce off of the edge of the world.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		05/04/97 BRH	Took out an old unused reference to an STL iterator.
+//      05/04/97 BRH   Took out an old unused reference to an STL iterator.
 //
-//		05/13/97	JMI	CFireBomb was using a formula to compute the direction of
-//							8 firefrags such that one appeared in a random position
-//							in all of 8 octants.  The problem was the formula subtract-
-//							ed 25 which, in the case of the first octant, if the random
-//							position 24 or less were chosen, would result in a negative
-//							value.  But, to simply remove this could cause values 360
-//							or over since the random portion was based on 50.0 and not
-//							the size of an octant.  So I removed the -25 and changed the
-//							50.0 to (360/8) which, as far as I can tell, makes the
-//							inclusive extents of the formula [0..359].
+//      05/13/97   JMI   CFireBomb was using a formula to compute the direction of
+//                     8 firefrags such that one appeared in a random position
+//                     in all of 8 octants.  The problem was the formula subtract-
+//                     ed 25 which, in the case of the first octant, if the random
+//                     position 24 or less were chosen, would result in a negative
+//                     value.  But, to simply remove this could cause values 360
+//                     or over since the random portion was based on 50.0 and not
+//                     the size of an octant.  So I removed the -25 and changed the
+//                     50.0 to (360/8) which, as far as I can tell, makes the
+//                     inclusive extents of the formula [0..359].
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/03/97 BRH	Changed the cocktails so they don't bounce off of
-//							walls, they just fall to the ground and break.
+//      06/03/97 BRH   Changed the cocktails so they don't bounce off of
+//                     walls, they just fall to the ground and break.
 //
-//		06/11/97 BRH	Added shooter ID passing to the fires that it creates.
+//      06/11/97 BRH   Added shooter ID passing to the fires that it creates.
 //
-//		06/12/97	JMI	Now handles State_Hide by setting m_sprite's InHidden flag.
+//      06/12/97   JMI   Now handles State_Hide by setting m_sprite's InHidden flag.
 //
-//		06/12/97 BRH	Fixed order of passing the shooter ID.
+//      06/12/97 BRH   Fixed order of passing the shooter ID.
 //
-//		06/16/97 BRH	Fixed starting condition in not walkable area.
+//      06/16/97 BRH   Fixed starting condition in not walkable area.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97 BRH	Added use of base class 2D shadow on the ground, but loaded
-//							a smaller shadow resource.
+//      06/25/97 BRH   Added use of base class 2D shadow on the ground, but loaded
+//                     a smaller shadow resource.
 //
-//		06/30/97 BRH	Added cache of sound effects in Preload function.
+//      06/30/97 BRH   Added cache of sound effects in Preload function.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/27/97	JMI	Changed to use Z position (i.e., X/Z plane) instead of
-//							Y2 position (i.e., viewing plane) position for draw
-//							priority.
+//      07/27/97   JMI   Changed to use Z position (i.e., X/Z plane) instead of
+//                     Y2 position (i.e., viewing plane) position for draw
+//                     priority.
 //
-//		07/30/97	JMI	Same old delete error showed up on Alpha.
-//							ProcessMessages() was deleting the firebomb on a delete msg
-//							but, once returned to Update(), it was checking the
-//							m_eState member to see if it should return.  Unfortunately,
-//							since 'this' had already been deallocated, it was too late
-//							to do such a thing.
+//      07/30/97   JMI   Same old delete error showed up on Alpha.
+//                     ProcessMessages() was deleting the firebomb on a delete msg
+//                     but, once returned to Update(), it was checking the
+//                     m_eState member to see if it should return.  Unfortunately,
+//                     since 'this' had already been deallocated, it was too late
+//                     to do such a thing.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
-//		08/20/97 BRH	Moved firebomb sound to Destruction volume control.
+//      08/20/97 BRH   Moved firebomb sound to Destruction volume control.
 //
-//		08/27/97 BRH	Added large fire sound which had not been used until now.
+//      08/27/97 BRH   Added large fire sound which had not been used until now.
 //
-//		08/28/97	JMI	Added a explode counter so we can cap the number of
-//							explosions a firefrag can make.
+//      08/28/97   JMI   Added a explode counter so we can cap the number of
+//                     explosions a firefrag can make.
 //
-//		08/28/97 BRH	Added cache of large fire sound.
+//      08/28/97 BRH   Added cache of large fire sound.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define FIREBOMB_CPP
@@ -313,12 +313,12 @@ void CFirebomb::Update(void)
             return;
          }
          m_eState = State_Go;
-//				m_lTimer = lThisTime + ms_lGrenadeFuseTime;
+//            m_lTimer = lThisTime + ms_lGrenadeFuseTime;
          break;
 
 //-----------------------------------------------------------------------
 // Go - fly through the air until hit the ground, change directions on
-//		  obstacle collision.
+//        obstacle collision.
 //-----------------------------------------------------------------------
       case CFirebomb::State_Go:
          // Do horizontal velocity
@@ -360,7 +360,7 @@ void CFirebomb::Update(void)
 
 //-----------------------------------------------------------------------
 // Explode - Once it hits the ground, break into fire fragments that
-//			    bounce out from this point.
+//             bounce out from this point.
 //-----------------------------------------------------------------------
       case CFirebomb::State_Explode:
 
@@ -391,7 +391,7 @@ void CFirebomb::Update(void)
                pFrag->Setup(m_dX, m_dY, m_dZ);
                pFrag->m_dVertVel = m_dVertVel * -0.5;
                pFrag->m_dHorizVel = 60.0;
-//						pFrag->m_dRot = (i * (360/8)) - 25 + (GetRandom() % 50);
+//                  pFrag->m_dRot = (i * (360/8)) - 25 + (GetRandom() % 50);
                pFrag->m_dRot = (i * (360 / 8)) + (GetRandom() % (360 / 8));
                pFrag->m_eState = CWeapon::State_Go;
             }
@@ -451,7 +451,7 @@ void CFirebomb::Render(void)
       // Layer should be based on info we get from attribute map
       m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-      m_sprite.m_ptrans		= &m_trans;
+      m_sprite.m_ptrans      = &m_trans;
 
       // Update sprite in scene
       m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -486,7 +486,7 @@ short CFirebomb::Setup(                         // Returns 0 if successfull, non
 
    // HARD-WIRED CODE ALERT!
    // Eventually, this should be set via the bounding sphere radius.
-   m_sCurRadius	= 22;    // FOR NOW, always half of scene.cpp:SCREEN_DIAMETER_FOR_3D.
+   m_sCurRadius   = 22;    // FOR NOW, always half of scene.cpp:SCREEN_DIAMETER_FOR_3D.
 
 
    // Load resources
@@ -537,8 +537,8 @@ short CFirebomb::FreeResources(void)                  // Returns 0 if successful
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CFirebomb::Preload(
@@ -590,7 +590,7 @@ void CFirebomb::ProcessMessages(void)
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define FRAG_IMAGE_FILE			"res\\grenade.bmp"
+#define FRAG_IMAGE_FILE         "res\\grenade.bmp"
 
 // Minimum elapsed time (in milliseconds)
 
@@ -608,7 +608,7 @@ double CFirefrag::ms_dThrowVertVel = 10.0;            // Throw up at this veloci
 double CFirefrag::ms_dThrowHorizVel = 60;          // Throw out at this velocity
 double CFirefrag::ms_dMinBounceVel = 30.0;               // Min amount needed to bounce up
 double CFirefrag::ms_dVelTransferFract = -0.4;        // Amount of velocity to bounce back up
-short	CFirefrag::ms_sMaxExplosions	= 4;              // Maximum explosions before death.
+short CFirefrag::ms_sMaxExplosions   = 4;                // Maximum explosions before death.
 // Let this auto-init to 0
 short CFirefrag::ms_sFileCount;
 
@@ -725,15 +725,15 @@ void CFirefrag::Update(void)
 
 //-----------------------------------------------------------------------
 // Go - fly through the air until hit the ground, change directions on
-//		  obstacle collision.
+//        obstacle collision.
 //-----------------------------------------------------------------------
       case CWeapon::State_Go:
          // Do horizontal velocity
          dNewX = m_dX + COSQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
          dNewZ = m_dZ - SINQ[(short)m_dRot] * (m_dHorizVel * dSeconds);
          // Do vertical velocity
-//				m_dVertVel += ms_dGravity;
-//				m_dY += m_dVertVel * dSeconds;
+//            m_dVertVel += ms_dGravity;
+//            m_dY += m_dVertVel * dSeconds;
          dPrevVertVel = m_dVertVel;
          dNewY = m_dY;
          AdjustPosVel(&dNewY, &m_dVertVel, dSeconds);
@@ -742,7 +742,7 @@ void CFirefrag::Update(void)
 
          // If its lower than the last and current height, assume it
          // hit the ground.
-//				if (m_dY <= m_sPrevHeight && m_dY <= sHeight)
+//            if (m_dY <= m_sPrevHeight && m_dY <= sHeight)
          if (dNewY < sHeight && m_dY >= sHeight)
          {
             m_dY = sHeight;
@@ -771,7 +771,7 @@ void CFirefrag::Update(void)
 
 //-----------------------------------------------------------------------
 // Explode - Once it hits the ground, break into fire fragments that
-//			    bounce out from this point.
+//             bounce out from this point.
 //-----------------------------------------------------------------------
       case CWeapon::State_Explode:
 
@@ -780,7 +780,7 @@ void CFirefrag::Update(void)
          {
             pFire->Setup(m_dX, m_dY, m_dZ, SECONDARY_BURN_TIME, true, CFire::SmallFire);
             pFire->m_u16ShooterID = m_u16ShooterID;
-//							PlaySample(g_smidGrenadeExplode);
+//                     PlaySample(g_smidGrenadeExplode);
          }
 
          m_sNumExplosions++;
@@ -833,31 +833,31 @@ void CFirefrag::Update(void)
 void CFirefrag::Render(void)
 {
 /*
-	// This is a standard 2d sprite
-	m_sprite.m_type = CSprite::Standard2d;
+   // This is a standard 2d sprite
+   m_sprite.m_type = CSprite::Standard2d;
 
-	// No special flags
-	m_sprite.m_sInFlags = 0;
+   // No special flags
+   m_sprite.m_sInFlags = 0;
 
-	// Map from 3d to 2d coords
-	m_sprite.m_sX2 = m_dX - (m_pImage->m_sWidth / 2);
-	m_sprite.m_sY2 = (m_dZ - (m_pImage->m_sHeight)) - m_dY;
+   // Map from 3d to 2d coords
+   m_sprite.m_sX2 = m_dX - (m_pImage->m_sWidth / 2);
+   m_sprite.m_sY2 = (m_dZ - (m_pImage->m_sHeight)) - m_dY;
 
-	// Priority is based on bottom edge of sprite
-	m_sprite.m_sPriority = m_sprite.m_sY2 + m_pImage->m_sHeight;
+   // Priority is based on bottom edge of sprite
+   m_sprite.m_sPriority = m_sprite.m_sY2 + m_pImage->m_sHeight;
 
-	// Layer should be based on info we get from attribute map, but is hardwired for now
-//	m_sprite.m_sLayer = 0;
-	ASSERT(m_pRealm					!= NULL);
-	ASSERT(m_pRealm->m_pAttribMap	!= NULL);
-	// Layer should be based on info we get from attribute map.
-	m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
+   // Layer should be based on info we get from attribute map, but is hardwired for now
+//   m_sprite.m_sLayer = 0;
+   ASSERT(m_pRealm               != NULL);
+   ASSERT(m_pRealm->m_pAttribMap   != NULL);
+   // Layer should be based on info we get from attribute map.
+   m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-	// Image would normally animate, but doesn't for now
-	m_sprite.m_pImage = m_pImage;
+   // Image would normally animate, but doesn't for now
+   m_sprite.m_pImage = m_pImage;
 
-	// Update sprite in scene
-	m_pRealm->m_scene.UpdateSprite(&m_sprite);
+   // Update sprite in scene
+   m_pRealm->m_scene.UpdateSprite(&m_sprite);
 */
 }
 
@@ -881,7 +881,7 @@ short CFirefrag::Setup(                         // Returns 0 if successfull, non
    m_dHorizVel = ms_dThrowHorizVel;
 
    // Load resources
-//	sResult = GetResources();
+//   sResult = GetResources();
 
    if (CThing::Construct(CThing::CFireID, m_pRealm, (CThing**) &m_pFire) == 0)
    {

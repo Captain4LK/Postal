@@ -20,16 +20,16 @@
 // This module impliments the RSpry class, which is a simple array of RSprites.
 //
 // History:
-//		12/25/96 MJR	Started.
+//      12/25/96 MJR   Started.
 //
-//		05/13/97	JMI	Casted instances of warning C4018 (signed/unsigned mismatch)
-//							to make MSVC 4.1(Alpha) happy (these seem to fall under
-//							Warning Level 3 in 4.1(Alpha) but not in 4.2(Intel)).
+//      05/13/97   JMI   Casted instances of warning C4018 (signed/unsigned mismatch)
+//                     to make MSVC 4.1(Alpha) happy (these seem to fall under
+//                     Warning Level 3 in 4.1(Alpha) but not in 4.2(Intel)).
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
 ////////////////////////////////////////////////////////////////////////////////
 

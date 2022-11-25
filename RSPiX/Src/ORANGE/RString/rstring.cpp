@@ -21,26 +21,26 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/17/97 MJR	Started.
-//		01/18/97 MJR	First (tentative) release.
-//		01/20/97 MJR	Revised lots of stuff, ready for testing/prerelease.
-//		01/21/97 MJR	Did a bunch of testing, fixed one minor typo-bug.
-//		01/28/97 MJR	Fixed ASSERT(1) to be ASSERT(0), as it should have been.
-//							Added char* operator.
-//							Added Update() function.
-//		02/10/97 MJR	Minor tweak to Save() -- got rid of (strange) unecessary
-//							cast.  Also got rid of one constructor varation which had
-//							allowed you to create an RString based on the value of a
-//							char.  The problem was that this caused an "abiguous"
-//							overload when you were trying to create an RString of
-//							a specified length, as in RString str(5).  Hopefully the
-//							removed constructor will not be missed.
+//      01/17/97 MJR   Started.
+//      01/18/97 MJR   First (tentative) release.
+//      01/20/97 MJR   Revised lots of stuff, ready for testing/prerelease.
+//      01/21/97 MJR   Did a bunch of testing, fixed one minor typo-bug.
+//      01/28/97 MJR   Fixed ASSERT(1) to be ASSERT(0), as it should have been.
+//                     Added char* operator.
+//                     Added Update() function.
+//      02/10/97 MJR   Minor tweak to Save() -- got rid of (strange) unecessary
+//                     cast.  Also got rid of one constructor varation which had
+//                     allowed you to create an RString based on the value of a
+//                     char.  The problem was that this caused an "abiguous"
+//                     overload when you were trying to create an RString of
+//                     a specified length, as in RString str(5).  Hopefully the
+//                     removed constructor will not be missed.
 //
-//		06/28/97 MJR	Fixed typo in mac-specific code that had never been
-//							compiled before (naturally).
+//      06/28/97 MJR   Fixed typo in mac-specific code that had never been
+//                     compiled before (naturally).
 //
-//		07/12/97 MJR	RString::Load() didn't initialize sResult, so it would
-//							return random error codes instead of 0 for success.
+//      07/12/97 MJR   RString::Load() didn't initialize sResult, so it would
+//                     return random error codes instead of 0 for success.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -52,98 +52,98 @@
 // Most RString functions and operators are overloaded to accept any of the
 // following types.  These are often referred to as the "supported types".
 //
-//		* Other RString's
+//      * Other RString's
 //
-//		* C-style strings (char*)
+//      * C-style strings (char*)
 //
-//		* Characters (char), which are treated as ASCII codes
+//      * Characters (char), which are treated as ASCII codes
 //
-//		* Integers (short, unsigned short, S32, and U32) converted
-//		  into string representations of their numerical values.  The exception
-//		  is that there are no constructors to take these types, only because
-//		  it caused a conflict with other, more usefull constructors.
+//      * Integers (short, unsigned short, S32, and U32) converted
+//        into string representations of their numerical values.  The exception
+//        is that there are no constructors to take these types, only because
+//        it caused a conflict with other, more usefull constructors.
 //
 //
 // This is an overview of the available functions.  Check the comments on
 // the individual functions for details.
 //
-//		RString()		Various constructors that allow the creation of a string,
-//							optionally based on any supported type, and optionally
-//							with a specific buffer size
+//      RString()      Various constructors that allow the creation of a string,
+//                     optionally based on any supported type, and optionally
+//                     with a specific buffer size
 //
-//		~RString()		Destructor
+//      ~RString()      Destructor
 //
-//		GetSize()		Get size of buffer (always larger than string length)
+//      GetSize()      Get size of buffer (always larger than string length)
 //
-//		Grow()			Grow buffer to at least the specified size
+//      Grow()         Grow buffer to at least the specified size
 //
-//		Shrink()			Shrink buffer to at most the specified size
+//      Shrink()         Shrink buffer to at most the specified size
 //
-//		Compact()		Compact buffer to minimum size required by current string
+//      Compact()      Compact buffer to minimum size required by current string
 //
-//		Clear()			Clear string (length will be 0)
+//      Clear()         Clear string (length will be 0)
 //
-//		GetLen()			Get string length
+//      GetLen()         Get string length
 //
-//		GetAt()			Get character at specified position in string
+//      GetAt()         Get character at specified position in string
 //
-//		operator[]		Get character at specified position in string
+//      operator[]      Get character at specified position in string
 //
-//		SetAt()			Set character at specified position in string
+//      SetAt()         Set character at specified position in string
 //
-//		operator char*	Casts RString to C-style string
+//      operator char*   Casts RString to C-style string
 //
-//		Update()			Updates string if it was modified via the char* pointer
+//      Update()         Updates string if it was modified via the char* pointer
 //
-//		Format()			Create string using sprintf-like method
+//      Format()         Create string using sprintf-like method
 //
-//		Left()			Returns new RString based on a portion of this string
+//      Left()         Returns new RString based on a portion of this string
 //
-//		Right()			Returns new RString based on a portion of this string
+//      Right()         Returns new RString based on a portion of this string
 //
-//		Mid()				Returns new RString based on a portion of this string
+//      Mid()            Returns new RString based on a portion of this string
 //
-//		Range()			Returns new RString based on a portion of this string
+//      Range()         Returns new RString based on a portion of this string
 //
-//		Insert()			Insert any supported type into string
+//      Insert()         Insert any supported type into string
 //
-//		Delete()			Delete portion of string
+//      Delete()         Delete portion of string
 //
-//		ToUpper()		Convert string to upper case
+//      ToUpper()      Convert string to upper case
 //
-//		ToLower()		Convert string to lower case
+//      ToLower()      Convert string to lower case
 //
-//		Load()			Load previously saved string
+//      Load()         Load previously saved string
 //
-//		Save()			Save string
+//      Save()         Save string
 //
-//		operator=		Assigns any supported type into string
+//      operator=      Assigns any supported type into string
 //
-//		operator+=		Appends supported types onto current string
+//      operator+=      Appends supported types onto current string
 //
-//		operator+		Concatinates string and any supported type
+//      operator+      Concatinates string and any supported type
 //
-//		operator==		Full gamut of comparison operators
-//		operator!=
-//		operator<=
-//		operator>=
-//		operator<
-//		operator>
+//      operator==      Full gamut of comparison operators
+//      operator!=
+//      operator<=
+//      operator>=
+//      operator<
+//      operator>
 //
 //
 // Functions to be added some time soon...
 //
-//		I'm thinking Insert() could be easily extended to make it much more
-//		usefull -- see the Insert() comment block (in the header file!) for
-//		details.
+//      I'm thinking Insert() could be easily extended to make it much more
+//      usefull -- see the Insert() comment block (in the header file!) for
+//      details.
 //
-//		AS32 the same lines as Insert(), I think a Copy() would be usefull.
-//		It would be just like Insert() except it would overwrite the data in
-//		the destination string.
+//      AS32 the same lines as Insert(), I think a Copy() would be usefull.
+//      It would be just like Insert() except it would overwrite the data in
+//      the destination string.
 //
-//		Together, just about everything else could be implimented based on
-//		Insert() and Copy()!  I'm not sure it's worth switching over to that,
-//		though.  Too bad I didn't create them first.
+//      Together, just about everything else could be implimented based on
+//      Insert() and Copy()!  I'm not sure it's worth switching over to that,
+//      though.  Too bad I didn't create them first.
 //
 //
 // More Information
@@ -523,7 +523,7 @@ void RString::ToUpper(void)
    char* p = m_pBuf;
    if (lLen > 0)
    {
-      do	{
+      do   {
          *p = toupper(*p);
          p++;
       } while (--lLen);

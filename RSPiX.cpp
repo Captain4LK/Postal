@@ -21,7 +21,7 @@
 // This module implements the precompiled header.
 //
 // History:
-//		01/26/97 JMI	Started.
+//      01/26/97 JMI   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //

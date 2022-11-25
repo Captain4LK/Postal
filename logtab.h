@@ -19,21 +19,21 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		05/17/97 MJR	Started.
+//      05/17/97 MJR   Started.
 //
-//		05/19/97	JMI	Added forward declaration of CLogTab.  Note that normally
-//							you don't need to do this but, in VC 5.0, the friend
-//							directive seems to need to know whether or not the class
-//							being befriended is templated or not so that it'll parse it
-//							correctly.  I'm not sure if this is a parser bug or new
-//							stricter ANSI requirements.  /shrug.
+//      05/19/97   JMI   Added forward declaration of CLogTab.  Note that normally
+//                     you don't need to do this but, in VC 5.0, the friend
+//                     directive seems to need to know whether or not the class
+//                     being befriended is templated or not so that it'll parse it
+//                     correctly.  I'm not sure if this is a parser bug or new
+//                     stricter ANSI requirements.  /shrug.
 //
-//		05/27/97 MJR	Added logging feature.
+//      05/27/97 MJR   Added logging feature.
 //
-//		05/27/97 MJR	Added comment token.
-//							Added operators (=, <, >, !, *).
+//      05/27/97 MJR   Added comment token.
+//                     Added operators (=, <, >, !, *).
 //
-//		07/21/97 BRH/MJR Fixed table matching bug on last column in logic table.
+//      07/21/97 BRH/MJR Fixed table matching bug on last column in logic table.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef LOGTAB_H
@@ -46,43 +46,43 @@
 class RFile;
 
 // Name of log file (if there is one)
-#define LOGTAB_LOGFILE							"logtablog.log"
+#define LOGTAB_LOGFILE                     "logtablog.log"
 
 // Error codes
-#define LOGTAB_ERR_NO_SUCH_VAR				-10
-#define LOGTAB_ERR_DUP_VAR						-11
-#define LOGTAB_ERR_INVALID_VAR_TEXT			-12
-#define LOGTAB_ERR_BAD_RANGE_VAR_TEXT		-13
-#define LOGTAB_ERR_NOT_OUTPUT_VAR			-14
-#define LOGTAB_ERR_VAR_NOT_FOUND				-15
-#define LOGTAB_ERR_TOO_MANY_VARS				-16
-#define LOGTAB_ERR_NO_ROWS_AFTER_HEADINGS	-17
-#define LOGTAB_ERR_NO_INPUTS					-18
-#define LOGTAB_ERR_NO_OUTPUT_SEPARATOR		-19
-#define LOGTAB_ERR_NO_OUTPUTS					-20
-#define LOGTAB_ERR_EXTRA_COLUMNS				-21
-#define LOGTAB_ERR_TOO_FEW_COLUMNS			-22
-#define LOGTAB_ERR_TOO_MANY_ROWS				-23
-#define LOGTAB_ERR_UNEXPECTED_EOF			-24
-#define LOGTAB_ERR_READ_ERROR					-25
-#define LOGTAB_ERR_TEXT_TOO_LONG				-26
+#define LOGTAB_ERR_NO_SUCH_VAR            -10
+#define LOGTAB_ERR_DUP_VAR                  -11
+#define LOGTAB_ERR_INVALID_VAR_TEXT         -12
+#define LOGTAB_ERR_BAD_RANGE_VAR_TEXT      -13
+#define LOGTAB_ERR_NOT_OUTPUT_VAR         -14
+#define LOGTAB_ERR_VAR_NOT_FOUND            -15
+#define LOGTAB_ERR_TOO_MANY_VARS            -16
+#define LOGTAB_ERR_NO_ROWS_AFTER_HEADINGS   -17
+#define LOGTAB_ERR_NO_INPUTS               -18
+#define LOGTAB_ERR_NO_OUTPUT_SEPARATOR      -19
+#define LOGTAB_ERR_NO_OUTPUTS               -20
+#define LOGTAB_ERR_EXTRA_COLUMNS            -21
+#define LOGTAB_ERR_TOO_FEW_COLUMNS         -22
+#define LOGTAB_ERR_TOO_MANY_ROWS            -23
+#define LOGTAB_ERR_UNEXPECTED_EOF         -24
+#define LOGTAB_ERR_READ_ERROR               -25
+#define LOGTAB_ERR_TEXT_TOO_LONG            -26
 
 // Token for "comment" (everything after it is ignored up to the end of the row)
-#define LOGTAB_COMMENT_TOKEN		"//"
+#define LOGTAB_COMMENT_TOKEN      "//"
 
 // Symbol in logic table files used to separate input columns from output columns.
-#define LOGTAB_OUTPUT_SEPARATOR	"->"
+#define LOGTAB_OUTPUT_SEPARATOR   "->"
 
 // Symbol in logic table files for "don't care"
-#define LOGTAB_DONT_CARE			"*"
+#define LOGTAB_DONT_CARE         "*"
 
 // The default name given to all vars, just in case someone forgets to assign
 // a real name in their derived var class.
-#define LOGTABVAR_NONAME	"<NO NAME!>"
+#define LOGTABVAR_NONAME   "<NO NAME!>"
 
 // For "internal" use only when calling rspMsgBox().  This whole approach will
 // change once I switch over to an error callback.
-#define LOGTAB_MSG								RSP_MB_BUT_OK | RSP_MB_ICN_STOP, "Logic Table Loader"
+#define LOGTAB_MSG                        RSP_MB_BUT_OK | RSP_MB_ICN_STOP, "Logic Table Loader"
 
 // Forward declaration of CLogTab.  Note that normally you don't need to do this
 // but, in VC 5.0, the friend directive seems to need to know whether or not
@@ -192,7 +192,7 @@ CLogTabVar(void)
 static
 short FindVar(                                        // Returns 0 if successfull, non-zero otherwise
    char* pszName,                                     // In:  Variable name to find
-   CLogTabVar** ppVar);                               //	Out: Pointer to variable (if found)
+   CLogTabVar** ppVar);                               //   Out: Pointer to variable (if found)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Increment reference count
@@ -285,7 +285,7 @@ CLogTabVar<usertype>* CLogTabVar<usertype>::ms_pHead = 0;
 template <class usertype>
 short CLogTabVar<usertype>::FindVar(            // Returns 0 if successfull, non-zero otherwise
    char* pszName,                               // In:  Variable name to find
-   CLogTabVar** ppVar)                          //	Out: Pointer to variable (if found)
+   CLogTabVar** ppVar)                          //   Out: Pointer to variable (if found)
 {
    short sResult = 0;
 
@@ -844,7 +844,7 @@ short CLogTab<usertype>::Load(                  // Returns 0 if successfull, non
    bool bEndOfTable;
    bool bEndOfRow;
    bool bOutput = false;
-   do	{
+   do   {
       // Get next entry
       sResult = ReadEntry(pFile, acText, sizeof(acText), &bEndOfTable, &bEndOfRow, &cSave);
       if (sResult == 0)
@@ -951,7 +951,7 @@ short CLogTab<usertype>::Load(                  // Returns 0 if successfull, non
          do {
             // Each row must contain the same number of columns as the total number of vars
             short sColumn = 0;
-            do	{
+            do   {
                // Get next entry
                sResult = ReadEntry(pFile, acText, sizeof(acText), &bEndOfTable, &bEndOfRow, &cSave);
                if (sResult == 0)
@@ -1134,7 +1134,7 @@ short CLogTab<usertype>::ReadEntry(             // Returns 0 if successfull, non
    *pbEndOfRow = false;          // Not at end of row
    short sEntryIndex = 0;        // Start index at 0
    bool bFillingEntry = false;   // Not filling entry yet
-   do	{
+   do   {
       // Check for EOF
       if (pFile->IsEOF())
       {

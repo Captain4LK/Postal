@@ -21,99 +21,99 @@
 // This module sets up the system and RSPiX.
 //
 // History:
-//		11/19/96 MJR	Started.
+//      11/19/96 MJR   Started.
 //
-//		02/04/97	JMI	Now defaults to using RSP_DOSYSTEM_SLEEP instead of
-//							RSP_DOSYSTEM_HOGCPU for rspSetDoSystemMode().
+//      02/04/97   JMI   Now defaults to using RSP_DOSYSTEM_SLEEP instead of
+//                     RSP_DOSYSTEM_HOGCPU for rspSetDoSystemMode().
 //
-//		02/19/97	JMI	rspInitBlue was being called before
-//							rspSetWin32Video/AudioType().
+//      02/19/97   JMI   rspInitBlue was being called before
+//                     rspSetWin32Video/AudioType().
 //
-//		02/21/97	JMI	Now gets specific display settings from game settings(INI).
+//      02/21/97   JMI   Now gets specific display settings from game settings(INI).
 //
-//		02/21/97	JMI	Now gets audio lag time from INI.
+//      02/21/97   JMI   Now gets audio lag time from INI.
 //
-//		03/14/97	JMI	Now, under Win32, gets value from INI indicating whether to
-//							manage Windows' GUI components when the screen is resized.
+//      03/14/97   JMI   Now, under Win32, gets value from INI indicating whether to
+//                     manage Windows' GUI components when the screen is resized.
 //
-//		03/24/97	JMI	No S32er exits if SetMode() fails.  This allows the game
-//							to be played on systems without sound cards.
+//      03/24/97   JMI   No S32er exits if SetMode() fails.  This allows the game
+//                     to be played on systems without sound cards.
 //
-//		04/14/97	JMI	Now uses zeroinit flag to SmartHeap.
+//      04/14/97   JMI   Now uses zeroinit flag to SmartHeap.
 //
-//		04/16/97 MJR	Added more advanced audio init that retries for several
-//							seconds, and then asks the user whether to abort, retry,
-//							or ignore.
+//      04/16/97 MJR   Added more advanced audio init that retries for several
+//                     seconds, and then asks the user whether to abort, retry,
+//                     or ignore.
 //
-//							If video mode can't be set, it now tries to figure out
-//							the exact reason and reports it to the user.
+//                     If video mode can't be set, it now tries to figure out
+//                     the exact reason and reports it to the user.
 //
-//							Fixed a stupid bug that prevented audio from ever working.
+//                     Fixed a stupid bug that prevented audio from ever working.
 //
-//		04/17/97 MJR	Futher clarified video error messages.
+//      04/17/97 MJR   Futher clarified video error messages.
 //
-//							Discovered that the whole suggest-vide-mode thing is
-//							different than I expected, so I restructured everything.
+//                     Discovered that the whole suggest-vide-mode thing is
+//                     different than I expected, so I restructured everything.
 //
-//		05/20/97	JMI	Changed the #if block around the SmartHeap specific stuff
-//							to include only Intel Processor or MAC OS.
+//      05/20/97   JMI   Changed the #if block around the SmartHeap specific stuff
+//                     to include only Intel Processor or MAC OS.
 //
-//		06/03/97	JMI	Now, in the case an audio mode cannot be obtained, we
-//							attempt to use a message specific to the error returned
-//							by RMix::SetMode() for the message box displayed.
+//      06/03/97   JMI   Now, in the case an audio mode cannot be obtained, we
+//                     attempt to use a message specific to the error returned
+//                     by RMix::SetMode() for the message box displayed.
 //
-//		06/16/97	JMI	Now sets do system mode to highest cooperation level in
-//							debug and lowest coop level in release.
+//      06/16/97   JMI   Now sets do system mode to highest cooperation level in
+//                     debug and lowest coop level in release.
 //
-//		07/05/97 MJR	Added <smrtheap.hpp> if NOT in debug mode so we could
-//							properly set one of its options.  Not sure why this worked
-//							without <smrtheap.hpp> on the PC, but it didn't on the mac.
+//      07/05/97 MJR   Added <smrtheap.hpp> if NOT in debug mode so we could
+//                     properly set one of its options.  Not sure why this worked
+//                     without <smrtheap.hpp> on the PC, but it didn't on the mac.
 //
-//		07/06/97 MJR	Added call to new rspSetWin32StaticColors() so we'll have
-//							a common set of colors across platforms.
+//      07/06/97 MJR   Added call to new rspSetWin32StaticColors() so we'll have
+//                     a common set of colors across platforms.
 //
-//		07/07/97 MJR	Added RSPiX profiling stuff (in disabled form).
+//      07/07/97 MJR   Added RSPiX profiling stuff (in disabled form).
 //
-//		07/13/97	JMI	Added MAIN_VANILLA_AUDIO_* macro overrides to MAIN_AUDIO_*
-//							defaults.  These should be used when the INI or default
-//							audio mode fails.
+//      07/13/97   JMI   Added MAIN_VANILLA_AUDIO_* macro overrides to MAIN_AUDIO_*
+//                     defaults.  These should be used when the INI or default
+//                     audio mode fails.
 //
-//		07/26/97	JMI	We were using the video type as the audio type.  Whoopsee.
+//      07/26/97   JMI   We were using the video type as the audio type.  Whoopsee.
 //
-//		09/03/97 PPL	Added the pragma to turn off far data for the mempool
-//							initialization flag so that the smartheap library can reach it.
+//      09/03/97 PPL   Added the pragma to turn off far data for the mempool
+//                     initialization flag so that the smartheap library can reach it.
 //
-//		09/05/97 BRH	Added #if defined(MAC) around pragmas which didn't compile
-//							on the PC.
+//      09/05/97 BRH   Added #if defined(MAC) around pragmas which didn't compile
+//                     on the PC.
 //
-//		09/09/97	JMI	Added check of INI flag in setting of Blue Shield Cursor
-//							Mode on PC.
+//      09/09/97   JMI   Added check of INI flag in setting of Blue Shield Cursor
+//                     Mode on PC.
 //
-//		09/25/97	JMI	Now, on the PC, when setting the video type, sets the
-//							rspLock/Unlock behavior to be strict even when in simpler
-//							modes that don't require that level of behavior (like GDI).
+//      09/25/97   JMI   Now, on the PC, when setting the video type, sets the
+//                     rspLock/Unlock behavior to be strict even when in simpler
+//                     modes that don't require that level of behavior (like GDI).
 //
-//		10/09/97	JMI	Added g_pszVideoChangeDepthErrorUnderGDI_s in the event
-//							the colordepth could not be changed and the user had
-//							specified to use GDI (i.e., not DirectX).
+//      10/09/97   JMI   Added g_pszVideoChangeDepthErrorUnderGDI_s in the event
+//                     the colordepth could not be changed and the user had
+//                     specified to use GDI (i.e., not DirectX).
 //
-//		10/21/97	JMI	Put back the play movie hack.  Also, added ability to turn
-//							it off via the INI.
+//      10/21/97   JMI   Put back the play movie hack.  Also, added ability to turn
+//                     it off via the INI.
 //
-//		10/21/97	JMI	Now disables RipCord static logo only if movie successfully
-//							plays.
+//      10/21/97   JMI   Now disables RipCord static logo only if movie successfully
+//                     plays.
 //
-//		10/24/97	JMI	Now switches the video mode back if AVI changes (this seems
-//							to happen when we're in a DirectX mode and we launch the
-//							AVI).
+//      10/24/97   JMI   Now switches the video mode back if AVI changes (this seems
+//                     to happen when we're in a DirectX mode and we launch the
+//                     AVI).
 //
-//		10/31/97	JMI	Now uses MixBits entry in INI (in section Audio) to
-//							determine what bit depth to mix samples with (defaults to
-//							the device depth).
+//      10/31/97   JMI   Now uses MixBits entry in INI (in section Audio) to
+//                     determine what bit depth to mix samples with (defaults to
+//                     the device depth).
 //
-//		01/05/98	JMI	Now the MixBits var defaults to 16.
+//      01/05/98   JMI   Now the MixBits var defaults to 16.
 //
-//		01/21/98	JMI	No S32er plays movie regardless of OS or INI setting.
+//      01/21/98   JMI   No S32er plays movie regardless of OS or INI setting.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define MAIN_CPP
@@ -159,7 +159,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Amount of time to retry audio before telling the user it's not working
-#define AUDIO_RETRY_TIME	5000
+#define AUDIO_RETRY_TIME   5000
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -176,11 +176,11 @@ int wideScreenWidth;
 // Set up video for the game.
 ////////////////////////////////////////////////////////////////////////////////
 static short SetupVideo(               // Returns 0 on success.
-   short	sUseCurrentDeviceDimensions,  // In:  1 to use current video area.
-   short	sDeviceWidth,                 // In:  Desired video hardware width.
-   short	sDeviceHeight)                // In:  Desired video hardware height.
+   short sUseCurrentDeviceDimensions,    // In:  1 to use current video area.
+   short sDeviceWidth,                   // In:  Desired video hardware width.
+   short sDeviceHeight)                  // In:  Desired video hardware height.
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
 #ifdef MOBILE
    wideScreenWidth = 850;
@@ -294,7 +294,7 @@ static short SetupVideo(               // Returns 0 on success.
          rspQueryVideoModeReset();
          short sDeviceDepth;
          short sDevicePages;
-         do	{
+         do   {
             sResult = rspQueryVideoMode(
                &sDeviceDepth,
                &sDeviceWidth,
@@ -372,8 +372,8 @@ static char* CreateChunk(  // Returns the memory ptr that will hold the chunk
                            // with the chunk.
    S32 lChunkSize)         // In:  Size of chunk to create.
 {
-   char*	pcOrig		= (char*)malloc(lChunkSize);
-   char* pcReAlloc	= (char*)realloc(pcOrig, 1024);
+   char*   pcOrig      = (char*)malloc(lChunkSize);
+   char* pcReAlloc   = (char*)realloc(pcOrig, 1024);
    ASSERT(pcOrig == pcReAlloc);
    if (pcReAlloc)
    {
@@ -781,16 +781,16 @@ int main(int argc, char **argv)
       // Get video preferences
       short sDeviceWidth;
       short sDeviceHeight;
-      short	sUseCurrentDeviceDimensions;
+      short sUseCurrentDeviceDimensions;
       prefs.GetVal("Video", "DeviceWidth", MAIN_SCREEN_MIN_WIDTH, &sDeviceWidth);
       prefs.GetVal("Video", "DeviceHeight", MAIN_SCREEN_MIN_HEIGHT, &sDeviceHeight);
       prefs.GetVal("Video", "UseCurrentDeviceDimensions", 1, &sUseCurrentDeviceDimensions);
 
       // Get audio preferences
-      short	sAudioSamplesPerSec;
-      short	sDeviceBitsPerSample;
-      short	sBufTime;
-      short	sMixBitsPerSample;
+      short sAudioSamplesPerSec;
+      short sDeviceBitsPerSample;
+      short sBufTime;
+      short sMixBitsPerSample;
       prefs.GetVal("Audio", "DeviceRate", MAIN_AUDIO_RATE, &sAudioSamplesPerSec);
       prefs.GetVal("Audio", "DeviceBits", MAIN_AUDIO_BITS, &sDeviceBitsPerSample);
       prefs.GetVal("Audio", "DeviceBufTime", MAIN_AUDIO_BUFTIME, &sBufTime);
@@ -834,7 +834,7 @@ int main(int argc, char **argv)
             // Setup video
             //------------------------------------------------------------------------
 
-            sResult	= SetupVideo(           // Returns 0 on success.
+            sResult   = SetupVideo(           // Returns 0 on success.
                sUseCurrentDeviceDimensions,  // In:  1 to use current video area.
                sDeviceWidth,                 // In:  Desired video hardware width.
                sDeviceHeight);               // In:  Desired video hardware height.
@@ -865,7 +865,7 @@ int main(int argc, char **argv)
                   // Keep trying until it works or time runs out, whichever comes first
                   S32 lTime = rspGetMilliseconds();
                   bool bDone = false;
-                  do	{
+                  do   {
                      // Try to set mode
                      sResult = RMix::SetMode(
                         sAudioSamplesPerSec,
@@ -880,7 +880,7 @@ int main(int argc, char **argv)
                      {
                      case 0:
                         // Alrighty.
-                        bDone	= true;
+                        bDone   = true;
                         break;
                      case BLU_ERR_DEVICE_IN_USE:
                         // Try again until timer expires.
@@ -891,19 +891,19 @@ int main(int argc, char **argv)
                         else
                         {
                            // Done.
-                           bDone	= true;
+                           bDone   = true;
                         }
                         break;
                      case BLU_ERR_NO_DEVICE:
                         // Not much we can do about this.  Note that we'll still
                         // need to be able to open the sample files to query info
                         // about them (even if NO sound).  This is handled by game.cpp.
-                        bDone	= true;
+                        bDone   = true;
                         break;
                      case BLU_ERR_NOT_SUPPORTED:
                         // Trying more won't help.  Jump out of this loop so the
                         // user can choose what to do.
-                        bDone	= true;
+                        bDone   = true;
                         break;
                      }
 
@@ -924,45 +924,45 @@ int main(int argc, char **argv)
                              (MAIN_AUDIO_CHANNELS == 1) ? "Mono" : "Stereo");
 
                      // Default to generic error.
-                     char*	pszMsg;
+                     char*   pszMsg;
                      USHORT usFlags;
                      // Try to find a better one, though, based on the return value.
                      switch (sResult)
                      {
                      case BLU_ERR_DEVICE_IN_USE:
-                        pszMsg	= g_pszAudioModeInUseError_s;
-                        usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                        pszMsg   = g_pszAudioModeInUseError_s;
+                        usFlags   = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
                         break;
                      case BLU_ERR_NO_DEVICE:
-                        pszMsg	= g_pszAudioModeNoDeviceError_s;
-                        usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
+                        pszMsg   = g_pszAudioModeNoDeviceError_s;
+                        usFlags   = RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
                         break;
                      case BLU_ERR_NOT_SUPPORTED:
                         // If we haven't already tried vanilla settings . . .
                         if (bSwitchedToVanillaSettings == false)
                         {
-                           pszMsg	= g_pszAudioModeNotSupportedError_s;
-                           usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                           pszMsg   = g_pszAudioModeNotSupportedError_s;
+                           usFlags   = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
                            // Fall back on our most Vanilla mode.
-                           sAudioSamplesPerSec		= MAIN_VANILLA_AUDIO_RATE;
-                           sDeviceBitsPerSample		= MAIN_VANILLA_AUDIO_BITS;
+                           sAudioSamplesPerSec      = MAIN_VANILLA_AUDIO_RATE;
+                           sDeviceBitsPerSample      = MAIN_VANILLA_AUDIO_BITS;
 
                            // Should we alter sMixBitsPerSample????
                            // Let's not -- that way they should be able to use the
                            // assets they originally installed.
 
                            // Remember.
-                           bSwitchedToVanillaSettings	= true;
+                           bSwitchedToVanillaSettings   = true;
                         }
                         else
                         {
-                           pszMsg	= g_pszAudioVanillaModeNotSupportedError_s;
-                           usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
+                           pszMsg   = g_pszAudioVanillaModeNotSupportedError_s;
+                           usFlags   = RSP_MB_ICN_QUERY | RSP_MB_BUT_YESNO;
                         }
                         break;
                      default:
-                        pszMsg	= g_pszAudioModeGeneralError_s;
-                        usFlags	= RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
+                        pszMsg   = g_pszAudioModeGeneralError_s;
+                        usFlags   = RSP_MB_ICN_QUERY | RSP_MB_BUT_ABORTRETRYIGNORE;
                         break;
                      }
 

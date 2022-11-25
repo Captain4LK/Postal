@@ -20,30 +20,30 @@
 // ProcessGui.CPP
 //
 // History:
-//		07/03/97 JMI	Started.
+//      07/03/97 JMI   Started.
 //
-//		07/03/97	JMI	Had not implemented the update func to the feature level
-//							the comments implied.  Implemented.
+//      07/03/97   JMI   Had not implemented the update func to the feature level
+//                     the comments implied.  Implemented.
 //
-//		07/03/97	JMI	Added Init() and Kill().  Init() is called by the con-
-//							structor.  Kill() is called by the destructor.  The de-
-//							structor used to call Unprepare() but the problem with
-//							that was that Unprepare() did more than just deallocate
-//							the dynamic stuff and that stuff shouldn't have been done
-//							upon destruction.  So now Unprepare() and the destructor
-//							call Kill() to take care of dynamic items.
+//      07/03/97   JMI   Added Init() and Kill().  Init() is called by the con-
+//                     structor.  Kill() is called by the destructor.  The de-
+//                     structor used to call Unprepare() but the problem with
+//                     that was that Unprepare() did more than just deallocate
+//                     the dynamic stuff and that stuff shouldn't have been done
+//                     upon destruction.  So now Unprepare() and the destructor
+//                     call Kill() to take care of dynamic items.
 //
-//		08/22/97	JMI	Now uses rspGeneralLock/Unlock() to ensure the composite
-//							buffer is locked as necessary.
+//      08/22/97   JMI   Now uses rspGeneralLock/Unlock() to ensure the composite
+//                     buffer is locked as necessary.
 //
-//		09/01/97	JMI	Now only sets the focus to the first item if there's no
-//							focus or the current focus is not a descendant of the
-//							root item.
-//							Also, added special behavior flags, m_flags.
+//      09/01/97   JMI   Now only sets the focus to the first item if there's no
+//                     focus or the current focus is not a descendant of the
+//                     root item.
+//                     Also, added special behavior flags, m_flags.
 //
-//		09/06/97	JMI	Now filters out the high word of ie.lKey when checking
-//							for enter.  This filters out the the key flags (i.e.,
-//							shift, control, alt, system).
+//      09/06/97   JMI   Now filters out the high word of ie.lKey when checking
+//                     for enter.  This filters out the the key flags (i.e.,
+//                     shift, control, alt, system).
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -106,17 +106,17 @@ S32 RProcessGui::ms_lPressedId;
 //////////////////////////////////////////////////////////////////////////////
 inline
 void DrawDirty(         // Returns nothing.
-   RImage*	pimDst,     // In:  Destination buffer.
-   RImage*	pimScr,     // In:  Screen buffer.
+   RImage*   pimDst,     // In:  Destination buffer.
+   RImage*   pimScr,     // In:  Screen buffer.
    RDirtyRects* pdrl)   // In:  Dirty rect list of areas to be updated.
 {
-   RDRect*	pdr;
+   RDRect*   pdr;
    // If not going direct to screen . . .
    if (pimDst != pimScr)
    {
       rspShieldMouseCursor();
 
-      pdr	= pdrl->GetHead();
+      pdr   = pdrl->GetHead();
       while (pdr != NULL)
       {
          // Update screen.
@@ -129,7 +129,7 @@ void DrawDirty(         // Returns nothing.
 
          delete pdr;
 
-         pdr	= pdrl->GetNext();
+         pdr   = pdrl->GetNext();
       }
 
       rspUnshieldMouseCursor();
@@ -151,7 +151,7 @@ short RProcessGui::Prepare(         // Returns 0 on success.
    RGuiItem* pguiCancel /* = NULL*/) // In:  If not NULL, specifies GUI
                                      // activated by ESCAPE key.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Create erase buffer . . .
    if (m_imEraser.CreateImage(
@@ -166,11 +166,11 @@ short RProcessGui::Prepare(         // Returns 0 on success.
    else
    {
       TRACE("Prepare():  CreateImage() failed.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
-   m_pguiOk			= pguiOk;
-   m_pguiCancel	= pguiCancel;
+   m_pguiOk         = pguiOk;
+   m_pguiCancel   = pguiCancel;
 
    // These need to call us back.
    if (pguiOk)
@@ -214,7 +214,7 @@ void RProcessGui::Unprepare(void)   // Returns nothing.
    // If we're allowed . . .
    if ( (m_sFlags & NoCleanScreen) == 0)
    {
-      RImage*	pimScr;
+      RImage*   pimScr;
       rspNameBuffers(NULL, &pimScr);
 
       // Draw remaining dirty areas.
@@ -229,10 +229,10 @@ void RProcessGui::Unprepare(void)   // Returns nothing.
 // Setup GUI to notify this class of presses.
 //////////////////////////////////////////////////////////////////////////////
 void RProcessGui::SetGuiToNotify(   // Returns nothing.
-   RGuiItem*	pgui)                // GUI item to setup to notify this class
+   RGuiItem*   pgui)                // GUI item to setup to notify this class
                                     // of presses.
 {
-   pgui->m_bcUser	= PressedCall;
+   pgui->m_bcUser   = PressedCall;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ void RProcessGui::SetGuisToNotify(  // Returns nothing.
                                     // ProcessGui.
 {
    // Enum GUIs directing unclaimed callbacks to PressedCall.
-   RGuiItem*	pguiChild	= pguiRoot->m_listguiChildren.GetHead();
+   RGuiItem*   pguiChild   = pguiRoot->m_listguiChildren.GetHead();
    while (pguiChild != NULL)
    {
       // If callback unclaimed . . .
@@ -256,7 +256,7 @@ void RProcessGui::SetGuisToNotify(  // Returns nothing.
       // Do this item's children.
       SetGuisToNotify(pguiChild);
 
-      pguiChild	= pguiRoot->m_listguiChildren.GetNext();
+      pguiChild   = pguiRoot->m_listguiChildren.GetNext();
    }
 }
 
@@ -286,12 +286,12 @@ S32 RProcessGui::DoModal(           // Returns ID of pressed GUI that terminated
    // Set up ptrs and erase buffer.
    Prepare(pgui, pguiOk, pguiCancel);
 
-   RInputEvent	ie;
+   RInputEvent ie;
 
    // Process GUI.
    while (rspGetQuitStatus() == FALSE && lId == 0)
    {
-      ie.type	= RInputEvent::None;
+      ie.type   = RInputEvent::None;
       // If there's a user update func . . .
       if (m_fnUpdate)
       {
@@ -306,7 +306,7 @@ S32 RProcessGui::DoModal(           // Returns ID of pressed GUI that terminated
 
       if (lId == 0)
       {
-         lId	= DoModeless(pgui, &ie, pimDst);
+         lId   = DoModeless(pgui, &ie, pimDst);
       }
    }
 
@@ -331,7 +331,7 @@ S32 RProcessGui::DoModeless(     // Returns ID of pressed GUI or value.
                                  // screen image unless pimDst is the screen
                                  // image.
 {
-   RImage*	pimScr;
+   RImage*   pimScr;
 
    // We update these things every frame in case the video mode has changed.
    if (pimDst == NULL)
@@ -346,11 +346,11 @@ S32 RProcessGui::DoModeless(     // Returns ID of pressed GUI or value.
    }
 
    // Update dirty rect clipping in case video mode changed.
-   m_drl.m_sClipX	= pimDst->m_sWidth - 1;
-   m_drl.m_sClipY	= pimDst->m_sHeight - 1;
+   m_drl.m_sClipX   = pimDst->m_sWidth - 1;
+   m_drl.m_sClipY   = pimDst->m_sHeight - 1;
 
    // Clear callback ID.
-   ms_lPressedId	= 0;
+   ms_lPressedId   = 0;
 
    // Update hots with input event.
    // If the event is used by RHot, the sUsed flag will be
@@ -375,14 +375,14 @@ S32 RProcessGui::DoModeless(     // Returns ID of pressed GUI or value.
          RSP_SAFE_GUI_REF_VOID(m_pguiOk, SetClicked(TRUE) );
          PressedCall(m_pguiOk);
          // Used key.
-         pie->sUsed	= TRUE;
+         pie->sUsed   = TRUE;
          break;
       // Escape == Cancel.
       case 27:
          RSP_SAFE_GUI_REF_VOID(m_pguiCancel, SetClicked(TRUE) );
          PressedCall(m_pguiCancel);
          // Used key.
-         pie->sUsed	= TRUE;
+         pie->sUsed   = TRUE;
          break;
       }
    }
@@ -475,7 +475,7 @@ S32 RProcessGui::DoModeless(     // Returns ID of pressed GUI or value.
    }
 
    // Remember last dst.
-   m_pimLastDst	= pimDst;
+   m_pimLastDst   = pimDst;
 
    // Check GUI pressage.
    return ms_lPressedId;
@@ -496,11 +496,11 @@ S32 RProcessGui::DoModeless(     // Returns ID of pressed GUI or value.
 ///////////////////////////////////////////////////////////////////////////
 void RProcessGui::Init(void)  // Returns nothing.
 {
-   m_pguiOk			= NULL;
-   m_pguiCancel	= NULL;
-   m_fnUpdate		= NULL;
-   m_pimLastDst	= NULL;
-   m_sFlags			= 0;
+   m_pguiOk         = NULL;
+   m_pguiCancel   = NULL;
+   m_fnUpdate      = NULL;
+   m_pimLastDst   = NULL;
+   m_sFlags         = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -517,9 +517,9 @@ void RProcessGui::Kill(void)  // Returns nothing.
    m_drl.Empty();
 
    // Reset (don't call Init() it does more).
-   m_pguiOk			= NULL;
-   m_pguiCancel	= NULL;
-   m_pimLastDst	= NULL;
+   m_pguiOk         = NULL;
+   m_pguiCancel   = NULL;
+   m_pimLastDst   = NULL;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -532,11 +532,11 @@ void RProcessGui::Kill(void)  // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 // static.
 void RProcessGui::PressedCall(   // Returns nothing.
-   RGuiItem*		pgui)          // In:  Pressed GUI.
+   RGuiItem*      pgui)          // In:  Pressed GUI.
 {
    if (pgui)
    {
-      ms_lPressedId	= pgui->m_lId;
+      ms_lPressedId   = pgui->m_lId;
    }
 }
 

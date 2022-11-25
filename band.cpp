@@ -18,151 +18,151 @@
 // band.cpp
 // Project: Postal
 //
-//	This module implements the marching band member.
+//   This module implements the marching band member.
 //
 // History:
-//		03/04/97 BRH	Started this file.
+//      03/04/97 BRH   Started this file.
 //
-//		03/05/97 BRH	Implemented the functionality of this class in this
-//							function and in the base class CCharacter.  This uses
-//							many of the default base class functions for motion, states
-//							etc.  Currently has the logic to follow the parade route
-//							and simple after Parade mingling.  Also reacts to
-//							shot, fire and explosions.  Still need to add panic
-//							mode and panic message sending.
+//      03/05/97 BRH   Implemented the functionality of this class in this
+//                     function and in the base class CCharacter.  This uses
+//                     many of the default base class functions for motion, states
+//                     etc.  Currently has the logic to follow the parade route
+//                     and simple after Parade mingling.  Also reacts to
+//                     shot, fire and explosions.  Still need to add panic
+//                     mode and panic message sending.
 //
-//		03/06/97 BRH	Fixed panic message so it won't interrupt dying.  Also
-//							Use AlignToBouy function to set the direction to bouy
-//							and to periodically readjust the alighment to the bouy.
+//      03/06/97 BRH   Fixed panic message so it won't interrupt dying.  Also
+//                     Use AlignToBouy function to set the direction to bouy
+//                     and to periodically readjust the alighment to the bouy.
 //
-//		03/06/97	JMI	Upgraded to current rspMod360 usage.
-//							Was commented out, but just in case it ever gets re-
-//							instated.
+//      03/06/97   JMI   Upgraded to current rspMod360 usage.
+//                     Was commented out, but just in case it ever gets re-
+//                     instated.
 //
-//		03/07/97 BRH	Added dialog box to select starting bouy and also
-//							saves and loads that bouy ID.
+//      03/07/97 BRH   Added dialog box to select starting bouy and also
+//                     saves and loads that bouy ID.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/18/97	JMI	Now saves and loads child ID.
-//							Render() now checks for child item and, if present, updates
-//							its transform via the band member's rigid body transform.
-//							EditModify() now allows one to select type of child.
-//							OnExplosionMsg() now detaches child items.
+//      03/18/97   JMI   Now saves and loads child ID.
+//                     Render() now checks for child item and, if present, updates
+//                     its transform via the band member's rigid body transform.
+//                     EditModify() now allows one to select type of child.
+//                     OnExplosionMsg() now detaches child items.
 //
-//		03/18/97	JMI	Load() was ignoring versions 2 and 3.  Fixed.
+//      03/18/97   JMI   Load() was ignoring versions 2 and 3.  Fixed.
 //
-//		03/18/97	JMI	OnDead() now drops current child instrument.
+//      03/18/97   JMI   OnDead() now drops current child instrument.
 //
-//		03/18/97	JMI	Update() was calling CCharacter::OnDead() bypassing the
-//							CBand::OnDead() override.
+//      03/18/97   JMI   Update() was calling CCharacter::OnDead() bypassing the
+//                     CBand::OnDead() override.
 //
-//		03/19/97 BRH	Added a check to the OnPanicMsg to make sure that the
-//							bouy chosen exists before getting its position.
+//      03/19/97 BRH   Added a check to the OnPanicMsg to make sure that the
+//                     bouy chosen exists before getting its position.
 //
-//		03/27/97	JMI	Now you cannot create a CBand when there is no bouy.
+//      03/27/97   JMI   Now you cannot create a CBand when there is no bouy.
 //
-//		04/10/97 BRH	Changed it to work with the new multi layer attribute maps.
+//      04/10/97 BRH   Changed it to work with the new multi layer attribute maps.
 //
-//		04/16/97 BRH	Changed references to the realm's list of CThings to use
-//							the new non-STL method.
+//      04/16/97 BRH   Changed references to the realm's list of CThings to use
+//                     the new non-STL method.
 //
-//		04/29/97	JMI	Now, in Render(), the band guy has safer interaction with
-//							his child instrument which, also, does not keep him from
-//							having a weapon, like it did before.
+//      04/29/97   JMI   Now, in Render(), the band guy has safer interaction with
+//                     his child instrument which, also, does not keep him from
+//                     having a weapon, like it did before.
 //
-//		05/12/97 BRH	Added the randomness to the falling down dead state so
-//							when you kill the marchers they don't all fall the same
-//							direction.
+//      05/12/97 BRH   Added the randomness to the falling down dead state so
+//                     when you kill the marchers they don't all fall the same
+//                     direction.
 //
-//		05/26/97 BRH	Added avoidance of obstacles.
+//      05/26/97 BRH   Added avoidance of obstacles.
 //
-//		05/27/97 BRH	Fixed problem in Panic where no random bouy was being
-//							selected.
+//      05/27/97 BRH   Fixed problem in Panic where no random bouy was being
+//                     selected.
 //
-//		05/29/97	JMI	Changed instance of REALM_ATTR_FLOOR_MASK to
-//							REALM_ATTR_NOT_WALKABLE.
+//      05/29/97   JMI   Changed instance of REALM_ATTR_FLOOR_MASK to
+//                     REALM_ATTR_NOT_WALKABLE.
 //
-//		06/03/97 BRH	Changed the mingle so they walk around a lot more.  Added
-//							screaming sound effects when they panic so that they aren't
-//							totally silent as they run around.  Also changed the song
-//							to be played internally rather than using a sound thing
-//							object.
+//      06/03/97 BRH   Changed the mingle so they walk around a lot more.  Added
+//                     screaming sound effects when they panic so that they aren't
+//                     totally silent as they run around.  Also changed the song
+//                     to be played internally rather than using a sound thing
+//                     object.
 //
-//		06/04/97	JMI	Now aborts ms_pBandSongSound, if not NULL, in destructor.
-//							Also, added ms_bDonePlaying so marchers know when to not
-//							restart ms_pBandSongSound.
+//      06/04/97   JMI   Now aborts ms_pBandSongSound, if not NULL, in destructor.
+//                     Also, added ms_bDonePlaying so marchers know when to not
+//                     restart ms_pBandSongSound.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/08/97	JMI	Added override for WhileDying() and WhileShot().  In which
-//							we make sure to drop child items with some random
-//							rotation velocity and our direction and velocity.
-//							Also, OnExplosionMsg() now passes the message on to the
-//							child item immediately after dropping it.
+//      06/08/97   JMI   Added override for WhileDying() and WhileShot().  In which
+//                     we make sure to drop child items with some random
+//                     rotation velocity and our direction and velocity.
+//                     Also, OnExplosionMsg() now passes the message on to the
+//                     child item immediately after dropping it.
 //
-//		06/10/97 BRH	Added message passing to CDemon for all band members.
+//      06/10/97 BRH   Added message passing to CDemon for all band members.
 //
-//		06/16/97 BRH	Added more sound effects for the band members.
+//      06/16/97 BRH   Added more sound effects for the band members.
 //
-//		06/17/97	JMI	Added NULL in call to PlaySample() corresponding to new
-//							param.
+//      06/17/97   JMI   Added NULL in call to PlaySample() corresponding to new
+//                     param.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/24/97	JMI	Added some LOG() calls for the synchronization log
-//							mechanism.
+//      06/24/97   JMI   Added some LOG() calls for the synchronization log
+//                     mechanism.
 //
-//		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
-//							a shadow sprite.
+//      06/25/97   JMI   Now calls PrepareShadow() in Init() which loads and sets up
+//                     a shadow sprite.
 //
-//		06/30/97 MJR	Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
+//      06/30/97 MJR   Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
 //
-//		06/30/97 BRH	Changed most of the PlaySample calls to PlaySampleThenPurge
-//							to save memory.
+//      06/30/97 BRH   Changed most of the PlaySample calls to PlaySampleThenPurge
+//                     to save memory.
 //
-//		07/01/97	JMI	Replaced GetFloorMapValue() with GetHeightAndNoWalk() call.
+//      07/01/97   JMI   Replaced GetFloorMapValue() with GetHeightAndNoWalk() call.
 //
-//		07/01/97	JMI	Now passes rigid body transform to DetachChild().
+//      07/01/97   JMI   Now passes rigid body transform to DetachChild().
 //
-//		07/08/97 BRH	Renamed some of the bandguy's animations since the
-//							filenames were too S32 for the delicate MacOS.
+//      07/08/97 BRH   Renamed some of the bandguy's animations since the
+//                     filenames were too S32 for the delicate MacOS.
 //
-//		07/09/97	JMI	Removed unused 2D res name macros.
+//      07/09/97   JMI   Removed unused 2D res name macros.
 //
-//		07/17/97	JMI	Changed ms_pBandSongSound to ms_siBandSongInstance.
-//							Now uses new SampleMaster interface for volume and play
-//							instance reference.
+//      07/17/97   JMI   Changed ms_pBandSongSound to ms_siBandSongInstance.
+//                     Now uses new SampleMaster interface for volume and play
+//                     instance reference.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/31/97 BRH	Changed destination bouy from always being 1 to an editable
-//							item in the EditModify dialog box.
+//      07/31/97 BRH   Changed destination bouy from always being 1 to an editable
+//                     item in the EditModify dialog box.
 //
-//		08/12/97	JMI	Now one band member maintains the volume for the band
-//							sample.
+//      08/12/97   JMI   Now one band member maintains the volume for the band
+//                     sample.
 //
-//		08/26/97 BRH	Added a few more voices to the list.
+//      08/26/97 BRH   Added a few more voices to the list.
 //
-//		09/03/97	JMI	Replaced Good Smash bit with Civilian.
+//      09/03/97   JMI   Replaced Good Smash bit with Civilian.
 //
-//		09/24/97 BRH	Band members will not appear for the non US version.  This
-//							needs to be tested with the new project setup once
-//							the band is moved into the localized projects.
+//      09/24/97 BRH   Band members will not appear for the non US version.  This
+//                     needs to be tested with the new project setup once
+//                     the band is moved into the localized projects.
 //
-//		10/03/97	JMI	Now includes CompileOptions.h so it knows what US is when
-//							comparing to LOCALE.
+//      10/03/97   JMI   Now includes CompileOptions.h so it knows what US is when
+//                     comparing to LOCALE.
 //
-//		10/14/97	JMI	Added GetInstanceID() as parameter to LOG() calls.
+//      10/14/97   JMI   Added GetInstanceID() as parameter to LOG() calls.
 //
-//		09/27/99	JMI	Changed to allow band mebmers only in any locale
-//							satisfying the CompilerOptions macro VIOLENT_LOCALE.
+//      09/27/99   JMI   Changed to allow band mebmers only in any locale
+//                     satisfying the CompilerOptions macro VIOLENT_LOCALE.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define BAND_CPP
@@ -184,17 +184,17 @@
 #define NUM_ELEMENTS(a) (sizeof(a) / sizeof(a[0]) )
 
 // Notification message lParm1's.
-#define BLOOD_POOL_DONE_NOTIFICATION	1  // Blood pool is done animating.
+#define BLOOD_POOL_DONE_NOTIFICATION   1  // Blood pool is done animating.
 
 // Random amount the blood splat can adjust.
-#define BLOOD_SPLAT_SWAY		10
+#define BLOOD_SPLAT_SWAY      10
 
 // Gets a random between -range / 2 and range / 2.
-#define RAND_SWAY(sway)	((GetRand() % sway) - sway / 2)
+#define RAND_SWAY(sway)   ((GetRand() % sway) - sway / 2)
 
-#define GUI_ID_OK						1
+#define GUI_ID_OK                  1
 
-#define BAND_SONG_HALF_LIFE		500
+#define BAND_SONG_HALF_LIFE      500
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -324,7 +324,7 @@ short CBand::Load(               // Returns 0 if successfull, non-zero otherwise
    short sResult = 0;
 
    // Call the base class load to get the instance ID, position, motion etc.
-   sResult	= CDoofus::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CDoofus::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load common data just once per file (not with each object)
@@ -344,7 +344,7 @@ short CBand::Load(               // Returns 0 if successfull, non-zero otherwise
          // Note that, if no band members are loaded (i.e., they are all
          // created during play (maybe via a dispenser, although dispensers
          // use load) ), this won't get reset.
-         ms_bDonePlaying		= false;
+         ms_bDonePlaying      = false;
       }
 
       // Load Rocket Man specific data
@@ -472,7 +472,7 @@ short CBand::Init(void)
    short sResult = 0;
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	= PrepareShadow();
+   sResult   = PrepareShadow();
 
    // Init position, rotation and velocity
    m_dVel = 0.0;
@@ -482,29 +482,29 @@ short CBand::Init(void)
    m_lTimer = m_pRealm->m_time.GetGameTime() + 500;
    m_sBrightness = 0;   // Default brightness
 
-   m_smash.m_bits		= CSmash::Civilian | CSmash::Character;
-   m_smash.m_pThing	= this;
+   m_smash.m_bits      = CSmash::Civilian | CSmash::Character;
+   m_smash.m_pThing   = this;
 
    m_lAnimTime = 0;
    m_panimCur = &m_animMarch;
    m_stockpile.m_sHitPoints = ms_sStartingHitPoints;
 
    // Set them facing their first bouy so they are lined up ready to march
-//	m_ucDestBouyID = 1;		// This is the end of the parade route bouy
-//	m_ucNextBouyID = m_pNavNet->FindNearestBouy(m_dX, m_dZ);
+//   m_ucDestBouyID = 1;      // This is the end of the parade route bouy
+//   m_ucNextBouyID = m_pNavNet->FindNearestBouy(m_dX, m_dZ);
    m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
-//	ASSERT(m_pNextBouy != NULL);
+//   ASSERT(m_pNextBouy != NULL);
    if (m_pNextBouy != NULL)
    {
       m_sNextX = m_pNextBouy->GetX();
       m_sNextZ = m_pNextBouy->GetZ();
-      //	m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
+      //   m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
       AlignToBouy();
    }
    else
    {
       TRACE("Init():  Where's the dang, blam, dangin, blamin, BOUY?!\n");
-      sResult	= -1;
+      sResult   = -1;
    }
 
    m_state = CCharacter::State_March;
@@ -587,14 +587,14 @@ void CBand::Update(void)
                &ms_siBandSongInstance,                // Out: Handle for adjusting sound volume
                NULL,                                  // Out: Sample duration in ms, if not NULL.
                0,                                     // In:  Where to loop back to in milliseconds.
-                                                      //	-1 indicates no looping (unless m_sLoop is
+                                                      //   -1 indicates no looping (unless m_sLoop is
                                                       // explicitly set).
                -1,                                    // In:  Where to loop back from in milliseconds.
                                                       // In:  If less than 1, the end + lLoopEndTime is used.
                false);                                // In:  Call ReleaseAndPurge rather than Release after playing
 
             // Make this guy the band leader.
-            ms_idBandLeader	= GetInstanceID();
+            ms_idBandLeader   = GetInstanceID();
          }
 
          // If I am the band leader . . .
@@ -621,7 +621,7 @@ void CBand::Update(void)
             if (m_ucNextBouyID == 0)
             {
                // Note that we're done playing music.
-               ms_bDonePlaying	= true;
+               ms_bDonePlaying   = true;
 
                m_lTimer = lThisTime;
                m_state = State_Wait;
@@ -630,7 +630,7 @@ void CBand::Update(void)
                {
                   AbortSample(ms_siBandSongInstance);
                   ms_siBandSongInstance = 0;
-                  ms_bDonePlaying		= true;
+                  ms_bDonePlaying      = true;
                }
             }
             else
@@ -638,7 +638,7 @@ void CBand::Update(void)
                m_pNextBouy = m_pNavNet->GetBouy(m_ucNextBouyID);
                m_sNextX = m_pNextBouy->GetX();
                m_sNextZ = m_pNextBouy->GetZ();
-//						m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
+//                  m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
                AlignToBouy();
             }
          }
@@ -650,9 +650,9 @@ void CBand::Update(void)
          {
             // Update Values /////////////////////////////////////////////////////////
 
-            m_dX	= dNewX;
-            m_dY	= dNewY;
-            m_dZ	= dNewZ;
+            m_dX   = dNewX;
+            m_dY   = dNewY;
+            m_dZ   = dNewZ;
 
             UpdateFirePosition();
          }
@@ -660,7 +660,7 @@ void CBand::Update(void)
          {
             // Restore Values ////////////////////////////////////////////////////////
 
-            m_dVel			-= m_dDeltaVel;
+            m_dVel         -= m_dDeltaVel;
          }
 
          break;
@@ -690,7 +690,7 @@ void CBand::Update(void)
                {
                   m_sNextX = m_pNextBouy->GetX();
                   m_sNextZ = m_pNextBouy->GetZ();
-//							m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
+//                     m_dRot = rspATan(m_dZ - m_sNextZ, m_sNextX - m_dX);
                   AlignToBouy();
                   m_dAcc = 150;
                   m_state = State_Mingle;
@@ -722,9 +722,9 @@ void CBand::Update(void)
                   {
                   // Update Values /////////////////////////////////////////////////////////
 
-                     m_dX	= dNewX;
-                     m_dY	= dNewY;
-                     m_dZ	= dNewZ;
+                     m_dX   = dNewX;
+                     m_dY   = dNewY;
+                     m_dZ   = dNewZ;
 
                      UpdateFirePosition();
                   }
@@ -732,14 +732,14 @@ void CBand::Update(void)
                   {
                   // Restore Values ////////////////////////////////////////////////////////
 
-                     m_dVel			-= m_dDeltaVel;
+                     m_dVel         -= m_dDeltaVel;
                   }
 
                   break;
       */
 //-----------------------------------------------------------------------
 // Panic - Pick a random bouy and run to it.  When you are there, pick
-//			  a different random bouy and run to it.
+//           a different random bouy and run to it.
 //-----------------------------------------------------------------------
 
       case State_Panic:
@@ -880,7 +880,7 @@ void CBand::Update(void)
             AlignToBouy();
 
          // Move towards the bouy
-//				DeluxeUpdatePosVel();
+//            DeluxeUpdatePosVel();
          if (m_state == State_Mingle)
             UpdateVelocities(dSeconds, ms_dMaxMarchVel, ms_dMaxMarchVel);
          else
@@ -889,7 +889,7 @@ void CBand::Update(void)
 
          // Get height and 'no walk' status at new position.
          bool bNoWalk;
-         sHeight	= m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
+         sHeight   = m_pRealm->GetHeightAndNoWalk(dNewX, dNewY, &bNoWalk);
 
          // If too big a height difference or completely not walkable . . .
          if (bNoWalk == true
@@ -907,9 +907,9 @@ void CBand::Update(void)
          {
             // Update Values /////////////////////////////////////////////////////////
 
-            m_dX	= dNewX;
-            m_dY	= dNewY;
-            m_dZ	= dNewZ;
+            m_dX   = dNewX;
+            m_dY   = dNewY;
+            m_dZ   = dNewZ;
 
             UpdateFirePosition();
          }
@@ -917,7 +917,7 @@ void CBand::Update(void)
          {
             // Restore Values ////////////////////////////////////////////////////////
 
-            m_dVel			-= m_dDeltaVel;
+            m_dVel         -= m_dDeltaVel;
             m_ucDestBouyID = SelectRandomBouy();
             m_ucNextBouyID = m_pNavNet->FindNearestBouy(m_dX, m_dZ);
             m_sNextX = m_pNextBouy->GetX();
@@ -1010,12 +1010,12 @@ void CBand::Update(void)
 
       }
 
-      m_smash.m_sphere.sphere.X			= m_dX;
+      m_smash.m_sphere.sphere.X         = m_dX;
       // Fudge center of sphere as half way up the dude.
       // Doesn't work if dude's feet leave the origin.
-      m_smash.m_sphere.sphere.Y			= m_dY + m_sprite.m_sRadius;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Y         = m_dY + m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -1040,12 +1040,12 @@ void CBand::Render(void)
    // Update child, if any . . .
    if (m_idChildItem != CIdBank::IdNil)
    {
-      CItem3d*	pitem;
+      CItem3d*   pitem;
       if (m_pRealm->m_idbank.GetThingByID((CThing**)&pitem, m_idChildItem) == 0)
       {
          // Set transform from our rigid body transfanimation for the child
          // sprite.
-         pitem->m_sprite.m_ptrans	= (RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime);
+         pitem->m_sprite.m_ptrans   = (RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime);
          // If the item is not our child . . .
          if (pitem->m_sprite.m_psprParent != &m_sprite)
          {
@@ -1056,7 +1056,7 @@ void CBand::Render(void)
       else  // Safety:
       {
          // Item is gone.
-         m_idChildItem	= CIdBank::IdNil;
+         m_idChildItem   = CIdBank::IdNil;
       }
    }
 }
@@ -1080,7 +1080,7 @@ short CBand::EditNew(                           // Returns 0 if successfull, non
       sResult = GetResources();
       if (sResult == SUCCESS)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
 
@@ -1097,8 +1097,8 @@ short CBand::EditModify(void)
    RGuiItem* pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/band.gui"));
    if (pGui)
    {
-      RGuiItem*	pguiStartBouy = pGui->GetItemFromId(10);
-      RGuiItem*	pguiDestBouy  = pGui->GetItemFromId(11);
+      RGuiItem*   pguiStartBouy = pGui->GetItemFromId(10);
+      RGuiItem*   pguiDestBouy  = pGui->GetItemFromId(11);
 
       if (pguiStartBouy)
       {
@@ -1110,33 +1110,33 @@ short CBand::EditModify(void)
          RSP_SAFE_GUI_REF((REdit*) pguiDestBouy, m_sCaretPos = strlen(pguiDestBouy->m_szText));
          RSP_SAFE_GUI_REF_VOID(pguiDestBouy, Compose());
 
-         CItem3d::ItemType	itChild	= CItem3d::None;
+         CItem3d::ItemType itChild   = CItem3d::None;
          // If there's currently a child . . .
-         CItem3d*	pitem	= NULL;
+         CItem3d*   pitem   = NULL;
          if (m_pRealm->m_idbank.GetThingByID((CThing**)&pitem, m_idChildItem) == 0)
          {
             // Get the type.
-            itChild	= pitem->m_type;
+            itChild   = pitem->m_type;
          }
 
-         RListBox*	plbChildTypes	= (RListBox*)pGui->GetItemFromId(3);
+         RListBox*   plbChildTypes   = (RListBox*)pGui->GetItemFromId(3);
          if (plbChildTypes != NULL)
          {
             ASSERT(plbChildTypes->m_type == RGuiItem::ListBox);
 
             // Add all built-in 3D Item types.
-            short	i;
-            RGuiItem*	pguiItem;
+            short i;
+            RGuiItem*   pguiItem;
             for (i = CItem3d::None; i < CItem3d::NumTypes; i++)
             {
                // Don't allow Custom . . .
                if (i != CItem3d::Custom)
                {
-                  pguiItem	= plbChildTypes->AddString(CItem3d::ms_apszKnownAnimDescriptions[i]);
+                  pguiItem   = plbChildTypes->AddString(CItem3d::ms_apszKnownAnimDescriptions[i]);
                   if (pguiItem != NULL)
                   {
                      // Set item number.
-                     pguiItem->m_ulUserData	= i;
+                     pguiItem->m_ulUserData   = i;
                      // If this item is the current item type . . .
                      if (i == itChild)
                      {
@@ -1155,15 +1155,15 @@ short CBand::EditModify(void)
             m_ucDestBouyID = RSP_SAFE_GUI_REF(pguiDestBouy, GetVal());
             if (plbChildTypes != NULL)
             {
-               RGuiItem*	pguiSel	= plbChildTypes->GetSel();
+               RGuiItem*   pguiSel   = plbChildTypes->GetSel();
                if (pguiSel != NULL)
                {
-                  itChild	= (CItem3d::ItemType)pguiSel->m_ulUserData;
+                  itChild   = (CItem3d::ItemType)pguiSel->m_ulUserData;
                }
                else
                {
                   // None.
-                  itChild	= CItem3d::None;
+                  itChild   = CItem3d::None;
                }
 
                if (pitem != NULL)
@@ -1177,7 +1177,7 @@ short CBand::EditModify(void)
                         (RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime) );
                      // Be gone.
                      delete pitem;
-                     pitem	= NULL;
+                     pitem   = NULL;
                   }
                }
 
@@ -1191,7 +1191,7 @@ short CBand::EditModify(void)
                      if (ConstructWithID(CItem3dID, m_pRealm, (CThing**)&pitem) == 0)
                      {
                         // Remember who our child is.
-                        m_idChildItem	= pitem->GetInstanceID();
+                        m_idChildItem   = pitem->GetInstanceID();
                         // Setup the child.
                         pitem->Setup(0, 0, 0, itChild, NULL, m_u16InstanceId);
                      }
@@ -1300,7 +1300,7 @@ short CBand::FreeResources(void)                // Returns 0 if successfull, non
 void CBand::ProcessMessages(void)
 {
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       ProcessMessage(&msg);
@@ -1389,7 +1389,7 @@ void CBand::OnExplosionMsg(Explosion_Message* pMessage)
       CCharacter::OnExplosionMsg(pMessage);
 
       // Drop item, if we have one still.
-      CThing3d*	pthing3d	= DetachChild(
+      CThing3d*   pthing3d   = DetachChild(
          &m_idChildItem,
          (RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime) );
       // If we got something back . . .
@@ -1397,7 +1397,7 @@ void CBand::OnExplosionMsg(Explosion_Message* pMessage)
       {
          // Let it know about the explosion.
          GameMessage msg;
-         msg.msg_Explosion	= *pMessage;
+         msg.msg_Explosion   = *pMessage;
 
          SendThingMessage(&msg, pthing3d);
       }
@@ -1593,7 +1593,7 @@ void CBand::AlertBand(void)
    {
       AbortSample(ms_siBandSongInstance);
       ms_siBandSongInstance = 0;
-      ms_bDonePlaying	= true;
+      ms_bDonePlaying   = true;
    }
 }
 
@@ -1650,19 +1650,19 @@ void CBand::DropItem(void) // Returns nothing.
    if (m_idChildItem != CIdBank::IdNil)
    {
       // Drop it.
-      CThing3d*	pthing3d	= DetachChild(
+      CThing3d*   pthing3d   = DetachChild(
          &m_idChildItem,
          (RTransform*) m_panimCur->m_ptransRigid->GetAtTime(m_lAnimTime) );
       // If we got something back . . .
       if (pthing3d != NULL)
       {
          // Send it spinning.
-         pthing3d->m_dExtRotVelY	= GetRand() % 720;
-         pthing3d->m_dExtRotVelZ	= GetRand() % 720;
+         pthing3d->m_dExtRotVelY   = GetRand() % 720;
+         pthing3d->m_dExtRotVelZ   = GetRand() % 720;
          // Send it forward (from our perspective)
          // with our current velocity.
-         pthing3d->m_dExtHorzRot	= m_dRot;
-         pthing3d->m_dExtHorzVel	= m_dVel;
+         pthing3d->m_dExtHorzRot   = m_dRot;
+         pthing3d->m_dExtHorzVel   = m_dVel;
          // ... and air drag.
          if (pthing3d->m_dExtHorzVel > 0.0)
          {
@@ -1674,7 +1674,7 @@ void CBand::DropItem(void) // Returns nothing.
          }
 
          // Similar enough to blown up.
-         pthing3d->m_state			= State_BlownUp;
+         pthing3d->m_state         = State_BlownUp;
       }
    }
 }

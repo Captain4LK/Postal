@@ -21,7 +21,7 @@
 // This module conveniently implemetns running averages
 //
 // History:
-//		09/03/97 JRD	Started.
+//      09/03/97 JRD   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef AVERAGE_H
@@ -43,7 +43,7 @@
 // Let me know if this kills your heap
 //
 template <class ValueType, S32 clFixedWidth>
-class	CRunningAverage
+class CRunningAverage
 {
 public:
 //---------------------------------------
@@ -52,7 +52,7 @@ public:
 
 //=======================================
 // set average value
-void	Seed(ValueType vtSeedValue)
+void   Seed(ValueType vtSeedValue)
 {
    short i;
    m_lSignificantNumber = clFixedWidth;

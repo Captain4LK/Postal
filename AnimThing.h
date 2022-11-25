@@ -19,26 +19,26 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/18/97 JMI	Started.
+//      02/18/97 JMI   Started.
 //
-//		02/19/97	JMI	Added ability to send any message to any CThing when done
-//							with animation.
+//      02/19/97   JMI   Added ability to send any message to any CThing when done
+//                     with animation.
 //
-//		02/19/97	JMI	Unprotected more members.
+//      02/19/97   JMI   Unprotected more members.
 //
-//		02/24/97	JMI	Changed declaration of m_sprite from CAlphaSprite2 to
-//							CSprite2.
+//      02/24/97   JMI   Changed declaration of m_sprite from CAlphaSprite2 to
+//                     CSprite2.
 //
-//		02/24/97	JMI	Changed m_pthingSendMsg to m_u16IdSendMsg.
+//      02/24/97   JMI   Changed m_pthingSendMsg to m_u16IdSendMsg.
 //
-//		02/26/97	JMI	Now sets m_sprite.m_pthing = this on construction.
+//      02/26/97   JMI   Now sets m_sprite.m_pthing = this on construction.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		06/24/97	JMI	Now intializes m_msg's priority to 0 on construction for
-//							safety.
+//      06/24/97   JMI   Now intializes m_msg's priority to 0 on construction for
+//                     safety.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -73,18 +73,18 @@ double m_dY;
 double m_dZ;
 
 short m_sSuspend;                         // Suspend flag
-short	m_sLoop;                            // Loops, if true.
+short m_sLoop;                              // Loops, if true.
 char m_szResName[RSP_MAX_PATH];           // Resource name.
 
 S32 m_lAnimTime;                          // Cummulative animation time.
 S32 m_lAnimPrevTime;                      // Last animation time.
 
 U16 m_u16IdSendMsg;                       // ID of CThing to send msg to when done.
-GameMessage	m_msg;                        // Message to send to m_pthingSendMsg.
+GameMessage m_msg;                          // Message to send to m_pthingSendMsg.
 
 protected:
-CSprite2	m_sprite;                        // Sprite.
-ChannelAA*	m_paachannel;                 // Animation (with or without alpha).
+CSprite2 m_sprite;                          // Sprite.
+ChannelAA*   m_paachannel;                 // Animation (with or without alpha).
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -94,13 +94,13 @@ public:
 CAnimThing(CRealm* pRealm)
    : CThing(pRealm, CAnimThingID)
 {
-   m_paachannel		= NULL;
-   m_sSuspend			= 0;
-   m_sLoop				= TRUE;
-   m_szResName[0]		= '\0';
-   m_msg.msg_Generic.sPriority	= 0;
-   m_u16IdSendMsg		= CIdBank::IdNil;
-   m_sprite.m_pthing	= this;
+   m_paachannel      = NULL;
+   m_sSuspend         = 0;
+   m_sLoop            = TRUE;
+   m_szResName[0]      = '\0';
+   m_msg.msg_Generic.sPriority   = 0;
+   m_u16IdSendMsg      = CIdBank::IdNil;
+   m_sprite.m_pthing   = this;
 }
 
 public:
@@ -190,14 +190,14 @@ short EditMove(                                       // Returns 0 if successful
 // Called by editor to get the clickable pos/area of an object in 2D.
 virtual        // Overridden here.
 void EditRect(                // Returns nothiing.
-   RRect*	prc);             // Out: Clickable pos/area of object.
+   RRect*   prc);             // Out: Clickable pos/area of object.
 
 // Called by editor to get the hotspot of an object in 2D.
 virtual        // Overridden here.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Called by editor to update object
@@ -208,13 +208,13 @@ void EditRender(void);
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 //---------------------------------------------------------------------------
 // Internal functions

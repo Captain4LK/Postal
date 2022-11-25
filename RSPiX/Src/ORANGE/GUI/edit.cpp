@@ -20,142 +20,142 @@
 // EDIT.CPP
 //
 // History:
-//		08/15/96 JMI	Started.
+//      08/15/96 JMI   Started.
 //
-//		09/24/96	JMI	Changed all BLU_MB?_* macros to RSP_MB?_* macros.
+//      09/24/96   JMI   Changed all BLU_MB?_* macros to RSP_MB?_* macros.
 //
-//		10/02/96	JMI	No S32er checks ms_szText for NULL before calling
-//							m_print stuff and updating m_aptTextPos.
+//      10/02/96   JMI   No S32er checks ms_szText for NULL before calling
+//                     m_print stuff and updating m_aptTextPos.
 //
-//		10/27/96 MJR	Fixed "unused variable" warnings.
+//      10/27/96 MJR   Fixed "unused variable" warnings.
 //
-//		10/31/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CEdit				REdit
-//							CTxt				RTxt
-//							CImage			RImage
-//							CGuiItem			RGuiItem
-//							LEFT				RGuiItem::Left
-//							MULTILINE		Multiline
-//							NUMBERS_ONLY	NumbersOnly
-//							POINT				Point
-//							EDITNOTIFY		EditNotify
+//      10/31/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CEdit            REdit
+//                     CTxt            RTxt
+//                     CImage         RImage
+//                     CGuiItem         RGuiItem
+//                     LEFT            RGuiItem::Left
+//                     MULTILINE      Multiline
+//                     NUMBERS_ONLY   NumbersOnly
+//                     POINT            Point
+//                     EDITNOTIFY      EditNotify
 //
-//							Moved #include <string.h> to the beginning.
+//                     Moved #include <string.h> to the beginning.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							Rect				RRect
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     Rect            RRect
 //
-//		11/12/96 MJR	Added RSP_ prefix to GK keyboard macros.
+//      11/12/96 MJR   Added RSP_ prefix to GK keyboard macros.
 //
-//		11/14/96	JMI	DrawText() now attempts to clip the string to the edit
-//							box.
+//      11/14/96   JMI   DrawText() now attempts to clip the string to the edit
+//                     box.
 //
-//		11/27/96	JMI	Added initialization of m_type to identify this type
-//							of GUI item.
+//      11/27/96   JMI   Added initialization of m_type to identify this type
+//                     of GUI item.
 //
-//		12/04/96	JMI	Do() can no S32er optionally poll for input, does not
-//							call rspGetKey(), and does not return that key.  Instead,
-//							you pass the a pointer to the rspGetKeys() formatted key
-//							you want Do() to process.  The key will be zeroed if it
-//							is "absorbed" by the edit box.
+//      12/04/96   JMI   Do() can no S32er optionally poll for input, does not
+//                     call rspGetKey(), and does not return that key.  Instead,
+//                     you pass the a pointer to the rspGetKeys() formatted key
+//                     you want Do() to process.  The key will be zeroed if it
+//                     is "absorbed" by the edit box.
 //
-//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and
-//							upgraded to new RFont/RPrint.
+//      12/19/96   JMI   Uses new m_justification (as m_sJustification) and
+//                     upgraded to new RFont/RPrint.
 //
-//		12/31/96	JMI	Do() now calls base implementation in RGuiItem.
+//      12/31/96   JMI   Do() now calls base implementation in RGuiItem.
 //
-//		01/01/97	JMI	DrawText() now draws a space with transparent back and
-//							foreground colors so that the positions array will be
-//							updated so we can use the caret position.
-//							Also, now clips caret.
+//      01/01/97   JMI   DrawText() now draws a space with transparent back and
+//                     foreground colors so that the positions array will be
+//                     updated so we can use the caret position.
+//                     Also, now clips caret.
 //
-//		01/04/97	JMI	Upgraded HotCall() to new CursorEvent().  This upgrade
-//							is in response to RGuiItem now using relative RHots.
-//							Now m_hot.m_sX/Y is parent item relative just like
-//							m_sX/Y.  This should simplify a lot of stuff and even
-//							fix some odd features like being able to click a GUI
-//							item that exceeds the boundary of its parent.  This fix
-//							will be essential for the not-yet-existent RListBox since
-//							it will most likely scroll many children through a small
-//							client area.
-//							Now there are two regions associated with cursor events.
-//							The first is the 'hot' area.  This is the area that m_hot
-//							is set to include.  Child items can only receive cursor
-//							events through this area.  The second is the 'event' area.
-//							This is the area where the item really is actually con-
-//							cerned with cursor events.  Example:  For a Dlg, the
-//							entire window is the 'hot' area and the title bar is the
-//							'event' area.
+//      01/04/97   JMI   Upgraded HotCall() to new CursorEvent().  This upgrade
+//                     is in response to RGuiItem now using relative RHots.
+//                     Now m_hot.m_sX/Y is parent item relative just like
+//                     m_sX/Y.  This should simplify a lot of stuff and even
+//                     fix some odd features like being able to click a GUI
+//                     item that exceeds the boundary of its parent.  This fix
+//                     will be essential for the not-yet-existent RListBox since
+//                     it will most likely scroll many children through a small
+//                     client area.
+//                     Now there are two regions associated with cursor events.
+//                     The first is the 'hot' area.  This is the area that m_hot
+//                     is set to include.  Child items can only receive cursor
+//                     events through this area.  The second is the 'event' area.
+//                     This is the area where the item really is actually con-
+//                     cerned with cursor events.  Example:  For a Dlg, the
+//                     entire window is the 'hot' area and the title bar is the
+//                     'event' area.
 //
-//		01/08/97	JMI	There were some typos in Draw() involving clipping.
-//							Fixed.
+//      01/08/97   JMI   There were some typos in Draw() involving clipping.
+//                     Fixed.
 //
-//		01/18/97	JMI	Converted Do() to take an RInputEvent* instead of a
-//							S32*.
+//      01/18/97   JMI   Converted Do() to take an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/20/97	JMI	Made very few changes for overriding Read/WriteMembers.
-//							Should not change functionality.  Checked in to use at
-//							home.
+//      01/20/97   JMI   Made very few changes for overriding Read/WriteMembers.
+//                     Should not change functionality.  Checked in to use at
+//                     home.
 //
-//		01/21/97	JMI	Added ReadMembers() and WriteMembers() overloads to read
-//							and write members of this class.  Note that they call the
-//							base class version to read/write base class members.
-//							Support exists for versions 0 and 1.  Version 0 did not
-//							contain other than RGuiItem members.
+//      01/21/97   JMI   Added ReadMembers() and WriteMembers() overloads to read
+//                     and write members of this class.  Note that they call the
+//                     base class version to read/write base class members.
+//                     Support exists for versions 0 and 1.  Version 0 did not
+//                     contain other than RGuiItem members.
 //
-//		01/23/97	JMI	Added escape to keys we don't want to process during Do().
+//      01/23/97   JMI   Added escape to keys we don't want to process during Do().
 //
-//		01/23/97	JMI	Now sets m_sShowFocus to FALSE in constructor.  Focus is
-//							shown via caret anyhow.
+//      01/23/97   JMI   Now sets m_sShowFocus to FALSE in constructor.  Focus is
+//                     shown via caret anyhow.
 //
-//		02/05/97	JMI	Changed position of default: case in ReadMembers().
+//      02/05/97   JMI   Changed position of default: case in ReadMembers().
 //
-//		03/14/97	JMI	Added ClipCaret().
+//      03/14/97   JMI   Added ClipCaret().
 //
-//		03/19/97	JMI	Converted to using the RHot::m_iecUser (was using
-//							RHot::m_epcUser) so HotCall and CursorEvent now take
-//							RInputEvent ptrs.
+//      03/19/97   JMI   Converted to using the RHot::m_iecUser (was using
+//                     RHot::m_epcUser) so HotCall and CursorEvent now take
+//                     RInputEvent ptrs.
 //
-//		03/28/97	JMI	RSP_MB0_DOUBLECLICK is now treated the same as
-//							RSP_MB0_PRESSED.
+//      03/28/97   JMI   RSP_MB0_DOUBLECLICK is now treated the same as
+//                     RSP_MB0_PRESSED.
 //
-//		04/10/97	JMI	DrawText() considers new m_sFontCellHeight member.
-//							Now uses m_sFontCellHeight instead of GetPos() to get
-//							cell height.
+//      04/10/97   JMI   DrawText() considers new m_sFontCellHeight member.
+//                     Now uses m_sFontCellHeight instead of GetPos() to get
+//                     cell height.
 //
-//		04/24/97	JMI	Added m_u32TextShadowColor.
+//      04/24/97   JMI   Added m_u32TextShadowColor.
 //
-//		07/07/97	JMI	Now calls SetTextEffects() before drawing text in
-//							DrawText() and Draw().
+//      07/07/97   JMI   Now calls SetTextEffects() before drawing text in
+//                     DrawText() and Draw().
 //
-//		08/25/97	JMI	Added m_sFirstVisibleCharIndex which is the first visible
-//							character in the field.
-//							Now automagically scrolls left or right based on caret
-//							positions.
+//      08/25/97   JMI   Added m_sFirstVisibleCharIndex which is the first visible
+//                     character in the field.
+//                     Now automagically scrolls left or right based on caret
+//                     positions.
 //
-//		08/25/97	JMI	Was not handling the case where the text was truncated by
-//							an outside source.  Now handled by calling ClipCaret() in
-//							DrawText().
+//      08/25/97   JMI   Was not handling the case where the text was truncated by
+//                     an outside source.  Now handled by calling ClipCaret() in
+//                     DrawText().
 //
-//		08/25/97	JMI	Added macros to define extra space on each side of text
-//							in the edit field to make sure it doesn't butt up against
-//							stuff.
-//							Also, effects, justification, size, and word-wrappage
-//							were not being set before drawing the caret in Draw().
+//      08/25/97   JMI   Added macros to define extra space on each side of text
+//                     in the edit field to make sure it doesn't butt up against
+//                     stuff.
+//                     Also, effects, justification, size, and word-wrappage
+//                     were not being set before drawing the caret in Draw().
 //
-//		08/25/97	JMI	Now scrolls half the field to the left if the caret
-//							passes the left edge (used to only scroll one character).
+//      08/25/97   JMI   Now scrolls half the field to the left if the caret
+//                     passes the left edge (used to only scroll one character).
 //
-//		08/30/97	JMI	Now repaginates if the caret position is less than the
-//							first visible character.
+//      08/30/97   JMI   Now repaginates if the caret position is less than the
+//                     first visible character.
 //
-//		09/01/97	JMI	Now Do() only functions if this is activated.
+//      09/01/97   JMI   Now Do() only functions if this is activated.
 //
-//		01/15/98	JMI	Added numeric keypad support in Do().
+//      01/15/98   JMI   Added numeric keypad support in Do().
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -192,12 +192,12 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def)   ((val == -1) ? def : val)
 
 // Number of pixels to reserve as non-client on each vertical edge.
-#define VERT_EDGE_RESERVED		1
+#define VERT_EDGE_RESERVED      1
 
-#define EXTRA_NONCLIENT_EDGE	(m_sShowFocus ? m_sBorderThickness + VERT_EDGE_RESERVED : VERT_EDGE_RESERVED)
+#define EXTRA_NONCLIENT_EDGE   (m_sShowFocus ? m_sBorderThickness + VERT_EDGE_RESERVED : VERT_EDGE_RESERVED)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -222,33 +222,33 @@ REdit::REdit()
    // Defaults:
    ///////////////////////////////////////////////////////////////////////////
 
-   m_cCaretChar		= '_';   // Character to use as caret.
-   m_u32CaretColor	= 255;   // Color to use for caret.
-   m_sCaretPos			= 0;     // Text position of caret.
-   m_lCaretBlinkRate	= 500;   // Rate at which character blinks in ms.  Can be
-                              // 0 indicating no blinkage.
-   m_sMaxText			= GUI_MAX_STR; // Maximum text to allow.  Limited to
-                                    // GUI_MAX_STR.
-   m_sBehavior			= 0;     // Flags.  See enums in header.
+   m_cCaretChar      = '_';   // Character to use as caret.
+   m_u32CaretColor   = 255;   // Color to use for caret.
+   m_sCaretPos         = 0;     // Text position of caret.
+   m_lCaretBlinkRate   = 500;   // Rate at which character blinks in ms.  Can be
+                                // 0 indicating no blinkage.
+   m_sMaxText         = GUI_MAX_STR; // Maximum text to allow.  Limited to
+                                     // GUI_MAX_STR.
+   m_sBehavior         = 0;     // Flags.  See enums in header.
 
-   m_encCall			= NULL;  // Callback when a user input notification
+   m_encCall         = NULL;  // Callback when a user input notification
                               // should occur such as too much input or
                               // invalid character generated (e.g., alphas
                               // in NUMBERS_ONLY mode).  A good place to
                               // generate a beep or something.
 
-   m_lNextCaretUpdate	= 0;  // Time in ms of next caret update.
-   m_sCaretState			= 0;  // Current state the caret is in until
-                              // m_lNextCaretUpdate. (0 == hidden,
-                              // 1 == shown).
+   m_lNextCaretUpdate   = 0;  // Time in ms of next caret update.
+   m_sCaretState         = 0;  // Current state the caret is in until
+                               // m_lNextCaretUpdate. (0 == hidden,
+                               // 1 == shown).
 
-   m_sInvertedBorder		= TRUE;  // Override RGuiItem's default.
+   m_sInvertedBorder      = TRUE;  // Override RGuiItem's default.
 
-   m_type					= Edit;  // Indicates type of GUI item.
+   m_type               = Edit;  // Indicates type of GUI item.
 
-   m_sShowFocus			= FALSE; // Focus is shown via the caret.
+   m_sShowFocus         = FALSE; // Focus is shown via the caret.
 
-   m_sFirstVisibleCharIndex	= 0;  // First visible char in field.
+   m_sFirstVisibleCharIndex   = 0;  // First visible char in field.
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -279,14 +279,14 @@ short REdit::Draw(         // Returns 0 on success.
    short sH /*= 0*/,       // Amount to draw.
    RRect* prc /*= NULL*/)  // Clip to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If visible . . .
    if (m_sVisible != FALSE)
    {
       // Call the base class.
-      sRes = RGuiItem::Draw(	pimDst, sDstX, sDstY,
-                              sSrcX, sSrcY, sW, sH, prc);
+      sRes = RGuiItem::Draw(   pimDst, sDstX, sDstY,
+                               sSrcX, sSrcY, sW, sH, prc);
 
       // If the caret is shown . . .
       if (m_sCaretState != 0)
@@ -305,7 +305,7 @@ short REdit::Draw(         // Returns 0 on success.
          // Setup printer ////////////////////////////////
 
          // Word wrap must be off.
-         short	sWordWrapWas	= (m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
+         short sWordWrapWas   = (m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
          m_pprint->SetWordWrap(FALSE);
 
          // Text support is currently 8 bit only.
@@ -319,31 +319,31 @@ short REdit::Draw(         // Returns 0 on success.
 
          // Done setting up printer //////////////////////
 
-         short	sClientX, sClientY, sClientW, sClientH;
+         short sClientX, sClientY, sClientW, sClientH;
          GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
-         short	sClipW, sClipH;
+         short sClipW, sClipH;
 
          if (sW == 0)
          {
             // Use client.
-            sClipW	= sClientW;
+            sClipW   = sClientW;
          }
          else
          {
             // Adjust by blt position.
-            sClipW	= sW - (sClientX + m_sX);
+            sClipW   = sW - (sClientX + m_sX);
          }
 
          if (sH == 0)
          {
             // Use client.
-            sClipH	= sClientH;
+            sClipH   = sClientH;
          }
          else
          {
             // Adjust by blt position.
-            sClipH	= sH - (sClientY + m_sY);
+            sClipH   = sH - (sClientY + m_sY);
          }
 
          // Clip.
@@ -385,26 +385,26 @@ short REdit::DrawText(     // Returns 0 on success.
    short sX,               // X position in image.
    short sY,               // Y position in image.
    short sW /*= 0*/,       // Width of text area.
-   short	sH /*= 0*/,       // Height of test area.
+   short sH /*= 0*/,         // Height of test area.
    RImage* pim /*= NULL*/) // Destination image.  NULL == use m_im.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (pim == NULL)
    {
       // Use internal image.
-      pim	= &m_im;
+      pim   = &m_im;
    }
 
-   char*	pszText;
+   char*   pszText;
    U32 u32ForeColor;
 
    if (m_szText[0] != '\0')
    {
       // Use user supplied text.
-      pszText	= m_szText;
+      pszText   = m_szText;
       // Use user supplied color.
-      u32ForeColor	= m_u32TextColor;
+      u32ForeColor   = m_u32TextColor;
    }
    else
    {
@@ -412,15 +412,15 @@ short REdit::DrawText(     // Returns 0 on success.
       // array is updated.  It would be handy if the
       // print command would update the array even for
       // printing "".  Then this would not be necessary.
-      static char szSpace[]	= " ";
+      static char szSpace[]   = " ";
 
       // Display space so that we can guarantee that the
       // character positions array will be updated.
-      pszText	= szSpace;
+      pszText   = szSpace;
 
       // Use transparent color (just in case actually has
       // some pixels).
-      u32ForeColor	= 0;
+      u32ForeColor   = 0;
    }
 
    // Text support is currently 8 bit only.
@@ -434,9 +434,9 @@ short REdit::DrawText(     // Returns 0 on success.
    if (m_justification == RGuiItem::Left)
    {
       // Added in extra space before starting text.
-      sX	+= EXTRA_NONCLIENT_EDGE;
+      sX   += EXTRA_NONCLIENT_EDGE;
       // Remove extra space before starting text.
-      sW	-= EXTRA_NONCLIENT_EDGE * 2;
+      sW   -= EXTRA_NONCLIENT_EDGE * 2;
 
       // Keep the caret within bounds.
       ClipCaret();
@@ -445,7 +445,7 @@ short REdit::DrawText(     // Returns 0 on success.
       SetTextEffects();
 
       // Word wrap must be off.
-      short	sWordWrapWas	= (m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
+      short sWordWrapWas   = (m_pprint->m_eModes & RPrint::WORD_WRAP) ? TRUE : FALSE;
       m_pprint->SetWordWrap(FALSE);
 
       m_pprint->SetDestination(pim);
@@ -458,7 +458,7 @@ short REdit::DrawText(     // Returns 0 on success.
       // character back.
       if (m_sCaretPos < m_sFirstVisibleCharIndex)
       {
-         short	sHalfWidth	= sW / 2;
+         short sHalfWidth   = sW / 2;
          // Go backward until we hit the beginning
          // or we get within half the field of the caret.
 
@@ -473,13 +473,13 @@ short REdit::DrawText(     // Returns 0 on success.
          }
       }
 
-      short	sCaretWidth	= m_pprint->GetBlitW(m_cCaretChar);
+      short sCaretWidth   = m_pprint->GetBlitW(m_cCaretChar);
 
       // Whenever the caret hits or passes the right edge, jump the first
       // visible character forward.
       if (m_pprint->ms_sCharPosX[m_sCaretPos] - m_pprint->ms_sCharPosX[m_sFirstVisibleCharIndex] + sCaretWidth >= sW - EXTRA_NONCLIENT_EDGE)
       {
-         short	sHalfWidth	= sW / 2;
+         short sHalfWidth   = sW / 2;
          // Go forward until we hit the end
          // or we get within half the field of the caret.
 
@@ -500,18 +500,18 @@ short REdit::DrawText(     // Returns 0 on success.
       m_pprint->print(sX, sY, "%s", pszText + m_sFirstVisibleCharIndex);
 
 
-      REdit::Point*	ppt	= m_aptTextPos;
+      REdit::Point*   ppt   = m_aptTextPos;
       S32 lIndex;
-      for (lIndex	= 0; lIndex < lLen; lIndex++, ppt++)
+      for (lIndex   = 0; lIndex < lLen; lIndex++, ppt++)
       {
          // Store its position in the pim.
-         ppt->sX	= m_pprint->ms_sCharPosX[lIndex];
-         ppt->sY	= sY; // Eventually will be available as above.
+         ppt->sX   = m_pprint->ms_sCharPosX[lIndex];
+         ppt->sY   = sY; // Eventually will be available as above.
       }
 
       // Update last position for cursor.
-      ppt->sX	= m_pprint->ms_sCharPosX[lIndex];
-      ppt->sY	= sY; // Eventually will be available as above.
+      ppt->sX   = m_pprint->ms_sCharPosX[lIndex];
+      ppt->sY   = sY; // Eventually will be available as above.
 
       m_pprint->SetWordWrap(sWordWrapWas);
    }
@@ -519,7 +519,7 @@ short REdit::DrawText(     // Returns 0 on success.
    {
       TRACE("DrawText(): Only left justification supported by REdit "
             "currently.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -541,21 +541,21 @@ void REdit::Do(      // Returns nothing.
    // Only if currenly active . . .
    if (IsActivated() != FALSE)
    {
-      short sRedrawText	= FALSE; // Redraw text if TRUE.
-      short	sRedrawItem	= FALSE; // Redraw item if TRUE (for event driven
-                                 // user).
+      short sRedrawText   = FALSE; // Redraw text if TRUE.
+      short sRedrawItem   = FALSE;   // Redraw item if TRUE (for event driven
+      // user).
 
       // If unused key event . . .
       if (pie->sUsed == FALSE && pie->type == RInputEvent::Key)
       {
          // Set the caret state to show.
-         m_sCaretState	= 1;
+         m_sCaretState   = 1;
 
          // Get length of current text.  Always handy.
          S32 lStrLen  = strlen(m_szText);
 
          // Remember caret position.
-         short	sCaretPosIn	= m_sCaretPos;
+         short sCaretPosIn   = m_sCaretPos;
 
          // Char to add or 0.
          S32 lNewChar = 0;
@@ -574,14 +574,14 @@ void REdit::Do(      // Returns nothing.
                if (m_sCaretPos > 0)
                {
                   // Remove character at cursor.
-                  memmove(	m_szText + m_sCaretPos - 1,
-                           m_szText + m_sCaretPos,
-                           lStrLen - m_sCaretPos + 1);
+                  memmove(   m_szText + m_sCaretPos - 1,
+                             m_szText + m_sCaretPos,
+                             lStrLen - m_sCaretPos + 1);
 
                   m_sCaretPos--;
 
                   // Need to redraw text.
-                  sRedrawText	= TRUE;
+                  sRedrawText   = TRUE;
                }
                else
                {
@@ -589,7 +589,7 @@ void REdit::Do(      // Returns nothing.
                }
 
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
 
                break;
 
@@ -600,7 +600,7 @@ void REdit::Do(      // Returns nothing.
                   NotifyCall();
 
                   // Absorb key.
-                  pie->sUsed	= TRUE;
+                  pie->sUsed   = TRUE;
                }
                break;
 
@@ -611,10 +611,10 @@ void REdit::Do(      // Returns nothing.
 
             default:
 
-               lNewChar	= pie->lKey;
+               lNewChar   = pie->lKey;
 
                // Absorb key.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
 
                break;
             }
@@ -632,10 +632,10 @@ void REdit::Do(      // Returns nothing.
          case RSP_GK_NUMPAD_8:
          case RSP_GK_NUMPAD_9:
 
-            lNewChar	= '0' + ( (pie->lKey - RSP_GK_NUMPAD_0) >> 8);
+            lNewChar   = '0' + ( (pie->lKey - RSP_GK_NUMPAD_0) >> 8);
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
@@ -643,29 +643,29 @@ void REdit::Do(      // Returns nothing.
          // NOTE:  This is essentially a table so, if it gets too large, let's use a real table
          // instead.  Maybe there should be a function.
          case RSP_GK_NUMPAD_ASTERISK:
-            lNewChar	= '*';
+            lNewChar   = '*';
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
             break;
          case RSP_GK_NUMPAD_PLUS:
-            lNewChar	= '+';
+            lNewChar   = '+';
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
             break;
          case RSP_GK_NUMPAD_MINUS:
-            lNewChar	= '-';
+            lNewChar   = '-';
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
             break;
          case RSP_GK_NUMPAD_DECIMAL:
-            lNewChar	= '.';
+            lNewChar   = '.';
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
             break;
          case RSP_GK_NUMPAD_DIVIDE:
-            lNewChar	= '/';
+            lNewChar   = '/';
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
             break;
 
          // Single line caret movement.
@@ -680,7 +680,7 @@ void REdit::Do(      // Returns nothing.
             }
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
@@ -695,7 +695,7 @@ void REdit::Do(      // Returns nothing.
             }
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
@@ -703,12 +703,12 @@ void REdit::Do(      // Returns nothing.
             if (m_sCaretPos < lStrLen)
             {
                // Remove character at cursor.
-               memmove(	m_szText + m_sCaretPos,
-                        m_szText + m_sCaretPos + 1,
-                        lStrLen - m_sCaretPos);
+               memmove(   m_szText + m_sCaretPos,
+                          m_szText + m_sCaretPos + 1,
+                          lStrLen - m_sCaretPos);
 
                // Need to redraw text.
-               sRedrawText	= TRUE;
+               sRedrawText   = TRUE;
             }
             else
             {
@@ -716,23 +716,23 @@ void REdit::Do(      // Returns nothing.
             }
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
          case RSP_GK_HOME:
-            m_sCaretPos	= 0;
+            m_sCaretPos   = 0;
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
          case RSP_GK_END:
-            m_sCaretPos	= (short)lStrLen;
+            m_sCaretPos   = (short)lStrLen;
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
@@ -745,7 +745,7 @@ void REdit::Do(      // Returns nothing.
             }
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
 
@@ -757,7 +757,7 @@ void REdit::Do(      // Returns nothing.
             }
 
             // Absorb key.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
 
             break;
          }
@@ -770,13 +770,13 @@ void REdit::Do(      // Returns nothing.
                // Add character to string.
                // Move existing characters (perhaps only '\0')
                // out of the way.
-               memmove(	m_szText + m_sCaretPos + 1,
-                        m_szText + m_sCaretPos,
-                        lStrLen - m_sCaretPos + 1);
+               memmove(   m_szText + m_sCaretPos + 1,
+                          m_szText + m_sCaretPos,
+                          lStrLen - m_sCaretPos + 1);
                // Place character and advance caret position.
-               m_szText[m_sCaretPos++]	= (char)lNewChar;
+               m_szText[m_sCaretPos++]   = (char)lNewChar;
                // Need to redraw text.
-               sRedrawText	= TRUE;
+               sRedrawText   = TRUE;
             }
             else
             {
@@ -789,7 +789,7 @@ void REdit::Do(      // Returns nothing.
          {
             // We must make sure the caret is visible.
             Compose();
-            sRedrawItem	= TRUE;
+            sRedrawItem   = TRUE;
          }
       }
 
@@ -800,26 +800,26 @@ void REdit::Do(      // Returns nothing.
          if (lCurTime >= m_lNextCaretUpdate)
          {
             // Set next blink time.
-            m_lNextCaretUpdate	= lCurTime + m_lCaretBlinkRate;
+            m_lNextCaretUpdate   = lCurTime + m_lCaretBlinkRate;
             // If caret is to be shown . . .
             if (m_sCaretState == 1)
             {
                // Set caret state.
-               m_sCaretState	= 0;
+               m_sCaretState   = 0;
             }
             else
             {
                // Set caret state.
-               m_sCaretState	= 1;
+               m_sCaretState   = 1;
             }
 
             // Redraw needed.
-            sRedrawItem	= TRUE;
+            sRedrawItem   = TRUE;
          }
       }
       else
       {
-         m_sCaretState	= 1;
+         m_sCaretState   = 1;
       }
 
       // If we need to redraw the text . . .
@@ -827,7 +827,7 @@ void REdit::Do(      // Returns nothing.
       {
          // Recompose the item.
          Compose();
-         sRedrawItem	= TRUE;
+         sRedrawItem   = TRUE;
       }
 
       // If a redraw is necessary . . .
@@ -858,14 +858,14 @@ void REdit::CursorEvent(   // Returns nothing.
    case RSP_MB0_RELEASED:
    {
       // Set the caret position based on the area clicked.
-      char*		pszText	= m_szText;
-      Point*	ppt		= m_aptTextPos;
-      m_sCaretPos			= m_sFirstVisibleCharIndex;
+      char*      pszText   = m_szText;
+      Point*   ppt      = m_aptTextPos;
+      m_sCaretPos         = m_sFirstVisibleCharIndex;
 
-      short	sCellH		= m_sFontCellHeight;
+      short sCellH      = m_sFontCellHeight;
 
       // Adjust sPosY to bottom of line.
-      short sPosY	= pie->sPosY + sCellH;
+      short sPosY   = pie->sPosY + sCellH;
 
       while (*pszText++ != '\0')
       {
@@ -881,11 +881,11 @@ void REdit::CursorEvent(   // Returns nothing.
       }
 
       // Make sure it gets shown.
-      m_lNextCaretUpdate	= 0L;
-      m_sCaretState			= 0;
+      m_lNextCaretUpdate   = 0L;
+      m_sCaretState         = 0;
 
       // Note that we used it.
-      pie->sUsed	= TRUE;
+      pie->sUsed   = TRUE;
 
       break;
    }
@@ -903,13 +903,13 @@ void REdit::CursorEvent(   // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////
 short REdit::ReadMembers(        // Returns 0 on success.
-   RFile*	pfile,               // File to read from.
+   RFile*   pfile,               // File to read from.
    U32 u32Version)               // File format version to use.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Invoke base class to read base members.
-   sRes	= RTxt::ReadMembers(pfile, u32Version);
+   sRes   = RTxt::ReadMembers(pfile, u32Version);
 
    // If okay so far . . .
    if (sRes == 0)
@@ -922,8 +922,8 @@ short REdit::ReadMembers(        // Returns 0 on success.
       {
       default:
       // Insert additional version numbers here!
-      // case 4:	// Version 4 stuff.
-      // case 3:	// Version 3 stuff.
+      // case 4:   // Version 4 stuff.
+      // case 3:   // Version 3 stuff.
       case 2:     // Version 2 stuff.
 
       case 1:
@@ -943,7 +943,7 @@ short REdit::ReadMembers(        // Returns 0 on success.
          else
          {
             TRACE("ReadMembers(): Error reading REdit members.\n");
-            sRes	= -1;
+            sRes   = -1;
          }
          break;
       }
@@ -959,12 +959,12 @@ short REdit::ReadMembers(        // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////
 short REdit::WriteMembers(       // Returns 0 on success.
-   RFile*	pfile)               // File to write to.
+   RFile*   pfile)               // File to write to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Invoke base class to read base members.
-   sRes	= RTxt::WriteMembers(pfile);
+   sRes   = RTxt::WriteMembers(pfile);
 
    // If okay so far . . .
    if (sRes == 0)
@@ -987,7 +987,7 @@ short REdit::WriteMembers(       // Returns 0 on success.
       else
       {
          TRACE("WriteMembers(): Error writing REdit members.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
@@ -1003,7 +1003,7 @@ void REdit::ClipCaret(void)      // Returns nothing.
    if (m_sCaretPos > lLen)
    {
       // After last char.
-      m_sCaretPos	= (short)lLen;
+      m_sCaretPos   = (short)lLen;
    }
 }
 

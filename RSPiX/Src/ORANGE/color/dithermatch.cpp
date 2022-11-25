@@ -31,7 +31,7 @@
 // a near lossless feedback loop off an edge.
 //==============================================
 // CURRENT STATE: one pass, bidirectional
-//	diffusion, full callback/cancel,
+//   diffusion, full callback/cancel,
 // no no-dither to bkd
 //==============================================
 /*
@@ -44,10 +44,10 @@ COLOR PALETTE INTO THE BMP IF DESIRED!
 */
 
 /* This extension was eeded for analysis:
-					short	lClip = 256,  // JEFF DEBUGGING!
-					short* ppsSaveErrorR = NULL,  // JEFF DEBUGGING!
-					short* ppsSaveErrorG = NULL,  // JEFF DEBUGGING!
-					short* ppsSaveErrorB = NULL  // JEFF DEBUGGING!
+               short   lClip = 256,  // JEFF DEBUGGING!
+               short* ppsSaveErrorR = NULL,  // JEFF DEBUGGING!
+               short* ppsSaveErrorG = NULL,  // JEFF DEBUGGING!
+               short* ppsSaveErrorB = NULL  // JEFF DEBUGGING!
 */
 
 
@@ -62,14 +62,14 @@ COLOR PALETTE INTO THE BMP IF DESIRED!
 // Returns 0 for SUCCESS, -1 for ERROR, 1 for user cancel
 //==============================================
 //
-short	rspDither(
+short   rspDither(
    RImage* pimSrc,               // MUST BE 24-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc,
    // User interaction
    PDitherCallBack func,
@@ -146,7 +146,7 @@ short	rspDither(
    short *psErrorB = (short*)calloc(sizeof(short), 2 * (sW + 2));
    short *psCurrentErrorB = psErrorB + 1; // allow clipping
    short *psNextErrorB = psCurrentErrorB + sW + 2; // allow clipping
-   short	*psSwap;
+   short   *psSwap;
 
    // Used with the look ahead pixel!
    short sNextErrorR = 0, sNextErrorG = 0, sNextErrorB = 0;
@@ -329,14 +329,14 @@ short	rspDither(
 // Does NOT dither at all!
 //==============================================
 //
-short	rspSimpleMap(
+short   rspSimpleMap(
    RImage* pimSrc,               // MUST BE 24-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc,
    // User interaction
    PDitherCallBack func,
@@ -441,7 +441,7 @@ short	rspSimpleMap(
 // Returns 0 for SUCCESS, -1 for ERROR, 1 for user cancel
 //==============================================
 //
-short	rspDither(
+short   rspDither(
    S32 lBackR,                // Don't dither to this color!
    S32 lBackG,
    S32 lBackB,
@@ -450,9 +450,9 @@ short	rspDither(
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc,
    // User interaction
    PDitherCallBack func,
@@ -528,7 +528,7 @@ short	rspDither(
    short *psErrorB = (short*)calloc(sizeof(short), 2 * (sW + 2));
    short *psCurrentErrorB = psErrorB + 1; // allow clipping
    short *psNextErrorB = psCurrentErrorB + sW + 2; // allow clipping
-   short	*psSwap;
+   short   *psSwap;
 
    // Used with the look ahead pixel!
    short sNextErrorR = 0, sNextErrorG = 0, sNextErrorB = 0;
@@ -740,16 +740,16 @@ short	rspDither(
 // Returns 0 for SUCCESS, -1 for ERROR, 1 for user cancel
 //==============================================
 //
-short	rspDither(
+short   rspDither(
    UCHAR ucForeAlpha,                  // lower limit for foreground
    UCHAR ucBack,                 // index to make BKGD
    RImage* pimSrc,               // MUST BE 32-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc,
    // User interaction
    PDitherCallBack func,
@@ -826,7 +826,7 @@ short	rspDither(
    short *psErrorB = (short*)calloc(sizeof(short), 2 * (sW + 2));
    short *psCurrentErrorB = psErrorB + 1; // allow clipping
    short *psNextErrorB = psCurrentErrorB + sW + 2; // allow clipping
-   short	*psSwap;
+   short   *psSwap;
 
    // Used with the look ahead pixel!
    short sNextErrorR = 0, sNextErrorG = 0, sNextErrorB = 0;
@@ -842,7 +842,7 @@ short	rspDither(
          short sTotErrorR, sTotErrorG, sTotErrorB;
 
          // This is the desired target color
-         UCHAR	ucAlpha = S32(pSrc[3]);
+         UCHAR ucAlpha = S32(pSrc[3]);
          S32 lRed = S32(pSrc[2] + sNextErrorR + psCurrentErrorR[sErrPos]);
          S32 lGreen = S32(pSrc[1] + sNextErrorG + psCurrentErrorG[sErrPos]);
          S32 lBlue = S32(pSrc[0] + sNextErrorB + psCurrentErrorB[sErrPos]);
@@ -1021,16 +1021,16 @@ short	rspDither(
 // treatment will occur.
 //==============================================
 //
-short	rspSimpleMap(
-   UCHAR	ucForeAlpha,               // alpha threshhold
+short   rspSimpleMap(
+   UCHAR ucForeAlpha,                 // alpha threshhold
    UCHAR ucBack,                    // map background to this index
    RImage* pimSrc,               // MUST BE 32-bit!
    RImage* pimDst,               // MUST be 8-bit
    short sStartMap,              // palette index
    short sNumMap,                // # of colors
-   UCHAR*	pRed,                // Palette to match to
-   UCHAR*	pGreen,
-   UCHAR*	pBlue,
+   UCHAR*   pRed,                // Palette to match to
+   UCHAR*   pGreen,
+   UCHAR*   pBlue,
    S32 lInc,
    // User interaction
    PDitherCallBack func,
@@ -1096,7 +1096,7 @@ short	rspSimpleMap(
       for (i = 0; i < pimSrc->m_sWidth; i++, pSrc += lSrcXP, pDst++)
       {
          // This is the desired target color
-         UCHAR	ucAlpha = pSrc[3];
+         UCHAR ucAlpha = pSrc[3];
          S32 lRed = S32(pSrc[2]);
          S32 lGreen = S32(pSrc[1]);
          S32 lBlue = S32(pSrc[0]);

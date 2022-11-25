@@ -22,7 +22,7 @@
 // together (also known as collision detection).
 //
 // History:
-//		02/18/97 MJR	Started.
+//      02/18/97 MJR   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef TRIGGER_REGIONS_H

@@ -19,160 +19,160 @@
 // Project: Postal
 //
 // This module implements the CRocket weapon class which is an unguided
-//	rocket missile.
+//   rocket missile.
 //
 //
 // History:
-//		01/17/97 BRH	Started this weapon object.
+//      01/17/97 BRH   Started this weapon object.
 //
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
 //
-//		02/06/97 BRH	Moved Explosion position down some.
+//      02/06/97 BRH   Moved Explosion position down some.
 //
-//		02/11/97 BRH	Changed the rocket to use the game res manager rather
-//							than loading its assets from a file directly.
+//      02/11/97 BRH   Changed the rocket to use the game res manager rather
+//                     than loading its assets from a file directly.
 //
-//		02/16/97 BRH	Rocket now sends a message to the CDude when it hits him.
+//      02/16/97 BRH   Rocket now sends a message to the CDude when it hits him.
 //
-//		02/18/97	JMI	Now uses typeExplosion instead of msg_Explosion.
+//      02/18/97   JMI   Now uses typeExplosion instead of msg_Explosion.
 //
-//		02/19/97 BRH	Added ProcessMessage routine to look for ObjectDelete
-//							messages.
+//      02/19/97 BRH   Added ProcessMessage routine to look for ObjectDelete
+//                     messages.
 //
-//		02/23/97 BRH	Set the transform for the rocket so it faces the right
-//							direction.  Also changed the coordinate system to x,-z
+//      02/23/97 BRH   Set the transform for the rocket so it faces the right
+//                     direction.  Also changed the coordinate system to x,-z
 //
-//		02/23/97 BRH	Added Preload() function to cache resources for this
-//							object before play begins.
+//      02/23/97 BRH   Added Preload() function to cache resources for this
+//                     object before play begins.
 //
-//		02/23/97 BRH	Added State_Hide so that the rocket can be created but
-//							is not shown.
+//      02/23/97 BRH   Added State_Hide so that the rocket can be created but
+//                     is not shown.
 //
-//		02/24/97	JMI	No S32er sets the m_type member of the m_sprite b/c it
-//							is set by m_sprite's constructor.
+//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//                     is set by m_sprite's constructor.
 //
-//		03/03/97 BRH	Derived this from the CWeapon base class
+//      03/03/97 BRH   Derived this from the CWeapon base class
 //
-//		03/06/97	JMI	Upgraded to current rspMod360 usage.
+//      03/06/97   JMI   Upgraded to current rspMod360 usage.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/19/97 BRH	Changed the ProcessMessages function to return void so
-//							it matches the new virtual function in the CWeapon
-//							base class.
+//      03/19/97 BRH   Changed the ProcessMessages function to return void so
+//                     it matches the new virtual function in the CWeapon
+//                     base class.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps.
 //
-//		04/15/97 BRH	Added CSmash::Item to the collision items so that rockets
-//							can blow up barrels and other items.
+//      04/15/97 BRH   Added CSmash::Item to the collision items so that rockets
+//                     can blow up barrels and other items.
 //
-//		04/15/97 BRH	Took out old State_Find code that was used to seek the
-//							CDude.  The rocket is now aimed by the shooter and
-//							this old code was using the CDude list which will soon
-//							be changed and since it is no S32er needed, it was
-//							best to take it out.
+//      04/15/97 BRH   Took out old State_Find code that was used to seek the
+//                     CDude.  The rocket is now aimed by the shooter and
+//                     this old code was using the CDude list which will soon
+//                     be changed and since it is no S32er needed, it was
+//                     best to take it out.
 //
-//		04/23/97	JMI	Now collides with Characters, Miscs, and Barrels.
-//							Also, sets its m_smash's bits to Projectile instead of
-//							Character.
-//							Also, changed layer priority to simply use Z position.
+//      04/23/97   JMI   Now collides with Characters, Miscs, and Barrels.
+//                     Also, sets its m_smash's bits to Projectile instead of
+//                     Character.
+//                     Also, changed layer priority to simply use Z position.
 //
-//		04/24/97	JMI	Now when it hits something, it does not update its
-//							position (i.e., it keeps its old valid position).
+//      04/24/97   JMI   Now when it hits something, it does not update its
+//                     position (i.e., it keeps its old valid position).
 //
-//		04/24/97 BRH	Added puffs of smoke in addition to the explosion.
+//      04/24/97 BRH   Added puffs of smoke in addition to the explosion.
 //
-//		04/29/97 BRH	Added an off screen distance at which the rocket will self
-//							destruct.
+//      04/29/97 BRH   Added an off screen distance at which the rocket will self
+//                     destruct.
 //
-//		05/26/97 BRH	Changed the check for wall collisions to ignore the
-//							NOT_WALKABLE attribute which caused it to blow up in
-//							the wrong places.  Now only the height is checked.
+//      05/26/97 BRH   Changed the check for wall collisions to ignore the
+//                     NOT_WALKABLE attribute which caused it to blow up in
+//                     the wrong places.  Now only the height is checked.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/10/97 BRH	Increased the rocket arming time from 200ms to 500ms to
-//							avoid killing yourself when you are moving & shooting.
+//      06/10/97 BRH   Increased the rocket arming time from 200ms to 500ms to
+//                     avoid killing yourself when you are moving & shooting.
 //
-//		06/11/97 BRH	Passes shooter ID to the explosion that is created.
+//      06/11/97 BRH   Passes shooter ID to the explosion that is created.
 //
-//		06/12/97 BRH	Added shooter ID to the call to Setup for the explosion.
+//      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97 BRH	Added use of base class 2D shadow on the ground, but loaded
-//							a smaller shadow resource.
+//      06/25/97 BRH   Added use of base class 2D shadow on the ground, but loaded
+//                     a smaller shadow resource.
 //
-//		06/30/97 BRH	Added cache samples to the Preload function.
+//      06/30/97 BRH   Added cache samples to the Preload function.
 //
-//		06/30/97	JMI	Now uses CRealm's new GetRealmWidth() and *Height()
-//							for dimensions of realm's X/Z plane.
+//      06/30/97   JMI   Now uses CRealm's new GetRealmWidth() and *Height()
+//                     for dimensions of realm's X/Z plane.
 //
-//		06/30/97	JMI	Now uses IsPathClear() to determine if the path to the new
-//							position is clear.
+//      06/30/97   JMI   Now uses IsPathClear() to determine if the path to the new
+//                     position is clear.
 //
-//		07/01/97 BRH	Added smoke trails.
+//      07/01/97 BRH   Added smoke trails.
 //
-//		07/01/97	JMI	In Update(), when the weapon explodes, it didn't set dNewX
-//							and dNewZ but still created smoke at this unitialized
-//							position.  Fixed.
+//      07/01/97   JMI   In Update(), when the weapon explodes, it didn't set dNewX
+//                     and dNewZ but still created smoke at this unitialized
+//                     position.  Fixed.
 //
-//		07/07/97	JMI	In ProcessMessages(), it was deleting this.  Then, once
-//							ProcessMessages() returned to Update(), it would check
-//							m_eState to see if it had been deleted and then return.
-//							The problem is that once deleted you cannot access m_eState.
-//							Changed it so ProcessMessages() does not delete this but
-//							merely sets the state to delete so that Update() can do it.
+//      07/07/97   JMI   In ProcessMessages(), it was deleting this.  Then, once
+//                     ProcessMessages() returned to Update(), it would check
+//                     m_eState to see if it had been deleted and then return.
+//                     The problem is that once deleted you cannot access m_eState.
+//                     Changed it so ProcessMessages() does not delete this but
+//                     merely sets the state to delete so that Update() can do it.
 //
-//		07/08/97 BRH	Adjusted the position of the smoke, and cut down the trail
-//							length.
+//      07/08/97 BRH   Adjusted the position of the smoke, and cut down the trail
+//                     length.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/16/97 BRH	Retuned, or untuned the hotspot for the smoke trails.
-//							Now that the hotspot for the smoke is correct, the
-//							smoke does not need to be adjusted here.
+//      07/16/97 BRH   Retuned, or untuned the hotspot for the smoke trails.
+//                     Now that the hotspot for the smoke is correct, the
+//                     smoke does not need to be adjusted here.
 //
-//		07/18/97	JMI	Added m_siThrust to track our thrust play instance so we
-//							can loop it and then terminate the looping when we explode.
-//							The sound tapers way too much to be loopable now.
-//							Hopefully, we can get a better one.
+//      07/18/97   JMI   Added m_siThrust to track our thrust play instance so we
+//                     can loop it and then terminate the looping when we explode.
+//                     The sound tapers way too much to be loopable now.
+//                     Hopefully, we can get a better one.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		08/08/97 BRH	Changed the arming so that the missle won't arm until
-//							it stops colliding with the shooter's smash.  Also, added
-//							a special case so that missiles shot by Sentry guns won't
-//							blow up other Sentry guns.
+//      08/08/97 BRH   Changed the arming so that the missle won't arm until
+//                     it stops colliding with the shooter's smash.  Also, added
+//                     a special case so that missiles shot by Sentry guns won't
+//                     blow up other Sentry guns.
 //
-//		08/12/97 BRH	Changed collision bits to exclude any object that is
-//							ducking (which should only be the main dude when he
-//							is ducking down).
+//      08/12/97 BRH   Changed collision bits to exclude any object that is
+//                     ducking (which should only be the main dude when he
+//                     is ducking down).
 //
-//		08/15/97 BRH	Made the smash radius larger.
+//      08/15/97 BRH   Made the smash radius larger.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
-//		08/24/97 BRH	Now when the rocket goes into the expoode state, it sets
-//							its position back to the previous position so that the
-//							explosion won't always be created behind the thing it hit
-//							and alwyas blow it forward which looked kind of weird.
+//      08/24/97 BRH   Now when the rocket goes into the expoode state, it sets
+//                     its position back to the previous position so that the
+//                     explosion won't always be created behind the thing it hit
+//                     and alwyas blow it forward which looked kind of weird.
 //
-//		08/26/97 BRH	Fixed bug with brackets where rocket always went back to
-//							its previous position when fired by a sentry gun.
+//      08/26/97 BRH   Fixed bug with brackets where rocket always went back to
+//                     its previous position when fired by a sentry gun.
 //
-//		08/27/97	JMI	No S32er sets the smash radius to m_sCurRadius during
-//							Render().
+//      08/27/97   JMI   No S32er sets the smash radius to m_sCurRadius during
+//                     Render().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define ROCKET_CPP
@@ -191,7 +191,7 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SMALL_SHADOW_FILE	"smallshadow.img"
+#define SMALL_SHADOW_FILE   "smallshadow.img"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -361,12 +361,12 @@ void CRocket::Update(void)
             &m_siThrust,                           // Out: Handle for adjusting sound volume
             NULL,                                  // Out: Sample duration in ms, if not NULL.
             2841,                                  // In:  Where to loop back to in milliseconds.
-                                                   //	-1 indicates no looping (unless m_sLoop is
+                                                   //   -1 indicates no looping (unless m_sLoop is
                                                    // explicitly set).
             3090,                                  // In:  Where to loop back from in milliseconds.
                                                    // In:  If less than 1, the end + lLoopEndTime is used.
             false);                                // In:  Call ReleaseAndPurge rather than Release after playing
-// Old Call:	PlaySample(g_smidRocketFire);
+// Old Call:   PlaySample(g_smidRocketFire);
          m_lTimer = lThisTime + ms_lArmingTime;
          m_eState = State_Chase;
          break;
@@ -598,7 +598,7 @@ void CRocket::Update(void)
                g_smidRocketExplode,                   // In:  Identifier of sample you want played.
                SampleMaster::Destruction,             // In:  Sound Volume Category for user adjustment
                DistanceToVolume(m_dX, m_dY, m_dZ, ExplosionSndHalfLife) );    // In:  Initial Sound Volume (0 - 255)
-// Old call:	PlaySample(g_smidRocketExplode);
+// Old call:   PlaySample(g_smidRocketExplode);
          }
 
          short a;
@@ -618,10 +618,10 @@ void CRocket::Update(void)
       }
 
       // Update sphere.
-      m_smash.m_sphere.sphere.X			= m_dX;
-      m_smash.m_sphere.sphere.Y			= m_dY;
-      m_smash.m_sphere.sphere.Z			= m_dZ;
-      m_smash.m_sphere.sphere.lRadius	= 2 * m_sprite.m_sRadius;
+      m_smash.m_sphere.sphere.X         = m_dX;
+      m_smash.m_sphere.sphere.Y         = m_dY;
+      m_smash.m_sphere.sphere.Z         = m_dZ;
+      m_smash.m_sphere.sphere.lRadius   = 2 * m_sprite.m_sRadius;
 
       // Update the smash.
       m_pRealm->m_smashatorium.Update(&m_smash);
@@ -651,7 +651,7 @@ void CRocket::Render(void)
    m_trans.Ry(rspMod360(m_dRot));
 
    // Eventually this should be channel driven also
-//	m_sprite.m_sRadius = m_sCurRadius;
+//   m_sprite.m_sRadius = m_sCurRadius;
 
    if (m_eState == State_Hide)
       m_sprite.m_sInFlags = CSprite::InHidden;
@@ -670,7 +670,7 @@ void CRocket::Render(void)
       // Layer should be based on info we get from the attribute map
       m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
 
-      m_sprite.m_ptrans		= &m_trans;
+      m_sprite.m_ptrans      = &m_trans;
 
       // Update sprite in scene
       m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -766,8 +766,8 @@ short CRocket::FreeResources(void)                 // Returns 0 if successfull, 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Preload - basically trick the resource manager into caching resources
-//				 for this object so there won't be a delay the first time it is
-//				 created.
+//             for this object so there won't be a delay the first time it is
+//             created.
 ////////////////////////////////////////////////////////////////////////////////
 
 short CRocket::Preload(

@@ -18,164 +18,164 @@
 // Score.cpp
 // Project: Postal
 //
-//	Description:
-//		This module will be used to collect and display the scoring for the
-//		game.  Characters that die will call a function to register the kill
-//		giving their ID and the ID of the character that killed them.  Play
-//		will call a function to update the display for the score and depending
-//		on the mode of scoring, this module will draw the score into the given
-//		image.  The first scoring mode will be for multiplayer where all 8
-//		players will have the number of kills displayed with their names.
-//		Single player score may show something like Number of victims and
-//		number of enemies.  A timed challenge level may show the kills and the
-//		time remaining.
+//   Description:
+//      This module will be used to collect and display the scoring for the
+//      game.  Characters that die will call a function to register the kill
+//      giving their ID and the ID of the character that killed them.  Play
+//      will call a function to update the display for the score and depending
+//      on the mode of scoring, this module will draw the score into the given
+//      image.  The first scoring mode will be for multiplayer where all 8
+//      players will have the number of kills displayed with their names.
+//      Single player score may show something like Number of victims and
+//      number of enemies.  A timed challenge level may show the kills and the
+//      time remaining.
 //
 // History:
 //
-//		06/11/97 BRH	Started this module for scoring of different types.
+//      06/11/97 BRH   Started this module for scoring of different types.
 //
-//		06/12/97 BRH	Added Scoring display for multiplayer and moved the
-//							single player score from Realm to the same display
-//							function here in score.
+//      06/12/97 BRH   Added Scoring display for multiplayer and moved the
+//                     single player score from Realm to the same display
+//                     function here in score.
 //
-//		06/13/97 BRH	Fixed the formatting for multiplayer mode.
+//      06/13/97 BRH   Fixed the formatting for multiplayer mode.
 //
-//		06/15/97 BRH	Took out temporary code that forced it into multiplayer
-//							display for testing.  Put back the normal code to
-//							work for either single or multiplayer mode.
+//      06/15/97 BRH   Took out temporary code that forced it into multiplayer
+//                     display for testing.  Put back the normal code to
+//                     work for either single or multiplayer mode.
 //
-//		06/16/97 BRH	Added a reset function to reset the scores and
-//							display time.
+//      06/16/97 BRH   Added a reset function to reset the scores and
+//                     display time.
 //
-//		06/17/97 BRH	Fixed the display area for the score.
+//      06/17/97 BRH   Fixed the display area for the score.
 //
-//		06/26/97 BRH	Changed the score so that the population number goes
-//							down when someone is killed.
+//      06/26/97 BRH   Changed the score so that the population number goes
+//                     down when someone is killed.
 //
-//		06/29/97 BRH	Separated the score and status lines so that the mission
-//							goal can be displayed for a short period of time while
-//							the score displays constantly.
+//      06/29/97 BRH   Separated the score and status lines so that the mission
+//                     goal can be displayed for a short period of time while
+//                     the score displays constantly.
 //
-//		07/04/97 BRH	Added scoring displays for some of the other types
-//							of games, timed, goal, capture the flag, etc.
+//      07/04/97 BRH   Added scoring displays for some of the other types
+//                     of games, timed, goal, capture the flag, etc.
 //
-//		07/06/97 BRH	Added scoring displays and staus lines for the challenge
-//							levels.
+//      07/06/97 BRH   Added scoring displays and staus lines for the challenge
+//                     levels.
 //
-//		07/07/97	JMI	Now ScoreUpdateDisplay() returns true if it drew into
-//							the passed in buffer and false otherwise.
+//      07/07/97   JMI   Now ScoreUpdateDisplay() returns true if it drew into
+//                     the passed in buffer and false otherwise.
 //
-//		07/08/97 BRH	Changed the check for scoring mode from the scoreboard
-//							to the realm's enumerated type.
+//      07/08/97 BRH   Changed the check for scoring mode from the scoreboard
+//                     to the realm's enumerated type.
 //
-//		07/14/97 BRH	Fixed clock format to use %2.2d to correctly display
-//							2 digits for seconds.
+//      07/14/97 BRH   Fixed clock format to use %2.2d to correctly display
+//                     2 digits for seconds.
 //
-//		07/22/97 BRH	Added ScoreDisplayHighScores function which is called
-//							from Play.cpp after the goal level has been met.  This
-//							will check the player's score against the top 5 stored
-//							scores for the level and if they place, it will allow
-//							them to enter their name.  The initial version of this
-//							will just skip the dialog for now, but will soon
-//							do a switch statement for each scoring mode.
+//      07/22/97 BRH   Added ScoreDisplayHighScores function which is called
+//                     from Play.cpp after the goal level has been met.  This
+//                     will check the player's score against the top 5 stored
+//                     scores for the level and if they place, it will allow
+//                     them to enter their name.  The initial version of this
+//                     will just skip the dialog for now, but will soon
+//                     do a switch statement for each scoring mode.
 //
-//		07/26/97 BRH	Added loading and saving of high scores in a prefs type
-//							file.  Now the only thing that needs to be changed is
-//							to use the function that returns the realm name or
-//							descriptive string which will be used as the section
-//							name to find the scores particular to this realm.
+//      07/26/97 BRH   Added loading and saving of high scores in a prefs type
+//                     file.  Now the only thing that needs to be changed is
+//                     to use the function that returns the realm name or
+//                     descriptive string which will be used as the section
+//                     name to find the scores particular to this realm.
 //
-//		07/27/97 BRH	Made use of the new realm variable m_lScoreIntialTime
-//							to calculate the elapsed time for two of the scoring
-//							modes.
+//      07/27/97 BRH   Made use of the new realm variable m_lScoreIntialTime
+//                     to calculate the elapsed time for two of the scoring
+//                     modes.
 //
-//		07/30/97 BRH	Used the realm's string to identify the current realm
-//							being played so that the high scores for this realm
-//							can be loaded and saved.
+//      07/30/97 BRH   Used the realm's string to identify the current realm
+//                     being played so that the high scores for this realm
+//                     can be loaded and saved.
 //
-//		08/10/97	JRD	Modified ScoreUpdateDisplay to accept a hood pointer so
-//							it could create a graphical back drop.
+//      08/10/97   JRD   Modified ScoreUpdateDisplay to accept a hood pointer so
+//                     it could create a graphical back drop.
 //
-//		09/10/97	JRD	Added color matching and shadow drop to the upper score bar.
+//      09/10/97   JRD   Added color matching and shadow drop to the upper score bar.
 //
-//		08/14/97 BRH	Changed location of gui for high scores, moved from
-//							/game/ to /shell directory so that the textures used
-//							for it could be shared easier with the other shell gui's
+//      08/14/97 BRH   Changed location of gui for high scores, moved from
+//                     /game/ to /shell directory so that the textures used
+//                     for it could be shared easier with the other shell gui's
 //
-//		08/17/97 MJR	Now uses g_resmgrShell to load gui's.  Also now frees
-//							the resources (ooooohhh Bill!)
+//      08/17/97 MJR   Now uses g_resmgrShell to load gui's.  Also now frees
+//                     the resources (ooooohhh Bill!)
 //
-//		08/19/97 BRH	Fixed the problem with checkpoint scoring, probably
-//							some typo that Mike put in by accident.
+//      08/19/97 BRH   Fixed the problem with checkpoint scoring, probably
+//                     some typo that Mike put in by accident.
 //
-//		08/19/97	JMI	There was a missing '}' ala Mike via Bill.
+//      08/19/97   JMI   There was a missing '}' ala Mike via Bill.
 //
-//		08/20/97 BRH	No thanks to Mike or Jon, I had to fix the multiplayer
-//							score displays so that new time information would
-//							fit on a third line.
+//      08/20/97 BRH   No thanks to Mike or Jon, I had to fix the multiplayer
+//                     score displays so that new time information would
+//                     fit on a third line.
 //
-//		08/25/97	JMI	Moved gsStatus* to toolbar.h.
+//      08/25/97   JMI   Moved gsStatus* to toolbar.h.
 //
-//		08/28/97	JMI	Added GetRes/ReleaseRes callbacks to dialogs, PalTrans,
-//							Postal Font, and sound to name edit field.
+//      08/28/97   JMI   Added GetRes/ReleaseRes callbacks to dialogs, PalTrans,
+//                     Postal Font, and sound to name edit field.
 //
-//		08/29/97 BRH	Changed challenge modes to use Population numbers
-//							rather than just hostile numbers so that the victims
-//							count also.
+//      08/29/97 BRH   Changed challenge modes to use Population numbers
+//                     rather than just hostile numbers so that the victims
+//                     count also.
 //
-//		08/29/97	JMI	Now ScoreDisplayHighScores() quits immediately for
-//							scoring modes that don't track high scores (currently,
-//							only standard).
+//      08/29/97   JMI   Now ScoreDisplayHighScores() quits immediately for
+//                     scoring modes that don't track high scores (currently,
+//                     only standard).
 //
-//		08/30/97	JMI	Now uses population deaths instead of hostile deaths
-//							for timed challenge scoring.
-//							Also, sets the palette every time the dialog is shown.
+//      08/30/97   JMI   Now uses population deaths instead of hostile deaths
+//                     for timed challenge scoring.
+//                     Also, sets the palette every time the dialog is shown.
 //
-//		09/01/97	JMI	Now your high score is entered in the high score dialog
-//							itself.  Also, now uses a listbox for high scores so
-//							that we could edit merely one high score item and fill
-//							the listbox with instances of that same item.
+//      09/01/97   JMI   Now your high score is entered in the high score dialog
+//                     itself.  Also, now uses a listbox for high scores so
+//                     that we could edit merely one high score item and fill
+//                     the listbox with instances of that same item.
 //
-//		09/01/97	JMI	Now displays new highscore in different color.
+//      09/01/97   JMI   Now displays new highscore in different color.
 //
-//		09/02/97	JMI	Now ScoreDisplayHighScores() makes sure you're not playing
-//							a demo before displaying the highscores.
+//      09/02/97   JMI   Now ScoreDisplayHighScores() makes sure you're not playing
+//                     a demo before displaying the highscores.
 //
-//		09/02/97	JMI	Now has separate cases for determing scoring for every
-//							mode in ScoreDisplayHighScores().
+//      09/02/97   JMI   Now has separate cases for determing scoring for every
+//                     mode in ScoreDisplayHighScores().
 //
-//		09/04/97 BRH	Fixed font size for the MPFrag scoring mode.
+//      09/04/97 BRH   Fixed font size for the MPFrag scoring mode.
 //
-//		09/07/97	JMI	Added ability to display high scores for multiplayer.
-//							Also, added optional high score display timeout.
+//      09/07/97   JMI   Added ability to display high scores for multiplayer.
+//                     Also, added optional high score display timeout.
 //
-//		09/07/97 BRH	Fixed problem with S32 multi player names wrapping
-//							to the next line.
+//      09/07/97 BRH   Fixed problem with S32 multi player names wrapping
+//                     to the next line.
 //
-//		09/07/97	JMI	Now colors this player's score in MP mode.  Also, dialog
-//							is much smaller so name length is restricted more.  But
-//							does allow up to 16 scores now.
+//      09/07/97   JMI   Now colors this player's score in MP mode.  Also, dialog
+//                     is much smaller so name length is restricted more.  But
+//                     does allow up to 16 scores now.
 //
-//		09/08/97 BRH	Fixed Goal and TimedGoal to display the Remaining: as
-//							the number remaining in the goal, not the number of
-//							people remaining in the realm.
+//      09/08/97 BRH   Fixed Goal and TimedGoal to display the Remaining: as
+//                     the number remaining in the goal, not the number of
+//                     people remaining in the realm.
 //
-//		09/08/97 BRH	Adjusted the posiiton of the MP mission goals since
-//							the font size is smaller, they weren't centered properly.
+//      09/08/97 BRH   Adjusted the posiiton of the MP mission goals since
+//                     the font size is smaller, they weren't centered properly.
 //
-//		09/08/97	JMI	Changed "Congratulations! Please enter your name for your
-//							score." to "Please enter your name, Asshole." but the end
-//							clips off (just kidding).
+//      09/08/97   JMI   Changed "Congratulations! Please enter your name for your
+//                     score." to "Please enter your name, Asshole." but the end
+//                     clips off (just kidding).
 //
-//		09/08/97	JMI	Now sorts multiplayer names by score.
+//      09/08/97   JMI   Now sorts multiplayer names by score.
 //
-//		06/04/98	JMI	Strings used for storage and sorting of multiplayer names
-//							were sized at MAX_PLAYER_NAME_LEN (to fit the high score
-//							GUI without overlapping the score) but Postal's net
-//							client (from which the names are querried) allows S32er
-//							names (specifically Net::MaxPlayerNameSize).  Now only
-//							copies first MAX_PLAYER_NAME_LEN chars from the player's
-//							name.
+//      06/04/98   JMI   Strings used for storage and sorting of multiplayer names
+//                     were sized at MAX_PLAYER_NAME_LEN (to fit the high score
+//                     GUI without overlapping the score) but Postal's net
+//                     client (from which the names are querried) allows S32er
+//                     names (specifically Net::MaxPlayerNameSize).  Now only
+//                     copies first MAX_PLAYER_NAME_LEN chars from the player's
+//                     name.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -196,47 +196,47 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Time, in ms, between status updates.
-#define SCORE_UPDATE_INTERVAL			1000
-#define STATUS_DISPLAY_TIMEOUT		8000
+#define SCORE_UPDATE_INTERVAL         1000
+#define STATUS_DISPLAY_TIMEOUT      8000
 
-#define STATUS_PRINT_X					2
-#define STATUS_PRINT_Y					0
-#define STATUS_PRINT_Y2					14
-#define STATUS_PRINT_Y3					28
+#define STATUS_PRINT_X               2
+#define STATUS_PRINT_Y               0
+#define STATUS_PRINT_Y2               14
+#define STATUS_PRINT_Y3               28
 
-#define STATUS_FONT_SIZE				19
-#define STATUS_DISPLAY_HEIGHT			40
+#define STATUS_FONT_SIZE            19
+#define STATUS_DISPLAY_HEIGHT         40
 
-#define MP_FONT_SIZE						11 //15
-#define MP_PRINT_X						2
-#define MP_PRINT_Y1						0
-#define MP_PRINT_Y2						11
-#define MP_PRINT_Y3						22
+#define MP_FONT_SIZE                  11 //15
+#define MP_PRINT_X                  2
+#define MP_PRINT_Y1                  0
+#define MP_PRINT_Y2                  11
+#define MP_PRINT_Y3                  22
 
 //------------------------ These are color matched in the toolbar module
 
-#define HIGHSCORE_NAMEDIALOG_FILE	"menu/addname.gui"
-#define HIGHSCORE_DIALOG_FILE			"menu/hiscore.gui"
-#define HIGHSCORE_ITEM_FILE			"menu/HiScoreItem.gui"
+#define HIGHSCORE_NAMEDIALOG_FILE   "menu/addname.gui"
+#define HIGHSCORE_DIALOG_FILE         "menu/hiscore.gui"
+#define HIGHSCORE_ITEM_FILE         "menu/HiScoreItem.gui"
 
-#define HIGHSCORE_SCORES_FILE			"res/savegame/high.ini"
+#define HIGHSCORE_SCORES_FILE         "res/savegame/high.ini"
 
-#define TEXT_SHADOW_COLOR				220
+#define TEXT_SHADOW_COLOR            220
 
-#define TEXT_HIGHLIGHT_COLOR			9
+#define TEXT_HIGHLIGHT_COLOR         9
 
 // This path gets prepended to the resource path before passing the
 // GUI res request to the resource manager.  This makes it easy to
 // keep the path for the file simple while in the GUI Editor so the default
 // handling can take care of it there.  The GUI Editor does not use the resmgr,
 // it simply loads it blindly with no regard to its current directory.
-#define GUI_RES_DIR						"menu/"
+#define GUI_RES_DIR                  "menu/"
 
 // Maximum name length.
-#define MAX_PLAYER_NAME_LEN			17
+#define MAX_PLAYER_NAME_LEN         17
 
 
-#define MAX_HIGH_SCORES					16
+#define MAX_HIGH_SCORES               16
 
 //////////////////////////////////////////////////////////////////////////////
 // Variables
@@ -258,10 +258,10 @@ static S32 ms_lScoreMaxTimeOut;     // Optional score timeout (max time spent
 inline char* CreateTimeString(   // Returns time string.  No failures.
    S32 lTimeVal)                 // In:  Time value in milliseconds.
 {
-   static char	szTime[100];
+   static char szTime[100];
 
    short sMinutes = lTimeVal / 60000;
-   short	sSeconds = (lTimeVal / 1000) % 60;
+   short sSeconds = (lTimeVal / 1000) % 60;
    sprintf(szTime, "%2.2d:%2.2d", sMinutes, sSeconds);
 
    return szTime;
@@ -331,7 +331,7 @@ static short GuiGetRes(    // Returns 0 on success; non-zero on failure.
 
 static void EditInputUserFeedback(  // Called when a user input notification
                                     // should occur.
-   REdit*	pedit)                  // In:  Edit field.
+   REdit*   pedit)                  // In:  Edit field.
 {
    PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
 }
@@ -343,7 +343,7 @@ static void EditInputUserFeedback(  // Called when a user input notification
 ////////////////////////////////////////////////////////////////////////////////
 static S32 SysUpdate(         // Returns a non-zero ID to abort or zero
                               // to continue.
-   RInputEvent*	pie)        // Out: Next input event to process.
+   RInputEvent*   pie)        // Out: Next input event to process.
 {
    S32 lIdRes   = 0;    // Assume no GUI ID pressed (i.e., continue).
 
@@ -354,7 +354,7 @@ static S32 SysUpdate(         // Returns a non-zero ID to abort or zero
    if (rspGetMilliseconds() > ms_lScoreMaxTimeOut)
    {
       // Auto push OK.
-      lIdRes	= 1;
+      lIdRes   = 1;
    }
 
    return lIdRes;
@@ -393,7 +393,7 @@ void ScoreReset(void)
 
 //////////////////////////////////////////////////////////////////////////////
 // ScoreResetDisplay - Reset the timer for the display before the start
-//							  of each realm
+//                       of each realm
 //////////////////////////////////////////////////////////////////////////////
 
 void ScoreResetDisplay(void)
@@ -428,11 +428,11 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
                         short sDstX, short sDstY, CHood* pHood)
 {
    RRect rcBox;
-   RRect	rcDst;
-   rcDst.sX	= prc->sX + STATUS_PRINT_X;
+   RRect rcDst;
+   rcDst.sX   = prc->sX + STATUS_PRINT_X;
    rcDst.sY = prc->sY + STATUS_PRINT_Y;
    rcDst.sW = prc->sW - 2 * STATUS_PRINT_X;
-   rcDst.sH	= prc->sH - STATUS_PRINT_Y;
+   rcDst.sH   = prc->sH - STATUS_PRINT_Y;
    short sMinutes = pRealm->m_lScoreTimeDisplay / 60000;
    short sSeconds = (pRealm->m_lScoreTimeDisplay / 1000) % 60;
    bool bDrew = false;  // Assume we do not draw.
@@ -527,7 +527,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
          ms_print.print(
             rcDst.sX,
             rcDst.sY,
-//					"Time Remaining %d:%2.2d",
+//               "Time Remaining %d:%2.2d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds);
@@ -544,14 +544,14 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
          {
             // If this player is dead, set the color to dead color
             /*
-               ms_print.SetColor(	// set current color
+               ms_print.SetColor(   // set current color
                gsStatusFontForeDeadIndex,
                gsStatusFontBackIndex,
                gsStatusFontShadowIndex);
 
                   else
 
-               ms_print.SetColor(	// set current color
+               ms_print.SetColor(   // set current color
                gsStatusFontForeIndex,
                gsStatusFontBackIndex,
                gsStatusFontShadowIndex);
@@ -593,7 +593,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					"      Population %d                        Hostiles %d   Killed %d (%d%% / %d%%)",
+//               "      Population %d                        Hostiles %d   Killed %d (%d%% / %d%%)",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             pRealm->m_sPopulation,
             pRealm->m_sHostiles,
@@ -609,7 +609,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Time Remaining %d:%2.2d                                Kills %d",
+//               " Time Remaining %d:%2.2d                                Kills %d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds,
@@ -623,7 +623,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Time Remaining %d:%2.2d            Kills %d               Remaining %d / %d",
+//               " Time Remaining %d:%2.2d            Kills %d               Remaining %d / %d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds,
@@ -638,7 +638,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Time Remaining %d:%2.2d",
+//               " Time Remaining %d:%2.2d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds
@@ -651,7 +651,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Kills %d                     Remaining %d            Time Elapsed %d:%2.2d",
+//               " Kills %d                     Remaining %d            Time Elapsed %d:%2.2d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             pRealm->m_sPopulationDeaths,
             pRealm->m_sKillsGoal - pRealm->m_sPopulationDeaths /*pRealm->m_sPopulation*/,
@@ -666,7 +666,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Time Elapsed %d:%2.2d",
+//               " Time Elapsed %d:%2.2d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds
@@ -679,7 +679,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             pim,
             rcDst.sX,
             rcDst.sY,
-//					" Clock %d:%2.2d    You have %d flags    Flags Remaining %d",
+//               " Clock %d:%2.2d    You have %d flags    Flags Remaining %d",
             g_apszScoreDisplayText[pRealm->m_ScoringMode],
             sMinutes,
             sSeconds,
@@ -692,7 +692,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
          break;
 
       }
-      g_scoreboard.m_lLastScoreDrawTime	= lCurTime;
+      g_scoreboard.m_lLastScoreDrawTime   = lCurTime;
 
       // Display the status or mission statement line
       if (lCurTime < g_scoreboard.m_lLastStatusDrawTime + STATUS_DISPLAY_TIMEOUT)
@@ -708,7 +708,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
                ms_print.print(
                   rcDst.sX,
                   rcDst.sY,
-//							" There are no time or kill limits on this game - play as S32 as you like"
+//                     " There are no time or kill limits on this game - play as S32 as you like"
                   g_apszScoreGoalText[CRealm::MPLastManTimedFrag]    // Cheating since this is
                                                                      // Really none of the scoring modes
 
@@ -721,7 +721,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
                ms_print.print(
                   rcDst.sX,
                   rcDst.sY,
-//							" The first player to get %d kills wins",
+//                     " The first player to get %d kills wins",
                   g_apszScoreGoalText[pRealm->m_ScoringMode],
                   pRealm->m_sKillsGoal
                   );
@@ -736,7 +736,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" The player with the most kills when time expires is the winner"
+//                  " The player with the most kills when time expires is the winner"
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -748,7 +748,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Try to reach %d kills before time expires",
+//                  " Try to reach %d kills before time expires",
                g_apszScoreGoalText[pRealm->m_ScoringMode],
                pRealm->m_sKillsGoal
                );
@@ -761,7 +761,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						"      You must kill %d%% of the hostiles.",
+//                  "      You must kill %d%% of the hostiles.",
                g_apszScoreGoalText[pRealm->m_ScoringMode],
                (short) pRealm->m_dKillsPercentGoal
                );
@@ -773,7 +773,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Score as many kills as possible in the time remaining."
+//                  " Score as many kills as possible in the time remaining."
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -784,7 +784,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Kill everyone before time runs out."
+//                  " Kill everyone before time runs out."
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -795,7 +795,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Capture the flag before time runs out."
+//                  " Capture the flag before time runs out."
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -806,7 +806,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Kill %d People in as little time as possible.",
+//                  " Kill %d People in as little time as possible.",
                g_apszScoreGoalText[pRealm->m_ScoringMode],
                pRealm->m_sKillsGoal
                );
@@ -818,7 +818,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Capture the flag in as little time as possible."
+//                  " Capture the flag in as little time as possible."
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -829,7 +829,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
             ms_print.print(
                rcDst.sX,
                rcDst.sY,
-//						" Grab as many flags as possible before time runs out."
+//                  " Grab as many flags as possible before time runs out."
                g_apszScoreGoalText[pRealm->m_ScoringMode]
                );
             break;
@@ -841,7 +841,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
 
 
       // Note that we drew.
-      bDrew	= true;
+      bDrew   = true;
    }
 
    return bDrew;
@@ -850,7 +850,7 @@ bool ScoreUpdateDisplay(RImage* pim, RRect* prc, CRealm* pRealm, CNetClient* pcl
 //////////////////////////////////////////////////////////////////////////////
 // ScoreDisplayStatus
 //
-//		Sets the status display timer so it will show for a few seconds
+//      Sets the status display timer so it will show for a few seconds
 //////////////////////////////////////////////////////////////////////////////
 
 void ScoreDisplayStatus(CRealm* pRealm)
@@ -882,7 +882,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
    RGuiItem::ms_print.SetFont(15, &g_fontPostal);
    RProcessGui guiDialog;
    short sResult;
-   char szScoringExplanation[512]	= "";
+   char szScoringExplanation[512]   = "";
    S32 alScores[MAX_HIGH_SCORES];
    char astrNames[MAX_HIGH_SCORES][MAX_PLAYER_NAME_LEN + 1];
    char szKeyName[256];
@@ -912,8 +912,8 @@ void ScoreDisplayHighScores(  // Returns nothing.
       case CRealm::Timed:
          sprintf(szScoringExplanation, g_apszScoreExplanations[pRealm->m_ScoringMode], CreateTimeString(pRealm->m_lScoreInitialTime) );
          // Number of deaths.
-         lPlayerScore	= pRealm->m_sPopulationDeaths;
-         vtScoringUnit	= Value;
+         lPlayerScore   = pRealm->m_sPopulationDeaths;
+         vtScoringUnit   = Value;
          break;
 
       case CRealm::TimedGoal:
@@ -921,15 +921,15 @@ void ScoreDisplayHighScores(  // Returns nothing.
          // Elapsed time, if goal met.
          if (pRealm->m_sPopulationDeaths >= pRealm->m_sKillsGoal)
          {
-            lPlayerScore	= pRealm->m_lScoreInitialTime - pRealm->m_lScoreTimeDisplay;
+            lPlayerScore   = pRealm->m_lScoreInitialTime - pRealm->m_lScoreTimeDisplay;
          }
          else
          {
             // Really bad elapsed time.
-            lPlayerScore	= LONG_MAX;
+            lPlayerScore   = LONG_MAX;
          }
 
-         vtScoringUnit	= Time;
+         vtScoringUnit   = Time;
          break;
 
       case CRealm::TimedFlag:
@@ -937,15 +937,15 @@ void ScoreDisplayHighScores(  // Returns nothing.
          // Elapsed time, if goal met.
          if (pRealm->m_sFlagbaseCaptured >= pRealm->m_sFlagsGoal)
          {
-            lPlayerScore	= pRealm->m_lScoreInitialTime - pRealm->m_lScoreTimeDisplay;
+            lPlayerScore   = pRealm->m_lScoreInitialTime - pRealm->m_lScoreTimeDisplay;
          }
          else
          {
             // Really bad elapsed time.
-            lPlayerScore	= LONG_MAX;
+            lPlayerScore   = LONG_MAX;
          }
 
-         vtScoringUnit	= Time;
+         vtScoringUnit   = Time;
          break;
 
       case CRealm::CaptureFlag:
@@ -953,15 +953,15 @@ void ScoreDisplayHighScores(  // Returns nothing.
          // Time left, if goal met.
          if (pRealm->m_sFlagbaseCaptured >= pRealm->m_sFlagsGoal)
          {
-            lPlayerScore	= pRealm->m_lScoreTimeDisplay;
+            lPlayerScore   = pRealm->m_lScoreTimeDisplay;
          }
          else
          {
             // Really bad time.
-            lPlayerScore	= LONG_MIN;
+            lPlayerScore   = LONG_MIN;
          }
 
-         vtScoringUnit	= Time;
+         vtScoringUnit   = Time;
          break;
 
       case CRealm::Goal:
@@ -969,22 +969,22 @@ void ScoreDisplayHighScores(  // Returns nothing.
          // Time left, if goal met.
          if (pRealm->m_sPopulationDeaths >= pRealm->m_sKillsGoal)
          {
-            lPlayerScore	= pRealm->m_lScoreTimeDisplay;
+            lPlayerScore   = pRealm->m_lScoreTimeDisplay;
          }
          else
          {
             // Really bad time.
-            lPlayerScore	= LONG_MIN;
+            lPlayerScore   = LONG_MIN;
          }
 
-         vtScoringUnit	= Time;
+         vtScoringUnit   = Time;
          break;
 
       case CRealm::Checkpoint:
          sprintf(szScoringExplanation, g_apszScoreExplanations[pRealm->m_ScoringMode], 0);
          // Number of flags captured.
-         lPlayerScore	= pRealm->m_sFlagsCaptured;
-         vtScoringUnit	= Value;
+         lPlayerScore   = pRealm->m_sFlagsCaptured;
+         vtScoringUnit   = Value;
          break;
 
       case CRealm::MPTimed:
@@ -998,7 +998,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
       case CRealm::MPLastManTimedFrag:
 
          sprintf(szScoringExplanation, g_apszScoreExplanations[pRealm->m_ScoringMode], MAX_HIGH_SCORES);
-         vtScoringUnit	= Value;
+         vtScoringUnit   = Value;
          break;
       }
 
@@ -1010,8 +1010,8 @@ void ScoreDisplayHighScores(  // Returns nothing.
       // Temporarily I will base the section name on the scoring method
       // until the realm description function is available.
 
-      short	sPlayersScorePosition	= -1; // Valid score index once/if we find a slot
-                                          // for this player's score.
+      short sPlayersScorePosition   = -1;   // Valid score index once/if we find a slot
+                                            // for this player's score.
 
       // If not a multiplayer scoring . . .
       if (pRealm->m_flags.bMultiplayer == false)
@@ -1021,8 +1021,8 @@ void ScoreDisplayHighScores(  // Returns nothing.
          short sOpenRes = scores.Open(FullPathHD(HIGHSCORE_SCORES_FILE), "r");
 
          // Read in the scores file
-         short	sSrcIndex;
-         short	sDstIndex;
+         short sSrcIndex;
+         short sDstIndex;
          for (sSrcIndex = 0, sDstIndex = 0; sDstIndex < MAX_HIGH_SCORES; sDstIndex++)
          {
             sprintf(szKeyName, "Player%d", sSrcIndex);
@@ -1046,7 +1046,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
                // Did we get a higher value than in score?
                if (lPlayerScore > alScores[sDstIndex])
                {
-                  bPlayerBeatThisScore	= true;
+                  bPlayerBeatThisScore   = true;
                }
             }
             else
@@ -1059,7 +1059,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
                // Did we get a better time than read in score?
                if (lPlayerScore < alScores[sDstIndex] )
                {
-                  bPlayerBeatThisScore	= true;
+                  bPlayerBeatThisScore   = true;
                }
             }
 
@@ -1067,11 +1067,11 @@ void ScoreDisplayHighScores(  // Returns nothing.
             if (bPlayerBeatThisScore == true && sPlayersScorePosition < 0)
             {
                // Remember player's score.
-               alScores[sDstIndex]		= lPlayerScore;
+               alScores[sDstIndex]      = lPlayerScore;
                // Clear player's name.
-               astrNames[sDstIndex][0]	= '\0';
+               astrNames[sDstIndex][0]   = '\0';
                // Remember player's score position.
-               sPlayersScorePosition	= sDstIndex;
+               sPlayersScorePosition   = sDstIndex;
                // Don't increment the source index.
             }
             else
@@ -1090,7 +1090,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
          S32 alTempScores[MAX_HIGH_SCORES];
          char astrTempNames[MAX_HIGH_SCORES][MAX_PLAYER_NAME_LEN + 1];
 
-         short	sIndex;
+         short sIndex;
          for (sIndex = 0; sIndex < MAX_HIGH_SCORES ; sIndex++)
          {
             if (sIndex < pRealm->m_asClassNumThings[CThing::CDudeID])
@@ -1098,22 +1098,22 @@ void ScoreDisplayHighScores(  // Returns nothing.
                strncpy(astrTempNames[sIndex], pclient->GetPlayerName(sIndex), MAX_PLAYER_NAME_LEN);
                // Strncpy does not NULL terminate if the 'n' is less than or equal to the length
                // of the src string.
-               astrTempNames[sIndex][MAX_PLAYER_NAME_LEN]	= '\0';
+               astrTempNames[sIndex][MAX_PLAYER_NAME_LEN]   = '\0';
 
-               alTempScores[sIndex]	= g_scoreboard.m_asScores[sIndex];
+               alTempScores[sIndex]   = g_scoreboard.m_asScores[sIndex];
             }
             else
             {
-               astrTempNames[sIndex][0]	= '\0';
-               alTempScores[sIndex]			= LONG_MIN + 1;
+               astrTempNames[sIndex][0]   = '\0';
+               alTempScores[sIndex]         = LONG_MIN + 1;
             }
          }
 
          // Find the largest score (most frags in all modes) and put it at the
          // next position.
-         short	sDstIndex;
-         short	sSrcIndex;
-         short	sHighestScoreIndex;
+         short sDstIndex;
+         short sSrcIndex;
+         short sHighestScoreIndex;
          S32 lHighestScore;
 
          // This declaration relies on false being zero!!
@@ -1122,8 +1122,8 @@ void ScoreDisplayHighScores(  // Returns nothing.
 
          for (sDstIndex = 0; sDstIndex < MAX_HIGH_SCORES; sDstIndex++)
          {
-            sHighestScoreIndex	= -1;
-            lHighestScore			= LONG_MIN;
+            sHighestScoreIndex   = -1;
+            lHighestScore         = LONG_MIN;
 
             // Find the highest score of the ones not yet copied.
             for (sSrcIndex = 0; sSrcIndex < MAX_HIGH_SCORES; sSrcIndex++)
@@ -1134,15 +1134,15 @@ void ScoreDisplayHighScores(  // Returns nothing.
                   // If this score is higher . . .
                   if (alTempScores[sSrcIndex] > lHighestScore)
                   {
-                     sHighestScoreIndex	= sSrcIndex;
-                     lHighestScore			= alTempScores[sSrcIndex];
+                     sHighestScoreIndex   = sSrcIndex;
+                     lHighestScore         = alTempScores[sSrcIndex];
                   }
                }
             }
 
             // Use the highest score.
             ASSERT(sHighestScoreIndex != -1);
-            alScores[sDstIndex]	= alTempScores[sHighestScoreIndex];
+            alScores[sDstIndex]   = alTempScores[sHighestScoreIndex];
             // This copy is safe b/c astrTempNames[] and astrNames[] are the
             // same length.
 
@@ -1151,13 +1151,13 @@ void ScoreDisplayHighScores(  // Returns nothing.
 
             strcpy(astrNames[sDstIndex], astrTempNames[sHighestScoreIndex] );
             // Note that this score is already placed.
-            abAlreadyCopied[sHighestScoreIndex]	= true;
+            abAlreadyCopied[sHighestScoreIndex]   = true;
 
             // If this is us . . .
             if (sHighestScoreIndex == pclient->GetID() )
             {
                // Remember our position (placement) so we can highlight it.
-               sPlayersScorePosition	= sDstIndex;
+               sPlayersScorePosition   = sDstIndex;
             }
          }
 
@@ -1169,18 +1169,18 @@ void ScoreDisplayHighScores(  // Returns nothing.
 
       if (rspGetResource(&g_resmgrShell, HIGHSCORE_DIALOG_FILE, (RDlg**)&pguiRoot) == 0)
       {
-         RGuiItem* pguiOk			= pguiRoot->GetItemFromId(1);
-         RGuiItem* pguiCancel		= pguiRoot->GetItemFromId(2);
+         RGuiItem* pguiOk         = pguiRoot->GetItemFromId(1);
+         RGuiItem* pguiCancel      = pguiRoot->GetItemFromId(2);
 
-         RTxt* ptextExplain1		= (RTxt*) pguiRoot->GetItemFromId(50);
-         RTxt* ptextExplain2		= (RTxt*) pguiRoot->GetItemFromId(51);
-         RListBox*	plbScores	= (RListBox*) pguiRoot->GetItemFromId(1000);
+         RTxt* ptextExplain1      = (RTxt*) pguiRoot->GetItemFromId(50);
+         RTxt* ptextExplain2      = (RTxt*) pguiRoot->GetItemFromId(51);
+         RListBox*   plbScores   = (RListBox*) pguiRoot->GetItemFromId(1000);
 
          // Set to the input field if the player gets a high score.
-         RGuiItem*	pguiPlayersName	= NULL;
+         RGuiItem*   pguiPlayersName   = NULL;
 
          // Create and add all score items.
-         short	sScoreIndex;
+         short sScoreIndex;
          bool bGotAllScoreItems = true;
 
          if (plbScores)
@@ -1192,20 +1192,20 @@ void ScoreDisplayHighScores(  // Returns nothing.
                // If there's an associated name or this is the one we're adding . . .
                if (astrNames[sScoreIndex][0] != '\0' || sPlayersScorePosition == sScoreIndex)
                {
-                  RGuiItem*	pguiItem;
+                  RGuiItem*   pguiItem;
                   if (rspGetResourceInstance(&g_resmgrShell, HIGHSCORE_ITEM_FILE, &pguiItem) == 0)
                   {
                      // Get the two settable items.
-                     RGuiItem*	pguiName		= pguiItem->GetItemFromId(100);
-                     RGuiItem*	pguiScore	= pguiItem->GetItemFromId(101);
-                     RGuiItem*	pguiPlace	= pguiItem->GetItemFromId(102);
+                     RGuiItem*   pguiName      = pguiItem->GetItemFromId(100);
+                     RGuiItem*   pguiScore   = pguiItem->GetItemFromId(101);
+                     RGuiItem*   pguiPlace   = pguiItem->GetItemFromId(102);
                      if (pguiName && pguiScore)
                      {
                         // Add shadow attributes.
-                        pguiName->m_sTextEffects			|= RGuiItem::Shadow;
-                        pguiName->m_u32TextShadowColor	=	TEXT_SHADOW_COLOR;
-                        pguiScore->m_sTextEffects			|= RGuiItem::Shadow;
-                        pguiScore->m_u32TextShadowColor	=	TEXT_SHADOW_COLOR;
+                        pguiName->m_sTextEffects         |= RGuiItem::Shadow;
+                        pguiName->m_u32TextShadowColor   =   TEXT_SHADOW_COLOR;
+                        pguiScore->m_sTextEffects         |= RGuiItem::Shadow;
+                        pguiScore->m_u32TextShadowColor   =   TEXT_SHADOW_COLOR;
 
                         // If this is the place for the new name . . .
                         if (sPlayersScorePosition == sScoreIndex)
@@ -1215,16 +1215,16 @@ void ScoreDisplayHighScores(  // Returns nothing.
                            // Limit input text to the space in our storage area.
                            // Must be edit field for this op.
                            ASSERT(pguiName->m_type == RGuiItem::Edit);
-                           ((REdit*)pguiName)->m_sMaxText	= sizeof(astrNames[0]) - 1;
+                           ((REdit*)pguiName)->m_sMaxText   = sizeof(astrNames[0]) - 1;
                            // Highlight this entry.
-                           pguiName->m_u32TextColor	= TEXT_HIGHLIGHT_COLOR;
+                           pguiName->m_u32TextColor   = TEXT_HIGHLIGHT_COLOR;
                            // Remember which one so we can get the name later.
-                           pguiPlayersName	= pguiName;
+                           pguiPlayersName   = pguiName;
                         }
                         else
                         {
                            // Deactivate all others.
-                           pguiName->m_sActive	= FALSE;
+                           pguiName->m_sActive   = FALSE;
                         }
 
                         // Set placement.
@@ -1262,21 +1262,21 @@ void ScoreDisplayHighScores(  // Returns nothing.
                         else
                         {
                            TRACE("ScoreDisplayHighScores(): Unable to add item to listbox.\n");
-                           bGotAllScoreItems	= false;
+                           bGotAllScoreItems   = false;
                         }
                      }
                      else
                      {
                         TRACE("ScoreDisplayHighScores(): Missing items in this instance of \"%d\".\n",
                               HIGHSCORE_ITEM_FILE);
-                        bGotAllScoreItems	= false;
+                        bGotAllScoreItems   = false;
                      }
                   }
                   else
                   {
                      TRACE("ScoreDisplayHighScores(): Failed to get instance of \"%d\".\n",
                            HIGHSCORE_ITEM_FILE);
-                     bGotAllScoreItems	= false;
+                     bGotAllScoreItems   = false;
                   }
                }
             }
@@ -1294,7 +1294,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
 
          if (ptextExplain1 != NULL &&
              ptextExplain2 != NULL &&
-             plbScores		!= NULL &&
+             plbScores      != NULL &&
              bGotAllScoreItems == true)
          {
             // Get some colors free.
@@ -1303,8 +1303,8 @@ void ScoreDisplayHighScores(  // Returns nothing.
             // Set the callbacks for the resource load and discard (note that it
             // already tried to load it during the above rspGetResource() and failed
             // b/c the default implementation has no clue about the resmgr).
-            pguiRoot->m_fnGetRes			= GuiGetRes;
-            pguiRoot->m_fnReleaseRes	= GuiReleaseRes;
+            pguiRoot->m_fnGetRes         = GuiGetRes;
+            pguiRoot->m_fnReleaseRes   = GuiReleaseRes;
 
             pguiRoot->ReleaseRes();
             // Recompose the root item (does not recompose children).  This time
@@ -1312,7 +1312,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
             pguiRoot->Compose();
 
             // Let us handle updates.
-            guiDialog.m_fnUpdate		= SysUpdate;
+            guiDialog.m_fnUpdate      = SysUpdate;
 
             // Center the GUI root.
             pguiRoot->Move(
@@ -1320,21 +1320,21 @@ void ScoreDisplayHighScores(  // Returns nothing.
                g_pimScreenBuf->m_sHeight / 2 - pguiRoot->m_im.m_sHeight / 2);
 
             // Make the explanation texts shadowed.
-            ptextExplain1->m_sTextEffects			|= RGuiItem::Shadow;
-            ptextExplain1->m_u32TextShadowColor	=	TEXT_SHADOW_COLOR;
+            ptextExplain1->m_sTextEffects         |= RGuiItem::Shadow;
+            ptextExplain1->m_u32TextShadowColor   =   TEXT_SHADOW_COLOR;
 
-            ptextExplain2->m_sTextEffects			|= RGuiItem::Shadow;
-            ptextExplain2->m_u32TextShadowColor	=	TEXT_SHADOW_COLOR;
+            ptextExplain2->m_sTextEffects         |= RGuiItem::Shadow;
+            ptextExplain2->m_u32TextShadowColor   =   TEXT_SHADOW_COLOR;
             ptextExplain2->Compose();
 
             // Store current mouse show level so we can restore it.
-            short	sOrigShowLevel	= rspGetMouseCursorShowLevel();
+            short sOrigShowLevel   = rspGetMouseCursorShowLevel();
             // Make sure it's visible.
 // Let's not do this and instead try to insinuate keyboard use.
-//				rspSetMouseCursorShowLevel(1);
+//            rspSetMouseCursorShowLevel(1);
 
             // Make sure there's no timeout on while player is adding their name.
-            ms_lScoreMaxTimeOut	= LONG_MAX;
+            ms_lScoreMaxTimeOut   = LONG_MAX;
 
             // If we want a high score from this player . . .
             if (sPlayersScorePosition >= 0 && pRealm->m_flags.bMultiplayer == false)
@@ -1344,7 +1344,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
                ptextExplain1->Compose();
                // Don't clean the screen when done so we can have a smooth transition
                // to the next DoModal().
-               guiDialog.m_sFlags	= RProcessGui::NoCleanScreen;
+               guiDialog.m_sFlags   = RProcessGui::NoCleanScreen;
                // Do the dialog once to get the name.
                guiDialog.DoModal(pguiRoot, pguiOk, pguiCancel);
                // Clear the focus.
@@ -1364,18 +1364,18 @@ void ScoreDisplayHighScores(  // Returns nothing.
             // If timeout specified . . .
             if (lMaxTimeOut >= 0)
             {
-               ms_lScoreMaxTimeOut	= rspGetMilliseconds() + lMaxTimeOut;
+               ms_lScoreMaxTimeOut   = rspGetMilliseconds() + lMaxTimeOut;
             }
             else
             {
-               ms_lScoreMaxTimeOut	= LONG_MAX;
+               ms_lScoreMaxTimeOut   = LONG_MAX;
             }
 
             // Set the focus to the listbox's vertical scrollbar so that the arrows will work.
             plbScores->m_sbVert.SetFocus();
 
             // This time we want the screen cleared.
-            guiDialog.m_sFlags	= 0;
+            guiDialog.m_sFlags   = 0;
             // Display the high scores.
             guiDialog.DoModal(pguiRoot, pguiOk, pguiCancel);
 
@@ -1415,7 +1415,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
          {
 #if 0
             // Get rid of all score item instances.
-            RGuiItem*	pguiScoreItem	= plbScores->GetFirst();
+            RGuiItem*   pguiScoreItem   = plbScores->GetFirst();
             while (pguiScoreItem)
             {
                // Remove the listbox's encapsulator property.
@@ -1425,7 +1425,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
                rspReleaseResourceInstance(&g_resmgrShell, &pguiScoreItem);
 
                // Set the next one as the current.
-               pguiScoreItem	= plbScores->GetNext();
+               pguiScoreItem   = plbScores->GetNext();
             }
 #else
             plbScores->RemoveAll();

@@ -19,7 +19,7 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		06/11/97 JMI	Started.
+//      06/11/97 JMI   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef MENUSETTINGS_H

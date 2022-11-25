@@ -21,75 +21,75 @@
 // This module implements the automatic sentry gun
 //
 // History:
-//		06/02/97 BRH	Created this Sentry gun from gunner.cpp.
+//      06/02/97 BRH   Created this Sentry gun from gunner.cpp.
 //
-//		06/05/97	JMI	Changed m_sHitPoints to m_stockpile.m_sHitPoints to
-//							accommodate new m_stockpile in base class, CThing3d (which
-//							used to contain the m_sHitPoints).
+//      06/05/97   JMI   Changed m_sHitPoints to m_stockpile.m_sHitPoints to
+//                     accommodate new m_stockpile in base class, CThing3d (which
+//                     used to contain the m_sHitPoints).
 //
-//		06/13/97 BRH	Added Turret and Base for the Sentry.
+//      06/13/97 BRH   Added Turret and Base for the Sentry.
 //
-//		06/16/97 BRH	Added blown up animation, dialog box for weapon selection
-//							and settings.  Fixed positioning problems.
+//      06/16/97 BRH   Added blown up animation, dialog box for weapon selection
+//                     and settings.  Fixed positioning problems.
 //
-//		06/17/97 BRH	Added SetRangeToTarget call for weapons that
-//							require range adjustment.
+//      06/17/97 BRH   Added SetRangeToTarget call for weapons that
+//                     require range adjustment.
 //
-//		06/18/97 BRH	Changed over to using GetRandom()
+//      06/18/97 BRH   Changed over to using GetRandom()
 //
-//		06/25/97	JMI	Now calls PrepareShadow() in Init() which loads and sets up
-//							a shadow sprite.
+//      06/25/97   JMI   Now calls PrepareShadow() in Init() which loads and sets up
+//                     a shadow sprite.
 //
-//		06/30/97	JMI	Added override for EditRect() and EditHotSpot().
-//							Now sets priority and layer for turret from base's values.
+//      06/30/97   JMI   Added override for EditRect() and EditHotSpot().
+//                     Now sets priority and layer for turret from base's values.
 //
-//					MJR	Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
+//               MJR   Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
 //
-//					BRH	Caches the sound effects during the static portion of
-//							load so that the sound effect will be ready on any
-//							level that has a sentry gun.
+//               BRH   Caches the sound effects during the static portion of
+//                     load so that the sound effect will be ready on any
+//                     level that has a sentry gun.
 //
-//		07/01/97 BRH	Added angular velocity to allow tuning of the rotation
-//							rate of the sentry gun.  Still need to edit the dialog
-//							box and EditModify to set the change.
+//      07/01/97 BRH   Added angular velocity to allow tuning of the rotation
+//                     rate of the sentry gun.  Still need to edit the dialog
+//                     box and EditModify to set the change.
 //
-//		07/02/97 BRH	Added angular velocity setting to edit modify dialog.
+//      07/02/97 BRH   Added angular velocity setting to edit modify dialog.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/31/97	JMI	Changed m_sPriority to use 3D z position like CThin3d does.
+//      07/31/97   JMI   Changed m_sPriority to use 3D z position like CThin3d does.
 //
-//		08/01/97 BRH	Took out reference to animation hots since we are not
-//							using those.
+//      08/01/97 BRH   Took out reference to animation hots since we are not
+//                     using those.
 //
-//		08/08/97	JMI	Now dynamically builds the weapons list for the
-//							EditModify().
-//							Also, since it doesn't call the base class Update(), it
-//							has to monitor the flamage sample.
+//      08/08/97   JMI   Now dynamically builds the weapons list for the
+//                     EditModify().
+//                     Also, since it doesn't call the base class Update(), it
+//                     has to monitor the flamage sample.
 //
-//		08/11/97	JMI	Added transform for base, m_transBase.
-//							Also, made UpdatePosition() bypass its logic when the
-//							animations are not yet set.
+//      08/11/97   JMI   Added transform for base, m_transBase.
+//                     Also, made UpdatePosition() bypass its logic when the
+//                     animations are not yet set.
 //
-//		08/16/97 BRH	Added collision bits for the Sentry gun to pass to
-//							ShootWeapon.
+//      08/16/97 BRH   Added collision bits for the Sentry gun to pass to
+//                     ShootWeapon.
 //
-//		08/18/97	JMI	Now plays impact animation when hit by bullets.
+//      08/18/97   JMI   Now plays impact animation when hit by bullets.
 //
-//		08/18/97	JMI	Changed State_Dead to call DeadRender3D() (which used to be
-//							known/called as just another Render() overload).
+//      08/18/97   JMI   Changed State_Dead to call DeadRender3D() (which used to be
+//                     known/called as just another Render() overload).
 //
-//		08/20/97 BRH	Changed ricochet sounds from Destruction to Weapon volume
-//							slider.
+//      08/20/97 BRH   Changed ricochet sounds from Destruction to Weapon volume
+//                     slider.
 //
-//		08/26/97 BRH	Changed sentry gun getting hit by bullets sound.
+//      08/26/97 BRH   Changed sentry gun getting hit by bullets sound.
 //
-//		09/02/97	JMI	Changed use of Misc bit to Sentry bit.
+//      09/02/97   JMI   Changed use of Misc bit to Sentry bit.
 //
-//		09/03/97	JMI	Sentries now exclude CSmash::Bads and CSmash::Civilians.
+//      09/03/97   JMI   Sentries now exclude CSmash::Bads and CSmash::Civilians.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define SENTRY_CPP
@@ -106,18 +106,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Anim for when a barrel is hit by a bullet.
-#define SENTRY_HIT_RES_NAME	"Ricochet.aan"
+#define SENTRY_HIT_RES_NAME   "Ricochet.aan"
 
-#define HULL_RADIUS				(m_sprite.m_sRadius / 2)
+#define HULL_RADIUS            (m_sprite.m_sRadius / 2)
 
 // Gets a GetRandom()om between -range / 2 and range / 2.
-#define RAND_SWAY(sway)		((GetRandom() % sway) - sway / 2)
+#define RAND_SWAY(sway)      ((GetRandom() % sway) - sway / 2)
 
 // Tunable bullet parameters.
-#define MAX_BULLET_RANGE		400
-#define MAX_BULLETS_PER_SEC	6
+#define MAX_BULLET_RANGE      400
+#define MAX_BULLETS_PER_SEC   6
 
-#define MS_BETWEEN_BULLETS		(1000 / MAX_BULLETS_PER_SEC)
+#define MS_BETWEEN_BULLETS      (1000 / MAX_BULLETS_PER_SEC)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -139,7 +139,7 @@ S32 CSentry::ms_lBurningRunTime = 50;     // Run this time before turning
 short CSentry::ms_sHitLimit = 150;        // Number of starting hit points
 short CSentry::ms_sBurntBrightness = -40; // Brightness after being burnt
 S32 CSentry::ms_lMaxShootTime = MS_BETWEEN_BULLETS;      // Maximum in ms of continuous shooting.
-S32 CSentry::ms_lReselectDudeTime	= 3000;  // Time to go without finding a dude
+S32 CSentry::ms_lReselectDudeTime   = 3000;  // Time to go without finding a dude
                                              // before calling SelectDude() to find
                                              // possibly a closer one.
 U32 CSentry::ms_u32WeaponIncludeBits = CSmash::Character | CSmash::Barrel | CSmash::Misc;
@@ -275,12 +275,12 @@ short CSentry::Load(          // Returns 0 if successfull, non-zero otherwise
 
       if (ulFileVersion > 24)
          pFile->Read(&m_dAngularVelocity);
-//		m_sNumRounds = 32000;
-//		m_sRoundsPerShot = 2;
-//		m_lSqDistRange = 280*280;
-//		m_eWeaponType = CShotGunID;
-//		m_eWeaponType = CShotGunID;
-//		m_lShootDelay = 500;
+//      m_sNumRounds = 32000;
+//      m_sRoundsPerShot = 2;
+//      m_lSqDistRange = 280*280;
+//      m_eWeaponType = CShotGunID;
+//      m_eWeaponType = CShotGunID;
+//      m_lShootDelay = 500;
 
       // Make sure there were no file errors or format errors . . .
       if (!pFile->Error() && sResult == 0)
@@ -373,18 +373,18 @@ void CSentry::Render(void)
 
    // Do our own render of the stationary base
    U16 u16CombinedAttributes;
-   short	sLightTally;
+   short sLightTally;
    GetEffectAttributes(m_dXBase, m_dZBase, &u16CombinedAttributes, &sLightTally);
 
    // Brightness.
-   m_spriteBase.m_sBrightness	= m_sBrightness + sLightTally * gsGlobalBrightnessPerLightAttribute;
+   m_spriteBase.m_sBrightness   = m_sBrightness + sLightTally * gsGlobalBrightnessPerLightAttribute;
 
    // If no parent . . .
    if (m_u16IdParent == CIdBank::IdNil)
    {
       // Reset transform back to start to set absolute rather than cummulative rotation
       m_trans.Make1();
-//		m_transBase.Make1(); Not currently needed since the base does not change its transform.
+//      m_transBase.Make1(); Not currently needed since the base does not change its transform.
 
       m_trans.Ry(rspMod360(m_dRot) );
       m_trans.Rz(rspMod360(m_dRotZ) );
@@ -415,8 +415,8 @@ void CSentry::Render(void)
    CCharacter::Render();
 
    // The turret is always at a just higher priority than the base.
-   m_sprite.m_sPriority	= m_spriteBase.m_sPriority + 1;
-   m_sprite.m_sLayer		= m_spriteBase.m_sLayer;
+   m_sprite.m_sPriority   = m_spriteBase.m_sPriority + 1;
+   m_sprite.m_sLayer      = m_spriteBase.m_sLayer;
 
    // Update sprite in scene
    m_pRealm->m_scene.UpdateSprite(&m_sprite);
@@ -432,7 +432,7 @@ short CSentry::Init(void)
    short sResult = 0;
 
    // Prepare shadow (get resources and setup sprite).
-   sResult	= PrepareShadow();
+   sResult   = PrepareShadow();
 
    // Init other stuff
    m_dVel = 0.0;
@@ -451,7 +451,7 @@ short CSentry::Init(void)
    m_animShoot.m_psops->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
    m_animShoot.m_pmeshes->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
    m_animShoot.m_ptextures->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
-//	m_animShoot.m_phots->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
+//   m_animShoot.m_phots->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
    m_animShoot.m_pbounds->SetLooping(RChannel_LoopAtStart | RChannel_LoopAtEnd);
 
    // Set up the base sprite so we can get the position
@@ -492,7 +492,7 @@ void CSentry::UpdatePosition(void)
       // Update its position.
       // set up translation based on the combined last character and child transforms
       RTransform transChildAbsolute;
-      RTransform*	ptransRigid	= m_panimCurBase->m_ptransRigid->GetAtTime(m_lAnimTime);
+      RTransform*   ptransRigid   = m_panimCurBase->m_ptransRigid->GetAtTime(m_lAnimTime);
 
       // Apply child and parent to transChildAbs
       transChildAbsolute.Mul(m_trans.T, ptransRigid->T);
@@ -597,10 +597,10 @@ void CSentry::Update(void)
          }
 
          // Update sphere.
-         m_smash.m_sphere.sphere.X			= m_dXBase;
-         m_smash.m_sphere.sphere.Y			= m_dYBase;
-         m_smash.m_sphere.sphere.Z			= m_dZBase;
-         m_smash.m_sphere.sphere.lRadius	= 30;    //m_spriteBase.m_sRadius;
+         m_smash.m_sphere.sphere.X         = m_dXBase;
+         m_smash.m_sphere.sphere.Y         = m_dYBase;
+         m_smash.m_sphere.sphere.Z         = m_dZBase;
+         m_smash.m_sphere.sphere.lRadius   = 30;    //m_spriteBase.m_sRadius;
 
          // Update the smash.
          m_pRealm->m_smashatorium.Update(&m_smash);
@@ -641,7 +641,7 @@ void CSentry::Update(void)
          }
 
          // Turn to him directly for now.
-//				m_dRot = m_dAnimRot = m_dShootAngle = CDoofus::FindDirection();
+//            m_dRot = m_dAnimRot = m_dShootAngle = CDoofus::FindDirection();
          lSqDistanceToDude = CDoofus::SQDistanceToDude();
 
          if (bShootThisTime &&
@@ -701,7 +701,7 @@ void CSentry::Update(void)
 //-----------------------------------------------------------------------
 
       case CSentry::State_Dead:
-         CHood*	phood	= m_pRealm->m_phood;
+         CHood*   phood   = m_pRealm->m_phood;
          // Render current dead frame into background to stay.
          m_pRealm->m_scene.DeadRender3D(
             phood->m_pimBackground,          // Destination image.
@@ -729,7 +729,7 @@ void CSentry::Update(void)
             // Stop looping the sound.
             StopLoopingSample(m_siLastWeaponPlayInstance);
             // Forget about it.
-            m_siLastWeaponPlayInstance	= 0;
+            m_siLastWeaponPlayInstance   = 0;
          }
       }
 
@@ -758,7 +758,7 @@ short CSentry::EditNew(                         // Returns 0 if successfull, non
       sResult = GetResources();
       if (sResult == SUCCESS)
       {
-         sResult	= Init();
+         sResult   = Init();
       }
    }
    else
@@ -795,19 +795,19 @@ void CSentry::EditRect(RRect* pRect)
    m_dY = m_dYBase;
    m_dZ = m_dZBase;
 
-   CAnim3D*	panimTemp	= m_panimCur;
+   CAnim3D*   panimTemp   = m_panimCur;
 
-   m_panimCur				= m_panimCurBase;
+   m_panimCur            = m_panimCurBase;
 
    // Call base class.
    CDoofus::EditRect(pRect);
 
    // Restore.
-   m_dX	= dTempX;
-   m_dY	= dTempY;
-   m_dZ	= dTempZ;
+   m_dX   = dTempX;
+   m_dY   = dTempY;
+   m_dZ   = dTempZ;
 
-   m_panimCur	= panimTemp;
+   m_panimCur   = panimTemp;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -815,17 +815,17 @@ void CSentry::EditRect(RRect* pRect)
 // (virtual (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CSentry::EditHotSpot(       // Returns nothiing.
-   short*	psX,                 // Out: X coord of 2D hotspot relative to
+   short*   psX,                 // Out: X coord of 2D hotspot relative to
                                  // EditRect() pos.
-   short*	psY)                 // Out: Y coord of 2D hotspot relative to
+   short*   psY)                 // Out: Y coord of 2D hotspot relative to
                                  // EditRect() pos.
 {
    // Get rectangle.
-   RRect	rc;
+   RRect rc;
    EditRect(&rc);
    // Get 2D hotspot.
-   short	sX;
-   short	sY;
+   short sX;
+   short sY;
    Map3Dto2D(
       m_dXBase,
       m_dYBase,
@@ -834,8 +834,8 @@ void CSentry::EditHotSpot(       // Returns nothiing.
       &sY);
 
    // Get relation.
-   *psX	= sX - rc.sX;
-   *psY	= sY - rc.sY;
+   *psX   = sX - rc.sX;
+   *psY   = sY - rc.sY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -853,7 +853,7 @@ short CSentry::EditModify(void)
       REdit* peditShotDelay = (REdit*) pGui->GetItemFromId(102);
       REdit* peditRange     = (REdit*) pGui->GetItemFromId(103);
       REdit* peditRotVel    = (REdit*) pGui->GetItemFromId(104);
-      if (	pWeaponList && peditAmmoCount && peditShotDelay && peditRange && peditRotVel)
+      if (   pWeaponList && peditAmmoCount && peditShotDelay && peditRange && peditRotVel)
       {
          // Verify these are the type we think they are before accessing type specific
          // members.
@@ -872,21 +872,21 @@ short CSentry::EditModify(void)
          pWeaponList->RemoveAll();
 
          // Fill in the list box with current available weapons.
-         short	i;
+         short i;
          for (i = 0; i < NumWeaponTypes; i++)
          {
-            if (	(i != DeathWad || CStockPile::ms_sEnableDeathWad) &&
-                  (i != DoubleBarrel || CStockPile::ms_sEnableDoubleBarrel) &&
-                  (i != ProximityMine) &&
-                  (i != TimedMine) &&
-                  (i != RemoteControlMine) &&
-                  (i != BouncingBettyMine) )
+            if (   (i != DeathWad || CStockPile::ms_sEnableDeathWad) &&
+                   (i != DoubleBarrel || CStockPile::ms_sEnableDoubleBarrel) &&
+                   (i != ProximityMine) &&
+                   (i != TimedMine) &&
+                   (i != RemoteControlMine) &&
+                   (i != BouncingBettyMine) )
             {
-               pGuiItem	= pWeaponList->AddString(ms_awdWeapons[i].pszName);
+               pGuiItem   = pWeaponList->AddString(ms_awdWeapons[i].pszName);
                if (pGuiItem != NULL)
                {
                   // Store class ID so we can determine user selection
-                  pGuiItem->m_lId	= ms_awdWeapons[i].id;
+                  pGuiItem->m_lId   = ms_awdWeapons[i].id;
                }
             }
          }
@@ -894,7 +894,7 @@ short CSentry::EditModify(void)
          pWeaponList->AdjustContents();
 
          // Show which weapon is currently selected
-         pGuiItem	= pGui->GetItemFromId(m_eWeaponType);
+         pGuiItem   = pGui->GetItemFromId(m_eWeaponType);
          if (pGuiItem)
          {
             pWeaponList->SetSel(pGuiItem);
@@ -929,7 +929,7 @@ short CSentry::EditModify(void)
                RGuiItem* pSelection = pWeaponList->GetSel();
                if (pSelection)
                {
-                  m_eWeaponType	= pSelection->m_lId;
+                  m_eWeaponType   = pSelection->m_lId;
                }
 
                m_sNumRounds = RSP_SAFE_GUI_REF(peditAmmoCount, GetVal());
@@ -1042,7 +1042,7 @@ void CSentry::OnShotMsg(Shot_Message* pMessage)
    }
 
    // X/Z position depends on angle of shot (it is opposite).
-   short	sDeflectionAngle	= rspMod360(pMessage->sAngle + 180);
+   short sDeflectionAngle   = rspMod360(pMessage->sAngle + 180);
    double dHitX = m_dX + COSQ[sDeflectionAngle] * HULL_RADIUS + RAND_SWAY(4);
    double dHitZ = m_dZ - SINQ[sDeflectionAngle] * HULL_RADIUS + RAND_SWAY(4);
    StartAnim(
@@ -1080,8 +1080,8 @@ void CSentry::OnExplosionMsg(Explosion_Message* pMessage)
       m_dExtHorzVel *= 1.4; //2.5;
       m_dExtVertVel *= 1.1; //1.4;
       // Send it spinning.
-      m_dExtRotVelY	= GetRandom() % 720;
-      m_dExtRotVelZ	= GetRandom() % 720;
+      m_dExtRotVelY   = GetRandom() % 720;
+      m_dExtRotVelZ   = GetRandom() % 720;
 
       // Show the gun as damaged
       m_panimCurBase = &m_animBaseDie;

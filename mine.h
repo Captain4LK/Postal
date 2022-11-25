@@ -18,45 +18,45 @@
 // mine.h
 // Project: Postal
 //
-//	History:
-//		03/19/97 BRH	Started this weapon object.
+//   History:
+//      03/19/97 BRH   Started this weapon object.
 //
-//		04/29/97	JMI	Added GetSprite() virtual override to provide access
-//							to m_sprite from a lower level.
-//							Replaced Setup() with default parm eType = Proximity with
-//							a Setup() that matches the base class virtual Setup() to
-//							make sure it gets overriden.  The functionality is the
-//							same (the new Setup() just calls the four parm Setup()
-//							with Proximity as the type).
+//      04/29/97   JMI   Added GetSprite() virtual override to provide access
+//                     to m_sprite from a lower level.
+//                     Replaced Setup() with default parm eType = Proximity with
+//                     a Setup() that matches the base class virtual Setup() to
+//                     make sure it gets overriden.  The functionality is the
+//                     same (the new Setup() just calls the four parm Setup()
+//                     with Proximity as the type).
 //
-//		04/30/97	JMI	Changed the Setup() override of the CWeapon's Setup() to
-//							pass the current mine type to the Setup() with eType.
-//							Changed Construct() to take an ID as a parameter and added
-//							ConstructProximity(), ConstructTimed(),
-//							ConstructBouncingBetty(), and ConstructRemoteControl() to
-//							allocate that type of mine.
-//							Removed m_eMineType (now uses Class ID instead).
-//							Removed Setup() that took an eType.
-//							Fixed EditRect() and added EditHotSpot().
+//      04/30/97   JMI   Changed the Setup() override of the CWeapon's Setup() to
+//                     pass the current mine type to the Setup() with eType.
+//                     Changed Construct() to take an ID as a parameter and added
+//                     ConstructProximity(), ConstructTimed(),
+//                     ConstructBouncingBetty(), and ConstructRemoteControl() to
+//                     allocate that type of mine.
+//                     Removed m_eMineType (now uses Class ID instead).
+//                     Removed Setup() that took an eType.
+//                     Fixed EditRect() and added EditHotSpot().
 //
-//		06/12/97 BRH	Initialized the Shooter ID to IdNil for mines that
-//							are placed in the level, and not placed by a CDude.
+//      06/12/97 BRH   Initialized the Shooter ID to IdNil for mines that
+//                     are placed in the level, and not placed by a CDude.
 //
-//		06/27/97	JMI	Modified EditRect() to use Map3Dto2D().
+//      06/27/97   JMI   Modified EditRect() to use Map3Dto2D().
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		07/21/97	JMI	Now handles delete messages.
+//      07/21/97   JMI   Now handles delete messages.
 //
-//		08/16/97 BRH	Added a sound handle so that we could have a looping
-//							arming sound that could be stopped when the mine was
-//							armed.
+//      08/16/97 BRH   Added a sound handle so that we could have a looping
+//                     arming sound that could be stopped when the mine was
+//                     armed.
 //
-//		08/17/97	JMI	Destructor now stops looping the arming sound, if it is
-//							still running.
+//      08/17/97   JMI   Destructor now stops looping the arming sound, if it is
+//                     still running.
 //
-//		08/28/97 BRH	Added preload function to load the sounds and images.
+//      08/28/97 BRH   Added preload function to load the sounds and images.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef MINE_H
@@ -95,10 +95,10 @@ public:
 protected:
 short m_sPrevHeight;                         // Previous height
 
-RImage*		m_pImage;                        // Pointer to mine image
-CSprite2	m_sprite;                           // Sprite for 2D mine
+RImage*      m_pImage;                        // Pointer to mine image
+CSprite2 m_sprite;                             // Sprite for 2D mine
 CSmash m_smash;                              // Collision object
-CBulletFest	m_bulletfest;                    // Used for bouncing betty
+CBulletFest m_bulletfest;                      // Used for bouncing betty
 double m_dVertVel;                           // Vertical velocity
 double m_dVertDeltaVel;                      // Change in vertical velocity
 S32 m_lFuseTime;                             // Time before timed mine goes off
@@ -211,7 +211,7 @@ public:
 void Reset(void)
 {
    m_pImage = NULL;
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_lFuseTime = 0;
    m_u16ShooterID = CIdBank::IdNil;
    m_siMineBeep = 0;
@@ -242,23 +242,23 @@ void EditRect(RRect* pRect)
          &(pRect->sY) );
 
       // Center on image.
-      pRect->sX	-= m_pImage->m_sWidth / 2;
-      pRect->sY	-= m_pImage->m_sHeight / 2;
-      pRect->sW	= m_pImage->m_sWidth;
-      pRect->sH	= m_pImage->m_sHeight;
+      pRect->sX   -= m_pImage->m_sWidth / 2;
+      pRect->sY   -= m_pImage->m_sHeight / 2;
+      pRect->sW   = m_pImage->m_sWidth;
+      pRect->sH   = m_pImage->m_sHeight;
    }
 }
 
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY)              // Out: Y coord of 2D hotspot relative to
+   short*   psY)              // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 {
    if (m_pImage)
    {
-      *psX	= m_pImage->m_sWidth / 2;
-      *psY	= m_pImage->m_sHeight / 2;
+      *psX   = m_pImage->m_sWidth / 2;
+      *psY   = m_pImage->m_sHeight / 2;
    }
    else
    {

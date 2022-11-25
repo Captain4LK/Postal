@@ -18,13 +18,13 @@
 // netserver.h
 // Project: RSPiX
 //
-//	History:
-//		08/30/97 MJR	Started.
+//   History:
+//      08/30/97 MJR   Started.
 //
-//		11/20/97	JMI	Added support for new sCoopLevels & sCoopMode flags in
-//							StartGame and SetupGame messages.
+//      11/20/97   JMI   Added support for new sCoopLevels & sCoopMode flags in
+//                     StartGame and SetupGame messages.
 //
-//		05/26/98	JMB	Added CNetServer::GetNumberOfClients()
+//      05/26/98   JMB   Added CNetServer::GetNumberOfClients()
 //
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,22 +85,22 @@ typedef enum
 // Variables
 //------------------------------------------------------------------------------
 public:
-State	m_state;                                                 // State
+State m_state;                                                   // State
 RSocket::Address m_address;                                    // Address
 char m_acName[Net::MaxPlayerNameSize];                         // Name
 unsigned char m_ucColor;                                       // Color number
 unsigned char m_ucTeam;                                        // Team number
-short	m_sBandwidth;                                            // Net::Bandwidth
+short m_sBandwidth;                                              // Net::Bandwidth
 
-CNetMsgr	m_msgr;                                               // Messenger for communicating with client
+CNetMsgr m_msgr;                                                 // Messenger for communicating with client
 bool m_bLoggedIn;                                              // Whether client is logged in
 
 S32 m_lLatestPingTime;                                         // Latest ping time
-Net::SEQ	m_seqLastDoneFrame;                                   // Last frame client did
-Net::SEQ	m_seqInput;
+Net::SEQ m_seqLastDoneFrame;                                     // Last frame client did
+Net::SEQ m_seqInput;
 bool m_bSentReadyRealm;                                        // Whether this client sent READY_REALM msg
 bool m_bSentDropAck;                                           // Whether this client sent DROP_ACK msg
-Net::SEQ	m_seqHighestDropeeInput;                              // Highest input seq client got from dropee
+Net::SEQ m_seqHighestDropeeInput;                                // Highest input seq client got from dropee
 
 //------------------------------------------------------------------------------
 // Functions
@@ -128,21 +128,21 @@ CClient()
 ////////////////////////////////////////////////////////////////////////////////
 void Reset(void)
 {
-   m_state					= Unused;
+   m_state               = Unused;
    m_address.Reset();
-   m_acName[0]				= 0;
-   m_ucColor				= 0;
-   m_ucTeam					= 0;
-   m_sBandwidth			= Net::FirstBandwidth;
+   m_acName[0]            = 0;
+   m_ucColor            = 0;
+   m_ucTeam               = 0;
+   m_sBandwidth         = Net::FirstBandwidth;
 
    m_msgr.Reset();
-   m_bLoggedIn				= false;
+   m_bLoggedIn            = false;
 
-   m_lLatestPingTime		= 0;
-   m_seqLastDoneFrame	= 0;
-   m_seqInput				= 0;
-   m_bSentReadyRealm		= false;
-   m_bSentDropAck			= false;
+   m_lLatestPingTime      = 0;
+   m_seqLastDoneFrame   = 0;
+   m_seqInput            = 0;
+   m_bSentReadyRealm      = false;
+   m_bSentDropAck         = false;
 }
 };
 
@@ -158,7 +158,7 @@ RSocket m_socketListen;                                  // Listen socket
 RSocket m_socketAntenna;                                 // Socket used to receive browse broadcasts
 protected:
 RSocket::BLOCK_CALLBACK m_callback;                      // Blocking callback
-unsigned short	m_usBasePort;                             // Base port number
+unsigned short m_usBasePort;                               // Base port number
 
 CClient m_aClients[Net::MaxNumIDs];                      // Array of clients
 Net::ID m_idPrevGet;                                     // Client we got last msg from
@@ -173,7 +173,7 @@ bool m_bSetupGameValid;                                  // Whether m_msgSetupGa
 NetMsg m_msgSetupGame;                                   // The latest SetupGame msg (if valid)
 
 FQueue<Net::ID, Net::MaxNumIDs> m_qDropIDs;              // Queue of ID's to be dropped
-Net::SEQ	m_seqHighestDoneFrame;                          // Highest frame
+Net::SEQ m_seqHighestDoneFrame;                            // Highest frame
 bool m_bWaitingForInputData;                             // Whether we're waiting for input data
 
 //------------------------------------------------------------------------------
@@ -305,8 +305,8 @@ void SetupGame(
    short sRejuvenate,                                 // In:  Rejuvenate flag
    short sTimeLimit,                                  // In:  Time limit in minutes, or negative if none
    short sKillLimit,                                  // In:  Kill limit, or negative if none
-   short	sCoopLevels,                                 // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   short	sCoopMode);                                  // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   short sCoopLevels,                                   // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   short sCoopMode);                                    // In:  Zero for deathmatch mode, non-zero for cooperative mode.
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -320,8 +320,8 @@ void StartGame(
    short sRejuvenate,                                 // In:  Rejuvenate flag
    short sTimeLimit,                                  // In:  Time limit in minutes, or negative if none
    short sKillLimit,                                  // In:  Kill limit, or negative if none
-   short	sCoopLevels,                                 // In:  Zero for deathmatch levels, non-zero for cooperative levels.
-   short	sCoopMode,                                   // In:  Zero for deathmatch mode, non-zero for cooperative mode.
+   short sCoopLevels,                                   // In:  Zero for deathmatch levels, non-zero for cooperative levels.
+   short sCoopMode,                                     // In:  Zero for deathmatch mode, non-zero for cooperative mode.
    short sFrameTime,                                  // In:  Time per frame (in milliseconds)
    Net::SEQ seqMaxAhead);                             // In:  Initial max ahead for input versus frame seq
 
@@ -396,9 +396,9 @@ const char* GetPlayerName(
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//	Counts how many clients are logged in
+//   Counts how many clients are logged in
 ////////////////////////////////////////////////////////////////////////////////
-short	GetNumberOfClients()
+short   GetNumberOfClients()
 {
    short sNumClients = 0;
    for(int id = 0; id < Net::MaxNumIDs; id++)

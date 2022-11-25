@@ -44,9 +44,9 @@ short   ConvertFromFSPR8(RImage* pImage);
 
 // Will delete pSpecial
 //
-short		DeleteFSPR8(RImage* pImage);
-short		LoadFSPR8(RImage* pImage, RFile* pcf);
-short		SaveFSPR8(RImage* pImage, RFile* pcf);
+short      DeleteFSPR8(RImage* pImage);
+short      LoadFSPR8(RImage* pImage, RFile* pcf);
+short      SaveFSPR8(RImage* pImage, RFile* pcf);
 
 IMAGELINKLATE(FSPR8, ConvertToFSPR8, ConvertFromFSPR8, LoadFSPR8, SaveFSPR8, NULL, DeleteFSPR8);
 
@@ -58,8 +58,8 @@ USHORT usCompType;      // = FSPR8 image type
 U32 m_lBufSize;            // Size of the pixel data
 U32 m_lCodeSize;           // Size of the control block
 USHORT usSourceType;       // uncompressed Image pre-compressed type
-UCHAR*	pCBuf;         // Start of compressed picture data, 128-aligned, NULL for monochrome
-UCHAR*	pCMem;
+UCHAR*   pCBuf;         // Start of compressed picture data, 128-aligned, NULL for monochrome
+UCHAR*   pCMem;
 UCHAR* pControlBlock;   // 32-aligned run length code for compressed BLiT
 UCHAR** pLineArry;      // 32-aligned, arry of ptrs to pCBuf scanlines, 32-bit align assumed
                         // (S32)->pLineArry[sH] = size of compressed buffer.
@@ -84,7 +84,7 @@ RCompressedImageData()
 
 // SAVES ONLY the pSpecial information!
 //
-short		SaveFSPR8(RImage* pImage, RFile* pcf)
+short      SaveFSPR8(RImage* pImage, RFile* pcf)
 {
    // Assume valid pImage and cnfile:
    RCompressedImageData* pSpec = (RCompressedImageData*) pImage->m_pSpecialMem;
@@ -145,7 +145,7 @@ short		SaveFSPR8(RImage* pImage, RFile* pcf)
 // Assumes all of the FSPR1 has successfully been
 // loaded EXCEPT for pSpecial[Mem]
 //
-short		LoadFSPR8(RImage* pImage, RFile* pcf)
+short      LoadFSPR8(RImage* pImage, RFile* pcf)
 {
    //------------------
    // Initial Security:
@@ -227,7 +227,7 @@ short		LoadFSPR8(RImage* pImage, RFile* pcf)
 
 // Just deletes pSpecial...
 //
-short		DeleteFSPR8(RImage* pImage)
+short      DeleteFSPR8(RImage* pImage)
 {
    if (pImage->m_pSpecial != NULL)
    {
@@ -243,7 +243,7 @@ short		DeleteFSPR8(RImage* pImage)
 short   ConvertToFSPR8(RImage*  pImage)
 {
    // Convert to BKD8:
-#ifdef	_DEBUG
+#ifdef   _DEBUG
    // Can convert any standard uncompressed 8-bit buffer....
    if (!ImageIsUncompressed(pImage->m_type))
    {
@@ -294,15 +294,15 @@ short   ConvertToFSPR8(RImage*  pImage)
 
    short x, y;  // For now, clear = 0, but this can be EASILY changed.
    S32 i;
-   short	sCount;
+   short sCount;
    UCHAR *pucOldMem, *pucOldBuf; // For shrinking the buffer while maintaining alignment
 
    //********* MALLOC all elements to maximum possible length, then shrink them. (realloc)
    //********* for now, assume MALLOC returns 32-bit aligned ptr arrays.
 
    // Max memory requirements:  Compresssed block = uncompressed block.
-   //									  Control Block = (width+1)*height
-   //	pCtlArry always = pLineArry always = 4*height bytes.
+   //                             Control Block = (width+1)*height
+   //   pCtlArry always = pLineArry always = 4*height bytes.
 
    // So worst case scenario:  MEM = Height * (2*Width+9)
 
@@ -321,11 +321,11 @@ short   ConvertToFSPR8(RImage*  pImage)
    pHeader->pControlBlock = (UCHAR*)malloc((size_t)lSizeEstimate);
 
    //******** For convenience, generate the Compressed Buffer immediately:
-   UCHAR*	pucCPos = pHeader->pCBuf;
-   UCHAR*	pucBPos = pImage->m_pData; // read the actual buffer
-   short	sW = pImage->m_sWidth;
-   short	sH = pImage->m_sHeight;
-   short	sP = pImage->m_lPitch;
+   UCHAR*   pucCPos = pHeader->pCBuf;
+   UCHAR*   pucBPos = pImage->m_pData; // read the actual buffer
+   short sW = pImage->m_sWidth;
+   short sH = pImage->m_sHeight;
+   short sP = pImage->m_lPitch;
 
    // WARNING:  THIS IS HARD CODED 8-bit PIXEL SIZE STUFF!
    for (y = 0; y<sH; y++)
@@ -376,7 +376,7 @@ short   ConvertToFSPR8(RImage*  pImage)
 
    //******** NOW, the challange... Create the Control Block!
    pucBPos = pImage->m_pData;
-   UCHAR*	pucConBlk = pHeader->pControlBlock;
+   UCHAR*   pucConBlk = pHeader->pControlBlock;
 
    for (y = 0; y<sH; y++)
    {
@@ -477,15 +477,15 @@ short   ConvertFromFSPR8(RImage*        pImage)
    pImage->CreateData(pImage->m_lPitch * pImage->m_sHeight); // should be blank
 
    // BLiT Into the buffer!
-   UCHAR*	pDstLine = pImage->m_pData; // centered at 0,0
-   UCHAR*	pDst;
+   UCHAR*   pDstLine = pImage->m_pData; // centered at 0,0
+   UCHAR*   pDst;
 
-   short	sY = 0;
+   short sY = 0;
    RCompressedImageData* pInfo = (RCompressedImageData*) pImage->m_pSpecial;
 
-   UCHAR	ucCode;
-   UCHAR*	pSrc;
-   UCHAR*	pCB;
+   UCHAR ucCode;
+   UCHAR*   pSrc;
+   UCHAR*   pCB;
 
    for (sY = 0; sY < pImage->m_sHeight; sY++, pDstLine += pImage->m_lPitch)
    {
@@ -506,7 +506,7 @@ NextCode3:
       ucCode = *(pCB)++;         // Get Skip Length
       if (!ucCode) goto NextCode3;
 
-      do	*(pDst++) = *(pSrc++);  // Copy pixel
+      do *(pDst++) = *(pSrc++);    // Copy pixel
       while (--ucCode);
 
       goto NextCode3;
@@ -527,7 +527,7 @@ NextCode3:
 // currently 8-bit, but soon to be full color.
 // Must deal with screen locking.
 //
-short	rspBlit(RImage* pimSrc, RImage* pimDst, short sDstX, short sDstY, const RRect* prDst)
+short   rspBlit(RImage* pimSrc, RImage* pimDst, short sDstX, short sDstY, const RRect* prDst)
 {
 
    short sClip;
@@ -621,28 +621,28 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sDstX, short sDstY, const RR
    case BUF_MEMORY:    // image to system buffer
       // need to lock / unlock this one:
 /*
-			if (rspLockBuffer())
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         if (rspLockBuffer())
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case BUF_VRAM:    // image to front screen
       // need to lock / unlock this one:
 /*
-			if (rspLockScreen())
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         if (rspLockScreen())
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -679,15 +679,15 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sDstX, short sDstY, const RR
    // 8-bit biased!
 
    // Right now, pDst refers to the CLIPPED start of the scanline:
-   UCHAR*	pDstLine = pimDst->m_pData + sDstX + sDstY * pimDst->m_lPitch;
-   UCHAR*	pDst;
+   UCHAR*   pDstLine = pimDst->m_pData + sDstX + sDstY * pimDst->m_lPitch;
+   UCHAR*   pDst;
 
-   short	sY = 0;
+   short sY = 0;
    RCompressedImageData* pInfo = (RCompressedImageData*) pimSrc->m_pSpecial;
 
-   UCHAR	ucCode;
-   UCHAR*	pSrc;
-   UCHAR*	pCB;
+   UCHAR ucCode;
+   UCHAR*   pSrc;
+   UCHAR*   pCB;
    short sClipWidth;
 
    // Current algorithms CAN'T clip BOTH sides of the FSPR!
@@ -727,11 +727,11 @@ NextSkip:
          else  // We've broken out of the Clipped region!
          {           // Do a partial opaque run:
             pSrc += sClipWidth;        // We DO need to advance the source!
-            //pDst += sClipWidth;				// and the Dest for the clipped part!
+            //pDst += sClipWidth;            // and the Dest for the clipped part!
             ucCode -= sClipWidth;         // Remaining part of run is opaque
             if (!ucCode) goto NormalClear;
-            do	*(pDst++) = *(pSrc++);  // Should be an unrolled loop
-            while	(--ucCode);
+            do *(pDst++) = *(pSrc++);    // Should be an unrolled loop
+            while   (--ucCode);
 
             goto NormalClear; // continue
          }
@@ -751,8 +751,8 @@ NormalOpaque:
          ucCode = *(pCB++); // Get skip length
 
          if (!ucCode) goto NormalClear;
-         do	*(pDst++) = *(pSrc++);  // Should be an unrolled loop
-         while	(--ucCode);
+         do *(pDst++) = *(pSrc++);    // Should be an unrolled loop
+         while   (--ucCode);
 
          goto NormalClear;
          // Do next line
@@ -788,7 +788,7 @@ NextCodeRC:          // Go until used up sClipWidth
 
          if (ucCode)    // Do an opaque run
          {
-            do	*(pDst++) = *(pSrc++);     // Copy pixel
+            do *(pDst++) = *(pSrc++);       // Copy pixel
             while (--ucCode);
          }
 
@@ -815,7 +815,7 @@ NextCode:
          ucCode = *(pCB)++;               // Get Skip Length
          if (!ucCode) goto NextCode;
 
-         do	*(pDst++) = *(pSrc++);        // Copy pixel
+         do *(pDst++) = *(pSrc++);          // Copy pixel
          while (--ucCode);
 
          goto NextCode;
@@ -839,11 +839,11 @@ NextCode:
       break;
 
    case BUF_MEMORY:
-//			rspUnlockBuffer();
+//         rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-//			rspUnlockScreen();
+//         rspUnlockScreen();
       break;
 
    case BUF_VRAM2:

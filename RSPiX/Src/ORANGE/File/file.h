@@ -20,55 +20,55 @@
 // File.h
 //
 // History:
-//		07/29/95 JMI	Started.
+//      07/29/95 JMI   Started.
 //
-//		01/22/97	JMI	Added NeutralEndian which never byte swaps and additional
-//							overload for Open() to open memfiles that grow when writes
-//							exceed their bounds.
+//      01/22/97   JMI   Added NeutralEndian which never byte swaps and additional
+//                     overload for Open() to open memfiles that grow when writes
+//                     exceed their bounds.
 //
-//		01/28/97	JMI	Added yet another Open() overload that allows one to open
-//							an existing FILE* stream with an RFile.
+//      01/28/97   JMI   Added yet another Open() overload that allows one to open
+//                     an existing FILE* stream with an RFile.
 //
-//		01/28/97	JMI	Added yet another Open() overload that allows one to open
-//							an existing FILE* stream with an RFile.
-//							And yet another Open() which opens from another RFile
-//							that is already attached to disk or memory.  This is use-
-//							ful for descended classes such as RIff (so they can sub-
-//							class an existing RFile).
+//      01/28/97   JMI   Added yet another Open() overload that allows one to open
+//                     an existing FILE* stream with an RFile.
+//                     And yet another Open() which opens from another RFile
+//                     that is already attached to disk or memory.  This is use-
+//                     ful for descended classes such as RIff (so they can sub-
+//                     class an existing RFile).
 //
-//		02/04/97	MJR/JMI	Added RFileEZSave() and RFileEZLoad() that are meant
-//							to replace the myclass.Load(char*) and
-//							myclass.Save(char*) that has been written so far for
-//							nearly every class that loads and saves.  These new funcs
-//							are essentially macros that will allocate an RFile, open
-//							it with the specified filename, permissions, and endian
-//							format, call the specified class's Load or Save, check
-//							for error, close the RFile, and deallocate the RFile.
+//      02/04/97   MJR/JMI   Added RFileEZSave() and RFileEZLoad() that are meant
+//                     to replace the myclass.Load(char*) and
+//                     myclass.Save(char*) that has been written so far for
+//                     nearly every class that loads and saves.  These new funcs
+//                     are essentially macros that will allocate an RFile, open
+//                     it with the specified filename, permissions, and endian
+//                     format, call the specified class's Load or Save, check
+//                     for error, close the RFile, and deallocate the RFile.
 //
-//		02/05/97	JMI	Protected Read and Write for void* (see comments there
-//							for details).  Consequently, I had to add an overload
-//							for char* that was being caught by the void* version
-//							before.
-//							Also, added Read and Writes for RPixel32.
+//      02/05/97   JMI   Protected Read and Write for void* (see comments there
+//                     for details).  Consequently, I had to add an overload
+//                     for char* that was being caught by the void* version
+//                     before.
+//                     Also, added Read and Writes for RPixel32.
 //
-//		02/10/97	JMI	Added rspAnyLoad() and rspAnySave().  There are two types
-//							of implementations for these functions.  One is the
-//							explicit overload where someone defines an rspAnyLoad/Save
-//							specific to the overloaded type and the other is implicit
-//							in that there is a template function that catches all the
-//							ones that don't have an explicit overload.
-//							Also, added explicit overloads for most RFile supported
-//							types.
+//      02/10/97   JMI   Added rspAnyLoad() and rspAnySave().  There are two types
+//                     of implementations for these functions.  One is the
+//                     explicit overload where someone defines an rspAnyLoad/Save
+//                     specific to the overloaded type and the other is implicit
+//                     in that there is a template function that catches all the
+//                     ones that don't have an explicit overload.
+//                     Also, added explicit overloads for most RFile supported
+//                     types.
 //
-//		02/10/97	JMI	RFILE_INSTANTIATE_ANYLOAD and SAVE had a bug where they
-//							returned the number of items read or written instead of
-//							0 indicating success or non-zero indicating failure.
+//      02/10/97   JMI   RFILE_INSTANTIATE_ANYLOAD and SAVE had a bug where they
+//                     returned the number of items read or written instead of
+//                     0 indicating success or non-zero indicating failure.
 //
-//		06/28/97 MJR	Metrowerks compiler has a problem with explicit functions
-//							being created AFTER templates of the same name are
-//							defined.  I simply rearranged the order so it works.
+//      06/28/97 MJR   Metrowerks compiler has a problem with explicit functions
+//                     being created AFTER templates of the same name are
+//                     defined.  I simply rearranged the order so it works.
 //
-//		10/06/99	JMI	rspEZSave() was not deleting its RFile when done.
+//      10/06/99   JMI   rspEZSave() was not deleting its RFile when done.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -106,17 +106,17 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #ifdef ALLOW_RFILE_REOPEN
-   #define KEEPCONNECTEDANDUPDATELASTACCESS	Reconnect(), m_lLastAccess = rspGetMilliseconds()
-#else	// ALLOW_RFILE_REOPEN
+   #define KEEPCONNECTEDANDUPDATELASTACCESS   Reconnect(), m_lLastAccess = rspGetMilliseconds()
+#else   // ALLOW_RFILE_REOPEN
    #define KEEPCONNECTEDANDUPDATELASTACCESS
 #endif // ALLOW_RFILE_REOPEN
 
-#define MAX_MODE_LEN		6
-#define MAX_NAME_LEN		512
+#define MAX_MODE_LEN      6
+#define MAX_NAME_LEN      512
 
 // Size of buffer used to byte swap by Write().  It'd be safe to make sure
 // this number is a multiple of 8 (our largest base type is 8 bytes).
-#define RFILE_SWAP_SIZE	1024
+#define RFILE_SWAP_SIZE   1024
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -133,11 +133,11 @@ public:     // Typedefs & Enums.
 typedef enum
 {
    // No flags.
-   NoFlags	= 0x0000,
+   NoFlags   = 0x0000,
    // Binary mode.  All numbers written to file as numbers.
-   Binary	= 0x0001,
+   Binary   = 0x0001,
    // ASCII mode.  All numbers written to file as text.
-   Ascii		= 0x0002
+   Ascii      = 0x0002
 } Flags;
 
 // Use for endian field of Open and SetEndian calls.
@@ -187,7 +187,7 @@ short Open(                   // Returns 0 on success.
    const char* pszFileName,         // Filename to open.
    const char* pszFlags,            // fopen flags to use for opening.
    Endian endian,             // { RFile::BigEndian | RFile::LittleEndian | RFile::NeutralEndian }.
-   Flags flags	=              // See comments in Typedefs & Enums section
+   Flags flags   =              // See comments in Typedefs & Enums section
    Binary);                   // above.
 
 // Open memory pFile of size lSize and endian format endian.
@@ -215,9 +215,9 @@ short Open(                   // Returns 0 on success.
 // Once a FILE* is opened, you can use this class's Close() instead of fclose(),
 // if that is more convenient.
 short Open(                   // Returns 0 on success.
-   FILE*	fs,                  // FILE* stream to open.
+   FILE*   fs,                  // FILE* stream to open.
    Endian endian,             // { RFile::BigEndian | RFile::LittleEndian | RFile::NeutralEndian }.
-   Flags flags	=              // See comments in Typedefs & Enums section
+   Flags flags   =              // See comments in Typedefs & Enums section
    Binary);                   // above.
 
 // Open an existing RFile.
@@ -303,11 +303,11 @@ S32 Read(char* pcData, S32 lNum)
 
 // Reads lNum U8 values from currently open file.
 // Returns number of U8 values successfully read.
-S32 Read(U8*	pu8Data, S32 lNum = 1L);
+S32 Read(U8*   pu8Data, S32 lNum = 1L);
 
 // Reads lNum S8 values from currently open file.
 // Returns number of S8 values successfully read.
-S32 Read(S8*	ps8Data, S32 lNum = 1L);
+S32 Read(S8*   ps8Data, S32 lNum = 1L);
 
 // Reads lNum U16 values from currently open file.
 // Returns number of U16 values successfully read.
@@ -377,16 +377,16 @@ S32 Write(const void* pData, S32 lNum);
 public:
 // Writes lNum char values to currently open file.
 // Returns number of U8 values successfully written.
-S32 Write(const char*	pcData, S32 lNum)
+S32 Write(const char*   pcData, S32 lNum)
 { return Write((void*)pcData, lNum); }
 
 // Writes lNum U8 values to currently open file.
 // Returns number of U8 values successfully written.
-S32 Write(const U8*	pu8Data, S32 lNum = 1L);
+S32 Write(const U8*   pu8Data, S32 lNum = 1L);
 
 // Writes lNum S8 values to currently open file.
 // Returns number of S8 values successfully written.
-S32 Write(const S8*	ps8Data, S32 lNum = 1L);
+S32 Write(const S8*   ps8Data, S32 lNum = 1L);
 
 // Writes lNum U16 values to currently open file.
 // Returns number of U16 values successfully written.
@@ -502,13 +502,13 @@ public:     // Querries.
 ////////////////////////////////////////////////////////////////////////
 
 // Returns TRUE, if open, FALSE if closed.
-short IsOpen(void)	{ return (m_fs == NULL && m_pucFile == NULL ? FALSE : TRUE); }
+short IsOpen(void)   { return (m_fs == NULL && m_pucFile == NULL ? FALSE : TRUE); }
 
 // Returns TRUE, if connected to a non-memory file.
-short IsFile(void)	{ return (m_fs == NULL ? FALSE : TRUE); }
+short IsFile(void)   { return (m_fs == NULL ? FALSE : TRUE); }
 
 // Returns TRUE, if connected to a memory file.
-short IsMemory(void)	{ return (m_pucFile == NULL ? FALSE : TRUE); }
+short IsMemory(void)   { return (m_pucFile == NULL ? FALSE : TRUE); }
 
 // Returns FALSE if no error has occurred on this stream; TRUE if an
 // error has occurred.
@@ -534,7 +534,7 @@ void ClearError(void)
       clearerr(m_fs);
    }
    else if (IsMemory() == TRUE)
-      m_sMemError	= FALSE;
+      m_sMemError   = FALSE;
 }
 
 // Returns TRUE if end of file has been reached, FALSE otherwise.
@@ -585,12 +585,12 @@ protected:     // Internal functions.
 
 // Reads in 8 bit data, swapped if necessary (BWAH HA).
 S32 Read8(           // Returns number of 8 bit items read.
-   U8*	pu8,           // In:  8 bit data to read (swapping, if necessary).
+   U8*   pu8,           // In:  8 bit data to read (swapping, if necessary).
    S32 lNum);           // In:  Number of 8 bit items to read.
 
 // Reads in 16 bit data, swapped if necessary.
 S32 Read16(          // Returns number of 16 bit items read.
-   U16*	pu16,          // In:  16 bit data to read (swapping, if necessary).
+   U16*   pu16,          // In:  16 bit data to read (swapping, if necessary).
    S32 lNum);           // In:  Number of 16 bit items to read.
 
 // Reads in 24 bit data, swapped if necessary.
@@ -600,24 +600,24 @@ S32 Read24(             // Returns number of 24 bit items read.
 
 // Reads in 32 bit data, swapped if necessary.
 S32 Read32(          // Returns number of 32 bit items read.
-   U32*	pu32,          // In:  32 bit data to read (swapping, if necessary).
+   U32*   pu32,          // In:  32 bit data to read (swapping, if necessary).
    S32 lNum);           // In:  Number of 32 bit items to read.
 
 // Reads in 64 bit data, swapped if necessary.
 S32 Read64(          // Returns number of 64 bit items read.
-   U64*	pu64,          // In:  64 bit data to read (swapping, if necessary).
+   U64*   pu64,          // In:  64 bit data to read (swapping, if necessary).
    S32 lNum);           // In:  Number of 64 bit items to read.
 
 /////////// Binary Writes ////////////////////////////////////////////////////
 
 // Writes out 8 bit data, swapped if necessary (BWAH HA).
 S32 Write8(          // Returns number of 8 bit items written.
-   const U8*	pu8,           // In:  8 bit data to write (swapping, if necessary).
+   const U8*   pu8,           // In:  8 bit data to write (swapping, if necessary).
    S32 lNum);           // In:  Number of 8 bit items to write.
 
 // Writes out 16 bit data, swapped if necessary.
 S32 Write16(            // Returns number of 16 bit items written.
-   const U16*	pu16,          // In:  16 bit data to write (swapping, if necessary).
+   const U16*   pu16,          // In:  16 bit data to write (swapping, if necessary).
    S32 lNum);           // In:  Number of 16 bit items to write.
 
 // Writes out 24 bit data, swapped if necessary.
@@ -627,12 +627,12 @@ S32 Write24(               // Returns number of 24 bit items written.
 
 // Writes out 32 bit data, swapped if necessary.
 S32 Write32(            // Returns number of 32 bit items written.
-   const U32*	pu32,          // In:  32 bit data to write (swapping, if necessary).
+   const U32*   pu32,          // In:  32 bit data to write (swapping, if necessary).
    S32 lNum);           // In:  Number of 32 bit items to write.
 
 // Writes out 64 bit data, swapped if necessary.
 S32 Write64(            // Returns number of 64 bit items written.
-   const U64*	pu64,          // In:  64 bit data to write (swapping, if necessary).
+   const U64*   pu64,          // In:  64 bit data to write (swapping, if necessary).
    S32 lNum);           // In:  Number of 64 bit items to write.
 
       #ifdef ALLOW_RFILE_REOPEN
@@ -649,32 +649,32 @@ short Reconnect(void);
 // S32est ago.
 // Returns 0 on success.
 static short MakeStreamAvailable(void);
-      #endif	// ALLOW_RFILE_REOPEN
+      #endif   // ALLOW_RFILE_REOPEN
 
 //////////////////////////////////////////////////////////////////////////////
 friend class RRes;
 //////////////////////////////////////////////////////////////////////////////
 
 public:     // Member variables.
-FILE*			m_fs;                      // Stdio file stream ptr.
+FILE*         m_fs;                      // Stdio file stream ptr.
 static CritiCall ms_criticall;         // Called on every read and write with
                                        // the amount that is about to be
                                        // processed.
 
 protected:     // Member variables.
-UCHAR*		m_pucFile;              // Memory file ptr.
-short	m_sOwnMem;                    // TRUE, if RFile allocated m_pucFile.
-UCHAR*		m_pucCur;               // Current position in memory file.
+UCHAR*      m_pucFile;              // Memory file ptr.
+short m_sOwnMem;                      // TRUE, if RFile allocated m_pucFile.
+UCHAR*      m_pucCur;               // Current position in memory file.
 S32 m_lSize;                        // Size of memory file (in bytes).
 S32 m_lGrowSize;                    // Amount to grow memfile when buffer
                                     // overwritten.
-short	m_sMemError;                  // TRUE if memory file access functions
-                                    // caused an error.
+short m_sMemError;                    // TRUE if memory file access functions
+                                      // caused an error.
 Endian m_endian;                    // Endian type.
-Flags	m_flags;                      // Flags.  See comments in Typedefs &
-                                    // Enums section above.
+Flags m_flags;                        // Flags.  See comments in Typedefs &
+                                      // Enums section above.
 
-RFile*		m_pfileSynch;           // RFile this RFile is synchronized with.
+RFile*      m_pfileSynch;           // RFile this RFile is synchronized with.
                                     // Used on Close() to resynch.
 
 static U8 ms_au8SwapBuf[RFILE_SWAP_SIZE];          // Used to byte swap by Write().
@@ -683,19 +683,19 @@ static U8 ms_au8SwapBuf[RFILE_SWAP_SIZE];          // Used to byte swap by Write
 S32 m_lUser;                                 // Instantiable hook value.
 static OpenHook ms_hOpen;                    // Hook for calls to Open(char*...).
 static S32 ms_lOpenUser;                     // User value passed to m_hOpen.
-short	m_sOpenSem;                            // Semaphore to block recursion greater
-                                             // than 1.
+short m_sOpenSem;                              // Semaphore to block recursion greater
+                                               // than 1.
 static CloseHook ms_hClose;                  // Hook for calls to Close().
 static S32 ms_lCloseUser;                    // User value passed to m_hClose.
-short	m_sCloseSem;                           // Semaphore to block recursion greater
-                                             // than 1.
+short m_sCloseSem;                             // Semaphore to block recursion greater
+                                               // than 1.
    #ifdef ALLOW_RFILE_REOPEN
 // Reopen stuff.
-static RList <RFile>	ms_listOpen;                  // List of open RFiles.
+static RList <RFile>   ms_listOpen;                  // List of open RFiles.
 S32 m_lLastAccess;                                 // Time of last access.
 char m_szFlags[MAX_MODE_LEN + 1];                  // Last Open's flags.
-short	m_sDisconnected;                             // TRUE if file has been
-                                                   // diskonnected.
+short m_sDisconnected;                               // TRUE if file has been
+                                                     // diskonnected.
 char m_szFileName[MAX_NAME_LEN + 1];               // Filename for reopening.
    #endif // ALLOW_RFILE_REOPEN
 };
@@ -708,11 +708,11 @@ char m_szFileName[MAX_NAME_LEN + 1];               // Filename for reopening.
 // Load(), and closes the file, all with full error checking.  Note that the
 // file mode defaults to "rb" and the endian mode defaults to LittleEndian.
 ////////////////////////////////////////////////////////////////////////////////
-#define	rspEZLoad(a, b) RFileEZLoad(a, b, "rb", RFile::LittleEndian)
-#define	rspEZSave(a, b) RFileEZSave(a, b, "wb", RFile::LittleEndian)
+#define   rspEZLoad(a, b) RFileEZLoad(a, b, "rb", RFile::LittleEndian)
+#define   rspEZSave(a, b) RFileEZSave(a, b, "wb", RFile::LittleEndian)
 
 #ifdef _DEBUG
-   #define RFileEZLoad(a, b, c, d)	RFileEZLoadDebug(__FILE__, __LINE__, a, b, c, d)
+   #define RFileEZLoad(a, b, c, d)   RFileEZLoadDebug(__FILE__, __LINE__, a, b, c, d)
 #endif
 
 template <class ClassType>
@@ -788,7 +788,7 @@ short RFileEZLoad(
 // file mode defaults to "wb" and the endian mode defaults to LittleEndian.
 ////////////////////////////////////////////////////////////////////////////////
 #ifdef _DEBUG
-   #define RFileEZSave(a, b, c, d)	RFileEZSaveDebug(__FILE__, __LINE__, a, b, c, d)
+   #define RFileEZSave(a, b, c, d)   RFileEZSaveDebug(__FILE__, __LINE__, a, b, c, d)
 #endif
 
 template <class ClassType>
@@ -842,7 +842,7 @@ short RFileEZSave(
       }
 
       delete pFile;
-      pFile	= 0;
+      pFile   = 0;
    }
    else
    {
@@ -858,7 +858,7 @@ short RFileEZSave(
 
 ////////// rspAnyLoad() and rspAnySave() /////////////////////////////////////
 // There are two types of implementations for these functions.  One is the
-//	explicit overload where someone defines an rspAnyLoad/Save specific to the
+//   explicit overload where someone defines an rspAnyLoad/Save specific to the
 // overloaded type and the other is implicit in that there is a template
 // function that catches all the ones that don't have an explicit overload.
 //////////////////////////////////////////////////////////////////////////////
@@ -927,8 +927,8 @@ RFILE_INSTANTIATE_ANYSAVE(double)
 //////////////////////////////////////////////////////////////////////////////
 template <class obj>
 short rspAnyLoad(    // Returns 0 on success.
-   obj*		pobj,    // Ptr to object to load.
-   RFile*	pfile)   // Open RFile.  Must have read access.
+   obj*      pobj,    // Ptr to object to load.
+   RFile*   pfile)   // Open RFile.  Must have read access.
 {
    return pobj->Load(pfile);
 }
@@ -939,8 +939,8 @@ short rspAnyLoad(    // Returns 0 on success.
 //////////////////////////////////////////////////////////////////////////////
 template <class obj>
 short rspAnySave(    // Returns 0 on success.
-   obj*		pobj,    // Ptr to object to save.
-   RFile*	pfile)   // Open RFile.  Must have write access.
+   obj*      pobj,    // Ptr to object to save.
+   RFile*   pfile)   // Open RFile.  Must have write access.
 {
    return pobj->Save(pfile);
 }
@@ -955,5 +955,5 @@ extern const char *FindCorrectFile(const char *pszName, const char *pszMode);
 
 #endif // FILE_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

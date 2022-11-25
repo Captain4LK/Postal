@@ -19,17 +19,17 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		12/18/96 MJR	Started.
+//      12/18/96 MJR   Started.
 //
-//		02/07/97	JMI	Added CGameEditThing to store editor settings and, perhaps,
-//							later it could do more things that only a CThing derived
-//							class can do for the Editor.
+//      02/07/97   JMI   Added CGameEditThing to store editor settings and, perhaps,
+//                     later it could do more things that only a CThing derived
+//                     class can do for the Editor.
 //
-//		02/07/97	JMI	Needed include of idBank.h.
+//      02/07/97   JMI   Needed include of idBank.h.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/18/97	JMI	Added Edit_Menu_Continue() and Edit_Menu_ExitEditor().
+//      04/18/97   JMI   Added Edit_Menu_Continue() and Edit_Menu_ExitEditor().
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef GAMEEDIT_H
@@ -64,8 +64,8 @@ public:
 // Settings //////////////////////////////////////////////////////////////
 
 U16 m_u16CameraTrackId;          // ID of object for grip to track.
-short	m_sViewPosX;               // View position.
-short	m_sViewPosY;               // View position.
+short m_sViewPosX;                 // View position.
+short m_sViewPosY;                 // View position.
 RListBox* m_plbNavNetList;       // Pointer to Nav Net List Box
 
 //---------------------------------------------------------------------------
@@ -77,9 +77,9 @@ CGameEditThing(CRealm* pRealm)
    : CThing(pRealm, CGameEditThingID)
 {
    // Set defaults.
-   m_u16CameraTrackId	= CIdBank::IdNil;
-   m_sViewPosX				= 0;
-   m_sViewPosY				= 0;
+   m_u16CameraTrackId   = CIdBank::IdNil;
+   m_sViewPosX            = 0;
+   m_sViewPosY            = 0;
 }
 
 public:
@@ -119,7 +119,7 @@ short Load(                                           // Returns 0 if successful
    U32 ulFileVersion)                                 // In:  Version of file format to load.
 {
    // Call base class.
-   short	sResult	= CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   short sResult   = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Read settings.
@@ -137,7 +137,7 @@ short Load(                                           // Returns 0 if successful
       if (sResult == 0)
       {
          // File status indicates our success, or lack thereof.
-         sResult	= pFile->Error();
+         sResult   = pFile->Error();
       }
    }
    else
@@ -154,7 +154,7 @@ short Save(                                           // Returns 0 if successful
    short sFileCount)                                  // In:  File count (unique per file, never 0)
 {
    // Call base class.
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       // Write settings.
@@ -163,7 +163,7 @@ short Save(                                           // Returns 0 if successful
       pFile->Write(m_sViewPosY);
 
       // File status indicates our success, or lack thereof.
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
    else
    {

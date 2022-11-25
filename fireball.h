@@ -19,35 +19,35 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		04/25/97 BRH	Started this new weapon to be used to make a
-//							flamethrower.
+//      04/25/97 BRH   Started this new weapon to be used to make a
+//                     flamethrower.
 //
-//		04/29/97	JMI	Added GetSprite() virtual override to provide access
-//							to m_sprite from a lower level.
-//							Changed back to being derived from CWeapon (instead of
-//							CThing).
-//							Added a Setup() that matches the base class virtual
-//							Setup() to make sure it gets overriden.  The
-//							functionality is the same (the new Setup() just calls
-//							the six parm Setup() with some handy defaults).
-//							Changed name of ProcessMessages() to
-//							ProcessFireballMessages() to avoid conflicts with
-//							CWeapon's ProcessMessages().
+//      04/29/97   JMI   Added GetSprite() virtual override to provide access
+//                     to m_sprite from a lower level.
+//                     Changed back to being derived from CWeapon (instead of
+//                     CThing).
+//                     Added a Setup() that matches the base class virtual
+//                     Setup() to make sure it gets overriden.  The
+//                     functionality is the same (the new Setup() just calls
+//                     the six parm Setup() with some handy defaults).
+//                     Changed name of ProcessMessages() to
+//                     ProcessFireballMessages() to avoid conflicts with
+//                     CWeapon's ProcessMessages().
 //
-//		06/30/97 BRH	Added a fire stream object in this file to emit several
-//							fireballs spaced close together to make a better stream
-//							for the flamethrower.
+//      06/30/97 BRH   Added a fire stream object in this file to emit several
+//                     fireballs spaced close together to make a better stream
+//                     for the flamethrower.
 //
-//		07/04/97 BRH	Changed to an auto alpha level based on the time to
-//							live so that the flame gets more alpha-ed toward the
-//							end where it burns out.
+//      07/04/97 BRH   Changed to an auto alpha level based on the time to
+//                     live so that the flame gets more alpha-ed toward the
+//                     end where it burns out.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		08/08/97	JMI	Changed m_pFireball1, 2, & 3 to m_idFireball1, 2, & 3.
+//      08/08/97   JMI   Changed m_pFireball1, 2, & 3 to m_idFireball1, 2, & 3.
 //
-//		08/17/97	JMI	Changed m_pthingParent to m_idParent.
+//      08/17/97   JMI   Changed m_pthingParent to m_idParent.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -114,9 +114,9 @@ bool m_bMoving;                        // Once it hits a wall it will stop movin
 S32 m_lAnimTime;                       // Animation time so anims can be offset frames.
 S32 m_lPrevTime;                       // Previous update time
 
-CSprite2	m_sprite;                     // 2D sprite to render this object.
+CSprite2 m_sprite;                       // 2D sprite to render this object.
 
-ChannelAA*	m_pAnimChannel;            // Alpha animation stored as a channel.
+ChannelAA*   m_pAnimChannel;            // Alpha animation stored as a channel.
 
 short m_sSuspend;                      // Suspend flag
 
@@ -193,7 +193,7 @@ static short Construct(                               // Returns 0 if successful
 //---------------------------------------------------------------------------
 
 // Function for this class that is called before play begins to make
-//	the resource manager cache the resources for this object.
+//   the resource manager cache the resources for this object.
 static short Preload(
    CRealm* prealm);                 // In:  Calling realm.
 
@@ -367,7 +367,7 @@ bool m_bSendMessages;                  // Whether or not to send messages to oth
                                        // objects telling them to burn or not.
 S32 m_lPrevTime;                       // Previous update time
 
-CSprite2	m_sprite;                     // False sprite for positioning info
+CSprite2 m_sprite;                       // False sprite for positioning info
 U16 m_idFireball1;
 U16 m_idFireball2;
 U16 m_idFireball3;
@@ -433,7 +433,7 @@ static short Construct(                               // Returns 0 if successful
 //---------------------------------------------------------------------------
 
 // Function for this class that is called before play begins to make
-//	the resource manager cache the resources for this object.
+//   the resource manager cache the resources for this object.
 static short Preload(
    CRealm* prealm);                 // In:  Calling realm.
 

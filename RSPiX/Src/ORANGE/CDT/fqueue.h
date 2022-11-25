@@ -17,16 +17,16 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	fqueue.h
+//   fqueue.h
 //
 // History:
-//		08/30/97	MJR	Started.
+//      08/30/97   MJR   Started.
 //
-//		09/01/97 MJR	Changed to use a counter to keep track of items in queue.
+//      09/01/97 MJR   Changed to use a counter to keep track of items in queue.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	This file impliments a template for a fast queue with little or no error
+//   This file impliments a template for a fast queue with little or no error
 // checking.  It assumes that memory allocations will never fail and the
 // interface is designed around the idea of an intelligent user.
 //

@@ -19,27 +19,27 @@
 // Project: Soon-to-be-RSPiX
 //
 // History:
-//		12/11/96	JPW	RPrefsLine created to contain ini file lines, information
-//							on the type of lines, and to help in processing of lines.
-//		12/16/96	JPW	Fixed so it will work with the STL stuff that comes with
-//							MSVC 4.1 or newer.  Also fixed a few psz parameters that
-//							should have been const's.
+//      12/11/96   JPW   RPrefsLine created to contain ini file lines, information
+//                     on the type of lines, and to help in processing of lines.
+//      12/16/96   JPW   Fixed so it will work with the STL stuff that comes with
+//                     MSVC 4.1 or newer.  Also fixed a few psz parameters that
+//                     should have been const's.
 //
-//		05/08/97	JMI	Added conditions for compiler versions' STL
-//							differences (namely "list" vs. "list.h").
-//							Also, changed #include <rspix.h> to #include "RSPiX.h".
+//      05/08/97   JMI   Added conditions for compiler versions' STL
+//                     differences (namely "list" vs. "list.h").
+//                     Also, changed #include <rspix.h> to #include "RSPiX.h".
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
-//		07/10/97 MJR	Removed TRACE() that occured if there was nothing following
-//							an entry's '='.
+//      07/10/97 MJR   Removed TRACE() that occured if there was nothing following
+//                     an entry's '='.
 //
-//		08/27/97	JMI	Now Var names and Section names can contain spaces (note,
-//							though, that leading and trailing spaces are ignored for
-//							user's convenience).
+//      08/27/97   JMI   Now Var names and Section names can contain spaces (note,
+//                     though, that leading and trailing spaces are ignored for
+//                     user's convenience).
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,13 +56,13 @@
 // The whitespace directly preceding and postceding.
 ////////////////////////////////////////////////////////////////////////////////
 inline short GetVar( // Returns 0 on success.
-   char*	pszLine,    // In:  Line to parse.
-   char*	pszVar,     // Out: Var name, if not NULL.
+   char*   pszLine,    // In:  Line to parse.
+   char*   pszVar,     // Out: Var name, if not NULL.
    char* pszVal)     // Out: Val, if not NULL.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   short	j, i, k;
+   short j, i, k;
    // Copy variable name to out string
    for (j = 0, i = 0; pszLine[i] != '\0' && pszLine[i] != '='; i++, j++)
    {
@@ -96,7 +96,7 @@ inline short GetVar( // Returns 0 on success.
          if (pszLine[i] == '\0')
          {
 // 7/10/97 MJR - Removed this TRACE() because we often use entries with nothing after the '='
-//				TRACE("GetVar(): Badly formed variable syntax.\n");
+//            TRACE("GetVar(): Badly formed variable syntax.\n");
             sRes = 3;
          }
          else
@@ -135,7 +135,7 @@ RPrefsLine::~RPrefsLine ()
 ////////////////////////////////////////////////////////////////////////////////
 // Method to get a constant pointer to the Line of text.
 ////////////////////////////////////////////////////////////////////////////////
-const char*	RPrefsLine::GetLine (void)
+const char*   RPrefsLine::GetLine (void)
 {
    return (m_pszLine);
 }
@@ -224,7 +224,7 @@ short RPrefsLine::GetVariableName(char *pszVariable)
    if (sRes != 0)
       strcpy(pszVariable, "");
 #else
-      sRes	= GetVar(m_pszLine, pszVariable, NULL);
+      sRes   = GetVar(m_pszLine, pszVariable, NULL);
 #endif
    return (sRes);
 }
@@ -263,7 +263,7 @@ short RPrefsLine::GetVariableValue(char *pszValue)
          if (m_pszLine[i] == '\0')
          {
 // 7/10/97 MJR - Removed this TRACE() because we often use entries with nothing after the '='
-//				TRACE("RPrefsLine::GetVariableName(): Badly formed variable syntax.\n");
+//            TRACE("RPrefsLine::GetVariableName(): Badly formed variable syntax.\n");
             sRes = 3;
          }
          else
@@ -274,7 +274,7 @@ short RPrefsLine::GetVariableValue(char *pszValue)
    if (sRes != 0)
       strcpy(pszValue, "");
 #else
-      sRes	= GetVar(m_pszLine, NULL, pszValue);
+      sRes   = GetVar(m_pszLine, NULL, pszValue);
 #endif
    return (sRes);
 }
@@ -284,7 +284,7 @@ short RPrefsLine::GetVariableValue(char *pszValue)
 ////////////////////////////////////////////////////////////////////////////////
 short RPrefsLine::SetVariableValue(const char *pszValue)
 {
-   short	sRes = 0;
+   short sRes = 0;
    char pszLine[128], pszVariable[64];
 
    ASSERT(pszValue);
@@ -303,7 +303,7 @@ short RPrefsLine::SetVariableValue(const char *pszValue)
          pszVariable[i] = m_pszLine[i];
       pszVariable[i] = '\0';
 #else
-      sRes	= GetVar(m_pszLine, pszVariable, NULL);
+      sRes   = GetVar(m_pszLine, pszVariable, NULL);
       if (sRes == 0)
 #endif
       {

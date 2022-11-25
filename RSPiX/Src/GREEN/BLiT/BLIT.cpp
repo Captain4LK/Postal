@@ -28,7 +28,7 @@
 #endif
 
 template <class PIXSIZE>
-void	rspClipPlot(PIXSIZE color, RImage* pimDst, short sX, short sY, const RRect* prClip)
+void   rspClipPlot(PIXSIZE color, RImage* pimDst, short sX, short sY, const RRect* prClip)
 {
 
 #ifdef _DEBUG
@@ -135,11 +135,11 @@ void	rspClipPlot(PIXSIZE color, RImage* pimDst, short sX, short sY, const RRect*
       break;
 
    case BUF_MEMORY:
-//			rspUnlockBuffer();
+//         rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-//			rspUnlockScreen();
+//         rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -177,8 +177,8 @@ void instantiatePlot()
 // the side shrinking.
 //
 template <class PIXSIZE>
-short	rspLasso(PIXSIZE ignoreColor, RImage* pimSrc, short &x, short &y, short &w, short &h,
-               int lFlag, int rFlag, int tFlag, int bFlag)
+short   rspLasso(PIXSIZE ignoreColor, RImage* pimSrc, short &x, short &y, short &w, short &h,
+                 int lFlag, int rFlag, int tFlag, int bFlag)
 {
    short sWordLen = sizeof(PIXSIZE);
 
@@ -337,12 +337,12 @@ void instantiateLasso()
 //
 template <class PIXSIZE>
 inline void _BLiT(PIXSIZE* pSrc, PIXSIZE* pDst, S32 lSrcPitch, S32 lDstPitch,
-                  short sHeight, short	sByteWidth)
+                  short sHeight, short sByteWidth)
 {
    union
    {
       PIXSIZE *w;
-      UCHAR	*b;
+      UCHAR   *b;
    } pSrcLine, pDstLine;
 
    int i;
@@ -372,7 +372,7 @@ inline void _BLiT(PIXSIZE* pSrc, PIXSIZE* pDst, S32 lSrcPitch, S32 lDstPitch,
 //
 // But this is a garatied SegBus on ARM with NEON vectorisation, as misaligned are not possible
 inline void _BLiT_MA(UCHAR* pSrc, UCHAR* pDst, S32 lSrcPitch, S32 lDstPitch,
-                     short sHeight, short	sWidth)
+                     short sHeight, short sWidth)
 {
 #ifdef __ARM_NEON__
    while (sHeight--)
@@ -385,7 +385,7 @@ inline void _BLiT_MA(UCHAR* pSrc, UCHAR* pDst, S32 lSrcPitch, S32 lDstPitch,
    union
    {
       U32 *w;
-      UCHAR	*b;
+      UCHAR   *b;
    } pSrcLine, pDstLine, pS, pD;
 
    short i;
@@ -417,8 +417,8 @@ inline void _BLiT_MA(UCHAR* pSrc, UCHAR* pDst, S32 lSrcPitch, S32 lDstPitch,
 // Source and Destination (X,Y) must be the same.
 // Will widen your rectangle to take advantage of your bus!
 //
-short	rspBlitA(RImage* pimSrc, RImage* pimDst, short sX, short sY,
-               short sW, short sH, const RRect* prDst, const RRect* prSrc)
+short   rspBlitA(RImage* pimSrc, RImage* pimDst, short sX, short sY,
+                 short sW, short sH, const RRect* prDst, const RRect* prSrc)
 {
 
 #ifdef _DEBUG
@@ -449,7 +449,7 @@ short	rspBlitA(RImage* pimSrc, RImage* pimDst, short sX, short sY,
 
    // in bytes!
    short sx1 = sX << sDepthS;
-   short	sx2 = (sX + sW) << sDepthS;
+   short sx2 = (sX + sW) << sDepthS;
 
    // Optimize the 8-bit case:
    //***********************************************************************
@@ -611,8 +611,8 @@ short	rspBlitA(RImage* pimSrc, RImage* pimDst, short sX, short sY,
 //*****************************************************************************
 // This is the main controller... It clips in pixels, then thinks in bytes:
 //
-short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sDstX,
-              short sDstY, short sW, short sH, const RRect* prDst, const RRect* prSrc)
+short   rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sDstX,
+                short sDstY, short sW, short sH, const RRect* prDst, const RRect* prSrc)
 {
    short sClip;
 
@@ -723,7 +723,7 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sD
    short sBlitTypeSrc = 0;
    short sBlitTypeDst = 0;
 
-   //	if (gsScreenLocked || gsBufferLocked) goto BLIT_PRELOCKED;
+   //   if (gsScreenLocked || gsBufferLocked) goto BLIT_PRELOCKED;
 
    // IN THIS IMPLEMENTATION, we must do LOCK, BLiT, UNLOCK, so I
    // must record which UNLOCK (if any) needs to be done AFTER the BLiT
@@ -736,56 +736,56 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sD
    case (BUF_MEMORY << 3) + 0:  // system buffer to an image
       // need to lock / unlock this one:
 /*
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case (0 << 3) + BUF_MEMORY:  // image to system buffer
 /*
-			// need to lock / unlock this one:
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         // need to lock / unlock this one:
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case (BUF_VRAM << 3) + 0:  // front screen to image
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
    case (0 << 3) + BUF_VRAM:  // image to front screen
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("BLiT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -798,7 +798,7 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sD
 
    case (BUF_VRAM << 3) + BUF_MEMORY:  // front screen to system buffer
 /*
-			sNeedToUnlock = (BUF_VRAM<<3) + BUF_MEMORY;
+         sNeedToUnlock = (BUF_VRAM<<3) + BUF_MEMORY;
 */
       break;
 
@@ -890,7 +890,7 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sD
    // IN RELEASE MODE, GIVE THE USER A CHANCE:
    #ifndef _DEBUG
 
-   //	if (gsScreenLocked || gsBufferLocked) goto BLIT_DONTUNLOCK;
+   //   if (gsScreenLocked || gsBufferLocked) goto BLIT_DONTUNLOCK;
 
    #endif
 #endif
@@ -905,20 +905,20 @@ short	rspBlit(RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sD
       break;
 
    case BUF_MEMORY:
-//			rspUnlockBuffer();
+//         rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-//			rspUnlockScreen();
+//         rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
-//			rspUnlockVideoFlipPage();
+//         rspUnlockVideoFlipPage();
       break;
 
    case (BUF_VRAM << 3) + BUF_MEMORY:
-//			rspUnlockBuffer();
-//			rspUnlockScreen();
+//         rspUnlockBuffer();
+//         rspUnlockScreen();
       break;
 
    default:
@@ -944,7 +944,7 @@ inline void _ClearRect(WORDSIZE color, WORDSIZE* pDst, S32 lDstPitch,
    union
    {
       WORDSIZE *w;
-      UCHAR	*b;
+      UCHAR   *b;
    } pDstLine;
 
    short i, sWordWidth = sByteWidth;
@@ -1063,28 +1063,28 @@ short rspRect(U32 color, RImage* pimDst, short sX, short sY, short sW, short sH,
    case BUF_MEMORY:    // draw a rectangle in the system buffer
       // need to lock / unlock this one:
 /*
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("rspDrawRect: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("rspDrawRect: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case BUF_VRAM:    // draw a rectangle to the visible vram screen
       // need to lock / unlock this one:
 /*
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("rspDrawRect: Unable to lock the OnScreen buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("rspDrawRect: Unable to lock the OnScreen buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -1171,7 +1171,7 @@ short rspRect(U32 color, RImage* pimDst, short sX, short sY, short sW, short sH,
    // IN RELEASE MODE, GIVE THE USER A CHANCE:
 #ifndef _DEBUG
 
-//	if (gsScreenLocked || gsBufferLocked) goto RECT_DONTUNLOCK;
+//   if (gsScreenLocked || gsBufferLocked) goto RECT_DONTUNLOCK;
 
 #endif
 
@@ -1181,11 +1181,11 @@ short rspRect(U32 color, RImage* pimDst, short sX, short sY, short sW, short sH,
       break;
 
    case BUF_MEMORY:
-//			rspUnlockBuffer();
+//         rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-//			rspUnlockScreen();
+//         rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -1259,8 +1259,8 @@ short rspRect(short sThickness, U32 color, RImage* pimDst, short sX, short sY, s
 // This only crops uncompressed images.
 //
 // Modify current:
-short	rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
-              short sAlign) // sAlign in BYTES
+short   rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
+                short sAlign) // sAlign in BYTES
 {
 #ifdef _DEBUG
 
@@ -1296,7 +1296,7 @@ short	rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
    // 2) Create a new buffer with 128-bit alignment and pitch:
 
    // Determine pixel size:
-   short	sPixSize = pimSrc->m_sDepth >> 3;
+   short sPixSize = pimSrc->m_sDepth >> 3;
    short sShift[] = {-1, 0, 1, -1, 2};
    short sAlignMask = sAlign - 1; // sAlign is in BYTES
    short sPixShift = sShift[sPixSize];
@@ -1313,7 +1313,7 @@ short	rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
    rspBlit(pimSrc, &imDst, sX, sY, 0, 0, sW, sH);
 
    // tricky part: Swap buffers...
-   UCHAR	*pSrcMem, *pSrcBuf;
+   UCHAR   *pSrcMem, *pSrcBuf;
    pimSrc->DetachData((void**)&pSrcMem, (void**)&pSrcBuf);
    // Move the new buffer back to the original
    imDst.DetachData((void**)&(pimSrc->m_pMem), (void**)&(pimSrc->m_pData));
@@ -1339,9 +1339,9 @@ short	rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
 // This only pads uncompressed images.
 //
 // Modify current:
-short	rspPad(RImage* pimSrc, short sX, short sY, // where to move the old image to
-             short sW, short sH,  // new width and height
-             short sAlign)   // sAlign in BYTES
+short   rspPad(RImage* pimSrc, short sX, short sY, // where to move the old image to
+               short sW, short sH, // new width and height
+               short sAlign) // sAlign in BYTES
 {
 #ifdef _DEBUG
 
@@ -1388,7 +1388,7 @@ short	rspPad(RImage* pimSrc, short sX, short sY, // where to move the old image 
    // 2) Create a new buffer with 128-bit alignment and pitch:
 
    // Determine pixel size:
-   short	sPixSize = pimSrc->m_sDepth >> 3;
+   short sPixSize = pimSrc->m_sDepth >> 3;
    short sShift[] = {-1, 0, 1, -1, 2};
    short sAlignMask = sAlign - 1; // sAlign is in BYTES
    short sPixShift = sShift[sPixSize];
@@ -1421,7 +1421,7 @@ short	rspPad(RImage* pimSrc, short sX, short sY, // where to move the old image 
    }
 
    // tricky part: Swap buffers...
-   UCHAR	*pSrcMem, *pSrcBuf;
+   UCHAR   *pSrcMem, *pSrcBuf;
    pimSrc->DetachData((void**)&pSrcMem, (void**)&pSrcBuf);
    // Move the new buffer back to the original
    imDst.DetachData((void**)&(pimSrc->m_pMem), (void**)&(pimSrc->m_pData));

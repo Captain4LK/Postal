@@ -19,59 +19,59 @@
 // Project: Nostril (aka Postal)
 //
 // This module implements the bouy marker for use with the network navagation
-//	system that will help the enemy guys get around the world.
+//   system that will help the enemy guys get around the world.
 //
 // History:
 //
-//		05/01/97 BRH	Started this object from the Bouy.  It will take over the
-//							responsibility of logic suggestions and locations for the
-//							enemy AI and the bouys will go back to dealing only with
-//							navigation.
+//      05/01/97 BRH   Started this object from the Bouy.  It will take over the
+//                     responsibility of logic suggestions and locations for the
+//                     enemy AI and the bouys will go back to dealing only with
+//                     navigation.
 //
-//		05/02/97 BRH	Added message processing and changed the Popout and
-//							ShootCycle messages to be similar in their parameters.
-//							Stores the information about the other pylon and the
-//							dude when they become available.
+//      05/02/97 BRH   Added message processing and changed the Popout and
+//                     ShootCycle messages to be similar in their parameters.
+//                     Stores the information about the other pylon and the
+//                     dude when they become available.
 //
-//		05/05/97 BRH	Fixed problems in the EditModify and the EditNew.  Now
-//							properly sets the image for the sprite.
+//      05/05/97 BRH   Fixed problems in the EditModify and the EditNew.  Now
+//                     properly sets the image for the sprite.
 //
-//		05/06/97	JMI	GetThingByID() was being passed a pylon pointer instead of
-//							a pointer to a pylon pointer.
+//      05/06/97   JMI   GetThingByID() was being passed a pylon pointer instead of
+//                     a pointer to a pylon pointer.
 //
-//		05/17/97 BRH	Moved the clearing of the triggered flag to the top of
-//							Update so that it will stay alive an entire interation.
+//      05/17/97 BRH   Moved the clearing of the triggered flag to the top of
+//                     Update so that it will stay alive an entire interation.
 //
-//		05/29/97	JMI	Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/17/97 MJR	Moved some vars that were CPylon statics into the realm
-//							so they could be instantiated on a realm-by-realm basis.
+//      06/17/97 MJR   Moved some vars that were CPylon statics into the realm
+//                     so they could be instantiated on a realm-by-realm basis.
 //
-//		06/30/97	JMI	Moved EditRect() and EditHotSpot() from pylon.h to
-//							pylon.cpp.
-//							Also, converted EditRect(), EditRender(), and/or Render()
-//							to use Map3Dto2D().
+//      06/30/97   JMI   Moved EditRect() and EditHotSpot() from pylon.h to
+//                     pylon.cpp.
+//                     Also, converted EditRect(), EditRender(), and/or Render()
+//                     to use Map3Dto2D().
 //
-//		06/30/97	JMI	Now maps the Z to 3D when loading fileversions previous to
-//							24.
+//      06/30/97   JMI   Now maps the Z to 3D when loading fileversions previous to
+//                     24.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/14/97	JMI	Fixed two spots that did not check the return value from
-//							GetThingById() before using the passed thing pointer.
-//							Now EditModify() sets m_msg.msg_Popout.ucIDNext to 0, if
-//							the user's specified pylon ID did not exist.
-//							A dilemna existed for GetPylon(), if the user entered an
-//							invalid pylon ID in the editor OR, more likely, the user
-//							entered a valid pylon ID and then deleted the pylon, what
-//							did GetPylon() return as the end pylon?  It currently
-//							returns itself since that pylon is guaranteed to exist.
-//							/shrug.
+//      07/14/97   JMI   Fixed two spots that did not check the return value from
+//                     GetThingById() before using the passed thing pointer.
+//                     Now EditModify() sets m_msg.msg_Popout.ucIDNext to 0, if
+//                     the user's specified pylon ID did not exist.
+//                     A dilemna existed for GetPylon(), if the user entered an
+//                     invalid pylon ID in the editor OR, more likely, the user
+//                     entered a valid pylon ID and then deleted the pylon, what
+//                     did GetPylon() return as the end pylon?  It currently
+//                     returns itself since that pylon is guaranteed to exist.
+//                     /shrug.
 //
-//		08/05/97	JMI	Changed priority to use Z position rather than 2D
-//							projected Y position.
+//      08/05/97   JMI   Changed priority to use Z position rather than 2D
+//                     projected Y position.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define PYLON_CPP
@@ -85,7 +85,7 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define IMAGE_FILE			"pylon.bmp"
+#define IMAGE_FILE         "pylon.bmp"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -164,7 +164,7 @@ short CPylon::Load(                             // Returns 0 if successfull, non
          if (bEditMode == true)
          {
             // Get resources
-            //			sResult = GetResources();
+            //         sResult = GetResources();
          }
       }
       else
@@ -230,12 +230,12 @@ short CPylon::Startup(void)                        // Returns 0 if successfull, 
    sResult = GetResources();
 
    // Update sphere.
-   m_smash.m_sphere.sphere.X			= m_dX;
-   m_smash.m_sphere.sphere.Y			= m_dY;
-   m_smash.m_sphere.sphere.Z			= m_dZ;
-   m_smash.m_sphere.sphere.lRadius	= m_sprite.m_pImage->m_sWidth;
-   m_smash.m_bits		= CSmash::Pylon;
-   m_smash.m_pThing	= this;
+   m_smash.m_sphere.sphere.X         = m_dX;
+   m_smash.m_sphere.sphere.Y         = m_dY;
+   m_smash.m_sphere.sphere.Z         = m_dZ;
+   m_smash.m_sphere.sphere.lRadius   = m_sprite.m_pImage->m_sWidth;
+   m_smash.m_bits      = CSmash::Pylon;
+   m_smash.m_pThing   = this;
 
    // Update the smash.
    m_pRealm->m_smashatorium.Update(&m_smash);
@@ -318,12 +318,12 @@ short CPylon::EditNew(                          // Returns 0 if successfull, non
    sResult = GetResources();
 
    // Update sphere.
-   m_smash.m_sphere.sphere.X			= m_dX;
-   m_smash.m_sphere.sphere.Y			= m_dY;
-   m_smash.m_sphere.sphere.Z			= m_dZ;
-   m_smash.m_sphere.sphere.lRadius	= m_sprite.m_pImage->m_sWidth;
-   m_smash.m_bits		= CSmash::Pylon;
-   m_smash.m_pThing	= this;
+   m_smash.m_sphere.sphere.X         = m_dX;
+   m_smash.m_sphere.sphere.Y         = m_dY;
+   m_smash.m_sphere.sphere.Z         = m_dZ;
+   m_smash.m_sphere.sphere.lRadius   = m_sprite.m_pImage->m_sWidth;
+   m_smash.m_bits      = CSmash::Pylon;
+   m_smash.m_pThing   = this;
 
    // Update the smash.
    m_pRealm->m_smashatorium.Update(&m_smash);
@@ -333,11 +333,11 @@ short CPylon::EditNew(                          // Returns 0 if successfull, non
 
 inline
 void SetText(              // Returns nothing.
-   RGuiItem*	pguiRoot,   // In:  Root GUI.
+   RGuiItem*   pguiRoot,   // In:  Root GUI.
    S32 lId,                // In:  ID of GUI to set text.
    S32 lVal)               // In:  Value to set text to.
 {
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui != NULL)
    {
       pgui->SetText("%ld", lVal);
@@ -431,7 +431,7 @@ short CPylon::EditModify(void)
                            }
                            else
                            {
-                              m_msg.msg_Popout.ucIDNext	= 0;
+                              m_msg.msg_Popout.ucIDNext   = 0;
                            }
 
                         }
@@ -459,7 +459,7 @@ short CPylon::EditModify(void)
                            }
                            else
                            {
-                              m_msg.msg_Popout.ucIDNext	= 0;
+                              m_msg.msg_Popout.ucIDNext   = 0;
                            }
                         }
                      }
@@ -491,12 +491,12 @@ short CPylon::EditMove(                         // Returns 0 if successfull, non
    m_dZ = (double)sZ;
 
    // Update sphere.
-   m_smash.m_sphere.sphere.X			= m_dX;
-   m_smash.m_sphere.sphere.Y			= m_dY;
-   m_smash.m_sphere.sphere.Z			= m_dZ;
-   m_smash.m_sphere.sphere.lRadius	= m_sprite.m_pImage->m_sWidth;
-   m_smash.m_bits		= CSmash::Pylon;
-   m_smash.m_pThing	= this;
+   m_smash.m_sphere.sphere.X         = m_dX;
+   m_smash.m_sphere.sphere.Y         = m_dY;
+   m_smash.m_sphere.sphere.Z         = m_dZ;
+   m_smash.m_sphere.sphere.lRadius   = m_sprite.m_pImage->m_sWidth;
+   m_smash.m_bits      = CSmash::Pylon;
+   m_smash.m_pThing   = this;
 
    // Update the smash.
    m_pRealm->m_smashatorium.Update(&m_smash);
@@ -532,8 +532,8 @@ void CPylon::EditRender(void)
    m_sprite.m_sPriority = m_dZ;
 
    // Center on image.
-   m_sprite.m_sX2	-= m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_pImage->m_sHeight;
+   m_sprite.m_sX2   -= m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_pImage->m_sHeight;
 
    // Layer should be based on info we get from attribute map.
    m_sprite.m_sLayer = CRealm::GetLayerViaAttrib(m_pRealm->GetLayer((short) m_dX, (short) m_dZ));
@@ -557,31 +557,31 @@ void CPylon::EditRect(RRect* pRect)
       &(pRect->sX),
       &(pRect->sY) );
 
-   pRect->sW	= 10; // Safety.
-   pRect->sH	= 10; // Safety.
+   pRect->sW   = 10; // Safety.
+   pRect->sH   = 10; // Safety.
 
    if (m_pImage != NULL)
    {
-      pRect->sW	= m_pImage->m_sWidth;
-      pRect->sH	= m_pImage->m_sHeight;
+      pRect->sW   = m_pImage->m_sWidth;
+      pRect->sH   = m_pImage->m_sHeight;
    }
 
-   pRect->sX	-= pRect->sW / 2;
-   pRect->sY	-= pRect->sH;
+   pRect->sX   -= pRect->sW / 2;
+   pRect->sY   -= pRect->sH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
 ////////////////////////////////////////////////////////////////////////////////
 void CPylon::EditHotSpot(  // Returns nothiing.
-   short*	psX,           // Out: X coord of 2D hotspot relative to
+   short*   psX,           // Out: X coord of 2D hotspot relative to
                            // EditRect() pos.
-   short*	psY)           // Out: Y coord of 2D hotspot relative to
+   short*   psY)           // Out: Y coord of 2D hotspot relative to
                            // EditRect() pos.
 {
    // Base of pylon is hotspot.
-   *psX	= (m_pImage->m_sWidth / 2);
-   *psY	= m_pImage->m_sHeight;
+   *psX   = (m_pImage->m_sWidth / 2);
+   *psY   = m_pImage->m_sHeight;
 }
 
 
@@ -594,12 +594,12 @@ short CPylon::GetResources(void)                // Returns 0 if successfull, non
 
    if (m_pImage == 0)
    {
-      RImage*	pimBouyRes;
+      RImage*   pimBouyRes;
       sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &pimBouyRes);
       if (sResult == 0)
       {
          // Allocate image . . .
-         m_pImage	= new RImage;
+         m_pImage   = new RImage;
          if (m_pImage != NULL)
          {
             // Allocate image data . . .
@@ -641,7 +641,7 @@ short CPylon::GetResources(void)                // Returns 0 if successfull, non
             }
             else
             {
-               sResult	= -2;
+               sResult   = -2;
                TRACE("CPylon::GetResource() - m_pImage->CreateImage() failed.\n");
             }
 
@@ -649,12 +649,12 @@ short CPylon::GetResources(void)                // Returns 0 if successfull, non
             if (sResult != 0)
             {
                delete m_pImage;
-               m_pImage	= NULL;
+               m_pImage   = NULL;
             }
          }
          else
          {
-            sResult	= -1;
+            sResult   = -1;
             TRACE("CPylon::GetResource(): Failed to allocate RImage.\n");
          }
 
@@ -674,7 +674,7 @@ short CPylon::FreeResources(void)                  // Returns 0 if successfull, 
    if (m_pImage != NULL)
    {
       delete m_pImage;
-      m_pImage	= NULL;
+      m_pImage   = NULL;
    }
 
    return 0;
@@ -695,7 +695,7 @@ void CPylon::MessageRequest(CThing* pRequestingThing)
 
 ////////////////////////////////////////////////////////////////////////////////
 // GetFreePylonID - Scan the list of CPylons and make sure that the ID is
-//						  not used before it is given out.
+//                    not used before it is given out.
 ////////////////////////////////////////////////////////////////////////////////
 
 UCHAR CPylon::GetFreePylonID(void)
@@ -789,7 +789,7 @@ void CPylon::ProcessMessages(void)
    double dTempSqDistance = 0;
 
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
 

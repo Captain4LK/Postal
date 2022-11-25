@@ -23,22 +23,22 @@
 
 
 // Define the magic numbers for FLC and FLI files.
-#define FLX_MAGIC_FLI			0xAF11
-#define FLX_MAGIC_FLC			0xAF12
+#define FLX_MAGIC_FLI         0xAF11
+#define FLX_MAGIC_FLC         0xAF12
 
 // Define operation modes
-#define FLX_RETURN_DELTAS		0
-#define FLX_RETURN_FULL			1
+#define FLX_RETURN_DELTAS      0
+#define FLX_RETURN_FULL         1
 
 // Define data chunk types
-#define FLX_DATA_COLOR256		4
-#define FLX_DATA_SS2				7
-#define FLX_DATA_COLOR			11
-#define FLX_DATA_LC				12
-#define FLX_DATA_BLACK			13
-#define FLX_DATA_BRUN			15
-#define FLX_DATA_COPY			16
-#define FLX_DATA_PSTAMP			18
+#define FLX_DATA_COLOR256      4
+#define FLX_DATA_SS2            7
+#define FLX_DATA_COLOR         11
+#define FLX_DATA_LC            12
+#define FLX_DATA_BLACK         13
+#define FLX_DATA_BRUN         15
+#define FLX_DATA_COPY         16
+#define FLX_DATA_PSTAMP         18
 
 
 #ifndef RAMFLX_H  // Already defined if RAMFLX.H was included.
@@ -102,7 +102,7 @@ typedef struct tag_FLX_RGB
    UCHAR bG;
    UCHAR bB;
 } FLX_RGB;
-#endif	// RAMFLX_H
+#endif   // RAMFLX_H
 
 // Define struct that describes the buffers where a frame's data is stored
 typedef struct tag_FLX_BUF

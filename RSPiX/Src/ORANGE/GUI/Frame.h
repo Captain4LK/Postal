@@ -20,11 +20,11 @@
 // Frame.H
 //
 // History:
-//		01/13/97 JMI	Started.
+//      01/13/97 JMI   Started.
 //
-//		08/22/97	JMI	Now uses rspGeneralLock/Unlock() to make sure the
-//							destination buffer to Draw() is properly locked, if
-//							necessary.
+//      08/22/97   JMI   Now uses rspGeneralLock/Unlock() to make sure the
+//                     destination buffer to Draw() is properly locked, if
+//                     necessary.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -78,9 +78,9 @@ public:     // Construction/Destruction.
 RFrame(void)
 {
    // No border.
-   m_sBorderThickness	= 0;
+   m_sBorderThickness   = 0;
    // Don't show focus.
-   m_sShowFocus			= FALSE;
+   m_sShowFocus         = FALSE;
 }
 
 // Destructor.
@@ -117,10 +117,10 @@ short Create(              // Returns 0 on success.
    short sH,               // Height.
    short sDepth)           // Color depth.
 {
-   m_sX				= sX;
-   m_sY				= sY;
-   m_im.m_sWidth	= sW;
-   m_im.m_sHeight	= sH;
+   m_sX            = sX;
+   m_sY            = sY;
+   m_im.m_sWidth   = sW;
+   m_im.m_sHeight   = sH;
 
    Compose();
 
@@ -132,45 +132,45 @@ short Create(              // Returns 0 on success.
 virtual                       // If you override this, call this base if possible.
 short Draw(                   // Returns 0 on success.
    RImage* pimDst,            // Destination image.
-   short sDstX	= 0,           // X position in destination.
-   short sDstY	= 0,           // Y position in destination.
+   short sDstX   = 0,           // X position in destination.
+   short sDstY   = 0,           // Y position in destination.
    short sSrcX = 0,           // X position in source.
    short sSrcY = 0,           // Y position in source.
    short sW = 0,              // Amount to draw.
    short sH = 0,              // Amount to draw.
    RRect* prc = NULL)         // Clip to.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // If visible . . .
    if (m_sVisible != FALSE)
    {
-      sDstX	+= m_sX;
-      sDstY	+= m_sY;
+      sDstX   += m_sX;
+      sDstY   += m_sY;
 
       // An original clippage should be passed to all these children.
       // Set up default clip rect.
-      RRect	rc;
+      RRect rc;
       // Get client.
       GetClient(&rc.sX, &rc.sY, &rc.sW, &rc.sH);
 
       // Affect by draw position.
-      rc.sX	+= sDstX;
-      rc.sY	+= sDstY;
+      rc.sX   += sDstX;
+      rc.sY   += sDstY;
 
       // Clip to destination.
-      RRect	rcDst;
+      RRect rcDst;
 
       // If no rect . . .
       if (prc == NULL)
       {
          // Provide one using destination image.
-         rcDst.sX	= 0;
-         rcDst.sY	= 0;
-         rcDst.sW	= pimDst->m_sWidth;
-         rcDst.sH	= pimDst->m_sHeight;
+         rcDst.sX   = 0;
+         rcDst.sY   = 0;
+         rcDst.sW   = pimDst->m_sWidth;
+         rcDst.sH   = pimDst->m_sHeight;
 
-         prc	= &rcDst;
+         prc   = &rcDst;
       }
 
       // Clip default clipper to provided or destination.
@@ -188,14 +188,14 @@ short Draw(                   // Returns 0 on success.
       // again (the exception being the flip page).
       rspGeneralLock(pimDst);
 
-      RGuiItem*	pgui	= m_listguiChildren.GetTail();
+      RGuiItem*   pgui   = m_listguiChildren.GetTail();
 
       while (sRes == 0 && pgui != NULL)
       {
          // Draw subitem and all its subitems.
-         sRes	= pgui->Draw(pimDst, sDstX, sDstY, 0, 0, 0, 0, &rc);
+         sRes   = pgui->Draw(pimDst, sDstX, sDstY, 0, 0, 0, 0, &rc);
 
-         pgui	= m_listguiChildren.GetPrev();
+         pgui   = m_listguiChildren.GetPrev();
       }
 
       // If this item has the focus . . .
@@ -241,5 +241,5 @@ protected:     // Protected member variables.
 
 #endif // FRAME_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

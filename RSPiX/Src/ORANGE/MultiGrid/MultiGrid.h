@@ -19,17 +19,17 @@
 //
 // MULTIGRID.H
 //
-// Created on	03/23/97 JRD
-// Implemented	03/23/97 JRD
+// Created on   03/23/97 JRD
+// Implemented   03/23/97 JRD
 //
-//	History:
+//   History:
 //
-//		04/08/97 BRH	Fixed problems with include files
+//      04/08/97 BRH   Fixed problems with include files
 //
-//		04/09/97 BRH	Added GetValueUncompressed for the utility which
-//							added attributes from each layer.  It needed to
-//							get the value fromt the previous layer and OR
-//							them together.
+//      04/09/97 BRH   Added GetValueUncompressed for the utility which
+//                     added attributes from each layer.  It needed to
+//                     get the value fromt the previous layer and OR
+//                     them together.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -75,7 +75,7 @@
 //
 // By turning off clipping, access speed is greatly enhanced
 //
-#define	MULTIGRID_CLIP	TRUE // undefine to turn off clip to world...
+#define   MULTIGRID_CLIP   TRUE // undefine to turn off clip to world...
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -95,15 +95,15 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-class	RMultiGrid
+class RMultiGrid
 {
 public:
 //////////////////////////////////////////////////////////////////////
 //  User members:
 //////////////////////////////////////////////////////////////////////
 
-short	m_sWidth;      // With compression, you might get huge objects!
-short	m_sHeight;
+short m_sWidth;        // With compression, you might get huge objects!
+short m_sHeight;
 
 //////////////////////////////////////////////////////////////////////
 //  User methods:
@@ -112,7 +112,7 @@ short	m_sHeight;
 // This inline does a high speed lookup into the compressed data.
 // It ONLY works AFTER the data has been compressed!
 //
-short	GetVal(short sX, short sY, short sClipVal = -1)
+short   GetVal(short sX, short sY, short sClipVal = -1)
 {
    //-----------------------------------------------------------------
    ASSERT(m_sIsCompressed);
@@ -135,13 +135,13 @@ short	GetVal(short sX, short sY, short sClipVal = -1)
 // If you wish to know the scale, you can get it from
 // the mask members:
 //
-S32	GetScale(short sMask)    // decode the mask
+S32   GetScale(short sMask)    // decode the mask
 {
    return ++sMask;
 }
 
 // If you wish to know the coarse grid dimensions:
-void	GetGridDimensions(short *psW, short *psH)
+void   GetGridDimensions(short *psW, short *psH)
 {
    *psW = m_sWidth >> m_sShiftX;
    *psH = m_sHeight >> m_sShiftY;
@@ -150,7 +150,7 @@ void	GetGridDimensions(short *psW, short *psH)
 }
 
 // If you wish to know the enumber of unique blocks:
-short	GetNumTiles()
+short   GetNumTiles()
 {
    ASSERT(m_sIsCompressed);
 
@@ -186,11 +186,11 @@ short Save(RFile* prFile);
 // Returns SUCCESS or FAILURE
 // Sets up the UNCOMPRESSED data
 //
-short	Alloc(short sW, short sH);
+short   Alloc(short sW, short sH);
 
 // UNCOMPRESSED ACCESS:
 //
-void	SetValueUncompressed(short sVal, short sX, short sY)
+void   SetValueUncompressed(short sVal, short sX, short sY)
 {
    ASSERT(m_psGrid);
    ASSERT(sVal >= 0);
@@ -213,18 +213,18 @@ short GetValueUncompressed(short sX, short sY)
 
 // A visual Debug View: (Uncompressed)
 //
-void	Dump(RImage* pimDst, short sSrcX, short sSrcY, short sDstX, short sDstY,
-           short sW, short sH);
+void   Dump(RImage* pimDst, short sSrcX, short sSrcY, short sDstX, short sDstY,
+            short sW, short sH);
 
 // A visual Debug View: (Compressed)
 //
-void	DumpGrid(RImage* pimDst);
+void   DumpGrid(RImage* pimDst);
 
 // For Debugging:
-void	DumpData(RImage* pimDst);
+void   DumpData(RImage* pimDst);
 
 // For Debugging:
-void	DumpTiles(RImage* pimDst);
+void   DumpTiles(RImage* pimDst);
 
 //////////////////////////////////////////////////////////////////////
 // Performs Multigrid compression on the data in place
@@ -247,13 +247,13 @@ short Compress(
 // Returns the Data to an uncompressed state to try another
 // compression tile size.
 //////////////////////////////////////////////////////////////////////
-short	Decompress();
+short   Decompress();
 
 //////////////////////////////////////////////////////////////////////
 //  Internal members:
 //////////////////////////////////////////////////////////////////////
-short	m_sIsCompressed;
-short	m_sMaskX;      // Encodes the scale of the tiles
+short m_sIsCompressed;
+short m_sMaskX;        // Encodes the scale of the tiles
 short m_sMaskY;
 short m_sShiftX;
 short m_sShiftY;     // For user convenience ONLY
@@ -262,20 +262,20 @@ short m_sShiftY;     // For user convenience ONLY
 //  Internal methods:
 //////////////////////////////////////////////////////////////////////
 
-void	ClearUncompressed()
+void   ClearUncompressed()
 {
    m_sWidth = m_sHeight = 0;
    m_psGrid = NULL;
 }
 
-void	ClearCompressed()
+void   ClearCompressed()
 {
    m_sIsCompressed = m_sMaskX = m_sMaskY = m_sShiftX = m_sShiftY = 0;
    m_psTiles = m_psTileLine = NULL;
    m_ppsGridLines = m_ppsTileList = NULL;
 }
 
-void	FreeCompressed()
+void   FreeCompressed()
 {
    if (m_psTiles) free(m_psTiles);    // This should be freed!
    if (m_psTileLine) free(m_psTileLine);
@@ -285,13 +285,13 @@ void	FreeCompressed()
    ClearCompressed();
 }
 
-void	FreeUncompressed()
+void   FreeUncompressed()
 {
    if (m_psGrid) free(m_psGrid);
    ClearUncompressed();
 }
 
-void	Free()
+void   Free()
 {
    FreeCompressed();
    FreeUncompressed();
@@ -308,9 +308,9 @@ RMultiGrid()
    Free();
 }
 
-short	AllocGrid(short sScaleW, short sScaleH);
+short   AllocGrid(short sScaleW, short sScaleH);
 
-S32	MaskToShift(short sMask)
+S32   MaskToShift(short sMask)
 {
    S32 lShift = 0;
    S32 lValue = 1;
@@ -329,11 +329,11 @@ public:
 //////////////////////////////////////////////////////////////////////
 //  Data Structures
 //////////////////////////////////////////////////////////////////////
-short*	m_psGrid;    // Stores the grid data, compressed or uncompressed
-short**	m_ppsGridLines;      // fast access into the grid lines
-short*	m_psTiles;           // Stores the array of tiles
-short**	m_ppsTileList;       // fast access into the tile array
-short*	m_psTileLine;        // fast access into each tile line
+short*   m_psGrid;    // Stores the grid data, compressed or uncompressed
+short**   m_ppsGridLines;      // fast access into the grid lines
+short*   m_psTiles;           // Stores the array of tiles
+short**   m_ppsTileList;       // fast access into the tile array
+short*   m_psTileLine;        // fast access into each tile line
 
 //////////////////////////////////////////////////////////////////////
 //  Statics:

@@ -42,8 +42,8 @@ void main(void)
 {
    static FLX_BUF buf1;
 
-//	if (flxRead.Open("BUS_DRIV.FLI") == 0)	// Written by ??? - FLI format
-//	if (flxRead.Open("DIAGONAL.FLI") == 0)	// Written by AniPro - says FLI but it's FLC!
+//   if (flxRead.Open("BUS_DRIV.FLI") == 0)   // Written by ??? - FLI format
+//   if (flxRead.Open("DIAGONAL.FLI") == 0)   // Written by AniPro - says FLI but it's FLC!
 
    // Open existing FLI file for reading
    CFlx flxRead;
@@ -66,46 +66,46 @@ void main(void)
       // Create new FLI file for writing
       CFlx flxWrite;
       static FLX_FILE_HDR filehdrWrite;
-/*		if (flxWrite.Create("MY_frm.FLI", TRUE,
-			filehdrRead.sWidth, filehdrRead.sHeight, 20,//filehdrRead.lMilliPerFrame,
-			filehdrRead.sAspectX, filehdrRead.sAspectY,
-			TRUE, TRUE, &filehdrWrite, NULL) == 0)
-			{
-			DumpHeader(&filehdrWrite);
+/*      if (flxWrite.Create("MY_frm.FLI", TRUE,
+         filehdrRead.sWidth, filehdrRead.sHeight, 20,//filehdrRead.lMilliPerFrame,
+         filehdrRead.sAspectX, filehdrRead.sAspectY,
+         TRUE, TRUE, &filehdrWrite, NULL) == 0)
+         {
+         DumpHeader(&filehdrWrite);
 
-			cout << "Processing frames:\n";
+         cout << "Processing frames:\n";
 
-			// Read each frame and write it out
-			for (short sFrame = 1; sFrame <= filehdrRead.sNumFrames; sFrame++)
-				{
-				cout << sFrame << "\n";
+         // Read each frame and write it out
+         for (short sFrame = 1; sFrame <= filehdrRead.sNumFrames; sFrame++)
+            {
+            cout << sFrame << "\n";
 
-				if (flxRead.ReadNextFrame(&buf1) == 0)
-					{
-					if (flxWrite.WriteNextFrame(&buf1) == 0)
-						{
-						}
-					else
-						{
-						cout << "Error reported by CFlx::WriteNextFrame()!\n";
-						break;
-						}
-					}
-				else
-					{
-					cout << "Error reported by CFlx::ReadNextFrame()!\n";
-					break;
-					}
-				}
+            if (flxRead.ReadNextFrame(&buf1) == 0)
+               {
+               if (flxWrite.WriteNextFrame(&buf1) == 0)
+                  {
+                  }
+               else
+                  {
+                  cout << "Error reported by CFlx::WriteNextFrame()!\n";
+                  break;
+                  }
+               }
+            else
+               {
+               cout << "Error reported by CFlx::ReadNextFrame()!\n";
+               break;
+               }
+            }
 
-			flxWrite.WriteFinish(NULL, NULL);
-			flxWrite.Close();
-			}
-		else
-			cout << "Error reported by CFlx::Create()!\n";
+         flxWrite.WriteFinish(NULL, NULL);
+         flxWrite.Close();
+         }
+      else
+         cout << "Error reported by CFlx::Create()!\n";
 
-		flxRead.Close(&buf1);
-		flxRead.Open("Farmtest.FLc", TRUE, &filehdrRead, &buf1);
+      flxRead.Close(&buf1);
+      flxRead.Open("Farmtest.FLc", TRUE, &filehdrRead, &buf1);
 */
       if (flxWrite.Create("MY_abc.fli", TRUE,
                           filehdrRead.sWidth, filehdrRead.sHeight, 50,//filehdrRead.lMilliPerFrame,

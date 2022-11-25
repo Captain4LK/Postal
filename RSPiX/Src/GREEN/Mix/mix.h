@@ -17,28 +17,28 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	mix.h
+//   mix.h
 //
 // History:
-//		06/17/95 JMI	Started.
+//      06/17/95 JMI   Started.
 //
-//		06/26/97	JMI	Started tracking history of this .h file.
-//							Added optional constant playing of silence.
+//      06/26/97   JMI   Started tracking history of this .h file.
+//                     Added optional constant playing of silence.
 //
-//		07/16/97	JRD	Added volume members and volume parameters to Start.
-//							Modified BlueCall to pass parameters to MixBuf.
+//      07/16/97   JRD   Added volume members and volume parameters to Start.
+//                     Modified BlueCall to pass parameters to MixBuf.
 //
-//		07/17/97 JRD	Removed Volume parameters, as they should be set
-//							by the callback.
+//      07/17/97 JRD   Removed Volume parameters, as they should be set
+//                     by the callback.
 //
-//		07/17/97 JRD	Added Volume parameters, as they aren't always set
-//							by the callback.
+//      07/17/97 JRD   Added Volume parameters, as they aren't always set
+//                     by the callback.
 //
-//		08/05/97	JMI	Added IsPaused(), PauseChannel(), ResumeChannel(),
-//							and IsChannelPaused().
+//      08/05/97   JMI   Added IsPaused(), PauseChannel(), ResumeChannel(),
+//                     and IsChannelPaused().
 //
-//		10/30/97	JMI	Added alternate version of SetMode() which allows more
-//							detail as to bit depth quality of samples and mixing.
+//      10/30/97   JMI   Added alternate version of SetMode() which allows more
+//                     detail as to bit depth quality of samples and mixing.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -74,7 +74,7 @@
 // Macros.
 ///////////////////////////////////////////////////////////////////////////////
 // Maximum number of buffers this class will use.
-#define MAX_BUFS	256
+#define MAX_BUFS   256
 
 ///////////////////////////////////////////////////////////////////////////////
 // Types.
@@ -106,12 +106,12 @@ typedef enum
 } State;
 
 // Callback.
-typedef void* (*RMixCall)(	Msg msg,
-                           void*		pData,
-                           U32*	pulBufSize,
-                           uintptr_t ulUser,
-                           UCHAR*	pucVol1,
-                           UCHAR*	pucVol2);
+typedef void* (*RMixCall)(   Msg msg,
+                             void*      pData,
+                             U32*   pulBufSize,
+                             uintptr_t ulUser,
+                             UCHAR*   pucVol1,
+                             UCHAR*   pucVol2);
 
 public:     // <Con|De>struction.
 // Default constructor.
@@ -138,7 +138,7 @@ short CloseChannel(void);
 // Set the initial mix volumes
 // Returns 0 on success.
 short Start(RMixCall mcUser, uintptr_t ulUser,
-            UCHAR	ucVolume = 255, UCHAR ucVol2 = 255 );
+            UCHAR ucVolume = 255, UCHAR ucVol2 = 255 );
 
 // Stop receiving callbacks to fill channel data.
 short Suspend(void);       // Returns 0 on success.
@@ -157,7 +157,7 @@ void SetFx(                // Returns nothing.
    RSndFx* psndfx)         // FX for this channel.  Clears current, if
                            // NULL.
 {
-   m_psndfx	= psndfx;
+   m_psndfx   = psndfx;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ static void SetGlobalFx(         // Returns nothing.
    RSndFx* psndfx)               // FX for all channels.  Clears current, if
                                  // NULL.
 {
-   ms_psndfx	= psndfx;
+   ms_psndfx   = psndfx;
 }
 
 // Enable or disable auto-pump feature which will keep silence pumping
@@ -247,7 +247,7 @@ static void SetGlobalFx(         // Returns nothing.
 static void SetAutoPump(         // Returns nothing.
    short sAutoPump)              // In:  TRUE to auto-pump silence, FALSE othwerise.
 {
-   ms_sKeepPumping	= sAutoPump;
+   ms_sKeepPumping   = sAutoPump;
 }
 
 public:     // Querries.
@@ -276,29 +276,29 @@ static State GetState() { return ms_sState; }
 // Gets the current mode of the sound output device.
 static short GetMode(                        // Returns 0 on success;
                                              // nonzero if no mode.
-   S32*		plSamplesPerSec,                 // Sample rate in samples per second
-                                             // returned here, if not NULL.
-   S32*		plDevBitsPerSample = NULL,       // Bits per sample of device,
-                                             // returned here, if not NULL.
-   S32*		plNumChannels = NULL,            // Number of channels (1 == mono,
-                                             // 2 == stereo) returned here,
-                                             // if not NULL.
-   S32*		plBufferTime = NULL,             // Amount of time in ms to lead the
-                                             // current play cursor returned here,
-                                             // if not NULL.  This could also be
-                                             // described as the maximum amount of
-                                             // time in ms that can occur between
-                                             // calls to rspDoSound.
-   S32*		plMaxBufferTime	= NULL,        // Maximum buffer time.  This is the amt
-                                             // that *plBufferTime can be increased to.
-                                             // This is indicative of how much space
-                                             // was/will-be allocated for the sound
-                                             // output device on rspLockSoundOut.
-   S32*		plMixBitsPerSample = NULL,       // Bits per sample at which samples are
-                                             // mixed, if not NULL.
-   S32*		plSrcBitsPerSample = NULL);      // Bits per sample at which samples must
-                                             // be to be mixed (0 if no requirement),
-                                             // if not NULL.
+   S32*      plSamplesPerSec,                 // Sample rate in samples per second
+                                              // returned here, if not NULL.
+   S32*      plDevBitsPerSample = NULL,       // Bits per sample of device,
+                                              // returned here, if not NULL.
+   S32*      plNumChannels = NULL,            // Number of channels (1 == mono,
+                                              // 2 == stereo) returned here,
+                                              // if not NULL.
+   S32*      plBufferTime = NULL,             // Amount of time in ms to lead the
+                                              // current play cursor returned here,
+                                              // if not NULL.  This could also be
+                                              // described as the maximum amount of
+                                              // time in ms that can occur between
+                                              // calls to rspDoSound.
+   S32*      plMaxBufferTime   = NULL,        // Maximum buffer time.  This is the amt
+                                              // that *plBufferTime can be increased to.
+                                              // This is indicative of how much space
+                                              // was/will-be allocated for the sound
+                                              // output device on rspLockSoundOut.
+   S32*      plMixBitsPerSample = NULL,       // Bits per sample at which samples are
+                                              // mixed, if not NULL.
+   S32*      plSrcBitsPerSample = NULL);      // Bits per sample at which samples must
+                                              // be to be mixed (0 if no requirement),
+                                              // if not NULL.
 
 protected:     // Internal use.
 // Intialize members.
@@ -316,32 +316,32 @@ short BlueCall(               // Returns FALSE when no data mixed.
 // Callbacks from Blue.
 static short BlueCallStatic(        // Returns TRUE to continue mixing in this
                                     // buffer or FALSE to not mix this buffer.
-   UCHAR*	pucData,
+   UCHAR*   pucData,
    S32 lBufSize,
    S32 lDataPos,
-   U32*	pul_ppmixbuf);
+   U32*   pul_ppmixbuf);
 
 public:     // members
 
 // Volume information is set from Start and RSND callbacks
-UCHAR	m_ucVolume;                      // 0 - 255
-UCHAR	m_ucSecondaryVolume;             // 0 - 255
+UCHAR m_ucVolume;                        // 0 - 255
+UCHAR m_ucSecondaryVolume;               // 0 - 255
 
 protected:     // Members.
 S32 m_lSampleRate;                     // Sample rate for audio playback/mix.
 S32 m_lBitsPerSample;                  // Sample size in bits.
 S32 m_lNumChannels;                    // Number of channels (mono or stereo).
 
-short	m_sOpen;                         // TRUE if channel open; FALSE
-                                       // otherwise.
-short	m_sActive;                       // TRUE if channel active; FALSE
-                                       // otherwise.
-short	m_sSuspending;                   // TRUE if channel suspending; FALSE
-                                       // otherwise.
+short m_sOpen;                           // TRUE if channel open; FALSE
+                                         // otherwise.
+short m_sActive;                         // TRUE if channel active; FALSE
+                                         // otherwise.
+short m_sSuspending;                     // TRUE if channel suspending; FALSE
+                                         // otherwise.
 S32 m_lLastDataPos;                    // Last byte mixed into.
-RMixCall	m_mcUser;                     // User callback.
+RMixCall m_mcUser;                       // User callback.
 uintptr_t m_ulUser;                 // User value.
-UCHAR*		m_pucData;                 // User data.
+UCHAR*      m_pucData;                 // User data.
 U32 m_ulAmount;                        // Amount of user data remaining.
 
 S32 m_lStartTime;                      // Audio time when first buffer entered
@@ -349,11 +349,11 @@ S32 m_lStartTime;                      // Audio time when first buffer entered
 S32 m_lStartPos;                       // Audio position when first buffer
                                        // enter queue.
 
-RSndFx*		m_psndfx;                  // Pointer to an RSndFx.
+RSndFx*      m_psndfx;                  // Pointer to an RSndFx.
 
-short	m_sPauseLevel;                   // Current pause level.
+short m_sPauseLevel;                     // Current pause level.
 
-static RList<RMix>	ms_listActive;          // List of active channels.
+static RList<RMix>   ms_listActive;          // List of active channels.
 
 static short ms_sSetMode;                    // TRUE if we set Blue's sound
                                              // output mode.
@@ -365,13 +365,13 @@ static U32 ms_ulBufSize;                  // The size to use when allocating
                                           // RMixBufs.
 static short ms_sReset;                      // Resets Blue and returns all
                                              // current user buffers.
-static RSndFx*			ms_psndfx;              // Pointer to a global RSndFx.
+static RSndFx*         ms_psndfx;              // Pointer to a global RSndFx.
 
 static short ms_sKeepPumping;                // Keep Blue pumped with silence
                                              // when no channels are playing,
                                              // if TRUE.
 
-static RMixBuf	ms_mixbuf;                    // One and only mix buffer.
+static RMixBuf ms_mixbuf;                      // One and only mix buffer.
 };
 
 #endif // MIX_H

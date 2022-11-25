@@ -26,9 +26,9 @@
 #define rspRadToDeg  57.29577951308
 #define rspDegToRad  0.01745329251994
 #define rspSQRT2  1.414213562373
-#define rspSQRT3	1.732050807569
+#define rspSQRT3   1.732050807569
 
-#define	MAX_FAST_SQRT 131072 // Will take a LOT of memory
+#define   MAX_FAST_SQRT 131072 // Will take a LOT of memory
 /*****************************************************************
 Quickmath contains several extansions, but FixedPoint.cpp is
 required because it is called to initialize from the normal
@@ -36,11 +36,11 @@ quickmath initialization.  QuickMath is based upon the concept
 of integer degrees, from 0-359 inclusive.
 
   Hungarian notation:
-				& = implicit pass by reference, do NOT use a pointer
-				& is used in almost all cases to prevent VC from creating
-				a local stack frame which would slow things down by 20 times.
-				T = a single templated type
-				-64 = enhanced 64-bit math mode...
+            & = implicit pass by reference, do NOT use a pointer
+            & is used in almost all cases to prevent VC from creating
+            a local stack frame which would slow things down by 20 times.
+            T = a single templated type
+            -64 = enhanced 64-bit math mode...
 
 /*****************************************************************
 inline void rspMod360(&sDeg) // USE BEFORE ALL CALLS IF IN QUESTION!
@@ -69,7 +69,7 @@ extern float fSINQ[csNumRotSteps], fCOSQ[csNumRotSteps];
 extern short ATANQ[60];
 extern short SQRTQ[MAX_FAST_SQRT];
 /****************************************************************/
-inline short	rspSqrt(S32 lVal)
+inline short   rspSqrt(S32 lVal)
 {
    if (lVal < MAX_FAST_SQRT) return SQRTQ[lVal];
    return short(sqrt(double(lVal)));

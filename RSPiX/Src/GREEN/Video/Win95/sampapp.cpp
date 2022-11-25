@@ -29,8 +29,8 @@
 
 #include "wdisplay.h"
 
-#define VIDEO_FILE	"\\\\METRO\\PROJECTS\\MUPPETS\\BEAKER\\TEMPASSETS\\LOSER1.AVI"
-#define CURSOR_FILE	"\\\\METRO\\PROJECTS\\MUPPETS\\BEAKER\\TEMPASSETS\\HOTPTR.CUR"
+#define VIDEO_FILE   "\\\\METRO\\PROJECTS\\MUPPETS\\BEAKER\\TEMPASSETS\\LOSER1.AVI"
+#define CURSOR_FILE   "\\\\METRO\\PROJECTS\\MUPPETS\\BEAKER\\TEMPASSETS\\HOTPTR.CUR"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -41,14 +41,14 @@
 short WinProcHook(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam,
                   LRESULT* plResult)
 {
-   short	sRes	= 0; // Assume normal processing.
+   short sRes   = 0;   // Assume normal processing.
 
    switch (uiMsg)
    {
    case WM_SETCURSOR:
-//			TRACE("WinProcHook(): WM_SETCURSOR.\n");
-//			sRes = TRUE;
-//			*plResult = TRUE;
+//         TRACE("WinProcHook(): WM_SETCURSOR.\n");
+//         sRes = TRUE;
+//         *plResult = TRUE;
       break;
    }
 
@@ -57,7 +57,7 @@ short WinProcHook(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	Waits for a mouse click (down, then up) on sButton { MOUSE_BUTTON_LEFT,
+//   Waits for a mouse click (down, then up) on sButton { MOUSE_BUTTON_LEFT,
 // MOUSE_BUTTON_RIGHT }.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,11 +80,11 @@ static void WaitClick(short sButton)
 // Returns 0 on success.
 //
 ///////////////////////////////////////////////////////////////////////////////
-#define MCI_TIME_OUT	500
-#define MCI_RETRIES	3
+#define MCI_TIME_OUT   500
+#define MCI_RETRIES   3
 static short ToggleVideo(CVideo* pvideo)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    Blu_HookWinProc(WinProcHook);
 
@@ -106,11 +106,11 @@ static short ToggleVideo(CVideo* pvideo)
    {
       if (pvideo->Open(VIDEO_FILE, 0, 0, 1, 1, 0) == VIDEO_SUCCESS)
       {
-         short	sRetries;
+         short sRetries;
          S32 lEndTime = 0L;
-         for (	sRetries = 0;
-               sRetries < MCI_RETRIES && sRes == 0 && pvideo->IsPlaying() == FALSE;
-               )
+         for (   sRetries = 0;
+                 sRetries < MCI_RETRIES && sRes == 0 && pvideo->IsPlaying() == FALSE;
+                 )
          {
             if (lEndTime < Blu_GetTime())
             {
@@ -152,7 +152,7 @@ static short ToggleVideo(CVideo* pvideo)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	Test video library functionality.
+//   Test video library functionality.
 //
 ///////////////////////////////////////////////////////////////////////////////
 short AppMain(void)

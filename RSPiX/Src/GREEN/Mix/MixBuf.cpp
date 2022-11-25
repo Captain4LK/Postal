@@ -17,64 +17,64 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	MixBuf.cpp
+//   MixBuf.cpp
 //
 // History:
-//		06/19/95 JMI	Started.
+//      06/19/95 JMI   Started.
 //
-//		12/19/95	JMI	Altered to accept user supplied data space as well as
-//							the space allocated by this module.  Changed use of void*
-//							in calls to UCHAR*.
+//      12/19/95   JMI   Altered to accept user supplied data space as well as
+//                     the space allocated by this module.  Changed use of void*
+//                     in calls to UCHAR*.
 //
-//		08/02/96 MJR	Updated non-WIN32 code (was using m_pData, should have
-//							been m_pucData).
+//      08/02/96 MJR   Updated non-WIN32 code (was using m_pData, should have
+//                     been m_pucData).
 //
-//		08/26/96	JMI	Changed names of ms_usBitsPerSample, ms_ulSampleRate,
-//							and ms_usNumChannels to ms_lBitsPerSample,
-//							ms_lSampleRate, ms_lNumChannels.
+//      08/26/96   JMI   Changed names of ms_usBitsPerSample, ms_ulSampleRate,
+//                     and ms_usNumChannels to ms_lBitsPerSample,
+//                     ms_lSampleRate, ms_lNumChannels.
 //
-//		08/30/96	JMI	Silence() now uses memset() which seems to have improved
-//							performance 4x for 8 bit and 2x for 16 bit b/c I was
-//							doing a stupid 8 bit or 16 bit copy depending on sample
-//							size.
+//      08/30/96   JMI   Silence() now uses memset() which seems to have improved
+//                     performance 4x for 8 bit and 2x for 16 bit b/c I was
+//                     doing a stupid 8 bit or 16 bit copy depending on sample
+//                     size.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CMixBuf			RMixBuf
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CMixBuf         RMixBuf
 //
-//		02/04/97 MJR	Removed a lingering <smrtheap.hpp>.  Also found out
-//							that WIN32 was mistaken for _M_IX86.
+//      02/04/97 MJR   Removed a lingering <smrtheap.hpp>.  Also found out
+//                     that WIN32 was mistaken for _M_IX86.
 //
-//		07/05/97 MJR	Optimized generic C versions of mixing loops.
-//							Also optimized Intel x86 versions of mixing loops.
+//      07/05/97 MJR   Optimized generic C versions of mixing loops.
+//                     Also optimized Intel x86 versions of mixing loops.
 //
-//		07/15/97	JRD	Added optional dynamic volume adjustment to mix, both
-//							globally and on a per sound chunk basis
+//      07/15/97   JRD   Added optional dynamic volume adjustment to mix, both
+//                     globally and on a per sound chunk basis
 //
-//		07/17/97 JRD	Enhanced multiple volume scaling accuracy
+//      07/17/97 JRD   Enhanced multiple volume scaling accuracy
 //
-//		07/17/97 MJR	Added FORCE_GENERIC_CODE macro to force use of generic
-//							C/C++ code on all systems.
+//      07/17/97 MJR   Added FORCE_GENERIC_CODE macro to force use of generic
+//                     C/C++ code on all systems.
 //
-//		08/10/97	JRD	Added a user setable parameter to cut off sound at a set
-//							global volume.  Note that this does NOT have to do with
-//							the volume of the SAMPLE WAVE DATA, but rather the mix
-//							volume passed to MixBuf
+//      08/10/97   JRD   Added a user setable parameter to cut off sound at a set
+//                     global volume.  Note that this does NOT have to do with
+//                     the volume of the SAMPLE WAVE DATA, but rather the mix
+//                     volume passed to MixBuf
 //
-//		08/14/97	JRD	Made dynamic (8-bit) scaling available to user directly for use
-//							in ither applications.
+//      08/14/97   JRD   Made dynamic (8-bit) scaling available to user directly for use
+//                     in ither applications.
 //
-//		08/20/97	JMI	Fixed indexing problem with ASM 8bit scaling loop.  Now
-//							sounds very crunchy when scaling though.  Also, moved
-//							local var declarations that don't get used in ASM version
-//							into #if/#endif block for non-ASM code.
+//      08/20/97   JMI   Fixed indexing problem with ASM 8bit scaling loop.  Now
+//                     sounds very crunchy when scaling though.  Also, moved
+//                     local var declarations that don't get used in ASM version
+//                     into #if/#endif block for non-ASM code.
 //
-//		10/30/97	JMI	Broke mixers out into different functions to make it
-//							easier to find a particular mixer and easier to add more
-//							mixers.  Also, added 8 to 16 and 16 to 8 bit conversion
-//							functions so we can mix at a different bit depth than
-//							we playback.
+//      10/30/97   JMI   Broke mixers out into different functions to make it
+//                     easier to find a particular mixer and easier to add more
+//                     mixers.  Also, added 8 to 16 and 16 to 8 bit conversion
+//                     functions so we can mix at a different bit depth than
+//                     we playback.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -115,9 +115,9 @@
 #define FORCE_GENERIC_CODE
 
 // Silence for 8 bit.
-#define SILENCE_8		0x80
+#define SILENCE_8      0x80
 // Silence for 16 bit.
-#define SILENCE_16	0x0000
+#define SILENCE_16   0x0000
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -141,10 +141,10 @@ S32 RMixBuf::ms_lMixBitsPerSample;     // Sample size in bits for mixing.
 S32 RMixBuf::ms_lDstBitsPerSample;     // Sample size in bits for Blue data.
 S32 RMixBuf::ms_lNumChannels;          // Number of channels (mono
                                        //  or stereo).
-short	RMixBuf::ms_sNumBufs	= 0;        // Number of RMixBufs allocated.
-UCHAR	RMixBuf::ms_ucGlobalVolume = UCHAR(255);  // Full volume is standard
+short RMixBuf::ms_sNumBufs   = 0;          // Number of RMixBufs allocated.
+UCHAR RMixBuf::ms_ucGlobalVolume = UCHAR(255);    // Full volume is standard
 
-short	RMixBuf::ms_sCutOffVolume = 1;   // Volume to not bother mixing.
+short RMixBuf::ms_sCutOffVolume = 1;     // Volume to not bother mixing.
 
 //////////////////////////////////////////////////////////////////////////////
 // Handy conversion functions used by RMixBuf.
@@ -156,8 +156,8 @@ short	RMixBuf::ms_sCutOffVolume = 1;   // Volume to not bother mixing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Conv8to16(  // Returns nothing.
-   U8*	pu8Src,        // In:  8 bit src.
-   S16*	ps16Dst,       // Out: 16 bit dst.  Cannot be the same as the src.
+   U8*   pu8Src,        // In:  8 bit src.
+   S16*   ps16Dst,       // Out: 16 bit dst.  Cannot be the same as the src.
    S32 lSamples)        // In:  Samples to convert.
 {
    while (lSamples--)
@@ -166,7 +166,7 @@ inline void Conv8to16(  // Returns nothing.
       // if it was 128 or more, we want no sign and, if it was under 128, we
       // want a sign -- I'm not sure if C does this for us or tries something
       // similar and screws me...need to check the assembly).
-      *ps16Dst++	= (*pu8Src++ << 8) ^ 0x8000;
+      *ps16Dst++   = (*pu8Src++ << 8) ^ 0x8000;
    }
 }
 
@@ -176,15 +176,15 @@ inline void Conv8to16(  // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Conv16to8(  // Returns nothing.
-   S16*	ps16Src,       // In:  16 bit src.
-   U8*	pu8Dst,        // Out: 8 bit dst.  _Can_ be the same as the src.
+   S16*   ps16Src,       // In:  16 bit src.
+   U8*   pu8Dst,        // Out: 8 bit dst.  _Can_ be the same as the src.
    S32 lSamples)        // In:  Samples to convert.
 {
    while (lSamples--)
    {
       // Toggle sign bit based on 16 bit value, add 256 / 2 for rounding, and
       // shift down to 8 bits.
-      *pu8Dst++	= ( (*ps16Src++ ^ 0x8000) + 128) >> 8;
+      *pu8Dst++   = ( (*ps16Src++ ^ 0x8000) + 128) >> 8;
    }
 }
 
@@ -198,11 +198,11 @@ inline void Conv16to8(  // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Mix(     // Returns nothing.
-   U8*	pu8Src,     // In:  Src.
-   U8*	pu8Dst,     // In:  Dst.
+   U8*   pu8Src,     // In:  Src.
+   U8*   pu8Dst,     // In:  Dst.
    S32 lSamples)     // In:  Number of samples to mix.
 {
-   short	sVal;
+   short sVal;
 
    while (lSamples--)
    {
@@ -210,7 +210,7 @@ inline void Mix(     // Returns nothing.
       // convert back to unsigned value, and save result.
 
       // Add values after converting to signed.
-      sVal	= ((short)(*pu8Src++) - 128) + ((short)(*pu8Dst) - 128);
+      sVal   = ((short)(*pu8Src++) - 128) + ((short)(*pu8Dst) - 128);
 
       // Clip.
       if (sVal > 127)
@@ -231,8 +231,8 @@ inline void Mix(     // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void MixX86(  // Returns nothing.
-   U8*	pu8Src,     // In:  Src.
-   U8*	pu8Dst,     // In:  Dst.
+   U8*   pu8Src,     // In:  Src.
+   U8*   pu8Dst,     // In:  Dst.
    S32 lSamples)     // In:  Number of samples to mix.
 {
    _asm
@@ -252,14 +252,14 @@ MixLoop8:
       sub ah, 128;              // Make signed.
       add ah, al;               // Mix.
       jno MixDone8;             // If no overflow then we're done
-      js	MixWasPos8;            // If negative then it overflowed positive
+      js MixWasPos8;              // If negative then it overflowed positive
       mov ah, 080H;             // Set to max negative.
       jmp MixDone8
 MixWasPos8:
       mov ah, 07fH;             // Set to max positive.
 MixDone8:
       add ah, 128;              // Unsign.
-      mov	[edi], ah;          // Store mixed value.
+      mov   [edi], ah;          // Store mixed value.
       inc esi;                  // Next source value.
       inc edi;                  // Next dest value.
       loop MixLoop8
@@ -269,7 +269,7 @@ MixDone8:
    }
 }
 
-#endif	// defined(SYS_BIN_X86)
+#endif   // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -277,8 +277,8 @@ MixDone8:
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Mix(     // Returns nothing.
-   S16*	ps16Src,    // In:  Src.
-   S16*	ps16Dst,    // In:  Dst.
+   S16*   ps16Src,    // In:  Src.
+   S16*   ps16Dst,    // In:  Dst.
    S32 lSamples)     // In:  Number of samples to mix.
 {
    S32 lVal;
@@ -288,7 +288,7 @@ inline void Mix(     // Returns nothing.
       // Add two signed values, clip sum to fit a 16 bit value and save
       // result.
 
-      lVal	= (S32)(*ps16Src++) + (S32)(*ps16Dst);
+      lVal   = (S32)(*ps16Src++) + (S32)(*ps16Dst);
 
       if (lVal > 32767)
          lVal = 32767;
@@ -307,8 +307,8 @@ inline void Mix(     // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void MixX86(  // Returns nothing.
-   S16*	ps16Src,    // In:  Src.
-   S16*	ps16Dst,    // In:  Dst.
+   S16*   ps16Src,    // In:  Src.
+   S16*   ps16Dst,    // In:  Dst.
    S32 lSamples)     // In:  Number of samples to mix.
 {
    _asm
@@ -325,13 +325,13 @@ MixLoop16:
       mov ax, [esi];            // Get src val.
       add ax, [edi];            // Add dst val.
       jno MixDone16;            // If no overflow then we're done
-      js	MixWasPos16;           // If negative then it overflowed positive
+      js MixWasPos16;             // If negative then it overflowed positive
       mov ax, 08000H;           // Set to max negative.
       jmp MixDone16
 MixWasPos16:
       mov ax, 07fffH;           // Set to max positive.
 MixDone16:
-      mov	[edi], ax;          // Store mixed value.
+      mov   [edi], ax;          // Store mixed value.
       add esi, 2;               // Next source value.
       add edi, 2;               // Next dest value.
       loop MixLoop16
@@ -341,7 +341,7 @@ MixDone16:
    }
 }
 
-#endif	// defined(SYS_BIN_X86)
+#endif   // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -349,12 +349,12 @@ MixDone16:
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Mix(     // Returns nothing.
-   U8*	pu8Src,     // In:  Src.
-   U8*	pu8Dst,     // In:  Dst.
+   U8*   pu8Src,     // In:  Src.
+   U8*   pu8Dst,     // In:  Dst.
    S32 lSamples,     // In:  Number of samples to mix.
-   S16*	psLowTable) // In:  Volume scale table.
+   S16*   psLowTable) // In:  Volume scale table.
 {
-   short	sVal;
+   short sVal;
 
    while (lSamples--)
    {
@@ -365,7 +365,7 @@ inline void Mix(     // Returns nothing.
       // ENDIAN ALERT! Assuming first byte is low!
       sVal = psLowTable[*pu8Src++]; // scaled
 
-      sVal	= (sVal - 128) + (*pu8Dst - 128);
+      sVal   = (sVal - 128) + (*pu8Dst - 128);
       if (sVal > 127)
          sVal = 127;
       else if (sVal < -128)
@@ -383,10 +383,10 @@ inline void Mix(     // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void MixX86(  // Returns nothing.
-   U8*	pu8Src,     // In:  Src.
-   U8*	pu8Dst,     // In:  Dst.
+   U8*   pu8Src,     // In:  Src.
+   U8*   pu8Dst,     // In:  Dst.
    S32 lSamples,     // In:  Number of samples to mix.
-   S16*	psLowTable) // In:  Volume scale table.
+   S16*   psLowTable) // In:  Volume scale table.
 {
    _asm
    {
@@ -408,14 +408,14 @@ MixVolLoop8:
       sub ah, 128;              // Make signed.
       add ah, al;               // Mix.
       jno MixVolDone8;          // If no overflow then we're done
-      js	MixVolWasPos8;         // If negative then it overflowed positive
+      js MixVolWasPos8;           // If negative then it overflowed positive
       mov ah, 080H;             // Set to max negative.
       jmp MixVolDone8
 MixVolWasPos8:
       mov ah, 07fH;             // Set to max positive.
 MixVolDone8:
       add ah, 128;              // Unsign.
-      mov	[edi], ah;          // Store mixed value.
+      mov   [edi], ah;          // Store mixed value.
       inc esi;                  // Next source value.
       inc edi;                  // Next dest value.
       loop MixVolLoop8
@@ -425,7 +425,7 @@ MixVolDone8:
    }
 }
 
-#endif	// defined(SYS_BIN_X86)
+#endif   // defined(SYS_BIN_X86)
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -433,19 +433,19 @@ MixVolDone8:
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void Mix(        // Returns nothing.
-   S16*	ps16Src,       // In:  Src.
-   S16*	ps16Dst,       // In:  Dst.
+   S16*   ps16Src,       // In:  Src.
+   S16*   ps16Dst,       // In:  Dst.
    S32 lSamples,        // In:  Number of samples to mix.
-   S16*	psLowTable,    // In:  Volume scale table for low byte.
-   S16*	psHighTable)   // In:  Volume scale table for high byte.
+   S16*   psLowTable,    // In:  Volume scale table for low byte.
+   S16*   psHighTable)   // In:  Volume scale table for high byte.
 {
    S32 lVal;
-   short	sVal;
-   short	sHighSrc;
-   short	sLowSrc;
+   short sVal;
+   short sHighSrc;
+   short sLowSrc;
 
    // Move into a byte by byte, sign adjustable reference wrapper.
-   P8	p8Src	= { (S8*)ps16Src };
+   P8 p8Src   = { (S8*)ps16Src };
 
    while (lSamples--)
    {
@@ -472,7 +472,7 @@ inline void Mix(        // Returns nothing.
 
       // Add two signed values, clip sum to fit a 16 bit value, and save
       // result.
-      lVal	= (S32)(sVal) + (S32)(*ps16Dst);
+      lVal   = (S32)(sVal) + (S32)(*ps16Dst);
 
       if (lVal > 32767)
          lVal = 32767;
@@ -491,13 +491,13 @@ inline void Mix(        // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
 inline void MixX86(     // Returns nothing.
-   S16*	ps16Src,       // In:  Src.
-   S16*	ps16Dst,       // In:  Dst.
+   S16*   ps16Src,       // In:  Src.
+   S16*   ps16Dst,       // In:  Dst.
    S32 lSamples,        // In:  Number of samples to mix.
-   S16*	psTable)       // In:  Volume scale tables for high AND low byte.
-                        // One table is used to save registers but we could
-                        // have the second table as well instead of offseting
-                        // this table by DVA_LOW_OFFSET.
+   S16*   psTable)       // In:  Volume scale tables for high AND low byte.
+                         // One table is used to save registers but we could
+                         // have the second table as well instead of offseting
+                         // this table by DVA_LOW_OFFSET.
 {
    _asm
    {
@@ -518,17 +518,17 @@ MixVolLoop16:
       inc esi;                  //
       mov bl, [esi];            // Get src val high byte
       add bl, 128;              // Make unsigned
-      add ax, [edx + ebx * 2];     //	Cut Volume
+      add ax, [edx + ebx * 2];     //   Cut Volume
       inc esi;                  // Next source value.
       add ax, [edi];            // Add dst val.
       jno MixVolDone16;         // If no overflow then we're done
-      js	MixVolWasPos16;        // If negative then it overflowed positive
+      js MixVolWasPos16;          // If negative then it overflowed positive
       mov ax, 08000H;           // Set to max negative.
       jmp MixVolDone16
 MixVolWasPos16:
       mov ax, 07fffH;           // Set to max positive.
 MixVolDone16:
-      mov	[edi], ax;          // Store mixed value.
+      mov   [edi], ax;          // Store mixed value.
       add edi, 2;               // Next dest value.
       loop MixVolLoop16
 
@@ -537,7 +537,7 @@ MixVolDone16:
    }
 }
 
-#endif	// defined(SYS_BIN_X86)
+#endif   // defined(SYS_BIN_X86)
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -576,8 +576,8 @@ RMixBuf::RMixBuf(
    Init();
 
    // Set data ptr and size.
-   m_pu8Dst		= pu8Dst;
-   m_ulDstSize	= ulSize;
+   m_pu8Dst      = pu8Dst;
+   m_ulDstSize   = ulSize;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -603,12 +603,12 @@ RMixBuf::~RMixBuf(void)
 //////////////////////////////////////////////////////////////////////////////
 void RMixBuf::Init(void)
 {
-   m_pu8Dst			= NULL;
-   m_ulDstSize		= 0L;
-   m_pu8Mix			= NULL;
-   m_ulMixSize		= 0L;
-   m_sInUse			= FALSE;
-   m_sOwnMixBuf	= FALSE;
+   m_pu8Dst         = NULL;
+   m_ulDstSize      = 0L;
+   m_pu8Mix         = NULL;
+   m_ulMixSize      = 0L;
+   m_sInUse         = FALSE;
+   m_sOwnMixBuf   = FALSE;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -690,10 +690,10 @@ short RMixBuf::SetSize(U32 ulSize)
          free(m_pu8Mix);
 
          // We no S32er own it.
-         m_sOwnMixBuf	= FALSE;
+         m_sOwnMixBuf   = FALSE;
       }
 
-      m_ulMixSize	= 0L;
+      m_ulMixSize   = 0L;
    }
 
    // Allocate new data chunk.
@@ -702,8 +702,8 @@ short RMixBuf::SetSize(U32 ulSize)
    if (m_pu8Mix != NULL)
    {
       // Success.
-      m_sOwnMixBuf	= TRUE;
-      m_ulMixSize		= ulSize;
+      m_sOwnMixBuf   = TRUE;
+      m_ulMixSize      = ulSize;
       // Initialize to silence.
       Silence();
    }
@@ -729,12 +729,12 @@ void RMixBuf::SetDest(  // Returns nothing.
    if (m_pu8Mix == m_pu8Dst)
    {
       // Clear it.
-      m_pu8Mix		= NULL;
-      m_ulMixSize	= 0;
+      m_pu8Mix      = NULL;
+      m_ulMixSize   = 0;
    }
 
-   m_pu8Dst		= pu8Dst;
-   m_ulDstSize	= ulSize;
+   m_pu8Dst      = pu8Dst;
+   m_ulDstSize   = ulSize;
 
    // If incorrect size for mixer buffer . . .
    if (m_ulMixSize != m_ulDstSize && m_ulDstSize)
@@ -744,8 +744,8 @@ void RMixBuf::SetDest(  // Returns nothing.
       if (ms_lMixBitsPerSample == ms_lDstBitsPerSample)
       {
          // Just use the destination buffer.
-         m_pu8Mix		= m_pu8Dst;
-         m_ulMixSize	= m_ulDstSize;
+         m_pu8Mix      = m_pu8Dst;
+         m_ulMixSize   = m_ulDstSize;
 
          // Since this is our first use, Silence() it.
          Silence();
@@ -778,7 +778,7 @@ void RMixBuf::SetDest(  // Returns nothing.
 //////////////////////////////////////////////////////////////////////////////
 // This stores both the high and low arrasy in one, to save registers
 // (hence the '*2')
-short	CDVA::ms_asHighByte[DVA_SIZE * 2][256];   // for 16-bit sound
+short CDVA::ms_asHighByte[DVA_SIZE * 2][256];     // for 16-bit sound
 
 CDVA initVolumeControl;    // create the tables
 
@@ -793,11 +793,11 @@ CDVA::CDVA()   // Create the tables!
 
    //================================================================
    // Input: 0-255 representing -32768 to +32767. ( (Input-128) * 256)
-   //	DIM Value:	0-255, 255 being identity
+   //   DIM Value:   0-255, 255 being identity
    // Output: 16 bit table yielding Input*256*DIM/255
    //================================================================
    S32 lSrcVal, lDimVal, lCurValue, lNumerator;
-   short*	psCur = &ms_asHighByte[0][0];    // assume linear addressing:
+   short*   psCur = &ms_asHighByte[0][0];    // assume linear addressing:
    double dSrcVal;
    // This is DimVal major!
 
@@ -848,16 +848,16 @@ CDVA::CDVA()   // Create the tables!
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short RMixBuf::Mix(	U32 ulStartPos,
-                     U8*		pu8Data,
-                     U32 ulSize,
-                     S32 lSampleRate,
-                     S32 lBitsPerSample,
-                     S32 lNumChannels,
-                     UCHAR	ucVolume,
-                     UCHAR	ucVol2)
+short RMixBuf::Mix(   U32 ulStartPos,
+                      U8*      pu8Data,
+                      U32 ulSize,
+                      S32 lSampleRate,
+                      S32 lBitsPerSample,
+                      S32 lNumChannels,
+                      UCHAR ucVolume,
+                      UCHAR ucVol2)
 {
-   short sRes	= 0;  // Assume success.
+   short sRes   = 0;  // Assume success.
 
    ASSERT(m_sInUse == FALSE);
 
@@ -865,17 +865,17 @@ short RMixBuf::Mix(	U32 ulStartPos,
    if (m_ulMixSize != 0)
    {
       // Must be the same.
-      ASSERT(lSampleRate		== ms_lSampleRate);
-      ASSERT(lNumChannels		== ms_lNumChannels);
+      ASSERT(lSampleRate      == ms_lSampleRate);
+      ASSERT(lNumChannels      == ms_lNumChannels);
 
       // If ms_lSrcBitsPerSample is non-zero, lBitsPerSample must match.
-      ASSERT(lBitsPerSample	== ms_lSrcBitsPerSample || ms_lSrcBitsPerSample == 0);
+      ASSERT(lBitsPerSample   == ms_lSrcBitsPerSample || ms_lSrcBitsPerSample == 0);
 
       // *** TEMP ***
       // Temporarily enforce use of same bit depth on sources since we have
       // functions yet that convert and mix.
       // Delete this line once we have support.
-      ASSERT(lBitsPerSample	== ms_lSrcBitsPerSample);
+      ASSERT(lBitsPerSample   == ms_lSrcBitsPerSample);
       // *** END TEMP ***
 
       // If you do not have full accuracy in volume settings, round results
@@ -899,7 +899,7 @@ short RMixBuf::Mix(	U32 ulStartPos,
 
       ASSERT(ulSize <= (m_ulMixSize - ulStartPos) );
 
-      U32 ulNum	= MIN(ulSize, m_ulMixSize - ulStartPos);
+      U32 ulNum   = MIN(ulSize, m_ulMixSize - ulStartPos);
 
       if (ulNum > 0)
       {
@@ -948,12 +948,12 @@ short RMixBuf::Mix(	U32 ulStartPos,
             sCurVolume >>= DVA_SHIFT; // scale to an offset
 
             // Offset high by 128 to represent signed upper bytes
-            short*	psHighTable = 128 + CDVA::ms_asHighByte[sCurVolume];
+            short*   psHighTable = 128 + CDVA::ms_asHighByte[sCurVolume];
             // The assembler doesn't know the offset is signed
-            short*	psASMHighTable = CDVA::ms_asHighByte[sCurVolume];
+            short*   psASMHighTable = CDVA::ms_asHighByte[sCurVolume];
             // Low byte is by nature unsigned, so no offset
             // This is packed into the same table, offset by DVA_SIZE entries
-            short*	psLowTable = CDVA::ms_asHighByte[DVA_SIZE + sCurVolume];
+            short*   psLowTable = CDVA::ms_asHighByte[DVA_SIZE + sCurVolume];
 
             switch (lBitsPerSample)
             {
@@ -995,7 +995,7 @@ short RMixBuf::Mix(	U32 ulStartPos,
    else
    {
       TRACE("Mix():  No mix buffer.\n");
-      sRes	= -2;
+      sRes   = -2;
    }
 
    return sRes;

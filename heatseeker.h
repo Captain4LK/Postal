@@ -19,21 +19,21 @@
 // Project: Postal
 //
 // History:
-//		05/13/97 BRH	Started this weapon object fromt the CHeatseeker code.
+//      05/13/97 BRH   Started this weapon object fromt the CHeatseeker code.
 //
-//		07/01/97 BRH	Added smoke timer for making smoke trails.
+//      07/01/97 BRH   Added smoke timer for making smoke trails.
 //
-//		07/09/97	JMI	Changed Preload() to take a pointer to the calling realm
-//							as a parameter.
+//      07/09/97   JMI   Changed Preload() to take a pointer to the calling realm
+//                     as a parameter.
 //
-//		08/14/97 BRH	Added SetCollideBits and the collision bit fields so that
-//							they can be set by the Doofus or Dude when they shoot it
-//							and they can collide differently, rather than the
-//							standard default behavoir.
+//      08/14/97 BRH   Added SetCollideBits and the collision bit fields so that
+//                     they can be set by the Doofus or Dude when they shoot it
+//                     and they can collide differently, rather than the
+//                     standard default behavoir.
 //
-//		08/17/97 BRH	Added thrust sound instance so it is like the rocket.
+//      08/17/97 BRH   Added thrust sound instance so it is like the rocket.
 //
-//		08/23/97	JMI	Added CSmash::AlmostDead to exclude bits.
+//      08/23/97   JMI   Added CSmash::AlmostDead to exclude bits.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef HEATSEEKER_H
@@ -62,7 +62,7 @@ CSmash m_smash;                        // Smash used for explosion collisions (s
 CSmash m_smashSeeker;                  // Smash used to detect heat sources (larger)
 bool m_bArmed;                         // Initially missile is not armed so it doesn't
                                        // collide with the person who shot it.
-CSprite3	m_sprite;                     // 3D sprite to render this thing.
+CSprite3 m_sprite;                       // 3D sprite to render this thing.
 S32 m_lSmokeTimer;                     // Time to wait between emitting smoke
 U32 m_u32CollideBitsInclude;                 // Bits that cause a collision
 U32 m_u32CollideBitsDontCare;                // Bits that are ignored for collisions
@@ -105,7 +105,7 @@ public:
 CHeatseeker(CRealm* pRealm)
    : CWeapon(pRealm, CHeatseekerID)
 {
-   m_sprite.m_pthing	= this;
+   m_sprite.m_pthing   = this;
    m_lSmokeTimer = 0;
    m_siThrust = 0;
 }

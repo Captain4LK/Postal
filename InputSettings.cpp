@@ -19,77 +19,77 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		03/31/97 JMI	Started.
+//      03/31/97 JMI   Started.
 //
-//		04/25/97	JMI	Added execute input.
+//      04/25/97   JMI   Added execute input.
 //
-//		05/13/97	JMI	Changed 'Run' to 'Walk'.
-//							Also, added 'Suicide' and 'NextLevel'.
+//      05/13/97   JMI   Changed 'Run' to 'Walk'.
+//                     Also, added 'Suicide' and 'NextLevel'.
 //
-//		05/14/97	JMI	Changed key description of Next Level to "NextLevel" b/c
-//							prefs does not seem to handle spaces in the var name
-//							correctly.
+//      05/14/97   JMI   Changed key description of Next Level to "NextLevel" b/c
+//                     prefs does not seem to handle spaces in the var name
+//                     correctly.
 //
-//		05/14/97	JMI	Added pick up.
+//      05/14/97   JMI   Added pick up.
 //
-//		06/09/97	JMI	Swapped default keys for Strafe and Fire.
+//      06/09/97   JMI   Swapped default keys for Strafe and Fire.
 //
-//		06/10/97	JMI	Changed m_dDegreesPerSec to m_dMovingSlowDegreesPerSec and
-//							added m_dMovingFastDegreesPerSec, m_dStillSlowDegreesPerSec,
-//							m_dStillFastDegreesPerSec, and m_sTapRotationDegrees.
+//      06/10/97   JMI   Changed m_dDegreesPerSec to m_dMovingSlowDegreesPerSec and
+//                     added m_dMovingFastDegreesPerSec, m_dStillSlowDegreesPerSec,
+//                     m_dStillFastDegreesPerSec, and m_sTapRotationDegrees.
 //
-//		06/15/97 MJR	Removed NextLevel.
+//      06/15/97 MJR   Removed NextLevel.
 //
-//		07/03/97	JMI	Moved InputInfo and ms_ainputinfo into CInputSettings.
+//      07/03/97   JMI   Moved InputInfo and ms_ainputinfo into CInputSettings.
 //
-//		07/06/97	JMI	Changed m_au8PlayKeys[] from a U8 array to a short array,
-//							m_asPlayKeys[].
-//							Also, changed g_apszButtonDescriptions to
-//							g_apszMouseButtonDescriptions.
-//							Also, changed m_asPlayButtons to m_asPlayMouseButtons.
+//      07/06/97   JMI   Changed m_au8PlayKeys[] from a U8 array to a short array,
+//                     m_asPlayKeys[].
+//                     Also, changed g_apszButtonDescriptions to
+//                     g_apszMouseButtonDescriptions.
+//                     Also, changed m_asPlayButtons to m_asPlayMouseButtons.
 //
-//		07/07/97	JMI	Added m_dMouseSensitivityX and m_dMouseSensitivityY.
+//      07/07/97   JMI   Added m_dMouseSensitivityX and m_dMouseSensitivityY.
 //
-//		07/16/97	JMI	Added Weapon10 enum.
+//      07/16/97   JMI   Added Weapon10 enum.
 //
-//		07/25/97	JMI	Removed PickUp enum and associated array entries.
+//      07/25/97   JMI   Removed PickUp enum and associated array entries.
 //
-//		08/04/97	JMI	Added DefaultRotations().
-//							Also, rotations (except for tap) were not saving with the
-//							same var names they were loading with.  Fixed.
+//      08/04/97   JMI   Added DefaultRotations().
+//                     Also, rotations (except for tap) were not saving with the
+//                     same var names they were loading with.  Fixed.
 //
-//		08/10/97	JMI	Changed defaults for mouse buttons to typical Doom mouse
-//							player style.
-//							Added StrafeLeft and StrafeRight inputs.
-//							Also, changed Jump to Revive.
+//      08/10/97   JMI   Changed defaults for mouse buttons to typical Doom mouse
+//                     player style.
+//                     Added StrafeLeft and StrafeRight inputs.
+//                     Also, changed Jump to Revive.
 //
-//		08/12/97	JMI	Removed StrafeLeft and StrafeRight inputs.  Replaced with
-//							Strafe2 which can get you the same thing if you combine
-//							both strafes with an turn arrow key.
-//							Also, added Run2 which is handy for similar reasons.
+//      08/12/97   JMI   Removed StrafeLeft and StrafeRight inputs.  Replaced with
+//                     Strafe2 which can get you the same thing if you combine
+//                     both strafes with an turn arrow key.
+//                     Also, added Run2 which is handy for similar reasons.
 //
-//		08/24/97	JMI	Moved Execute and Suicide to before the weapons and changed
-//							the weapon descriptions to reflect the actual weapons.
-//							Also, changed 'No Weapon' to be weapon 0 and 'Mines' to be
-//							weapon 10.
-//							Also, changed names for Strafe to Strafe1 and Run to Run1.
+//      08/24/97   JMI   Moved Execute and Suicide to before the weapons and changed
+//                     the weapon descriptions to reflect the actual weapons.
+//                     Also, changed 'No Weapon' to be weapon 0 and 'Mines' to be
+//                     weapon 10.
+//                     Also, changed names for Strafe to Strafe1 and Run to Run1.
 //
-//		08/27/97	JMI	Changed Run1 to Run, Run2 to Run_, Strafe1 to Strafe, and
-//							Strafe2 to Strafe_.  The reason I don't want to set them
-//							to the same value is b/c these are the values used to
-//							write them to the INI and have to be different.  The deal
-//							with using the _ is that it doesn't show up in Smash.fnt
-//							so it looks fine.  Cheezy, I know, but quick
-//							implementation!
+//      08/27/97   JMI   Changed Run1 to Run, Run2 to Run_, Strafe1 to Strafe, and
+//                     Strafe2 to Strafe_.  The reason I don't want to set them
+//                     to the same value is b/c these are the values used to
+//                     write them to the INI and have to be different.  The deal
+//                     with using the _ is that it doesn't show up in Smash.fnt
+//                     so it looks fine.  Cheezy, I know, but quick
+//                     implementation!
 //
-//		08/27/97	JMI	Changed Run_ to Run. and Strafe_ to Strafe. .
+//      08/27/97   JMI   Changed Run_ to Run. and Strafe_ to Strafe. .
 //
-//		08/27/97	JMI	Added pszSaveName to InputInfo.  Now saves using
-//							pszSaveName.
+//      08/27/97   JMI   Added pszSaveName to InputInfo.  Now saves using
+//                     pszSaveName.
 //
-//		08/27/97	JMI	Added Fire2.
+//      08/27/97   JMI   Added Fire2.
 //
-//		10/10/97	JMI	Added m_sUseJoystick, JoyButtons, InputInfo.sJoyButtons.
+//      10/10/97   JMI   Added m_sUseJoystick, JoyButtons, InputInfo.sJoyButtons.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -131,90 +131,90 @@
 // Module specific (static) variables / Instantiate class statics.
 //////////////////////////////////////////////////////////////////////////////
 CInputSettings::InputInfo CInputSettings::ms_ainputinfoOld[CInputSettings::NumInputFunctions]  =
-{     // Description			Save Name			Default Key			Default Mouse Button(s)			Default Joy Button(s)
-      //	===========			===========			===========			=======================			=====================
-   {	"Turn Left",		"Left",				RSP_SK_A,			0,										0,								},
-   {	"Turn Right",		"Right",			RSP_SK_D,			0,										0,								},
-   {	"Forward",			"Forward",			RSP_SK_W,			RightButton,							0,								},
-   {	"Backward",			"Backward",			RSP_SK_S,			0,										0,								},
-   {	"Up",				"Up",				0,					0,										0,	},
-   {	"Down",				"Down",				0,					0,										0,	},
-   {	"Left",				"MoveLeft",			0,					0,										0,	},
-   {	"Right",			"MoveRight",		0,					0,										0,	},
-   {	"Strafe Left",		"StrafeLeft",		0,					0,										0,	},
-   {	"Strafe Right",		"StrafeRight",		0,					0,										0,	},
-   {	"Walk",				"Run1",				RSP_SK_SHIFT,		0,										0,						},
-   {	"Walk",				"Run2",				0,					0,										0,								},
-   {	"Strafe",			"Strafe1",			RSP_SK_ALT,			MiddleButton,							0,						},
-   {	"Strafe",			"Strafe2",			0,					0,										0,								},
-   {	"Fire",				"Fire",				RSP_SK_CONTROL,		LeftButton,								0,						},
-   {	"Fire",				"Fire2",			0,					0,										0,								},
-   {	"Fire Left",		"FireLeft",			0,					0,										0,								},
-   {	"Fire Right",		"FireRight",		0,					0,										0,								},
-   {	"Fire Up",			"FireUp",			0,					0,										0,								},
-   {	"Fire Down",		"FireDown",			0,					0,										0,								},
-   {	"Duck",				"Duck",				RSP_SK_F,			0,										RSP_JOY_BUT_1,						},
-   {	"Rejuvenate",		"Rejuvenate",		RSP_SK_SPACE,		0,										RSP_JOY_BUT_1,								},
-   {	"Execute",			"Execute",			RSP_SK_X,			0,										RSP_JOY_BUT_3,								},
-   {	"Suicide",			"Suicide",			RSP_SK_K,			0,										RSP_JOY_BUT_4,								},
-   {	"Next Level",		"NextLevel",		RSP_SK_F1,			0,										RSP_JOY_BUT_2,								},
-   {	"Next Weapon",		"NextWeapon",		RSP_SK_RBRACKET,	0,										RSP_JOY_BUT_11,								},
-   {	"Prev Weapon",		"PrevWeapon",		RSP_SK_LBRACKET,	0,										RSP_JOY_BUT_10,								},
-   {	"NoWeapon",			"NoWeapon",			RSP_SK_LQUOTE,		0,										0,								},
-   {	"MachineGun",		"MachineGun",		RSP_SK_1,			0,										0,								},
-   {	"Shotgun",			"Shotgun",			RSP_SK_2,			0,										0,								},
-   {	"SprayCannon",		"SprayCannon",		RSP_SK_3,			0,										0,								},
-   {	"Grenades",			"Grenades",			RSP_SK_4,			0,										0,								},
-   {	"Missiles",			"Missiles",			RSP_SK_5,			0,										0,								},
-   {	"Heatseekers",		"Heatseekers",		RSP_SK_6,			0,										0,								},
-   {	"Molotovs",			"Molotovs",			RSP_SK_7,			0,										0,								},
-   {	"Napalm",			"Napalm",			RSP_SK_8,			0,										0,								},
-   {	"Flamer",			"Flamer",			RSP_SK_9,			0,										0,								},
-   {	"Mines",			"Mines",			RSP_SK_0,			0,										0,								},
+{     // Description         Save Name         Default Key         Default Mouse Button(s)         Default Joy Button(s)
+      //   ===========         ===========         ===========         =======================         =====================
+   {   "Turn Left",      "Left",            RSP_SK_A,         0,                              0,                        },
+   {   "Turn Right",      "Right",         RSP_SK_D,         0,                              0,                        },
+   {   "Forward",         "Forward",         RSP_SK_W,         RightButton,                     0,                        },
+   {   "Backward",         "Backward",         RSP_SK_S,         0,                              0,                        },
+   {   "Up",            "Up",            0,               0,                              0,   },
+   {   "Down",            "Down",            0,               0,                              0,   },
+   {   "Left",            "MoveLeft",         0,               0,                              0,   },
+   {   "Right",         "MoveRight",      0,               0,                              0,   },
+   {   "Strafe Left",      "StrafeLeft",      0,               0,                              0,   },
+   {   "Strafe Right",      "StrafeRight",      0,               0,                              0,   },
+   {   "Walk",            "Run1",            RSP_SK_SHIFT,      0,                              0,                  },
+   {   "Walk",            "Run2",            0,               0,                              0,                        },
+   {   "Strafe",         "Strafe1",         RSP_SK_ALT,         MiddleButton,                     0,                  },
+   {   "Strafe",         "Strafe2",         0,               0,                              0,                        },
+   {   "Fire",            "Fire",            RSP_SK_CONTROL,      LeftButton,                        0,                  },
+   {   "Fire",            "Fire2",         0,               0,                              0,                        },
+   {   "Fire Left",      "FireLeft",         0,               0,                              0,                        },
+   {   "Fire Right",      "FireRight",      0,               0,                              0,                        },
+   {   "Fire Up",         "FireUp",         0,               0,                              0,                        },
+   {   "Fire Down",      "FireDown",         0,               0,                              0,                        },
+   {   "Duck",            "Duck",            RSP_SK_F,         0,                              RSP_JOY_BUT_1,                  },
+   {   "Rejuvenate",      "Rejuvenate",      RSP_SK_SPACE,      0,                              RSP_JOY_BUT_1,                        },
+   {   "Execute",         "Execute",         RSP_SK_X,         0,                              RSP_JOY_BUT_3,                        },
+   {   "Suicide",         "Suicide",         RSP_SK_K,         0,                              RSP_JOY_BUT_4,                        },
+   {   "Next Level",      "NextLevel",      RSP_SK_F1,         0,                              RSP_JOY_BUT_2,                        },
+   {   "Next Weapon",      "NextWeapon",      RSP_SK_RBRACKET,   0,                              RSP_JOY_BUT_11,                        },
+   {   "Prev Weapon",      "PrevWeapon",      RSP_SK_LBRACKET,   0,                              RSP_JOY_BUT_10,                        },
+   {   "NoWeapon",         "NoWeapon",         RSP_SK_LQUOTE,      0,                              0,                        },
+   {   "MachineGun",      "MachineGun",      RSP_SK_1,         0,                              0,                        },
+   {   "Shotgun",         "Shotgun",         RSP_SK_2,         0,                              0,                        },
+   {   "SprayCannon",      "SprayCannon",      RSP_SK_3,         0,                              0,                        },
+   {   "Grenades",         "Grenades",         RSP_SK_4,         0,                              0,                        },
+   {   "Missiles",         "Missiles",         RSP_SK_5,         0,                              0,                        },
+   {   "Heatseekers",      "Heatseekers",      RSP_SK_6,         0,                              0,                        },
+   {   "Molotovs",         "Molotovs",         RSP_SK_7,         0,                              0,                        },
+   {   "Napalm",         "Napalm",         RSP_SK_8,         0,                              0,                        },
+   {   "Flamer",         "Flamer",         RSP_SK_9,         0,                              0,                        },
+   {   "Mines",         "Mines",         RSP_SK_0,         0,                              0,                        },
 };
 
 
 CInputSettings::InputInfo CInputSettings::ms_ainputinfo[CInputSettings::NumInputFunctions]  =
-{     // Description			Save Name			Default Key			Default Mouse Button(s)			Default Joy Button(s)
-      //	===========			===========			===========			=======================			=====================
-   {	"Turn Left",		"Left",				0,					0,										0,								},
-   {	"Turn Right",		"Right",			0,					0,										0,								},
-   {	"Forward",			"Forward",			0,					0,										0,								},
-   {	"Backward",			"Backward",			0,					0,										0,								},
-   {	"Up",				"Up",				RSP_SK_W,			0,										0,	},
-   {	"Down",				"Down",				RSP_SK_S,			0,										0,	},
-   {	"Left",				"MoveLeft",			RSP_SK_A,			0,										0,	},
-   {	"Right",			"MoveRight",		RSP_SK_D,			0,										0,	},
-   {	"Strafe Left",		"StrafeLeft",		0,					0,										0,	},
-   {	"Strafe Right",		"StrafeRight",		0,					0,										0,	},
-   {	"Walk",				"Run1",				RSP_SK_SHIFT,		0,										0,						},
-   {	"Walk",				"Run2",				0,					0,										0,								},
-   {	"Strafe",			"Strafe1",			0,					0,										0,						},
-   {	"Strafe",			"Strafe2",			0,					0,										0,								},
-   {	"Fire",				"Fire",				RSP_SK_CONTROL,		0,										RSP_JOY_BUT_17,						},
-   {	"Fire",				"Fire2",			0,					0,										0,								},
-   {	"Fire Left",		"FireLeft",			RSP_SK_LEFT,		0,										0,								},
-   {	"Fire Right",		"FireRight",		RSP_SK_RIGHT,		0,										0,								},
-   {	"Fire Up",			"FireUp",			RSP_SK_UP,			0,										0,								},
-   {	"Fire Down",		"FireDown",			RSP_SK_DOWN,		0,										0,								},
-   {	"Duck",				"Duck",				RSP_SK_F,			0,										RSP_JOY_BUT_16,						},
-   {	"Rejuvenate",		"Rejuvenate",		RSP_SK_SPACE,		0,										RSP_JOY_BUT_1,								},
-   {	"Execute",			"Execute",			RSP_SK_X,			0,										RSP_JOY_BUT_3,								},
-   {	"Suicide",			"Suicide",			RSP_SK_K,			0,										RSP_JOY_BUT_4,								},
-   {	"Next Level",		"NextLevel",		RSP_SK_F1,			0,										RSP_JOY_BUT_2,								},
-   {	"Next Weapon",		"NextWeapon",		RSP_SK_RBRACKET,	0,										RSP_JOY_BUT_11,								},
-   {	"Prev Weapon",		"PrevWeapon",		RSP_SK_LBRACKET,	0,										RSP_JOY_BUT_10,								},
-   {	"NoWeapon",			"NoWeapon",			RSP_SK_LQUOTE,		0,										0,								},
-   {	"MachineGun",		"MachineGun",		RSP_SK_1,			0,										0,								},
-   {	"Shotgun",			"Shotgun",			RSP_SK_2,			0,										0,								},
-   {	"SprayCannon",		"SprayCannon",		RSP_SK_3,			0,										0,								},
-   {	"Grenades",			"Grenades",			RSP_SK_4,			0,										0,								},
-   {	"Missiles",			"Missiles",			RSP_SK_5,			0,										0,								},
-   {	"Heatseekers",		"Heatseekers",		RSP_SK_6,			0,										0,								},
-   {	"Molotovs",			"Molotovs",			RSP_SK_7,			0,										0,								},
-   {	"Napalm",			"Napalm",			RSP_SK_8,			0,										0,								},
-   {	"Flamer",			"Flamer",			RSP_SK_9,			0,										0,								},
-   {	"Mines",			"Mines",			RSP_SK_0,			0,										0,								},
+{     // Description         Save Name         Default Key         Default Mouse Button(s)         Default Joy Button(s)
+      //   ===========         ===========         ===========         =======================         =====================
+   {   "Turn Left",      "Left",            0,               0,                              0,                        },
+   {   "Turn Right",      "Right",         0,               0,                              0,                        },
+   {   "Forward",         "Forward",         0,               0,                              0,                        },
+   {   "Backward",         "Backward",         0,               0,                              0,                        },
+   {   "Up",            "Up",            RSP_SK_W,         0,                              0,   },
+   {   "Down",            "Down",            RSP_SK_S,         0,                              0,   },
+   {   "Left",            "MoveLeft",         RSP_SK_A,         0,                              0,   },
+   {   "Right",         "MoveRight",      RSP_SK_D,         0,                              0,   },
+   {   "Strafe Left",      "StrafeLeft",      0,               0,                              0,   },
+   {   "Strafe Right",      "StrafeRight",      0,               0,                              0,   },
+   {   "Walk",            "Run1",            RSP_SK_SHIFT,      0,                              0,                  },
+   {   "Walk",            "Run2",            0,               0,                              0,                        },
+   {   "Strafe",         "Strafe1",         0,               0,                              0,                  },
+   {   "Strafe",         "Strafe2",         0,               0,                              0,                        },
+   {   "Fire",            "Fire",            RSP_SK_CONTROL,      0,                              RSP_JOY_BUT_17,                  },
+   {   "Fire",            "Fire2",         0,               0,                              0,                        },
+   {   "Fire Left",      "FireLeft",         RSP_SK_LEFT,      0,                              0,                        },
+   {   "Fire Right",      "FireRight",      RSP_SK_RIGHT,      0,                              0,                        },
+   {   "Fire Up",         "FireUp",         RSP_SK_UP,         0,                              0,                        },
+   {   "Fire Down",      "FireDown",         RSP_SK_DOWN,      0,                              0,                        },
+   {   "Duck",            "Duck",            RSP_SK_F,         0,                              RSP_JOY_BUT_16,                  },
+   {   "Rejuvenate",      "Rejuvenate",      RSP_SK_SPACE,      0,                              RSP_JOY_BUT_1,                        },
+   {   "Execute",         "Execute",         RSP_SK_X,         0,                              RSP_JOY_BUT_3,                        },
+   {   "Suicide",         "Suicide",         RSP_SK_K,         0,                              RSP_JOY_BUT_4,                        },
+   {   "Next Level",      "NextLevel",      RSP_SK_F1,         0,                              RSP_JOY_BUT_2,                        },
+   {   "Next Weapon",      "NextWeapon",      RSP_SK_RBRACKET,   0,                              RSP_JOY_BUT_11,                        },
+   {   "Prev Weapon",      "PrevWeapon",      RSP_SK_LBRACKET,   0,                              RSP_JOY_BUT_10,                        },
+   {   "NoWeapon",         "NoWeapon",         RSP_SK_LQUOTE,      0,                              0,                        },
+   {   "MachineGun",      "MachineGun",      RSP_SK_1,         0,                              0,                        },
+   {   "Shotgun",         "Shotgun",         RSP_SK_2,         0,                              0,                        },
+   {   "SprayCannon",      "SprayCannon",      RSP_SK_3,         0,                              0,                        },
+   {   "Grenades",         "Grenades",         RSP_SK_4,         0,                              0,                        },
+   {   "Missiles",         "Missiles",         RSP_SK_5,         0,                              0,                        },
+   {   "Heatseekers",      "Heatseekers",      RSP_SK_6,         0,                              0,                        },
+   {   "Molotovs",         "Molotovs",         RSP_SK_7,         0,                              0,                        },
+   {   "Napalm",         "Napalm",         RSP_SK_8,         0,                              0,                        },
+   {   "Flamer",         "Flamer",         RSP_SK_9,         0,                              0,                        },
+   {   "Mines",         "Mines",         RSP_SK_0,         0,                              0,                        },
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -234,19 +234,19 @@ CInputSettings::CInputSettings(void)
    // them at anytime.
    DefaultRotations();
 
-   m_sUseMouse							= FALSE;
-   m_sUseJoy							= FALSE;
+   m_sUseMouse                     = FALSE;
+   m_sUseJoy                     = FALSE;
 
-   m_dMouseSensitivityX				= 1.00;  // 100%
-   m_dMouseSensitivityY				= 1.00;  // 100%
+   m_dMouseSensitivityX            = 1.00;  // 100%
+   m_dMouseSensitivityY            = 1.00;  // 100%
 
    // Set default inputs (in case no INI is loaded).
    short i;
    for (i = 0; i < NumInputFunctions; i++)
    {
-      m_asPlayKeys[i]			= ms_ainputinfo[i].u8DefaultKey;
-      m_asPlayMouseButtons[i]	= ms_ainputinfo[i].sDefMouseButtons;
-      m_asPlayJoyButtons[i]	= ms_ainputinfo[i].sDefJoyButtons;
+      m_asPlayKeys[i]         = ms_ainputinfo[i].u8DefaultKey;
+      m_asPlayMouseButtons[i]   = ms_ainputinfo[i].sDefMouseButtons;
+      m_asPlayJoyButtons[i]   = ms_ainputinfo[i].sDefJoyButtons;
    }
 }
 
@@ -293,7 +293,7 @@ short CInputSettings::LoadPrefs(
    pPrefs->GetVal("Input", "JoyButtonMenuDeleteKeybind", 5, &m_sJoyMenuDeleteKeybindButton);
 
    // Game play keys.
-   short	i;
+   short i;
    char szDescriptor[256];
    for (i = 0; i < NumInputFunctions; i++)
    {
@@ -370,7 +370,7 @@ short CInputSettings::SavePrefs(
    pPrefs->SetVal("Input", "UseJoystick", m_sUseJoy);
 
    // Game play input.
-   short	i;
+   short i;
    for (i = 0; i < NumInputFunctions; i++)
    {
       pPrefs->SetVal(
@@ -444,11 +444,11 @@ short CInputSettings::PostDemo(
 ///////////////////////////////////////////////////////////////////////////////
 void CInputSettings::DefaultRotations(void)
 {
-   m_dMovingSlowDegreesPerSec		= 240.0;
-   m_dMovingFastDegreesPerSec		= 300.0;
-   m_dStillSlowDegreesPerSec		= 180.0;
-   m_dStillFastDegreesPerSec		= 240.0;
-   m_sTapRotationDegrees			= 10;
+   m_dMovingSlowDegreesPerSec      = 240.0;
+   m_dMovingFastDegreesPerSec      = 300.0;
+   m_dStillSlowDegreesPerSec      = 180.0;
+   m_dStillFastDegreesPerSec      = 240.0;
+   m_sTapRotationDegrees         = 10;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

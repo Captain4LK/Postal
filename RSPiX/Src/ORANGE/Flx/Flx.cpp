@@ -20,26 +20,26 @@
 // FLX.CPP
 //
 // History:
-//		08/05/94 MR		Started. (10h)
+//      08/05/94 MR      Started. (10h)
 //
-//		08/07/94 MR		Got decompression working (except for SS2) and started
-//							on compression. (13h)
+//      08/07/94 MR      Got decompression working (except for SS2) and started
+//                     on compression. (13h)
 //
-//		08/08/94 MR		General cleanup of interfaces, etc. (12h)
+//      08/08/94 MR      General cleanup of interfaces, etc. (12h)
 //
-//		08/09/94 MR		Finished up basic compression.
+//      08/09/94 MR      Finished up basic compression.
 //
-//		08/12/94 MR		Added flags to FLX_BUF struct that indicate whether the
-//							pixels and/or the colors were modified by a "Read".
+//      08/12/94 MR      Added flags to FLX_BUF struct that indicate whether the
+//                     pixels and/or the colors were modified by a "Read".
 //
-//		08/15/94 MR		Fixed bug in ReadFrame() -- if the requested frame was
-//							the current frame, it was not copied to the specified buf.
+//      08/15/94 MR      Fixed bug in ReadFrame() -- if the requested frame was
+//                     the current frame, it was not copied to the specified buf.
 //
-//							Also added a function that returns the last frame that
-//							was written.
+//                     Also added a function that returns the last frame that
+//                     was written.
 //
-//	 03/06/96	JMI	Converted references from PORTABLE.H (e.g., DWORD) to
-//							references from SYSTEM.H (e.g., U32).
+//    03/06/96   JMI   Converted references from PORTABLE.H (e.g., DWORD) to
+//                     references from SYSTEM.H (e.g., U32).
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,8 +117,8 @@ CFlx::~CFlx()
 // the file header and can optionally have your buf memory allocated for you.
 // Returns 0 if successfull, non-zero otherwise.
 //
-// 10/20/94, Paul Lin,	add code to reset error conditions on the fstream object
-//						so that the next time this function is called, it doesn't fail
+// 10/20/94, Paul Lin,   add code to reset error conditions on the fstream object
+//                  so that the next time this function is called, it doesn't fail
 //
 ///////////////////////////////////////////////////////////////////////////////
 short CFlx::Open(
@@ -226,26 +226,26 @@ short CFlx::Create(
 
    // Create file.  Depending on what user selected, either allow for the
    // replacement of existing files or don't.
-   short	sSux;
+   short sSux;
    if (bReplaceExisting)
-      sSux	= m_file.Open(pszFileName, "wb", ENDIAN_LITTLE);
+      sSux   = m_file.Open(pszFileName, "wb", ENDIAN_LITTLE);
    else
    {
       // There's no no-replace flag so we must text.
       if (m_file.Open(pszFileName, "rb", ENDIAN_LITTLE) == 0)
       {
          // File exists.
-         sSux	= TRUE;
+         sSux   = TRUE;
          m_file.Close();
       }
       else
       {
          // File doesn't exist.
-         sSux	= m_file.Open(pszFileName, "wb", ENDIAN_LITTLE);
+         sSux   = m_file.Open(pszFileName, "wb", ENDIAN_LITTLE);
       }
    }
 
-   if (sSux	== FALSE)
+   if (sSux   == FALSE)
    {
       // Set file mode to binary (this seems to be necessary even
       // though we specified ios::binary when we opened the stream)

@@ -19,11 +19,11 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		09/12/97 JMI	Started.
+//      09/12/97 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Manages a group of memory resources that represent disk files.  Currently
+//   Manages a group of memory resources that represent disk files.  Currently
 // used for .RLM files to limit the usefulness of crippleware demos.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,8 @@
 
 typedef struct
 {
-   char*	pszResName; // Resource filename.
-   U8*	pau8Res;    // Resource data.
+   char*   pszResName; // Resource filename.
+   U8*   pau8Res;    // Resource data.
    S32 lResSize;     // Amount of resource data in bytes.
 } FATEntry;
 
@@ -52,11 +52,11 @@ typedef struct
 // Given a filename, open an RFile to the corresponding resource data.
 //////////////////////////////////////////////////////////////////////////////
 extern short GetMemFileResource( // Returns 0 on successful open.
-   const char*		pszResName,    // In:  Res filename.
+   const char*      pszResName,    // In:  Res filename.
    RFile::Endian endian,         // In:  Endian nature for RFile.
-   RFile*			pfile);        // In:  File to open with.
+   RFile*         pfile);        // In:  File to open with.
 
-#endif	// ENABLE_PLAY_SPECIFIC_REALMS_ONLY
+#endif   // ENABLE_PLAY_SPECIFIC_REALMS_ONLY
 
 //////////////////////////////////////////////////////////////////////////////
 // EOF

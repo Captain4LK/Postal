@@ -20,53 +20,53 @@
 //
 // History:
 //
-//		03/31/97	JMI	Started.
+//      03/31/97   JMI   Started.
 //
-//		04/25/97	JMI	Added execute input.
+//      04/25/97   JMI   Added execute input.
 //
-//		05/13/97	JMI	Changed 'Run' to 'Walk'.
-//							Also, added 'Suicide' and 'NextLevel'.
+//      05/13/97   JMI   Changed 'Run' to 'Walk'.
+//                     Also, added 'Suicide' and 'NextLevel'.
 //
-//		05/14/97	JMI	Added pick up.
+//      05/14/97   JMI   Added pick up.
 //
-//		06/09/97	JMI	Changed 'Walk' to 'Run'.
+//      06/09/97   JMI   Changed 'Walk' to 'Run'.
 //
-//		06/10/97	JMI	Changed m_dDegreesPerSec to m_dMovingSlowDegreesPerSec and
-//							added m_dMovingFastDegreesPerSec, m_dStillSlowDegreesPerSec,
-//							m_dStillFastDegreesPerSec, and m_sTapRotationDegrees.
+//      06/10/97   JMI   Changed m_dDegreesPerSec to m_dMovingSlowDegreesPerSec and
+//                     added m_dMovingFastDegreesPerSec, m_dStillSlowDegreesPerSec,
+//                     m_dStillFastDegreesPerSec, and m_sTapRotationDegrees.
 //
-//		06/15/97 MJR	Removed NextLevel.
+//      06/15/97 MJR   Removed NextLevel.
 //
-//		07/03/97	JMI	Moved InputInfo and ms_ainputinfo into CInputSettings.
+//      07/03/97   JMI   Moved InputInfo and ms_ainputinfo into CInputSettings.
 //
-//		07/06/97	JMI	Changed m_au8PlayKeys[] from a U8 array to a short array,
-//							m_asPlayKeys[].
-//							Also, changed m_asPlayButtons to m_asPlayMouseButtons.
+//      07/06/97   JMI   Changed m_au8PlayKeys[] from a U8 array to a short array,
+//                     m_asPlayKeys[].
+//                     Also, changed m_asPlayButtons to m_asPlayMouseButtons.
 //
-//		07/07/97	JMI	Added m_dMouseSensitivityX and m_dMouseSensitivityY.
+//      07/07/97   JMI   Added m_dMouseSensitivityX and m_dMouseSensitivityY.
 //
-//		07/16/97	JMI	Added Weapon10 enum.
+//      07/16/97   JMI   Added Weapon10 enum.
 //
-//		07/25/97	JMI	Removed PickUp enum.
+//      07/25/97   JMI   Removed PickUp enum.
 //
-//		08/04/97	JMI	Added DefaultRotations().
+//      08/04/97   JMI   Added DefaultRotations().
 //
-//		08/10/97	JMI	Added StrafeLeft and StrafeRight inputs.
-//							Also, changed Jump to Revive.
+//      08/10/97   JMI   Added StrafeLeft and StrafeRight inputs.
+//                     Also, changed Jump to Revive.
 //
-//		08/12/97	JMI	Removed StrafeLeft and StrafeRight inputs.  Replaced with
-//							Strafe2 which can get you the same thing if you combine
-//							both strafes with an turn arrow key.
-//							Also, added Run2 which is handy for similar reasons.
+//      08/12/97   JMI   Removed StrafeLeft and StrafeRight inputs.  Replaced with
+//                     Strafe2 which can get you the same thing if you combine
+//                     both strafes with an turn arrow key.
+//                     Also, added Run2 which is handy for similar reasons.
 //
-//		08/24/97	JMI	Moved Execute and Suicide to before the weapons and changed
-//							the weapon descriptions to reflect the actual weapons.
+//      08/24/97   JMI   Moved Execute and Suicide to before the weapons and changed
+//                     the weapon descriptions to reflect the actual weapons.
 //
-//		08/27/97	JMI	Added pszSaveName to InputInfo.
+//      08/27/97   JMI   Added pszSaveName to InputInfo.
 //
-//		08/27/97	JMI	Added Fire2.
+//      08/27/97   JMI   Added Fire2.
 //
-//		10/10/97	JMI	Added m_sUseJoystick, JoyButtons, InputInfo.sJoyButtons.
+//      10/10/97   JMI   Added m_sUseJoystick, JoyButtons, InputInfo.sJoyButtons.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef INPUTSETTINGS_H
@@ -135,29 +135,29 @@ typedef enum
 
 typedef enum
 {
-   None				= 0,
-   LeftButton		= 1,
-   RightButton		= 2,
-   MiddleButton	= 4
+   None            = 0,
+   LeftButton      = 1,
+   RightButton      = 2,
+   MiddleButton   = 4
 } MouseButtons;
 
 typedef enum
 {
-//			None				= 0,
-   ButtonA			= 1,
-   ButtonB			= 2,
-   ButtonC			= 4,
-   ButtonD			= 8
+//         None            = 0,
+   ButtonA         = 1,
+   ButtonB         = 2,
+   ButtonC         = 4,
+   ButtonD         = 8
 } JoyButtons;
 
 // Game play input information.
 typedef struct
 {
-   char*	pszDescription;         // Description of key.
-   char*	pszSaveName;            // Name for INI.
-   U8	u8DefaultKey;              // Default rspScanKeys val (RSP_SK_*).
-   short	sDefMouseButtons;       // Default rspGetMouse psButtons mask (MouseButtons).
-   short	sDefJoyButtons;         // Default rspGetJoyState buttons mask (JoyButtons).
+   char*   pszDescription;         // Description of key.
+   char*   pszSaveName;            // Name for INI.
+   U8 u8DefaultKey;                // Default rspScanKeys val (RSP_SK_*).
+   short sDefMouseButtons;         // Default rspGetMouse psButtons mask (MouseButtons).
+   short sDefJoyButtons;           // Default rspGetJoyState buttons mask (JoyButtons).
 } InputInfo;
 
 
@@ -198,9 +198,9 @@ double m_dMouseSensitivityY;                 // Percentage of Y mouse movement u
                                              // halved before interpretation by the
                                              // input logic.
 
-short	m_sUseMouse;                           // Allow mouse input (for main dude).
+short m_sUseMouse;                             // Allow mouse input (for main dude).
 
-short	m_sUseJoy;                             // Allow joystick input.
+short m_sUseJoy;                               // Allow joystick input.
 
 U32 m_asPlayKeys[NumInputFunctions];                  // Array of game play keys indexed
                                                       // by an InputFunction value.
@@ -208,19 +208,19 @@ U32 m_asPlayMouseButtons[NumInputFunctions];          // Array of game play mous
                                                       // indexed by an InputFunction value.
 U32 m_asPlayJoyButtons[NumInputFunctions];            // Array of game play joystick buttons
                                                       // indexed by an InputFunction value.
-short	m_sJoyStartButton;                        // Default button to use as "Start"
-short	m_sJoyMenuUpButton;                       // Default button to use as "Menu Up"
-short	m_sJoyMenuDownButton;                        // Default button to use as "Menu Down"
-short	m_sJoyMenuLeftButton;                        // Default button to use as "Menu Left"
-short	m_sJoyMenuRightButton;                       // Default button to use as "Menu Right"
-short	m_sJoyMenuUpAxis;                      // Default button to use as "Menu Up"
-short	m_sJoyMenuDownAxis;                       // Default button to use as "Menu Down"
-short	m_sJoyMenuLeftAxis;                       // Default button to use as "Menu Left"
-short	m_sJoyMenuRightAxis;                      // Default button to use as "Menu Right"
-short	m_sJoyMenuConfirmButton;                        // Default button to use as "Confirm"
-short	m_sJoyMenuBackButton;                        // Default button to use as "Back"
-short	m_sJoyMenuBackButton2;                       // Other default button to use as "Back"
-short	m_sJoyMenuDeleteKeybindButton;               // Default button to use for deleting keybinds
+short m_sJoyStartButton;                          // Default button to use as "Start"
+short m_sJoyMenuUpButton;                         // Default button to use as "Menu Up"
+short m_sJoyMenuDownButton;                          // Default button to use as "Menu Down"
+short m_sJoyMenuLeftButton;                          // Default button to use as "Menu Left"
+short m_sJoyMenuRightButton;                         // Default button to use as "Menu Right"
+short m_sJoyMenuUpAxis;                        // Default button to use as "Menu Up"
+short m_sJoyMenuDownAxis;                         // Default button to use as "Menu Down"
+short m_sJoyMenuLeftAxis;                         // Default button to use as "Menu Left"
+short m_sJoyMenuRightAxis;                        // Default button to use as "Menu Right"
+short m_sJoyMenuConfirmButton;                          // Default button to use as "Confirm"
+short m_sJoyMenuBackButton;                          // Default button to use as "Back"
+short m_sJoyMenuBackButton2;                         // Other default button to use as "Back"
+short m_sJoyMenuDeleteKeybindButton;                 // Default button to use for deleting keybinds
 
 public:
 // Set settings to default values

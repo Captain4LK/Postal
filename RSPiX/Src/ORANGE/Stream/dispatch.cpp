@@ -20,7 +20,7 @@
 // Dispatch.CPP
 //
 // History:
-//		09/21/95 JMI	Started.
+//      09/21/95 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -34,7 +34,7 @@
 // This class will NOT use malloc for a type that has no USE_DISPATCHFUNC;
 // otherwise would be silly.
 //
-// IMPORTANT:	If you provide an ALLOC_DISPATCHFUNC, you SHOULD provide a
+// IMPORTANT:   If you provide an ALLOC_DISPATCHFUNC, you SHOULD provide a
 // FREE_DISPATCHFUNC to deallocate a buffer.  This module will attempt to free
 // data if an error occurs causing a buffer to become only partially filled.
 // If no ALLOC_DISPATCHFUNC is provided, it will use free (since it allocated
@@ -120,15 +120,15 @@ void CDispatch::Set(void)
 {
    for (S32 l = 0L; l < NUM_TYPES; l++)
    {
-      m_afnAlloc[l]	= NULL;
-      m_afnFree[l]	= NULL;
-      m_afnUse[l]		= NULL;
+      m_afnAlloc[l]   = NULL;
+      m_afnFree[l]   = NULL;
+      m_afnUse[l]      = NULL;
    }
 
-   m_fnTime		= NULL;
-   m_pfilter	= NULL;
+   m_fnTime      = NULL;
+   m_pfilter   = NULL;
 
-   m_sActive	= FALSE;
+   m_sActive   = FALSE;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ void CDispatch::Reset(void)
       // Destroy item container.
       delete pri;
       // Get Next.
-      pri	= m_slistRtItems.GetNext();
+      pri   = m_slistRtItems.GetNext();
    }
 
    Set();
@@ -206,7 +206,7 @@ void CDispatch::UseCallStatic(UCHAR* pucBuffer, S32 lSize, USHORT usType,
 //////////////////////////////////////////////////////////////////////////////
 UCHAR* CDispatch::AllocCall(S32 lSize, USHORT usType, UCHAR ucFlags)
 {
-   UCHAR*	puc	= NULL;
+   UCHAR*   puc   = NULL;
 
    if (m_afnAlloc[usType] != NULL)
    {
@@ -245,9 +245,9 @@ UCHAR* CDispatch::AllocCall(S32 lSize, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-UCHAR* CDispatch::AllocCallStatic(	S32 lSize,
-                                    USHORT usType, UCHAR ucFlags,
-                                    S32 l_pDispatch)
+UCHAR* CDispatch::AllocCallStatic(   S32 lSize,
+                                     USHORT usType, UCHAR ucFlags,
+                                     S32 l_pDispatch)
 {
    return ((CDispatch*)l_pDispatch)->AllocCall(lSize, usType, ucFlags);
 }
@@ -284,8 +284,8 @@ void CDispatch::FreeCall(UCHAR* puc, USHORT usType, UCHAR ucFlags)
 // (static)
 //
 //////////////////////////////////////////////////////////////////////////////
-void CDispatch::FreeCallStatic(	UCHAR* pucBuffer, USHORT usType,
-                                 UCHAR ucFlags, S32 l_pDispatch)
+void CDispatch::FreeCallStatic(   UCHAR* pucBuffer, USHORT usType,
+                                  UCHAR ucFlags, S32 l_pDispatch)
 {
    ((CDispatch*)l_pDispatch)->FreeCall(pucBuffer, usType, ucFlags);
 }
@@ -296,10 +296,10 @@ void CDispatch::FreeCallStatic(	UCHAR* pucBuffer, USHORT usType,
 // Returns 0 on success.
 //
 //////////////////////////////////////////////////////////////////////////////
-short CDispatch::AddItem(	UCHAR* puc, S32 lSize, USHORT usType,
-                           UCHAR ucFlags, S32 lTime)
+short CDispatch::AddItem(   UCHAR* puc, S32 lSize, USHORT usType,
+                            UCHAR ucFlags, S32 lTime)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Attempt to allocate a RTITEM for this chunk.
    PRTITEM pri   = new RTITEM;
@@ -308,11 +308,11 @@ short CDispatch::AddItem(	UCHAR* puc, S32 lSize, USHORT usType,
    if (pri != NULL)
    {
       // Set up item.
-      pri->puc			= puc;
-      pri->lSize		= lSize;
-      pri->usType		= usType;
-      pri->ucFlags	= ucFlags;
-      pri->lTime		= lTime;
+      pri->puc         = puc;
+      pri->lSize      = lSize;
+      pri->usType      = usType;
+      pri->ucFlags   = ucFlags;
+      pri->lTime      = lTime;
       // Add item to sorted list with time as sort key . . .
       if (m_slistRtItems.Insert(pri, &(pri->lTime)) == 0)
       {
@@ -359,9 +359,9 @@ void CDispatch::Blow(void)
       m_slistRtItems.Remove();
 
       // Call handler.  If handler doesn't need buffer anymore . . .
-      if ((*m_afnUse[pri->usType])(	pri->puc, pri->lSize, pri->usType,
-                                    pri->ucFlags, pri->lTime,
-                                    m_alUser[pri->usType]) == RET_FREE)
+      if ((*m_afnUse[pri->usType])(   pri->puc, pri->lSize, pri->usType,
+                                      pri->ucFlags, pri->lTime,
+                                      m_alUser[pri->usType]) == RET_FREE)
       {
          FreeCall(pri->puc, pri->usType, pri->ucFlags);
       }
@@ -370,7 +370,7 @@ void CDispatch::Blow(void)
       delete pri;
 
       // Get next node.
-      pri	= m_slistRtItems.GetHead();
+      pri   = m_slistRtItems.GetHead();
 
       // Get the "current" time in case handler was slow.
       lTime = GetTime();
@@ -401,7 +401,7 @@ void CDispatch::SetDataHandler(USHORT usType, USE_DISPATCHFUNC fnUse)
 {
    ASSERT(usType < NUM_TYPES);
 
-   m_afnUse[usType]	= fnUse;
+   m_afnUse[usType]   = fnUse;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ void CDispatch::SetAllocHandler(USHORT usType, ALLOC_DISPATCHFUNC fnAlloc)
 {
    ASSERT(usType < NUM_TYPES);
 
-   m_afnAlloc[usType]	= fnAlloc;
+   m_afnAlloc[usType]   = fnAlloc;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ void CDispatch::SetFreeHandler(USHORT usType, FREE_DISPATCHFUNC fnFree)
 {
    ASSERT(usType < NUM_TYPES);
 
-   m_afnFree[usType]	= fnFree;
+   m_afnFree[usType]   = fnFree;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -437,7 +437,7 @@ void CDispatch::SetUserVal(USHORT usType, S32 lUser)
 {
    ASSERT(usType < NUM_TYPES);
 
-   m_alUser[usType]	= lUser;
+   m_alUser[usType]   = lUser;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -450,9 +450,9 @@ void CDispatch::SetFilter(CFilter* pfilter)
    if (m_pfilter != NULL)
    {
       // Clear callbacks that point at our CFilter callback dispatchers.
-      m_pfilter->m_fnAlloc	= NULL;
-      m_pfilter->m_fnFree	= NULL;
-      m_pfilter->m_fnUse	= NULL;
+      m_pfilter->m_fnAlloc   = NULL;
+      m_pfilter->m_fnFree   = NULL;
+      m_pfilter->m_fnUse   = NULL;
    }
 
    m_pfilter = pfilter;
@@ -461,10 +461,10 @@ void CDispatch::SetFilter(CFilter* pfilter)
    {
       // Point callbacks at our CFilter callback dispatchers (calls implied this
       // version (Filter*Call)).
-      m_pfilter->m_fnAlloc	= AllocCallStatic;
-      m_pfilter->m_fnFree	= FreeCallStatic;
-      m_pfilter->m_fnUse	= UseCallStatic;
-      m_pfilter->m_lUser	= (S32)this;
+      m_pfilter->m_fnAlloc   = AllocCallStatic;
+      m_pfilter->m_fnFree   = FreeCallStatic;
+      m_pfilter->m_fnUse   = UseCallStatic;
+      m_pfilter->m_lUser   = (S32)this;
    }
 }
 
@@ -476,7 +476,7 @@ void CDispatch::SetFilter(CFilter* pfilter)
 //////////////////////////////////////////////////////////////////////////////
 short CDispatch::Start(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (m_sActive == FALSE)
    {
@@ -503,7 +503,7 @@ short CDispatch::Start(void)
 //////////////////////////////////////////////////////////////////////////////
 short CDispatch::Suspend(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (m_sActive == TRUE)
    {
@@ -530,7 +530,7 @@ short CDispatch::Suspend(void)
 //////////////////////////////////////////////////////////////////////////////
 short CDispatch::SendHandlerMessage(USHORT usMsg)
 {
-   short sNum	= 0;
+   short sNum   = 0;
 
    for (S32 l = 0L; l < NUM_TYPES; l++)
    {

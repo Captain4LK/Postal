@@ -24,8 +24,8 @@
 #ifndef attrib_h
 #define attrib_h
 
-#define ATTRIBUTE_MASK	0xffc0
-#define CONTOUR_MASK		0x006f
+#define ATTRIBUTE_MASK   0xffc0
+#define CONTOUR_MASK      0x006f
 
 typedef struct tag_CONTOUR
 {
@@ -44,7 +44,7 @@ protected:
 
 WORD*    m_pAttribMap;           //Pointer to attribute map
 CONTOUR* m_pAttribCont;
-short	m_sMapWidth;
+short m_sMapWidth;
 
 public:
 CAttribute();

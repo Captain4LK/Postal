@@ -19,78 +19,78 @@
 // Project: RSPiX
 //
 // History:
-//		09/01/97 MJR	Nearing the end of a major overhaul.
+//      09/01/97 MJR   Nearing the end of a major overhaul.
 //
-//		09/07/97 MJR	Fixed problem with DROPPED message, whereby the caller
-//							couldn't recognize when he himself was dropped because
-//							the ID was no S32er valid.
+//      09/07/97 MJR   Fixed problem with DROPPED message, whereby the caller
+//                     couldn't recognize when he himself was dropped because
+//                     the ID was no S32er valid.
 //
-//							Added support for PROCEED and PROGRESS_REALM messages.
+//                     Added support for PROCEED and PROGRESS_REALM messages.
 //
-//		09/10/97 MJR	Changed return value from StartJoinProcess() so that
-//							caller could determine whether the failure was due to
-//							unsupported protocol (RSocket::errNotSupported).
+//      09/10/97 MJR   Changed return value from StartJoinProcess() so that
+//                     caller could determine whether the failure was due to
+//                     unsupported protocol (RSocket::errNotSupported).
 //
-//		09/12/97 MJR	Added SendText() as alternative to SendChat().
+//      09/12/97 MJR   Added SendText() as alternative to SendChat().
 //
-//		09/12/97 MJR	Now checks to make sure we're joined before it tries to
-//							send chat or text.
+//      09/12/97 MJR   Now checks to make sure we're joined before it tries to
+//                     send chat or text.
 //
-//		11/25/97	JMI	Changed m_error to m_msgError so we could store a whole
-//							error message instead of just the error type.
-//							Also, now notices the difference between a version mismatch
-//							and a platform mismatch and reports separate errors for
-//							each.
+//      11/25/97   JMI   Changed m_error to m_msgError so we could store a whole
+//                     error message instead of just the error type.
+//                     Also, now notices the difference between a version mismatch
+//                     and a platform mismatch and reports separate errors for
+//                     each.
 //
-//		11/26/97	JMI	Masking error in evaluation of version mismatch problem
-//							such that platform mismatch was never detected.
+//      11/26/97   JMI   Masking error in evaluation of version mismatch problem
+//                     such that platform mismatch was never detected.
 //
-//		12/18/97	SPA	Changed ReceiveFromPeers to limit by number of times through
-//							the loop (to number of joined peers *2) instead of a time limit.
-//						Changed SendToPeers to write it's own data directly instead of
-//							sending it out over the net just to receive it again later.
-//							Also limited the resending of the same packet multiple times
-//							to a maximum number (set from prefs - NumSendsPerBurst - default 2)
-//							and a repeat interval for burst (set from prefs - SendInterval -
-//							default 1000 ms).
-//						Added variable frame rate (really more of a self regulating frame rate).
-//							Each peer keeps track of how S32 it took between frames (as measured
-//							in CanDoFrame) and then sends that value to all other peers in the
-//							next available frame that hasn't been yet. Each peer then averages the
-//							frame times for that frame (which is really the time it took for the
-//							frame that happened MaxFrameLag frames ago). This is stored in an array
-//							which contains the average frame times for the last eight frames. The
-//							values in this array are then averaged and the result is used as the
-//							elapsed game time for the current frame (passed back in psFrameTime).
-//							This last step is done to smooth out any rapid changes in the speed.
-//						Also changed msg INPUT_REQ and INPUT_DATA to update frame time from above.
+//      12/18/97   SPA   Changed ReceiveFromPeers to limit by number of times through
+//                     the loop (to number of joined peers *2) instead of a time limit.
+//                  Changed SendToPeers to write it's own data directly instead of
+//                     sending it out over the net just to receive it again later.
+//                     Also limited the resending of the same packet multiple times
+//                     to a maximum number (set from prefs - NumSendsPerBurst - default 2)
+//                     and a repeat interval for burst (set from prefs - SendInterval -
+//                     default 1000 ms).
+//                  Added variable frame rate (really more of a self regulating frame rate).
+//                     Each peer keeps track of how S32 it took between frames (as measured
+//                     in CanDoFrame) and then sends that value to all other peers in the
+//                     next available frame that hasn't been yet. Each peer then averages the
+//                     frame times for that frame (which is really the time it took for the
+//                     frame that happened MaxFrameLag frames ago). This is stored in an array
+//                     which contains the average frame times for the last eight frames. The
+//                     values in this array are then averaged and the result is used as the
+//                     elapsed game time for the current frame (passed back in psFrameTime).
+//                     This last step is done to smooth out any rapid changes in the speed.
+//                  Also changed msg INPUT_REQ and INPUT_DATA to update frame time from above.
 //
-//		12/22/97 SPA	Rewrote SendToPeers to send only one packet per frame with each packet
-//							containing all the frames that that peer might need. This is frames
-//							starting from the previous frame (which is the one that we have all
-//							the data for) minus MaxFrameLag up to current frame plus MaxFrameLag.
-//							This means that we send (MaxFrameLag *2 + 2) frames per packet. This also
-//							means that each frame is sent (MaxFrameLag *2 + 2) times which should
-//							replace most lost or misplaced packets. In case we do loose multiple
-//							packets, there is also a request mechanism. If we are unable to render
-//							a frame after a time out has expired, we request frame data from the
-//							peers that are missing (as well as resending the last packet sent to
-//							them, just in case the reason he didn't send the data is because he
-//							didn't get our data). The request is checked for in ReceiveFromPeers
-//							and the requested data sent immediately. To simplify the request mechanism
-//							I pulled the center loop of SendToPeers out into it's own method (SendToPeer).
+//      12/22/97 SPA   Rewrote SendToPeers to send only one packet per frame with each packet
+//                     containing all the frames that that peer might need. This is frames
+//                     starting from the previous frame (which is the one that we have all
+//                     the data for) minus MaxFrameLag up to current frame plus MaxFrameLag.
+//                     This means that we send (MaxFrameLag *2 + 2) frames per packet. This also
+//                     means that each frame is sent (MaxFrameLag *2 + 2) times which should
+//                     replace most lost or misplaced packets. In case we do loose multiple
+//                     packets, there is also a request mechanism. If we are unable to render
+//                     a frame after a time out has expired, we request frame data from the
+//                     peers that are missing (as well as resending the last packet sent to
+//                     them, just in case the reason he didn't send the data is because he
+//                     didn't get our data). The request is checked for in ReceiveFromPeers
+//                     and the requested data sent immediately. To simplify the request mechanism
+//                     I pulled the center loop of SendToPeers out into it's own method (SendToPeer).
 //
-//		1/5/98		SPA	Fixed problem were we would not go to next level because the data for the
-//							halt frame was not being sent so that everyone was stuck waiting to
-//							render the last frame.
+//      1/5/98      SPA   Fixed problem were we would not go to next level because the data for the
+//                     halt frame was not being sent so that everyone was stuck waiting to
+//                     render the last frame.
 //
-//		1/6/98	 SPA	TimePerFrame from .ini now used for maximum time per frame instead of actual
-//							time per frame. SendInputInterval from .ini now used as timeout value for
-//							frame request mechanism.
+//      1/6/98    SPA   TimePerFrame from .ini now used for maximum time per frame instead of actual
+//                     time per frame. SendInputInterval from .ini now used as timeout value for
+//                     frame request mechanism.
 //
-//		06/02/98	JMI	Added an additional condition to avoid indexing into the
-//							peers array with our ID when it is invalid in
-//							SetLocalInput().
+//      06/02/98   JMI   Added an additional condition to avoid indexing into the
+//                     peers array with our ID when it is invalid in
+//                     SetLocalInput().
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +99,7 @@
 #include "NetDlg.h"
 
 // This is the maximum size of the peer messages.
-#define PEER_MSG_HEADER_SIZE		(1 + 2 + 2 + 2 + 2)
+#define PEER_MSG_HEADER_SIZE      (1 + 2 + 2 + 2 + 2)
 #define PEER_MSG_MAX_SIZE       (PEER_MSG_HEADER_SIZE + ((Net::MaxAheadSeq * 2) * (sizeof(UINPUT) + sizeof(U8)))) // *SPA
 
 
@@ -498,10 +498,10 @@ void CNetClient::Update(void)
                // S32er care about the data we temporarily stashed in peer #0 because if our join
                // request is accepted, the server will send us info about ALL the clients, including
                // ourself.  If our request is denied, then nothing matters.
-               msg.msg.joinReq.ucType	= NetMsg::JOIN_REQ;
+               msg.msg.joinReq.ucType   = NetMsg::JOIN_REQ;
                memcpy(msg.msg.joinReq.acName, m_aPeers[0].m_acName, sizeof(msg.msg.joinReq.acName));
-               msg.msg.joinReq.ucColor	= m_aPeers[0].m_ucColor;
-               msg.msg.joinReq.ucTeam	= m_aPeers[0].m_ucTeam;
+               msg.msg.joinReq.ucColor   = m_aPeers[0].m_ucColor;
+               msg.msg.joinReq.ucTeam   = m_aPeers[0].m_ucTeam;
                msg.msg.joinReq.sBandwidth = m_aPeers[0].m_sBandwidth;
                SendMsg(&msg);
                m_state = WaitForJoinResponse;
@@ -519,8 +519,8 @@ void CNetClient::Update(void)
                else
                {
                   // Incompatible version number.
-                  m_msgError.msg.err.error	= NetMsg::ClientVersionMismatchError;
-                  m_msgError.msg.err.ulParam	= msg.msg.loginAccept.ulVersion & ~CNetMsgr::MacVersionBit;
+                  m_msgError.msg.err.error   = NetMsg::ClientVersionMismatchError;
+                  m_msgError.msg.err.ulParam   = msg.msg.loginAccept.ulVersion & ~CNetMsgr::MacVersionBit;
                }
 
                // Unsupported version number -- send LOGOUT message
@@ -537,9 +537,9 @@ void CNetClient::Update(void)
             // There's ONLY ONE reason we'll ever get a LOGIN_DENY message and that is
             // a version 1 server refused our connection b/c of our later version number
             // so ... Incompatible version number.
-            m_msgError.msg.err.error	= NetMsg::ClientVersionMismatchError;
-            m_msgError.msg.err.ulParam	= 1;
-//						m_msgError.msg.err.error = NetMsg::LoginDeniedError;
+            m_msgError.msg.err.error   = NetMsg::ClientVersionMismatchError;
+            m_msgError.msg.err.ulParam   = 1;
+//                  m_msgError.msg.err.error = NetMsg::LoginDeniedError;
             TRACE("CNetClient::Update(): Login denied!\n");
             break;
 
@@ -639,8 +639,8 @@ void CNetClient::GetMsg(
       // If an error occurred, generate an error message, then reset the error flag
       *pmsg = m_msgError;
       bGotMsgForCaller = true;
-      m_msgError.msg.err.error	= NetMsg::NoError;
-      m_msgError.msg.err.ulParam	= 0;
+      m_msgError.msg.err.error   = NetMsg::NoError;
+      m_msgError.msg.err.ulParam   = 0;
 
       // Return this message to caller
       bGotMsgForCaller = true;
@@ -815,12 +815,12 @@ void CNetClient::GetMsg(
             // input data, which is what varies in size.  It will free the memory when it
             // gets destroyed.
             NetMsg msg;
-            msg.msg.inputData.ucType	= NetMsg::INPUT_DATA;
-            msg.msg.inputData.id			= id;
-            msg.msg.inputData.seqStart	= pmsg->msg.inputReq.seqStart;
-            msg.msg.inputData.sNum		= pmsg->msg.inputReq.sNum;
-            msg.msg.inputData.pInputs	= (UINPUT*)msg.AllocVar((S32)pmsg->msg.inputReq.sNum * sizeof(UINPUT));
-            msg.msg.inputData.pFrameTimes	= (U8*)msg.AllocVar((S32)pmsg->msg.inputReq.sNum * sizeof(U8));
+            msg.msg.inputData.ucType   = NetMsg::INPUT_DATA;
+            msg.msg.inputData.id         = id;
+            msg.msg.inputData.seqStart   = pmsg->msg.inputReq.seqStart;
+            msg.msg.inputData.sNum      = pmsg->msg.inputReq.sNum;
+            msg.msg.inputData.pInputs   = (UINPUT*)msg.AllocVar((S32)pmsg->msg.inputReq.sNum * sizeof(UINPUT));
+            msg.msg.inputData.pFrameTimes   = (U8*)msg.AllocVar((S32)pmsg->msg.inputReq.sNum * sizeof(U8));
 
             // Copy the requested values into the allocated memory
             Net::SEQ seq = msg.msg.inputData.seqStart;
@@ -974,8 +974,8 @@ void CNetClient::GetMsg(
          case NetMsg::PING:
             // Calculate ping time and stuff result back into message so high
             // level has easy access to it.
-//					m_lLatestPingTime = rspGetMilliseconds() - pmsg->msg.ping.lTimeStamp;
-//					pmsg->msg.ping.lLatestPingResult = m_lLatestPingTime;
+//               m_lLatestPingTime = rspGetMilliseconds() - pmsg->msg.ping.lTimeStamp;
+//               pmsg->msg.ping.lLatestPingResult = m_lLatestPingTime;
             break;
 
          case NetMsg::RAND:
@@ -1159,7 +1159,7 @@ void CNetClient::ReceiveFromPeers(void)
    // when single-stepping, the time expires before we ever get into the loop!)
    //S32 lMaxTime = rspGetMilliseconds() + Net::MaxPeerReceiveTime;
    short sIterations = 0;
-   do	{
+   do   {
       // Call watchdog to let it know we're still going (we're in a loop!)
       NetBlockingWatchdog();
 
@@ -1193,36 +1193,36 @@ void CNetClient::ReceiveFromPeers(void)
                   S32 lNumInputs = (lReceived - PEER_MSG_HEADER_SIZE) / (sizeof(UINPUT) + sizeof(U8));
 
                   // Get the rest of the message
-//						U16 u16SenderPing;
-//						U16 u16ReceiverPing;
+//                  U16 u16SenderPing;
+//                  U16 u16ReceiverPing;
                   U16 u16MsgType; // *SPA
                   U16 u16PackageID; // *SPA
                   Net::SEQ seqWhatHeNeeds;
                   Net::SEQ seqInputs;
                   Get(pget, &u16PackageID); // *SPA
                   Get(pget, &u16MsgType); // *SPA
-//						Get(pget, &u16SenderPing);
-//						Get(pget, &u16ReceiverPing);
+//                  Get(pget, &u16SenderPing);
+//                  Get(pget, &u16ReceiverPing);
                   Get(pget, &seqWhatHeNeeds);
                   Get(pget, &seqInputs);
 
                   // Reset the receive timer for this peer *SPA
                   m_aPeers[id].m_lLastReceiveTime = rspGetMilliseconds();
 
-/*						// 12/7/97 AJC
+/*                  // 12/7/97 AJC
 #ifdef WIN32
-						if (g_GameSettings.m_bLogNetTime)
-							{
-							WriteTimeStamp("ReceiveFromPeers()",
-												m_aPeers[id].m_acName,
-												NetMsg::INPUT_DATA,
-												seqInputs,
-												lNumInputs,
-												true,
-												u16PackageID);
-							}
+                  if (g_GameSettings.m_bLogNetTime)
+                     {
+                     WriteTimeStamp("ReceiveFromPeers()",
+                                    m_aPeers[id].m_acName,
+                                    NetMsg::INPUT_DATA,
+                                    seqInputs,
+                                    lNumInputs,
+                                    true,
+                                    u16PackageID);
+                     }
 #endif
-						// 12/7/97 AJC
+                  // 12/7/97 AJC
 */
                   // Add input values to peer's input buffer
                   UINPUT input;
@@ -1246,15 +1246,15 @@ void CNetClient::ReceiveFromPeers(void)
                   }
 
                   // Now that I got new inputs, determine the first input seq I need from him
-//						m_aPeers[id].m_seqWhatINeed = m_aPeers[id].m_netinput.FindFirstInvalid();
+//                  m_aPeers[id].m_seqWhatINeed = m_aPeers[id].m_netinput.FindFirstInvalid();
 
                   // Since messages can arrive in the wrong order, we want to ignore older
                   // versions of this value so we don't send him more than he really needs.
                   // We can safely assume that what he needs will never go backwards from what
                   // he previously said -- it will stay the same or go further ahead.  So we
                   // only use the new value if it's greater than what we have.
-//						if (SEQ_GTE(seqWhatHeNeeds, m_aPeers[id].m_seqWhatHeNeeds))
-//							m_aPeers[id].m_seqWhatHeNeeds = seqWhatHeNeeds;
+//                  if (SEQ_GTE(seqWhatHeNeeds, m_aPeers[id].m_seqWhatHeNeeds))
+//                     m_aPeers[id].m_seqWhatHeNeeds = seqWhatHeNeeds;
 #if 0
                   // Add his ping time into the average
                   m_aPeers[id].m_lHisPingSum += (S32)u16SenderPing;
@@ -1295,7 +1295,7 @@ void CNetClient::ReceiveFromPeers(void)
 // Send messages to peers
 ////////////////////////////////////////////////////////////////////////////////
 // 12/30/97 *SPA Pulled center loop out to seperate routine (SendToPeer) and
-//				simplified to send only one packet per frame
+//            simplified to send only one packet per frame
 void CNetClient::SendToPeers(void)
 {
    // Are we ready to send the next frame
@@ -1390,29 +1390,29 @@ void CNetClient::SendToPeer(Net::ID id,            // id of peer to send to
    }
 
 
-/*	// 12/7/97 AJC
+/*   // 12/7/97 AJC
 #ifdef WIN32
-	if (g_GameSettings.m_bLogNetTime)
-		{
-		if (!bSeqReq)
-			WriteTimeStamp("SendToPeer()",
-								m_aPeers[id].m_acName,
-								NetMsg::INPUT_DATA,
-								seqStart,
-								s - seqStart,
-								false,
-								m_u16PackageID);
-		else
-			WriteTimeStamp("SendFrameRequest",
-								m_aPeers[id].m_acName,
-								NetMsg::INPUT_DATA,
-								seqStart,
-								s - seqStart,
-								false,
-								m_u16PackageID);
-		}
+   if (g_GameSettings.m_bLogNetTime)
+      {
+      if (!bSeqReq)
+         WriteTimeStamp("SendToPeer()",
+                        m_aPeers[id].m_acName,
+                        NetMsg::INPUT_DATA,
+                        seqStart,
+                        s - seqStart,
+                        false,
+                        m_u16PackageID);
+      else
+         WriteTimeStamp("SendFrameRequest",
+                        m_aPeers[id].m_acName,
+                        NetMsg::INPUT_DATA,
+                        seqStart,
+                        s - seqStart,
+                        false,
+                        m_u16PackageID);
+      }
 #endif
-	// 12/7/97 AJC
+   // 12/7/97 AJC
 */
 
    // Calculate size of message.  The peer uses the message size to determine
@@ -1453,7 +1453,7 @@ bool CNetClient::CanDoFrame(                    // Returns true if frame can be 
 {
    bool bResult = false;
    S32 lFrameTime = 0;      // The sum of the frame times of the joined players *SPA
-   short	sCount = 0;       // Count of the number of joined players *SPA
+   short sCount = 0;         // Count of the number of joined players *SPA
 
    // If we playing, we might be able to do this, otherwise, we definitely can't
    if (m_bPlaying)
@@ -1545,7 +1545,7 @@ bool CNetClient::CanDoFrame(                    // Returns true if frame can be 
          m_lFrameTime = *psFrameTime;
 
          // Calculate the time since the last time here *SPA
-//			S32 lCurTime = rspGetMilliseconds();
+//         S32 lCurTime = rspGetMilliseconds();
          S32 frameTime = lCurTime - m_lStartTime;
          m_lStartTime = lCurTime;
          // Limit our frame rate to minimum set by .ini (TimePerFrame) *SPA
@@ -1618,9 +1618,9 @@ bool CNetClient::IsLocalInputNeeded(void)
    if (m_bPlaying)
    {
       // Check if timer expired
-//		S32 lCurTime = rspGetMilliseconds();
-//		if (lCurTime > m_lNextLocalInputTime)
-//			{
+//      S32 lCurTime = rspGetMilliseconds();
+//      if (lCurTime > m_lNextLocalInputTime)
+//         {
       // The input seq is only allowed to get m_seqMaxAhead ahead of the
       // frame seq.  Both m_seqInput and m_seqFrame are really refering to
       // the NEXT seq.  When we say we're "on frame 0", we really mean we're
@@ -1652,7 +1652,7 @@ bool CNetClient::IsLocalInputNeeded(void)
             // ahead for whatever reason, then the instant we CAN move ahead
             // we want to do so.  By waiting until here to reset the timer,
             // we ensure that if we don't get here, it will remain expired.
-//					m_lNextLocalInputTime = lCurTime + m_lFrameTime;
+//               m_lNextLocalInputTime = lCurTime + m_lFrameTime;
          }
          else if (m_bUseHaltFrame)
          {
@@ -1662,7 +1662,7 @@ bool CNetClient::IsLocalInputNeeded(void)
             m_aPeers[m_id].m_netinput.PutFrameTime(m_seqFrame, frameTime);
          }
       }
-//			}
+//         }
    }
 
    return bResult;

@@ -20,25 +20,25 @@
 // Props.H
 //
 // History:
-//		01/05/97 JMI	Started.
+//      01/05/97 JMI   Started.
 //
-//		01/09/97	JMI	Removed #include <utility>.
+//      01/09/97   JMI   Removed #include <utility>.
 //
-//		01/14/97	JMI	Changed order of ItemType and KeyType in calls that
-//							take both.  Also, RemoveProp() no S32er complains
-//							about removing props that didn't exist.  Who really
-//							wants to check if a prop exists before removing it?
+//      01/14/97   JMI   Changed order of ItemType and KeyType in calls that
+//                     take both.  Also, RemoveProp() no S32er complains
+//                     about removing props that didn't exist.  Who really
+//                     wants to check if a prop exists before removing it?
 //
-//		03/28/97	JMI	Removed all traces of STL.  IN PROGRESS!!!!!
+//      03/28/97   JMI   Removed all traces of STL.  IN PROGRESS!!!!!
 //
-//		03/31/97	JMI	Finished converting.  Note that the STL map was much
-//							better suited for this class than the regular "Jon Lists"
-//							(as they've been called).  Perhaps RSPiX could use its
-//							own implementation of map or a more advanced 'Jon List'
-//							suite.  The major difference being the allocation of the
-//							data in chunks that are larger than the actual nodes and,
-//							in the case of a map, being able to access the data
-//							actually allocated by the map.
+//      03/31/97   JMI   Finished converting.  Note that the STL map was much
+//                     better suited for this class than the regular "Jon Lists"
+//                     (as they've been called).  Perhaps RSPiX could use its
+//                     own implementation of map or a more advanced 'Jon List'
+//                     suite.  The major difference being the allocation of the
+//                     data in chunks that are larger than the actual nodes and,
+//                     in the case of a map, being able to access the data
+//                     actually allocated by the map.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -100,7 +100,7 @@ class RProps
 public:
 typedef struct
 {
-   ItemType	item;
+   ItemType item;
    KeyType key;
 } Node;
 
@@ -134,20 +134,20 @@ short AddProp(          // Returns 0 on success.
                         // Returns 1 if key already exists.
                         // Returns -1 if error.
    KeyType key,         // Key to identify item.
-   ItemType	item)       // Item to add.
+   ItemType item)         // Item to add.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Verify key does not exist . . .
    if (Find(&key) == NULL)
    {
       // Insert item . . .
-      sRes	= Add(key, item);
+      sRes   = Add(key, item);
    }
    else
    {
       TRACE("AddProp(): Key already exists.  Not adding prop.\n");
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -159,14 +159,14 @@ short AddProp(          // Returns 0 on success.
 void SetProp(           // Returns 0 on success.
                         // Returns -1 if error.
    KeyType key,         // Key to identify old item.
-   ItemType	item)       // New item.
+   ItemType item)         // New item.
 {
    // If the key already exists . . .
-   Node*	pnode	= Find(&key);
+   Node*   pnode   = Find(&key);
    if (pnode != NULL)
    {
       // Change the value.
-      pnode->item	= item;
+      pnode->item   = item;
    }
    else
    {
@@ -198,21 +198,21 @@ short IsProp(                 // Returns TRUE if item exists, FALSE otherwise.
 short GetProp(                // Returns 0 on success.
                               // Returns 1 if no item with specified key.
    KeyType key,               // Key of item to get.
-   ItemType*	pitem)         // Where to put item.
+   ItemType*   pitem)         // Where to put item.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Find node by key . . .
-   Node*	pnode	= Find(&key);
+   Node*   pnode   = Find(&key);
    if (pnode != NULL)
    {
       // Get item.
-      *pitem	= pnode->item;
+      *pitem   = pnode->item;
    }
    else
    {
       TRACE("GetProp(): Key does not exist.\n");
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -227,13 +227,13 @@ protected:
 Node* Find(             // Returns the node with the specified key.
    KeyType* pkey)       // In:  Ptr to the key to search for.
 {
-   Node*	pn	= m_container.GetHead();
+   Node*   pn   = m_container.GetHead();
    while (pn != NULL)
    {
       if (pn->key == *pkey)
          break;
 
-      pn	= m_container.GetNext();
+      pn   = m_container.GetNext();
    }
 
    return pn;
@@ -243,16 +243,16 @@ Node* Find(             // Returns the node with the specified key.
 short Add(              // Returns 0 on success.
                         // Returns -1 if error.
    KeyType key,         // Key to identify item.
-   ItemType	item)       // Item to add.
+   ItemType item)         // Item to add.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
    // Allocate node to add . . .
-   Node*	pn	= new Node;
+   Node*   pn   = new Node;
    if (pn != NULL)
    {
-      pn->key	= key;
-      pn->item	= item;
+      pn->key   = key;
+      pn->item   = item;
       if (m_container.AddTail(pn) == 0)
       {
          // Success.
@@ -260,7 +260,7 @@ short Add(              // Returns 0 on success.
       else
       {
          TRACE("Add(): m_container.AddTail() failed.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
 
       // If any errors occurred after allocation . . .
@@ -272,7 +272,7 @@ short Add(              // Returns 0 on success.
    else
    {
       TRACE("Add(): Unable to allocate new Node.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -283,9 +283,9 @@ short Remove(           // Returns 0 on success.
                         // Returns -1 if error.
    KeyType key)         // Key to identify item to remove.
 {
-   short	sRes	= 0;        // Assume success.
+   short sRes   = 0;          // Assume success.
 
-   Node*	pn	= Find(&key);
+   Node*   pn   = Find(&key);
    if (pn != NULL)
    {
       // The container's current item is the one we want to remove.
@@ -297,13 +297,13 @@ short Remove(           // Returns 0 on success.
       else
       {
          TRACE("Remove(): m_container.Remove() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
    else
    {
       // No such node.
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -312,14 +312,14 @@ short Remove(           // Returns 0 on success.
 // Empty container of current contents.
 void Reset(void)
 {
-   Node*	pn	= m_container.GetHead();
+   Node*   pn   = m_container.GetHead();
    while (pn != NULL)
    {
       m_container.Remove();
 
       delete pn;
 
-      pn	= m_container.GetNext();
+      pn   = m_container.GetNext();
    }
 }
 
@@ -335,7 +335,7 @@ Container m_container;           // Contains the props.
 public:
 };
 
-#endif	// PROPS_H
+#endif   // PROPS_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

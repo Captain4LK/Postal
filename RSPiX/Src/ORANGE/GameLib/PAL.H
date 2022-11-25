@@ -31,7 +31,7 @@
 
 typedef struct tag_PALETTE
 {
-//	RGBQUAD rgbColors[PALETTE_MAXCOLORS];
+//   RGBQUAD rgbColors[PALETTE_MAXCOLORS];
    int rgbColors[PALETTE_MAXCOLORS];
 } PALETTE;
 

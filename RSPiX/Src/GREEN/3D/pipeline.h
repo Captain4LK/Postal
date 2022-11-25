@@ -16,12 +16,12 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
 ///////////////////////////////////////////////////////////////
-//	PIPELINE - History
+//   PIPELINE - History
 ///////////////////////////////////////////////////////////////
 //
-//	07/23/97	JRD	Added support for generating shadows.  Currently
-//						all shadows are hard coded to be cast upon the
-//						plane y = 0, based on postal needs.
+//   07/23/97   JRD   Added support for generating shadows.  Currently
+//                  all shadows are hard coded to be cast upon the
+//                  plane y = 0, based on postal needs.
 //
 ///////////////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ void TransformShadow(RSop* pPts, RTransform& tObj,
 
 // Do NOT use a z-buffer.  Return offset to current position to
 // draw the image m_pimShadowBuf
-void	RenderShadow(RImage* pimDst, RMesh* pMesh, UCHAR ucColor);  // Unicolored!
+void   RenderShadow(RImage* pimDst, RMesh* pMesh, UCHAR ucColor);  // Unicolored!
 
 void Render(RImage* pimDst, short sDstX, short sDstY,
             RMesh* pMesh, UCHAR ucColor); // wire frame!
@@ -127,7 +127,7 @@ void BoundingSphereToScreen(RP3d& ptCenter, RP3d& ptRadius,
 //-------------------------------------
 // Configurable by instance:
 RZBuffer* m_pZB;
-RImage*	m_pimClipBuf;    // For clipping (2 pass rendering)
+RImage*   m_pimClipBuf;    // For clipping (2 pass rendering)
 RTransform m_tScreen;    // map to window
 RTransform m_tView;    // lens
 
@@ -139,14 +139,14 @@ double m_dShadowScale;     // Needed extra parameter
 // store a transformed bounding rect for object being rendered:
 // These are screend coordinates relative to the center of
 // the zbuf square / clipping square
-short	m_sX;    // far cube point
+short m_sX;      // far cube point
 short m_sY;
 short m_sZ;
 short m_sW;
 short m_sH;
 short m_sD;
 
-short	m_sCenX;    // for convenience - the cube center
+short m_sCenX;      // for convenience - the cube center
 short m_sCenY;    // in 3d screen coordinates
 short m_sCenZ;
 // TRUE of FALSE

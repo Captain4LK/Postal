@@ -18,8 +18,8 @@
 // netbrowse.h
 // Project: RSPiX
 //
-//	History:
-//		08/31/97 MJR	Started.
+//   History:
+//      08/31/97 MJR   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NETBROWSE_H
@@ -103,7 +103,7 @@ typedef RFList<CHost> Hosts;
 protected:
 RSocket m_socketBrowse;                               // Socket used to browse for hosts
 S32 m_lLastBroadcast;                                 // Last broadcast time
-unsigned short	m_usBasePort;                          // Base port
+unsigned short m_usBasePort;                            // Base port
 
 //------------------------------------------------------------------------------
 // Functions

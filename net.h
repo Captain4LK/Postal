@@ -18,12 +18,12 @@
 // net.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		05/26/97 MJR	Started.
+//   History:
+//      05/26/97 MJR   Started.
 //
-//		05/28/97	JMI	Upped NetMaxPlayers to 5.
+//      05/28/97   JMI   Upped NetMaxPlayers to 5.
 //
-//		06/16/97 MJR	Upped NetMaxPlayers to 16.
+//      06/16/97 MJR   Upped NetMaxPlayers to 16.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NET_H
@@ -51,24 +51,24 @@
 //
 // The macro names are encoded as follows:
 //
-//			SEQ_EQ(a, b)		Returns true if "a" is equal-to "b", false otherwise
+//         SEQ_EQ(a, b)      Returns true if "a" is equal-to "b", false otherwise
 //
-//			SEQ_NE(a, b)		Returns true if "a" is not-equal-to "b", false otherwise
+//         SEQ_NE(a, b)      Returns true if "a" is not-equal-to "b", false otherwise
 //
-//			SEQ_GT(a, b)		Returns true if "a" is greater-than "b", false otherwise
+//         SEQ_GT(a, b)      Returns true if "a" is greater-than "b", false otherwise
 //
-//			SEQ_GTE(a, b)		Returns true if "a" is greater-than-or-equal-to "b", false otherwise
+//         SEQ_GTE(a, b)      Returns true if "a" is greater-than-or-equal-to "b", false otherwise
 //
-//			SEQ_LT(a, b)		Returns true if "a" is less-than "b"
+//         SEQ_LT(a, b)      Returns true if "a" is less-than "b"
 //
-//			SEQ_LTE(a, b)		Returns true if "a" is less-than-or-equal-to "b"
+//         SEQ_LTE(a, b)      Returns true if "a" is less-than-or-equal-to "b"
 //
-#define SEQ_EQ(a, b)			((Net::SEQ)(a) == (Net::SEQ)(b))
-#define SEQ_NE(a, b)			((Net::SEQ)(a) != (Net::SEQ)(b))
-#define SEQ_GTE(a, b)		( (Net::SEQ)( (Net::SEQ)(a) - (Net::SEQ)(b) ) < (Net::SEQ)(Net::MaxAheadSeq * 3) )
-#define SEQ_GT(a, b)			(SEQ_GTE(a, b) && SEQ_NE(a, b))
-#define SEQ_LT(a, b)			SEQ_GT(b, a)
-#define SEQ_LTE(a, b)		SEQ_GTE(b, a)
+#define SEQ_EQ(a, b)         ((Net::SEQ)(a) == (Net::SEQ)(b))
+#define SEQ_NE(a, b)         ((Net::SEQ)(a) != (Net::SEQ)(b))
+#define SEQ_GTE(a, b)      ( (Net::SEQ)( (Net::SEQ)(a) - (Net::SEQ)(b) ) < (Net::SEQ)(Net::MaxAheadSeq * 3) )
+#define SEQ_GT(a, b)         (SEQ_GTE(a, b) && SEQ_NE(a, b))
+#define SEQ_LT(a, b)         SEQ_GT(b, a)
+#define SEQ_LTE(a, b)      SEQ_GTE(b, a)
 
 
 
@@ -90,22 +90,22 @@ typedef enum
 {
    // Maximum number of ID's.  Can't be more than 16 right now because
    // some bit masks are hardwired to 16-bits, which is 1 bit per player.
-   MaxNumIDs			= 16,
+   MaxNumIDs         = 16,
 
    // Indicates an invalid/unused net ID
-   InvalidID			= 255,
+   InvalidID         = 255,
 
    // Maximum length of chat text
-   MaxChatSize			= 80,
+   MaxChatSize         = 80,
 
    // Maximum length of name text
-   MaxPlayerNameSize	= 32,
+   MaxPlayerNameSize   = 32,
 
    // Maximum length of realm text
-   MaxRealmNameSize	= 32,
+   MaxRealmNameSize   = 32,
 
    // Maximum length of host text
-   MaxHostNameSize	= 32,
+   MaxHostNameSize   = 32,
 
       #if NET_PING
    // These values relate the a ping message that is periodically sent by the client
@@ -113,12 +113,12 @@ typedef enum
    // serves two purposes: (1) it let's us measure the actual ping times, which may
    // be usefull for something, and (2) if the server doesn't get a ping from a client
    // for a S32 time, it can decide that the client has timed-out.
-   MaxTimeBetweenSends		= 1000,                    // Maximum time between sends to the server
-   MaxTimeBeforeTimeout		= 5000,                    // Maximum time before client is considered dead
+   MaxTimeBetweenSends      = 1000,                    // Maximum time between sends to the server
+   MaxTimeBeforeTimeout      = 5000,                    // Maximum time before client is considered dead
       #endif
 
    // Maximum amount of time to wait before giving up on an attempt to connect to the server
-   MaxConnectWaitTime			= 10000,
+   MaxConnectWaitTime         = 10000,
 
    // This is the maximum amount of time the input sequence is allowed to get ahead of the
    // frame sequence and the minimum amount of time per frame (which can also be thought of
@@ -184,10 +184,10 @@ typedef enum
    // (By the way, the goal of using as few bits as possible is reducing the size of the
    // messages being sent back and forth).
    //
-   MaxAheadOfFrameTime			= 1000,
-   MinFrameTime					= 33,       // 1000/33 = 30 frames per second
-   MaxAheadSeq						= MaxAheadOfFrameTime / MinFrameTime,
-   TotalRequiredSeqs				= MaxAheadSeq * 3,
+   MaxAheadOfFrameTime         = 1000,
+   MinFrameTime               = 33,       // 1000/33 = 30 frames per second
+   MaxAheadSeq                  = MaxAheadOfFrameTime / MinFrameTime,
+   TotalRequiredSeqs            = MaxAheadSeq * 3,
 
    // Maximum amount of time to spend receiving peer data.  If this is too low,
    // we might end up with a growing backlog of peer data.  If it is too high, we
@@ -195,30 +195,30 @@ typedef enum
    // It's probably better to err on the high side because in theory the peers will be
    // sending less data than our bandwidth, so we shouldn't have to spend too much
    // time receiving it.
-   MaxPeerReceiveTime		= 200,
+   MaxPeerReceiveTime      = 200,
 
    // Minimum time between sends to a peer.  The actual time is calculated according to the
    // available bandwidth, but even when huge bandwidths are available, we don't want to
    // go nuts saturating it.  Setting it to the minimum frame time seems like a good idea.
-   MinPeerSendInterval		= MinFrameTime,
+   MinPeerSendInterval      = MinFrameTime,
 
    // Datagram packet overhead that isn't under our control.  For TCP/IP, datagram
    // packets (UDP) have a 36 byte header, so that's what I went with.
-   DatagramPacketHeader		= 36,
+   DatagramPacketHeader      = 36,
 
    // Maximum datagram size.  It seems that all protocols support a minimum datagram
    // size of just over 500 bytes.  Anything larger might be broken into multiple
    // datagrams, which we don't want because datagrams are not necessarily received in
    // the same order they are sent in, which is something we don't want to deal with.
-   MaxDatagramSize			= 500,
+   MaxDatagramSize         = 500,
 
    // Interval between broadcasts (clients browsing for hosts will generate a
    // "looking for a host" message every this often)
-   BroadcastInterval			= 1500,
+   BroadcastInterval         = 1500,
 
    // If we don't hear from a host again for this amount of time, then
    // we assume he isn't going to respond.  I
-   BroadcastDropTime			= BroadcastInterval * 2,
+   BroadcastDropTime         = BroadcastInterval * 2,
 
    // Add this offset to the base port to calculate the listen port
    ListenPortOffset        = 0,
@@ -229,7 +229,7 @@ typedef enum
 
    // Add this offset to the base port to calculate the antenna port
    // (the port on which broadcasts are received)
-   AntennaPortOffset			= 2,
+   AntennaPortOffset         = 2,
 
    // In order to allow for multiple games running on the same system, which
    // is only usefull for debugging, but then becomes VERY usefull, we need
@@ -241,10 +241,10 @@ typedef enum
    // Magic number embedded at start of broadcasts so we can validate them.
    // To avoid having to deal with endian crap, it's simply defined as four
    // bytes in a row, that are always in this order.
-   BroadcastMagic0			= 0x06,
-   BroadcastMagic1			= 0x16,
-   BroadcastMagic2			= 0x63,
-   BroadcastMagic3			= 0x89
+   BroadcastMagic0         = 0x06,
+   BroadcastMagic1         = 0x16,
+   BroadcastMagic2         = 0x63,
+   BroadcastMagic3         = 0x89
 };
 
 // This should probably be unsigned, and may as well be as small as we can get
@@ -253,7 +253,7 @@ typedef unsigned char ID;
 
 // This MUST be unsigned to work properly!!!
 // See above for an explanation of why 16-bits is a good choice.
-typedef U16	SEQ;
+typedef U16 SEQ;
 
 //------------------------------------------------------------------------------
 // These are the various bandwidths we support

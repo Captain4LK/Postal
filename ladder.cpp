@@ -19,13 +19,13 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		06/02/97 JMI	Started.
+//      06/02/97 JMI   Started.
 //
-//		06/02/97	JMI	Was not previously setting the position of the smashes'
-//							spheres.  Fixed.
+//      06/02/97   JMI   Was not previously setting the position of the smashes'
+//                     spheres.  Fixed.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -47,18 +47,18 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define GUI_FILE_NAME				"res/editor/Ladder.gui"
+#define GUI_FILE_NAME            "res/editor/Ladder.gui"
 
 // This is for edit mode only.
-#define LADDER_IMAGE_FILENAME		"ladder.bmp"
+#define LADDER_IMAGE_FILENAME      "ladder.bmp"
 
-#define GUI_ID_LEN					3
-#define GUI_ID_HEIGHT				4
-#define GUI_ID_ROT					5
+#define GUI_ID_LEN               3
+#define GUI_ID_HEIGHT            4
+#define GUI_ID_ROT               5
 
-#define GUI_ID_TYPE_BASE			10
+#define GUI_ID_TYPE_BASE         10
 
-#define LADDER_ENDS_RADIUS			10
+#define LADDER_ENDS_RADIUS         10
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -128,7 +128,7 @@ short CLadder::Save(                            // Returns 0 if successfull, non
    RFile* pFile,                                // In:  File to save to
    short sFileCount)                            // In:  File count (unique per file, never 0)
 {
-   short	sResult	= CThing::Save(pFile, sFileCount);
+   short sResult   = CThing::Save(pFile, sFileCount);
    if (sResult == 0)
    {
       pFile->Write(&m_dX);
@@ -139,7 +139,7 @@ short CLadder::Save(                            // Returns 0 if successfull, non
       pFile->Write(&m_sRotY);
 
       // Make sure there were no file errors
-      sResult	= pFile->Error();
+      sResult   = pFile->Error();
    }
 
    return sResult;
@@ -214,7 +214,7 @@ short CLadder::EditNew(                      // Returns 0 if successfull, non-ze
    m_dY = (double)sY;
    m_dZ = (double)sZ;
 
-   sResult	= Init();
+   sResult   = Init();
 
    return sResult;
 }
@@ -225,14 +225,14 @@ short CLadder::EditNew(                      // Returns 0 if successfull, non-ze
 ////////////////////////////////////////////////////////////////////////////////
 short CLadder::EditModify(void)
 {
-   short	sResult	= 0;
+   short sResult   = 0;
 
    RGuiItem* pgui = RGuiItem::LoadInstantiate(FullPathVD(GUI_FILE_NAME));
    if (pgui != NULL)
    {
-      RGuiItem*	pguiLen		= pgui->GetItemFromId(GUI_ID_LEN);
-      RGuiItem*	pguiHeight	= pgui->GetItemFromId(GUI_ID_HEIGHT);
-      RGuiItem*	pguiRot		= pgui->GetItemFromId(GUI_ID_ROT);
+      RGuiItem*   pguiLen      = pgui->GetItemFromId(GUI_ID_LEN);
+      RGuiItem*   pguiHeight   = pgui->GetItemFromId(GUI_ID_HEIGHT);
+      RGuiItem*   pguiRot      = pgui->GetItemFromId(GUI_ID_ROT);
       if (pguiLen != NULL && pguiHeight != NULL && pguiRot != NULL)
       {
          // Set text.
@@ -253,18 +253,18 @@ short CLadder::EditModify(void)
          if (DoGui(pgui) == 1)
          {
             // Get new values.
-            m_sLen		= pguiLen->GetVal();
-            m_sHeight	= pguiHeight->GetVal();
-            m_sRotY		= rspMod360(pguiRot->GetVal() );
+            m_sLen      = pguiLen->GetVal();
+            m_sHeight   = pguiHeight->GetVal();
+            m_sRotY      = rspMod360(pguiRot->GetVal() );
          }
          else
          {
-            sResult	= 1;
+            sResult   = 1;
          }
       }
       else
       {
-         sResult	= -2;
+         sResult   = -2;
       }
 
       // Done with GUI.
@@ -272,7 +272,7 @@ short CLadder::EditModify(void)
    }
    else
    {
-      sResult	= -1;
+      sResult   = -1;
    }
 
    // If successful so far . . .
@@ -303,43 +303,43 @@ short CLadder::EditMove(                        // Returns 0 if successfull, non
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the clickable pos/area of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CLadder::EditRect( // Returns nothiing.
-   RRect*	prc)           // Out: Clickable pos/area of object.
+   RRect*   prc)           // Out: Clickable pos/area of object.
 {
-   prc->sX	= m_dX;
-   prc->sY	= m_dZ - m_dY;
-   prc->sW	= 10; // Safety.
-   prc->sH	= 10; // Safety.
+   prc->sX   = m_dX;
+   prc->sY   = m_dZ - m_dY;
+   prc->sW   = 10; // Safety.
+   prc->sH   = 10; // Safety.
 
    if (m_sprite.m_pImage != NULL)
    {
-      prc->sW	= m_sprite.m_pImage->m_sWidth;
-      prc->sH	= m_sprite.m_pImage->m_sHeight;
+      prc->sW   = m_sprite.m_pImage->m_sWidth;
+      prc->sH   = m_sprite.m_pImage->m_sHeight;
    }
 
-   prc->sX	-= prc->sW / 2;
-   prc->sY	-= prc->sH / 2;
+   prc->sX   -= prc->sW / 2;
+   prc->sY   -= prc->sH / 2;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to get the hotspot of an object in 2D.
-// (virtual	(Overridden here)).
+// (virtual   (Overridden here)).
 ////////////////////////////////////////////////////////////////////////////////
 void CLadder::EditHotSpot( // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY)              // Out: Y coord of 2D hotspot relative to
+   short*   psY)              // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 {
-   *psX	= 0;  // Safety.
-   *psY	= 0;  // Safety.
+   *psX   = 0;  // Safety.
+   *psY   = 0;  // Safety.
 
    if (m_sprite.m_pImage != NULL)
    {
-      *psX	= m_sprite.m_pImage->m_sWidth / 2;
-      *psY	= m_sprite.m_pImage->m_sHeight / 2;
+      *psX   = m_sprite.m_pImage->m_sWidth / 2;
+      *psY   = m_sprite.m_pImage->m_sHeight / 2;
    }
 }
 
@@ -365,8 +365,8 @@ void CLadder::EditRender(void)
       &m_sprite.m_sY2);
 
    // Center on image.
-   m_sprite.m_sX2	-= m_sprite.m_pImage->m_sWidth / 2;
-   m_sprite.m_sY2	-= m_sprite.m_pImage->m_sHeight / 2;
+   m_sprite.m_sX2   -= m_sprite.m_pImage->m_sWidth / 2;
+   m_sprite.m_sY2   -= m_sprite.m_pImage->m_sHeight / 2;
 
    // Priority is based on bottom edge of sprite on X/Z plane.
    m_sprite.m_sPriority = m_dZ + m_sprite.m_pImage->m_sHeight / 2;
@@ -384,19 +384,19 @@ void CLadder::EditRender(void)
 ////////////////////////////////////////////////////////////////////////////////
 short CLadder::Init(void)  // Returns 0 on success.
 {
-   short	sRes	= GetResources();
+   short sRes   = GetResources();
 
    // Set up collision object.
-   m_smashTop.m_bits								= CSmash::Ladder;
-   m_smashTop.m_sphere.sphere.lRadius		= LADDER_ENDS_RADIUS;
-   m_smashTop.m_sphere.sphere.X				= m_dX + COSQ[m_sRotY] * m_sLen;
-   m_smashTop.m_sphere.sphere.Y				= m_dY + m_sHeight;
-   m_smashTop.m_sphere.sphere.Z				= m_dZ - SINQ[m_sRotY] * m_sLen;
-   m_smashBottom.m_bits							= CSmash::Ladder;
-   m_smashBottom.m_sphere.sphere.lRadius	= LADDER_ENDS_RADIUS;
-   m_smashBottom.m_sphere.sphere.X			= m_dX;
-   m_smashBottom.m_sphere.sphere.Y			= m_dY;
-   m_smashBottom.m_sphere.sphere.Z			= m_dZ;
+   m_smashTop.m_bits                        = CSmash::Ladder;
+   m_smashTop.m_sphere.sphere.lRadius      = LADDER_ENDS_RADIUS;
+   m_smashTop.m_sphere.sphere.X            = m_dX + COSQ[m_sRotY] * m_sLen;
+   m_smashTop.m_sphere.sphere.Y            = m_dY + m_sHeight;
+   m_smashTop.m_sphere.sphere.Z            = m_dZ - SINQ[m_sRotY] * m_sLen;
+   m_smashBottom.m_bits                     = CSmash::Ladder;
+   m_smashBottom.m_sphere.sphere.lRadius   = LADDER_ENDS_RADIUS;
+   m_smashBottom.m_sphere.sphere.X         = m_dX;
+   m_smashBottom.m_sphere.sphere.Y         = m_dY;
+   m_smashBottom.m_sphere.sphere.Z         = m_dZ;
    // Update the smash.
    m_pRealm->m_smashatorium.Update(&m_smashTop);
    m_pRealm->m_smashatorium.Update(&m_smashBottom);
@@ -414,7 +414,7 @@ short CLadder::GetResources(void)                  // Returns 0 if successfull, 
    // Safe to call even if no resource.
    FreeResources();
 
-   sResult	= rspGetResource(
+   sResult   = rspGetResource(
       &g_resmgrGame,
       m_pRealm->Make2dResPath(LADDER_IMAGE_FILENAME),
       &m_sprite.m_pImage);
@@ -452,11 +452,11 @@ bool CLadder::GetOn(    // Returns true, if able to get on,
 
    if (m_pcharLadderBoy == NULL)
    {
-      m_pcharLadderBoy	= pchar;
+      m_pcharLadderBoy   = pchar;
    }
    else
    {
-      bGotOn	= false;
+      bGotOn   = false;
    }
 
    return bGotOn;
@@ -469,19 +469,19 @@ bool CLadder::GetOn(    // Returns true, if able to get on,
 ////////////////////////////////////////////////////////////////////////////////
 void CLadder::GetOff(void) // Returns nothing.
 {
-   m_pcharLadderBoy	= NULL;
+   m_pcharLadderBoy   = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get the next position on the ladder.
 ////////////////////////////////////////////////////////////////////////////////
 void CLadder::GetNextPos(  // Returns nothing.
-   double*	pdX,           // In:  Current x position.
-                           // Out: New x position.
-   double*	pdY,           // In:  Current y position.
-                           // Out: New y position.
-   double*	pdZ,           // In:  Current z position.
-                           // Out: New z position.
+   double*   pdX,           // In:  Current x position.
+                            // Out: New x position.
+   double*   pdY,           // In:  Current y position.
+                            // Out: New y position.
+   double*   pdZ,           // In:  Current z position.
+                            // Out: New z position.
    double dDistance)       // In:  Distance to travel. Positive is up.
 {
    TRACE("GetNextPos(): NYI!!\n");

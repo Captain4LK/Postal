@@ -21,29 +21,29 @@
 // This module implements the CWeapon class which is base class for the weapons
 //
 // History:
-//		02/27/97 BRH	Started this file from CDoofus and modified it
-//							to be a base class for the weapons.
+//      02/27/97 BRH   Started this file from CDoofus and modified it
+//                     to be a base class for the weapons.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/19/97 BRH	Added virtual functions for processing messages and
-//							virtual OnMessage handler functions so that it follows
-//							the model of the CThing3d base class object.
+//      03/19/97 BRH   Added virtual functions for processing messages and
+//                     virtual OnMessage handler functions so that it follows
+//                     the model of the CThing3d base class object.
 //
-//		06/25/97 BRH	Added rendering of 2D shadow sprite to the Render
-//							function.  Also added PrepareShadow function to
-//							load the default shadow resource if no resource is
-//							loaded for the shadow and then make the shadow visible.
+//      06/25/97 BRH   Added rendering of 2D shadow sprite to the Render
+//                     function.  Also added PrepareShadow function to
+//                     load the default shadow resource if no resource is
+//                     loaded for the shadow and then make the shadow visible.
 //
-//		06/30/97	JMI	Now maps the Z to 3D when loading fileversions previous to
-//							24.
+//      06/30/97   JMI   Now maps the Z to 3D when loading fileversions previous to
+//                     24.
 //
-//		07/09/97	JMI	Now uses m_pRealm->Make2dResPath() to get the fullpath
-//							for 2D image components.
+//      07/09/97   JMI   Now uses m_pRealm->Make2dResPath() to get the fullpath
+//                     for 2D image components.
 //
-//		07/21/97	JMI	Now checks upper bound on m_sAlphaLevel of shadow sprite.
+//      07/21/97   JMI   Now checks upper bound on m_sAlphaLevel of shadow sprite.
 //
-//		07/30/97	JMI	Now hides shadow if mainsprite is hidden.
+//      07/30/97   JMI   Now hides shadow if mainsprite is hidden.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define WEAPON_CPP
@@ -56,7 +56,7 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SHADOW_FILE	"shadow.img"
+#define SHADOW_FILE   "shadow.img"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Variables/data
@@ -78,7 +78,7 @@ short CWeapon::Load(                            // Returns 0 if successfull, non
    short sResult = 0;
 
    // Call the CThing base class load to get the instance ID
-   sResult	= CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
+   sResult   = CThing::Load(pFile, bEditMode, sFileCount, ulFileVersion);
    if (sResult == 0)
    {
       // Load common data just once per file (not with each object)
@@ -124,7 +124,7 @@ short CWeapon::Load(                            // Returns 0 if successfull, non
       if (!pFile->Error() && sResult == 0)
       {
          // Get resources
-         //		sResult = GetResources();
+         //      sResult = GetResources();
       }
       else
       {
@@ -266,11 +266,11 @@ void CWeapon::Render(void)
       // Check bounds . . .
       if (m_spriteShadow.m_sAlphaLevel < 0)
       {
-         m_spriteShadow.m_sAlphaLevel	= 0;
+         m_spriteShadow.m_sAlphaLevel   = 0;
       }
       else if (m_spriteShadow.m_sAlphaLevel > 255)
       {
-         m_spriteShadow.m_sAlphaLevel	= 255;
+         m_spriteShadow.m_sAlphaLevel   = 255;
       }
 
       // If the main sprite is on the ground, then hide the shadow.
@@ -388,7 +388,7 @@ double CWeapon::BounceAngle(double dRot)
 void CWeapon::ProcessMessages(void)
 {
    // Check queue of messages.
-   GameMessage	msg;
+   GameMessage msg;
    while (m_MessageQueue.DeQ(&msg) == true)
    {
       ProcessMessage(&msg);

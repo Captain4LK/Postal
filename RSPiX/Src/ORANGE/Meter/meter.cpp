@@ -20,36 +20,36 @@
 // METER.CPP
 //
 // History:
-//		09/19/96 JMI	Started.
+//      09/19/96 JMI   Started.
 //
-//		09/24/96	JMI	Now consists of a CDlg and a CGuiItem.
+//      09/24/96   JMI   Now consists of a CDlg and a CGuiItem.
 //
-//		10/31/96	JMI	Changed:
-//							Old label:			New label:
-//							=========			=========
-//							CMeter				RMeter
-//							CImage				RImage
-//							CGuiItem				RGuiItem
-//							NEEDLE				Needle
-//							DIGITAL				Digital
-//							BAR					Bar
-//							HISTOGRAM			Histogram
-//							NUM_DISPLAY_TYPES	NumDisplayTypes
-//							PERCENTAGE			Percentage
-//							VALUE					Value
-//							NUM_INFO_TYPES		NumInfoTypes
+//      10/31/96   JMI   Changed:
+//                     Old label:         New label:
+//                     =========         =========
+//                     CMeter            RMeter
+//                     CImage            RImage
+//                     CGuiItem            RGuiItem
+//                     NEEDLE            Needle
+//                     DIGITAL            Digital
+//                     BAR               Bar
+//                     HISTOGRAM         Histogram
+//                     NUM_DISPLAY_TYPES   NumDisplayTypes
+//                     PERCENTAGE         Percentage
+//                     VALUE               Value
+//                     NUM_INFO_TYPES      NumInfoTypes
 //
-//		11/01/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							Rect				RRect
+//      11/01/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     Rect            RRect
 //
-//							Also, changed all members referenced in RImage to
-//							m_ and all position/dimension members referenced in
-//							RImage to type short usage.
+//                     Also, changed all members referenced in RImage to
+//                     m_ and all position/dimension members referenced in
+//                     RImage to type short usage.
 //
-//		12/19/96	JMI	Uses new m_justification (as m_sJustification) and
-//							upgraded to new RFont/RPrint.
+//      12/19/96   JMI   Uses new m_justification (as m_sJustification) and
+//                     upgraded to new RFont/RPrint.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -80,15 +80,15 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def)   ((val == -1) ? def : val)
 
-#define DEF_WIDTH		75
-#define DEF_HEIGHT	50
+#define DEF_WIDTH      75
+#define DEF_HEIGHT   50
 
-#define BORDER_THICKNESS	1
+#define BORDER_THICKNESS   1
 
-#define INIT_MAX	0
-#define INIT_MIN	0x7FFFFFFF
+#define INIT_MAX   0
+#define INIT_MIN   0x7FFFFFFF
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -109,37 +109,37 @@
 //////////////////////////////////////////////////////////////////////////////
 RMeter::RMeter()
 {
-   m_lCurVal				= 0L;    // Value for next draw.
-   m_lStartPeriod			= 0L;    // Start period.
+   m_lCurVal            = 0L;    // Value for next draw.
+   m_lStartPeriod         = 0L;    // Start period.
    strcpy(m_szUnit, "");         // Unit of measurement text.
-   m_lMin					= 0L;    // Minimum value.
-   m_lMax					= 100L;  // Maximum value.
-   m_dtType					= (DisplayType)(rand() % NumDisplayTypes);   // Type of meter display.
-   m_itType					= (InfoType)(rand() % NumInfoTypes);         // Type of meter info.
-   m_u32Meter				= RSP_WHITE_INDEX;   // Meter color.
-   m_u32Needle				= RSP_BLACK_INDEX;   // Needle, bar, etc. color.
-   m_u32Overflow			= RSP_BLACK_INDEX;   // Needle color for over/underflow.
+   m_lMin               = 0L;    // Minimum value.
+   m_lMax               = 100L;  // Maximum value.
+   m_dtType               = (DisplayType)(rand() % NumDisplayTypes);   // Type of meter display.
+   m_itType               = (InfoType)(rand() % NumInfoTypes);         // Type of meter info.
+   m_u32Meter            = RSP_WHITE_INDEX;   // Meter color.
+   m_u32Needle            = RSP_BLACK_INDEX;   // Needle, bar, etc. color.
+   m_u32Overflow         = RSP_BLACK_INDEX;   // Needle color for over/underflow.
 
-   m_lDuration				= 100;      // Time between updates in milliseconds.
-   m_lNextUpdate			= 0;        // Time of next update in
-                                    // milliseconds.
-   m_lCurTotal				= 0;        // Current total.
-   m_lNumValues			= 0;        // Number of values since
+   m_lDuration            = 100;      // Time between updates in milliseconds.
+   m_lNextUpdate         = 0;        // Time of next update in
+                                     // milliseconds.
+   m_lCurTotal            = 0;        // Current total.
+   m_lNumValues         = 0;        // Number of values since
                                     // total was last cleared.
-   m_lMaxValue				= INIT_MAX; // Maximum value since
-                                    // total was last cleared.
-   m_lMinValue				= INIT_MIN; // Minimum value since
-                                    // total was last cleared.
+   m_lMaxValue            = INIT_MAX; // Maximum value since
+                                      // total was last cleared.
+   m_lMinValue            = INIT_MIN; // Minimum value since
+                                      // total was last cleared.
 
-   m_lQIndex				= 0;     // Index for histogram history queue.
+   m_lQIndex            = 0;     // Index for histogram history queue.
    memset(m_asQHistory, 0, sizeof(m_asQHistory));
 
    // Override RGuiItem's default justification.
-   m_justification		= RGuiItem::Centered;
+   m_justification      = RGuiItem::Centered;
 
    m_guiMeter.SetParent(this);
-   m_guiMeter.m_bcUser				= BtnCall;
-   m_guiMeter.m_ulUserInstance	= (uintptr_t)this;
+   m_guiMeter.m_bcUser            = BtnCall;
+   m_guiMeter.m_ulUserInstance   = (uintptr_t)this;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -169,7 +169,7 @@ inline short Rectangle(    // Returns 0 on success.
    short sDstH,            // Height.
    RRect* prClip = NULL)   // Optional clipping rectangle.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (sDstW > 0 && sDstH > 0)
    {
@@ -186,62 +186,62 @@ inline short Rectangle(    // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////
 void RMeter::Compose(            // Returns nothing.
-   RImage*	pimDst /*= NULL*/)   // In: Destination.  NULL == use
-                                 // internal m_im.
+   RImage*   pimDst /*= NULL*/)   // In: Destination.  NULL == use
+                                  // internal m_im.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (pimDst == NULL)
    {
-      pimDst	= &m_im;
+      pimDst   = &m_im;
    }
 
    // Call base class.
    RDlg::Compose();
 
-   short	sX, sY, sW, sH;
+   short sX, sY, sW, sH;
    GetClient(&sX, &sY, &sW, &sH);
 
-   short	sCellH;
+   short sCellH;
    m_pprint->GetPos(NULL, NULL, NULL, &sCellH);
 
-   short	sMeterX;
-   short	sMeterY;
-   short	sMeterW;
-   short	sMeterH;
+   short sMeterX;
+   short sMeterY;
+   short sMeterW;
+   short sMeterH;
 
    // Behave by type.
    switch (m_dtType)
    {
    case Digital:
-      sMeterX	= sX + BORDER_THICKNESS;
-      sMeterY	= sY + BORDER_THICKNESS;
-      sMeterW	= sW - BORDER_THICKNESS * 2;
-      sMeterH	= sH - BORDER_THICKNESS * 2;
-      m_sInfoY	= sMeterY + (sMeterH / 2 - sCellH / 2);
+      sMeterX   = sX + BORDER_THICKNESS;
+      sMeterY   = sY + BORDER_THICKNESS;
+      sMeterW   = sW - BORDER_THICKNESS * 2;
+      sMeterH   = sH - BORDER_THICKNESS * 2;
+      m_sInfoY   = sMeterY + (sMeterH / 2 - sCellH / 2);
       break;
    case Needle:
    case Bar:
    case Histogram:
-      sMeterX	= sX + BORDER_THICKNESS;
-      sMeterY	= sY + BORDER_THICKNESS;
-      sMeterW	= sW - BORDER_THICKNESS * 2;
-      sMeterH	= sH - BORDER_THICKNESS * 2 - sCellH;
-      m_sInfoY	= sMeterY + sMeterH;
+      sMeterX   = sX + BORDER_THICKNESS;
+      sMeterY   = sY + BORDER_THICKNESS;
+      sMeterW   = sW - BORDER_THICKNESS * 2;
+      sMeterH   = sH - BORDER_THICKNESS * 2 - sCellH;
+      m_sInfoY   = sMeterY + sMeterH;
       break;
    default:
       TRACE("Compose(): Invalid display type.\n");
       break;
    }
 
-   m_guiMeter.m_u32BackColor					= m_u32Meter;
-   m_guiMeter.m_u32TextColor					= m_u32TextColor;
-   m_guiMeter.m_u32BorderColor				= m_u32BorderColor;
-   m_guiMeter.m_u32BorderShadowColor		= m_u32BorderShadowColor;
-   m_guiMeter.m_u32BorderHighlightColor	= m_u32BorderHighlightColor;
-   m_guiMeter.m_u32BorderEdgeColor			= m_u32BorderEdgeColor;
-   m_guiMeter.m_sBorderThickness				= m_sBorderThickness;
-   m_guiMeter.m_sInvertedBorder				= !m_sInvertedBorder;
+   m_guiMeter.m_u32BackColor               = m_u32Meter;
+   m_guiMeter.m_u32TextColor               = m_u32TextColor;
+   m_guiMeter.m_u32BorderColor            = m_u32BorderColor;
+   m_guiMeter.m_u32BorderShadowColor      = m_u32BorderShadowColor;
+   m_guiMeter.m_u32BorderHighlightColor   = m_u32BorderHighlightColor;
+   m_guiMeter.m_u32BorderEdgeColor         = m_u32BorderEdgeColor;
+   m_guiMeter.m_sBorderThickness            = m_sBorderThickness;
+   m_guiMeter.m_sInvertedBorder            = !m_sInvertedBorder;
 
    // If there is already data . . .
    if (m_guiMeter.m_im.m_pData != NULL)
@@ -284,7 +284,7 @@ short RMeter::Draw(              // Returns 0 on success.
    short sH /*= 0*/,             // Amount to draw.
    RRect* prc /*= NULL*/)        // Clip to.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(pimDst != NULL); // Duh!
 
@@ -300,15 +300,15 @@ short RMeter::Draw(              // Returns 0 on success.
             RDlg::Draw(pimDst, sDstX, sDstY, sSrcX, sSrcY, sW, sH, prc);
          }
 
-         short	sMeterX;
-         short	sMeterY;
-         short	sMeterW;
+         short sMeterX;
+         short sMeterY;
+         short sMeterW;
          short sMeterH;
          m_guiMeter.GetClient(&sMeterX, &sMeterY, &sMeterW, &sMeterH);
-         sMeterX	+= m_sX + m_guiMeter.m_sX + sDstX;
-         sMeterY	+= m_sY + m_guiMeter.m_sY + sDstY;
+         sMeterX   += m_sX + m_guiMeter.m_sX + sDstX;
+         sMeterY   += m_sY + m_guiMeter.m_sY + sDstY;
 
-         short	sInfoY	= m_sY + sDstY + m_sInfoY;
+         short sInfoY   = m_sY + sDstY + m_sInfoY;
 
          S32 lAvg  = 0;
          if (m_lNumValues > 0)
@@ -327,7 +327,7 @@ short RMeter::Draw(              // Returns 0 on success.
             case Value:
                break;
             case Percentage:
-               lVal	= ((lVal - m_lMin) * 100) / (m_lMax - m_lMin);
+               lVal   = ((lVal - m_lMin) * 100) / (m_lMax - m_lMin);
                strcpy(szExtra, "%");
                break;
             default:
@@ -350,21 +350,21 @@ short RMeter::Draw(              // Returns 0 on success.
          }
 
          // Contain within range.
-         lAvg			= MIN(m_lMax, lAvg);
-         lAvg			= MAX(m_lMin, lAvg);
+         lAvg         = MIN(m_lMax, lAvg);
+         lAvg         = MAX(m_lMin, lAvg);
 
-         m_lMaxValue	= MIN(m_lMax, m_lMaxValue);
-         m_lMaxValue	= MAX(m_lMin, m_lMaxValue);
+         m_lMaxValue   = MIN(m_lMax, m_lMaxValue);
+         m_lMaxValue   = MAX(m_lMin, m_lMaxValue);
 
-         m_lMinValue	= MIN(m_lMax, m_lMinValue);
-         m_lMinValue	= MIN(m_lMin, m_lMinValue);
+         m_lMinValue   = MIN(m_lMax, m_lMinValue);
+         m_lMinValue   = MIN(m_lMin, m_lMinValue);
 
          // Amount to adapt value to match meter width.
-         float	fAdaptor;
+         float fAdaptor;
          // Adapted values.
-         short	sMeterVal;
-         short	sMeterMax;
-         short	sMeterMin;
+         short sMeterVal;
+         short sMeterMax;
+         short sMeterMin;
          // Draw meter based on type.
          switch (m_dtType)
          {
@@ -373,11 +373,11 @@ short RMeter::Draw(              // Returns 0 on success.
             break;
          case Needle:
             // Compute adaptor.
-            fAdaptor		= (float)sMeterW / (float)(m_lMax - m_lMin);
+            fAdaptor      = (float)sMeterW / (float)(m_lMax - m_lMin);
             // Compute adapted.
-            sMeterVal	= (short)((float)lAvg * fAdaptor);
-            sMeterMin	= (short)((float)m_lMinValue * fAdaptor);
-            sMeterMax	= (short)((float)m_lMaxValue * fAdaptor);
+            sMeterVal   = (short)((float)lAvg * fAdaptor);
+            sMeterMin   = (short)((float)m_lMinValue * fAdaptor);
+            sMeterMax   = (short)((float)m_lMaxValue * fAdaptor);
             // Draw min.
             Rectangle(
                m_u32Overflow,
@@ -402,11 +402,11 @@ short RMeter::Draw(              // Returns 0 on success.
             break;
          case Bar:
             // Compute adaptor.
-            fAdaptor	= (float)sMeterW / (float)(m_lMax - m_lMin);
+            fAdaptor   = (float)sMeterW / (float)(m_lMax - m_lMin);
             // Compute adapted.
-            sMeterVal	= (short)((float)lAvg * fAdaptor);
-            sMeterMin	= (short)((float)m_lMinValue * fAdaptor);
-            sMeterMax	= (short)((float)m_lMaxValue * fAdaptor);
+            sMeterVal   = (short)((float)lAvg * fAdaptor);
+            sMeterMin   = (short)((float)m_lMinValue * fAdaptor);
+            sMeterMax   = (short)((float)m_lMaxValue * fAdaptor);
             // Draw min.
             Rectangle(
                m_u32Overflow,
@@ -432,23 +432,23 @@ short RMeter::Draw(              // Returns 0 on success.
          case Histogram:
          {
             // Compute adaptor.
-            fAdaptor	= (float)sMeterH / (float)(m_lMax - m_lMin);
+            fAdaptor   = (float)sMeterH / (float)(m_lMax - m_lMin);
             // Compute adapted.
-            sMeterVal	= (short)((float)lAvg * fAdaptor);
-            sMeterMin	= (short)((float)m_lMinValue * fAdaptor);
-            sMeterMax	= (short)((float)m_lMaxValue * fAdaptor);
+            sMeterVal   = (short)((float)lAvg * fAdaptor);
+            sMeterMin   = (short)((float)m_lMinValue * fAdaptor);
+            sMeterMax   = (short)((float)m_lMaxValue * fAdaptor);
             // Store new value.
-            m_asQHistory[m_lQIndex]	= sMeterVal;
+            m_asQHistory[m_lQIndex]   = sMeterVal;
             // Increase index.
-            m_lQIndex	= (m_lQIndex + 1) % METER_HISTOGRAM_HISTORY;
+            m_lQIndex   = (m_lQIndex + 1) % METER_HISTOGRAM_HISTORY;
             S32 l;
-            short	sVal;
-            short	sBarWidth	= sMeterW / METER_HISTOGRAM_HISTORY;
-            short	sBarPos		= sMeterX;
+            short sVal;
+            short sBarWidth   = sMeterW / METER_HISTOGRAM_HISTORY;
+            short sBarPos      = sMeterX;
             for (l = 0; l < (METER_HISTOGRAM_HISTORY - 1); l++, sBarPos += sBarWidth)
             {
                // Get value.
-               sVal	= m_asQHistory[(m_lQIndex + l) % METER_HISTOGRAM_HISTORY];
+               sVal   = m_asQHistory[(m_lQIndex + l) % METER_HISTOGRAM_HISTORY];
                // Draw avg bar.
                Rectangle(
                   m_u32Needle,
@@ -459,8 +459,8 @@ short RMeter::Draw(              // Returns 0 on success.
                   );
             }
 
-            short	sPosY	= sMeterY + sMeterH - sMeterMax;
-            short	sDiff	= sMeterMax - sMeterVal;
+            short sPosY   = sMeterY + sMeterH - sMeterMax;
+            short sDiff   = sMeterMax - sMeterVal;
             Rectangle(
                m_u32Overflow,
                pimDst,
@@ -469,8 +469,8 @@ short RMeter::Draw(              // Returns 0 on success.
                sBarWidth, sDiff);
 
             // Draw avg.
-            sPosY	+= sDiff;
-            sDiff	= sMeterVal - sMeterMin;
+            sPosY   += sDiff;
+            sDiff   = sMeterVal - sMeterMin;
             Rectangle(
                m_u32Needle,
                pimDst,
@@ -479,7 +479,7 @@ short RMeter::Draw(              // Returns 0 on success.
                sBarWidth, sDiff);
 
             // Draw max.
-            sPosY	+= sDiff;
+            sPosY   += sDiff;
             // Draw min.
             Rectangle(
                m_u32Overflow,
@@ -492,13 +492,13 @@ short RMeter::Draw(              // Returns 0 on success.
          }
 
          // Reset counter, accumulator, max, min.
-         m_lMaxValue		= INIT_MAX;
-         m_lMinValue		= INIT_MIN;
-         m_lCurTotal		= 0;
-         m_lNumValues	= 0;
+         m_lMaxValue      = INIT_MAX;
+         m_lMinValue      = INIT_MIN;
+         m_lCurTotal      = 0;
+         m_lNumValues   = 0;
 
          // Remember when to update next.
-         m_lNextUpdate	= lTime + m_lDuration;
+         m_lNextUpdate   = lTime + m_lDuration;
       }
    }
 

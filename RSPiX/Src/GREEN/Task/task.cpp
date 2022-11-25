@@ -17,23 +17,23 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	task.cpp
+//   task.cpp
 //
 // History:
-//		06/14/95 JMI	Started.
+//      06/14/95 JMI   Started.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CTask				RTask
-//							TASK_FUNC		TaskFunc
-//							TASK_TIMEFUNC	TimeFunc
-//							m_tf				m_fnTask
-//							CList				RList
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CTask            RTask
+//                     TASK_FUNC      TaskFunc
+//                     TASK_TIMEFUNC   TimeFunc
+//                     m_tf            m_fnTask
+//                     CList            RList
 //
 //////////////////////////////////////////////////////////////////////////////
 //
-//	Calls tasks stored in its list of tasks based on a time interval.
+//   Calls tasks stored in its list of tasks based on a time interval.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +58,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 ////////////////// Instantiate Static members ////////////////////////////////
-RList<RTask>	RTask::ms_listActive;         // List of tasks to be called.
+RList<RTask>   RTask::ms_listActive;         // List of tasks to be called.
 
 //////////////////////////////////////////////////////////////////////////////
 ///////////////////////// Allocation /////////////////////////////////////////
@@ -115,8 +115,8 @@ void RTask::Init(TaskFunc tf, U32 ulUser)
 {
    ASSERT(tf != NULL);
 
-   m_fnTask		= tf;
-   m_ulUser	= ulUser;
+   m_fnTask      = tf;
+   m_ulUser   = ulUser;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ short RTask::Start(void)
          m_sActive = TRUE;
 
          // Set the next call time.
-         m_lNextExpiration		= GetTime() + m_lInterval;
+         m_lNextExpiration      = GetTime() + m_lInterval;
 
          // If an error has occurred at this point . . .
          if (sRes != 0)
@@ -227,12 +227,12 @@ short RTask::Suspend(void)
 void RTask::Reset(void)
 {
    // Clear instantiable members.
-   m_fnTask			= NULL;
-   m_ulUser		= 0L;
+   m_fnTask         = NULL;
+   m_ulUser      = 0L;
 
-   m_sActive	= FALSE;
+   m_sActive   = FALSE;
 
-   m_fnTime		= NULL;
+   m_fnTime      = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ void RTask::Do(void)
 
    // Go through each node of the list checking its next execution time
    // against the current.
-   PTASK	ptask	= ms_listActive.GetHead();
+   PTASK ptask   = ms_listActive.GetHead();
 
    while (ptask != NULL)
    {
@@ -273,7 +273,7 @@ void RTask::Do(void)
       }
 
       // Get the next task.
-      ptask	= ms_listActive.GetNext();
+      ptask   = ms_listActive.GetNext();
    }
 }
 

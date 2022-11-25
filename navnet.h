@@ -19,20 +19,20 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		01/28/97 BRH	Added navigation net objects as the thing that holds
-//							a group of bouys together in a navigational network.
+//      01/28/97 BRH   Added navigation net objects as the thing that holds
+//                     a group of bouys together in a navigational network.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		06/30/97	JMI	Moved definitions of EditRect() and EditHotSpot() into
-//							navnet.cpp.
+//      06/30/97   JMI   Moved definitions of EditRect() and EditHotSpot() into
+//                     navnet.cpp.
 //
-//		07/21/97	JMI	Added GetX(), GetY(), and GetZ().
+//      07/21/97   JMI   Added GetX(), GetY(), and GetZ().
 //
-//		08/08/97 BRH	Added EditPostLoad function which adds the Nav Net name
-//							to the editor's list box, just as it does when EditNew is
-//							called.  This way the NavNets loaded from the realm file
-//							are now correctly displayed.
+//      08/08/97 BRH   Added EditPostLoad function which adds the Nav Net name
+//                     to the editor's list box, just as it does when EditNew is
+//                     called.  This way the NavNets loaded from the realm file
+//                     are now correctly displayed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NAVIGATIONNET_H
@@ -206,20 +206,20 @@ void EditRect(RRect* pRect);
 
 // Called by editor to get the hotspot of an object in 2D.
 void EditHotSpot(             // Returns nothiing.
-   short*	psX,              // Out: X coord of 2D hotspot relative to
+   short*   psX,              // Out: X coord of 2D hotspot relative to
                               // EditRect() pos.
-   short*	psY);             // Out: Y coord of 2D hotspot relative to
+   short*   psY);             // Out: Y coord of 2D hotspot relative to
                               // EditRect() pos.
 
 // Get the coordinates of this thing.
 virtual                    // Overriden here.
-double GetX(void)	{ return m_dX; }
+double GetX(void)   { return m_dX; }
 
 virtual                    // Overriden here.
-double GetY(void)	{ return m_dY; }
+double GetY(void)   { return m_dY; }
 
 virtual                    // Overriden here.
-double GetZ(void)	{ return m_dZ; }
+double GetZ(void)   { return m_dZ; }
 
 // Add a bouy to this network and assign it an ID
 UCHAR AddBouy(CBouy* pBouy);
@@ -240,7 +240,7 @@ void UpdateRoutingTables(void);
 void PrintRoutingTables(void);
 
 // Ping - return minimum number of hops from source to destination nodes
-//		UCHAR Ping(UCHAR dst, UCHAR src, UCHAR depth, UCHAR maxdepth);
+//      UCHAR Ping(UCHAR dst, UCHAR src, UCHAR depth, UCHAR maxdepth);
 UCHAR Ping(UCHAR dst, UCHAR src, UCHAR depth);
 
 UCHAR GetNumNodes(void)

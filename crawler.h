@@ -18,34 +18,34 @@
 // crawler.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		04/19/97 MJR	Started.
+//   History:
+//      04/19/97 MJR   Started.
 //
-//		04/21/97	MJR/JMI	Converted to 3D/Converted to Postal.
+//      04/21/97   MJR/JMI   Converted to 3D/Converted to Postal.
 //
-//		04/21/97	JMI	Removed ASSERTs that values were greater than 0 in Move().
-//							These were to protect against errors when using floor(),
-//							which we no S32er use.
+//      04/21/97   JMI   Removed ASSERTs that values were greater than 0 in Move().
+//                     These were to protect against errors when using floor(),
+//                     which we no S32er use.
 //
-//		04/29/97	JMI	CanWalk() no S32er sets the clip case of the get attribute
-//							call to include a max height (it just relies on 'no walk'
-//							now).
+//      04/29/97   JMI   CanWalk() no S32er sets the clip case of the get attribute
+//                     call to include a max height (it just relies on 'no walk'
+//                     now).
 //
-//		05/29/97	JMI	Changed m_pRealm->m_pHeightMap->GetHeight() call to
-//							m_pRealm->GetTerrainAttributes().
+//      05/29/97   JMI   Changed m_pRealm->m_pHeightMap->GetHeight() call to
+//                     m_pRealm->GetTerrainAttributes().
 //
-//		06/26/97	JMI	Now uses m_prealm->Map3Dto2D() in Plot() (was using
-//							the global version defined in reality.h which is no more).
+//      06/26/97   JMI   Now uses m_prealm->Map3Dto2D() in Plot() (was using
+//                     the global version defined in reality.h which is no more).
 //
-//		07/01/97	JMI	Now uses GetHeightAndNoWalk() in place of
-//							GetTerrainAttributes().
+//      07/01/97   JMI   Now uses GetHeightAndNoWalk() in place of
+//                     GetTerrainAttributes().
 //
-//		08/10/97	JMI	Now crawls to the 'pushed' point.  If the crawler does make
-//							it all the way to the 'pushed' point, we go back to the
-//							point we crawled to just previously (which we know is
-//							valid).
+//      08/10/97   JMI   Now crawls to the 'pushed' point.  If the crawler does make
+//                     it all the way to the 'pushed' point, we go back to the
+//                     point we crawled to just previously (which we know is
+//                     valid).
 //
-//		08/11/97	JMI	Changed some casting in comparisons.
+//      08/11/97   JMI   Changed some casting in comparisons.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CRAWLER_H
@@ -75,10 +75,10 @@ typedef struct
    // These values are for internal use only
    double dPushX;
    double dPushZ;
-//			double dDragX;
-//			double dDragZ;
+//         double dDragX;
+//         double dDragZ;
 
-   short	sHeight;          // Stored height used only by IsGood().
+   short sHeight;            // Stored height used only by IsGood().
 } Nub;
 
 //------------------------------------------------------------------------------
@@ -93,9 +93,9 @@ double m_dPushMaxX;
 double m_dPushMaxZ;
 
 public:
-CRealm*	m_prealm;               // Used to access the height map, the effect map,
-                                 // the scene, all that good stuff.
-short	m_sVertTolerance;          // Maximum amount crawler can step up.
+CRealm*   m_prealm;               // Used to access the height map, the effect map,
+                                  // the scene, all that good stuff.
+short m_sVertTolerance;            // Maximum amount crawler can step up.
 
 //------------------------------------------------------------------------------
 // Functions
@@ -108,7 +108,7 @@ CCrawler()
 {
    m_pnub = 0;
    m_sNum = 0;
-   m_prealm	= 0;
+   m_prealm   = 0;
 }
 
 
@@ -135,7 +135,7 @@ void Setup(
    m_sNum = sNum;
    m_pnub = pnub;
    m_dPushMaxX = dPushMaxX;
-   m_dPushMaxZ	= dPushMaxZ;
+   m_dPushMaxZ   = dPushMaxZ;
 
    // Precalculate push and drag values based on specified directions and magnitudes
    for (short s = 0; s < m_sNum; s++)
@@ -194,12 +194,12 @@ short Move(                                     // Returns 0 if successfull, non
       // Creep as far as possible towards new position
       short sx;
       short sy;
-      short	sz;
+      short sz;
       CrawlWhileGood(sx1, sy1, sz1, sx2, sy2, sz2, &sx, &sy, &sz, psTerrainH);
 
-      double dx	= sx;
-      double dy	= sy;
-      double dz	= sz;
+      double dx   = sx;
+      double dy   = sy;
+      double dz   = sz;
       // If we made it to the end point, we should include the fractional value
       // lost in converting to integers when we initially assigned into
       // sx2 and sz2.
@@ -237,7 +237,7 @@ short Move(                                     // Returns 0 if successfull, non
          *pdx = dx2;
          *pdy = dy2;
          *pdz = dz2;
-         *psTerrainH	= sTerrainH;
+         *psTerrainH   = sTerrainH;
       }
       else
       {
@@ -260,7 +260,7 @@ short Move(                                     // Returns 0 if successfull, non
          *pdx = dx2;
          *pdy = dy2;
          *pdz = dz2;
-         *psTerrainH	= sTerrainH;
+         *psTerrainH   = sTerrainH;
          TRACE("Crawler::Move(): Starting position is invalid, using psuedo-valid ending position!\n");
       }
       else
@@ -302,7 +302,7 @@ void CrawlWhileGood(
    short* psOutZ,
    short* psTerrainH)         // In/Out: Terrain height.
 {
-   short	sMaxTerrainH;
+   short sMaxTerrainH;
 
    // Clear push values
    m_dPushX = 0.0;
@@ -317,7 +317,7 @@ void CrawlWhileGood(
    short sGoodX = sx;
    short sGoodY = sy;
    short sGoodZ = sz;
-   short	sGoodH = *psTerrainH;
+   short sGoodH = *psTerrainH;
 
    // Calculate delta x and delta y
    short sdx = sx2 - sx;
@@ -339,7 +339,7 @@ void CrawlWhileGood(
       sdz = ABS(sdz);
 
       // This uses a Bresenham-like algorithm to move one pixel at a time aS32 the
-      // line from (sx,sy,sz) to (sx2,sy2,sz2).	 We basically continue aS32 until
+      // line from (sx,sy,sz) to (sx2,sy2,sz2).    We basically continue aS32 until
       // we hit an invalid position or the ending position, whichever comes first.
       short serry;
       short serrx;
@@ -447,9 +447,9 @@ bool IsGood(
 {
    bool bResult = true;
 
-   short sMaxTerrainH	= -32768;         // Default to lowest value.
+   short sMaxTerrainH   = -32768;         // Default to lowest value.
 
-   short	sTerrainH;
+   short sTerrainH;
    for (short s = 0; s < m_sNum; s++)
    {
       short sx = sBaseX + m_pnub[s].sX;
@@ -457,11 +457,11 @@ bool IsGood(
 
       if (CanWalk(sx, sBaseY, sz, &sTerrainH) == true)
       {
-//					Plot((U8)0xfa, sx, sBaseY, sz);
+//               Plot((U8)0xfa, sx, sBaseY, sz);
       }
       else
       {
-//					Plot((U8)0xf9, sx, sBaseY, sz);
+//               Plot((U8)0xf9, sx, sBaseY, sz);
          if (m_pnub[s].sHard)
             bResult = false;
          m_dPushX += m_pnub[s].dPushX;
@@ -474,13 +474,13 @@ bool IsGood(
          // If this height is larger than the previous max . . .
          if (sTerrainH > sMaxTerrainH)
          {
-            sMaxTerrainH	= sTerrainH;
+            sMaxTerrainH   = sTerrainH;
          }
       }
    }
 
    // Store for return.
-   *psMaxTerrainH	= sMaxTerrainH;
+   *psMaxTerrainH   = sMaxTerrainH;
 
    return bResult;
 }
@@ -492,21 +492,21 @@ bool IsGood(
 ////////////////////////////////////////////////////////////////////////////////
 bool CanWalk(        // Returns true if we can walk there, false otherwise.
    short sx,         // In:  X position on attribute map.
-   short	sy,         // In:  Y position on attribute map.
+   short sy,           // In:  Y position on attribute map.
    short sz,         // In:  Z position on attribute map.
    short* psH)       // Out: Terrain height at X/Z.
 {
    bool bCanWalk;
    bool bCannotWalk;
-   *psH	= m_prealm->GetHeightAndNoWalk(sx, sz, &bCannotWalk);
+   *psH   = m_prealm->GetHeightAndNoWalk(sx, sz, &bCannotWalk);
    if (bCannotWalk == true                            // Not walkable
        || (*psH - sy > m_sVertTolerance) )            // Terrain higher by m_sVertTolerance.
    {
-      bCanWalk	= false;
+      bCanWalk   = false;
    }
    else
    {
-      bCanWalk	= true;
+      bCanWalk   = true;
    }
 
    return bCanWalk;
@@ -516,13 +516,13 @@ bool CanWalk(        // Returns true if we can walk there, false otherwise.
 // Plot a point via the CScene.
 ////////////////////////////////////////////////////////////////////////////////
 void Plot(           // Returns nothing.
-   U8	u8Color,       // Color index.
-   short	sx,         // In:  X position.
-   short	sy,         // In:  Y position.
+   U8 u8Color,         // Color index.
+   short sx,           // In:  X position.
+   short sy,           // In:  Y position.
    short sz)         // In:  Z position.
 {
    // Create a line sprite.
-   CSpriteLine2d*	psl2d	= new CSpriteLine2d;
+   CSpriteLine2d*   psl2d   = new CSpriteLine2d;
    if (psl2d != NULL)
    {
       m_prealm->Map3Dto2D(
@@ -532,14 +532,14 @@ void Plot(           // Returns nothing.
          &(psl2d->m_sX2),
          &(psl2d->m_sY2) );
 
-      psl2d->m_sX2End		= psl2d->m_sX2;
-      psl2d->m_sY2End		= psl2d->m_sY2;
+      psl2d->m_sX2End      = psl2d->m_sX2;
+      psl2d->m_sY2End      = psl2d->m_sY2;
 
-      psl2d->m_sPriority	= sz;
-      psl2d->m_sLayer		= CRealm::GetLayerViaAttrib(m_prealm->GetLayer(sx, sz) );
-      psl2d->m_u8Color		= u8Color;
+      psl2d->m_sPriority   = sz;
+      psl2d->m_sLayer      = CRealm::GetLayerViaAttrib(m_prealm->GetLayer(sx, sz) );
+      psl2d->m_u8Color      = u8Color;
       // Destroy when done.
-      psl2d->m_sInFlags	= CSprite::InDeleteOnRender;
+      psl2d->m_sInFlags   = CSprite::InDeleteOnRender;
       // Put 'er there.
       m_prealm->m_scene.UpdateSprite(psl2d);
    }

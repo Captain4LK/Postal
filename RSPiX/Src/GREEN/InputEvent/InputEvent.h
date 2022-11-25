@@ -20,7 +20,7 @@
 // InputEvent.H
 //
 // History:
-//		01/16/96 JMI	Started.
+//      01/16/96 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,9 +75,9 @@ typedef struct
 
    Type type;     // Type of event { Mouse, Key, Joy }.
    S32 lTime;     // Time at which event occurred.
-   short	sUsed;   // Indicates that this event has been used.
-                  // Set this if your API utilizes this event so that others
-                  // know that it's already been absorbed.
+   short sUsed;     // Indicates that this event has been used.
+                    // Set this if your API utilizes this event so that others
+                    // know that it's already been absorbed.
    S32 lUser;     // User value.  Use as you please.
 
    union
@@ -85,9 +85,9 @@ typedef struct
       struct   // Mouse event.
       {
          short sPosX;      // X position of event.
-         short	sPosY;      // Y position of event.
-         short	sButtons;   // Buttons status at event (ala rspGetMouseEvent).
-         short	sEvent;     // Event type (ala rspGetMouseEvent).
+         short sPosY;        // Y position of event.
+         short sButtons;     // Buttons status at event (ala rspGetMouseEvent).
+         short sEvent;       // Event type (ala rspGetMouseEvent).
       };
 
       struct   // Keyboard event.
@@ -141,7 +141,7 @@ void rspClearMouseInputEvents(void);   // Returns nothing.
 
 // Gets the next input event.
 short rspGetNextInputEvent(   // Returns 1 if there is an event, 0 if none.
-   RInputEvent*	pie);       // Out: Filled with input event type and details.
+   RInputEvent*   pie);       // Out: Filled with input event type and details.
 
 
 // XInput menu controls.
@@ -157,7 +157,7 @@ short GetLastXInputState(XInputState* xis);  // Returns the last known XInputSta
 // Returns 1 if any button on the controller is pressed.
 short IsXInputButtonPressed();
 
-#endif	// INPUT_EVENT_H
+#endif   // INPUT_EVENT_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

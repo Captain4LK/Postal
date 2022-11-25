@@ -19,26 +19,26 @@
 //
 // ATTRIBUTE.H
 //
-// Created on	10/03/96 BRH
-// Implemented	10/03/96 BRH
+// Created on   10/03/96 BRH
+// Implemented   10/03/96 BRH
 //
-//	10/03/96 BRH	Started this class for use in the Postal
-//						demo to provide a way to load the attribute
-//						map and to access the data.
+//   10/03/96 BRH   Started this class for use in the Postal
+//                  demo to provide a way to load the attribute
+//                  map and to access the data.
 //
-// 10/31/96 BRH	Changed CAttributeMap to RAttributeMap for the
-//						new naming convention.
+// 10/31/96 BRH   Changed CAttributeMap to RAttributeMap for the
+//                  new naming convention.
 //
-// 11/20/96 BRH	Changed to new file version now that there are
-//						detail maps in addition to the block map.
+// 11/20/96 BRH   Changed to new file version now that there are
+//                  detail maps in addition to the block map.
 //
-// 01/23/97 BRH	Changed walkable attribute bit to allow bit
-//						space for another alpha layer.  Changed the
-//						version number due to this change.
+// 01/23/97 BRH   Changed walkable attribute bit to allow bit
+//                  space for another alpha layer.  Changed the
+//                  version number due to this change.
 //
-//	02/03/97 BRH	Added Load(RFile*) in addition to the Load(char*)
+//   02/03/97 BRH   Added Load(RFile*) in addition to the Load(char*)
 //
-//	03/13/97	JMI	Added ATTRIBUTE_HEIGHT_MASK macro.
+//   03/13/97   JMI   Added ATTRIBUTE_HEIGHT_MASK macro.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -66,7 +66,7 @@
 // RAttributeMap class
 //
 // This class makes it easier to load and access attribute maps for
-//	games.  There is a separate utility that converts Photoshop files
+//   games.  There is a separate utility that converts Photoshop files
 // (.PSD) to attribute maps.  It looks for a layer called
 // "attributes" and reads the R, G and B channels to get the
 // attribute data.  The attribute bits are set in that utility.

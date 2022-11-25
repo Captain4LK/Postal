@@ -17,7 +17,7 @@
 //
 //*****************************************************************************
 //
-//	ANIMDATA.H
+//   ANIMDATA.H
 //
 // These are the animation data structs.
 // They should probably be put in the PROJECT.H (or similar) file.
@@ -91,7 +91,7 @@ typedef struct tag_FRAME
 {
    short sOffsetX;
    short sOffsetY;
-   short	sOffsetZ;
+   short sOffsetZ;
    short sHold;
    short sRepeat;       // Bit 15 could be used to mark key frames
                         // If bit is set on frame 0, it would mean that
@@ -117,7 +117,7 @@ typedef struct tag_ANIM
 // Since we are allocating a block of memory for the while animation
 // data file and just casting pointers to various parts of memory within
 // that block, we don't need the size of the array.  The C compiler won't
-//	let us declair variable sized arrays containing variable sized arrays,
+//   let us declair variable sized arrays containing variable sized arrays,
 // so we can either do it by calling it size 1 and using is as a variable
 // sized array, or by making the linker generate a constant for the total
 // number of animations.  For now I've chosen to use the size 1 method.
@@ -144,11 +144,11 @@ typedef struct tag_ANIMSET
 // file viewer wouldn't work anymore.
 //
 // Proposed four-character-codes are:
-//		'alut' - animation lookup table
-//		'anim' - animation data
-//		'fram' - frame data
-//		'zset' - zone set data
-//		'zone' - zone data
+//      'alut' - animation lookup table
+//      'anim' - animation data
+//      'fram' - frame data
+//      'zset' - zone set data
+//      'zone' - zone data
 
 
 // The file contains offsets which we want to convert into pointers.
@@ -201,38 +201,38 @@ typedef struct tag_ANIMSET
 /*
 
 // This is animation lookup table
-	dl	<number of entries in following table>
-	dl	<offset to animation #0 or 0 if it doesn't exist in this file)
+   dl   <number of entries in following table>
+   dl   <offset to animation #0 or 0 if it doesn't exist in this file)
    dl <offset to animation #1 or 0 if it doesn't exist in this file)
-	(etc.)
+   (etc.)
 
 // Data for an animation
-	dw <number of frames>
+   dw <number of frames>
 
 // Data for frame 0 (only used once - loops go back to frame 1)
-	dw	<start x>
-	dw	<start y>
-	dw	<start z>
-	dw	<hold count>
-	dw	<repeat count>
-	dl	<offset to image>
-	dl	<offset to zoneset, 0 if none>
+   dw   <start x>
+   dw   <start y>
+   dw   <start z>
+   dw   <hold count>
+   dw   <repeat count>
+   dl   <offset to image>
+   dl   <offset to zoneset, 0 if none>
 
 // Data for frame 1 through n-1
-	dw	<offset x>
-	dw	<offset y>
-	dw	<offset z>
-	dw	<hold count>
-	dw	<repeat count>
-	dl	<offset to image>
-	dl	<offset to zoneset, 0 if none>
+   dw   <offset x>
+   dw   <offset y>
+   dw   <offset z>
+   dw   <hold count>
+   dw   <repeat count>
+   dl   <offset to image>
+   dl   <offset to zoneset, 0 if none>
 
 
 // Sample access stuff.  We coerce generic pointers into pointers to specific
 // structs.
-	ANIM* pAnim = (S32*)pLoadingAddress[1];
-	short sNumFrames = pAnim->sNumFrames;
-	FRAME* pFrame = pAnim->aFrames[3];
+   ANIM* pAnim = (S32*)pLoadingAddress[1];
+   short sNumFrames = pAnim->sNumFrames;
+   FRAME* pFrame = pAnim->aFrames[3];
 
 */
 

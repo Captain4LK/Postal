@@ -20,29 +20,29 @@
 // IFF.H
 //
 // History:
-//		08/14/96 JMI	Started.
+//      08/14/96 JMI   Started.
 //
-//		03/25/97	JMI	Started tracking history of this file.
-//							TOTALLY HOSED GetNextChunkPos() so it will not work for
-//							root case unless you already happen to be where the root
-//							is!  It should be changed back from:
-//			// The freshly initialized chunk is a special case . . .
-//			if (pchunk->lSizePos == 0)
-//				return Tell();
-//			else
-//				return pchunk->lSizePos							// File position of size.
-//						+ sizeof(pchunk->ulSize)				// Size of size field.
-//						+ pchunk->ulSize							// Size of chunk.
-//						+ ((pchunk->ulSize % 2) ? 1 : 0);	// New chunks on even
-//							to:
-//			// The freshly initialized chunk is a special case . . .
-//			if (pchunk->lSizePos == 0)
-//				return 0;
-//			else
-//				return pchunk->lSizePos							// File position of size.
-//						+ sizeof(pchunk->ulSize)				// Size of size field.
-//						+ pchunk->ulSize							// Size of chunk.
-//						+ ((pchunk->ulSize % 2) ? 1 : 0);	// New chunks on even
+//      03/25/97   JMI   Started tracking history of this file.
+//                     TOTALLY HOSED GetNextChunkPos() so it will not work for
+//                     root case unless you already happen to be where the root
+//                     is!  It should be changed back from:
+//         // The freshly initialized chunk is a special case . . .
+//         if (pchunk->lSizePos == 0)
+//            return Tell();
+//         else
+//            return pchunk->lSizePos                     // File position of size.
+//                  + sizeof(pchunk->ulSize)            // Size of size field.
+//                  + pchunk->ulSize                     // Size of chunk.
+//                  + ((pchunk->ulSize % 2) ? 1 : 0);   // New chunks on even
+//                     to:
+//         // The freshly initialized chunk is a special case . . .
+//         if (pchunk->lSizePos == 0)
+//            return 0;
+//         else
+//            return pchunk->lSizePos                     // File position of size.
+//                  + sizeof(pchunk->ulSize)            // Size of size field.
+//                  + pchunk->ulSize                     // Size of chunk.
+//                  + ((pchunk->ulSize % 2) ? 1 : 0);   // New chunks on even
 //
 //////////////////////////////////////////////////////////////////////////////
 #ifndef IFF_H
@@ -76,14 +76,14 @@
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
 // Converts four characters to a four character code (a U32).
-//#define MAKE_IFF_FCC(a,b,c,d)		RIff::IffStr2FCC(#a #b #c #d);
-//#define MAKE_RIFF_FCC(a,b,c,d)	RIff::RiffStr2FCC(#a #b #c #d);
+//#define MAKE_IFF_FCC(a,b,c,d)      RIff::IffStr2FCC(#a #b #c #d);
+//#define MAKE_RIFF_FCC(a,b,c,d)   RIff::RiffStr2FCC(#a #b #c #d);
 // Compile time macros.
-#define MAKE_IFF_FCC(a, b, c, d)		(((a) << 24) | ((b) << 16) | ((c) << 8) | (d))
-#define MAKE_RIFF_FCC(a, b, c, d)	(((d) << 24) | ((c) << 16) | ((b) << 8) | (a))
+#define MAKE_IFF_FCC(a, b, c, d)      (((a) << 24) | ((b) << 16) | ((c) << 8) | (d))
+#define MAKE_RIFF_FCC(a, b, c, d)   (((d) << 24) | ((c) << 16) | ((b) << 8) | (a))
 
 
-#define MAX_FORMS		50
+#define MAX_FORMS      50
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -160,7 +160,7 @@ U32 GetSize(void)          // Returns size of current chunk.
 { return m_chunk.ulSize; }
 
 // Get the file position of the next to the specified chunk.
-S32	GetNextChunkPos(           // Returns the position of the next to the
+S32   GetNextChunkPos(           // Returns the position of the next to the
                                  // chunk specified below.
    CHUNK* pchunk)                // Chunk to evaluate.
 {
@@ -244,14 +244,14 @@ static U32 RiffStr2FCC(char* pszFCC)
 
 // Create 4-character string for an IFF file based on FCC.
 // Platform independent.  Open IFF files as ENDIAN_BIG.
-static void IffFCC2Str(	U32 ulFCC,        // FCC to convert.
-                        char* pszFCC)        // String of at least 5 bytes.
+static void IffFCC2Str(   U32 ulFCC,        // FCC to convert.
+                          char* pszFCC)      // String of at least 5 bytes.
 {
-   pszFCC[0]	= (char)(ulFCC >> 24);
-   pszFCC[1]	= (char)(ulFCC >> 16);
-   pszFCC[2]	= (char)(ulFCC >> 8);
-   pszFCC[3]	= (char)(ulFCC);
-   pszFCC[4]	= '\0';
+   pszFCC[0]   = (char)(ulFCC >> 24);
+   pszFCC[1]   = (char)(ulFCC >> 16);
+   pszFCC[2]   = (char)(ulFCC >> 8);
+   pszFCC[3]   = (char)(ulFCC);
+   pszFCC[4]   = '\0';
 }
 
 // Create 4-character string for an RIFF file based on FCC.
@@ -259,11 +259,11 @@ static void IffFCC2Str(	U32 ulFCC,        // FCC to convert.
 static void RiffFCC2Str(U32 ulFCC,        // FCC to convert.
                         char* pszFCC)        // String of at least 5 bytes.
 {
-   pszFCC[3]	= (char)(ulFCC >> 24);
-   pszFCC[2]	= (char)(ulFCC >> 16);
-   pszFCC[1]	= (char)(ulFCC >> 8);
-   pszFCC[0]	= (char)(ulFCC);
-   pszFCC[4]	= '\0';
+   pszFCC[3]   = (char)(ulFCC >> 24);
+   pszFCC[2]   = (char)(ulFCC >> 16);
+   pszFCC[1]   = (char)(ulFCC >> 8);
+   pszFCC[0]   = (char)(ulFCC);
+   pszFCC[4]   = '\0';
 }
 
 
@@ -296,8 +296,8 @@ public:     // Member variables.
 
 protected:     // Protected member variables.
 
-RStack <PCHUNK>	m_stack;
-CHUNK	m_chunk;
+RStack <PCHUNK>   m_stack;
+CHUNK m_chunk;
 
 static FCC ms_afccIffForms[MAX_FORMS];                // Chunk FCC recognized
                                                       // as being FORMs in IFF
@@ -310,5 +310,5 @@ static FCC ms_afccRiffForms[MAX_FORMS];               // Chunk FCC recognized
 
 #endif // IFF_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

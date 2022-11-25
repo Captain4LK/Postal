@@ -20,99 +20,99 @@
 // MsgBox.CPP
 //
 // History:
-//		08/20/96 JMI	Started.
+//      08/20/96 JMI   Started.
 //
-//		08/21/96	JMI	Updated to make new lib.
+//      08/21/96   JMI   Updated to make new lib.
 //
-//		09/24/96	JMI	Now uses CGuiItem::GetTopLeftBorderThickness() and
-//							CGuiItem::GetBottomRightBorderThickness() instead of
-//							old CGuiItem::GetTotalBorderThickness().
+//      09/24/96   JMI   Now uses CGuiItem::GetTopLeftBorderThickness() and
+//                     CGuiItem::GetBottomRightBorderThickness() instead of
+//                     old CGuiItem::GetTotalBorderThickness().
 //
-//		10/01/96	JMI	DrawDirty() now uses rsp[Un]ShieldCursor().  DoModal()
-//							was always overwriting m_ulId by when callbacks were
-//							used..fixed.  DoModal() no S32er calls GetNext(phot).
-//							It now calls GetNext() with no args.
+//      10/01/96   JMI   DrawDirty() now uses rsp[Un]ShieldCursor().  DoModal()
+//                     was always overwriting m_ulId by when callbacks were
+//                     used..fixed.  DoModal() no S32er calls GetNext(phot).
+//                     It now calls GetNext() with no args.
 //
-//		10/03/96	JMI	Added DoModeless() to handle simple non-modal dirty
-//							work.
+//      10/03/96   JMI   Added DoModeless() to handle simple non-modal dirty
+//                     work.
 //
-//		10/31/96	JMI	Changed:
-//							Old label:			New label:
-//							=========			=========
-//							CMsgBox				RMsgBox
-//							CImage				RImage
-//							CDirtyRect			RDirtyRects	<-- Yes.  Now plural.
-//							DRECT					RDRect
-//							PDRECT				RDRect*
-//							CHot					RHot
-//							CList					RList
-//							BMP8					RImage::BMP8
-//							CGuiItem				RGuiItem
-//							CTxt					RTxt
-//							CBtn					RBtn
-//							CDlg					RDlg
-//							CEdit					REdit
+//      10/31/96   JMI   Changed:
+//                     Old label:         New label:
+//                     =========         =========
+//                     CMsgBox            RMsgBox
+//                     CImage            RImage
+//                     CDirtyRect         RDirtyRects   <-- Yes.  Now plural.
+//                     DRECT               RDRect
+//                     PDRECT            RDRect*
+//                     CHot               RHot
+//                     CList               RList
+//                     BMP8               RImage::BMP8
+//                     CGuiItem            RGuiItem
+//                     CTxt               RTxt
+//                     CBtn               RBtn
+//                     CDlg               RDlg
+//                     CEdit               REdit
 //
-//		11/01/96	JMI	Also, changed all members referenced in RImage to
-//							m_ and all position/dimension members referenced in
-//							RImage to type short usage.
+//      11/01/96   JMI   Also, changed all members referenced in RImage to
+//                     m_ and all position/dimension members referenced in
+//                     RImage to type short usage.
 //
-//		11/12/96	JMI	Changed GKF_SHIFT to RSP_GKF_SHIFT.
+//      11/12/96   JMI   Changed GKF_SHIFT to RSP_GKF_SHIFT.
 //
-//		11/14/96	JMI	Now adds some additional width to Edits when added
-//							with AddEdit() so they can fit their caret with their
-//							text.
+//      11/14/96   JMI   Now adds some additional width to Edits when added
+//                     with AddEdit() so they can fit their caret with their
+//                     text.
 //
-//		11/15/96	JMI	Now provides a clip rect when getting new erase data
-//							for the dialog and when sets the m_sClipX/Y members of
-//							RDirtyRects in DoModal().
+//      11/15/96   JMI   Now provides a clip rect when getting new erase data
+//                     for the dialog and when sets the m_sClipX/Y members of
+//                     RDirtyRects in DoModal().
 //
-//		12/04/96	JMI	DoModless() and, consequently, DoModal() now take a
-//							pointer to an rspGetKey() formmatted key that is passed
-//							to REdits, if they have the focus.  Also, now moves
-//							focus through the gui items even if an edit field is not
-//							active.
-//							Now initializes RRects using new syntax.
+//      12/04/96   JMI   DoModless() and, consequently, DoModal() now take a
+//                     pointer to an rspGetKey() formmatted key that is passed
+//                     to REdits, if they have the focus.  Also, now moves
+//                     focus through the gui items even if an edit field is not
+//                     active.
+//                     Now initializes RRects using new syntax.
 //
-//		12/16/96	JMI	Focus is can now be specific to any type.
+//      12/16/96   JMI   Focus is can now be specific to any type.
 //
-//		12/19/96	JMI	Upgraded to new RFont/RPrint.
+//      12/19/96   JMI   Upgraded to new RFont/RPrint.
 //
-//		12/19/96	JMI	In CopyParms(), I was getting the height from the wrong
-//							m_pprint (was using the one in pgui, instead of 'this').
+//      12/19/96   JMI   In CopyParms(), I was getting the height from the wrong
+//                     m_pprint (was using the one in pgui, instead of 'this').
 //
-//		12/31/96	JMI	Reduced focus support such that it mostly utilized that
-//							in RGuiItem, but preserved RMsgBox.SetFocus() so it could
-//							steal the focus from an REdit.  Note that this would be
-//							a good opportunity for a OnLoseFocus() virtual func so
-//							that REdit could handle this itself.
+//      12/31/96   JMI   Reduced focus support such that it mostly utilized that
+//                     in RGuiItem, but preserved RMsgBox.SetFocus() so it could
+//                     steal the focus from an REdit.  Note that this would be
+//                     a good opportunity for a OnLoseFocus() virtual func so
+//                     that REdit could handle this itself.
 //
-//		12/31/96	JMI	Removed RMsgBox.SetFocus() since REdit now handles its
-//							own garbage in REdit.OnLoseFocus().
+//      12/31/96   JMI   Removed RMsgBox.SetFocus() since REdit now handles its
+//                     own garbage in REdit.OnLoseFocus().
 //
-//		01/18/97	JMI	NOTE! HIGHLY TEMP FIX:  Commented out calls to Do() with
-//							a S32*.  Now Do() takes an RInputEvent*.  RMsgBox should
-//							be changed to taking this as a parm instead of lKey as
-//							well.  The reason I don't just go ahead and do it is b/c
-//							I'm not sure if this API is worth keeping since it is
-//							currently unused and is mostly obsoleted by new abilites
-//							in RGuiItem (e.g., Load(), LoadInstantiate(),
-//							Focus/NextPrev(), DoFocus(), etc.).
+//      01/18/97   JMI   NOTE! HIGHLY TEMP FIX:  Commented out calls to Do() with
+//                     a S32*.  Now Do() takes an RInputEvent*.  RMsgBox should
+//                     be changed to taking this as a parm instead of lKey as
+//                     well.  The reason I don't just go ahead and do it is b/c
+//                     I'm not sure if this API is worth keeping since it is
+//                     currently unused and is mostly obsoleted by new abilites
+//                     in RGuiItem (e.g., Load(), LoadInstantiate(),
+//                     Focus/NextPrev(), DoFocus(), etc.).
 //
-//		01/19/97	JMI	This is actually used by the Menu API, so I upated it.
-//							Converted Do*() to taking an RInputEvent* instead of a
-//							S32*.
+//      01/19/97   JMI   This is actually used by the Menu API, so I upated it.
+//                     Converted Do*() to taking an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/23/97	JMI	Now calls m_hot.Do() directly and does not need to
-//							deactivate other hotboxes.
+//      01/23/97   JMI   Now calls m_hot.Do() directly and does not need to
+//                     deactivate other hotboxes.
 //
-//		04/11/97	JMI	Now uses m_sFontCellHeight instead of GetPos() to
-//							determine cell height.
+//      04/11/97   JMI   Now uses m_sFontCellHeight instead of GetPos() to
+//                     determine cell height.
 //
-//		04/24/97	JMI	Add additional parms to Add*() to add extra size to a
-//							GUI.
+//      04/24/97   JMI   Add additional parms to Add*() to add extra size to a
+//                     GUI.
 //
-//		04/24/97	JMI	CopyParms() now copies new m_u32TextShadowColor parm.
+//      04/24/97   JMI   CopyParms() now copies new m_u32TextShadowColor parm.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -163,7 +163,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Sets val to def if val is -1.
-#define DEF(val, def)	((val == -1) ? def : val)
+#define DEF(val, def)   ((val == -1) ? def : val)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -185,12 +185,12 @@
 RMsgBox::RMsgBox()
 {
    // Assume no button up callback.
-   m_mbcUser	= NULL;
+   m_mbcUser   = NULL;
    // Active when visible.
-   m_sActive	= TRUE;
+   m_sActive   = TRUE;
 
    // No current clickage.
-   m_ulId		= 0;
+   m_ulId      = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -217,18 +217,18 @@ RBtn* RMsgBox::AddButton(  // Returns allocated GUI item on success.
                            // Do NOT delete this item; it will be deleted
                            // by a RemoveAll() call.
    char* pszText,          // Text for btn item.
-   short	sX,               // X position in RMsgBox dlg.
-   short	sY,               // Y position in RMsgBox dlg.
+   short sX,                 // X position in RMsgBox dlg.
+   short sY,                 // Y position in RMsgBox dlg.
    U32 ulId,            // ID to return if this item is chosen.
                         // There will be no response to this item
                         // if lId is 0.
-   short	sAddW /*= 0*/, // Additional width for guis that require more.
-   short	sAddH /*= 0*/) // Additional height for guis that require more.
+   short sAddW /*= 0*/,   // Additional width for guis that require more.
+   short sAddH /*= 0*/)   // Additional height for guis that require more.
 {
-   short	sError	= 0;
+   short sError   = 0;
 
    // Attempt to allocate new btn.
-   RBtn*	pbtn	= new RBtn;
+   RBtn*   pbtn   = new RBtn;
    if (pbtn != NULL)
    {
       if (AddItem(pbtn, pszText, sX, sY, ulId, sAddW, sAddH) == 0)
@@ -238,20 +238,20 @@ RBtn* RMsgBox::AddButton(  // Returns allocated GUI item on success.
       else
       {
          TRACE("AddButton(): AddItem() failed for allocated RBtn.\n");
-         sError	= 2;
+         sError   = 2;
       }
 
       // If any errors occurred after allocation . . .
       if (sError != 0)
       {
          delete pbtn;
-         pbtn	= NULL;
+         pbtn   = NULL;
       }
    }
    else
    {
       TRACE("AddButton(): Failed to allocate RBtn.\n");
-      sError	= 1;
+      sError   = 1;
    }
 
    return pbtn;
@@ -266,18 +266,18 @@ RTxt* RMsgBox::AddText( // Returns allocated GUI item on success.
                         // Do NOT delete this item; it will be deleted
                         // by a RemoveAll() call.
    char* pszText,       // Text for txt item.
-   short	sX,            // X position in RMsgBox dlg.
-   short	sY,            // Y position in RMsgBox dlg.
+   short sX,              // X position in RMsgBox dlg.
+   short sY,              // Y position in RMsgBox dlg.
    U32 ulId,            // ID to return if this item is chosen.
                         // There will be no response to this item
                         // if lId is 0.
-   short	sAddW /*= 0*/, // Additional width for guis that require more.
-   short	sAddH /*= 0*/) // Additional height for guis that require more.
+   short sAddW /*= 0*/,   // Additional width for guis that require more.
+   short sAddH /*= 0*/)   // Additional height for guis that require more.
 {
-   short	sError	= 0;
+   short sError   = 0;
 
    // Attempt to allocate new btn.
-   RTxt*	ptxt	= new RTxt;
+   RTxt*   ptxt   = new RTxt;
    if (ptxt != NULL)
    {
       if (AddItem(ptxt, pszText, sX, sY, ulId, sAddW, sAddH) == 0)
@@ -287,20 +287,20 @@ RTxt* RMsgBox::AddText( // Returns allocated GUI item on success.
       else
       {
          TRACE("AddText(): AddItem() failed for allocated RTxt.\n");
-         sError	= 2;
+         sError   = 2;
       }
 
       // If any errors occurred after allocation . . .
       if (sError != 0)
       {
          delete ptxt;
-         ptxt	= NULL;
+         ptxt   = NULL;
       }
    }
    else
    {
       TRACE("AddText(): Failed to allocate RTxt.\n");
-      sError	= 1;
+      sError   = 1;
    }
 
    return ptxt;
@@ -315,49 +315,49 @@ REdit* RMsgBox::AddEdit(   // Returns allocated GUI item on success.
                            // Do NOT delete this item; it will be deleted
                            // by a RemoveAll() call.
    char* pszText,          // Text for edit item.
-   short	sX,               // X position in RMsgBox dlg.
-   short	sY,               // Y position in RMsgBox dlg.
+   short sX,                 // X position in RMsgBox dlg.
+   short sY,                 // Y position in RMsgBox dlg.
    U32 ulId,            // ID to return if this item is chosen.
                         // There will be no response to this item
                         // if lId is 0.
-   short	sAddW /*= 0*/, // Additional width for guis that require more.
-   short	sAddH /*= 0*/) // Additional height for guis that require more.
+   short sAddW /*= 0*/,   // Additional width for guis that require more.
+   short sAddH /*= 0*/)   // Additional height for guis that require more.
 {
-   short	sError	= 0;
+   short sError   = 0;
 
    // Attempt to allocate new btn.
-   REdit*	pedit	= new REdit;
+   REdit*   pedit   = new REdit;
    if (pedit != NULL)
    {
       // Need to create string so we can determine size of caret.
       char szCaret[]   = { pedit->m_cCaretChar, '\0' };
       // Store text width.
-      short sTextWidth	= pedit->m_pprint->GetWidth(szCaret);
+      short sTextWidth   = pedit->m_pprint->GetWidth(szCaret);
 
       if (AddItem(pedit, pszText, sX, sY, ulId, sTextWidth + sAddW, sAddH) == 0)
       {
          // Limit text to the number of characters originally used.
-//			pedit->m_sMaxText	= strlen(pszText);
+//         pedit->m_sMaxText   = strlen(pszText);
 
          // Success.
       }
       else
       {
          TRACE("AddEdit(): AddItem() failed for allocated REdit.\n");
-         sError	= 2;
+         sError   = 2;
       }
 
       // If any errors occurred after allocation . . .
       if (sError != 0)
       {
          delete pedit;
-         pedit	= NULL;
+         pedit   = NULL;
       }
    }
    else
    {
       TRACE("AddEdit(): Failed to allocate REdit.\n");
-      sError	= 1;
+      sError   = 1;
    }
 
    return pedit;
@@ -370,13 +370,13 @@ REdit* RMsgBox::AddEdit(   // Returns allocated GUI item on success.
 //
 ////////////////////////////////////////////////////////////////////////
 RGuiItem* RMsgBox::AddItem(   // Returns pgui on success.
-   RGuiItem*	pgui)          // The RGuiItem to add (its m_sX/Y should
+   RGuiItem*   pgui)          // The RGuiItem to add (its m_sX/Y should
                               // already have been set).
 {
    // Store RMsgBox instance.
-   pgui->m_ulUserInstance	= (uintptr_t)this;
+   pgui->m_ulUserInstance   = (uintptr_t)this;
    // Let RGuiItem know where to call.
-   pgui->m_bcUser				= ItemBtnUpCall;
+   pgui->m_bcUser            = ItemBtnUpCall;
 
    // Simply sets this RGuiItem as a child of this RMsgBox{RDlg}.
    pgui->SetParent(this);
@@ -395,13 +395,13 @@ inline void DrawDirty(  // Returns nothing.
    RImage* pimScr,      // Screen buffer.
    RDirtyRects* pdrl)      // List of dirty rects.
 {
-   RDRect*	pdr;
+   RDRect*   pdr;
    // If not going direct to screen . . .
    if (pimComp != pimScr)
    {
       rspShieldMouseCursor();
 
-      pdr	= pdrl->GetHead();
+      pdr   = pdrl->GetHead();
       while (pdr != NULL)
       {
          // Update screen.
@@ -414,7 +414,7 @@ inline void DrawDirty(  // Returns nothing.
 
          delete pdr;
 
-         pdr	= pdrl->GetNext();
+         pdr   = pdrl->GetNext();
       }
 
       rspUnshieldMouseCursor();
@@ -440,7 +440,7 @@ U32 RMsgBox::DoModeless(      // Returns item clicked or 0, if none.
       if (ulRes != 0)
       {
          // Override ours.
-         m_ulId	= ulRes;
+         m_ulId   = ulRes;
       }
    }
    else
@@ -454,7 +454,7 @@ U32 RMsgBox::DoModeless(      // Returns item clicked or 0, if none.
 
    U32 ulResId  = m_ulId;
    // Reset.
-   m_ulId			= 0;
+   m_ulId         = 0;
 
    return ulResId;
 }
@@ -471,20 +471,20 @@ U32 RMsgBox::DoModal(               // Returns chosen ID on success,
                                     // 0 on failure.
    RInputEvent* pie,                // In:  Most recent user input event.
                                     // Out: pie->sUsed = TRUE, if used.
-   RImage*	pimDst /*= NULL*/)      // Where to draw dialog and rspBlit from.
-                                    // If this is NULL, the system buffer is
-                                    // used.
-                                    // rspBlit is used to update this to the
-                                    // screen image unless pimDst is the screen
-                                    // image.
+   RImage*   pimDst /*= NULL*/)      // Where to draw dialog and rspBlit from.
+                                     // If this is NULL, the system buffer is
+                                     // used.
+                                     // rspBlit is used to update this to the
+                                     // screen image unless pimDst is the screen
+                                     // image.
 {
-   m_ulId			= 0;  // ID to return.
-   short	sError	= 0;  // No errors yet.
+   m_ulId         = 0;  // ID to return.
+   short sError   = 0;    // No errors yet.
 
    // Deactivate RHots, adding them to our list.
    // We now can just service our own RHots.
 
-   RImage*	pimScr;
+   RImage*   pimScr;
    // If composition buffer provided . . .
    if (pimDst != NULL)
    {
@@ -507,34 +507,34 @@ U32 RMsgBox::DoModal(               // Returns chosen ID on success,
    else
    {
       TRACE("DoModal(): m_imEraser.CreateImage() failed.\n");
-      sError	= 1;
+      sError   = 1;
    }
 
    // Activate this and all children.
    SetVisible(TRUE);
 
    RDRect dr = { m_sX, m_sY, m_im.m_sWidth, m_im.m_sHeight };
-   RDirtyRects	drl;
-   drl.m_sClipX	= pimDst->m_sWidth - 1;
-   drl.m_sClipY	= pimDst->m_sHeight - 1;
+   RDirtyRects drl;
+   drl.m_sClipX   = pimDst->m_sWidth - 1;
+   drl.m_sClipY   = pimDst->m_sHeight - 1;
 
    // Clipping rectangle for composite buffer.
-   RRect	rcCompositeClip(0, 0, drl.m_sClipX, drl.m_sClipY);
+   RRect rcCompositeClip(0, 0, drl.m_sClipX, drl.m_sClipY);
 
    // Main loop:
    // Wait for an error or an ID.
    while (m_ulId == 0 && sError == 0)
    {
-      dr.sX	= m_sX;
-      dr.sY	= m_sY;
+      dr.sX   = m_sX;
+      dr.sY   = m_sY;
 
       // Get new erase data.
-      rspBlit(	pimDst, &imEraser,
-               dr.sX, dr.sY,
-               0, 0,
-               dr.sW, dr.sH,
-               NULL,                // Destination clippage.
-               &rcCompositeClip);   // Source clippage.
+      rspBlit(   pimDst, &imEraser,
+                 dr.sX, dr.sY,
+                 0, 0,
+                 dr.sW, dr.sH,
+                 NULL,              // Destination clippage.
+                 &rcCompositeClip); // Source clippage.
 
       // Draw new dlg data.
       Draw(pimDst, 0, 0, 0, 0, 0, 0, &rcCompositeClip);
@@ -551,13 +551,13 @@ U32 RMsgBox::DoModal(               // Returns chosen ID on success,
       if (ulRes != 0)
       {
          // Override ours.
-         m_ulId	= ulRes;
+         m_ulId   = ulRes;
       }
 
       // Erase old.
-      rspBlit(	&imEraser, pimDst, 0, 0,
-               dr.sX, dr.sY,
-               dr.sW, dr.sH);
+      rspBlit(   &imEraser, pimDst, 0, 0,
+                 dr.sX, dr.sY,
+                 dr.sW, dr.sH);
 
       // Add to dirty rect list.
       drl.Add(&dr);
@@ -583,14 +583,14 @@ U32 RMsgBox::DoModal(               // Returns chosen ID on success,
 ////////////////////////////////////////////////////////////////////////
 void RMsgBox::RemoveAll(void) // Returns nothing.
 {
-   RGuiItem*	pgui	= m_listGuis.GetHead();
+   RGuiItem*   pgui   = m_listGuis.GetHead();
    while (pgui != NULL)
    {
       m_listGuis.Remove();
 
       delete pgui;
 
-      pgui	= m_listGuis.GetNext();
+      pgui   = m_listGuis.GetNext();
    }
 }
 
@@ -616,10 +616,10 @@ void RMsgBox::ItemBtnUpCall(RGuiItem* pgui)
 {
    ASSERT(pgui->m_ulUserInstance != NULL);
 
-   RMsgBox*	pmb	= (RMsgBox*)(pgui->m_ulUserInstance);
+   RMsgBox*   pmb   = (RMsgBox*)(pgui->m_ulUserInstance);
 
    // Store item ID.
-   pmb->m_ulId	= pgui->m_ulUserData;
+   pmb->m_ulId   = pgui->m_ulUserData;
 
    // Set focus to.
    pmb->SetFocus(pgui);
@@ -637,42 +637,42 @@ void RMsgBox::ItemBtnUpCall(RGuiItem* pgui)
 short RMsgBox::AddItem( // Returns 0 on success.
    RGuiItem* pgui,      // Item to add.
    char* pszText,       // Text for item.
-   short	sX,            // X position in RMsgBox dlg.
-   short	sY,            // Y position in RMsgBox dlg.
+   short sX,              // X position in RMsgBox dlg.
+   short sY,              // Y position in RMsgBox dlg.
    U32 ulId,            // ID to return if this item is chosen.
                         // There will be no response to this item
                         // if lId is 0.
-   short	sAddW /*= 0*/, // Additional width for guis that require more.
-   short	sAddH /*= 0*/) // Additional height for guis that require more.
+   short sAddW /*= 0*/,   // Additional width for guis that require more.
+   short sAddH /*= 0*/)   // Additional height for guis that require more.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Copy settings.
    CopyParms(pgui);
 
    // Store ID.
-   pgui->m_ulUserData		= ulId;
+   pgui->m_ulUserData      = ulId;
 
    // Set text.
    pgui->SetText(pszText);
 
    // Store text width.
-   short sTextWidth			= pgui->m_pprint->GetWidth(pszText);
+   short sTextWidth         = pgui->m_pprint->GetWidth(pszText);
 
    // Active when visible.
-   pgui->m_sActive			= TRUE;
+   pgui->m_sActive         = TRUE;
    // Set font height for item.
-   pgui->m_sFontCellHeight	= m_sFontCellHeight;
+   pgui->m_sFontCellHeight   = m_sFontCellHeight;
 
    // Reserve space for borders, if there are any.
-   short sTotalBorderThickness	= pgui->GetTopLeftBorderThickness()
+   short sTotalBorderThickness   = pgui->GetTopLeftBorderThickness()
                                    + pgui->GetBottomRightBorderThickness();
 
    // Create to font/text appropriate size . . .
-   if (pgui->Create(	sX, sY,
-                     sTextWidth + sTotalBorderThickness + sAddW,
-                     m_sFontCellHeight + sTotalBorderThickness + sAddH,
-                     m_im.m_sDepth)
+   if (pgui->Create(   sX, sY,
+                       sTextWidth + sTotalBorderThickness + sAddW,
+                       m_sFontCellHeight + sTotalBorderThickness + sAddH,
+                       m_im.m_sDepth)
        == 0)
    {
       // Add item (i.e., set parent to us) . . .
@@ -686,13 +686,13 @@ short RMsgBox::AddItem( // Returns 0 on success.
          else
          {
             TRACE("AddItem(): Failed to add item to list.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
       }
       else
       {
          TRACE("AddItem(): AddItem() failed for allocated item.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
@@ -711,22 +711,22 @@ short RMsgBox::AddItem( // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////
 void RMsgBox::CopyParms(RGuiItem* pgui)
 {
-   pgui->m_drawcall						= m_drawcall;
-   pgui->m_backcall						= m_backcall;
+   pgui->m_drawcall                  = m_drawcall;
+   pgui->m_backcall                  = m_backcall;
 
-   pgui->m_u32BorderColor				= m_u32BorderColor;
-   pgui->m_u32BorderShadowColor		= m_u32BorderShadowColor;
-   pgui->m_u32BorderHighlightColor	= m_u32BorderHighlightColor;
-   pgui->m_u32BorderEdgeColor			= m_u32BorderEdgeColor;
+   pgui->m_u32BorderColor            = m_u32BorderColor;
+   pgui->m_u32BorderShadowColor      = m_u32BorderShadowColor;
+   pgui->m_u32BorderHighlightColor   = m_u32BorderHighlightColor;
+   pgui->m_u32BorderEdgeColor         = m_u32BorderEdgeColor;
 
-   pgui->m_u32TextColor					= m_u32TextColor;
-   pgui->m_u32BackColor					= m_u32BackColor;
-   pgui->m_u32TextShadowColor			= m_u32TextShadowColor;
+   pgui->m_u32TextColor               = m_u32TextColor;
+   pgui->m_u32BackColor               = m_u32BackColor;
+   pgui->m_u32TextShadowColor         = m_u32TextShadowColor;
 
-   pgui->m_sBorderThickness			= m_sBorderThickness;
+   pgui->m_sBorderThickness         = m_sBorderThickness;
 
    // Use this to copy font stuff instead of stuff below:
-   pgui->m_pprint							= m_pprint;
+   pgui->m_pprint                     = m_pprint;
 }
 
 //////////////////////////////////////////////////////////////////////////////

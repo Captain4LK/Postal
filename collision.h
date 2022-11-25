@@ -19,7 +19,7 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		02/18/97 JMI	Started.
+//      02/18/97 JMI   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -79,10 +79,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 template <class Region> // Must be a type supported by CThing::IsColliding(...)!
 bool GetNextCollision(  // Returns true if a collision is found, false otherwise.
-   CThing::Things*	pthings,    // In:  List of CThings to search within.
-   Region*				pregion,    // In:  Region OR shape to collide with.
-   CThing**				ppthing)    // In:  CThing to start with or NULL to start at beginning.
-                                 // Out: CThing collided with or NULL.
+   CThing::Things*   pthings,    // In:  List of CThings to search within.
+   Region*            pregion,    // In:  Region OR shape to collide with.
+   CThing**            ppthing)    // In:  CThing to start with or NULL to start at beginning.
+                                   // Out: CThing collided with or NULL.
 {
    bool bCollision  = false;  // Assume no collision.
 
@@ -113,9 +113,9 @@ bool GetNextCollision(  // Returns true if a collision is found, false otherwise
       if ((*i)->IsColliding(pregion) == true)
       {
          // Remember who it was with.
-         *ppthing	= *i;
+         *ppthing   = *i;
          // Set return value.
-         bCollision	= true;
+         bCollision   = true;
          // Exit loop.
          break;
       }
@@ -127,7 +127,7 @@ bool GetNextCollision(  // Returns true if a collision is found, false otherwise
    return bCollision;
 }
 
-#endif	// COLLISION_H
+#endif   // COLLISION_H
 //////////////////////////////////////////////////////////////////////////////
 // EOF
 //////////////////////////////////////////////////////////////////////////////

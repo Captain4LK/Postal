@@ -28,7 +28,7 @@ I AM ARCHAIC - INCLUDE ORANGE / QUICKMATH / FIXEDPOINT.H instead !
 // add two fractions of identical denominators...
 // both fraction MUST be PROPER!
 //
-inline void	Add(u16Frac& pDst, u16Frac& pAdd, short sDen)
+inline void   Add(u16Frac& pDst, u16Frac& pAdd, short sDen)
 {
    pDst.delta += pAdd.delta;
    if ( (pDst.frac += pAdd.frac) >= sDen)

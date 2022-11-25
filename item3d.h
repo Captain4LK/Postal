@@ -18,31 +18,31 @@
 // item3d.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		03/06/97	JMI	Started this 3D item class.
+//   History:
+//      03/06/97   JMI   Started this 3D item class.
 //
-//		03/06/97	JMI	Overrided EditModify().
+//      03/06/97   JMI   Overrided EditModify().
 //
-//		03/06/97	JMI	Added m_u16IdParent member and override for Render().
+//      03/06/97   JMI   Added m_u16IdParent member and override for Render().
 //
-//		03/06/97	JMI	Added Trumpet, Horn, and Sax and descriptions for known
-//							types.
+//      03/06/97   JMI   Added Trumpet, Horn, and Sax and descriptions for known
+//                     types.
 //
-//		03/07/97	JMI	Added handy everything-to-get-started Setup().
+//      03/07/97   JMI   Added handy everything-to-get-started Setup().
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		03/17/97	JMI	Now based on CThing3d instead of CCharacter.
+//      03/17/97   JMI   Now based on CThing3d instead of CCharacter.
 //
-//		03/18/97	JMI	Made ItemType and instantiable members public.
-//							Also, moved m_u16IdParent into base class.
-//							Also, removed Render() proto.
+//      03/18/97   JMI   Made ItemType and instantiable members public.
+//                     Also, moved m_u16IdParent into base class.
+//                     Also, removed Render() proto.
 //
-//		06/14/97	JMI	Added a constructor that will allow derivations of this
-//							class.
+//      06/14/97   JMI   Added a constructor that will allow derivations of this
+//                     class.
 //
-//		08/07/97	JMI	Added ability to optionally load a rigid body and child
-//							anim for this item3d.
+//      08/07/97   JMI   Added ability to optionally load a rigid body and child
+//                     anim for this item3d.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef ITEM3D_H
@@ -78,16 +78,16 @@ public:
 
 CAnim3D m_anim;                                    // One animation.
 char m_szAnimBaseName[RSP_MAX_PATH];               // Name of animation.
-ItemType	m_type;                                   // Item type if known.
+ItemType m_type;                                     // Item type if known.
 
 char m_szAnimRigidName[RSP_MAX_PATH];              // Rigid body transform anim name.
 CAnim3D m_animChild;                                     // Optional child anim.
 char m_szChildAnimBaseName[RSP_MAX_PATH];                // Name of child anim.
 
-CSprite3	m_spriteChild;                            // Child sprite.  Never
-                                                   // explicitly added to scene
-                                                   // (acts just as a child to
-                                                   // our main sprite).
+CSprite3 m_spriteChild;                              // Child sprite.  Never
+                                                     // explicitly added to scene
+                                                     // (acts just as a child to
+                                                     // our main sprite).
 
 // Tracks file counter so we know when to load/save "common" data
 static short ms_sFileCount;
@@ -99,8 +99,8 @@ public:
 // "Constant" values that we want to be able to tune using the editor
 
 // Array of known animation base names.
-static char*	ms_apszKnownAnimBaseNames[NumTypes];
-static char*	ms_apszKnownAnimDescriptions[NumTypes];
+static char*   ms_apszKnownAnimBaseNames[NumTypes];
+static char*   ms_apszKnownAnimDescriptions[NumTypes];
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor
@@ -123,13 +123,13 @@ CItem3d(CRealm* pRealm, ClassIDType id)
 // Reset this object.
 void Reset(void)        // Returns nothing.
 {
-   m_szAnimBaseName[0]	= '\0';
-   m_type					= None;
+   m_szAnimBaseName[0]   = '\0';
+   m_type               = None;
 
-   m_szAnimRigidName[0]			= '\0';
-   m_szChildAnimBaseName[0]	= '\0';
+   m_szAnimRigidName[0]         = '\0';
+   m_szChildAnimBaseName[0]   = '\0';
 
-   m_spriteChild.m_pthing		= this;
+   m_spriteChild.m_pthing      = this;
 }
 
 public:
@@ -203,8 +203,8 @@ short Setup(                        // Returns 0 on success.
    short sY,                        // In:  Starting Y position
    short sZ,                        // In:  Starting Z position
    ItemType type,                   // In:  Known item type or Custom.
-   char*	pszCustomBaseName = NULL,        // In:  Required if type == Custom.
-                                          // Base name for custom type resources.
+   char*   pszCustomBaseName = NULL,        // In:  Required if type == Custom.
+                                            // Base name for custom type resources.
    U16 u16IdParentInstance = CIdBank::IdNil);         // In:  Parent instance ID.
 
 // Message handling functions ////////////////////////////////////////////

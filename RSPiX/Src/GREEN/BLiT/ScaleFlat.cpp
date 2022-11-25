@@ -24,11 +24,11 @@
 #ifdef PATHS_IN_INCLUDES
    #include "GREEN/BLiT/BLIT.H"
    #include "GREEN/BLiT/_BlitInt.H"
-//	#include "GREEN/BLiT/_ic.h"
+//   #include "GREEN/BLiT/_ic.h"
 #else
    #include "BLIT.H"
    #include "_BlitInt.H"
-//	#include "_ic.h"
+//   #include "_ic.h"
 #endif
 
 // For now, do the shrink case only...
@@ -104,9 +104,9 @@ inline void _Blit_HS_VS_C(
    //-------------------------------------------------------------------------
    // Set up vertical variables:
    //
-   UCHAR*	pSrcLine = pSrc, *pDstLine = pDst;
+   UCHAR*   pSrcLine = pSrc, *pDstLine = pDst;
    S32 lDelMemY;
-   short	sIncY, sNumY, sClipH;
+   short sIncY, sNumY, sClipH;
 
    if (sMirrorV == -1) lDstP = -lDstP; // make sure pDst is correctly positioned
 
@@ -117,7 +117,7 @@ inline void _Blit_HS_VS_C(
    //-------------------------------------------------------------------------
    // Set up horizontal variables:
    //
-   short	sDelX, sIncX, sNumX, sClipW, sShowW;
+   short sDelX, sIncX, sNumX, sClipW, sShowW;
    // ASSUME SHRINKING FOR NOW:
    INIT_IMPROPER_FRACTION_H(sDstW, sSrcW, sDelX, sIncX, sNumX) // sDstW is the numerator
    sClipW = sDstW - sClipR; // right clip...
@@ -194,8 +194,8 @@ inline void _Blit_HM_VM_C(
    //-------------------------------------------------------------------------
    // Set up vertical variables:
    //
-   UCHAR*	pSrcLine = pSrc, *pDstLine = pDst;
-   short	sNumY, sClipH;
+   UCHAR*   pSrcLine = pSrc, *pDstLine = pDst;
+   short sNumY, sClipH;
 
    if (sMirrorV == -1) lDstP = -lDstP; // make sure pDst is correctly positioned
 
@@ -206,7 +206,7 @@ inline void _Blit_HM_VM_C(
    //-------------------------------------------------------------------------
    // Set up horizontal variables:
    //
-   short	sNumX, sClipW, sShowW;
+   short sNumX, sClipW, sShowW;
    // ASSUME ENLARGING FOR NOW:
    INIT_PROPER_FRACTION(sDstW, sNumX) // sDstW is the denominator
    sClipW = sDstW - sClipR; // right clip...
@@ -283,8 +283,8 @@ inline void _Blit_HS_VM_C(
    //-------------------------------------------------------------------------
    // Set up vertical variables:
    //
-   UCHAR*	pSrcLine = pSrc, *pDstLine = pDst;
-   short	sNumY, sClipH;
+   UCHAR*   pSrcLine = pSrc, *pDstLine = pDst;
+   short sNumY, sClipH;
 
    if (sMirrorV == -1) lDstP = -lDstP; // make sure pDst is correctly positioned
 
@@ -295,7 +295,7 @@ inline void _Blit_HS_VM_C(
    //-------------------------------------------------------------------------
    // Set up horizontal variables:
    //
-   short	sDelX, sIncX, sNumX, sClipW, sShowW;
+   short sDelX, sIncX, sNumX, sClipW, sShowW;
    // ASSUME SHRINKING FOR NOW:
    INIT_IMPROPER_FRACTION_H(sDstW, sSrcW, sDelX, sIncX, sNumX) // sDstW is the numerator
    sClipW = sDstW - sClipR; // right clip...
@@ -372,9 +372,9 @@ inline void _Blit_HM_VS_C(
    //-------------------------------------------------------------------------
    // Set up vertical variables:
    //
-   UCHAR*	pSrcLine = pSrc, *pDstLine = pDst;
+   UCHAR*   pSrcLine = pSrc, *pDstLine = pDst;
    S32 lDelMemY;
-   short	sIncY, sNumY, sClipH;
+   short sIncY, sNumY, sClipH;
 
    if (sMirrorV == -1) lDstP = -lDstP; // make sure pDst is correctly positioned
 
@@ -385,7 +385,7 @@ inline void _Blit_HM_VS_C(
    //-------------------------------------------------------------------------
    // Set up horizontal variables:
    //
-   short	sNumX, sClipW, sShowW;
+   short sNumX, sClipW, sShowW;
    // ASSUME ENLARGING FOR NOW:
    INIT_PROPER_FRACTION(sDstW, sNumX) // sDstW is the denominator
    sClipW = sDstW - sClipR; // right clip...
@@ -462,7 +462,7 @@ typedef S32 CHOOSE_TRANSPARENT;
 
 // at the internal level, assume all values have been verified..
 //
-inline short	_rspBlit(UCHAR* pSrc, S32 lSrcP, short sSrcW, short sSrcH,
+inline short   _rspBlit(UCHAR* pSrc, S32 lSrcP, short sSrcW, short sSrcH,
                         UCHAR* pDst, S32 lDstP, short sDstW, short sDstH)
 {
    return 0;
@@ -533,7 +533,7 @@ short rspBlitT(RImage* pimSrc, RImage* pimDst, RRect* prSrc, const RRect* prDst,
    // Only source clipping would effect this...
    //
    short sDstClipX = 0, sDstClipY = 0;
-   short	sDstClipW = pimDst->m_sWidth, sDstClipH = pimDst->m_sHeight;
+   short sDstClipW = pimDst->m_sWidth, sDstClipH = pimDst->m_sHeight;
 
    // NOT FOR CLIPPING PURPOSES -> FIXED UINPUT VALUES!
    short sDstX = prDst->sX, sDstY = prDst->sY, sDstW = prDst->sW, sDstH = prDst->sH;
@@ -596,8 +596,8 @@ short rspBlitT(RImage* pimSrc, RImage* pimDst, RRect* prSrc, const RRect* prDst,
    //------------------------------------------------------------------------------
    // set up IC
    //------------------------------------------------------------------------------
-   UCHAR*	pDst = pimDst->m_pData + pimDst->m_lPitch * sDstY + sDstX;
-   UCHAR*	pSrc = pimSrc->m_pData + pimSrc->m_lPitch * sSrcY + sSrcX;
+   UCHAR*   pDst = pimDst->m_pData + pimDst->m_lPitch * sDstY + sDstX;
+   UCHAR*   pSrc = pimSrc->m_pData + pimSrc->m_lPitch * sSrcY + sSrcX;
 
    if ((sDstW <= sSrcW) && (sDstH <= sSrcH))
       _Blit_HS_VS_C(pSrc, pimSrc->m_lPitch, sSrcW, sSrcH,

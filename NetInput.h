@@ -18,8 +18,8 @@
 // netinput.h
 // Project: RSPiX
 //
-//	History:
-//		09/02/97 MJR	Started.
+//   History:
+//      09/02/97 MJR   Started.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef NETINPUT_H
@@ -128,18 +128,18 @@ public:
 enum
 {
    // Maximum total entries (see elsewhere for in-depth explanation)
-   MaxTotalEntries	= 3 * Net::MaxAheadSeq,
+   MaxTotalEntries   = 3 * Net::MaxAheadSeq,
 
    // Maxumum new entries (see elsewhere for in-depth explanation)
    MaxNewEntries     = 2 * Net::MaxAheadSeq,
 
    // Maximum old entries (see elsewhere for in-depth explanation)
-   MaxOldEntries		= 1 * Net::MaxAheadSeq,
+   MaxOldEntries      = 1 * Net::MaxAheadSeq,
 
    // The size must be a power of two, and the mask must correspond to it.
    // Remember that this must be at LEAST as large as MaxTotalEntries!
-   Size				= 256,
-   Mask				= Size - 1,
+   Size            = 256,
+   Mask            = Size - 1,
 
    // Invalid input value
    Invalid = 0xffffffff
@@ -150,9 +150,9 @@ enum
 //------------------------------------------------------------------------------
 protected:
 UINPUT m_aInputs[Size];                                     // Inputs
-U8	m_aFrameTimes[Size];                                  // Game time for the frames *SPA
-Net::SEQ	m_seqFrame;                                     // Local player's current frame number
-Net::SEQ	m_seqOldest;                                    // Oldest sequence we have
+U8 m_aFrameTimes[Size];                                    // Game time for the frames *SPA
+Net::SEQ m_seqFrame;                                       // Local player's current frame number
+Net::SEQ m_seqOldest;                                      // Oldest sequence we have
 
 //------------------------------------------------------------------------------
 // Functions

@@ -21,649 +21,649 @@
 // This module impliments the game editor.
 //
 // History:
-//		12/18/96 MJR	Started.
-//
-//		01/14/97 BRH	Added CDoofus and CTkachuk keys to the editor
+//      12/18/96 MJR   Started.
+//
+//      01/14/97 BRH   Added CDoofus and CTkachuk keys to the editor
 //
-//		01/17/97 BRH	Added CRocketMan key to the editor
-//
-//		01/21/97	JMI	Converted from rspGetKey() and rspGetMouseEvent() to
-//							RInputEvent API (rspGetNextInputEvent() ).
-//
-//		01/21/97	JMI	Added Realm Bar GUI and Object Picker GUI.
-//							Now open and save realm invoke file system dialogs
-//							to browse.
-//
-//		01/22/97	JMI	Now requests that you save before doing anything that
-//							might be detremental(sp!) to the current level (e.g., New,
-//							Close, etc.).
-//
-//		01/22/97	JMI	PlayRealm() now saves and loads the current level in
-//							TEMP_FILE_NAME.
-//
-//		01/22/97	JMI	The object picker list box now only adds items that are
-//							user creatable in the editor (as indicated by
-//							CThing::ms_aClassInfo[ID].bEditorCreatable.
-//
-//		01/22/97 MJR	Added use of realm's time object.  Also, it now uses a
-//							separate realm object in the play loop so as to avoid any
-//							possible interference between it and the editor's realm.
-//
-//		01/23/97	JMI	Fixed 'assing' comment because we definitely wouldn't
-//							want the word 'assing' appearing in our code anywhere.
-//							Who's the assinine jack ass for a dumb ass that wrote
-//							'assing' in the first place anyway?!  What an asswipe.
-//							Now you are only asked if you want to save before an op
-//							that destroys the current realm if that realm contains
-//							anything.
-//							Now hots for individual GUIs are called independently in
-//							the editor.
-//
-//		01/23/97	JMI	Now when you click an item in the list box, the item is
-//							created, the EditNew() is called, and then the item can
-//							be moved to the drop spot.
-//
-//		01/23/97	JMI	Now shows the system cursor when not placing an object.
-//
-//		01/24/97	JMI	Can now adjust display size with Numpad + and -.  Always
-//							restores display size when exiting editor to the original
-//							size (when entered editor).
-//							External effects:  g_pimScreenBuf.
-//
-//		01/24/97	JMI	Now PlayRealm() also supports the adjustment of the display
-//							area.  Also, cursor no S32er does height cursor's drag
-//							logic unless in drop dude mode.
-//
-//		01/25/97	JMI	Added scrollbars to edit mode.
-//
-//		01/26/97	JMI	Forgot to update scrollbars in PlayRealm().
-//
-//		01/26/97	JMI	Added selection.  This required creating a root RHot for
-//							the Hood and a child RHot for each of the other CThings.
-//
-//		01/27/97	JMI	Now you can double click an existing item to move it,
-//							hit enter while it is selected to modify it, or hit
-//							delete while it is selected to delete it.
-//
-//		01/27/97	JMI	Now if you delete the item with the selection and then try
-//							to move it, it doesn't crash.  A technological breakthrough
-//							enabled this by collapsing ms_p*Move into ms_p*Sel and
-//							adding an ms_sMoving flag.
-//
-//		01/28/97	JMI	Now you can toggle layers on and off using the layers list-
-//							box.
-//
-//		01/29/97	JMI	Quickly changed UI...will update cleaner later...just need
-//							to get this to Bill so he can do cool Buoy stuff.
-//
-//		01/29/97 BRH	Added ability to link Bouys.  It draws the link between
-//							two bouy's that you are attempting to link.  Also added
-//							a CNavigationNet pointer to the editor to keep track
-//							of the currently selected NavNet to which new Bouys
-//							are added.  Will need to add a GUI item to let the user
-//							select the 'current' NavNet when you have more than one.
-//							Also still need to add the function to display the lines
-//							between all bouys once the network is linked together.
-//
-//		01/30/97	JMI	Now when you open/load or new a realm, the size affected
-//							stuff is updated via a call to SizeUpdate().
-//
-//		01/30/97 BRH	Added key 'B' as a toggle for showing the bouy lines.
-//							Added a set of bouy lines to the editor which can be
-//							added to when a new line is drawn or completely set
-//							up with all bouy lines by calling UpdateNetLines.
-//							Now I need the CThing unique ID numbers so that when
-//							bouys are reloaded, they will know what CNavigationNet
-//							to relink themselves to.
-//
-//		01/30/97	JMI	Now the editor assigns a realm unique ID to every item it
-//							creates.
-//
-//		01/31/97	JMI	If CreateNewThing() failed to create a new CBuoy b/c there
-//							was no current NavNet, it returned success.  Now it returns
-//							failure.
-//
-//		02/02/97	JMI	If a CThing derived class has an EditHotSpot() defined, the
-//							editor will be able to smoothly drag the thing.  If it does
-//							not have this function, the cursor will jump when a drag
-//							is started.
-//							Also, made cursor aware of the height on the attribute map.
-//							Also, made the distinction between an editor hotbox event
-//							and another event.
-//
-//		02/03/97	JMI	Moved all input in editor loop into DoInput() and all output
-//							in editor loop to DoOutput().  This makes it a little easier
-//							to figure out what's going on, but DoInput() is still rather
-//							large (mainly due to the two switch statements).
-//
-//		02/03/97	JMI	Can track a particular CThing during PlayRealm().  To track
-//							a CThing, hold down shift and then click the thing.  There
-//							should be a beep signifying the item was set as the tracked
-//							thing.  Hit 'T' in PlayRealm() mode to toggle tracking mode
-//							vs. scrollbar mode.
-//
-//		02/03/97	JMI	Now loads GUIs and cursor images via
-//							FullPath(GAME_PATH_VD, "...") and uses temp path
-//							FullPath(GAME_PATH_HD, "...") for realms in PlayRealm().
-//							In PlayRealm(), the grip is now reset when switching from
-//							scrollbar to track target mode.
-//
-//		02/04/97	JMI	Changed LoadDib() call to Load() (which now supports
-//							loading of DIBs).
-//
-//		02/04/97	JMI	SizeUpdate() was directly accessing members of CHood.  Now
-//							calls CHood.GetWidth(),GetHeight() instead.
-//
-//		02/04/97	JMI	You can now change the game's priority level via the keys
-//							'1', '2', & '3' where '1' is the highest priority and
-//							'3' is lowest.
-//
-//		02/05/97 BRH	NewRealm now automatically creates a NavNet for the realm
-//							right after it creates a Hood.  Many objects depend on the
-//							NavNet object being in place before they are added so
-//							the editor now creates one by default.
-//
-//		02/05/97	JMI	The toggle of layers is now stimulated by the actual list-
-//							box item, rather than the "Toggle Button" which I will
-//							remove from the LAYERS.GUI after checking this in.
-//
-//		02/06/97 BRH	Checked for CBouy and CNavigationNet when deleting things
-//							in the editor.  You may not delete the last remaining
-//							NavNet.  If you delete a Bouy, it will unlink the bouy from
-//							its network first and update the lines if necessary.  If
-//							you delete a NavNet, it will delete all of its bouys.
-//
-//		02/07/97	JMI	Added use of new CGameEditThing.
-//
-//		02/12/97	JMI	Added pause feature in PlayRealm().  Also, added keys for
-//							speeding up, slowing down, and normalizing game time, but
-//							have not implemented that yet b/c it requires a change to
-//							CTime.
-//
-//		02/12/97	JMI	Temp fix until GetMaxHeight() returns *4 value (or the *4
-//							an app thing?).  Also, fixed bug where I was getting the
-//							height via the cursor's screen pos (not the cursor's world
-//							pos).
-//
-//		02/13/97	JMI	Now the editor sets the Camera's Hood.  This fixed the prob
-//							the grip was having finding the realm limits and allows us
-//							to utilize the newest scene which gets its alpha stuff from
-//							the hood passed to it by the camera.  The camera's connect-
-//							ed to the  realm bone, ... .
-//
-//		02/13/97	JMI	In the previous update, the camera's hood was being set
-//							after the load realm, but too late.  Now it's set earlier.
-//							Since before, it was never set, it was never a problem b/c
-//							the camera's hood was NULL.
-//
-//		02/13/97	JMI	On the second entrance to GameEdit(), ms_pcameraCur was
-//							already pointing at an old deleted camera.
-//							Also, I guess the camera and realm were not being delete'd
-//							in GameEdit().
-//
-//		02/14/97	JMI	SizeUpdate() now makes sure the camera's hood is up to
-//							date.
-//		02/17/97	JMI	Now checks rspGetQuitStatus().
-//
-//		02/19/97	JMI	PlayRealm() now checks for camera tracking object
-//							iteratively.
-//
-//		02/20/97	JMI	Now uses input interface for user input.
+//      01/17/97 BRH   Added CRocketMan key to the editor
+//
+//      01/21/97   JMI   Converted from rspGetKey() and rspGetMouseEvent() to
+//                     RInputEvent API (rspGetNextInputEvent() ).
+//
+//      01/21/97   JMI   Added Realm Bar GUI and Object Picker GUI.
+//                     Now open and save realm invoke file system dialogs
+//                     to browse.
+//
+//      01/22/97   JMI   Now requests that you save before doing anything that
+//                     might be detremental(sp!) to the current level (e.g., New,
+//                     Close, etc.).
+//
+//      01/22/97   JMI   PlayRealm() now saves and loads the current level in
+//                     TEMP_FILE_NAME.
+//
+//      01/22/97   JMI   The object picker list box now only adds items that are
+//                     user creatable in the editor (as indicated by
+//                     CThing::ms_aClassInfo[ID].bEditorCreatable.
+//
+//      01/22/97 MJR   Added use of realm's time object.  Also, it now uses a
+//                     separate realm object in the play loop so as to avoid any
+//                     possible interference between it and the editor's realm.
+//
+//      01/23/97   JMI   Fixed 'assing' comment because we definitely wouldn't
+//                     want the word 'assing' appearing in our code anywhere.
+//                     Who's the assinine jack ass for a dumb ass that wrote
+//                     'assing' in the first place anyway?!  What an asswipe.
+//                     Now you are only asked if you want to save before an op
+//                     that destroys the current realm if that realm contains
+//                     anything.
+//                     Now hots for individual GUIs are called independently in
+//                     the editor.
+//
+//      01/23/97   JMI   Now when you click an item in the list box, the item is
+//                     created, the EditNew() is called, and then the item can
+//                     be moved to the drop spot.
+//
+//      01/23/97   JMI   Now shows the system cursor when not placing an object.
+//
+//      01/24/97   JMI   Can now adjust display size with Numpad + and -.  Always
+//                     restores display size when exiting editor to the original
+//                     size (when entered editor).
+//                     External effects:  g_pimScreenBuf.
+//
+//      01/24/97   JMI   Now PlayRealm() also supports the adjustment of the display
+//                     area.  Also, cursor no S32er does height cursor's drag
+//                     logic unless in drop dude mode.
+//
+//      01/25/97   JMI   Added scrollbars to edit mode.
+//
+//      01/26/97   JMI   Forgot to update scrollbars in PlayRealm().
+//
+//      01/26/97   JMI   Added selection.  This required creating a root RHot for
+//                     the Hood and a child RHot for each of the other CThings.
+//
+//      01/27/97   JMI   Now you can double click an existing item to move it,
+//                     hit enter while it is selected to modify it, or hit
+//                     delete while it is selected to delete it.
+//
+//      01/27/97   JMI   Now if you delete the item with the selection and then try
+//                     to move it, it doesn't crash.  A technological breakthrough
+//                     enabled this by collapsing ms_p*Move into ms_p*Sel and
+//                     adding an ms_sMoving flag.
+//
+//      01/28/97   JMI   Now you can toggle layers on and off using the layers list-
+//                     box.
+//
+//      01/29/97   JMI   Quickly changed UI...will update cleaner later...just need
+//                     to get this to Bill so he can do cool Buoy stuff.
+//
+//      01/29/97 BRH   Added ability to link Bouys.  It draws the link between
+//                     two bouy's that you are attempting to link.  Also added
+//                     a CNavigationNet pointer to the editor to keep track
+//                     of the currently selected NavNet to which new Bouys
+//                     are added.  Will need to add a GUI item to let the user
+//                     select the 'current' NavNet when you have more than one.
+//                     Also still need to add the function to display the lines
+//                     between all bouys once the network is linked together.
+//
+//      01/30/97   JMI   Now when you open/load or new a realm, the size affected
+//                     stuff is updated via a call to SizeUpdate().
+//
+//      01/30/97 BRH   Added key 'B' as a toggle for showing the bouy lines.
+//                     Added a set of bouy lines to the editor which can be
+//                     added to when a new line is drawn or completely set
+//                     up with all bouy lines by calling UpdateNetLines.
+//                     Now I need the CThing unique ID numbers so that when
+//                     bouys are reloaded, they will know what CNavigationNet
+//                     to relink themselves to.
+//
+//      01/30/97   JMI   Now the editor assigns a realm unique ID to every item it
+//                     creates.
+//
+//      01/31/97   JMI   If CreateNewThing() failed to create a new CBuoy b/c there
+//                     was no current NavNet, it returned success.  Now it returns
+//                     failure.
+//
+//      02/02/97   JMI   If a CThing derived class has an EditHotSpot() defined, the
+//                     editor will be able to smoothly drag the thing.  If it does
+//                     not have this function, the cursor will jump when a drag
+//                     is started.
+//                     Also, made cursor aware of the height on the attribute map.
+//                     Also, made the distinction between an editor hotbox event
+//                     and another event.
+//
+//      02/03/97   JMI   Moved all input in editor loop into DoInput() and all output
+//                     in editor loop to DoOutput().  This makes it a little easier
+//                     to figure out what's going on, but DoInput() is still rather
+//                     large (mainly due to the two switch statements).
+//
+//      02/03/97   JMI   Can track a particular CThing during PlayRealm().  To track
+//                     a CThing, hold down shift and then click the thing.  There
+//                     should be a beep signifying the item was set as the tracked
+//                     thing.  Hit 'T' in PlayRealm() mode to toggle tracking mode
+//                     vs. scrollbar mode.
+//
+//      02/03/97   JMI   Now loads GUIs and cursor images via
+//                     FullPath(GAME_PATH_VD, "...") and uses temp path
+//                     FullPath(GAME_PATH_HD, "...") for realms in PlayRealm().
+//                     In PlayRealm(), the grip is now reset when switching from
+//                     scrollbar to track target mode.
+//
+//      02/04/97   JMI   Changed LoadDib() call to Load() (which now supports
+//                     loading of DIBs).
+//
+//      02/04/97   JMI   SizeUpdate() was directly accessing members of CHood.  Now
+//                     calls CHood.GetWidth(),GetHeight() instead.
+//
+//      02/04/97   JMI   You can now change the game's priority level via the keys
+//                     '1', '2', & '3' where '1' is the highest priority and
+//                     '3' is lowest.
+//
+//      02/05/97 BRH   NewRealm now automatically creates a NavNet for the realm
+//                     right after it creates a Hood.  Many objects depend on the
+//                     NavNet object being in place before they are added so
+//                     the editor now creates one by default.
+//
+//      02/05/97   JMI   The toggle of layers is now stimulated by the actual list-
+//                     box item, rather than the "Toggle Button" which I will
+//                     remove from the LAYERS.GUI after checking this in.
+//
+//      02/06/97 BRH   Checked for CBouy and CNavigationNet when deleting things
+//                     in the editor.  You may not delete the last remaining
+//                     NavNet.  If you delete a Bouy, it will unlink the bouy from
+//                     its network first and update the lines if necessary.  If
+//                     you delete a NavNet, it will delete all of its bouys.
+//
+//      02/07/97   JMI   Added use of new CGameEditThing.
+//
+//      02/12/97   JMI   Added pause feature in PlayRealm().  Also, added keys for
+//                     speeding up, slowing down, and normalizing game time, but
+//                     have not implemented that yet b/c it requires a change to
+//                     CTime.
+//
+//      02/12/97   JMI   Temp fix until GetMaxHeight() returns *4 value (or the *4
+//                     an app thing?).  Also, fixed bug where I was getting the
+//                     height via the cursor's screen pos (not the cursor's world
+//                     pos).
+//
+//      02/13/97   JMI   Now the editor sets the Camera's Hood.  This fixed the prob
+//                     the grip was having finding the realm limits and allows us
+//                     to utilize the newest scene which gets its alpha stuff from
+//                     the hood passed to it by the camera.  The camera's connect-
+//                     ed to the  realm bone, ... .
+//
+//      02/13/97   JMI   In the previous update, the camera's hood was being set
+//                     after the load realm, but too late.  Now it's set earlier.
+//                     Since before, it was never set, it was never a problem b/c
+//                     the camera's hood was NULL.
+//
+//      02/13/97   JMI   On the second entrance to GameEdit(), ms_pcameraCur was
+//                     already pointing at an old deleted camera.
+//                     Also, I guess the camera and realm were not being delete'd
+//                     in GameEdit().
+//
+//      02/14/97   JMI   SizeUpdate() now makes sure the camera's hood is up to
+//                     date.
+//      02/17/97   JMI   Now checks rspGetQuitStatus().
+//
+//      02/19/97   JMI   PlayRealm() now checks for camera tracking object
+//                     iteratively.
+//
+//      02/20/97   JMI   Now uses input interface for user input.
 //
-//		02/21/97	JMI	Now makes sure scrollbars don't have focus in PlayRealm().
-//							Also, makes all CDudes X-Rayable.
+//      02/21/97   JMI   Now makes sure scrollbars don't have focus in PlayRealm().
+//                     Also, makes all CDudes X-Rayable.
 //
-//		02/22/97	JMI	Now SetDisplayArea() only changes the display device
-//							settings if g_GameSettings.m_sUseCurrentDeviceDimensions
-//							is FALSE.
+//      02/22/97   JMI   Now SetDisplayArea() only changes the display device
+//                     settings if g_GameSettings.m_sUseCurrentDeviceDimensions
+//                     is FALSE.
 //
-//		02/22/97	JMI	Now sets working dir to levels dir when entering editor.
+//      02/22/97   JMI   Now sets working dir to levels dir when entering editor.
 //
-//		02/24/97	JMI	CloseRealm() now purges g_resmgrGame.
+//      02/24/97   JMI   CloseRealm() now purges g_resmgrGame.
 //
-//		02/25/97	JMI	CloseRealm() now also purges prealm->m_resmgr.
-//							Also, CloseRealm() now clears ms_pcameraCur's hood ptr
-//							and calls SizeUpdate().
+//      02/25/97   JMI   CloseRealm() now also purges prealm->m_resmgr.
+//                     Also, CloseRealm() now clears ms_pcameraCur's hood ptr
+//                     and calls SizeUpdate().
 //
-//		02/25/97	JMI	Resized viewable area and repositioned GUIs into non-
-//							viewable areas.
-//							Also, added SetCameraArea() function which will resize the
-//							device mode and the display area such that the camera area
-//							will be the specified size.
+//      02/25/97   JMI   Resized viewable area and repositioned GUIs into non-
+//                     viewable areas.
+//                     Also, added SetCameraArea() function which will resize the
+//                     device mode and the display area such that the camera area
+//                     will be the specified size.
 //
-//		02/28/97	JMI	Added satellite cameras.  No current way to resize them
-//							though.  That kinda sux.  But they're there.
+//      02/28/97   JMI   Added satellite cameras.  No current way to resize them
+//                     though.  That kinda sux.  But they're there.
 //
-//		03/03/97	JMI	Now cameras work in PlayRealm() mode.
-//							Also, now, on entry to GameEdit(), stores device settings
-//							and uses them in restoring the display area on exit.
-//							Previously, only the display area was restored with the
-//							device mode as returned by rspSuggestVideoMode().
+//      03/03/97   JMI   Now cameras work in PlayRealm() mode.
+//                     Also, now, on entry to GameEdit(), stores device settings
+//                     and uses them in restoring the display area on exit.
+//                     Previously, only the display area was restored with the
+//                     device mode as returned by rspSuggestVideoMode().
 //
-//		03/05/97	JMI	Dude now commits suicide when user exits PlayRealm().
-//							CreateNewThing() now uses CThing::ConstructWithID() to
-//							create new things.
+//      03/05/97   JMI   Dude now commits suicide when user exits PlayRealm().
+//                     CreateNewThing() now uses CThing::ConstructWithID() to
+//                     create new things.
 //
-//		03/06/97	JMI	PlayRealm() now sends a suicide message to the local dude
-//							instead of setting his state.
+//      03/06/97   JMI   PlayRealm() now sends a suicide message to the local dude
+//                     instead of setting his state.
 //
-//		03/06/97 BRH	Added NetLog() function for debugging NavNet links.  Prints
-//							out a text file of connected bouys.
+//      03/06/97 BRH   Added NetLog() function for debugging NavNet links.  Prints
+//                     out a text file of connected bouys.
 //
-//		03/09/97	JMI	Added GUIs bar for showing/hiding GUIs, NavNets listbox,
-//							and Map GUI.
-//							Also, CloseRealm() now clears ms_pgething.
+//      03/09/97   JMI   Added GUIs bar for showing/hiding GUIs, NavNets listbox,
+//                     and Map GUI.
+//                     Also, CloseRealm() now clears ms_pgething.
 //
-//		03/10/97	JMI	Now using correct rspBlitT scale version so map actually
-//							gets blit (but transparent for color 0 (which it should
-//							not contain)).
+//      03/10/97   JMI   Now using correct rspBlitT scale version so map actually
+//                     gets blit (but transparent for color 0 (which it should
+//                     not contain)).
 //
-//		03/10/97	JMI	Now you can click on the map to move the main camera to the
-//							clicked area.
+//      03/10/97   JMI   Now you can click on the map to move the main camera to the
+//                     clicked area.
 //
-//		03/10/97 BRH	Added a route table printout to NetLog function to verify
-//							that the routing tables are correct.
+//      03/10/97 BRH   Added a route table printout to NetLog function to verify
+//                     that the routing tables are correct.
 //
-//		03/13/97 BRH	Made a change to the route table printout.
+//      03/13/97 BRH   Made a change to the route table printout.
 //
-//		03/13/97	JMI	Now calls CDude::DrawStatus() for the local dude.
+//      03/13/97   JMI   Now calls CDude::DrawStatus() for the local dude.
 //
-//		03/17/97	JMI	Now scrolls the view if a dragged item is on or beyond an
-//							edge.
-//							Also, now cancels current drag in CloseRealm() and before
-//							calling  PlayRealm().
+//      03/17/97   JMI   Now scrolls the view if a dragged item is on or beyond an
+//                     edge.
+//                     Also, now cancels current drag in CloseRealm() and before
+//                     calling  PlayRealm().
 //
-//		03/19/97	JMI	Added flag indicating the view should not be scrolled while
-//							dragging/moving a CThing.  This is utilized when a CThing
-//							is first created from the CThing pick list so it doesn't
-//							cause immediate scrolling.  It is re-enabled as soon as the
-//							thing is dragged into the view, destroyed, or placed.
-//							Also, now the view will start scrolling within
-//							DRAG_SCROLL_BUFFER pixels of any view edge.
+//      03/19/97   JMI   Added flag indicating the view should not be scrolled while
+//                     dragging/moving a CThing.  This is utilized when a CThing
+//                     is first created from the CThing pick list so it doesn't
+//                     cause immediate scrolling.  It is re-enabled as soon as the
+//                     thing is dragged into the view, destroyed, or placed.
+//                     Also, now the view will start scrolling within
+//                     DRAG_SCROLL_BUFFER pixels of any view edge.
 //
-//		03/19/97	JMI	Switched to the new input event hotbox callback for thing
-//							hotboxes.
+//      03/19/97   JMI   Switched to the new input event hotbox callback for thing
+//                     hotboxes.
 //
-//		03/19/97 BRH	Made sure network line draw is turned off when the current
-//							realm is closed so that lines don't show up on the next
-//							realm and it doesn't crash when you quit the editor with
-//							lines turned on.
+//      03/19/97 BRH   Made sure network line draw is turned off when the current
+//                     realm is closed so that lines don't show up on the next
+//                     realm and it doesn't crash when you quit the editor with
+//                     lines turned on.
 //
-//		03/24/97	JMI	PlayRealm() now passes a ptr to the realm to GetLocalInput.
+//      03/24/97   JMI   PlayRealm() now passes a ptr to the realm to GetLocalInput.
 //
-//		03/25/97	JMI	Changed CURSOR_BASE_IMAGE_FILE, CURSOR_TIP_IMAGE_FILE, and
-//							PICK_OBJECT_FILE to 8.3 compliant names.
+//      03/25/97   JMI   Changed CURSOR_BASE_IMAGE_FILE, CURSOR_TIP_IMAGE_FILE, and
+//                     PICK_OBJECT_FILE to 8.3 compliant names.
 //
-//		03/27/97	JMI	ThingHotCall now makes sure the event it processes has not
-//							yet been used.  Also, you may no S32er drag the hood.
+//      03/27/97   JMI   ThingHotCall now makes sure the event it processes has not
+//                     yet been used.  Also, you may no S32er drag the hood.
 //
-//		03/28/97	JMI	Now the scrollbar tray and button clicks will advance more
-//							than just a few pixels.
-//							Now, if there is no current camera focus, it is set to the
-//							first CDude created.
+//      03/28/97   JMI   Now the scrollbar tray and button clicks will advance more
+//                     than just a few pixels.
+//                     Now, if there is no current camera focus, it is set to the
+//                     first CDude created.
 //
-//		03/28/97	JMI	Fixed exit button.  Also my last change made change had
-//							caused the Hood hotbox to parent itself which caused hosed
-//							behavior.  Fixed.
+//      03/28/97   JMI   Fixed exit button.  Also my last change made change had
+//                     caused the Hood hotbox to parent itself which caused hosed
+//                     behavior.  Fixed.
 //
-//		03/28/97	JMI	Now resets directory back to original when done.
+//      03/28/97   JMI   Now resets directory back to original when done.
 //
-//		04/03/97	JMI	Main dude's status is now displayed below the view (instead
-//							of on it).
+//      04/03/97   JMI   Main dude's status is now displayed below the view (instead
+//                     of on it).
 //
-//		04/04/97	JMI	ms_sbVert and ms_sbHorz are now smooth scrollers.
+//      04/04/97   JMI   ms_sbVert and ms_sbHorz are now smooth scrollers.
 //
-//		04/10/97 BRH	Updated this to work with the new multi layer attribute
-//							maps using the helper functions.
+//      04/10/97 BRH   Updated this to work with the new multi layer attribute
+//                     maps using the helper functions.
 //
-//		04/11/97	JMI	Changed GetLocalInput() to take the RInputEvent.
+//      04/11/97   JMI   Changed GetLocalInput() to take the RInputEvent.
 //
-//		04/16/97 BRH	Added an #ifdef REALM_NONSTL for testing the new
-//							non-stl lists for the CThings in the realm.  References
-//							to either method are available by changing the
-//							REALM_NONSTRL macro in realm.h
+//      04/16/97 BRH   Added an #ifdef REALM_NONSTL for testing the new
+//                     non-stl lists for the CThings in the realm.  References
+//                     to either method are available by changing the
+//                     REALM_NONSTRL macro in realm.h
 //
-//		04/17/97 BRH	Fixed a bug in the new list code where it wasn't
-//							advancing the list pointer at the end of the loop, cauing
-//							an infinite loop.
+//      04/17/97 BRH   Fixed a bug in the new list code where it wasn't
+//                     advancing the list pointer at the end of the loop, cauing
+//                     an infinite loop.
 //
-//		04/17/97 BRH	Changed call to Startup and Shutdown in realm, changed
-//							calls in this file from 1 parameter to 0 parameters.
+//      04/17/97 BRH   Changed call to Startup and Shutdown in realm, changed
+//                     calls in this file from 1 parameter to 0 parameters.
 //
-//		04/21/97	JMI	Menu is now activated by escape key.
+//      04/21/97   JMI   Menu is now activated by escape key.
 //
-//		04/21/97 BRH	Bouys are now linked by right clicking on the bouy, or
-//							on the Mac, hold down open-apple & click to connect
-//							bouy lines.  Double click on a bouy now brings up
-//							its EditModify dialog box.
+//      04/21/97 BRH   Bouys are now linked by right clicking on the bouy, or
+//                     on the Mac, hold down open-apple & click to connect
+//                     bouy lines.  Double click on a bouy now brings up
+//                     its EditModify dialog box.
 //
-//		04/22/97	JMI	No S32er uses chdir() to get the open dialog into the
-//							correct directory.  Now we simply default ms_szFileName
-//							to the path of the dir we want to save under.
+//      04/22/97   JMI   No S32er uses chdir() to get the open dialog into the
+//                     correct directory.  Now we simply default ms_szFileName
+//                     to the path of the dir we want to save under.
 //
-//		04/22/97	JMI	Removed #include <direct.h>.
+//      04/22/97   JMI   Removed #include <direct.h>.
 //
-//		04/29/97	JMI	Added key motivated new item placement.
+//      04/29/97   JMI   Added key motivated new item placement.
 //
-//		05/01/97	JMI	Added ability to create regions to be associated with
-//							pylons.  These regions are saved with the .RLM with the
-//							same name except the .RLM is changed to .RGN.
-//							To edit a pylon's region, double right click it, use left
-//							and right mouse buttons to paint, Num pad + and - to
-//							control brush size, and Escape to end trigger region paint
-//							mode.
-//							Also, added focus next and prev.
-//							Also, made enlarge/reduce screen during PlayRealm() update
-//							the CDude's status area.
+//      05/01/97   JMI   Added ability to create regions to be associated with
+//                     pylons.  These regions are saved with the .RLM with the
+//                     same name except the .RLM is changed to .RGN.
+//                     To edit a pylon's region, double right click it, use left
+//                     and right mouse buttons to paint, Num pad + and - to
+//                     control brush size, and Escape to end trigger region paint
+//                     mode.
+//                     Also, added focus next and prev.
+//                     Also, made enlarge/reduce screen during PlayRealm() update
+//                     the CDude's status area.
 //
-//		05/02/97	JMI	Now, while editing a pylon's trigger region, it is drawn
-//							with a game sprite so we can have alpha so you can see
-//							what you're drawing on.
+//      05/02/97   JMI   Now, while editing a pylon's trigger region, it is drawn
+//                     with a game sprite so we can have alpha so you can see
+//                     what you're drawing on.
 //
-//		05/02/97	JMI	Changed number of pylons trigger regions to 256 b/c I didn't
-//							want to bother adding 1 in all the special locations.
+//      05/02/97   JMI   Changed number of pylons trigger regions to 256 b/c I didn't
+//                     want to bother adding 1 in all the special locations.
 //
-//		05/04/97 BRH	Removed #ifdef sections referring to STL lists.
+//      05/04/97 BRH   Removed #ifdef sections referring to STL lists.
 //
-//		05/09/97	JMI	Assigned pylon instance IDs into ms_argns[].u16InstanceId
-//							so the multigrid for pylon triggers can contain a mapping
-//							from pylon ID to instance ID.
+//      05/09/97   JMI   Assigned pylon instance IDs into ms_argns[].u16InstanceId
+//                     so the multigrid for pylon triggers can contain a mapping
+//                     from pylon ID to instance ID.
 //
-//		05/12/97 JRD	Added the creation of the Trigger Attribute map into the
-//							save realm process.
+//      05/12/97 JRD   Added the creation of the Trigger Attribute map into the
+//                     save realm process.
 //
-//		05/15/97	JMI	Added a common SaveRealm(char*) that does all the stuff
-//							necessary to save the realm and triggers so that the
-//							PlayRealm() gets everything done that would happen normally.
+//      05/15/97   JMI   Added a common SaveRealm(char*) that does all the stuff
+//                     necessary to save the realm and triggers so that the
+//                     PlayRealm() gets everything done that would happen normally.
 //
-//		05/23/97 BRH	Added support for NavNets in the editor's list box.
-//							Added code for button callbacks to switch the current
-//							Nav Net, and to remove them from the list when they are
-//							deleted.
+//      05/23/97 BRH   Added support for NavNets in the editor's list box.
+//                     Added code for button callbacks to switch the current
+//                     Nav Net, and to remove them from the list when they are
+//                     deleted.
 //
-//		05/25/97	JMI	Holding down CONTROL, ALT, and/or SHIFT provides different
-//							variations on the amount pylon regions are moved by arrow
-//							keys.
+//      05/25/97   JMI   Holding down CONTROL, ALT, and/or SHIFT provides different
+//                     variations on the amount pylon regions are moved by arrow
+//                     keys.
 //
-//		05/26/97	JMI	If you hold down CONTROL while hitting DEL, the editor will
-//							delete all objects of the type of the currently selected
-//							objects.
+//      05/26/97   JMI   If you hold down CONTROL while hitting DEL, the editor will
+//                     delete all objects of the type of the currently selected
+//                     objects.
 //
-//		05/29/97	JMI	Removed references to m_pRealm->m_pAttribMap which no S32er
-//							exists.
+//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no S32er
+//                     exists.
 //
-//		06/07/97	JMI	Now, in PlayRealm(), if no dude exists, we attempt to use
-//							CWarp::WarpInAnywhere() to create one.  This will fail, if
-//							there are no warps in the specified realm.
-//							Changed message for CTRL-DEL group deletes as per
-//							humiliation.
-//							Added realm status info to PlayRealm().
+//      06/07/97   JMI   Now, in PlayRealm(), if no dude exists, we attempt to use
+//                     CWarp::WarpInAnywhere() to create one.  This will fail, if
+//                     there are no warps in the specified realm.
+//                     Changed message for CTRL-DEL group deletes as per
+//                     humiliation.
+//                     Added realm status info to PlayRealm().
 //
-//		06/09/97	JMI	Now generates a unique temp filename for PlayRealm() that
-//							is generated at least in part by the current OS.
+//      06/09/97   JMI   Now generates a unique temp filename for PlayRealm() that
+//                     is generated at least in part by the current OS.
 //
-//		06/11/97 MJR	If mouse is enabled (via InputSettings) then the mouse
-//							cursor is now hidden and then restored while playing
-//							the realm.
+//      06/11/97 MJR   If mouse is enabled (via InputSettings) then the mouse
+//                     cursor is now hidden and then restored while playing
+//                     the realm.
 //
-//		06/12/97	JMI	Commented out use of rspSetDoSystemMode() in PlayRealm().
+//      06/12/97   JMI   Commented out use of rspSetDoSystemMode() in PlayRealm().
 //
-//		06/16/97	JMI	Now passes destination buffer in StartMenu() call.
+//      06/16/97   JMI   Now passes destination buffer in StartMenu() call.
 //
-//		06/16/97	JMI	Added copy/paste.
+//      06/16/97   JMI   Added copy/paste.
 //
-//		06/16/97	JMI	PlayRealm() now calls the realm's hood's SetPalette().
-//							It also clears the key status array.
+//      06/16/97   JMI   PlayRealm() now calls the realm's hood's SetPalette().
+//                     It also clears the key status array.
 //
-//		06/17/97	JMI	Converted all occurrences of rand() to GetRand() and
-//							srand() to SeedRand().
+//      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
+//                     srand() to SeedRand().
 //
-//		06/26/97	JMI	Now enables RMix's autopump feature during the PlayRealm()
-//							and disables it before exiting.
+//      06/26/97   JMI   Now enables RMix's autopump feature during the PlayRealm()
+//                     and disables it before exiting.
 //
-//		06/26/97	JMI	DrawCursor() now uses the realm's Map3Dto2D().
+//      06/26/97   JMI   DrawCursor() now uses the realm's Map3Dto2D().
 //
-//		06/26/97	JMI	Now editor's cursor is fully 3D and there are two functions
-//							for mapping between screen & realm coords
-//							(MapScreen2Realm() and Maprealm2Screen() ).
+//      06/26/97   JMI   Now editor's cursor is fully 3D and there are two functions
+//                     for mapping between screen & realm coords
+//                     (MapScreen2Realm() and Maprealm2Screen() ).
 //
-//		06/30/97	JMI	Converted to use new m_pLayers member of CScene (was using
-//							m_layers).
+//      06/30/97   JMI   Converted to use new m_pLayers member of CScene (was using
+//                     m_layers).
 //
-//					MJR	Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
+//               MJR   Replaced SAFE_GUI_REF with new GuiItem.h-defined macro.
 //
-//					JMI	Now all bouy lines are mapped through Maprealm2Screen()
-//							before being drawn.
+//               JMI   Now all bouy lines are mapped through Maprealm2Screen()
+//                     before being drawn.
 //
-//		07/03/97	JMI	Converted calls to rspOpen/SaveBox() to new parm
-//							conventions.
+//      07/03/97   JMI   Converted calls to rspOpen/SaveBox() to new parm
+//                     conventions.
 //
-//		07/05/97	JMI	Now you can clear the current camera focus thing by
-//							SHIFT-Left-clicking on the hood.
+//      07/05/97   JMI   Now you can clear the current camera focus thing by
+//                     SHIFT-Left-clicking on the hood.
 //
-//		07/05/97 MJR	Changed to RSP_BLACK_INDEX instead of 0.
+//      07/05/97 MJR   Changed to RSP_BLACK_INDEX instead of 0.
 //
-//		07/07/97	JMI	Added extremely CHEEZY thing that checks for an active
-//							input settings menu and, if so, calls EditInputSettings().
+//      07/07/97   JMI   Added extremely CHEEZY thing that checks for an active
+//                     input settings menu and, if so, calls EditInputSettings().
 //
-//		07/07/97	JMI	Now SetCameraArea() sets the display area based on user
-//							settings from g_GameSettings.  Also, SetDisplayArea()
-//							always updates these settings when the user changes the
-//							display area.
+//      07/07/97   JMI   Now SetCameraArea() sets the display area based on user
+//                     settings from g_GameSettings.  Also, SetDisplayArea()
+//                     always updates these settings when the user changes the
+//                     display area.
 //
-//		07/07/97 BRH	Added processing for the properties button on the Realm
-//							bar which calls the realm's EditModify function to put
-//							up its properties dialog box for the realm.
+//      07/07/97 BRH   Added processing for the properties button on the Realm
+//                     bar which calls the realm's EditModify function to put
+//                     up its properties dialog box for the realm.
 //
-//					MJR	Added regular plus and minus in addition to numpad versions
-//							for changing display size.
+//               MJR   Added regular plus and minus in addition to numpad versions
+//                     for changing display size.
 //
-//		07/10/97	JMI	Now you cannot select an item in the 'PickObj' list when
-//							you are dragging an item.
+//      07/10/97   JMI   Now you cannot select an item in the 'PickObj' list when
+//                     you are dragging an item.
 //
-//		07/14/97	JMI	Now there is a place to put exceptions to what can be
-//							copied (via Copy/Paste).  Currently, you cannot copy
-//							Bouys, Pylons, NavNets, and Hoods.
+//      07/14/97   JMI   Now there is a place to put exceptions to what can be
+//                     copied (via Copy/Paste).  Currently, you cannot copy
+//                     Bouys, Pylons, NavNets, and Hoods.
 //
-//		07/15/97	JMI	Now you can display the attributes with a green mist over
-//							the hood by checking boxes in 'View Attributes'.  You can
-//							also use NUMPAD_MULTIPLY and NUMPAD_DIVIDE to vary the
-//							opacity of this mist.
+//      07/15/97   JMI   Now you can display the attributes with a green mist over
+//                     the hood by checking boxes in 'View Attributes'.  You can
+//                     also use NUMPAD_MULTIPLY and NUMPAD_DIVIDE to vary the
+//                     opacity of this mist.
 //
-//		07/16/97	JMI	Can now take snap shots from editor.  Also, F3 does auto
-//							X ray.
+//      07/16/97   JMI   Can now take snap shots from editor.  Also, F3 does auto
+//                     X ray.
 //
-//		07/18/97	JMI	Now updates the sound location with the camera target.
+//      07/18/97   JMI   Now updates the sound location with the camera target.
 //
-//		07/18/97	JMI	Got rid of bogus immitation PlaySample functions.
-//							Now there is one PlaySample() function.  Also, you now
-//							MUST specify a category and you don't have to specify a
-//							SoundInstance ptr to specify a volume.
+//      07/18/97   JMI   Got rid of bogus immitation PlaySample functions.
+//                     Now there is one PlaySample() function.  Also, you now
+//                     MUST specify a category and you don't have to specify a
+//                     SoundInstance ptr to specify a volume.
 //
-//		07/19/97	JMI	Now calls InitLocalInput() in PlayRealm() just prior to
-//							starting.
+//      07/19/97   JMI   Now calls InitLocalInput() in PlayRealm() just prior to
+//                     starting.
 //
-//		07/20/97	JMI	Now uses back/foreground callbacks to suspend/resume the
-//							realm (PlayRealm() only), adjust CPU hoggage, and make
-//							sure the cursor is visible when in the background.
+//      07/20/97   JMI   Now uses back/foreground callbacks to suspend/resume the
+//                     realm (PlayRealm() only), adjust CPU hoggage, and make
+//                     sure the cursor is visible when in the background.
 //
-//		07/20/97	JMI	DelThing() was dereferencing the ptr to the object to be
-//							deleted after it was cleared by the special cases that
-//							don't allow deletion.  Fixed.
+//      07/20/97   JMI   DelThing() was dereferencing the ptr to the object to be
+//                     deleted after it was cleared by the special cases that
+//                     don't allow deletion.  Fixed.
 //
-//		07/20/97 MJR	Added conditional compile to disable save & play.
-//							Added use of RFile callback during load to call Update().
+//      07/20/97 MJR   Added conditional compile to disable save & play.
+//                     Added use of RFile callback during load to call Update().
 //
-//		07/20/97	JMI	Fixed syntax error produced when we added the above
-//							conditional compile option.
+//      07/20/97   JMI   Fixed syntax error produced when we added the above
+//                     conditional compile option.
 //
-//		07/21/97	JMI	PlayRealm() now sets the input mode to live via
-//							SetInputMode().
+//      07/21/97   JMI   PlayRealm() now sets the input mode to live via
+//                     SetInputMode().
 //
-//		07/22/97	JMI	Now shows the info for the currently selected thing.
+//      07/22/97   JMI   Now shows the info for the currently selected thing.
 //
-//		07/22/97	JMI	Now PlayRealm() displays the "display info" (FPS, etc.).
+//      07/22/97   JMI   Now PlayRealm() displays the "display info" (FPS, etc.).
 //
-//		07/23/97	JMI	Changed EDIT_KEY_TRACKING_TOGGLE to CONTROL T (was T).
+//      07/23/97   JMI   Changed EDIT_KEY_TRACKING_TOGGLE to CONTROL T (was T).
 //
-//		07/25/97 BRH	Fixed problem of last bouy link causing the editor
-//							to crash when the highlight was left active.  Also fixed
-//							bug that crashed the editor if you hit space bar before
-//							loading a hood.
+//      07/25/97 BRH   Fixed problem of last bouy link causing the editor
+//                     to crash when the highlight was left active.  Also fixed
+//                     bug that crashed the editor if you hit space bar before
+//                     loading a hood.
 //
-//		07/25/97 MJR	Made separate function to get temp file names and added
-//							mac-specific version of that code.
-//							Also added message box if there's an error playing the
-//							realm.
+//      07/25/97 MJR   Made separate function to get temp file names and added
+//                     mac-specific version of that code.
+//                     Also added message box if there's an error playing the
+//                     realm.
 //
-//		07/27/97	JMI	Now maps pylon trigger regions' initial positions from 3D
-//							to 2D viewing plane.
-//							Also, added '=' as another option for enlarging the display
-//							since most games don't actually require you to hit SHIFT to
-//							get the actual '+'.
-//							Also, converted movement keys for pylon trigger regions to
-//							use the key status array (instead of
-//							rspGetNextInputEvent() ).
-//							Also, CTRL, ALT, and SHIFT speed ups for movement now speed
-//							up draw block sizing.
+//      07/27/97   JMI   Now maps pylon trigger regions' initial positions from 3D
+//                     to 2D viewing plane.
+//                     Also, added '=' as another option for enlarging the display
+//                     since most games don't actually require you to hit SHIFT to
+//                     get the actual '+'.
+//                     Also, converted movement keys for pylon trigger regions to
+//                     use the key status array (instead of
+//                     rspGetNextInputEvent() ).
+//                     Also, CTRL, ALT, and SHIFT speed ups for movement now speed
+//                     up draw block sizing.
 //
-//		07/30/97 BRH	Changed the toggle bouy key to turn off the bouys in
-//							addition to the bouy lines.
+//      07/30/97 BRH   Changed the toggle bouy key to turn off the bouys in
+//                     addition to the bouy lines.
 //
-//		07/31/97	JMI	Now allows you to turn off clipping to the realm edges
-//							via the '?' key so you can scroll off the world looking
-//							for lost souls or whatever.
-//							Also, added realm statistics activated by 'I' key in both
-//							edit and play modes.
+//      07/31/97   JMI   Now allows you to turn off clipping to the realm edges
+//                     via the '?' key so you can scroll off the world looking
+//                     for lost souls or whatever.
+//                     Also, added realm statistics activated by 'I' key in both
+//                     edit and play modes.
 //
-//		07/31/97 BRH	Made the hots on the bouys inactive when they are hidden.
+//      07/31/97 BRH   Made the hots on the bouys inactive when they are hidden.
 //
-//		07/31/97	JMI	Now shows the cursor, if hidden, in ShowRealmStatistics()
-//							and restores its show level when done.  Also, clears inputs
-//							before returning.
-//							Also, PlayRealm() Suspend()s the realm before calling
-//							ShowRealmStatistics() and Resume()s it afterward.
+//      07/31/97   JMI   Now shows the cursor, if hidden, in ShowRealmStatistics()
+//                     and restores its show level when done.  Also, clears inputs
+//                     before returning.
+//                     Also, PlayRealm() Suspend()s the realm before calling
+//                     ShowRealmStatistics() and Resume()s it afterward.
 //
-//		07/31/97	JMI	Changed EDIT_KEY_REALM_STATISTICS to F11 (was 'I') so it
-//							wouldn't interfere with typing cheats.
+//      07/31/97   JMI   Changed EDIT_KEY_REALM_STATISTICS to F11 (was 'I') so it
+//                     wouldn't interfere with typing cheats.
 //
-//		08/01/97	JMI	Changed %.2f sprintf format specifiers to %g.  It's not as
-//							pretty but it's more compact.  The problem if the %f is it
-//							will put hundreds of 0's after the decimal point if it
-//							needs to display a very small number.
+//      08/01/97   JMI   Changed %.2f sprintf format specifiers to %g.  It's not as
+//                     pretty but it's more compact.  The problem if the %f is it
+//                     will put hundreds of 0's after the decimal point if it
+//                     needs to display a very small number.
 //
-//		08/02/97	JMI	Now makes sure the CBouys' show/hidden status is in synch
-//							with the ms_bDrawNetwork flag (the flag defaults to false
-//							and the bouys default to shown).
-//							Also, now does not actiavte bouys' hots when loading a
-//							level while ms_bDrawNetwork is false.
-//							Also, if a new bouy is created while ms_bDrawNetwork is
-//							false, its hot is initially inactive.
+//      08/02/97   JMI   Now makes sure the CBouys' show/hidden status is in synch
+//                     with the ms_bDrawNetwork flag (the flag defaults to false
+//                     and the bouys default to shown).
+//                     Also, now does not actiavte bouys' hots when loading a
+//                     level while ms_bDrawNetwork is false.
+//                     Also, if a new bouy is created while ms_bDrawNetwork is
+//                     false, its hot is initially inactive.
 //
-//		08/05/97 BRH	Defaulted the bouy network to ON.
+//      08/05/97 BRH   Defaulted the bouy network to ON.
 //
-//		08/06/97	JMI	Changed instances of InitLocalInput() to ClearLocalInput().
+//      08/06/97   JMI   Changed instances of InitLocalInput() to ClearLocalInput().
 //
-//		08/07/97	JMI	Now PlayRealm() and GameEdit() set the appropriate realm
-//							flags so things can know what we're doing.
+//      08/07/97   JMI   Now PlayRealm() and GameEdit() set the appropriate realm
+//                     flags so things can know what we're doing.
 //
-//		08/08/97 MJR	Moved background/foreground callbacks to game.cpp.
+//      08/08/97 MJR   Moved background/foreground callbacks to game.cpp.
 //
-//		08/08/97 BRH	Fixed display of NavNet names in the listbox after loading,
-//							also clears them on CloseRealm.
+//      08/08/97 BRH   Fixed display of NavNet names in the listbox after loading,
+//                     also clears them on CloseRealm.
 //
-//		08/09/97	JMI	Now shows wait cursor during CRealm::Load() calls.
+//      08/09/97   JMI   Now shows wait cursor during CRealm::Load() calls.
 //
-//		08/09/97	JMI	Added some pretty UNdeluxe, ugly, not-too-useful load/save
-//							progress feedback.
+//      08/09/97   JMI   Added some pretty UNdeluxe, ugly, not-too-useful load/save
+//                     progress feedback.
 //
-//		08/10/97	JMI	Now allows ALT-ENTER to function as EditModify() as well as
-//							the original ENTER.
+//      08/10/97   JMI   Now allows ALT-ENTER to function as EditModify() as well as
+//                     the original ENTER.
 //
-//		08/10/97	JMI	Removed unreferenced local var u32ColorIndex.
+//      08/10/97   JMI   Removed unreferenced local var u32ColorIndex.
 //
-//		08/12/97	JMI	No S32er sets the realm's progress callback.
-//							Also, now passes input events to GetLocalInput() which
-//							GetLocalInput() now uses for finding cheat key combos.
+//      08/12/97   JMI   No S32er sets the realm's progress callback.
+//                     Also, now passes input events to GetLocalInput() which
+//                     GetLocalInput() now uses for finding cheat key combos.
 //
-//		08/13/97	JMI	No S32er attempts to show the attribute map when there
-//							is no hood.
+//      08/13/97   JMI   No S32er attempts to show the attribute map when there
+//                     is no hood.
 //
-//		08/14/97	JMI	Now you can select a thing from the realm stats list to
-//							be selected by the editor in 'edit mode' (not edit play
-//							mode which could be done later using IDs) which would be
-//							cool.
+//      08/14/97   JMI   Now you can select a thing from the realm stats list to
+//                     be selected by the editor in 'edit mode' (not edit play
+//                     mode which could be done later using IDs) which would be
+//                     cool.
 //
-//		08/16/97 BRH	Added the feature that deletes all but the pylons, bouys,
-//							soundthings and sound relays on a level so that it is
-//							easy to strip a level down to a template.  Also fixed a
-//							problem with left over bouy lines if you had a level
-//							showing bouys and then started a new level, the lines
-//							would still be showing on that new level.  Now it deletes
-//							the bouy lines when a new level is started.
+//      08/16/97 BRH   Added the feature that deletes all but the pylons, bouys,
+//                     soundthings and sound relays on a level so that it is
+//                     easy to strip a level down to a template.  Also fixed a
+//                     problem with left over bouy lines if you had a level
+//                     showing bouys and then started a new level, the lines
+//                     would still be showing on that new level.  Now it deletes
+//                     the bouy lines when a new level is started.
 //
-//		08/17/97	JMI	Now unlocks the composite buffer before a video mode change
-//							and relocks it again after a video mode change.  This
-//							occurred in two spots.
+//      08/17/97   JMI   Now unlocks the composite buffer before a video mode change
+//                     and relocks it again after a video mode change.  This
+//                     occurred in two spots.
 //
-//					JMI	Now hides the mouse cursor while the menu is up.
+//               JMI   Now hides the mouse cursor while the menu is up.
 //
-//					JMI	Now ignores all input when in a menu.
+//               JMI   Now ignores all input when in a menu.
 //
-//					JMI	Also, disables postal organ option from within the editor.
+//               JMI   Also, disables postal organ option from within the editor.
 //
-//		08/21/97	JMI	PlayRealm() now sets the difficulty to the global settings
-//							difficulty.
+//      08/21/97   JMI   PlayRealm() now sets the difficulty to the global settings
+//                     difficulty.
 //
-//		08/21/97	JMI	Changed call to Update() to UpdateSystem() and occurrences
-//							of rspUpdateDisplay() to UpdateDisplay().
+//      08/21/97   JMI   Changed call to Update() to UpdateSystem() and occurrences
+//                     of rspUpdateDisplay() to UpdateDisplay().
 //
-//		08/22/97	JMI	Changed occurrences of UpdateDisplay() back to
-//							rspUpdateDisplay().  Now that we are using the lock
-//							functions correctly, we don't need them.
-//							Also, removed rspLockBuffer() and rspUnlockBuffer() that
-//							were used to encapsulate the entire app in a lock.
-//							Incorporated correct usage of rspLock/UnlockBuffer().
+//      08/22/97   JMI   Changed occurrences of UpdateDisplay() back to
+//                     rspUpdateDisplay().  Now that we are using the lock
+//                     functions correctly, we don't need them.
+//                     Also, removed rspLockBuffer() and rspUnlockBuffer() that
+//                     were used to encapsulate the entire app in a lock.
+//                     Incorporated correct usage of rspLock/UnlockBuffer().
 //
-//		08/23/97	JMI	Now does not save the .rgns when in PlayRealm().
+//      08/23/97   JMI   Now does not save the .rgns when in PlayRealm().
 //
-//		08/25/97	JMI	Made the dude show up with the user selected texture.
+//      08/25/97   JMI   Made the dude show up with the user selected texture.
 //
-//		08/27/97	JMI	Changed file counter messages to be very short (no file
-//							name) and be in the upper left corner.
+//      08/27/97   JMI   Changed file counter messages to be very short (no file
+//                     name) and be in the upper left corner.
 //
-//		08/27/97	JMI	Now sets the editor GUIs font back to the editor's pref
-//							after ending a menu b/c the menu uses the global RGuiItem
-//							RPrint too.
+//      08/27/97   JMI   Now sets the editor GUIs font back to the editor's pref
+//                     after ending a menu b/c the menu uses the global RGuiItem
+//                     RPrint too.
 //
-//		08/27/97	JMI	Set video mode was being called while the composite buffer
-//							was locked which, perhaps, should not be allowed.  Fixed.
+//      08/27/97   JMI   Set video mode was being called while the composite buffer
+//                     was locked which, perhaps, should not be allowed.  Fixed.
 //
-//		08/30/97	JMI	Now, if a warp is selected when Play is chosen, PlayRealm()
-//							will use that warp.  Also, tried to make a generic
-//							mechanism for PlayRealm() to utilize the current selection
-//							in choosing among multiple things.
+//      08/30/97   JMI   Now, if a warp is selected when Play is chosen, PlayRealm()
+//                     will use that warp.  Also, tried to make a generic
+//                     mechanism for PlayRealm() to utilize the current selection
+//                     in choosing among multiple things.
 //
-//		09/04/97	JMI	If the quit status was non zero, it wasn't calling
-//							CloseRealm() before exiting.
+//      09/04/97   JMI   If the quit status was non zero, it wasn't calling
+//                     CloseRealm() before exiting.
 //
-//		09/12/97 MJR	Now the entire file doesn't compile when the editor is
-//							disabled.
+//      09/12/97 MJR   Now the entire file doesn't compile when the editor is
+//                     disabled.
 //
-//		10/15/97	JMI	Now LoadRealm() converts the system path returned from
-//							rspOpenBox() to a RSPiX path before passing it to
-//							CRealm::Load() which then converts it back to system.  Even
-//							though it was working without this change on the PC, it did
-//							not work on the Mac.
+//      10/15/97   JMI   Now LoadRealm() converts the system path returned from
+//                     rspOpenBox() to a RSPiX path before passing it to
+//                     CRealm::Load() which then converts it back to system.  Even
+//                     though it was working without this change on the PC, it did
+//                     not work on the Mac.
 //
-//		10/15/97	JMI	Applied above change to PlayRealm() as well.
+//      10/15/97   JMI   Applied above change to PlayRealm() as well.
 //
-//		12/02/97	JMI	Now uses gsi.sAlwaysSetHWMode on Win32 platforms to avoid
-//							flicker when changing display area without changing video
-//							hardware settings.
+//      12/02/97   JMI   Now uses gsi.sAlwaysSetHWMode on Win32 platforms to avoid
+//                     flicker when changing display area without changing video
+//                     hardware settings.
 //
-//		10/03/99	JMI	Fixed pasto in RealmOpProgress() where buffer was unlocked
-//							twice rather than being locked and unlocked.
+//      10/03/99   JMI   Fixed pasto in RealmOpProgress() where buffer was unlocked
+//                     twice rather than being locked and unlocked.
 //
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -747,293 +747,293 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define EDIT_KEY_LOADREALM		'L'
-#define EDIT_KEY_OPENREALM		'O'
-#define EDIT_KEY_SAVEREALM		'S'
-#define EDIT_KEY_NEWREALM		'N'
-#define EDIT_KEY_TOGGLEBOUY	'B'
-#define EDIT_KEY_PICKOBJECT1	'1'
-#define EDIT_KEY_PICKOBJECT2	'2'
-#define EDIT_KEY_PICKOBJECT3	'3'
-#define EDIT_KEY_PICKOBJECT4	'4'
-#define EDIT_KEY_PICKOBJECT5	'5'
-#define EDIT_KEY_PICKOBJECT6	'6'
-#define EDIT_KEY_EXIT			27
-#define EDIT_KEY_MENU			27
-#define EDIT_KEY_CANCEL			27
-#define EDIT_KEY_PLAY			'P'
-#define EDIT_KEY_SCROLL_L		RSP_GK_LEFT
-#define EDIT_KEY_SCROLL_R		RSP_GK_RIGHT
-#define EDIT_KEY_SCROLL_U		RSP_GK_UP
-#define EDIT_KEY_SCROLL_D		RSP_GK_DOWN
-#define EDIT_KEY_ENDPLAY		27
+#define EDIT_KEY_LOADREALM      'L'
+#define EDIT_KEY_OPENREALM      'O'
+#define EDIT_KEY_SAVEREALM      'S'
+#define EDIT_KEY_NEWREALM      'N'
+#define EDIT_KEY_TOGGLEBOUY   'B'
+#define EDIT_KEY_PICKOBJECT1   '1'
+#define EDIT_KEY_PICKOBJECT2   '2'
+#define EDIT_KEY_PICKOBJECT3   '3'
+#define EDIT_KEY_PICKOBJECT4   '4'
+#define EDIT_KEY_PICKOBJECT5   '5'
+#define EDIT_KEY_PICKOBJECT6   '6'
+#define EDIT_KEY_EXIT         27
+#define EDIT_KEY_MENU         27
+#define EDIT_KEY_CANCEL         27
+#define EDIT_KEY_PLAY         'P'
+#define EDIT_KEY_SCROLL_L      RSP_GK_LEFT
+#define EDIT_KEY_SCROLL_R      RSP_GK_RIGHT
+#define EDIT_KEY_SCROLL_U      RSP_GK_UP
+#define EDIT_KEY_SCROLL_D      RSP_GK_DOWN
+#define EDIT_KEY_ENDPLAY      27
 
-#define EDIT_KEY_PAUSE			RSP_GK_PAUSE
-#define EDIT_KEY_SPEED_UP		RSP_GK_NUMPAD_ASTERISK
-#define EDIT_KEY_SPEED_DOWN	RSP_GK_NUMPAD_DIVIDE
-#define EDIT_KEY_SPEED_NORMAL	RSP_GK_NUMPAD_DECIMAL
+#define EDIT_KEY_PAUSE         RSP_GK_PAUSE
+#define EDIT_KEY_SPEED_UP      RSP_GK_NUMPAD_ASTERISK
+#define EDIT_KEY_SPEED_DOWN   RSP_GK_NUMPAD_DIVIDE
+#define EDIT_KEY_SPEED_NORMAL   RSP_GK_NUMPAD_DECIMAL
 
-#define EDIT_KEY_MODIFY1		'\r'
-#define EDIT_KEY_MODIFY2		('\r' | RSP_GKF_ALT)
-#define EDIT_KEY_DELETE			RSP_GK_DELETE
-#define EDIT_KEY_DELETE_GROUP	(RSP_GK_DELETE | RSP_GKF_CONTROL)
-#define EDIT_KEY_DELETE_MOST	(RSP_GKF_CONTROL | 'D')
+#define EDIT_KEY_MODIFY1      '\r'
+#define EDIT_KEY_MODIFY2      ('\r' | RSP_GKF_ALT)
+#define EDIT_KEY_DELETE         RSP_GK_DELETE
+#define EDIT_KEY_DELETE_GROUP   (RSP_GK_DELETE | RSP_GKF_CONTROL)
+#define EDIT_KEY_DELETE_MOST   (RSP_GKF_CONTROL | 'D')
 
-#define EDIT_KEY_ENLARGE_DISPLAY1	RSP_GK_NUMPAD_PLUS
-#define EDIT_KEY_ENLARGE_DISPLAY2	'+'
-#define EDIT_KEY_ENLARGE_DISPLAY3	'='
-#define EDIT_KEY_REDUCE_DISPLAY1		RSP_GK_NUMPAD_MINUS
-#define EDIT_KEY_REDUCE_DISPLAY2		'-'
+#define EDIT_KEY_ENLARGE_DISPLAY1   RSP_GK_NUMPAD_PLUS
+#define EDIT_KEY_ENLARGE_DISPLAY2   '+'
+#define EDIT_KEY_ENLARGE_DISPLAY3   '='
+#define EDIT_KEY_REDUCE_DISPLAY1      RSP_GK_NUMPAD_MINUS
+#define EDIT_KEY_REDUCE_DISPLAY2      '-'
 
-#define EDIT_KEY_INCREASE_OPACITY	RSP_GK_NUMPAD_ASTERISK
-#define EDIT_KEY_DECREASE_OPACITY	RSP_GK_NUMPAD_DIVIDE
+#define EDIT_KEY_INCREASE_OPACITY   RSP_GK_NUMPAD_ASTERISK
+#define EDIT_KEY_DECREASE_OPACITY   RSP_GK_NUMPAD_DIVIDE
 
-#define EDIT_KEY_CAMERA_TRACKING	(RSP_GKF_CONTROL | 'T')
+#define EDIT_KEY_CAMERA_TRACKING   (RSP_GKF_CONTROL | 'T')
 
-#define EDIT_KEY_SENDTOBACK		RSP_SK_CONTROL
-#define EDIT_KEY_SETCAMERATRACK	RSP_SK_SHIFT
+#define EDIT_KEY_SENDTOBACK      RSP_SK_CONTROL
+#define EDIT_KEY_SETCAMERATRACK   RSP_SK_SHIFT
 
-#define EDIT_KEY_NEWITEM			' '
+#define EDIT_KEY_NEWITEM         ' '
 
-#define EDIT_KEY_NEXTITEM			'\t'
-#define EDIT_KEY_PREVITEM			(RSP_GKF_SHIFT | '\t')
+#define EDIT_KEY_NEXTITEM         '\t'
+#define EDIT_KEY_PREVITEM         (RSP_GKF_SHIFT | '\t')
 
-#define EDIT_KEY_COPY				(RSP_GKF_CONTROL | 'C')
-#define EDIT_KEY_CUT					(RSP_GKF_CONTROL | 'X')
-#define EDIT_KEY_PASTE				(RSP_GKF_CONTROL | 'V')
+#define EDIT_KEY_COPY            (RSP_GKF_CONTROL | 'C')
+#define EDIT_KEY_CUT               (RSP_GKF_CONTROL | 'X')
+#define EDIT_KEY_PASTE            (RSP_GKF_CONTROL | 'V')
 
-#define EDIT_KEY_DOS_COPY			(RSP_GKF_CONTROL | RSP_GK_INSERT)
-#define EDIT_KEY_DOS_CUT			(RSP_GKF_SHIFT | RSP_GK_DELETE)
-#define EDIT_KEY_DOS_PASTE			(RSP_GKF_SHIFT | RSP_GK_INSERT)
+#define EDIT_KEY_DOS_COPY         (RSP_GKF_CONTROL | RSP_GK_INSERT)
+#define EDIT_KEY_DOS_CUT         (RSP_GKF_SHIFT | RSP_GK_DELETE)
+#define EDIT_KEY_DOS_PASTE         (RSP_GKF_SHIFT | RSP_GK_INSERT)
 
-#define EDIT_KEY_TOGGLE_DISP_INFO	RSP_GK_F4
-#define EDIT_KEY_SHOW_MISSION			RSP_GK_F5
+#define EDIT_KEY_TOGGLE_DISP_INFO   RSP_GK_F4
+#define EDIT_KEY_SHOW_MISSION         RSP_GK_F5
 
-#define EDIT_KEY_OVERSHOOT_EDGES1	(RSP_GKF_SHIFT | '?')
-#define EDIT_KEY_OVERSHOOT_EDGES2	('?')
+#define EDIT_KEY_OVERSHOOT_EDGES1   (RSP_GKF_SHIFT | '?')
+#define EDIT_KEY_OVERSHOOT_EDGES2   ('?')
 
-#define EDIT_KEY_REALM_STATISTICS	(RSP_GK_F11)
+#define EDIT_KEY_REALM_STATISTICS   (RSP_GK_F11)
 
 // Note that this uses RSP_SK_* macros for use the rspGetKeyStatusArray() key interface.
-#define KEY_XRAY_ALL						RSP_SK_F3
-#define KEY_SNAP_PICTURE				RSP_SK_ENTER
-#define KEY_ABORT_REALM_OPERATION	RSP_SK_ESCAPE
+#define KEY_XRAY_ALL                  RSP_SK_F3
+#define KEY_SNAP_PICTURE            RSP_SK_ENTER
+#define KEY_ABORT_REALM_OPERATION   RSP_SK_ESCAPE
 
-#define EDIT_SCROLL_AMOUNT		16
+#define EDIT_SCROLL_AMOUNT      16
 
-#define CURSOR_BASE_IMAGE_FILE	"res/editor/CursBase.bmp"
-#define CURSOR_BASE_HOTX			7
-#define CURSOR_BASE_HOTY			7
-#define CURSOR_TIP_IMAGE_FILE		"res/editor/CursTip.bmp"
-#define CURSOR_TIP_HOTX				7
-#define CURSOR_TIP_HOTY				7
+#define CURSOR_BASE_IMAGE_FILE   "res/editor/CursBase.bmp"
+#define CURSOR_BASE_HOTX         7
+#define CURSOR_BASE_HOTY         7
+#define CURSOR_TIP_IMAGE_FILE      "res/editor/CursTip.bmp"
+#define CURSOR_TIP_HOTX            7
+#define CURSOR_TIP_HOTY            7
 
-#define DRAG_MIN_X				1
-#define DRAG_MIN_Y				1
-#define DRAG_MIN_TIME			500
+#define DRAG_MIN_X            1
+#define DRAG_MIN_Y            1
+#define DRAG_MIN_TIME         500
 
-#define CURSOR_NOTHING					0
-#define CURSOR_LEFT_BUTTON_UP			1
-#define CURSOR_LEFT_DOUBLE_CLICK		2
-#define CURSOR_LEFT_DRAG_BEGIN		3
-#define CURSOR_LEFT_DRAG_END			4
-#define CURSOR_RIGHT_BUTTON_UP		5
-#define CURSOR_RIGHT_DOUBLE_CLICK	6
-#define CURSOR_RIGHT_DRAG_BEGIN		7
-#define CURSOR_RIGHT_DRAG_END			8
+#define CURSOR_NOTHING               0
+#define CURSOR_LEFT_BUTTON_UP         1
+#define CURSOR_LEFT_DOUBLE_CLICK      2
+#define CURSOR_LEFT_DRAG_BEGIN      3
+#define CURSOR_LEFT_DRAG_END         4
+#define CURSOR_RIGHT_BUTTON_UP      5
+#define CURSOR_RIGHT_DOUBLE_CLICK   6
+#define CURSOR_RIGHT_DRAG_BEGIN      7
+#define CURSOR_RIGHT_DRAG_END         8
 
-#define REALM_BAR_FILE			"res/editor/RealmBar.gui"
-#define PICK_OBJECT_FILE		"res/editor/PickObj.gui"
-#define LAYERS_GUI_FILE			"res/editor/Layers.gui"
-#define CAMERAS_GUI_FILE		"res/editor/Cameras.gui"
-#define SHOWATTRIBS_GUI_FILE	"res/editor/Attribs.gui"
-#define INFO_GUI_FILE			"res/editor/Info.gui"
+#define REALM_BAR_FILE         "res/editor/RealmBar.gui"
+#define PICK_OBJECT_FILE      "res/editor/PickObj.gui"
+#define LAYERS_GUI_FILE         "res/editor/Layers.gui"
+#define CAMERAS_GUI_FILE      "res/editor/Cameras.gui"
+#define SHOWATTRIBS_GUI_FILE   "res/editor/Attribs.gui"
+#define INFO_GUI_FILE         "res/editor/Info.gui"
 
-#define VIEW_GUI_FILE			"res/editor/camera.gui"
-#define REALM_STATISTICS_GUI_FILE	"res/editor/stats.gui"
+#define VIEW_GUI_FILE         "res/editor/camera.gui"
+#define REALM_STATISTICS_GUI_FILE   "res/editor/stats.gui"
 
-#define GUIS_FONT_HEIGHT		15
+#define GUIS_FONT_HEIGHT      15
 
-#define REALM_BAR_X				0
-#define REALM_BAR_Y				(g_pimScreenBuf->m_sHeight - DISPLAY_BOTTOM_BORDER)
+#define REALM_BAR_X            0
+#define REALM_BAR_Y            (g_pimScreenBuf->m_sHeight - DISPLAY_BOTTOM_BORDER)
 
-#define PICKOBJ_LIST_X			(g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
-#define PICKOBJ_LIST_Y			0
+#define PICKOBJ_LIST_X         (g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
+#define PICKOBJ_LIST_Y         0
 
-#define LAYERS_LIST_X			(g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
-#define LAYERS_LIST_Y			(ms_pguiPickObj->m_sY + ms_pguiPickObj->m_im.m_sHeight)
+#define LAYERS_LIST_X         (g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
+#define LAYERS_LIST_Y         (ms_pguiPickObj->m_sY + ms_pguiPickObj->m_im.m_sHeight)
 
-#define CAMERAS_LIST_X			(LAYERS_LIST_X)
-#define CAMERAS_LIST_Y			(ms_pguiLayers->m_sY + ms_pguiLayers->m_im.m_sHeight)
+#define CAMERAS_LIST_X         (LAYERS_LIST_X)
+#define CAMERAS_LIST_Y         (ms_pguiLayers->m_sY + ms_pguiLayers->m_im.m_sHeight)
 
-#define GUIS_BAR_X				0
-#define GUIS_BAR_Y				(ms_pguiRealmBar->m_sY + ms_pguiRealmBar->m_im.m_sHeight)
+#define GUIS_BAR_X            0
+#define GUIS_BAR_Y            (ms_pguiRealmBar->m_sY + ms_pguiRealmBar->m_im.m_sHeight)
 
-#define MAP_X						MAX(ms_pguiRealmBar->m_sX + ms_pguiRealmBar->m_im.m_sWidth, \
-                                  ms_pguiGUIs->m_sX + ms_pguiGUIs->m_im.m_sWidth)
-#define MAP_Y						(g_pimScreenBuf->m_sHeight - DISPLAY_BOTTOM_BORDER)
+#define MAP_X                  MAX(ms_pguiRealmBar->m_sX + ms_pguiRealmBar->m_im.m_sWidth, \
+                                   ms_pguiGUIs->m_sX + ms_pguiGUIs->m_im.m_sWidth)
+#define MAP_Y                  (g_pimScreenBuf->m_sHeight - DISPLAY_BOTTOM_BORDER)
 
-#define NAVNETS_X					(g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
-#define NAVNETS_Y					(ms_pguiCameras->m_sY + ms_pguiCameras->m_im.m_sHeight)
+#define NAVNETS_X               (g_pimScreenBuf->m_sWidth - DISPLAY_RIGHT_BORDER)
+#define NAVNETS_Y               (ms_pguiCameras->m_sY + ms_pguiCameras->m_im.m_sHeight)
 
-#define SHOWATTRIBS_X			0
-#define SHOWATTRIBS_Y			(ms_pguiGUIs->m_sY + ms_pguiGUIs->m_im.m_sHeight)
+#define SHOWATTRIBS_X         0
+#define SHOWATTRIBS_Y         (ms_pguiGUIs->m_sY + ms_pguiGUIs->m_im.m_sHeight)
 
-#define INFO_X						(ms_pguiShowAttribs->m_sX + ms_pguiShowAttribs->m_im.m_sWidth)
-#define INFO_Y						SHOWATTRIBS_Y
+#define INFO_X                  (ms_pguiShowAttribs->m_sX + ms_pguiShowAttribs->m_im.m_sWidth)
+#define INFO_Y                  SHOWATTRIBS_Y
 
-#define SCROLL_BAR_THICKNESS	15
+#define SCROLL_BAR_THICKNESS   15
 
 // IDs:
-#define GUI_ID_NEW_REALM		1
-#define GUI_ID_OPEN_REALM		2
-#define GUI_ID_SAVE_REALM		3
-#define GUI_ID_CLOSE_REALM		4
-#define GUI_ID_PLAY_REALM		5
-#define GUI_ID_SAVE_REALM_AS	6
-#define GUI_ID_TOGGLE_LAYER	7
-#define GUI_ID_EXIT				8
-#define GUI_ID_PROPERTIES		23
+#define GUI_ID_NEW_REALM      1
+#define GUI_ID_OPEN_REALM      2
+#define GUI_ID_SAVE_REALM      3
+#define GUI_ID_CLOSE_REALM      4
+#define GUI_ID_PLAY_REALM      5
+#define GUI_ID_SAVE_REALM_AS   6
+#define GUI_ID_TOGGLE_LAYER   7
+#define GUI_ID_EXIT            8
+#define GUI_ID_PROPERTIES      23
 
-#define GUI_ID_NEW_CAMERA		9
-#define GUI_ID_CLOSE_CAMERA	10
-#define GUI_ID_CAMERA_LIST		11
-#define GUI_ID_NAVNET_LIST		11
+#define GUI_ID_NEW_CAMERA      9
+#define GUI_ID_CLOSE_CAMERA   10
+#define GUI_ID_CAMERA_LIST      11
+#define GUI_ID_NAVNET_LIST      11
 
-#define GUI_ID_REALM_VISIBLE		12
-#define GUI_ID_LAYERS_VISIBLE		13
-#define GUI_ID_THINGS_VISIBLE		14
-#define GUI_ID_CAMERAS_VISIBLE	15
-#define GUI_ID_NAVNETS_VISIBLE	16
-#define GUI_ID_MAP_VISIBLE			17
+#define GUI_ID_REALM_VISIBLE      12
+#define GUI_ID_LAYERS_VISIBLE      13
+#define GUI_ID_THINGS_VISIBLE      14
+#define GUI_ID_CAMERAS_VISIBLE   15
+#define GUI_ID_NAVNETS_VISIBLE   16
+#define GUI_ID_MAP_VISIBLE         17
 
-#define GUI_ID_MAP_REFRESH			18
+#define GUI_ID_MAP_REFRESH         18
 
-#define GUI_ID_NEW_THING			19
+#define GUI_ID_NEW_THING         19
 
-#define GUI_ID_COPY					20
-#define GUI_ID_CUT					21
-#define GUI_ID_PASTE					22
+#define GUI_ID_COPY               20
+#define GUI_ID_CUT               21
+#define GUI_ID_PASTE               22
 
-#define GUI_ID_PICK_LIST		3
+#define GUI_ID_PICK_LIST      3
 
-#define GUI_ID_LAYER_LIST		3
+#define GUI_ID_LAYER_LIST      3
 
-#define GUI_ID_MAP_ZONE			1
+#define GUI_ID_MAP_ZONE         1
 
-#define GUI_ID_ATTRIB_LAYERS		100
-#define GUI_ID_ATTRIB_HEIGHT		101
-#define GUI_ID_ATTRIB_NOWALK		102
-#define GUI_ID_ATTRIB_LIGHT		103
+#define GUI_ID_ATTRIB_LAYERS      100
+#define GUI_ID_ATTRIB_HEIGHT      101
+#define GUI_ID_ATTRIB_NOWALK      102
+#define GUI_ID_ATTRIB_LIGHT      103
 
-#define GUI_ID_INFO_X_POS			100
-#define GUI_ID_INFO_Y_POS			101
-#define GUI_ID_INFO_Z_POS			102
+#define GUI_ID_INFO_X_POS         100
+#define GUI_ID_INFO_Y_POS         101
+#define GUI_ID_INFO_Z_POS         102
 
-#define GUI_ID_REALM_STATISTICS	1000
+#define GUI_ID_REALM_STATISTICS   1000
 
 // The ID of the item to be selected by default.
-#define DEFAULT_THING_ID		CThing::CDudeID
+#define DEFAULT_THING_ID      CThing::CDudeID
 
 // Each item added to the Pick Object listbox will have an GUI ID of this plus
 // their class ID (e.g., CDude's list item would be LIST_ITEM_GUI_ID_BASE + CDudeId).
 // Don't define any editor GUI items with GUI IDs above this.
-#define LIST_ITEM_GUI_ID_BASE	0x70000000
+#define LIST_ITEM_GUI_ID_BASE   0x70000000
 
 // Determines the number of elements in the passed array at compile time.
-#define NUM_ELEMENTS(a)		(sizeof(a) / sizeof(a[0]) )
+#define NUM_ELEMENTS(a)      (sizeof(a) / sizeof(a[0]) )
 
 // Amount to inc or dec display area when adjusted.
 // Indicate here as inc (i.e., positive).
-#define DISPLAY_SIZE_DELTA_X	20
-#define DISPLAY_SIZE_DELTA_Y	20
+#define DISPLAY_SIZE_DELTA_X   20
+#define DISPLAY_SIZE_DELTA_Y   20
 
 // Amount of bottom border.
-#define DISPLAY_BOTTOM_BORDER	200
-#define DISPLAY_RIGHT_BORDER	100
+#define DISPLAY_BOTTOM_BORDER   200
+#define DISPLAY_RIGHT_BORDER   100
 
 // Initial camera viewable area.
-#define INITIAL_CAMERA_X		640
-#define INITIAL_CAMERA_Y		400
+#define INITIAL_CAMERA_X      640
+#define INITIAL_CAMERA_Y      400
 
 // Front most priority for a hotbox.
-#define FRONTMOST_HOT_PRIORITY	-32767
+#define FRONTMOST_HOT_PRIORITY   -32767
 
 // The colors used for the selection rectangle surrounding the currently
 // selected CThing.
-#define SELECTION_COLOR1				RSP_BLACK_INDEX
-#define SELECTION_COLOR2				RSP_WHITE_INDEX
-#define SELECTION_THICKNESS			1
+#define SELECTION_COLOR1            RSP_BLACK_INDEX
+#define SELECTION_COLOR2            RSP_WHITE_INDEX
+#define SELECTION_THICKNESS         1
 
-#define GUIS_GUI_FILE				"res/editor/GUIs.gui"
-#define MAP_GUI_FILE					"res/editor/Map.gui"
-#define NAVNETS_GUI_FILE			"res/editor/NavNets.gui"
+#define GUIS_GUI_FILE            "res/editor/GUIs.gui"
+#define MAP_GUI_FILE               "res/editor/Map.gui"
+#define NAVNETS_GUI_FILE         "res/editor/NavNets.gui"
 
-#define DISP_INFO_FONT_H			15
+#define DISP_INFO_FONT_H         15
 
-#define DUDE_STATUS_RECT_X			10
-#define DUDE_STATUS_RECT_Y			(REALM_STATUS_RECT_Y + REALM_STATUS_RECT_H + 3)
-#define DUDE_STATUS_RECT_W			(ms_pcameraCur->m_sViewW - DUDE_STATUS_RECT_X)
-#define DUDE_STATUS_RECT_H			(g_GameSettings.m_sDisplayInfo ? (INFO_STATUS_RECT_Y - DUDE_STATUS_RECT_Y) : (g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y) )// (g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y)
+#define DUDE_STATUS_RECT_X         10
+#define DUDE_STATUS_RECT_Y         (REALM_STATUS_RECT_Y + REALM_STATUS_RECT_H + 3)
+#define DUDE_STATUS_RECT_W         (ms_pcameraCur->m_sViewW - DUDE_STATUS_RECT_X)
+#define DUDE_STATUS_RECT_H         (g_GameSettings.m_sDisplayInfo ? (INFO_STATUS_RECT_Y - DUDE_STATUS_RECT_Y) : (g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y) )// (g_pimScreenBuf->m_sHeight - DUDE_STATUS_RECT_Y)
 
-#define REALM_STATUS_RECT_X		10
-#define REALM_STATUS_RECT_Y		(ms_pcameraCur->m_sFilmViewY + ms_pcameraCur->m_sViewH + 3)
-#define REALM_STATUS_RECT_W		(ms_pcameraCur->m_sViewW - REALM_STATUS_RECT_X)
-#define REALM_STATUS_RECT_H		(40)
+#define REALM_STATUS_RECT_X      10
+#define REALM_STATUS_RECT_Y      (ms_pcameraCur->m_sFilmViewY + ms_pcameraCur->m_sViewH + 3)
+#define REALM_STATUS_RECT_W      (ms_pcameraCur->m_sViewW - REALM_STATUS_RECT_X)
+#define REALM_STATUS_RECT_H      (40)
 
-#define INFO_STATUS_RECT_X			10
-#define INFO_STATUS_RECT_Y			(g_pimScreenBuf->m_sHeight - INFO_STATUS_RECT_H)
-#define INFO_STATUS_RECT_W			(g_pimScreenBuf->m_sWidth - INFO_STATUS_RECT_X)
-#define INFO_STATUS_RECT_H			(DISP_INFO_FONT_H + 1)
+#define INFO_STATUS_RECT_X         10
+#define INFO_STATUS_RECT_Y         (g_pimScreenBuf->m_sHeight - INFO_STATUS_RECT_H)
+#define INFO_STATUS_RECT_W         (g_pimScreenBuf->m_sWidth - INFO_STATUS_RECT_X)
+#define INFO_STATUS_RECT_H         (DISP_INFO_FONT_H + 1)
 
 
 // This value is mutliplied by the amount the cursor is off the edge of the view
 // and the result is used to scroll the view.
-#define EDGE_MOVEMENT_MULTIPLIER	1
+#define EDGE_MOVEMENT_MULTIPLIER   1
 
 // This value indicates the number of pixels around the edge of the view that
 // imply scrolling while dragging or moving an object.
-#define DRAG_SCROLL_BUFFER			10
+#define DRAG_SCROLL_BUFFER         10
 
 // Amount the scroll bar buttons will scroll.
-#define SCROLL_BTN_INCDEC			10
+#define SCROLL_BTN_INCDEC         10
 
 // Directory to get *.RLM files from.
-#define INITIAL_REALM_DIR			"res/Levels/."
+#define INITIAL_REALM_DIR         "res/Levels/."
 
 // Defines the alpha level used when blitting the trigger region currently being
 // editted.
-#define DEF_TRIGGER_RGN_ALPHA_LEVEL	80
+#define DEF_TRIGGER_RGN_ALPHA_LEVEL   80
 
 // The alpha level used when showing the attributes.
-#define DEF_ATTRIBUTES_ALPHA_LEVEL	80
+#define DEF_ATTRIBUTES_ALPHA_LEVEL   80
 
-#define TRIGGER_RGN_DRAW_INDEX		250
-#define SHOW_ATTRIBS_DRAW_INDEX		250
+#define TRIGGER_RGN_DRAW_INDEX      250
+#define SHOW_ATTRIBS_DRAW_INDEX      250
 
 // Initial size for paste buffer.
-#define PASTE_BUFFER_INITIAL_SIZE	1024
+#define PASTE_BUFFER_INITIAL_SIZE   1024
 // Amount paste buffer grows as it gets larger.
-#define PASTE_BUFFER_GROW_SIZE		1024
+#define PASTE_BUFFER_GROW_SIZE      1024
 
-#define MAX_ALPHA_LEVEL					255
-#define MIN_ALPHA_LEVEL					15
+#define MAX_ALPHA_LEVEL               255
+#define MIN_ALPHA_LEVEL               15
 
-#define INCDEC_ALPHA_LEVEL				10
+#define INCDEC_ALPHA_LEVEL            10
 
 
-#define MY_RFILE_CALLBACK_INTERVAL		100
+#define MY_RFILE_CALLBACK_INTERVAL      100
 
-#define PROGRESS_CALLBACK_INTERVAL		100
-#define PROGRESS_X							(ms_pcameraCur->m_sFilmViewX + 10)
-#define PROGRESS_Y							(ms_pcameraCur->m_sFilmViewY + 30)
-#define PROGRESS_W							(ms_pcameraCur->m_sViewW - PROGRESS_X - 10)
-#define PROGRESS_H							10
-#define PROGRESS_COLOR_INDEX				252
-#define PROGRESS_OUTLINE_COLOR_INDEX	249
+#define PROGRESS_CALLBACK_INTERVAL      100
+#define PROGRESS_X                     (ms_pcameraCur->m_sFilmViewX + 10)
+#define PROGRESS_Y                     (ms_pcameraCur->m_sFilmViewY + 30)
+#define PROGRESS_W                     (ms_pcameraCur->m_sViewW - PROGRESS_X - 10)
+#define PROGRESS_H                     10
+#define PROGRESS_COLOR_INDEX            252
+#define PROGRESS_OUTLINE_COLOR_INDEX   249
 
 // The font for the editor GUIs.
-#define EDITOR_GUI_FONT						g_fontBig
+#define EDITOR_GUI_FONT                  g_fontBig
 
 ////////////////////////////////////////////////////////////////////////////////
 // Typedefs/structures
@@ -1103,12 +1103,12 @@ typedef set <LINKLINE, less<LINKLINE> > lineset;
 // Container for a GUI and Camera pair.
 typedef struct
 {
-   RGuiItem*	pgui;
-   RScrollBar*	psbVert;
-   RScrollBar*	psbHorz;
+   RGuiItem*   pgui;
+   RScrollBar*   psbVert;
+   RScrollBar*   psbHorz;
    CCamera cam;
-   short	sViewW;
-   short	sViewH;
+   short sViewW;
+   short sViewH;
 } View;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1118,21 +1118,21 @@ typedef struct
 RImage* m_pimCursorBase;
 RImage* m_pimCursorTip;
 
-CBouy*	m_pBouyLink0;
-CBouy*	m_pBouyLink1;
+CBouy*   m_pBouyLink0;
+CBouy*   m_pBouyLink1;
 
 lineset m_NetLines;
-static bool	ms_bDrawNetwork = true;
+static bool ms_bDrawNetwork = true;
 
 // ID of item most recently pressed or 0, if none.
 static S32 ms_lPressedId  = 0;
 // Realm filename.  Assuming only one Realm loaded at once.
-static char	ms_szFileName[RSP_MAX_PATH]	= "";
+static char ms_szFileName[RSP_MAX_PATH]   = "";
 
 static short ms_sMoving     = FALSE;   // TRUE, if moving/placing a thing (ms_pthingSel).
 
-static CThing*	ms_pthingSel	= NULL;  // CThing* to thing currently selected.
-static RHot*	ms_photSel		= NULL;  // RHot* to hotbox associated with selected thing.
+static CThing*   ms_pthingSel   = NULL;  // CThing* to thing currently selected.
+static RHot*   ms_photSel      = NULL;  // RHot* to hotbox associated with selected thing.
 
 // Initial width and height of display so we can
 // restore video mode when done editting.
@@ -1144,15 +1144,15 @@ static short ms_sInitialDeviceHeight    = 0;
 
 // The current camera.
 // Scrollbars' callback update camera pointed to by this.
-static CCamera*	ms_pcameraCur	= NULL;
+static CCamera*   ms_pcameraCur   = NULL;
 
 // Global GUIs (used in both editing and edit play modes).
-static RScrollBar	ms_sbVert;
-static RScrollBar	ms_sbHorz;
+static RScrollBar ms_sbVert;
+static RScrollBar ms_sbHorz;
 
 // This points to the CHood's hotbox which is the root of all other CThing
 // hotboxes.
-static RHot*	ms_photHood	= NULL;
+static RHot*   ms_photHood   = NULL;
 
 // This is the hotbox priority of the farthest item from the user.
 // Start out as close to front as possible.
@@ -1162,40 +1162,40 @@ static short ms_sBackPriority  = FRONTMOST_HOT_PRIORITY;
 static short ms_sDragState = 0;
 
 // Root level GUIs to load from *.gui files.
-static RGuiItem*	ms_pguiRealmBar		= NULL;
-static RGuiItem*	ms_pguiPickObj			= NULL;
-static RGuiItem*	ms_pguiLayers			= NULL;
-static RGuiItem*	ms_pguiCameras			= NULL;
-static RGuiItem*	ms_pguiGUIs				= NULL;
-static RGuiItem*	ms_pguiMap				= NULL;
-static RGuiItem*	ms_pguiNavNets			= NULL;
-static RGuiItem*	ms_pguiShowAttribs	= NULL;
-static RGuiItem*	ms_pguiInfo				= NULL;
+static RGuiItem*   ms_pguiRealmBar      = NULL;
+static RGuiItem*   ms_pguiPickObj         = NULL;
+static RGuiItem*   ms_pguiLayers         = NULL;
+static RGuiItem*   ms_pguiCameras         = NULL;
+static RGuiItem*   ms_pguiGUIs            = NULL;
+static RGuiItem*   ms_pguiMap            = NULL;
+static RGuiItem*   ms_pguiNavNets         = NULL;
+static RGuiItem*   ms_pguiShowAttribs   = NULL;
+static RGuiItem*   ms_pguiInfo            = NULL;
 
 // Child GUIs that need to be frequently accessed.
-static RListBox*	ms_plbLayers		= NULL;
-static RGuiItem*	ms_pguiMapZone		= NULL;
-static RGuiItem*	ms_pguiInfoXPos	= NULL;
-static RGuiItem*	ms_pguiInfoYPos	= NULL;
-static RGuiItem*	ms_pguiInfoZPos	= NULL;
+static RListBox*   ms_plbLayers      = NULL;
+static RGuiItem*   ms_pguiMapZone      = NULL;
+static RGuiItem*   ms_pguiInfoXPos   = NULL;
+static RGuiItem*   ms_pguiInfoYPos   = NULL;
+static RGuiItem*   ms_pguiInfoZPos   = NULL;
 
 // The current ratio being used for the map.
 static double ms_dMapRatio      = 0.0;
 
 // The current CGameEditThing.
-static CGameEditThing*	ms_pgething	= NULL;
+static CGameEditThing*   ms_pgething   = NULL;
 
 // List of cameras and their GUI.
-static RList<View>	ms_listViews;
+static RList<View>   ms_listViews;
 
 // If true, scrolling via drag/move of CThing is allowed.
-static bool	ms_bDragScroll	= true;
+static bool ms_bDragScroll   = true;
 
 // Trigger regions for pylons.
-static TriggerRgn	ms_argns[256];
+static TriggerRgn ms_argns[256];
 
 // Current pylon being editted.
-static CPylon*			ms_pylonEdit	= NULL;  // NULL for none.
+static CPylon*         ms_pylonEdit   = NULL;  // NULL for none.
 
 // Current block size for drawing.
 static short ms_sDrawBlockSize = 5;
@@ -1211,7 +1211,7 @@ static RFile ms_filePaste;
 static short ms_sFileCount     = -1;
 
 // Type of item to paste.
-static CThing::ClassIDType	ms_idPaste;
+static CThing::ClassIDType ms_idPaste;
 
 // Sprite used to draw attributes.
 static CSprite2 ms_spriteAttributes;
@@ -1223,7 +1223,7 @@ static U16 ms_u16LayerMask;
 // Used by RFile callback function
 static S32 ms_lRFileCallbackTime;
 static S32 ms_lFileBytesSoFar;
-static char	ms_szFileOpDescriptionFrmt[512];
+static char ms_szFileOpDescriptionFrmt[512];
 static RPrint ms_printFile;
 static short ms_sFileOpTextX;
 static short ms_sFileOpTextY;
@@ -1239,22 +1239,22 @@ static S32 ms_lEdgeOvershoot = 1000;
 
 // Do ALL editor input.
 static bool DoInput(    // Returns true when done.
-   CRealm*	prealm,     // Ptr to current realm.
-   CCamera*	pcamera,    // Ptr to current camera.
-   short*	psCursorX,  // Out: Cursor X position.
-   short*	psCursorY,  // Out: Cursor Y position.
-   short*	psCursorZ); // Out: Cursor Z position.
+   CRealm*   prealm,     // Ptr to current realm.
+   CCamera*   pcamera,    // Ptr to current camera.
+   short*   psCursorX,  // Out: Cursor X position.
+   short*   psCursorY,  // Out: Cursor Y position.
+   short*   psCursorZ); // Out: Cursor Z position.
 
 // Do ALL editor output.
 static void DoOutput(   // Returns nothing.
-   CRealm*	prealm,     // Ptr to current realm.
-   CCamera*	pcamera,    // Ptr to current camera.
-   short	sCursorX,      // Cursor X position.
-   short	sCursorY,      // Cursor Y position.
-   short	sCursorZ);     // Cursor Z position.
+   CRealm*   prealm,     // Ptr to current realm.
+   CCamera*   pcamera,    // Ptr to current camera.
+   short sCursorX,        // Cursor X position.
+   short sCursorY,        // Cursor Y position.
+   short sCursorZ);       // Cursor Z position.
 
 static void GetCursor(  // Returns nothing.
-   RInputEvent*	pie,  // In:  Input event.
+   RInputEvent*   pie,  // In:  Input event.
                         // Out: pie->sUsed = TRUE, if used.
    short* psX,          // Out: X coord of event.
    short* psY,          // Out: Y coord of event.
@@ -1296,50 +1296,50 @@ static short SaveRealmAs(
    CRealm* prealm);
 
 static void PlayRealm(           // Returns nothing.
-   CRealm*	prealm,              // In:  Realm to play.
-   CThing*	pthingSel);          // In:  Currently selected CThing which can
-                                 // be used to give PlayRealm() a hint on which
-                                 // of several things the user wants to use.
-                                 // For example, a selected warp is the used
-                                 // as the warp in point.
+   CRealm*   prealm,              // In:  Realm to play.
+   CThing*   pthingSel);          // In:  Currently selected CThing which can
+                                  // be used to give PlayRealm() a hint on which
+                                  // of several things the user wants to use.
+                                  // For example, a selected warp is the used
+                                  // as the warp in point.
 
 // Create a new CThing derived object of type id in prealm at the specified
 // position.
 static short CreateNewThing(     // Returns 0 on success.
-   CRealm*	prealm,              // In:  Realm to add new CThing to.
+   CRealm*   prealm,              // In:  Realm to add new CThing to.
    CThing::ClassIDType id,       // ID of new CThing type to create.
-   short	sPosX,                  // Position for new CThing.
-   short	sPosY,                  // Position for new CThing.
-   short	sPosZ,                  // Position for new CThing.
-   CThing**	ppthing,             // Out: Pointer to new thing.
-   RHot**	pphot,               // Out: Pointer to new hotbox for thing.
-   RFile*	pfile = NULL);       // In:  Optional file to load from (instead of EditNew()).
+   short sPosX,                    // Position for new CThing.
+   short sPosY,                    // Position for new CThing.
+   short sPosZ,                    // Position for new CThing.
+   CThing**   ppthing,             // Out: Pointer to new thing.
+   RHot**   pphot,               // Out: Pointer to new hotbox for thing.
+   RFile*   pfile = NULL);       // In:  Optional file to load from (instead of EditNew()).
 
 // Move a thing to the specified location and update its RHot with an
 // EditRect() call.
 static void MoveThing(           // Returns nothing.
-   CThing*	pthing,              // Thing to move.
-   RHot*		phot,                // Thing's hotbox.
-   short	sPosX,                  // New position.
-   short	sPosY,                  // New position.
-   short	sPosZ);                 // New position.
+   CThing*   pthing,              // Thing to move.
+   RHot*      phot,                // Thing's hotbox.
+   short sPosX,                    // New position.
+   short sPosY,                    // New position.
+   short sPosZ);                   // New position.
 
 // Enlarges the display area.
 static void OnEnlargeDisplay(
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm);             // Realm to update.
+   CRealm*   prealm);             // Realm to update.
 
 // Reduces the display area.
 static void OnReduceDisplay(
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm);             // Realm to update.
+   CRealm*   prealm);             // Realm to update.
 
 // Set display mode such that display area is as
 // specified.
 static short SetDisplayArea(  // Returns 0 on success.
-   short	sDisplayD,           // New depth of display.
-   short	sDisplayW,           // New width of display area.
-   short	sDisplayH);          // New height of display area.
+   short sDisplayD,             // New depth of display.
+   short sDisplayW,             // New width of display area.
+   short sDisplayH);            // New height of display area.
 
 // Set display mode and display area such that camera view
 // is specified size.
@@ -1347,17 +1347,17 @@ static short SetCameraArea(void);   // Returns 0 on success.
 
 // Adjust the display area by the specified deltas.
 static short AdjustDisplaySize(  // Returns 0 on success.
-   short	sAdjustX,               // Amount to increase width of display area.
-                                 // Can be negative to decrease.
-   short	sAdjustY,               // Amount to increase height of display area.
-                                 // Can be negative to decrease.
+   short sAdjustX,                 // Amount to increase width of display area.
+                                   // Can be negative to decrease.
+   short sAdjustY,                 // Amount to increase height of display area.
+                                   // Can be negative to decrease.
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm);             // Realm to update.
+   CRealm*   prealm);             // Realm to update.
 
 // Update screen size sensitive objects.
 static short SizeUpdate(      // Returns 0 on success.
    CCamera* pcamera,          // Camera to update.
-   CRealm*	prealm);          // Realm to update.
+   CRealm*   prealm);          // Realm to update.
 
 // Resets all RHots including and descended from ms_photHood
 // to FRONTMOST_HOT_PRIORITY.
@@ -1365,11 +1365,11 @@ static void ResetHotPriorities(void);  // Returns nothing.
 
 // Callback from GUIs.  This will set ms_lPressedId to pgui->m_lId.
 static void GuiPressedCall(   // Returns nothing.
-   RGuiItem*	pgui);         // GUI item pressed.
+   RGuiItem*   pgui);         // GUI item pressed.
 
 // Callback from pressed list items.
 static void ListItemPressedCall( // Returns nothing.
-   RGuiItem*	pgui);            // GUI item pressed.
+   RGuiItem*   pgui);            // GUI item pressed.
 
 // Callback from scrollbars indicating change in thumb position.
 static void ScrollPosUpdate(  // Returns nothing.
@@ -1377,15 +1377,15 @@ static void ScrollPosUpdate(  // Returns nothing.
 
 // Callback from RHot when an event occurs within it.
 static void ThingHotCall(  // Returns nothing.
-   RHot*	phot,             // Ptr to RHot that generated event.
-   RInputEvent*	pie);    // In:  Most recent user input event.
+   RHot*   phot,             // Ptr to RHot that generated event.
+   RInputEvent*   pie);    // In:  Most recent user input event.
                            // Out: Depends on callbacks.  Generally,
                            // pie->sUsed = TRUE, if used.
 
 // Draws the rubber band type line while creating bouy links.
 static void DrawBouyLink(     // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera);         // In:  View of prealm.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera);         // In:  View of prealm.
 
 // AddLine - add the newly drawn line to the set of lines.
 static void AddNewLine(short sX0, short sY0, short sX1, short sY1);
@@ -1402,63 +1402,63 @@ static void UpdateNetLines(CNavigationNet* pNavNet);
 
 // Draw network - draw the lines
 static void DrawNetwork(      // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera);         // In:  View of prealm.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera);         // In:  View of prealm.
 
 // Get the Editor Thing from the specified realm.
 static CGameEditThing* GetEditorThing( // Returns ptr to editor thing for
                                        // specified realm or NULL.
-   CRealm*	prealm);                   // Realm to get editor thing from.
+   CRealm*   prealm);                   // Realm to get editor thing from.
 
 // Creates a view and adds it to the list of views.
 static short AddView(      // Returns 0 on success.
-   CRealm*	prealm);       // In:  Realm in which to setup camera.
+   CRealm*   prealm);       // In:  Realm in which to setup camera.
 
 // Kills a view and removes it from the list of views.
 static void RemoveView(    // Returns nothing.
-   View*	pview);           // In: View to remove or NULL to remove currently
-                           // selected view.
+   View*   pview);           // In: View to remove or NULL to remove currently
+                             // selected view.
 
 // Removes all current views.
 static void RemoveViews(void);
 
 // Creates a new View and adds it to the list of Views.
 static short CreateView(               // Returns 0 on success.
-   View**	ppview,                    // Out: New view, if not NULL.
-   CRealm*	prealm);                   // In:  Realm in which to setup camera.
+   View**   ppview,                    // Out: New view, if not NULL.
+   CRealm*   prealm);                   // In:  Realm in which to setup camera.
 
 // Destroys a View and removes it from the list of Views.
 static void KillView(                  // Returns nothing.
-   View*		pview);                    // View to kill.
+   View*      pview);                    // View to kill.
 
 // Draw specified view.
 static void DrawView(                  // Returns nothing.
-   View*		pview,                     // View to draw.
-   CRealm*	prealm);                   // Realm to draw.
+   View*      pview,                     // View to draw.
+   CRealm*   prealm);                   // Realm to draw.
 
 // Draw all views.
 static void DrawViews(                 // Returns nothing.
-   CRealm*	prealm);                   // Realm to draw.
+   CRealm*   prealm);                   // Realm to draw.
 
 // Clear the specified GUI's area.
 static void ClearGUI(                  // Returns nothing.
-   RGuiItem*	pgui);                  // In:  GUI's whose area we should clean.
+   RGuiItem*   pgui);                  // In:  GUI's whose area we should clean.
 
 // Clear all views.
 static void ClearViews(void);          // Returns nothing.
 
 // Do focus hotbox logic and such for GUIs.
 static void DoView(                    // Returns nothing.
-   View*				pview,               // View to do.
-   RInputEvent*	pie);                // Input event to process.
+   View*            pview,               // View to do.
+   RInputEvent*   pie);                // Input event to process.
 
 // Do all views.
 static void DoViews(                   // Returns nothing.
-   RInputEvent*	pie);                // Input event to process.
+   RInputEvent*   pie);                // Input event to process.
 
 // Draw the map.
 static void RefreshMap(                // Returns nothing.
-   CRealm*	prealm);                   // Realm to map.
+   CRealm*   prealm);                   // Realm to map.
 
 // Cancel any thing drag.
 static void CancelDrag(CRealm* prealm);// Returns nothing.
@@ -1471,39 +1471,39 @@ static void DragDrop(   // Returns nothing.
 
 // Move focus to next item in realm's thing list.
 static void NextItem(   // Returns nothing.
-   CRealm*	prealm);    // In:  The realm we want the next thing in.
+   CRealm*   prealm);    // In:  The realm we want the next thing in.
 
 // Move focus to previous item in realm's thing list.
 static void PrevItem(   // Returns nothing.
-   CRealm*	prealm);    // In:  The realm we want the next thing in.
+   CRealm*   prealm);    // In:  The realm we want the next thing in.
 
 // Load the trigger regions for the specified realm.
 static short LoadTriggerRegions( // Returns 0 on success.
-   char*	pszRealmName);          // In:  Name of the REALM (*.RLM) file.
-                                 // The .ext is stripped and .rgn is appended.
+   char*   pszRealmName);          // In:  Name of the REALM (*.RLM) file.
+                                   // The .ext is stripped and .rgn is appended.
 
 // Save the trigger regions for the specified realm.
 static short SaveTriggerRegions( // Returns 0 on success.
-   char*	pszRealmName,           // In:  Name of the REALM (*.RLM) file.
+   char*   pszRealmName,           // In:  Name of the REALM (*.RLM) file.
    CRealm* prealm);              // The .ext is stripped and .rgn is appended.
 
 // Create the trigger attribute layer for the realm
 static short CreateTriggerRegions(  // Returns 0 on success.
-   CRealm*	prealm		);       // In:  Access of Realm Info
+   CRealm*   prealm      );       // In:  Access of Realm Info
 
 // Change or clear the current pylon being edited.
 static void EditPylonTriggerRegion( // Returns nothing.
    CThing* pthingPylon);            // In:  Pylon whose trigger area we want to
 
 // Set the selection to the specified CThing.
-static CThing*	SetSel(  // Returns CThing that previously was selected.
+static CThing*   SetSel(  // Returns CThing that previously was selected.
    CThing* pthingSel,   // In:  CThing to be selected.
-   RHot*	photSel);      // In:  Hotbox of CThing to be selected.
+   RHot*   photSel);      // In:  Hotbox of CThing to be selected.
 
 // Delete the specified item.
 static void DelThing(   // Returns nothing.
    CThing* pthingDel,   // In:  CThing to be deleted.
-   RHot*	photDel,       // In:  Hotbox of CThing to be deleted.
+   RHot*   photDel,       // In:  Hotbox of CThing to be deleted.
    CRealm* prealm);     // In:  Current realm
 
 // Delete all the items in the currently selected class.
@@ -1521,18 +1521,18 @@ static short CopyItem(  // Returns 0 on success.
 
 // Copy a thing to the paste buffer.
 static short PasteItem( // Returns 0 on success.
-   CRealm*	prealm,     // In:  The realm to paste into.
-   short	sX,            // In:  Location for new thing.
-   short	sY,            // In:  Location for new thing.
-   short	sZ);           // In:  Location for new thing.
+   CRealm*   prealm,     // In:  The realm to paste into.
+   short sX,              // In:  Location for new thing.
+   short sY,              // In:  Location for new thing.
+   short sZ);             // In:  Location for new thing.
 
 // Map a screen coordinate to a realm coordinate.
 // Note that this function's *psRealmY output is always
 // the height specified by the realm's attribute map
 // at the resulting *psRealmX, *psRealmZ.
 static void MapScreen2Realm(  // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera,          // In:  View of prealm.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera,          // In:  View of prealm.
    short sScreenX,            // In:  Screen x coord.
    short sScreenY,            // In:  Screen y coord.
    short* psRealmX,           // Out: Realm x coord.
@@ -1541,34 +1541,34 @@ static void MapScreen2Realm(  // Returns nothing.
 
 // Map a realm coordinate to a screen coordinate.
 static void Maprealm2Screen(  // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera,          // In:  View of prealm.
-   short	sRealmX,             // In:  Realm x coord.
-   short	sRealmY,             // In:  Realm y coord.
-   short	sRealmZ,             // In:  Realm z coord.
-   short*	psScreenX,        // Out: Screen x coord.
-   short*	psScreenY);       // Out: Screen y coord.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera,          // In:  View of prealm.
+   short sRealmX,               // In:  Realm x coord.
+   short sRealmY,               // In:  Realm y coord.
+   short sRealmZ,               // In:  Realm z coord.
+   short*   psScreenX,        // Out: Screen x coord.
+   short*   psScreenY);       // Out: Screen y coord.
 
 // Blit attribute areas lit by the specified mask into the specified image.
 static void AttribBlit(       // Returns nothing.
-   RMultiGrid*	pmg,           // In:  Multigrid of attributes.
+   RMultiGrid*   pmg,           // In:  Multigrid of attributes.
    U16 u16Mask,               // In:  Mask of important attributes.
-   RImage*		pimDst,        // In:  Destination image.
-   short	sSrcX,               // In:  Where in Multigrid to start.
-   short	sSrcY,               // In:  Where in Multigrid to start.
-   short	sW,                  // In:  How much of multigrid to use.
-   short	sH);                 // In:  How much of multigrid to use.
+   RImage*      pimDst,        // In:  Destination image.
+   short sSrcX,                 // In:  Where in Multigrid to start.
+   short sSrcY,                 // In:  Where in Multigrid to start.
+   short sW,                    // In:  How much of multigrid to use.
+   short sH);                   // In:  How much of multigrid to use.
 
 // Callback for attrib mask multibtns.
 static void AttribMaskBtnPressed(   // Returns nothing.
-   RGuiItem*	pgui_pmb);           // In:  Ptr to the pressed GUI (which is a multibtn).
+   RGuiItem*   pgui_pmb);           // In:  Ptr to the pressed GUI (which is a multibtn).
 
 // Resizes the attribute sprite, if allocated.
 static short SizeShowAttribsSprite(void); // Returns 0 on success.
 
 // Convert a .RLM filename to a .RGN one.
 static void RlmNameToRgnName( // Returns nothing.
-   char*	pszRealmName,     // In:  .RLM name.
+   char*   pszRealmName,     // In:  .RLM name.
    char* pszRgnName);      // Out: .RGN name.
 
 // Our RFile callback
@@ -1584,14 +1584,14 @@ static short TmpFileName(                       // Returns 0 if successfull, non
 
 // Show statistics for the specified realm.
 static short ShowRealmStatistics(   // Returns 0 on success.
-   CRealm*	prealm,                 // In:  Realm to get stats on.
+   CRealm*   prealm,                 // In:  Realm to get stats on.
    CThing** ppthing);               // Out: Selected thing, if not NULL.
 
 // Init load/save counter.  You should call KillFileCounter() after
 // done with the file access.
 static void InitFileCounter(        // Returns nothing.
-   char*	pszDescriptionFrmt);       // In:  sprintf format for description of
-                                    // operation.
+   char*   pszDescriptionFrmt);       // In:  sprintf format for description of
+                                      // operation.
 
 // Kill load/save counter.  Can be called multiple times w/o corresponding
 // Init().
@@ -1600,8 +1600,8 @@ static void KillFileCounter(void);  // Returns nothing.
 // Callback from realm during time intensive operations.
 static bool RealmOpProgress(        // Returns true to continue; false to
                                     // abort operation.
-   short	sLastItemProcessed,        // In:  Number of items processed so far.
-   short	sTotalItemsToProcess);     // In:  Total items to process.
+   short sLastItemProcessed,          // In:  Number of items processed so far.
+   short sTotalItemsToProcess);       // In:  Total items to process.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1609,16 +1609,16 @@ static bool RealmOpProgress(        // Returns true to continue; false to
 //
 ////////////////////////////////////////////////////////////////////////////////
 inline void SetPressedCall(   // Returns nothing.
-   RGuiItem*	pguiRoot,      // Root item.
+   RGuiItem*   pguiRoot,      // Root item.
    S32 lId)                   // ID of GUI item to set.
 {
    ASSERT(pguiRoot != NULL);
 
-   RGuiItem*	pgui	= pguiRoot->GetItemFromId(lId);
+   RGuiItem*   pgui   = pguiRoot->GetItemFromId(lId);
    if (pgui != NULL)
    {
       // Set callback.
-      pgui->m_bcUser	= GuiPressedCall;
+      pgui->m_bcUser   = GuiPressedCall;
    }
    else
    {
@@ -1632,19 +1632,19 @@ inline void SetPressedCall(   // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 inline void SetMBValsAndCallback(      // Returns nothing.
-   RGuiItem*	pguiRoot,               // In:  Root item.
+   RGuiItem*   pguiRoot,               // In:  Root item.
    S32 lId,                            // In:  ID of child to set user vals on.
    uintptr_t u32UserInstance,       // In:  Value for m_ulUserInstance.
    uintptr_t u32UserData,           // In:  Value for m_ulUserData.
-   short	sState)                       // In:  Initial MultiBtn state.
+   short sState)                         // In:  Initial MultiBtn state.
 {
-   RMultiBtn*	pmb	= (RMultiBtn*)pguiRoot->GetItemFromId(lId);
+   RMultiBtn*   pmb   = (RMultiBtn*)pguiRoot->GetItemFromId(lId);
    if (pmb)
    {
-      pmb->m_ulUserInstance	= u32UserInstance;
-      pmb->m_ulUserData			= u32UserData;
-      pmb->m_bcUser				= AttribMaskBtnPressed;
-      pmb->m_sState				= sState;
+      pmb->m_ulUserInstance   = u32UserInstance;
+      pmb->m_ulUserData         = u32UserData;
+      pmb->m_bcUser            = AttribMaskBtnPressed;
+      pmb->m_sState            = sState;
       // Reflect new state.
       pmb->Compose();
    }
@@ -1659,23 +1659,23 @@ extern void GameEdit(
    void)
 {
    // Clear any members that need to be intialized on each entrance.
-   ms_pcameraCur		= NULL;
-   ms_pthingSel		= NULL;
-   ms_photSel			= NULL;
-   ms_plbLayers		= NULL;
-   ms_pgething			= NULL;
-   ms_photHood			= NULL;
+   ms_pcameraCur      = NULL;
+   ms_pthingSel      = NULL;
+   ms_photSel         = NULL;
+   ms_plbLayers      = NULL;
+   ms_pgething         = NULL;
+   ms_photHood         = NULL;
 
    // Disable 'Organ' on 'Audio Options' menu.
-   menuAudioOptions.ami[1].sEnabled	= FALSE;
+   menuAudioOptions.ami[1].sEnabled   = FALSE;
 
    // Set alpha level to default.
-   ms_spriteTriggerRgn.m_sAlphaLevel	= DEF_TRIGGER_RGN_ALPHA_LEVEL;
-   ms_spriteAttributes.m_sAlphaLevel	= DEF_ATTRIBUTES_ALPHA_LEVEL;
+   ms_spriteTriggerRgn.m_sAlphaLevel   = DEF_TRIGGER_RGN_ALPHA_LEVEL;
+   ms_spriteAttributes.m_sAlphaLevel   = DEF_ATTRIBUTES_ALPHA_LEVEL;
 
    // Set attrib masks to not display any attributes.
-   ms_u16TerrainMask	= 0;
-   ms_u16LayerMask	= 0;
+   ms_u16TerrainMask   = 0;
+   ms_u16LayerMask   = 0;
 
    // Set filename such that initially open and save dialogs start in
    // *.RLM dir.
@@ -1730,10 +1730,10 @@ extern void GameEdit(
       ASSERT(prealm != 0);
 
       // This realm will only be used for editting, so it make it known.
-      prealm->m_flags.bEditing	= true;
+      prealm->m_flags.bEditing   = true;
 
       // Setup progress callback right away.
-//		prealm->m_fnProgress			= RealmOpProgress;
+//      prealm->m_fnProgress         = RealmOpProgress;
 
       // Reset realm time here and never do anything to it while in the editor.
       // This way, game objects will be able to access the time, but will never
@@ -1752,7 +1752,7 @@ extern void GameEdit(
 
       pcamera->SetFilm(g_pimScreenBuf, 0, 0);
 
-      ms_pcameraCur	= pcamera;
+      ms_pcameraCur   = pcamera;
 
       /////////////////////////////////////////////////////////////////////////
       // Set up GUIs.
@@ -1763,26 +1763,26 @@ extern void GameEdit(
       RGuiItem::ms_print.SetFont(GUIS_FONT_HEIGHT, &EDITOR_GUI_FONT);
 
       // Load GUIs.
-      ms_pguiRealmBar		= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, REALM_BAR_FILE) );
-      ms_pguiPickObj			= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, PICK_OBJECT_FILE) );
-      ms_pguiLayers			= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, LAYERS_GUI_FILE) );
-      ms_pguiCameras			= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, CAMERAS_GUI_FILE) );
-      ms_pguiGUIs				= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, GUIS_GUI_FILE) );
-      ms_pguiMap				= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, MAP_GUI_FILE) );
-      ms_pguiNavNets			= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, NAVNETS_GUI_FILE) );
-      ms_pguiShowAttribs	= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, SHOWATTRIBS_GUI_FILE) );
-      ms_pguiInfo				= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, INFO_GUI_FILE) );
+      ms_pguiRealmBar      = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, REALM_BAR_FILE) );
+      ms_pguiPickObj         = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, PICK_OBJECT_FILE) );
+      ms_pguiLayers         = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, LAYERS_GUI_FILE) );
+      ms_pguiCameras         = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, CAMERAS_GUI_FILE) );
+      ms_pguiGUIs            = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, GUIS_GUI_FILE) );
+      ms_pguiMap            = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, MAP_GUI_FILE) );
+      ms_pguiNavNets         = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, NAVNETS_GUI_FILE) );
+      ms_pguiShowAttribs   = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, SHOWATTRIBS_GUI_FILE) );
+      ms_pguiInfo            = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, INFO_GUI_FILE) );
 
       // Make sure we got all our GUIs . . .
-      if (	ms_pguiRealmBar != NULL
-            && ms_pguiPickObj != NULL
-            && ms_pguiLayers != NULL
-            && ms_pguiCameras != NULL
-            && ms_pguiGUIs != NULL
-            && ms_pguiMap != NULL
-            && ms_pguiNavNets != NULL
-            && ms_pguiShowAttribs
-            && ms_pguiInfo)
+      if (   ms_pguiRealmBar != NULL
+             && ms_pguiPickObj != NULL
+             && ms_pguiLayers != NULL
+             && ms_pguiCameras != NULL
+             && ms_pguiGUIs != NULL
+             && ms_pguiMap != NULL
+             && ms_pguiNavNets != NULL
+             && ms_pguiShowAttribs
+             && ms_pguiInfo)
       {
          // Set items that are to notify us.
          SetPressedCall(ms_pguiRealmBar, GUI_ID_NEW_REALM);
@@ -1798,28 +1798,28 @@ extern void GameEdit(
          ms_pguiRealmBar->SetVisible(ms_pguiRealmBar->m_sVisible);
 
          // Get object picker list box.
-         RListBox*	plbPicker	= (RListBox*)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
+         RListBox*   plbPicker   = (RListBox*)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
 
          ASSERT(plbPicker != NULL);
          ASSERT(plbPicker->m_type == RGuiItem::ListBox);
 
          // Add available objects to listbox.
          CThing::ClassIDType idCur;
-         RGuiItem*				pguiItem;
-         for (idCur	= 1; idCur < CThing::TotalIDs; idCur++)
+         RGuiItem*            pguiItem;
+         for (idCur   = 1; idCur < CThing::TotalIDs; idCur++)
          {
             // If item is editor creatable . . .
             if (CThing::ms_aClassInfo[idCur].bEditorCreatable == true)
             {
                // Add string for each item to listbox.
-               pguiItem	= plbPicker->AddString((char*)CThing::ms_aClassInfo[idCur].pszClassName);
+               pguiItem   = plbPicker->AddString((char*)CThing::ms_aClassInfo[idCur].pszClassName);
                if (pguiItem != NULL)
                {
-                  pguiItem->m_lId			= LIST_ITEM_GUI_ID_BASE + idCur;
-                  pguiItem->m_ulUserData	= (U32)idCur;
+                  pguiItem->m_lId         = LIST_ITEM_GUI_ID_BASE + idCur;
+                  pguiItem->m_ulUserData   = (U32)idCur;
 
                   // Set the callback on pressed.
-                  pguiItem->m_bcUser		= ListItemPressedCall;
+                  pguiItem->m_bcUser      = ListItemPressedCall;
                }
             }
          }
@@ -1828,7 +1828,7 @@ extern void GameEdit(
          plbPicker->AdjustContents();
 
          // Select the DEFAULT_THING_ID.
-         RGuiItem*	pguiDefThing	= ms_pguiPickObj->GetItemFromId(DEFAULT_THING_ID + LIST_ITEM_GUI_ID_BASE);
+         RGuiItem*   pguiDefThing   = ms_pguiPickObj->GetItemFromId(DEFAULT_THING_ID + LIST_ITEM_GUI_ID_BASE);
          if (pguiDefThing != NULL)
          {
             plbPicker->SetSel(pguiDefThing);
@@ -1840,24 +1840,24 @@ extern void GameEdit(
          ms_pguiPickObj->SetVisible(ms_pguiPickObj->m_sVisible);
 
          // Get layer tweaker list box.
-         ms_plbLayers	= (RListBox*)ms_pguiLayers->GetItemFromId(GUI_ID_LAYER_LIST);
+         ms_plbLayers   = (RListBox*)ms_pguiLayers->GetItemFromId(GUI_ID_LAYER_LIST);
 
          ASSERT(ms_plbLayers != NULL);
          ASSERT(ms_plbLayers->m_type == RGuiItem::ListBox);
 
          // Add available layers to listbox.
-         short	sLayer;
-         for (sLayer	= CRealm::LayerBg; sLayer < CRealm::TotalLayers; sLayer++)
+         short sLayer;
+         for (sLayer   = CRealm::LayerBg; sLayer < CRealm::TotalLayers; sLayer++)
          {
             // Add string for each item to listbox.
-            pguiItem	= ms_plbLayers->AddString(CRealm::ms_apszLayerNames[sLayer]);
+            pguiItem   = ms_plbLayers->AddString(CRealm::ms_apszLayerNames[sLayer]);
             if (pguiItem != NULL)
             {
                // Remember which layer it's associated with.
-               pguiItem->m_ulUserData	= (U32)sLayer;
+               pguiItem->m_ulUserData   = (U32)sLayer;
                // We'll need to know when these are pressed.
-               pguiItem->m_bcUser	= ListItemPressedCall;
-               pguiItem->m_lId		= GUI_ID_TOGGLE_LAYER;
+               pguiItem->m_bcUser   = ListItemPressedCall;
+               pguiItem->m_lId      = GUI_ID_TOGGLE_LAYER;
                // These are push buttons.
                ASSERT(pguiItem->m_type == RGuiItem::PushBtn);
                ((RPushBtn*)pguiItem)->m_state
@@ -1904,16 +1904,16 @@ extern void GameEdit(
          ms_pguiShowAttribs->SetVisible(TRUE);
 
          // ---------- Info ----------------
-         ms_pguiInfoXPos	= ms_pguiInfo->GetItemFromId(GUI_ID_INFO_X_POS);
-         ms_pguiInfoYPos	= ms_pguiInfo->GetItemFromId(GUI_ID_INFO_Y_POS);
-         ms_pguiInfoZPos	= ms_pguiInfo->GetItemFromId(GUI_ID_INFO_Z_POS);
+         ms_pguiInfoXPos   = ms_pguiInfo->GetItemFromId(GUI_ID_INFO_X_POS);
+         ms_pguiInfoYPos   = ms_pguiInfo->GetItemFromId(GUI_ID_INFO_Y_POS);
+         ms_pguiInfoZPos   = ms_pguiInfo->GetItemFromId(GUI_ID_INFO_Z_POS);
 
          ms_pguiInfo->SetVisible(TRUE);
 
          // ---------- Map -----------------
          SetPressedCall(ms_pguiMap, GUI_ID_MAP_REFRESH);
 
-         ms_pguiMapZone	= ms_pguiMap->GetItemFromId(GUI_ID_MAP_ZONE);
+         ms_pguiMapZone   = ms_pguiMap->GetItemFromId(GUI_ID_MAP_ZONE);
 
          ms_pguiMap->SetVisible(ms_pguiMap->m_sVisible);
 
@@ -1921,17 +1921,17 @@ extern void GameEdit(
          ms_pguiPickObj->CopyParms(&ms_sbVert);
          ms_pguiPickObj->CopyParms(&ms_sbHorz);
 
-         ms_sbHorz.m_oOrientation	= RScrollBar::Horizontal;
+         ms_sbHorz.m_oOrientation   = RScrollBar::Horizontal;
 
          ms_sbVert.SetVisible(TRUE);
          ms_sbHorz.SetVisible(TRUE);
 
-         ms_sbVert.m_upcUser	= ScrollPosUpdate;
-         ms_sbHorz.m_upcUser	= ScrollPosUpdate;
+         ms_sbVert.m_upcUser   = ScrollPosUpdate;
+         ms_sbHorz.m_upcUser   = ScrollPosUpdate;
 
          // Smooth scrolling.
-         ms_sbVert.m_scrollage		= RScrollBar::Smooth;
-         ms_sbHorz.m_scrollage		= RScrollBar::Smooth;
+         ms_sbVert.m_scrollage      = RScrollBar::Smooth;
+         ms_sbHorz.m_scrollage      = RScrollBar::Smooth;
 
 
          // Set display size based on the user's settings.
@@ -1949,7 +1949,7 @@ extern void GameEdit(
 
          // Make sure the system cursor is visible.
          // Store show level so we can restore it.
-         short	sCursorShowLevel	= rspGetMouseCursorShowLevel();
+         short sCursorShowLevel   = rspGetMouseCursorShowLevel();
          rspSetMouseCursorShowLevel(1);
 
          // User must load an existing realm or start a new one to go any further
@@ -1966,7 +1966,7 @@ extern void GameEdit(
          //////////////////////////////////////////////////////////////////////
 
          bExit = false;
-         short	sCursorX, sCursorY, sCursorZ;
+         short sCursorX, sCursorY, sCursorZ;
          while (!bExit)
          {
             ///////////////////////////////////////////////////////////////////
@@ -1977,7 +1977,7 @@ extern void GameEdit(
             ///////////////////////////////////////////////////////////////////
             // Input.
             ///////////////////////////////////////////////////////////////////
-            bExit	= DoInput(prealm, pcamera, &sCursorX, &sCursorY, &sCursorZ);
+            bExit   = DoInput(prealm, pcamera, &sCursorX, &sCursorY, &sCursorZ);
 
             ///////////////////////////////////////////////////////////////////
             // Output.
@@ -1993,23 +1993,23 @@ extern void GameEdit(
 
          // Done with GUIs.
          delete ms_pguiRealmBar;
-         ms_pguiRealmBar	= NULL;
+         ms_pguiRealmBar   = NULL;
          delete ms_pguiPickObj;
-         ms_pguiPickObj		= NULL;
+         ms_pguiPickObj      = NULL;
          delete ms_pguiLayers;
-         ms_pguiLayers		= NULL;
+         ms_pguiLayers      = NULL;
          delete ms_pguiCameras;
-         ms_pguiCameras		= NULL;
+         ms_pguiCameras      = NULL;
          delete ms_pguiGUIs;
-         ms_pguiGUIs			= NULL;
+         ms_pguiGUIs         = NULL;
          delete ms_pguiMap;
-         ms_pguiMap			= NULL;
+         ms_pguiMap         = NULL;
          delete ms_pguiNavNets;
-         ms_pguiNavNets		= NULL;
+         ms_pguiNavNets      = NULL;
          delete ms_pguiShowAttribs;
-         ms_pguiShowAttribs	= NULL;
+         ms_pguiShowAttribs   = NULL;
          delete ms_pguiInfo;
-         ms_pguiInfo				= NULL;
+         ms_pguiInfo            = NULL;
       }
       else
       {
@@ -2021,11 +2021,11 @@ extern void GameEdit(
 
       // Done with the realm.
       delete prealm;
-      prealm	= NULL;
+      prealm   = NULL;
       // Done with the camera.
       delete pcamera;
-      pcamera	= NULL;
-      ms_pcameraCur	= NULL;
+      pcamera   = NULL;
+      ms_pcameraCur   = NULL;
 
       // Kill cursor stuff
       KillCursor();
@@ -2033,7 +2033,7 @@ extern void GameEdit(
 
    // If there is an image, delete it.
    delete ms_spriteAttributes.m_pImage;
-   ms_spriteAttributes.m_pImage	= NULL;
+   ms_spriteAttributes.m_pImage   = NULL;
 
    // If paste buffer open . . .
    if (ms_filePaste.IsOpen() != FALSE)
@@ -2066,7 +2066,7 @@ extern void GameEdit(
    rspUpdateDisplay();
 
    // Re-enable 'Organ' on 'Audio Options' menu.
-   menuAudioOptions.ami[1].sEnabled	= TRUE;
+   menuAudioOptions.ami[1].sEnabled   = TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2075,11 +2075,11 @@ extern void GameEdit(
 //
 ////////////////////////////////////////////////////////////////////////////////
 static bool DoInput(    // Returns true when done.
-   CRealm*	prealm,     // Ptr to current realm.
-   CCamera*	pcamera,    // Ptr to current camera.
-   short*	psCursorX,  // Out: Cursor X position.
-   short*	psCursorY,  // Out: Cursor Y position.
-   short*	psCursorZ)  // Out: Cursor Z position.
+   CRealm*   prealm,     // Ptr to current realm.
+   CCamera*   pcamera,    // Ptr to current camera.
+   short*   psCursorX,  // Out: Cursor X position.
+   short*   psCursorY,  // Out: Cursor Y position.
+   short*   psCursorZ)  // Out: Cursor Z position.
 {
    bool bExit = false;
 
@@ -2087,13 +2087,13 @@ static bool DoInput(    // Returns true when done.
    short sCursorY;
    short sCursorZ;
    short sCursorEvent;
-   RInputEvent	ie;
+   RInputEvent ie;
 
    // Get next input event.
-   ie.type	= RInputEvent::None;
+   ie.type   = RInputEvent::None;
    rspGetNextInputEvent(&ie);
 
-   Menu*	pmenu	= GetCurrentMenu();
+   Menu*   pmenu   = GetCurrentMenu();
    // If there is a menu . . .
    if (pmenu != NULL)
    {
@@ -2130,24 +2130,24 @@ static bool DoInput(    // Returns true when done.
          // Get cursor position and event
          GetCursor(&ie, &sCursorX, &sCursorY, &sCursorZ, &sCursorEvent);
 
-         UCHAR	ucId	= ms_pylonEdit->m_ucID;
+         UCHAR ucId   = ms_pylonEdit->m_ucID;
 
-         static U8*	pau8KeyStatus	= rspGetKeyStatusArray();
+         static U8*   pau8KeyStatus   = rspGetKeyStatusArray();
 
          // Move unit for arrow key movement of region.
          // Note: Combinations of SHIFT, CONTROL, and ALT
          // provide super fast movement.
-         short	sMoveUnit	= 1;
+         short sMoveUnit   = 1;
          if (pau8KeyStatus[RSP_SK_SHIFT] & 1)
-            sMoveUnit	*= 2;
+            sMoveUnit   *= 2;
          if (pau8KeyStatus[RSP_SK_CONTROL] & 1)
-            sMoveUnit	*= 3;
+            sMoveUnit   *= 3;
          if (pau8KeyStatus[RSP_SK_ALT] & 1)
-            sMoveUnit	*= 4;
+            sMoveUnit   *= 4;
 
          if (pau8KeyStatus[RSP_SK_LEFT] & 1)
          {
-            ms_argns[ucId].sX	-= sMoveUnit;
+            ms_argns[ucId].sX   -= sMoveUnit;
             ms_spriteTriggerRgn.m_sX2 -= sMoveUnit;
 
             // Update sprite in scene.
@@ -2183,7 +2183,7 @@ static bool DoInput(    // Returns true when done.
          {
             if (ie.type == RInputEvent::Mouse)
             {
-               sButtons	= ie.sButtons;
+               sButtons   = ie.sButtons;
             }
             else
             {
@@ -2199,15 +2199,15 @@ static bool DoInput(    // Returns true when done.
                   case EDIT_KEY_ENLARGE_DISPLAY3:
                      if (ms_sDrawBlockSize + sMoveUnit > ms_sDrawBlockSize)
                      {
-                        ms_sDrawBlockSize	+= sMoveUnit;
+                        ms_sDrawBlockSize   += sMoveUnit;
                      }
                      break;
                   case EDIT_KEY_REDUCE_DISPLAY1:
                   case EDIT_KEY_REDUCE_DISPLAY2:
-                     ms_sDrawBlockSize	-= sMoveUnit;
+                     ms_sDrawBlockSize   -= sMoveUnit;
                      if (ms_sDrawBlockSize < 2)
                      {
-                        ms_sDrawBlockSize	= 2;
+                        ms_sDrawBlockSize   = 2;
                      }
                      break;
                   case EDIT_KEY_DECREASE_OPACITY:
@@ -2274,24 +2274,24 @@ static bool DoInput(    // Returns true when done.
             {
             case EDIT_KEY_LOADREALM:
             case EDIT_KEY_OPENREALM:
-               ms_lPressedId	= GUI_ID_OPEN_REALM;
+               ms_lPressedId   = GUI_ID_OPEN_REALM;
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_SAVEREALM:
-               ms_lPressedId	= GUI_ID_SAVE_REALM_AS;
+               ms_lPressedId   = GUI_ID_SAVE_REALM_AS;
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_NEWREALM:
-               ms_lPressedId	= GUI_ID_NEW_REALM;
+               ms_lPressedId   = GUI_ID_NEW_REALM;
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_TOGGLEBOUY:
@@ -2299,7 +2299,7 @@ static bool DoInput(    // Returns true when done.
                ms_bDrawNetwork = !ms_bDrawNetwork;
                if (ms_bDrawNetwork)
                {
-                  CThing*	pThing;
+                  CThing*   pThing;
                   CListNode<CThing>* pNext = prealm->m_aclassHeads[CThing::CBouyID].m_pnNext;
                   while (pNext->m_powner != NULL)
                   {
@@ -2315,7 +2315,7 @@ static bool DoInput(    // Returns true when done.
                }
                else
                {
-                  CThing*	pThing;
+                  CThing*   pThing;
                   CListNode<CThing>* pNext = prealm->m_aclassHeads[CThing::CBouyID].m_pnNext;
                   while (pNext->m_powner != NULL)
                   {
@@ -2333,10 +2333,10 @@ static bool DoInput(    // Returns true when done.
                break;
 
             case EDIT_KEY_PLAY:
-               ms_lPressedId	= GUI_ID_PLAY_REALM;
+               ms_lPressedId   = GUI_ID_PLAY_REALM;
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_MENU:     // EDIT_KEY_CANCEL
@@ -2361,12 +2361,12 @@ static bool DoInput(    // Returns true when done.
                      }
                   }
       #else
-                  ms_lPressedId	= GUI_ID_EXIT;
+                  ms_lPressedId   = GUI_ID_EXIT;
       #endif
                }
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_SCROLL_L:
@@ -2374,7 +2374,7 @@ static bool DoInput(    // Returns true when done.
                ms_sbHorz.SetPos(pcamera->m_sSceneViewX - sScrollX);
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_SCROLL_R:
@@ -2382,7 +2382,7 @@ static bool DoInput(    // Returns true when done.
                ms_sbHorz.SetPos(pcamera->m_sSceneViewX + sScrollX);
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_SCROLL_U:
@@ -2390,7 +2390,7 @@ static bool DoInput(    // Returns true when done.
                ms_sbVert.SetPos(pcamera->m_sSceneViewY - sScrollY);
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_SCROLL_D:
@@ -2398,7 +2398,7 @@ static bool DoInput(    // Returns true when done.
                ms_sbVert.SetPos(pcamera->m_sSceneViewY + sScrollY);
 
                // Used the key.
-               ie.sUsed	= TRUE;
+               ie.sUsed   = TRUE;
                break;
 
             case EDIT_KEY_ENLARGE_DISPLAY1:
@@ -2421,18 +2421,18 @@ static bool DoInput(    // Returns true when done.
                   // Modify.
                   ms_pthingSel->EditModify();
                   // Size may have changed.
-                  RRect	rc;
+                  RRect rc;
                   ms_pthingSel->EditRect(&rc);
                   // Update hot.
-                  ms_photSel->m_sX	= rc.sX;
-                  ms_photSel->m_sY	= rc.sY;
-                  ms_photSel->m_sW	= rc.sW;
-                  ms_photSel->m_sH	= rc.sH;
+                  ms_photSel->m_sX   = rc.sX;
+                  ms_photSel->m_sY   = rc.sY;
+                  ms_photSel->m_sW   = rc.sW;
+                  ms_photSel->m_sH   = rc.sH;
                }
                break;
 
             case EDIT_KEY_NEWITEM:
-               ms_lPressedId	= GUI_ID_NEW_THING;
+               ms_lPressedId   = GUI_ID_NEW_THING;
                break;
 
             case EDIT_KEY_NEXTITEM:
@@ -2458,17 +2458,17 @@ static bool DoInput(    // Returns true when done.
 
             case EDIT_KEY_DOS_COPY:
             case EDIT_KEY_COPY:
-               ms_lPressedId	= GUI_ID_COPY;
+               ms_lPressedId   = GUI_ID_COPY;
                break;
 
             case EDIT_KEY_DOS_CUT:
             case EDIT_KEY_CUT:
-               ms_lPressedId	= GUI_ID_CUT;
+               ms_lPressedId   = GUI_ID_CUT;
                break;
 
             case EDIT_KEY_DOS_PASTE:
             case EDIT_KEY_PASTE:
-               ms_lPressedId	= GUI_ID_PASTE;
+               ms_lPressedId   = GUI_ID_PASTE;
                break;
 
             case EDIT_KEY_DECREASE_OPACITY:
@@ -2551,16 +2551,16 @@ static bool DoInput(    // Returns true when done.
          if (ms_photHood != NULL && ms_sMoving == FALSE)
          {
             // Pass the event to the Thing hotboxes in Realm coords.
-            RInputEvent	ieRealm	= ie;
-            ieRealm.sPosX			+= pcamera->m_sScene2FilmX;
-            ieRealm.sPosY			+= pcamera->m_sScene2FilmY;
+            RInputEvent ieRealm   = ie;
+            ieRealm.sPosX         += pcamera->m_sScene2FilmX;
+            ieRealm.sPosY         += pcamera->m_sScene2FilmY;
             ms_photHood->Do(&ieRealm);
 
             // If used by editor hotbox . . .
             if (ie.sUsed != ieRealm.sUsed)
             {
                // Note that it was used by editor hotbox.
-               ie.lUser	= 1;
+               ie.lUser   = 1;
             }
          }
          else
@@ -2569,7 +2569,7 @@ static bool DoInput(    // Returns true when done.
             if (ie.sUsed == FALSE)
             {
                // Make it an editor event.
-               ie.lUser	= 1;
+               ie.lUser   = 1;
             }
          }
 
@@ -2605,14 +2605,14 @@ static bool DoInput(    // Returns true when done.
                if (ms_pthingSel->GetClassID() != CThing::CHoodID)
                {
                   // Move mode.
-                  ms_sMoving			= TRUE;
+                  ms_sMoving         = TRUE;
 
                   // Make sure this is valid.
                   ASSERT(ms_photSel != NULL);
 
                   // Get hotspot for item in 2D.
-                  short	sOffsetX;
-                  short	sOffsetY;
+                  short sOffsetX;
+                  short sOffsetY;
                   ms_pthingSel->EditHotSpot(&sOffsetX, &sOffsetY);
 
                   // Reposition cursor to hotspot.
@@ -2659,8 +2659,8 @@ static bool DoInput(    // Returns true when done.
                if (pNavNet)
                   UpdateNetLines(pNavNet);
 
-               short	sScreenX;
-               short	sScreenY;
+               short sScreenX;
+               short sScreenY;
 
                Maprealm2Screen(
                   prealm,
@@ -2680,7 +2680,7 @@ static bool DoInput(    // Returns true when done.
                   }
 
                   // Note that the cursor is not in the non-scroll area.
-                  bInsideNonScroll	= false;
+                  bInsideNonScroll   = false;
                }
                else if (sScreenX > pcamera->m_sViewW - DRAG_SCROLL_BUFFER)
                {
@@ -2690,7 +2690,7 @@ static bool DoInput(    // Returns true when done.
                   }
 
                   // Note that the cursor is not in the non-scroll area.
-                  bInsideNonScroll	= false;
+                  bInsideNonScroll   = false;
                }
 
                if (sScreenY < DRAG_SCROLL_BUFFER)
@@ -2701,7 +2701,7 @@ static bool DoInput(    // Returns true when done.
                   }
 
                   // Note that the cursor is not in the non-scroll area.
-                  bInsideNonScroll	= false;
+                  bInsideNonScroll   = false;
                }
                else if (sScreenY > pcamera->m_sViewH - DRAG_SCROLL_BUFFER)
                {
@@ -2711,14 +2711,14 @@ static bool DoInput(    // Returns true when done.
                   }
 
                   // Note that the cursor is not in the non-scroll area.
-                  bInsideNonScroll	= false;
+                  bInsideNonScroll   = false;
                }
 
                // If inside the non-scroll area . . .
                if (bInsideNonScroll == true)
                {
                   // Enable scrolling.
-                  ms_bDragScroll	= true;
+                  ms_bDragScroll   = true;
                }
             }
             break;
@@ -2771,7 +2771,7 @@ static bool DoInput(    // Returns true when done.
                PlayRealm(prealm, ms_pthingSel);
 
                // Restore global camera.
-               ms_pcameraCur	= pcamera;
+               ms_pcameraCur   = pcamera;
 
                // Display size may have changed.
                SizeUpdate(pcamera, prealm);
@@ -2813,7 +2813,7 @@ static bool DoInput(    // Returns true when done.
          case GUI_ID_TOGGLE_LAYER:
          {
             // Get currently selected list item.
-            RGuiItem*	pguiSel	= ms_plbLayers->GetSel();
+            RGuiItem*   pguiSel   = ms_plbLayers->GetSel();
             if (pguiSel != NULL)
             {
                // Get layer to toggle.
@@ -2892,15 +2892,15 @@ static bool DoInput(    // Returns true when done.
                sCursorZ);        // z
 
             // Get object picker list box.
-            RListBox*	plbPicker	= (RListBox*)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
+            RListBox*   plbPicker   = (RListBox*)ms_pguiPickObj->GetItemFromId(GUI_ID_PICK_LIST);
             if (plbPicker != NULL)
             {
-               RGuiItem*	pguiSel	= plbPicker->GetSel();
+               RGuiItem*   pguiSel   = plbPicker->GetSel();
                // If there is a selection . . .
                if (pguiSel != NULL)
                {
                   // Get ID of list item representing thing to create.
-                  ms_lPressedId	= pguiSel->m_lId;
+                  ms_lPressedId   = pguiSel->m_lId;
                }
                else
                {
@@ -2917,12 +2917,12 @@ static bool DoInput(    // Returns true when done.
 
          default:
             // If the range of CThings . . .
-            if (	ms_lPressedId >= LIST_ITEM_GUI_ID_BASE
-                  &&	ms_lPressedId < LIST_ITEM_GUI_ID_BASE + CThing::TotalIDs
-                  && ms_sMoving == FALSE)
+            if (   ms_lPressedId >= LIST_ITEM_GUI_ID_BASE
+                   &&   ms_lPressedId < LIST_ITEM_GUI_ID_BASE + CThing::TotalIDs
+                   && ms_sMoving == FALSE)
             {
-               CThing*	pthingNew;
-               RHot*		photNew;
+               CThing*   pthingNew;
+               RHot*      photNew;
                if (CreateNewThing(                          // CThing* to new thing.
                       prealm,                               // Realm to create in.
                       ms_lPressedId - LIST_ITEM_GUI_ID_BASE, // ID to create.
@@ -2936,14 +2936,14 @@ static bool DoInput(    // Returns true when done.
                   SetSel(pthingNew, photNew);
 
                   // Start moving/placing object.
-                  ms_sMoving	= TRUE;
+                  ms_sMoving   = TRUE;
 
                   // Disable drag view scrolling.
-                  ms_bDragScroll	= false;
+                  ms_bDragScroll   = false;
 
                   // Enter drag.  Cheesy...Just need to get this to Bill and
                   // Then I'll clean up.
-                  ms_sDragState	= 4;
+                  ms_sDragState   = 4;
 
                   if (rspGetMouseCursorShowLevel() > 0)
                   {
@@ -2960,7 +2960,7 @@ static bool DoInput(    // Returns true when done.
             if (ms_pguiMapZone->m_sPressed != FALSE)
             {
                // Determine position.
-               short	sPosX, sPosY;
+               short sPosX, sPosY;
                rspGetMouse(&sPosX, &sPosY, NULL);
                ms_pguiMapZone->TopPosToClient(&sPosX, &sPosY);
                // Map position into map coords scroll to it.
@@ -2971,21 +2971,21 @@ static bool DoInput(    // Returns true when done.
       }
 
       // Clear ID.
-      ms_lPressedId	= 0;
+      ms_lPressedId   = 0;
    }
 
    // If quitting . . .
    if (rspGetQuitStatus() != FALSE)
    {
-      bExit	= true;
+      bExit   = true;
       // Make sure to close the realm...kind've a hack doing it here.
       CloseRealm(prealm);
    }
 
    // Return cursor position values.
-   *psCursorX	= sCursorX;
-   *psCursorY	= sCursorY;
-   *psCursorZ	= sCursorZ;
+   *psCursorX   = sCursorX;
+   *psCursorY   = sCursorY;
+   *psCursorZ   = sCursorZ;
 
    return bExit;
 }
@@ -2996,11 +2996,11 @@ static bool DoInput(    // Returns true when done.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void DoOutput(   // Returns nothing.
-   CRealm*	prealm,     // Ptr to current realm.
-   CCamera*	pcamera,    // Ptr to current camera.
-   short	sCursorX,      // Cursor X position.
-   short	sCursorY,      // Cursor Y position.
-   short	sCursorZ)      // Cursor Z position.
+   CRealm*   prealm,     // Ptr to current realm.
+   CCamera*   pcamera,    // Ptr to current camera.
+   short sCursorX,        // Cursor X position.
+   short sCursorY,        // Cursor Y position.
+   short sCursorZ)        // Cursor Z position.
 {
    // If not in menu . . .
    if (GetCurrentMenu() == NULL)
@@ -3080,7 +3080,7 @@ static void DoOutput(   // Returns nothing.
       {
          static RRect rc;
          static short sColorSwap  = 0;
-         sColorSwap	= (sColorSwap + 1) % 2;
+         sColorSwap   = (sColorSwap + 1) % 2;
 
          ms_pthingSel->EditRect(&rc);
          rspRect(
@@ -3153,7 +3153,7 @@ static void DoOutput(   // Returns nothing.
       // If editting a pylon . . .
       if (ms_pylonEdit != NULL)
       {
-         UCHAR	ucId	= ms_pylonEdit->m_ucID;
+         UCHAR ucId   = ms_pylonEdit->m_ucID;
          ASSERT(ms_argns[ucId].pimRgn != NULL);
 
          // Draw trigger region.
@@ -3223,7 +3223,7 @@ static void DoOutput(   // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void GetCursor(  // Returns nothing.
-   RInputEvent*	pie,  // In:  Input event.
+   RInputEvent*   pie,  // In:  Input event.
                         // Out: pie->sUsed = TRUE, if used.
    short* psX,          // Out: X coord of event.
    short* psY,          // Out: Y coord of event.
@@ -3236,7 +3236,7 @@ static void GetCursor(  // Returns nothing.
    static S32 lDragTime;
 
    // Init mouse pressed stuff.
-   static short sPressed	= FALSE;
+   static short sPressed   = FALSE;
 
    // Init cursor stuff
    static short sCursorY = 0;
@@ -3247,9 +3247,9 @@ static void GetCursor(  // Returns nothing.
 
    ASSERT(pie != NULL);
 
-   short sMouseX			= pie->sPosX;
-   short sMouseY			= pie->sPosY;
-   short sButtonEvent	= pie->sEvent;
+   short sMouseX         = pie->sPosX;
+   short sMouseY         = pie->sPosY;
+   short sButtonEvent   = pie->sEvent;
 
    // If mouse event . . .
    if (pie->type == RInputEvent::Mouse)
@@ -3262,7 +3262,7 @@ static void GetCursor(  // Returns nothing.
          if (pie->lUser == 1)
          {
             // Note pressed.
-            sPressed	= TRUE;
+            sPressed   = TRUE;
 
             if (ms_sDragState == 0)
             {
@@ -3273,7 +3273,7 @@ static void GetCursor(  // Returns nothing.
                lDragTime = pie->lTime;
 
                // We used the event.
-               pie->sUsed	= TRUE;
+               pie->sUsed   = TRUE;
             }
          }
          break;
@@ -3296,7 +3296,7 @@ static void GetCursor(  // Returns nothing.
                   rspSetMouse(sMouseX, sMouseY);
 
                   // We used the event.
-                  pie->sUsed	= TRUE;
+                  pie->sUsed   = TRUE;
                }
                else
                {
@@ -3304,7 +3304,7 @@ static void GetCursor(  // Returns nothing.
                   *psEvent = CURSOR_LEFT_DRAG_END;
 
                   // We used the event.
-                  pie->sUsed	= TRUE;
+                  pie->sUsed   = TRUE;
                }
             }
             else
@@ -3316,12 +3316,12 @@ static void GetCursor(  // Returns nothing.
                   *psEvent = CURSOR_LEFT_BUTTON_UP;
 
                   // We used the event.
-                  pie->sUsed	= TRUE;
+                  pie->sUsed   = TRUE;
                }
             }
 
             // Clera pressed state.
-            sPressed		= FALSE;
+            sPressed      = FALSE;
 
             // Clear drag state
             ms_sDragState = 0;
@@ -3342,7 +3342,7 @@ static void GetCursor(  // Returns nothing.
          }
 
          // We used the event.
-         pie->sUsed	= TRUE;
+         pie->sUsed   = TRUE;
 
          break;
 
@@ -3350,9 +3350,9 @@ static void GetCursor(  // Returns nothing.
          // If occurred in one of our hots . . .
          if (pie->lUser == 1)
          {
-            *psEvent	= CURSOR_RIGHT_DOUBLE_CLICK;
+            *psEvent   = CURSOR_RIGHT_DOUBLE_CLICK;
             // We used the event.
-            pie->sUsed	= TRUE;
+            pie->sUsed   = TRUE;
          }
          break;
 
@@ -3391,13 +3391,13 @@ static void GetCursor(  // Returns nothing.
       {
          // Save info we need when adjusting cursor's y coord
          sOrigCursorY = sCursorY;
-         ms_sDragState	= 3;  // Stretchy cursor mode.
+         ms_sDragState   = 3;  // Stretchy cursor mode.
       }
       else
       {
          // Return drag event
          *psEvent = CURSOR_LEFT_DRAG_BEGIN;
-         ms_sDragState	= 4;  // Drag mode.
+         ms_sDragState   = 4;  // Drag mode.
       }
 
    }
@@ -3499,12 +3499,12 @@ static void DrawCursor(
    CCamera* pcamera)                            // In:  Camera on prealm.
 {
    // Convert to 2D.
-   short	sBaseX2;
-   short	sBaseY2;
+   short sBaseX2;
+   short sBaseY2;
    Maprealm2Screen(prealm, pcamera, sCursorX, 0, sCursorZ, &sBaseX2, &sBaseY2);
 
-   short	sTipX2;
-   short	sTipY2;
+   short sTipX2;
+   short sTipY2;
    Maprealm2Screen(prealm, pcamera, sCursorX, sCursorY, sCursorZ, &sTipX2, &sTipY2);
 
    // Draw the base (I think this is the hotspot).
@@ -3554,7 +3554,7 @@ static short NewRealm(
    short sResult = 0;
 
    // Close realm in case it contains anything
-   sResult	= CloseRealm(prealm);
+   sResult   = CloseRealm(prealm);
    if (sResult == 0)
    {
       // Set the bouy lines to default to on
@@ -3566,21 +3566,21 @@ static short NewRealm(
       // Set disk path for this realm.
       prealm->m_resmgr.SetBasePath(g_GameSettings.m_szNoSakDir);
 
-      CThing*	pthing;
-      short	sResult	= CreateNewThing(prealm, CThing::CHoodID, 0, 0, 0, &pthing, &ms_photHood);
+      CThing*   pthing;
+      short sResult   = CreateNewThing(prealm, CThing::CHoodID, 0, 0, 0, &pthing, &ms_photHood);
       // Create hood object because we can't really do anything without it
       if (sResult == 0)
       {
-         RHot*		photdummy;
-         sResult	= CreateNewThing(prealm, CThing::CGameEditThingID, 0, 0, 0, &pthing, &photdummy);
+         RHot*      photdummy;
+         sResult   = CreateNewThing(prealm, CThing::CGameEditThingID, 0, 0, 0, &pthing, &photdummy);
          // Create editor object . . .
          if (sResult == 0)
          {
             // Store ptr to GameEdit thing.
-            ms_pgething	= (CGameEditThing*)pthing;
+            ms_pgething   = (CGameEditThing*)pthing;
             ms_pgething->m_plbNavNetList = (RListBox*) ms_pguiNavNets->GetItemFromId(GUI_ID_NAVNET_LIST);
 
-            sResult	= CreateNewThing(prealm, CThing::CNavigationNetID, 150, 0, 50, &pthing, &ms_photSel);
+            sResult   = CreateNewThing(prealm, CThing::CNavigationNetID, 150, 0, 50, &pthing, &ms_photSel);
             if (sResult == 0)
             {
                // Success.
@@ -3643,13 +3643,13 @@ static short CloseRealm(
                  g_pszSaveFileQuery) )
       {
       case RSP_MB_RET_YES:
-         sResult	= SaveRealm(prealm);
+         sResult   = SaveRealm(prealm);
          break;
       case RSP_MB_RET_NO:
          break;
       case RSP_MB_RET_CANCEL:
          // User abort.
-         sResult	= 1;
+         sResult   = 1;
          break;
       }
    }
@@ -3667,23 +3667,23 @@ static short CloseRealm(
       prealm->Clear();
 
       // This's gone now.
-      ms_pgething	= NULL;
+      ms_pgething   = NULL;
 
       // If there are any . . .
       if (ms_photHood != NULL)
       {
          // Destroy all child hotboxes.
-         RHot*	phot	= ms_photHood->m_listChildren.GetHead();
+         RHot*   phot   = ms_photHood->m_listChildren.GetHead();
          while (phot != NULL)
          {
             delete phot;
 
-            phot	= ms_photHood->m_listChildren.GetNext();
+            phot   = ms_photHood->m_listChildren.GetNext();
          }
 
          // Destroy root/hood hotbox.
          delete ms_photHood;
-         ms_photHood	= NULL;
+         ms_photHood   = NULL;
       }
 
       // Clean up trigger regions.
@@ -3694,7 +3694,7 @@ static short CloseRealm(
       }
 
       // Better clear these.
-      ms_sMoving		= FALSE;
+      ms_sMoving      = FALSE;
       SetSel(NULL, NULL);
 
       // Set filename such that initially open and save dialogs start in
@@ -3723,12 +3723,12 @@ static short LoadRealm(
    short sResult = 0;
 
    // Close current realm.
-   sResult	= CloseRealm(prealm);
+   sResult   = CloseRealm(prealm);
    if (sResult == 0)
    {
       // Attempt to get filename . . .
       // ***LOCALIZE***
-      sResult	= rspOpenBox(
+      sResult   = rspOpenBox(
          "Load Realm",
          ms_szFileName,
          ms_szFileName,
@@ -3751,7 +3751,7 @@ static short LoadRealm(
          if (sResult == 0)
          {
             // Get the editor thing.
-            ms_pgething	= GetEditorThing(prealm);
+            ms_pgething   = GetEditorThing(prealm);
 
             // Start the realm.
             prealm->Startup();
@@ -3776,13 +3776,13 @@ static short LoadRealm(
             // Get the hood . . .
             if (prealm->m_asClassNumThings[CThing::CHoodID] > 0)
             {
-               RRect	rc;
+               RRect rc;
                // Get first and only Hood iterator.
                CHood* phood = (CHood*) prealm->m_aclassHeads[CThing::CHoodID].m_pnNext->m_powner;
                // Get rectangle.
                phood->EditRect(&rc);
                // Create and setup RHot for hood.
-               phood->m_phot	= ms_photHood	= new RHot(
+               phood->m_phot   = ms_photHood   = new RHot(
                   rc.sX,                     // Position.
                   rc.sY,                     // Position.
                   rc.sW,                     // Dimensions.
@@ -3797,15 +3797,15 @@ static short LoadRealm(
                   // Setup hotboxes for all objects.
                   CListNode<CThing>* pList;
                   CThing*  pthing;
-                  short	sActivateHot;
+                  short sActivateHot;
                   pList = prealm->m_everythingHead.m_pnNext;
                   while (pList->m_powner != NULL && sResult == 0)
                   {
-                     pthing	= pList->m_powner;
+                     pthing   = pList->m_powner;
                      // Already got one for Hood.  If not the Hood . . .
                      if (pthing->GetClassID() != CThing::CHoodID)
                      {
-                        sActivateHot	= TRUE;
+                        sActivateHot   = TRUE;
 
                         // Some types may need to hook in here.
                         switch (pthing->GetClassID() )
@@ -3815,7 +3815,7 @@ static short LoadRealm(
                            if (ms_bDrawNetwork == false)
                            {
                               // Don't activate new bouy hots.
-                              sActivateHot	= FALSE;
+                              sActivateHot   = FALSE;
                            }
                            break;
 
@@ -3827,7 +3827,7 @@ static short LoadRealm(
                         // Get rectangle.
                         pthing->EditRect(&rc);
                         // Create and setup RHot.
-                        pthing->m_phot	= new RHot(
+                        pthing->m_phot   = new RHot(
                            rc.sX,                     // Position.
                            rc.sY,                     // Position.
                            rc.sW,                     // Dimensions.
@@ -3846,7 +3846,7 @@ static short LoadRealm(
                         else
                         {
                            TRACE("LoadRealm(): Unable to allocate hotbox for thing.\n");
-                           sResult	= 1;
+                           sResult   = 1;
                         }
                      }
                      // Go to next item
@@ -3856,14 +3856,14 @@ static short LoadRealm(
                else
                {
                   TRACE("LoadRealm(): Unable to allocate hotbox for Hood.\n");
-                  sResult	= 1;
+                  sResult   = 1;
                }
 
             }
             else
             {
                TRACE("LoadRealm(): Realm has no hood.\n");
-               sResult	= 1;
+               sResult   = 1;
             }
 
             // If any errors occurred . . .
@@ -3880,12 +3880,12 @@ static short LoadRealm(
             else
             {
                // Make sure our loaded settings are unaffected.
-               short	sViewPosX	= 0;
-               short	sViewPosY	= 0;
+               short sViewPosX   = 0;
+               short sViewPosY   = 0;
                if (ms_pgething != NULL)
                {
-                  sViewPosX	= ms_pgething->m_sViewPosX;
-                  sViewPosY	= ms_pgething->m_sViewPosY;
+                  sViewPosX   = ms_pgething->m_sViewPosX;
+                  sViewPosY   = ms_pgething->m_sViewPosY;
                }
 
                // Set camera's hood.
@@ -3974,7 +3974,7 @@ static short SaveRealmAs(
    else
    {
       // Cancelled.
-      sResult	= 1;
+      sResult   = 1;
    }
    #endif
 
@@ -3995,13 +3995,13 @@ static short SaveRealm(
    if (strcmp(ms_szFileName, FullPathVD(INITIAL_REALM_DIR)) != 0)
    {
       // Save realm with trigger regions.
-      sResult	= SaveRealm(prealm, ms_szFileName, true);
+      sResult   = SaveRealm(prealm, ms_szFileName, true);
    }
    else
    {
       // Get filename before save.
       // Note that SaveRealmAs() calls this SaveRealm().
-      sResult	= SaveRealmAs(prealm);
+      sResult   = SaveRealmAs(prealm);
    }
 
    return sResult;
@@ -4049,7 +4049,7 @@ static short SaveRealm(       // Returns 0 on success.
                RSP_MB_ICN_INFO | RSP_MB_BUT_OK,
                "SaveRealm()",
                "Pylon editor regions failed to save.");
-            sResult	= -1;
+            sResult   = -1;
          }
       }
    }
@@ -4071,12 +4071,12 @@ static short SaveRealm(       // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void PlayRealm(
-   CRealm*	pEditRealm,          // In:  Realm to play.
-   CThing*	pthingSel)           // In:  Currently selected CThing which can
-                                 // be used to give PlayRealm() a hint on which
-                                 // of several things the user wants to use.
-                                 // For example, a selected warp is the used
-                                 // as the warp in point.
+   CRealm*   pEditRealm,          // In:  Realm to play.
+   CThing*   pthingSel)           // In:  Currently selected CThing which can
+                                  // be used to give PlayRealm() a hint on which
+                                  // of several things the user wants to use.
+                                  // For example, a selected warp is the used
+                                  // as the warp in point.
 {
    #ifdef DISABLE_EDITOR_SAVE_AND_PLAY
    rspMsgBox(
@@ -4103,7 +4103,7 @@ static void PlayRealm(
       // Attach file counter callback to RFile and setup necessary components.
       InitFileCounter("Saving -- %ld bytes so far.");
       // Save realm being edited without the trigger regions.
-      sResult	= SaveRealm(pEditRealm, szFileName, false);
+      sResult   = SaveRealm(pEditRealm, szFileName, false);
       // Clean and detach file counter.
       KillFileCounter();
       // If successful . . .
@@ -4115,14 +4115,14 @@ static void PlayRealm(
          ASSERT(prealm != NULL);
 
          // Setup progress callback right away.
-//				prealm->m_fnProgress	= RealmOpProgress;
+//            prealm->m_fnProgress   = RealmOpProgress;
 
          // Clear realm (just in case)
          prealm->Clear();
 
          // Note that we are playing from the editor.  Might be useful.
-         prealm->m_flags.bEditPlay		= true;
-         prealm->m_flags.sDifficulty	= g_GameSettings.m_sDifficulty;
+         prealm->m_flags.bEditPlay      = true;
+         prealm->m_flags.sDifficulty   = g_GameSettings.m_sDifficulty;
 
          // Reset time here so that objects can use it when they are loaded
          prealm->m_time.Reset();
@@ -4138,7 +4138,7 @@ static void PlayRealm(
          strcpy(szRealmName, rspPathFromSystem(szFileName) );
 
          // Load realm (false indicates NOT edit mode)
-         sResult	= prealm->Load(szRealmName, false);
+         sResult   = prealm->Load(szRealmName, false);
          // Clean and detach file counter.
          KillFileCounter();
 
@@ -4174,7 +4174,7 @@ static void PlayRealm(
                   {
                   case CThing::CWarpID:
                      // Get user's preferred warp.
-                     idSpecificWarp	= pthingSel->GetInstanceID();
+                     idSpecificWarp   = pthingSel->GetInstanceID();
                      break;
                   }
                }
@@ -4220,7 +4220,7 @@ static void PlayRealm(
                pcamera->SetFilm(g_pimScreenBuf, 0, 0);
                pcamera->SetHood(prealm->m_phood);
 
-               ms_pcameraCur	= pcamera;
+               ms_pcameraCur   = pcamera;
 
                ScrollPosUpdate(&ms_sbVert);
                ScrollPosUpdate(&ms_sbHorz);
@@ -4235,7 +4235,7 @@ static void PlayRealm(
                bool bTracking   = true;
 
                // Get thing to track . . .
-               CThing*	pthingTrack	= NULL;
+               CThing*   pthingTrack   = NULL;
                U16 u16IdTrack  = CIdBank::IdNil;
                if (ms_pgething != NULL)
                {
@@ -4249,7 +4249,7 @@ static void PlayRealm(
                U16 u16IdDude = CIdBank::IdNil;
                while (pNext->m_powner != NULL)
                {
-                  CDude*	pdude = (CDude*) pNext->m_powner;
+                  CDude*   pdude = (CDude*) pNext->m_powner;
                   // if this is the local dude...
                   if (pdude->m_sDudeNum == 0)
                   {
@@ -4265,8 +4265,8 @@ static void PlayRealm(
                if (u16IdDude == CIdBank::IdNil)
                {
                   // Create one using warps (if any):
-                  CDude*	pdude	= NULL;
-                  CWarp*	pwarp	= NULL;
+                  CDude*   pdude   = NULL;
+                  CWarp*   pwarp   = NULL;
                   // If there's a specific warp desired . . .
                   if (prealm->m_idbank.GetThingByID( (CThing**)&pwarp, idSpecificWarp) == 0)
                   {
@@ -4314,18 +4314,18 @@ static void PlayRealm(
                   }
                }
 
-               CDude*	pdudeLocal	= NULL;
+               CDude*   pdudeLocal   = NULL;
                if (prealm->m_idbank.GetThingByID((CThing**)&pdudeLocal, u16IdDude) == 0)
                {
                   pdudeLocal->m_sTextureIndex = MAX((short)0, MIN((short)(CDude::MaxTextures - 1), g_GameSettings.m_sPlayerColorIndex));
 
                   // Don't use later.
-                  pdudeLocal	= NULL;
+                  pdudeLocal   = NULL;
                }
 
-               RInputEvent	ie;
+               RInputEvent ie;
                // Setup rectangular area for dude's status.
-               RRect	rcDudeStatus(
+               RRect rcDudeStatus(
                   DUDE_STATUS_RECT_X,
                   DUDE_STATUS_RECT_Y,
                   DUDE_STATUS_RECT_W,
@@ -4337,7 +4337,7 @@ static void PlayRealm(
                   REALM_STATUS_RECT_W,
                   REALM_STATUS_RECT_H);
                // Setup rectangular area for display info.
-               RRect	rcInfoStatus(
+               RRect rcInfoStatus(
                   INFO_STATUS_RECT_X,
                   INFO_STATUS_RECT_Y,
                   INFO_STATUS_RECT_W,
@@ -4372,7 +4372,7 @@ static void PlayRealm(
                   // System update
                   UpdateSystem();
 
-                  ie.type	= RInputEvent::None;
+                  ie.type   = RInputEvent::None;
                   rspGetNextInputEvent(&ie);
                   if (ie.type == RInputEvent::Key)
                   {
@@ -4391,7 +4391,7 @@ static void PlayRealm(
                         {
                            prealm->Resume();
                         }
-                        bSuspended	= !bSuspended;
+                        bSuspended   = !bSuspended;
                         break;
       #if 0
                      case EDIT_KEY_SPEED_UP:
@@ -4406,11 +4406,11 @@ static void PlayRealm(
                         // If first request . . .
                         if (bExitRequest == false)
                         {
-                           bExitRequest	= true;
+                           bExitRequest   = true;
                         }
                         else
                         {
-                           bDone	= true;
+                           bDone   = true;
                         }
                         break;
 
@@ -4419,40 +4419,40 @@ static void PlayRealm(
                      case EDIT_KEY_ENLARGE_DISPLAY3:
                         OnEnlargeDisplay(pcamera, prealm);
                         // Update status areas.  That is, repaginate now.
-                        rcDudeStatus.sX	= DUDE_STATUS_RECT_X;
-                        rcDudeStatus.sY	= DUDE_STATUS_RECT_Y;
-                        rcDudeStatus.sW	= DUDE_STATUS_RECT_W;
-                        rcDudeStatus.sH	= DUDE_STATUS_RECT_H;
-                        rcRealmStatus.sX	= REALM_STATUS_RECT_X;
-                        rcRealmStatus.sY	= REALM_STATUS_RECT_Y;
-                        rcRealmStatus.sW	= REALM_STATUS_RECT_W;
-                        rcRealmStatus.sH	= REALM_STATUS_RECT_H;
-                        rcInfoStatus.sX	= INFO_STATUS_RECT_X;
-                        rcInfoStatus.sY	= INFO_STATUS_RECT_Y;
-                        rcInfoStatus.sW	= INFO_STATUS_RECT_W;
-                        rcInfoStatus.sH	= INFO_STATUS_RECT_H;
+                        rcDudeStatus.sX   = DUDE_STATUS_RECT_X;
+                        rcDudeStatus.sY   = DUDE_STATUS_RECT_Y;
+                        rcDudeStatus.sW   = DUDE_STATUS_RECT_W;
+                        rcDudeStatus.sH   = DUDE_STATUS_RECT_H;
+                        rcRealmStatus.sX   = REALM_STATUS_RECT_X;
+                        rcRealmStatus.sY   = REALM_STATUS_RECT_Y;
+                        rcRealmStatus.sW   = REALM_STATUS_RECT_W;
+                        rcRealmStatus.sH   = REALM_STATUS_RECT_H;
+                        rcInfoStatus.sX   = INFO_STATUS_RECT_X;
+                        rcInfoStatus.sY   = INFO_STATUS_RECT_Y;
+                        rcInfoStatus.sW   = INFO_STATUS_RECT_W;
+                        rcInfoStatus.sH   = INFO_STATUS_RECT_H;
                         break;
 
                      case EDIT_KEY_REDUCE_DISPLAY1:
                      case EDIT_KEY_REDUCE_DISPLAY2:
                         OnReduceDisplay(pcamera, prealm);
                         // Update status areas.  That is, repaginate now.
-                        rcDudeStatus.sX	= DUDE_STATUS_RECT_X;
-                        rcDudeStatus.sY	= DUDE_STATUS_RECT_Y;
-                        rcDudeStatus.sW	= DUDE_STATUS_RECT_W;
-                        rcDudeStatus.sH	= DUDE_STATUS_RECT_H;
-                        rcRealmStatus.sX	= REALM_STATUS_RECT_X;
-                        rcRealmStatus.sY	= REALM_STATUS_RECT_Y;
-                        rcRealmStatus.sW	= REALM_STATUS_RECT_W;
-                        rcRealmStatus.sH	= REALM_STATUS_RECT_H;
-                        rcInfoStatus.sX	= INFO_STATUS_RECT_X;
-                        rcInfoStatus.sY	= INFO_STATUS_RECT_Y;
-                        rcInfoStatus.sW	= INFO_STATUS_RECT_W;
-                        rcInfoStatus.sH	= INFO_STATUS_RECT_H;
+                        rcDudeStatus.sX   = DUDE_STATUS_RECT_X;
+                        rcDudeStatus.sY   = DUDE_STATUS_RECT_Y;
+                        rcDudeStatus.sW   = DUDE_STATUS_RECT_W;
+                        rcDudeStatus.sH   = DUDE_STATUS_RECT_H;
+                        rcRealmStatus.sX   = REALM_STATUS_RECT_X;
+                        rcRealmStatus.sY   = REALM_STATUS_RECT_Y;
+                        rcRealmStatus.sW   = REALM_STATUS_RECT_W;
+                        rcRealmStatus.sH   = REALM_STATUS_RECT_H;
+                        rcInfoStatus.sX   = INFO_STATUS_RECT_X;
+                        rcInfoStatus.sY   = INFO_STATUS_RECT_Y;
+                        rcInfoStatus.sW   = INFO_STATUS_RECT_W;
+                        rcInfoStatus.sH   = INFO_STATUS_RECT_H;
                         break;
 
                      case EDIT_KEY_CAMERA_TRACKING:
-                        bTracking	= !bTracking;
+                        bTracking   = !bTracking;
 
                         // If we are now using grip . . .
                         if (bTracking == true)
@@ -4476,9 +4476,9 @@ static void PlayRealm(
                            // Reset the grip, if necessary.
                            if (pthingTrack != NULL && bTracking == true)
                            {
-                              RRect	rc;
+                              RRect rc;
                               pthingTrack->EditRect(&rc);
-                              short	sHotX, sHotY;
+                              short sHotX, sHotY;
                               pthingTrack->EditHotSpot(&sHotX, &sHotY);
 
                               grip.ResetTarget(rc.sX + sHotX, rc.sY + sHotY, rc.sH / 2);
@@ -4499,22 +4499,22 @@ static void PlayRealm(
                      case '1':
                      case '2':
                      case '3':
-                        //								rspSetDoSystemMode(ie.lKey - '1');
+                        //                        rspSetDoSystemMode(ie.lKey - '1');
                         break;
 
                      case EDIT_KEY_TOGGLE_DISP_INFO:
                         // Toggle display info flag.
                         if (g_GameSettings.m_sDisplayInfo == FALSE)
                         {
-                           g_GameSettings.m_sDisplayInfo	= TRUE;
+                           g_GameSettings.m_sDisplayInfo   = TRUE;
                         }
                         else
                         {
-                           g_GameSettings.m_sDisplayInfo	= FALSE;
+                           g_GameSettings.m_sDisplayInfo   = FALSE;
                         }
 
                         // Repaginate now.
-                        rcDudeStatus.sH	= DUDE_STATUS_RECT_H;
+                        rcDudeStatus.sH   = DUDE_STATUS_RECT_H;
                         break;
 
                      case EDIT_KEY_SHOW_MISSION:
@@ -4569,7 +4569,7 @@ static void PlayRealm(
                   // If exit requested . . .
                   if (bExitRequest == true)
                   {
-                     CDude*	pdudeLocal;
+                     CDude*   pdudeLocal;
                      // If there's a local dude . . .
                      if (prealm->m_idbank.GetThingByID((CThing**)&pdudeLocal, u16IdDude) == 0)
                      {
@@ -4577,20 +4577,20 @@ static void PlayRealm(
                         if (pdudeLocal->m_state == CCharacter::State_Dead)
                         {
                            // Okay, done.
-                           bDone	= true;
+                           bDone   = true;
                         }
                         else
                         {
                            // Commit suicide.
-                           GameMessage	msg;
-                           msg.msg_Generic.eType		= typeSuicide;
-                           msg.msg_Generic.sPriority	= 0;
+                           GameMessage msg;
+                           msg.msg_Generic.eType      = typeSuicide;
+                           msg.msg_Generic.sPriority   = 0;
                            pdudeLocal->SendThingMessage(&msg, pdudeLocal);
                         }
                      }
                      else
                      {
-                        bDone	= true;
+                        bDone   = true;
                      }
                   }
 
@@ -4602,22 +4602,22 @@ static void PlayRealm(
                   {
                      if (prealm->m_idbank.GetThingByID(&pthingTrack, u16IdTrack) != 0)
                      {
-                        u16IdTrack	= CIdBank::IdNil;
+                        u16IdTrack   = CIdBank::IdNil;
                      }
                   }
 
                   // Update grip/camera
                   if (pthingTrack != NULL)
                   {
-                     RRect	rc;
+                     RRect rc;
                      pthingTrack->EditRect(&rc);
-                     short	sHotX, sHotY;
+                     short sHotX, sHotY;
                      pthingTrack->EditHotSpot(&sHotX, &sHotY);
 
-                     sHotX	+= rc.sX;
-                     sHotY	+= rc.sY;
+                     sHotX   += rc.sX;
+                     sHotY   += rc.sY;
 
-                     short	sRealmX, sRealmY, sRealmZ;
+                     short sRealmX, sRealmY, sRealmZ;
                      // Convert to realm.
                      MapScreen2Realm(
                         prealm,                             // In:  Realm.
@@ -4640,14 +4640,14 @@ static void PlayRealm(
                   // If quitting . . .
                   if (rspGetQuitStatus() != FALSE)
                   {
-                     bDone	= true;
+                     bDone   = true;
                   }
 
                   // Snap picture of scene
                   pcamera->Snap();
 
                   // If there is a local dude . . .
-                  CDude*	pdudeLocal	= NULL;
+                  CDude*   pdudeLocal   = NULL;
                   // If there's a local dude, get him.
                   prealm->m_idbank.GetThingByID((CThing**)&pdudeLocal, u16IdDude);
 
@@ -4705,7 +4705,7 @@ static void PlayRealm(
                      Play_SnapPicture();
 
                      // Clear key status.
-                     pau8KeyStatus[KEY_SNAP_PICTURE]	= 0;
+                     pau8KeyStatus[KEY_SNAP_PICTURE]   = 0;
                   }
                }
 
@@ -4714,8 +4714,8 @@ static void PlayRealm(
 
                // Done with the camera.
                delete pcamera;
-               pcamera			= NULL;
-               ms_pcameraCur	= NULL;
+               pcamera         = NULL;
+               ms_pcameraCur   = NULL;
             }
             else
             {
@@ -4773,16 +4773,16 @@ static void PlayRealm(
 //
 ////////////////////////////////////////////////////////////////////////////////
 static short CreateNewThing(     // Returns 0 on success.
-   CRealm*	prealm,              // In:  Realm to add new CThing to.
+   CRealm*   prealm,              // In:  Realm to add new CThing to.
    CThing::ClassIDType id,       // ID of new CThing type to create.
-   short	sPosX,                  // Position for new CThing.
-   short	sPosY,                  // Position for new CThing.
-   short	sPosZ,                  // Position for new CThing.
-   CThing**	ppthing,             // Out: Pointer to new thing.
-   RHot**	pphot,               // Out: Pointer to new hotbox for thing.
-   RFile*	pfile /* = NULL*/)    // In:  Optional file to load from (instead of EditNew()).
+   short sPosX,                    // Position for new CThing.
+   short sPosY,                    // Position for new CThing.
+   short sPosZ,                    // Position for new CThing.
+   CThing**   ppthing,             // Out: Pointer to new thing.
+   RHot**   pphot,               // Out: Pointer to new hotbox for thing.
+   RFile*   pfile /* = NULL*/)    // In:  Optional file to load from (instead of EditNew()).
 {
-   short	sError		= 0;
+   short sError      = 0;
 
    // Don't allow more than one CHood . . .
    if ((id == CThing::CHoodID) && (prealm->m_asClassNumThings[CThing::CHoodID] > 0))
@@ -4793,7 +4793,7 @@ static short CreateNewThing(     // Returns 0 on success.
          "Editor: ",
          "Can't have multiple CHood's!");
       //STRACE("Editor: Can't have multiple CHood's!\n");
-      sError	= 1;
+      sError   = 1;
    }
    else
    {
@@ -4830,7 +4830,7 @@ static short CreateNewThing(     // Returns 0 on success.
                   else
                   {
                      TRACE("CreateNewThing(): Load() failed for object.\n");
-                     sError	= 4;
+                     sError   = 4;
                   }
                }
                else
@@ -4843,14 +4843,14 @@ static short CreateNewThing(     // Returns 0 on success.
                   else
                   {
                      TRACE("CreateNewThing(): EditNew() failed for object.\n");
-                     sError	= 4;
+                     sError   = 4;
                   }
                }
 
                // If successful so far . . .
                if (sError == 0)
                {
-                  short sActivateHot	= TRUE;
+                  short sActivateHot   = TRUE;
 
                   // Some types may need to hook in here.
                   switch ( (*ppthing)->GetClassID() )
@@ -4860,17 +4860,17 @@ static short CreateNewThing(     // Returns 0 on success.
                      if (ms_bDrawNetwork == false)
                      {
                         // Don't activate new bouy hots.
-                        sActivateHot	= FALSE;
+                        sActivateHot   = FALSE;
                      }
                      break;
                   }
 
                   // Get pos and dimensions for hot.
-                  RRect	rc;
+                  RRect rc;
                   (*ppthing)->EditRect(&rc);
 
                   // Allocate a RHot for the item . . .
-                  (*ppthing)->m_phot	= *pphot	= new RHot(
+                  (*ppthing)->m_phot   = *pphot   = new RHot(
                      rc.sX,                     // Position.
                      rc.sY,                     // Position.
                      rc.sW,                     // Dimensions.
@@ -4899,12 +4899,12 @@ static short CreateNewThing(     // Returns 0 on success.
                            if (ms_pgething->m_u16CameraTrackId == CIdBank::IdNil)
                            {
                               // Track this dude.
-                              ms_pgething->m_u16CameraTrackId	= (*ppthing)->GetInstanceID();
+                              ms_pgething->m_u16CameraTrackId   = (*ppthing)->GetInstanceID();
                            }
                         }
 
 
-                        CDude*	pdude	= (CDude*)(*ppthing);
+                        CDude*   pdude   = (CDude*)(*ppthing);
                         // If this is the local dude . . .
                         if (pdude->m_sDudeNum == 0)
                         {
@@ -4920,13 +4920,13 @@ static short CreateNewThing(     // Returns 0 on success.
                      {
                         // On error, destroy object
                         delete *pphot;
-                        *pphot	= NULL;
+                        *pphot   = NULL;
                      }
                   }
                   else
                   {
                      TRACE("CreateNewThing(): Failed to allocate new RHot.\n");
-                     sError	= 3;
+                     sError   = 3;
                   }
                }
 
@@ -4935,7 +4935,7 @@ static short CreateNewThing(     // Returns 0 on success.
                {
                   // On error, destroy object
                   delete *ppthing;
-                  *ppthing	= NULL;
+                  *ppthing   = NULL;
                }
             }
          }
@@ -4947,7 +4947,7 @@ static short CreateNewThing(     // Returns 0 on success.
                RSP_MB_ICN_STOP | RSP_MB_BUT_OK,
                "No current NavNet",
                "Cannot create new Buoy when there is no current NavNet.");
-            sError	= 6;
+            sError   = 6;
          }
       }
       else
@@ -4965,11 +4965,11 @@ static short CreateNewThing(     // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void MoveThing(           // Returns nothing.
-   CThing*	pthing,              // Thing to move.
-   RHot*		phot,                // Thing's hotbox.
-   short	sPosX,                  // New position.
-   short	sPosY,                  // New position.
-   short	sPosZ)                  // New position.
+   CThing*   pthing,              // Thing to move.
+   RHot*      phot,                // Thing's hotbox.
+   short sPosX,                    // New position.
+   short sPosY,                    // New position.
+   short sPosZ)                    // New position.
 {
    ASSERT(pthing != NULL);
    ASSERT(phot != NULL);
@@ -4981,15 +4981,15 @@ static void MoveThing(           // Returns nothing.
       sPosZ);
 
    // Get 2D position.
-   RRect	rc;
+   RRect rc;
    pthing->EditRect(
       &rc);
 
    // Copy to hot.
-   phot->m_sX	= rc.sX;
-   phot->m_sY	= rc.sY;
-   phot->m_sW	= rc.sW;
-   phot->m_sH	= rc.sH;
+   phot->m_sX   = rc.sX;
+   phot->m_sY   = rc.sY;
+   phot->m_sW   = rc.sW;
+   phot->m_sH   = rc.sH;
 
    // Update info GUI.
    UpdateSelectionInfo(false);
@@ -5002,7 +5002,7 @@ static void MoveThing(           // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 static void OnEnlargeDisplay(
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm)              // Realm to update.
+   CRealm*   prealm)              // Realm to update.
 {
    AdjustDisplaySize(DISPLAY_SIZE_DELTA_X, DISPLAY_SIZE_DELTA_Y, pcamera, prealm);
 }
@@ -5014,7 +5014,7 @@ static void OnEnlargeDisplay(
 ////////////////////////////////////////////////////////////////////////////////
 static void OnReduceDisplay(
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm)              // Realm to update.
+   CRealm*   prealm)              // Realm to update.
 {
    AdjustDisplaySize(-DISPLAY_SIZE_DELTA_X, -DISPLAY_SIZE_DELTA_Y, pcamera, prealm);
 }
@@ -5026,13 +5026,13 @@ static void OnReduceDisplay(
 //
 ////////////////////////////////////////////////////////////////////////////////
 static short SetDisplayArea(  // Returns 0 on success.
-   short	sDeviceD,            // New depth of display.
-   short	sDisplayW,           // New width of display area.
-   short	sDisplayH)           // New height of display area.
+   short sDeviceD,              // New depth of display.
+   short sDisplayW,             // New width of display area.
+   short sDisplayH)             // New height of display area.
 {
-   short	sError	= 0;
-   short	sDeviceW, sDeviceH;
-   short	sDeviceScaling	= FALSE;
+   short sError   = 0;
+   short sDeviceW, sDeviceH;
+   short sDeviceScaling   = FALSE;
    // Get device size/mode for this display size.
    sError = rspSuggestVideoMode(
       sDeviceD,
@@ -5053,15 +5053,15 @@ static short SetDisplayArea(  // Returns 0 on success.
          &sDeviceW,
          &sDeviceH);
       // Limit display area.
-      sDisplayW	= MIN(sDeviceW, sDisplayW);
-      sDisplayH	= MIN(sDeviceH, sDisplayH);
+      sDisplayW   = MIN(sDeviceW, sDisplayW);
+      sDisplayH   = MIN(sDeviceH, sDisplayH);
    }
 
    // If successful so far . . .
    if (sError == 0)
    {
       // Set the adjusted mode . . .
-      sError	= rspSetVideoMode(
+      sError   = rspSetVideoMode(
          sDeviceD,
          sDeviceW,
          sDeviceH,
@@ -5087,8 +5087,8 @@ static short SetDisplayArea(  // Returns 0 on success.
    }
 
    // Store latest values (in success or failure).
-   g_GameSettings.m_sEditorViewWidth	= g_pimScreenBuf->m_sWidth;
-   g_GameSettings.m_sEditorViewHeight	= g_pimScreenBuf->m_sHeight;
+   g_GameSettings.m_sEditorViewWidth   = g_pimScreenBuf->m_sWidth;
+   g_GameSettings.m_sEditorViewHeight   = g_pimScreenBuf->m_sHeight;
 
    return sError;
 }
@@ -5101,12 +5101,12 @@ static short SetDisplayArea(  // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 static short SetCameraArea(void) // Returns 0 on success.
 {
-   short	sDepth	= 8;  // Safety.
+   short sDepth   = 8;    // Safety.
    rspGetVideoMode(&sDepth);
 
    // Determine display area for this camera size.
-   short	sDisplayW	= g_GameSettings.m_sEditorViewWidth;//sCameraW + DISPLAY_RIGHT_BORDER;
-   short	sDisplayH	= g_GameSettings.m_sEditorViewHeight;//sCameraH + DISPLAY_BOTTOM_BORDER;
+   short sDisplayW   = g_GameSettings.m_sEditorViewWidth;  //sCameraW + DISPLAY_RIGHT_BORDER;
+   short sDisplayH   = g_GameSettings.m_sEditorViewHeight;  //sCameraH + DISPLAY_BOTTOM_BORDER;
 
    // Set the display area/mode.
    return SetDisplayArea(sDepth, sDisplayW, sDisplayH);
@@ -5118,18 +5118,18 @@ static short SetCameraArea(void) // Returns 0 on success.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static short AdjustDisplaySize(  // Returns 0 on success.
-   short	sAdjustX,               // Amount to increase width of display area.
-                                 // Can be negative to decrease.
-   short	sAdjustY,               // Amount to increase height of display area.
-                                 // Can be negative to decrease.
+   short sAdjustX,                 // Amount to increase width of display area.
+                                   // Can be negative to decrease.
+   short sAdjustY,                 // Amount to increase height of display area.
+                                   // Can be negative to decrease.
    CCamera* pcamera,             // Camera to update.
-   CRealm*	prealm)              // Realm to update.
+   CRealm*   prealm)              // Realm to update.
 {
-   short	sError		= 0;
+   short sError      = 0;
 
-   short	sDisplayW	= 640;   // Safety.
-   short	sDisplayH	= 480;   // Safety.
-   short	sDeviceD		= 8;     // Safety.
+   short sDisplayW   = 640;     // Safety.
+   short sDisplayH   = 480;     // Safety.
+   short sDeviceD      = 8;       // Safety.
 
    // Get current settings.
    rspGetVideoMode(
@@ -5150,7 +5150,7 @@ static short AdjustDisplaySize(  // Returns 0 on success.
    }
    else
    {
-      sError	= 1;
+      sError   = 1;
    }
 
    return sError;
@@ -5163,13 +5163,13 @@ static short AdjustDisplaySize(  // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 static short SizeUpdate(      // Returns 0 on success.
    CCamera* pcamera,          // Camera to update.
-   CRealm*	prealm)           // Realm to update.
+   CRealm*   prealm)           // Realm to update.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   short	sDisplayW	= 640;   // Safety.
-   short	sDisplayH	= 480;   // Safety.
-   short	sDisplayD	= 8;     // Safety.
+   short sDisplayW   = 640;     // Safety.
+   short sDisplayH   = 480;     // Safety.
+   short sDisplayD   = 8;       // Safety.
 
    // Get current settings.
    rspGetVideoMode(
@@ -5180,17 +5180,17 @@ static short SizeUpdate(      // Returns 0 on success.
       &sDisplayW,
       &sDisplayH);
 
-   short	sViewW	= sDisplayW - DISPLAY_RIGHT_BORDER - SCROLL_BAR_THICKNESS;
-   short	sViewH	= sDisplayH - DISPLAY_BOTTOM_BORDER - SCROLL_BAR_THICKNESS;
+   short sViewW   = sDisplayW - DISPLAY_RIGHT_BORDER - SCROLL_BAR_THICKNESS;
+   short sViewH   = sDisplayH - DISPLAY_BOTTOM_BORDER - SCROLL_BAR_THICKNESS;
 
    // Get the hood . . .
-   CHood*	phood = NULL;
+   CHood*   phood = NULL;
    if (prealm->m_asClassNumThings[CThing::CHoodID] > 0)
       phood = (CHood*) prealm->m_aclassHeads[CThing::CHoodID].GetNext();
    else
    {
       TRACE("SizeUpdate(): No hood.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    // Give Jeff a chance to update his cool wrapper.
@@ -5253,11 +5253,11 @@ static short SizeUpdate(      // Returns 0 on success.
    // If not clipping to realm . . .
    if (pcamera->m_bClip == false)
    {
-      lEdgeOvershoot	= ms_lEdgeOvershoot;
+      lEdgeOvershoot   = ms_lEdgeOvershoot;
    }
    else
    {
-      lEdgeOvershoot	= 0;
+      lEdgeOvershoot   = 0;
    }
 
    // (Re)Create scrollbars at appropriate sizes . . .
@@ -5278,14 +5278,14 @@ static short SizeUpdate(      // Returns 0 on success.
          ms_sbVert.SetRange(0, 0);
       }
 
-      ms_sbVert.m_lTrayIncDec		= sViewH - SCROLL_BTN_INCDEC;
-      ms_sbVert.m_lButtonIncDec	= SCROLL_BTN_INCDEC;
-      ms_sbVert.m_lPosPerSecond	= sViewH * 2;
+      ms_sbVert.m_lTrayIncDec      = sViewH - SCROLL_BTN_INCDEC;
+      ms_sbVert.m_lButtonIncDec   = SCROLL_BTN_INCDEC;
+      ms_sbVert.m_lPosPerSecond   = sViewH * 2;
    }
    else
    {
       TRACE("SizeUpdate(): ms_sbVert.Create() failed.\n");
-      sRes	= -3;
+      sRes   = -3;
    }
 
    if (ms_sbHorz.Create(
@@ -5305,14 +5305,14 @@ static short SizeUpdate(      // Returns 0 on success.
          ms_sbHorz.SetRange(0, 0);
       }
 
-      ms_sbHorz.m_lTrayIncDec		= sViewW - SCROLL_BTN_INCDEC;
-      ms_sbHorz.m_lButtonIncDec	= SCROLL_BTN_INCDEC;
-      ms_sbHorz.m_lPosPerSecond	= sViewW * 2;
+      ms_sbHorz.m_lTrayIncDec      = sViewW - SCROLL_BTN_INCDEC;
+      ms_sbHorz.m_lButtonIncDec   = SCROLL_BTN_INCDEC;
+      ms_sbHorz.m_lPosPerSecond   = sViewW * 2;
    }
    else
    {
       TRACE("SizeUpdate(): ms_sbHorz.Create() failed.\n");
-      sRes	= -3;
+      sRes   = -3;
    }
 
    // Re-Create attribute displayer sprite.
@@ -5328,9 +5328,9 @@ static short SizeUpdate(      // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 static CGameEditThing* GetEditorThing( // Returns ptr to editor thing for
                                        // specified realm or NULL.
-   CRealm*	prealm)                    // Realm to get editor thing from.
+   CRealm*   prealm)                    // Realm to get editor thing from.
 {
-   CGameEditThing*	pgething	= NULL;
+   CGameEditThing*   pgething   = NULL;
 
    if (prealm->m_asClassNumThings[CThing::CGameEditThingID] > 0)
    {
@@ -5350,10 +5350,10 @@ static CGameEditThing* GetEditorThing( // Returns ptr to editor thing for
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void GuiPressedCall(   // Returns nothing.
-   RGuiItem*	pgui)          // GUI item pressed.
+   RGuiItem*   pgui)          // GUI item pressed.
 {
    // Set ID of item pressed.
-   ms_lPressedId	= pgui->m_lId;
+   ms_lPressedId   = pgui->m_lId;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5362,7 +5362,7 @@ static void GuiPressedCall(   // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void ListItemPressedCall( // Returns nothing.
-   RGuiItem*	pgui)             // GUI item pressed.
+   RGuiItem*   pgui)             // GUI item pressed.
 {
    // If not dragging . . .
    if (ms_sMoving == FALSE)
@@ -5370,7 +5370,7 @@ static void ListItemPressedCall( // Returns nothing.
       // Default logic.
       GuiPressedCall(pgui);
       // Select item.
-      RListBox*	plb	= (RListBox*)pgui->m_ulUserInstance;
+      RListBox*   plb   = (RListBox*)pgui->m_ulUserInstance;
       if (plb != NULL)
       {
          // Set new item as selection.
@@ -5392,7 +5392,7 @@ void NavNetListPressedCall(   // Returns nothing
    RGuiItem* pgui)                  // GUI item pressed
 {
    // Default logic
-//	GuiPressedCall(pgui);
+//   GuiPressedCall(pgui);
    // Select item
    RGuiItem* pitem = (RGuiItem*) pgui->GetParent();
    RListBox* plb = (RListBox*) pitem->GetParent();
@@ -5426,28 +5426,28 @@ static void ScrollPosUpdate(  // Returns nothing.
       // If there's a camera . . .
       if (ms_pcameraCur != NULL)
       {
-         ms_pcameraCur->m_sSceneViewY	= psb->GetPos();
+         ms_pcameraCur->m_sSceneViewY   = psb->GetPos();
          ms_pcameraCur->Update();
       }
 
       // If there is an editor object . . .
       if (ms_pgething != NULL)
       {
-         ms_pgething->m_sViewPosY	= psb->GetPos();
+         ms_pgething->m_sViewPosY   = psb->GetPos();
       }
       break;
    case RScrollBar::Horizontal:
       // If there's a camera . . .
       if (ms_pcameraCur != NULL)
       {
-         ms_pcameraCur->m_sSceneViewX	= psb->GetPos();
+         ms_pcameraCur->m_sSceneViewX   = psb->GetPos();
          ms_pcameraCur->Update();
       }
 
       // If there is an editor object . . .
       if (ms_pgething != NULL)
       {
-         ms_pgething->m_sViewPosX	= psb->GetPos();
+         ms_pgething->m_sViewPosX   = psb->GetPos();
       }
       break;
    }
@@ -5459,12 +5459,12 @@ static void ScrollPosUpdate(  // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////////////
 static void ThingHotCall(  // Returns nothing.
-   RHot*	phot,             // Ptr to RHot that generated event.
-   RInputEvent*	pie)     // In:  Most recent user input event.
+   RHot*   phot,             // Ptr to RHot that generated event.
+   RInputEvent*   pie)     // In:  Most recent user input event.
                            // Out: Depends on callbacks.  Generally,
                            // pie->sUsed = TRUE, if used.
 {
-   CThing*	pthing	= (CThing*)phot->m_ulUser;
+   CThing*   pthing   = (CThing*)phot->m_ulUser;
    ASSERT(pthing != NULL);
 
    // If not used . . .
@@ -5478,8 +5478,8 @@ static void ThingHotCall(  // Returns nothing.
          SetSel(pthing, phot);
 
          // Note that we used the event.
-         pie->sUsed		= TRUE;
-         pie->lUser		= 1;
+         pie->sUsed      = TRUE;
+         pie->lUser      = 1;
 
          break;
       }
@@ -5488,7 +5488,7 @@ static void ThingHotCall(  // Returns nothing.
       {
          SetSel(pthing, phot);
          // If EDIT_KEY_SENDTOBACK held down . . .
-         UCHAR	aucKeys[128];
+         UCHAR aucKeys[128];
          rspScanKeys(aucKeys);
          if (aucKeys[EDIT_KEY_SENDTOBACK] != 0)
          {
@@ -5513,12 +5513,12 @@ static void ThingHotCall(  // Returns nothing.
                if (pthing->GetClassID() != CThing::CHoodID)
                {
                   // Get ID of item to track.
-                  ms_pgething->m_u16CameraTrackId	= pthing->GetInstanceID();
+                  ms_pgething->m_u16CameraTrackId   = pthing->GetInstanceID();
                }
                else
                {
                   // Clear camera track ID.
-                  ms_pgething->m_u16CameraTrackId	= CIdBank::IdNil;
+                  ms_pgething->m_u16CameraTrackId   = CIdBank::IdNil;
                }
 
                // User feedback.
@@ -5531,8 +5531,8 @@ static void ThingHotCall(  // Returns nothing.
          }
 
          // Note that we used the event.
-         pie->sUsed		= TRUE;
-         pie->lUser		= 1;
+         pie->sUsed      = TRUE;
+         pie->lUser      = 1;
 
          break;
       }
@@ -5545,13 +5545,13 @@ static void ThingHotCall(  // Returns nothing.
          SetSel(pthing, phot);
 
          // Size may have changed.
-         RRect	rc;
+         RRect rc;
          ms_pthingSel->EditRect(&rc);
          // Update hot.
-         ms_photSel->m_sX	= rc.sX;
-         ms_photSel->m_sY	= rc.sY;
-         ms_photSel->m_sW	= rc.sW;
-         ms_photSel->m_sH	= rc.sH;
+         ms_photSel->m_sX   = rc.sX;
+         ms_photSel->m_sY   = rc.sY;
+         ms_photSel->m_sW   = rc.sW;
+         ms_photSel->m_sH   = rc.sH;
 
          // See if a bouy was double clicked on
          if (ms_pthingSel->GetClassID() == CThing::CBouyID)
@@ -5586,8 +5586,8 @@ static void ThingHotCall(  // Returns nothing.
          }
 
          // Note that we used the event.
-         pie->sUsed		= TRUE;
-         pie->lUser		= 1;
+         pie->sUsed      = TRUE;
+         pie->lUser      = 1;
 
          break;
       }
@@ -5600,17 +5600,17 @@ static void ThingHotCall(  // Returns nothing.
          // Modify.
          ms_pthingSel->EditModify();
          // Size may have changed.
-         RRect	rc;
+         RRect rc;
          ms_pthingSel->EditRect(&rc);
          // Update hot.
-         ms_photSel->m_sX	= rc.sX;
-         ms_photSel->m_sY	= rc.sY;
-         ms_photSel->m_sW	= rc.sW;
-         ms_photSel->m_sH	= rc.sH;
+         ms_photSel->m_sX   = rc.sX;
+         ms_photSel->m_sY   = rc.sY;
+         ms_photSel->m_sW   = rc.sW;
+         ms_photSel->m_sH   = rc.sH;
 
          // Note that we used the event.
-         pie->sUsed		= TRUE;
-         pie->lUser		= 1;
+         pie->sUsed      = TRUE;
+         pie->lUser      = 1;
 
          break;
       }
@@ -5626,8 +5626,8 @@ static void ThingHotCall(  // Returns nothing.
             EditPylonTriggerRegion(ms_pthingSel);
 
             // Note that we used the event.
-            pie->sUsed		= TRUE;
-            pie->lUser		= 1;
+            pie->sUsed      = TRUE;
+            pie->lUser      = 1;
          }
 
          break;
@@ -5643,8 +5643,8 @@ static void ThingHotCall(  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 
 static void DrawBouyLink(  // Returns nothing.
-   CRealm*	prealm,        // In:  Realm.
-   CCamera*	pcamera)       // In:  View of prealm.
+   CRealm*   prealm,        // In:  Realm.
+   CCamera*   pcamera)       // In:  View of prealm.
 {
    short sMouseX;
    short sMouseY;
@@ -5656,7 +5656,7 @@ static void DrawBouyLink(  // Returns nothing.
       // These lines show the paths the characters would take so
       // they should be only on the X/Z plane and, therefore, Y
       // is ignored.
-      short	sBouyLink0X, sBouyLink0Y;
+      short sBouyLink0X, sBouyLink0Y;
       Maprealm2Screen(
          prealm,
          pcamera,
@@ -5666,7 +5666,7 @@ static void DrawBouyLink(  // Returns nothing.
          &sBouyLink0X,
          &sBouyLink0Y);
 
-      short	sBouyLink1X, sBouyLink1Y;
+      short sBouyLink1X, sBouyLink1Y;
       Maprealm2Screen(
          prealm,
          pcamera,
@@ -5688,7 +5688,7 @@ static void DrawBouyLink(  // Returns nothing.
       // These lines show the paths the characters would take so
       // they should be only on the X/Z plane and, therefore, Y
       // is ignored.
-      short	sBouyLink0X, sBouyLink0Y;
+      short sBouyLink0X, sBouyLink0Y;
       Maprealm2Screen(
          prealm,
          pcamera,
@@ -5720,16 +5720,16 @@ static void ResetHotPriorities(void)   // Returns nothing.
       // Set Hood's priority.
       ms_photHood->SetPriority(FRONTMOST_HOT_PRIORITY);
       // Do children.
-      RHot*	phot	= ms_photHood->m_listChildren.GetHead();
+      RHot*   phot   = ms_photHood->m_listChildren.GetHead();
       while (phot != NULL)
       {
          phot->SetPriority(FRONTMOST_HOT_PRIORITY);
 
-         phot	= ms_photHood->m_listChildren.GetNext();
+         phot   = ms_photHood->m_listChildren.GetNext();
       }
 
       // Reset backmost priority.
-      ms_sBackPriority	= FRONTMOST_HOT_PRIORITY;
+      ms_sBackPriority   = FRONTMOST_HOT_PRIORITY;
    }
 }
 
@@ -5792,61 +5792,61 @@ static void AddNewLine(short sX0, short sY0, short sX1, short sY1)
 static void NetLog(CNavigationNet* pNavNet)
 {
 /*
-	ofstream txtout;
-	ofstream routeout;
-	CNavigationNet::nodeMap::iterator ibouy;
-	CBouy::linkset::iterator ilink;
-	UCHAR i;
-	UCHAR ucHops;
+   ofstream txtout;
+   ofstream routeout;
+   CNavigationNet::nodeMap::iterator ibouy;
+   CBouy::linkset::iterator ilink;
+   UCHAR i;
+   UCHAR ucHops;
 
 
-	txtout.open("c:\\temp\\navnet.txt");
-	routeout.open("c:\\temp\\navroute.txt");
-	if (txtout.is_open() && routeout.is_open())
-	{
-		txtout << ";\n";
-		txtout << "; NavNet connections file" << endl;
-		txtout << ";" << endl;
-		txtout << "; Node: Directly connected nodes\n";
-		txtout << ";------------------------------------------------------------------\n";
-		routeout << ";Bouy Routing Tables" << endl;
-		routeout << ";" << endl;
-		routeout << ";-----------------------------------------------------------------\n";
+   txtout.open("c:\\temp\\navnet.txt");
+   routeout.open("c:\\temp\\navroute.txt");
+   if (txtout.is_open() && routeout.is_open())
+   {
+      txtout << ";\n";
+      txtout << "; NavNet connections file" << endl;
+      txtout << ";" << endl;
+      txtout << "; Node: Directly connected nodes\n";
+      txtout << ";------------------------------------------------------------------\n";
+      routeout << ";Bouy Routing Tables" << endl;
+      routeout << ";" << endl;
+      routeout << ";-----------------------------------------------------------------\n";
 
-		if (pNavNet)
-		{
-			for (ibouy = pNavNet->m_NodeMap.begin();
-				  ibouy != pNavNet->m_NodeMap.end(); ibouy++)
-			{
-				txtout << (USHORT) ((*ibouy).second->m_ucID) << " : ";
-				for (ilink = (*ibouy).second->m_apsDirectLinks.begin();
-					  ilink != (*ibouy).second->m_apsDirectLinks.end(); ilink++)
-				{
-					txtout << (USHORT) (*ilink)->m_ucID << ", ";
-				}
-				txtout << endl;
-				// Show routing table for reachable links
-				routeout << "bouy " << (USHORT) ((*ibouy).second->m_ucID) << endl;
-				for (i = 1; i < pNavNet->GetNumNodes(); i++)
-				{
-					ucHops = (*ibouy).second->NextRouteNode(i);
-					if (ucHops < 255)
-					{
-						routeout << " vialink[" << (USHORT) i << "] = " << (USHORT) ucHops << endl;
-					}
-				}
+      if (pNavNet)
+      {
+         for (ibouy = pNavNet->m_NodeMap.begin();
+              ibouy != pNavNet->m_NodeMap.end(); ibouy++)
+         {
+            txtout << (USHORT) ((*ibouy).second->m_ucID) << " : ";
+            for (ilink = (*ibouy).second->m_apsDirectLinks.begin();
+                 ilink != (*ibouy).second->m_apsDirectLinks.end(); ilink++)
+            {
+               txtout << (USHORT) (*ilink)->m_ucID << ", ";
+            }
+            txtout << endl;
+            // Show routing table for reachable links
+            routeout << "bouy " << (USHORT) ((*ibouy).second->m_ucID) << endl;
+            for (i = 1; i < pNavNet->GetNumNodes(); i++)
+            {
+               ucHops = (*ibouy).second->NextRouteNode(i);
+               if (ucHops < 255)
+               {
+                  routeout << " vialink[" << (USHORT) i << "] = " << (USHORT) ucHops << endl;
+               }
+            }
 
 
-			}
-		}
+         }
+      }
 
-		txtout.close();
-		routeout.close();
-	}
-	else
-	{
-		TRACE("NetLog: Error opening log file for output\n");
-	}
+      txtout.close();
+      routeout.close();
+   }
+   else
+   {
+      TRACE("NetLog: Error opening log file for output\n");
+   }
 */
 }
 
@@ -5885,28 +5885,28 @@ static void UpdateNetLines(CNavigationNet* pNavNet)
    }
 
 /*
-	CNavigationNet::nodeMap::iterator ibouy;
-	CBouy::linkset::iterator ilink;
+   CNavigationNet::nodeMap::iterator ibouy;
+   CBouy::linkset::iterator ilink;
 
-	if (pNavNet)
-	{
-		m_NetLines.erase(m_NetLines.begin(), m_NetLines.end());
+   if (pNavNet)
+   {
+      m_NetLines.erase(m_NetLines.begin(), m_NetLines.end());
 
-		for (ibouy = pNavNet->m_NodeMap.begin();
-		     ibouy != pNavNet->m_NodeMap.end(); ibouy++)
-		{
-			for (ilink = (*ibouy).second->m_apsDirectLinks.begin();
-			     ilink != (*ibouy).second->m_apsDirectLinks.end(); ilink++)
-			{
-				AddNewLine((*ibouy).second->GetX(),
-				           (*ibouy).second->GetZ(),
-							  (*ilink)->GetX(),
-							  (*ilink)->GetZ());
-			}
-		}
-	}
+      for (ibouy = pNavNet->m_NodeMap.begin();
+           ibouy != pNavNet->m_NodeMap.end(); ibouy++)
+      {
+         for (ilink = (*ibouy).second->m_apsDirectLinks.begin();
+              ilink != (*ibouy).second->m_apsDirectLinks.end(); ilink++)
+         {
+            AddNewLine((*ibouy).second->GetX(),
+                       (*ibouy).second->GetZ(),
+                       (*ilink)->GetX(),
+                       (*ilink)->GetZ());
+         }
+      }
+   }
 */
-//	NetLog(pNavNet);
+//   NetLog(pNavNet);
 }
 
 
@@ -5916,8 +5916,8 @@ static void UpdateNetLines(CNavigationNet* pNavNet)
 ////////////////////////////////////////////////////////////////////////////////
 
 static void DrawNetwork(   // Returns nothing.
-   CRealm*	prealm,        // In:  Realm.
-   CCamera*	pcamera)       // In:  View of prealm.
+   CRealm*   prealm,        // In:  Realm.
+   CCamera*   pcamera)       // In:  View of prealm.
 {
    lineset::iterator i;
 
@@ -5928,7 +5928,7 @@ static void DrawNetwork(   // Returns nothing.
          // These lines show the paths the characters would take so
          // they should be only on the X/Z plane and, therefore, Y
          // is ignored.
-         short	sBouyLink0X, sBouyLink0Y;
+         short sBouyLink0X, sBouyLink0Y;
          Maprealm2Screen(
             prealm,
             pcamera,
@@ -5938,7 +5938,7 @@ static void DrawNetwork(   // Returns nothing.
             &sBouyLink0X,
             &sBouyLink0Y);
 
-         short	sBouyLink1X, sBouyLink1Y;
+         short sBouyLink1X, sBouyLink1Y;
          Maprealm2Screen(
             prealm,
             pcamera,
@@ -5961,20 +5961,20 @@ static void DrawNetwork(   // Returns nothing.
 // Creates a view and adds it to the list of views.
 ////////////////////////////////////////////////////////////////////////////////
 static short AddView(      // Returns 0 on success.
-   CRealm*	prealm)        // In:  Realm in which to setup camera.
+   CRealm*   prealm)        // In:  Realm in which to setup camera.
 {
    static short sNum  = 0;
-   short	sRes	= 0;  // Assume success.
-   RListBox*	plb	= (RListBox*)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
+   short sRes   = 0;    // Assume success.
+   RListBox*   plb   = (RListBox*)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
    if (plb != NULL)
    {
-      View*	pview;
+      View*   pview;
       if (CreateView(&pview, prealm) == 0)
       {
          char szTitle[256];
          sprintf(szTitle, "Camera %d", ++sNum);
-         RGuiItem*	pgui			= plb->AddString(szTitle);
-         pgui->m_lId					= (intptr_t)pview;
+         RGuiItem*   pgui         = plb->AddString(szTitle);
+         pgui->m_lId               = (intptr_t)pview;
          plb->AdjustContents();
 
          pview->pgui->SetText("%s", szTitle);
@@ -5982,12 +5982,12 @@ static short AddView(      // Returns 0 on success.
       }
       else
       {
-         sRes	= -2;
+         sRes   = -2;
       }
    }
    else
    {
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -5997,20 +5997,20 @@ static short AddView(      // Returns 0 on success.
 // Kills a view and removes it from the list of views.
 ////////////////////////////////////////////////////////////////////////////////
 static void RemoveView(    // Returns nothing.
-   View*	pview)            // In: View to remove or NULL to remove currently
-                           // selected view.
+   View*   pview)            // In: View to remove or NULL to remove currently
+                             // selected view.
 {
-   RListBox*	plb	= (RListBox*)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
+   RListBox*   plb   = (RListBox*)ms_pguiCameras->GetItemFromId(GUI_ID_CAMERA_LIST);
    if (plb != NULL)
    {
-      RGuiItem*	pguiRemove;
+      RGuiItem*   pguiRemove;
       if (pview != NULL)
       {
-         pguiRemove	= plb->GetItemFromId((intptr_t)pview);
+         pguiRemove   = plb->GetItemFromId((intptr_t)pview);
       }
       else
       {
-         pguiRemove	= plb->GetSel();
+         pguiRemove   = plb->GetSel();
       }
 
       if (pguiRemove != NULL)
@@ -6027,11 +6027,11 @@ static void RemoveView(    // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 static void RemoveViews(void)
 {
-   View*	pview	= ms_listViews.GetHead();
+   View*   pview   = ms_listViews.GetHead();
    while (pview != NULL)
    {
       RemoveView(pview);
-      pview	= ms_listViews.GetNext();
+      pview   = ms_listViews.GetNext();
    }
 }
 
@@ -6039,37 +6039,37 @@ static void RemoveViews(void)
 // Creates a new View and adds it to the list of Views.
 ////////////////////////////////////////////////////////////////////////////////
 static short CreateView(               // Returns 0 on success.
-   View**	ppview,                    // Out: New view, if not NULL.
-   CRealm*	prealm)                    // In:  Realm in which to setup camera.
+   View**   ppview,                    // Out: New view, if not NULL.
+   CRealm*   prealm)                    // In:  Realm in which to setup camera.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (ppview != NULL)
    {
-      *ppview	= NULL;  // Safety.
+      *ppview   = NULL;  // Safety.
    }
 
    // Create view . . .
-   View*	pview	= new View;
+   View*   pview   = new View;
    if (pview != NULL)
    {
       // Create and load GUI . . .
-      pview->pgui	= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, VIEW_GUI_FILE) );
+      pview->pgui   = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, VIEW_GUI_FILE) );
       if (pview->pgui != NULL)
       {
          pview->pgui->GetClient(NULL, NULL, &(pview->sViewW), &(pview->sViewH) );
 
          // Get the scrollbars.
-         pview->psbVert	= (RScrollBar*)pview->pgui->GetItemFromId(3);
-         pview->psbHorz	= (RScrollBar*)pview->pgui->GetItemFromId(4);
+         pview->psbVert   = (RScrollBar*)pview->pgui->GetItemFromId(3);
+         pview->psbHorz   = (RScrollBar*)pview->pgui->GetItemFromId(4);
          // Adjust dimensions to make scrollbars visible.
          if (pview->psbVert != NULL)
          {
-            pview->sViewW	-= pview->psbVert->m_im.m_sWidth;
+            pview->sViewW   -= pview->psbVert->m_im.m_sWidth;
          }
          if (pview->psbHorz != NULL)
          {
-            pview->sViewH	-= pview->psbHorz->m_im.m_sHeight;
+            pview->sViewH   -= pview->psbHorz->m_im.m_sHeight;
          }
 
          // Set scrollbar range based on view size and realm size.
@@ -6091,13 +6091,13 @@ static short CreateView(               // Returns 0 on success.
             // Succcess.
             if (ppview != NULL)
             {
-               *ppview	= pview;
+               *ppview   = pview;
             }
          }
          else
          {
             TRACE("CreateView(): Failed to add view to list.\n");
-            sRes	= -3;
+            sRes   = -3;
          }
 
          // If an error occurred after allocating GUI . . .
@@ -6109,7 +6109,7 @@ static short CreateView(               // Returns 0 on success.
       else
       {
          TRACE("CreateView(): Failed to load %s.\n", VIEW_GUI_FILE);
-         sRes	= -2;
+         sRes   = -2;
       }
 
       // If an error occurred after allocating View . . .
@@ -6121,7 +6121,7 @@ static short CreateView(               // Returns 0 on success.
    else
    {
       TRACE("CreateView(): Failed to allocate new View.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -6131,7 +6131,7 @@ static short CreateView(               // Returns 0 on success.
 // Destroys a View and removes it from the list of Views.
 ////////////////////////////////////////////////////////////////////////////////
 static void KillView(                  // Returns nothing.
-   View*		pview)                     // View to kill.
+   View*      pview)                     // View to kill.
 {
    // Remove from list.
    ms_listViews.Remove(pview);
@@ -6143,28 +6143,28 @@ static void KillView(                  // Returns nothing.
 // Draw specified view.
 ////////////////////////////////////////////////////////////////////////////////
 static void DrawView(                  // Returns nothing.
-   View*		pview,                     // View to draw.
-   CRealm*	prealm)                    // Realm to draw.
+   View*      pview,                     // View to draw.
+   CRealm*   prealm)                    // Realm to draw.
 {
    // Get client.
-   short	sClientPosX, sClientPosY;
+   short sClientPosX, sClientPosY;
    pview->pgui->GetClient(&sClientPosX, &sClientPosY, NULL, NULL);
 
    // Add in GUI's position.
-   sClientPosX	+= pview->pgui->m_sX;
-   sClientPosY	+= pview->pgui->m_sY;
+   sClientPosX   += pview->pgui->m_sX;
+   sClientPosY   += pview->pgui->m_sY;
 
    // Use scrollbars for position.
-   short	sViewX	= 0;  // Safety.
-   short	sViewY	= 0;  // Safety.
+   short sViewX   = 0;    // Safety.
+   short sViewY   = 0;    // Safety.
    if (pview->psbVert != NULL)
    {
-      sViewY	= pview->psbVert->GetPos();
+      sViewY   = pview->psbVert->GetPos();
    }
 
    if (pview->psbHorz != NULL)
    {
-      sViewX	= pview->psbHorz->GetPos();
+      sViewX   = pview->psbHorz->GetPos();
    }
 
    // Draw GUI.
@@ -6188,13 +6188,13 @@ static void DrawView(                  // Returns nothing.
 // Draw all views.
 ////////////////////////////////////////////////////////////////////////////////
 static void DrawViews(                 // Returns nothing.
-   CRealm*	prealm)                    // Realm to draw.
+   CRealm*   prealm)                    // Realm to draw.
 {
-   View*	pview	= ms_listViews.GetHead();
+   View*   pview   = ms_listViews.GetHead();
    while (pview != NULL)
    {
       DrawView(pview, prealm);
-      pview	= ms_listViews.GetNext();
+      pview   = ms_listViews.GetNext();
    }
 
    ms_pguiCameras->Draw(g_pimScreenBuf);
@@ -6204,7 +6204,7 @@ static void DrawViews(                 // Returns nothing.
 // Clear specified view.
 ////////////////////////////////////////////////////////////////////////////////
 static void ClearGUI(                  // Returns nothing.
-   RGuiItem*	pgui)                   // In:  GUI's whose area we should clean.
+   RGuiItem*   pgui)                   // In:  GUI's whose area we should clean.
 {
    rspRect(
       RSP_BLACK_INDEX,
@@ -6220,12 +6220,12 @@ static void ClearGUI(                  // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 static void ClearViews(void)              // Returns nothing.
 {
-   View*	pview	= ms_listViews.GetHead();
+   View*   pview   = ms_listViews.GetHead();
    while (pview != NULL)
    {
       ClearGUI(pview->pgui);
 
-      pview	= ms_listViews.GetNext();
+      pview   = ms_listViews.GetNext();
    }
 
    ClearGUI(ms_pguiCameras);
@@ -6235,8 +6235,8 @@ static void ClearViews(void)              // Returns nothing.
 // Do focus hotbox logic and such for GUIs.
 ////////////////////////////////////////////////////////////////////////////////
 static void DoView(                    // Returns nothing.
-   View*				pview,               // View to do.
-   RInputEvent*	pie)                 // Input event to process.
+   View*            pview,               // View to do.
+   RInputEvent*   pie)                 // Input event to process.
 {
    pview->pgui->m_hot.Do(pie);
 }
@@ -6245,15 +6245,15 @@ static void DoView(                    // Returns nothing.
 // Do all views.
 ////////////////////////////////////////////////////////////////////////////////
 static void DoViews(
-   RInputEvent*	pie)                 // Input event to process.
+   RInputEvent*   pie)                 // Input event to process.
 {
    ms_pguiCameras->m_hot.Do(pie);
 
-   View*	pview	= ms_listViews.GetTail();
+   View*   pview   = ms_listViews.GetTail();
    while (pview != NULL)
    {
       DoView(pview, pie);
-      pview	= ms_listViews.GetPrev();
+      pview   = ms_listViews.GetPrev();
    }
 }
 
@@ -6261,7 +6261,7 @@ static void DoViews(
 // Draw the map.
 ////////////////////////////////////////////////////////////////////////////////
 static void RefreshMap(                // Returns nothing.
-   CRealm*	prealm)                    // Realm to map.
+   CRealm*   prealm)                    // Realm to map.
 {
    ASSERT(ms_pguiMap != NULL);
    // Get area to draw in.
@@ -6270,14 +6270,14 @@ static void RefreshMap(                // Returns nothing.
       // Clear.
       ms_pguiMapZone->Compose();
 
-      short	sClientX, sClientY, sClientW, sClientH;
+      short sClientX, sClientY, sClientW, sClientH;
       ms_pguiMapZone->GetClient(&sClientX, &sClientY, &sClientW, &sClientH);
 
       // Allocate temp camera and film . . .
       CCamera camera;
       RImage imFilm;
-      short	sViewW	= prealm->m_phood->m_pimBackground->m_sWidth;
-      short	sViewH	= prealm->m_phood->m_pimBackground->m_sHeight;
+      short sViewW   = prealm->m_phood->m_pimBackground->m_sWidth;
+      short sViewH   = prealm->m_phood->m_pimBackground->m_sHeight;
       if (imFilm.CreateImage(
              sViewW,
              sViewH,
@@ -6298,8 +6298,8 @@ static void RefreshMap(                // Returns nothing.
          // Stretch it as necessary to the map view.
          double dRatioX  = (double)sClientW / (double)sViewW;
          double dRatioY  = (double)sClientH / (double)sViewH;
-         ms_dMapRatio		= MIN(dRatioX, dRatioY);
-         RRect	rcClip(sClientX, sClientY, sClientW, sClientH);
+         ms_dMapRatio      = MIN(dRatioX, dRatioY);
+         RRect rcClip(sClientX, sClientY, sClientW, sClientH);
          rspBlitT(
             &imFilm,                   // Src.
             &(ms_pguiMapZone->m_im),   // Dst.
@@ -6325,7 +6325,7 @@ static void CancelDrag(CRealm* prealm)    // Returns nothing.
    if (ms_sMoving != FALSE)
    {
       DelThing(ms_pthingSel, ms_photSel, prealm);
-      ms_sMoving		= FALSE;
+      ms_sMoving      = FALSE;
 
       rspShowMouseCursor();
    }
@@ -6354,7 +6354,7 @@ static void DragDrop(   // Returns nothing.
          sDropZ);
 
       SetSel(NULL, NULL);
-      ms_sMoving		= FALSE;
+      ms_sMoving      = FALSE;
 
       rspShowMouseCursor();
    }
@@ -6378,7 +6378,7 @@ extern void Edit_Menu_Continue(void)
 ////////////////////////////////////////////////////////////////////////////////
 extern void Edit_Menu_ExitEditor(void)
 {
-   ms_lPressedId	= GUI_ID_EXIT;
+   ms_lPressedId   = GUI_ID_EXIT;
 
    StopMenu();
 
@@ -6390,15 +6390,15 @@ extern void Edit_Menu_ExitEditor(void)
 // Convert a .RLM filename to a .RGN one.
 ////////////////////////////////////////////////////////////////////////////////
 static void RlmNameToRgnName( // Returns nothing.
-   char*	pszRealmName,  // In:  .RLM name.
+   char*   pszRealmName,  // In:  .RLM name.
    char* pszRgnName)    // Out: .RGN name.
 {
-   short	sIndex	= strlen(pszRealmName);
+   short sIndex   = strlen(pszRealmName);
    while (sIndex-- >= 0)
    {
       if (pszRealmName[sIndex] == '\\')
       {
-         sIndex	= strlen(pszRealmName);
+         sIndex   = strlen(pszRealmName);
          break;
       }
 
@@ -6410,11 +6410,11 @@ static void RlmNameToRgnName( // Returns nothing.
 
    if (sIndex < 0)
    {
-      sIndex	= strlen(pszRealmName);
+      sIndex   = strlen(pszRealmName);
    }
 
    strncpy(pszRgnName, pszRealmName, sIndex);
-   pszRgnName[sIndex]	= '\0';
+   pszRgnName[sIndex]   = '\0';
    strcat(pszRgnName, ".rgn");
 }
 
@@ -6422,7 +6422,7 @@ static void RlmNameToRgnName( // Returns nothing.
 // Move focus to next item in realm's thing list.
 ////////////////////////////////////////////////////////////////////////////////
 static void NextItem(   // Returns nothing.
-   CRealm*	prealm)     // In:  The realm we want the next thing in.
+   CRealm*   prealm)     // In:  The realm we want the next thing in.
 {
    if (ms_pthingSel != NULL)
    {
@@ -6440,7 +6440,7 @@ static void NextItem(   // Returns nothing.
 // Move focus to previous item in realm's thing list.
 ////////////////////////////////////////////////////////////////////////////////
 static void PrevItem(   // Returns nothing.
-   CRealm*	prealm)     // In:  The realm we want the next thing in.
+   CRealm*   prealm)     // In:  The realm we want the next thing in.
 {
    if (ms_pthingSel != NULL)
    {
@@ -6458,22 +6458,22 @@ static void PrevItem(   // Returns nothing.
 // Load the trigger regions for the specified realm.
 ////////////////////////////////////////////////////////////////////////////////
 static short LoadTriggerRegions( // Returns 0 on success.
-   char*	pszRealmName)           // In:  Name of the REALM (*.RLM) file.
-                                 // The .ext is stripped and .rgn is appended.
+   char*   pszRealmName)           // In:  Name of the REALM (*.RLM) file.
+                                   // The .ext is stripped and .rgn is appended.
 {
-   short sRes	= 0;  // Assume success.
+   short sRes   = 0;  // Assume success.
 
    // Change filename to .RGN name.
    char szRgnName[RSP_MAX_PATH];
    RlmNameToRgnName(pszRealmName, szRgnName);
 
-   RFile	file;
+   RFile file;
    if (file.Open(szRgnName, "rb", RFile::LittleEndian) == 0)
    {
-      short	i;
+      short i;
       for (i = 0; i < NUM_ELEMENTS(ms_argns) && sRes == 0; i++)
       {
-         sRes	= ms_argns[i].Load(&file);
+         sRes   = ms_argns[i].Load(&file);
       }
 
       file.Close();
@@ -6481,7 +6481,7 @@ static short LoadTriggerRegions( // Returns 0 on success.
    else
    {
       TRACE("LoadTriggerRegions(): WARNING:  \"%s\" could not be opened.\n", szRgnName);
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -6491,23 +6491,23 @@ static short LoadTriggerRegions( // Returns 0 on success.
 // Save the trigger regions for the specified realm.
 ////////////////////////////////////////////////////////////////////////////////
 static short SaveTriggerRegions( // Returns 0 on success.
-   char*	pszRealmName,           // In:  Name of the REALM (*.RLM) file.
-   CRealm*	prealm               // In:  Access of Realm Info
+   char*   pszRealmName,           // In:  Name of the REALM (*.RLM) file.
+   CRealm*   prealm               // In:  Access of Realm Info
    )                             // The .ext is stripped and .rgn is appended.
 {
-   short sRes	= 0;  // Assume success.
+   short sRes   = 0;  // Assume success.
 
    // Change filename to .RGN name.
    char szRgnName[RSP_MAX_PATH];
    RlmNameToRgnName(pszRealmName, szRgnName);
 
-   RFile	file;
+   RFile file;
    if (file.Open(szRgnName, "wb", RFile::LittleEndian) == 0)
    {
-      short	i;
+      short i;
       for (i = 0; i < NUM_ELEMENTS(ms_argns) && sRes == 0; i++)
       {
-         sRes	= ms_argns[i].Save(&file);
+         sRes   = ms_argns[i].Save(&file);
       }
 
       file.Close();
@@ -6515,7 +6515,7 @@ static short SaveTriggerRegions( // Returns 0 on success.
    else
    {
       TRACE("SaveTriggerRegions(): Could not open \"%s\" for write.\n", szRgnName);
-      sRes	= -1;
+      sRes   = -1;
    }
 
    return sRes;
@@ -6528,18 +6528,18 @@ static short SaveTriggerRegions( // Returns 0 on success.
 // which in itself contains the pointer m_pmgi.
 ////////////////////////////////////////////////////////////////////////////////
 static short CreateTriggerRegions(  // Returns 0 on success.
-   CRealm*	prealm               // In:  Access of Realm Info
+   CRealm*   prealm               // In:  Access of Realm Info
    )
 {
-   short sRes	= 0;  // Assume success.
+   short sRes   = 0;  // Assume success.
    if (prealm->m_pTriggerMapHolder == NULL)
    {
       short sResult;
 
       TRACE("CreateTriggerRegions(): No default CThing to hold triggers!\n");
       TRACE("CreateTriggerRegions(): Adding one for your convenience!\n");
-      CThing*	pThing = NULL;
-      RHot*	photdummy;
+      CThing*   pThing = NULL;
+      RHot*   photdummy;
 
       sResult = CreateNewThing(prealm, CThing::CTriggerID, 0, 0, 0, &pThing, &photdummy);
       if (sResult == 0)
@@ -6630,12 +6630,12 @@ static void EditPylonTriggerRegion( // Returns nothing.
       // Remove sprite from scene.
       ms_pylonEdit->m_pRealm->m_scene.RemoveSprite(&ms_spriteTriggerRgn);
 
-      ms_spriteTriggerRgn.m_pImage	= NULL;
+      ms_spriteTriggerRgn.m_pImage   = NULL;
 
       // Put it into storage mode.
       ms_argns[ms_pylonEdit->m_ucID].SetMode(TriggerRgn::Storage);
       // Clear.
-      ms_pylonEdit	= NULL;
+      ms_pylonEdit   = NULL;
       // Show mouse.
       rspShowMouseCursor();
    }
@@ -6645,7 +6645,7 @@ static void EditPylonTriggerRegion( // Returns nothing.
    {
       ASSERT(pthingPylon->GetClassID() == CThing::CPylonID);
 
-      CPylon*	pylon	= (CPylon*)pthingPylon;
+      CPylon*   pylon   = (CPylon*)pthingPylon;
 
       // If the region did not previously exist . . .
       if (ms_argns[pylon->m_ucID].pimRgn == NULL)
@@ -6659,26 +6659,26 @@ static void EditPylonTriggerRegion( // Returns nothing.
             &(ms_argns[pylon->m_ucID].sX),
             &(ms_argns[pylon->m_ucID].sY) );
 
-         ms_argns[pylon->m_ucID].sX	-= TriggerRgn::MaxRgnWidth / 2;
-         ms_argns[pylon->m_ucID].sY	-= TriggerRgn::MaxRgnHeight / 2;
+         ms_argns[pylon->m_ucID].sX   -= TriggerRgn::MaxRgnWidth / 2;
+         ms_argns[pylon->m_ucID].sY   -= TriggerRgn::MaxRgnHeight / 2;
 
-         ms_argns[pylon->m_ucID].u16InstanceId	= pylon->GetInstanceID();
+         ms_argns[pylon->m_ucID].u16InstanceId   = pylon->GetInstanceID();
       }
 
       // Attempt to put it into edit mode . . .
       if (ms_argns[pylon->m_ucID].SetMode(TriggerRgn::Edit) == 0)
       {
-         ms_spriteTriggerRgn.m_pImage			= ms_argns[pylon->m_ucID].pimRgn;
-         ms_spriteTriggerRgn.m_sLayer			= CRealm::LayerSprite16;
-         ms_spriteTriggerRgn.m_sPriority		= 32767; // Always on top.
-         ms_spriteTriggerRgn.m_sX2				= ms_argns[pylon->m_ucID].sX;
-         ms_spriteTriggerRgn.m_sY2				= ms_argns[pylon->m_ucID].sY;
+         ms_spriteTriggerRgn.m_pImage         = ms_argns[pylon->m_ucID].pimRgn;
+         ms_spriteTriggerRgn.m_sLayer         = CRealm::LayerSprite16;
+         ms_spriteTriggerRgn.m_sPriority      = 32767; // Always on top.
+         ms_spriteTriggerRgn.m_sX2            = ms_argns[pylon->m_ucID].sX;
+         ms_spriteTriggerRgn.m_sY2            = ms_argns[pylon->m_ucID].sY;
 
          // Add sprite to scene.
          pylon->m_pRealm->m_scene.UpdateSprite(&ms_spriteTriggerRgn);
 
          // Success.  Remember.
-         ms_pylonEdit	= pylon;
+         ms_pylonEdit   = pylon;
          // Hide mouse.
          rspHideMouseCursor();
       }
@@ -6688,14 +6688,14 @@ static void EditPylonTriggerRegion( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Set the selection to the specified CThing.
 ////////////////////////////////////////////////////////////////////////////////
-static CThing*	SetSel(  // Returns CThing that previously was selected.
+static CThing*   SetSel(  // Returns CThing that previously was selected.
    CThing* pthingSel,   // In:  CThing to be selected.
-   RHot*	photSel)       // In:  Hotbox of CThing to be selected.
+   RHot*   photSel)       // In:  Hotbox of CThing to be selected.
 {
-   CThing*	pthingRes	= ms_pthingSel;
+   CThing*   pthingRes   = ms_pthingSel;
 
-   ms_pthingSel	= pthingSel;
-   ms_photSel		= photSel;
+   ms_pthingSel   = pthingSel;
+   ms_photSel      = photSel;
 
    // If this is an actual CThing . . .
    if (ms_pthingSel != NULL)
@@ -6707,7 +6707,7 @@ static CThing*	SetSel(  // Returns CThing that previously was selected.
       if (photSel == NULL)
       {
          // Get it.
-         ms_photSel	= ms_pthingSel->m_phot;
+         ms_photSel   = ms_pthingSel->m_phot;
       }
    }
 
@@ -6721,7 +6721,7 @@ static CThing*	SetSel(  // Returns CThing that previously was selected.
 ////////////////////////////////////////////////////////////////////////////////
 static void DelThing(   // Returns nothing.
    CThing* pthingDel,   // In:  CThing to be deleted.
-   RHot*	photDel,       // In:  Hotbox of CThing to be deleted.
+   RHot*   photDel,       // In:  Hotbox of CThing to be deleted.
    CRealm* prealm)      // In:  Current Realm
 {
    if (pthingDel != NULL)
@@ -6729,7 +6729,7 @@ static void DelThing(   // Returns nothing.
       // If hot not specified . . .
       if (photDel == NULL)
       {
-         photDel	= pthingDel->m_phot;
+         photDel   = pthingDel->m_phot;
       }
 
       CNavigationNet* pNavNet = NULL;
@@ -6840,7 +6840,7 @@ static void DelThing(   // Returns nothing.
             if (pthingDel->GetInstanceID() == ms_pgething->m_u16CameraTrackId)
             {
                // Done with that.
-               ms_pgething->m_u16CameraTrackId	= CIdBank::IdNil;
+               ms_pgething->m_u16CameraTrackId   = CIdBank::IdNil;
             }
          }
 
@@ -6858,7 +6858,7 @@ static void DelThing(   // Returns nothing.
          if (ms_pthingSel == NULL)
          {
             // Stop moving.
-            ms_sMoving		= FALSE;
+            ms_sMoving      = FALSE;
             // Show mouse cursor.
             rspShowMouseCursor();
          }
@@ -6892,30 +6892,30 @@ static void DelClass(   // Returns nothing.
           "Are you sure you want to perform this group delete?!"
           ) == RSP_MB_RET_YES)
    {
-      CListNode<CThing>*	plnDel;
-      CListNode<CThing>*	plnTail;
+      CListNode<CThing>*   plnDel;
+      CListNode<CThing>*   plnTail;
       // If thing specified . . .
       if (pthingDel != NULL)
       {
          // Use category of item.
-         plnDel	= prealm->m_aclassHeads[pthingDel->GetClassID()].m_pnNext;
-         plnTail	= &(prealm->m_aclassTails[pthingDel->GetClassID()]);
+         plnDel   = prealm->m_aclassHeads[pthingDel->GetClassID()].m_pnNext;
+         plnTail   = &(prealm->m_aclassTails[pthingDel->GetClassID()]);
       }
       else
       {
          // Use all CThings.
-         plnDel	= prealm->m_everythingHead.m_pnNext;
-         plnTail	= &(prealm->m_everythingTail);
+         plnDel   = prealm->m_everythingHead.m_pnNext;
+         plnTail   = &(prealm->m_everythingTail);
       }
 
-      CListNode<CThing>*	plnNext;
+      CListNode<CThing>*   plnNext;
       while (plnDel != plnTail)
       {
-         plnNext	= plnDel->m_pnNext;
+         plnNext   = plnDel->m_pnNext;
 
          DelThing(plnDel->m_powner, NULL, prealm);
 
-         plnDel	= plnNext;
+         plnDel   = plnNext;
       }
    }
 }
@@ -6940,17 +6940,17 @@ static void DelMost( // Returns nothing.
           "Are you sure you want to perform such a delete?"
           ) == RSP_MB_RET_YES)
    {
-      CListNode<CThing>*	plnDel;
-      CListNode<CThing>*	plnTail;
+      CListNode<CThing>*   plnDel;
+      CListNode<CThing>*   plnTail;
       CThing::ClassIDType classType;
       // Use all CThings.
-      plnDel	= prealm->m_everythingHead.m_pnNext;
-      plnTail	= &(prealm->m_everythingTail);
+      plnDel   = prealm->m_everythingHead.m_pnNext;
+      plnTail   = &(prealm->m_everythingTail);
 
-      CListNode<CThing>*	plnNext;
+      CListNode<CThing>*   plnNext;
       while (plnDel != plnTail)
       {
-         plnNext	= plnDel->m_pnNext;
+         plnNext   = plnDel->m_pnNext;
 
          classType = plnDel->m_powner->GetClassID();
          switch (classType)
@@ -6970,7 +6970,7 @@ static void DelMost( // Returns nothing.
             break;
          }
 
-         plnDel	= plnNext;
+         plnDel   = plnNext;
       }
    }
 }
@@ -6982,7 +6982,7 @@ static void DelMost( // Returns nothing.
 static short CopyItem(  // Returns 0 on success.
    CThing* pthingCopy)  // In:  CThing to copy.
 {
-   short	sRes	= 0;     // Assume success.
+   short sRes   = 0;       // Assume success.
 
    // If anything to copy . . .
    if (pthingCopy != NULL)
@@ -7017,18 +7017,18 @@ static short CopyItem(  // Returns 0 on success.
             if (pthingCopy->Save(&ms_filePaste, ms_sFileCount--) == 0)
             {
                // Success.  Store the type.
-               ms_idPaste	= pthingCopy->GetClassID();
+               ms_idPaste   = pthingCopy->GetClassID();
             }
             else
             {
                TRACE("CopyItem(): pthingCopy->Save() failed.\n");
-               sRes	= -2;
+               sRes   = -2;
             }
          }
          else
          {
             TRACE("CopyItem(): Failed to open paste buffer.\n");
-            sRes	= -1;
+            sRes   = -1;
          }
          break;
       }
@@ -7042,7 +7042,7 @@ static short CopyItem(  // Returns 0 on success.
    }
    else
    {
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -7052,12 +7052,12 @@ static short CopyItem(  // Returns 0 on success.
 // Copy a thing to the paste buffer.
 ////////////////////////////////////////////////////////////////////////////////
 static short PasteItem( // Returns 0 on success.
-   CRealm*	prealm,     // In:  The realm to paste into.
-   short	sX,            // In:  Location for new thing.
-   short	sY,            // In:  Location for new thing.
-   short	sZ)            // In:  Location for new thing.
+   CRealm*   prealm,     // In:  The realm to paste into.
+   short sX,              // In:  Location for new thing.
+   short sY,              // In:  Location for new thing.
+   short sZ)              // In:  Location for new thing.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Drop anything we currently are holding onto.
    DragDrop(
@@ -7085,14 +7085,14 @@ static short PasteItem( // Returns 0 on success.
          // Success.
 
          // Start moving/placing object.
-         ms_sMoving	= TRUE;
+         ms_sMoving   = TRUE;
 
          // Disable drag view scrolling.
-         ms_bDragScroll	= false;
+         ms_bDragScroll   = false;
 
          // Enter drag.  Cheesy...Just need to get this to Bill and
          // Then I'll clean up.
-         ms_sDragState	= 4;
+         ms_sDragState   = 4;
 
          if (rspGetMouseCursorShowLevel() > 0)
          {
@@ -7102,7 +7102,7 @@ static short PasteItem( // Returns 0 on success.
       else
       {
          TRACE("PasteItem(): CreateNewThing() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
    }
 
@@ -7116,8 +7116,8 @@ static short PasteItem( // Returns 0 on success.
 // at the resulting *psRealmX, *psRealmZ.
 ////////////////////////////////////////////////////////////////////////////////
 static void MapScreen2Realm(  // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera,          // In:  View of prealm.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera,          // In:  View of prealm.
    short sScreenX,            // In:  Screen x coord.
    short sScreenY,            // In:  Screen y coord.
    short* psRealmX,           // Out: Realm x coord.
@@ -7125,8 +7125,8 @@ static void MapScreen2Realm(  // Returns nothing.
    short* psRealmZ)           // Out: Realm z coord.
 {
    // Get coordinate on 2D viewing plane.
-   short	sRealmX2	= sScreenX + pcamera->m_sScene2FilmX;
-   short	sRealmY2	= sScreenY + pcamera->m_sScene2FilmY;
+   short sRealmX2   = sScreenX + pcamera->m_sScene2FilmX;
+   short sRealmY2   = sScreenY + pcamera->m_sScene2FilmY;
 
    // If there's a hood . . .
    if (prealm->m_phood != NULL)
@@ -7135,7 +7135,7 @@ static void MapScreen2Realm(  // Returns nothing.
       // Z is stretched.
       prealm->MapY2DtoZ3D(sRealmY2, psRealmZ);
       // X is trivial.
-      *psRealmX	= sRealmX2;
+      *psRealmX   = sRealmX2;
 
       // If there is an attribute map . . .
       if (prealm->m_pTerrainMap != NULL)
@@ -7149,15 +7149,15 @@ static void MapScreen2Realm(  // Returns nothing.
       else
       {
          // Safety.
-         *psRealmY	= 0;
+         *psRealmY   = 0;
       }
    }
    else
    {
       // Safety.
-      *psRealmX	= sRealmX2;
-      *psRealmY	= 0;
-      *psRealmZ	= sRealmY2;
+      *psRealmX   = sRealmX2;
+      *psRealmY   = 0;
+      *psRealmZ   = sRealmY2;
    }
 }
 
@@ -7165,17 +7165,17 @@ static void MapScreen2Realm(  // Returns nothing.
 // Map a realm coordinate to a screen coordinate.
 ////////////////////////////////////////////////////////////////////////////////
 static void Maprealm2Screen(  // Returns nothing.
-   CRealm*	prealm,           // In:  Realm.
-   CCamera*	pcamera,          // In:  View of prealm.
-   short	sRealmX,             // In:  Realm x coord.
-   short	sRealmY,             // In:  Realm y coord.
-   short	sRealmZ,             // In:  Realm z coord.
-   short*	psScreenX,        // Out: Screen x coord.
-   short*	psScreenY)        // Out: Screen y coord.
+   CRealm*   prealm,           // In:  Realm.
+   CCamera*   pcamera,          // In:  View of prealm.
+   short sRealmX,               // In:  Realm x coord.
+   short sRealmY,               // In:  Realm y coord.
+   short sRealmZ,               // In:  Realm z coord.
+   short*   psScreenX,        // Out: Screen x coord.
+   short*   psScreenY)        // Out: Screen y coord.
 {
    // Map coordinate onto 2D viewing plane.
-   short	sViewX2;
-   short	sViewY2;
+   short sViewX2;
+   short sViewY2;
    prealm->Map3Dto2D(
       sRealmX,
       sRealmY,
@@ -7184,56 +7184,56 @@ static void Maprealm2Screen(  // Returns nothing.
       &sViewY2);
 
    // Offset to screen.
-   *psScreenX	= sViewX2 - pcamera->m_sScene2FilmX;
-   *psScreenY	= sViewY2 - pcamera->m_sScene2FilmY;
+   *psScreenX   = sViewX2 - pcamera->m_sScene2FilmX;
+   *psScreenY   = sViewY2 - pcamera->m_sScene2FilmY;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Blit attribute areas lit by the specified mask into the specified image.
 ////////////////////////////////////////////////////////////////////////////////
 static void AttribBlit(       // Returns nothing.
-   RMultiGrid*	pmg,           // In:  Multigrid of attributes.
+   RMultiGrid*   pmg,           // In:  Multigrid of attributes.
    U16 u16Mask,               // In:  Mask of important attributes.
-   RImage*		pimDst,        // In:  Destination image.
-   short	sSrcX,               // In:  Where in Multigrid to start.
-   short	sSrcY,               // In:  Where in Multigrid to start.
-   short	sW,                  // In:  How much of multigrid to use.
-   short	sH)                  // In:  How much of multigrid to use.
+   RImage*      pimDst,        // In:  Destination image.
+   short sSrcX,                 // In:  Where in Multigrid to start.
+   short sSrcY,                 // In:  Where in Multigrid to start.
+   short sW,                    // In:  How much of multigrid to use.
+   short sH)                    // In:  How much of multigrid to use.
 {
    // Keep it at the edge of the film.
-   ms_spriteAttributes.m_sX2				= sSrcX;
-   ms_spriteAttributes.m_sY2				= sSrcY;
+   ms_spriteAttributes.m_sX2            = sSrcX;
+   ms_spriteAttributes.m_sY2            = sSrcY;
 
    ASSERT(pimDst->m_sDepth == 8);
    ASSERT(pimDst->m_sWidth >= sW);
    ASSERT(pimDst->m_sHeight >= sH);
 
    // Get dst start.
-   U8*	pu8RowDst	= pimDst->m_pData;
-   U8*	pu8Dst;
+   U8*   pu8RowDst   = pimDst->m_pData;
+   U8*   pu8Dst;
    S32 lPitch;
 
-   short	sGridW, sGridH;
+   short sGridW, sGridH;
    pmg->GetGridDimensions(&sGridW, &sGridH);
 
-   short	sIterX;
+   short sIterX;
 
    while (sH--)
    {
-      lPitch	= pimDst->m_lPitch;
-      sIterX	= sSrcX;
-      pu8Dst	= pu8RowDst;
+      lPitch   = pimDst->m_lPitch;
+      sIterX   = sSrcX;
+      pu8Dst   = pu8RowDst;
       while (lPitch--)
       {
          if (pmg->GetVal(sIterX++, sSrcY, 0x0000) & u16Mask)
          {
-            *pu8Dst	= SHOW_ATTRIBS_DRAW_INDEX;
+            *pu8Dst   = SHOW_ATTRIBS_DRAW_INDEX;
          }
 
          pu8Dst++;
       }
 
-      pu8RowDst	+= pimDst->m_lPitch;
+      pu8RowDst   += pimDst->m_lPitch;
       sSrcY++;
    }
 }
@@ -7242,14 +7242,14 @@ static void AttribBlit(       // Returns nothing.
 // Callback for attrib mask multibtns.
 ////////////////////////////////////////////////////////////////////////////////
 static void AttribMaskBtnPressed(   // Returns nothing.
-   RGuiItem*	pgui_pmb)            // In:  Ptr to the pressed GUI (which is a multibtn).
+   RGuiItem*   pgui_pmb)            // In:  Ptr to the pressed GUI (which is a multibtn).
 {
    ASSERT(pgui_pmb->m_type == RGuiItem::MultiBtn);
 
-   RMultiBtn*	pmb	= (RMultiBtn*)pgui_pmb;
+   RMultiBtn*   pmb   = (RMultiBtn*)pgui_pmb;
 
    // Get mask to affect.
-   U16*	pu16AttribMask	= (U16*)(pmb->m_ulUserInstance);
+   U16*   pu16AttribMask   = (U16*)(pmb->m_ulUserInstance);
 
    // Add or subtract mask dependent on state.
    switch (pmb->m_sState)
@@ -7257,10 +7257,10 @@ static void AttribMaskBtnPressed(   // Returns nothing.
    case 0:     // Pressing.
       break;
    case 1:     // Off.
-      *pu16AttribMask	&= ~pmb->m_ulUserData;
+      *pu16AttribMask   &= ~pmb->m_ulUserData;
       break;
    case 2:     // On.
-      *pu16AttribMask	|= pmb->m_ulUserData;
+      *pu16AttribMask   |= pmb->m_ulUserData;
       break;
    }
 
@@ -7270,32 +7270,32 @@ static void AttribMaskBtnPressed(   // Returns nothing.
       // If there's no image . . .
       if (ms_spriteAttributes.m_pImage == NULL)
       {
-         short	sErr	= 0;
+         short sErr   = 0;
 
          // Create it . . .
-         ms_spriteAttributes.m_pImage	= new RImage;
+         ms_spriteAttributes.m_pImage   = new RImage;
          if (ms_spriteAttributes.m_pImage)
          {
-            sErr	= SizeShowAttribsSprite();
+            sErr   = SizeShowAttribsSprite();
 
             // If an error occurred after allocating the image . . .
             if (sErr)
             {
                delete ms_spriteAttributes.m_pImage;
-               ms_spriteAttributes.m_pImage	= NULL;
+               ms_spriteAttributes.m_pImage   = NULL;
             }
          }
          else
          {
             TRACE("AttribMaskBtnPressed(): Error allocating RImage.\n");
-            sErr	= 1;
+            sErr   = 1;
          }
 
          // If an error occurred . . .
          if (sErr)
          {
             // Clear mask so we don't use it later.
-            *pu16AttribMask	= 0;
+            *pu16AttribMask   = 0;
          }
       }
    }
@@ -7306,7 +7306,7 @@ static void AttribMaskBtnPressed(   // Returns nothing.
       {
          // If there is an image, delete it.  No S32er needed.
          delete ms_spriteAttributes.m_pImage;
-         ms_spriteAttributes.m_pImage	= NULL;
+         ms_spriteAttributes.m_pImage   = NULL;
       }
    }
 }
@@ -7316,7 +7316,7 @@ static void AttribMaskBtnPressed(   // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 static short SizeShowAttribsSprite(void)  // Returns 0 on success.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (ms_spriteAttributes.m_pImage)
    {
@@ -7327,20 +7327,20 @@ static short SizeShowAttribsSprite(void)  // Returns 0 on success.
              ms_pcameraCur->m_sViewH,
              RImage::BMP8) == 0)
       {
-         ms_spriteAttributes.m_sLayer			= CRealm::LayerSprite16;
-         ms_spriteAttributes.m_sPriority		= 32767; // Always on top.
+         ms_spriteAttributes.m_sLayer         = CRealm::LayerSprite16;
+         ms_spriteAttributes.m_sPriority      = 32767; // Always on top.
       }
       else
       {
          TRACE("SizeShowAttribsSprite(): RImage::CreateImage() failed.\n");
-         sRes	= -1;
+         sRes   = -1;
       }
 
       // If an error occurred . . .
       if (sRes)
       {
          delete ms_spriteAttributes.m_pImage;
-         ms_spriteAttributes.m_pImage	= NULL;
+         ms_spriteAttributes.m_pImage   = NULL;
       }
    }
 
@@ -7355,7 +7355,7 @@ static short SizeShowAttribsSprite(void)  // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 static void MyRFileCallback(S32 lBytes)
 {
-   ms_lFileBytesSoFar	+= lBytes;
+   ms_lFileBytesSoFar   += lBytes;
 
    S32 lNow = rspGetMilliseconds();
    if ((lNow - ms_lRFileCallbackTime) > MY_RFILE_CALLBACK_INTERVAL)
@@ -7404,8 +7404,8 @@ static void MyRFileCallback(S32 lBytes)
 // done with the file access.
 ////////////////////////////////////////////////////////////////////////////////
 static void InitFileCounter(        // Returns nothing.
-   char*	pszDescriptionFrmt)        // In:  sprintf format for description of
-                                    // operation.
+   char*   pszDescriptionFrmt)        // In:  sprintf format for description of
+                                      // operation.
 {
    // Make sure string (with some digits) will fit . . .
    if (strlen(pszDescriptionFrmt) < sizeof(ms_szFileOpDescriptionFrmt) - 10 )
@@ -7423,7 +7423,7 @@ static void InitFileCounter(        // Returns nothing.
    // be processed, which is nice for both Mac and Win32.
    RFile::ms_criticall = MyRFileCallback;
    ms_lRFileCallbackTime = rspGetMilliseconds();
-   ms_lFileBytesSoFar	= 0;
+   ms_lFileBytesSoFar   = 0;
 
    // A little feedback would be nice.
    rspSetCursor(RSP_CURSOR_WAIT);
@@ -7438,11 +7438,11 @@ static void InitFileCounter(        // Returns nothing.
    char szSample[sizeof(ms_szFileOpDescriptionFrmt)];
    sprintf(szSample, ms_szFileOpDescriptionFrmt, LONG_MAX);
    // Just use entire width for now.
-   ms_sFileOpTextW	= ms_printFile.GetWidth(szSample);
+   ms_sFileOpTextW   = ms_printFile.GetWidth(szSample);
    // Get height.
    ms_printFile.GetPos(NULL, NULL, NULL, &ms_sFileOpTextH);
-   ms_sFileOpTextX	= PROGRESS_X;
-   ms_sFileOpTextY	= PROGRESS_Y - (ms_sFileOpTextH + 5);
+   ms_sFileOpTextX   = PROGRESS_X;
+   ms_sFileOpTextY   = PROGRESS_Y - (ms_sFileOpTextH + 5);
 
    RRect rect(ms_sFileOpTextX, ms_sFileOpTextY, ms_sFileOpTextW, ms_sFileOpTextH);
    ms_printFile.SetDestination(g_pimScreenBuf, &rect);
@@ -7462,7 +7462,7 @@ static void KillFileCounter(void)   // Returns nothing.
    // Restore arrow cursor.
    rspSetCursor(RSP_CURSOR_ARROW);
    // Clear op descriptor.
-   ms_szFileOpDescriptionFrmt[0]	= '\0';
+   ms_szFileOpDescriptionFrmt[0]   = '\0';
 
    // Don't need keys that occurred during the operation.
    rspClearAllInputEvents();
@@ -7473,7 +7473,7 @@ static void KillFileCounter(void)   // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 inline
 void SetPosInfo(        // Returns nothing.
-   RGuiItem*	pgui,    // In:  GUI to update.  NULL is safe.
+   RGuiItem*   pgui,    // In:  GUI to update.  NULL is safe.
    double dVal)         // In:  Value to udpate to GUI.
 {
    if (pgui)
@@ -7599,22 +7599,22 @@ void Pos2Str(     // Returns nothing.
 // Show statistics for the specified realm.
 ////////////////////////////////////////////////////////////////////////////////
 static short ShowRealmStatistics(   // Returns 0 on success.
-   CRealm*	prealm,                 // In:  Realm to get stats on.
+   CRealm*   prealm,                 // In:  Realm to get stats on.
    CThing** ppthing)                // Out: Selected thing, if not NULL.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Store cursor show level so we can restore it when done.
-   short sOrigCursorShowLevel	= rspGetMouseCursorShowLevel();
+   short sOrigCursorShowLevel   = rspGetMouseCursorShowLevel();
    // Set the mouse so we can see it.
    rspSetMouseCursorShowLevel(1);
 
    // Get GUI . . .
-   RGuiItem*	pguiRoot	= RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, REALM_STATISTICS_GUI_FILE) );
+   RGuiItem*   pguiRoot   = RGuiItem::LoadInstantiate(FullPath(GAME_PATH_VD, REALM_STATISTICS_GUI_FILE) );
    if (pguiRoot)
    {
       // Get list box . . .
-      RListBox*	plb	= (RListBox*)pguiRoot->GetItemFromId(GUI_ID_REALM_STATISTICS);
+      RListBox*   plb   = (RListBox*)pguiRoot->GetItemFromId(GUI_ID_REALM_STATISTICS);
       if (plb)
       {
          ASSERT(plb->m_type == RGuiItem::ListBox);
@@ -7626,15 +7626,15 @@ static short ShowRealmStatistics(   // Returns 0 on success.
          char szZ[256];
          double dX, dY, dZ;
          S32 lNum  = 0;
-         CListNode<CThing>*	pthingnode	= prealm->m_everythingHead.m_pnNext;
-         CThing*	pthing;
+         CListNode<CThing>*   pthingnode   = prealm->m_everythingHead.m_pnNext;
+         CThing*   pthing;
          while (pthingnode != &(prealm->m_everythingTail))
          {
             lNum++;
-            pthing	= pthingnode->m_powner;
-            dX			= pthing->GetX();
-            dY			= pthing->GetY();
-            dZ			= pthing->GetZ();
+            pthing   = pthingnode->m_powner;
+            dX         = pthing->GetX();
+            dY         = pthing->GetY();
+            dZ         = pthing->GetZ();
 
             Pos2Str(dX, szX);
             Pos2Str(dY, szY);
@@ -7650,20 +7650,20 @@ static short ShowRealmStatistics(   // Returns 0 on success.
                szY,
                szZ);
 
-            RGuiItem*	pguiThing	= plb->AddString(szThingDescription);
+            RGuiItem*   pguiThing   = plb->AddString(szThingDescription);
 
             if (pguiThing)
             {
                // Success.
-               pguiThing->m_lId	= (intptr_t)pthing;
+               pguiThing->m_lId   = (intptr_t)pthing;
             }
             else
             {
                TRACE("ShowRealmStatistics(): Error adding <<%s>> to the list box.\n", szThingDescription);
-               sRes	= -3;
+               sRes   = -3;
             }
 
-            pthingnode	= pthingnode->m_pnNext;
+            pthingnode   = pthingnode->m_pnNext;
          }
 
          // Repaginate now.
@@ -7675,30 +7675,30 @@ static short ShowRealmStatistics(   // Returns 0 on success.
          if (ppthing)
          {
             // If there's a selection . . .
-            RGuiItem* pguiSel	= plb->GetSel();
+            RGuiItem* pguiSel   = plb->GetSel();
             if (pguiSel)
             {
-               *ppthing	= (CThing*)(pguiSel->m_lId);
+               *ppthing   = (CThing*)(pguiSel->m_lId);
             }
             else
             {
-               *ppthing	= NULL;
+               *ppthing   = NULL;
             }
          }
       }
       else
       {
          TRACE("ShowRealmStatistics(): Failed to get realm stats listbox.\n");
-         sRes	= -2;
+         sRes   = -2;
       }
 
       delete pguiRoot;
-      pguiRoot	= NULL;
+      pguiRoot   = NULL;
    }
    else
    {
       TRACE("ShowRealmStatistics(): Failed to load realm stats GUI.\n");
-      sRes	= -1;
+      sRes   = -1;
    }
 
    // Clear queues.
@@ -7717,27 +7717,27 @@ static short ShowRealmStatistics(   // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 static bool RealmOpProgress(        // Returns true to continue; false to
                                     // abort operation.
-   short	sLastItemProcessed,        // In:  Number of items processed so far.
-   short	sTotalItemsToProcess)      // In:  Total items to process.
+   short sLastItemProcessed,          // In:  Number of items processed so far.
+   short sTotalItemsToProcess)        // In:  Total items to process.
 {
    static S32 lLastProgressPos;
    static S32 lProgressX, lProgressY, lProgressW, lProgressH;
    static S32 lLastCallTime;
 
    // Just need to get the key status array once.
-   U8*	pau8KeyStatus	= rspGetKeyStatusArray();
+   U8*   pau8KeyStatus   = rspGetKeyStatusArray();
 
    bool bContinue   = true;   // Assume we want to continue.
 
    // If new operation . . .
    if (sLastItemProcessed == 0)
    {
-      lLastProgressPos	= 0;
-      lProgressX			= PROGRESS_X;
-      lProgressY			= PROGRESS_Y;
-      lProgressW			= PROGRESS_W;
-      lProgressH			= PROGRESS_H;
-      lLastCallTime		= 0;
+      lLastProgressPos   = 0;
+      lProgressX         = PROGRESS_X;
+      lProgressY         = PROGRESS_Y;
+      lProgressW         = PROGRESS_W;
+      lProgressH         = PROGRESS_H;
+      lLastCallTime      = 0;
 
       // Clear key status array.
       memset(pau8KeyStatus, 0, 128);
@@ -7775,11 +7775,11 @@ static bool RealmOpProgress(        // Returns true to continue; false to
       S32 lNewProgressPos;
       if (sTotalItemsToProcess > 0)
       {
-         lNewProgressPos	= (S32)sLastItemProcessed * lProgressW / (S32)sTotalItemsToProcess;
+         lNewProgressPos   = (S32)sLastItemProcessed * lProgressW / (S32)sTotalItemsToProcess;
       }
       else
       {
-         lNewProgressPos	= lProgressW;
+         lNewProgressPos   = lProgressW;
       }
 
       // Lock the composite buffer.
@@ -7803,7 +7803,7 @@ static bool RealmOpProgress(        // Returns true to continue; false to
          lNewProgressPos - lLastProgressPos,
          lProgressH);
 
-      lLastProgressPos	= lNewProgressPos;
+      lLastProgressPos   = lNewProgressPos;
 
       // If escape hit . . .
       if (pau8KeyStatus[KEY_ABORT_REALM_OPERATION])
@@ -7814,12 +7814,12 @@ static bool RealmOpProgress(        // Returns true to continue; false to
                 "Are you sure you want to abort this operation?")
              == RSP_MB_RET_YES)
          {
-            bContinue	= false;
+            bContinue   = false;
          }
       }
 
       // Don't use lNow here...let's not count time we spent drawing.
-      lLastCallTime	= rspGetMilliseconds();
+      lLastCallTime   = rspGetMilliseconds();
    }
 
    return bContinue;

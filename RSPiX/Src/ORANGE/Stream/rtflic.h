@@ -29,7 +29,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // This value can be from 0 to 64K - 1.
 // The overhead per channel is sizeof(FLX_RT_HDR) bytes.
-#define MAX_VID_CHANNELS	25
+#define MAX_VID_CHANNELS   25
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -47,27 +47,27 @@ class FLX_RT_HDR
 {
 public:
 // Header info from stream.
-short	sNumFrames;                   // Number of frames. Max 4000.
-short	sWidth;                       // Width in pixels (always 320 in FLI)
-short	sHeight;                      // Height in pixels (always 200 in FLI)
-short	sDepth;                       // Bits per pixel (always 8)
+short sNumFrames;                     // Number of frames. Max 4000.
+short sWidth;                         // Width in pixels (always 320 in FLI)
+short sHeight;                        // Height in pixels (always 200 in FLI)
+short sDepth;                         // Bits per pixel (always 8)
 S32 lMilliPerFrame;                 // Milliseconds between frames.
-short	sNoDelta;                     // TRUE if no deltas, FALSE otherwise.
-short	sTransparent;                 // Blt with transparency if TRUE.
-short	sX;                           // Intended position in x direction.
-short	sY;                           // Intended position in y direction.
+short sNoDelta;                       // TRUE if no deltas, FALSE otherwise.
+short sTransparent;                   // Blt with transparency if TRUE.
+short sX;                             // Intended position in x direction.
+short sY;                             // Intended position in y direction.
 
 // Header info for our use.
-CImage*		pImage;                 // Where to blt.
-short	sCurFrame;                    // Current frame number (0 origin).
-short	sPixelsModified;              // TRUE if pixels were modified last
-                                    // decompression.
-short	sColorsModified;              // TRUE if colors were modified last
-                                    // decompression.
+CImage*      pImage;                 // Where to blt.
+short sCurFrame;                      // Current frame number (0 origin).
+short sPixelsModified;                // TRUE if pixels were modified last
+                                      // decompression.
+short sColorsModified;                // TRUE if colors were modified last
+                                      // decompression.
 S32 lMaxLag;                        // Maximum lag before skipping frames.
-RTFLIC_CALL	callbackHeader;         // Callback on header receipt.
-RTFLIC_CALL	callbackBefore;         // Callback before decompression.
-RTFLIC_CALL	callbackAfter;          // Callback after decompression.
+RTFLIC_CALL callbackHeader;           // Callback on header receipt.
+RTFLIC_CALL callbackBefore;           // Callback before decompression.
+RTFLIC_CALL callbackAfter;            // Callback after decompression.
 };
 
 class CRtFlic
@@ -100,11 +100,11 @@ void Reset();
 
 // Use handler for RtFlic buffers.
 // Returns RET_FREE if done with data on return, RET_DONTFREE otherwise.
-short Use(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-            S32 lTime);
+short Use(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+             S32 lTime);
 // Static entry point for above.
-static short UseStatic(	UCHAR* puc, S32 lSize, USHORT usType,
-                        UCHAR ucFlags, S32 lTime, S32 l_pRtFlic);
+static short UseStatic(   UCHAR* puc, S32 lSize, USHORT usType,
+                          UCHAR ucFlags, S32 lTime, S32 l_pRtFlic);
 
 protected:     // Internal typedefs.
 
@@ -114,7 +114,7 @@ public:        // Members.
 protected:     // Members.
 FLX_RT_HDR m_aflxhdrs[MAX_VID_CHANNELS];       // Info for each channel.
 USHORT m_usState;                         // The current state of this CRtFlic.
-CDispatch*	m_pdispatch;                  // The dispatcher for this CRtFlic.
+CDispatch*   m_pdispatch;                  // The dispatcher for this CRtFlic.
 
 };
 

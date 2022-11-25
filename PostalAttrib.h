@@ -18,12 +18,12 @@
 // ATTRIBUTE.H
 //
 // Created on 10/03/96 JMI
-// Implemented	03/14/97 JRD
+// Implemented   03/14/97 JRD
 //
-// 03/18/97 JRD	Started this file to remove the Postal specific
-//						interpretation of RAttribute out of the orange
-//						layer to allow a second attribute grid with different
-//						interpretations.
+// 03/18/97 JRD   Started this file to remove the Postal specific
+//                  interpretation of RAttribute out of the orange
+//                  layer to allow a second attribute grid with different
+//                  interpretations.
 //
 //////////////////////////////////////////////////////////////////////
 //  After Postal, this class will be renamed to something more general
@@ -56,23 +56,23 @@
 // the attribute mask.
 //
 // ALSO:  AVOID using fields which need both OFFSETS and SCALING!
-//			(To create a signed field, just subtract half)
+//         (To create a signed field, just subtract half)
 //
 // NOTE:  MACROS for VALUES are for comparison ONLY - they cannot be
-//			used for ANDing and ORing
+//         used for ANDing and ORing
 //
 //////////////////////////////////////////////////////////////////////
-//	 Postal Attribute Map ONE:
+//    Postal Attribute Map ONE:
 //////////////////////////////////////////////////////////////////////
 
-// BITS	0-7, signed numeric field
+// BITS   0-7, signed numeric field
 #define ATTRIBUTE_HEIGHT_MASK  0x00FF  // Mask of height bits.
 
 // BITS 8-11, unsigned numeric field
 #define ATTRIBUTE_LAYER_MASK 0x0F00    // Mask of layer cue
 
 // BIT 12, flag
-#define ATTRIBUTE_CLIFF	0x1000         // cliff attribute
+#define ATTRIBUTE_CLIFF   0x1000         // cliff attribute
 
 // BIT 13, flag
 #define ATTRIBUTE_NOT_WALKABLE 0x2000  // Flag for no-walk areas.
@@ -81,26 +81,26 @@
 #define ATTRIBUTE_LIGHT_EFFECT 0x4000  // Flag for light
 
 //////////////////////////////////////////////////////////////////////
-//	 Postal Attribute Map TWO:
+//    Postal Attribute Map TWO:
 //////////////////////////////////////////////////////////////////////
 
 // BITS 0-10 OPENED FOR ALL POSTAL DUDES!
 // That's 2048 possibilities opened up for the postal crew!
 
 // BITS 11-12, unsigned numeric field
-#define	ATTRIBUTE_RESERVED1_MASK	0x1800   // I reserve two for later
+#define   ATTRIBUTE_RESERVED1_MASK   0x1800   // I reserve two for later
 
 // BITS 13-14, unsigned numberic field
-#define	ATTRIBUTE_FLUID_MASK		0x6000   // Mask of fluids
-#define	ATTRIBUTE_BLOOD_VALUE	0x2000   // Value of BLOOD
-#define	ATTRIBUTE_OIL_VALUE		0x4000   // Value of GASOLINE
-#define	ATTRIBUTE_WATER_VALUE	0x6000   // Value of WATER
+#define   ATTRIBUTE_FLUID_MASK      0x6000   // Mask of fluids
+#define   ATTRIBUTE_BLOOD_VALUE   0x2000   // Value of BLOOD
+#define   ATTRIBUTE_OIL_VALUE      0x4000   // Value of GASOLINE
+#define   ATTRIBUTE_WATER_VALUE   0x6000   // Value of WATER
 
 //////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
 //  The goal was to make getting the field of an attribute have ZERO
-//	 cost to the user.  One change is that since BIT15 is removed
+//    cost to the user.  One change is that since BIT15 is removed
 //  from the attribute on decompression, all values deal with
 //  SIGNED shorts.  The meaning is uneffected, but it provides greater
 //  compatibility and options with comparing external values.
@@ -167,5 +167,5 @@ inline short GetLayer(short sMaskedValue))
 }
 
 //-------//-----//
-#endif	// EOF //
+#endif   // EOF //
 //-------//-----//

@@ -18,48 +18,48 @@
 // hood.h
 // Project: Nostril (aka Postal)
 //
-//	History:
-//		01/22/97	JMI	Converted many m_spryAlphas/Opaques to arrays and added
-//							a macro enum MaxLayers.
+//   History:
+//      01/22/97   JMI   Converted many m_spryAlphas/Opaques to arrays and added
+//                     a macro enum MaxLayers.
 //
-//		01/23/97	JMI	Added two very non-major comments and removed a #if 0
-//							block.
+//      01/23/97   JMI   Added two very non-major comments and removed a #if 0
+//                     block.
 //
-//		01/26/97	JMI	Made m_imBackground public.  It was the only way I could
-//							figure to get any idea of the realm dimensions that I
-//							needed for the editor.
+//      01/26/97   JMI   Made m_imBackground public.  It was the only way I could
+//                     figure to get any idea of the realm dimensions that I
+//                     needed for the editor.
 //
-//		01/26/97	JMI	Added override of EditRect() that sets the rect to the
-//							dimensions of m_pimBackground->
+//      01/26/97   JMI   Added override of EditRect() that sets the rect to the
+//                     dimensions of m_pimBackground->
 //
-//		01/31/97 MJR	Added GetWidth() and GetHeight().
+//      01/31/97 MJR   Added GetWidth() and GetHeight().
 //
-//		02/03/97	JMI	Updated default relative path used to get hood resources.
+//      02/03/97   JMI   Updated default relative path used to get hood resources.
 //
-//		02/04/97	JMI	Changed all resources to pointers so we can fully utilize
-//							the RResMgr.
+//      02/04/97   JMI   Changed all resources to pointers so we can fully utilize
+//                     the RResMgr.
 //
-//		02/07/97	JMI	Added m_sWorldXRot, world transformation x rotation.
+//      02/07/97   JMI   Added m_sWorldXRot, world transformation x rotation.
 //
-//		02/13/97	JMI	Changed paths for hoods to be in hoods/ instead of bg/
-//							and also now just store the import part (like "city" instead
-//							of "hoods/city").
-//							Also, now gets resources for lighting effects.
-//							Also, now sets the realm's m_phood ptr to this instance.
+//      02/13/97   JMI   Changed paths for hoods to be in hoods/ instead of bg/
+//                     and also now just store the import part (like "city" instead
+//                     of "hoods/city").
+//                     Also, now gets resources for lighting effects.
+//                     Also, now sets the realm's m_phood ptr to this instance.
 //
-//		02/13/97	JMI	Had to make m_pimBackground public so 3D guys could get in-
-//							to its palette.
+//      02/13/97   JMI   Had to make m_pimBackground public so 3D guys could get in-
+//                     to its palette.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/09/97 BRH	Added RMultiGrid to the hoods for the new type of attribute
-//							maps.  These will eventuall replace the RAttribMap but for
-//							now they are both here so that all parts of the game
-//							will continue to work during testing of the new attribute
-//							map.
+//      04/09/97 BRH   Added RMultiGrid to the hoods for the new type of attribute
+//                     maps.  These will eventuall replace the RAttribMap but for
+//                     now they are both here so that all parts of the game
+//                     will continue to work during testing of the new attribute
+//                     map.
 //
-//		05/12/97 JRD	Made it into a trigger CThing so it can load and save trigger
-//							attribute maps.
+//      05/12/97 JRD   Made it into a trigger CThing so it can load and save trigger
+//                     attribute maps.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef TRIGGER_H
@@ -182,13 +182,13 @@ void EditRender(void);
 // Called by editor to get the clickable pos/area of an object.
 virtual        // If you override this, do NOT call this base class.
 void EditRect(                // Returns nothiing.
-   RRect*	prc)              // Out: Clickable pos/area of object.
+   RRect*   prc)              // Out: Clickable pos/area of object.
 {
    // Default implementation makes the object unclickable.
-   prc->sX	= 0;
-   prc->sY	= 0;
-   prc->sW	= 16;
-   prc->sH	= 16;
+   prc->sX   = 0;
+   prc->sY   = 0;
+   prc->sW   = 16;
+   prc->sH   = 16;
 }
 
 //---------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void EditRect(                // Returns nothiing.
 public:
 
 // After the game editor creates the attribute data, stick it here
-void	AddData(RMultiGridIndirect* pmgi);
+void   AddData(RMultiGridIndirect* pmgi);
 
 };
 

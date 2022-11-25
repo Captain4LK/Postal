@@ -20,27 +20,27 @@
 // stack.h
 //
 // History:
-//		08/14/95 JMI	Started.
+//      08/14/95 JMI   Started.
 //
-//		07/08/96	JMI	No S32er automatically makes user type a pointer.
+//      07/08/96   JMI   No S32er automatically makes user type a pointer.
 //
-//		07/08/96	JMI	Converted to new CList that does not convert your
-//							template type into a pointer.
+//      07/08/96   JMI   Converted to new CList that does not convert your
+//                     template type into a pointer.
 //
-//		07/09/96	JMI	Reconverted to newest CList which does convert
-//							your template type into a pointer.  Now it CList
-//							is based on CBList which does not do this conversion.
+//      07/09/96   JMI   Reconverted to newest CList which does convert
+//                     your template type into a pointer.  Now it CList
+//                     is based on CBList which does not do this conversion.
 //
-//		07/31/96	JMI	ReReconverted to CBList which does NOT convert
-//							your template type into a pointer.
+//      07/31/96   JMI   ReReconverted to CBList which does NOT convert
+//                     your template type into a pointer.
 //
-//		08/01/96 MJR	Bug fixed in Pop() - returned incorrect error code.
+//      08/01/96 MJR   Bug fixed in Pop() - returned incorrect error code.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CBList			RBList
-//							CStack			RStack
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CBList         RBList
+//                     CStack         RStack
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -77,9 +77,9 @@ typedef T STACKDATA, *PSTACKDATA;
 
 public:     // Construction/Destruction.
 // Default constructor.
-RStack()		{ m_sNumItems = 0; }
+RStack()      { m_sNumItems = 0; }
 // Destructor.
-~RStack()	{ }
+~RStack()   { }
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +88,7 @@ public:     // Methods.
 // Returns 0 on success.
 short Push(STACKDATA sd)
 {
-   short	sRes	= m_list.InsertHead(sd);
+   short sRes   = m_list.InsertHead(sd);
    if (sRes == 0)
    {
       m_sNumItems++;
@@ -100,7 +100,7 @@ short Push(STACKDATA sd)
 // Returns item on success; NULL otherwise.
 short Pop(PSTACKDATA psd)
 {
-   short	sRes	= m_list.GetHead(psd);
+   short sRes   = m_list.GetHead(psd);
    if (sRes == 0)
    {
       m_sNumItems--;
@@ -131,8 +131,8 @@ protected:     // Internal functions.
 public:     // Member variables.
 
 protected:     // Protected member variables.
-RBList <T>	m_list;        // The dynamic stack.  Head is top.
-short	m_sNumItems;               // Number of items in stack.
+RBList <T>   m_list;        // The dynamic stack.  Head is top.
+short m_sNumItems;                 // Number of items in stack.
 };
 
 

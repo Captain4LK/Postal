@@ -19,101 +19,101 @@
 // Project: Nostril (aka Postal)
 //
 // History:
-//		12/02/96 MJR	Started.
+//      12/02/96 MJR   Started.
 //
-//		01/31/97	JMI	Added g_resmgrGame for specific to actual game data.
+//      01/31/97   JMI   Added g_resmgrGame for specific to actual game data.
 //
-//		01/31/97	JMI	Added m_lTitleLoadLoops to settings.
+//      01/31/97   JMI   Added m_lTitleLoadLoops to settings.
 //
-//		02/03/97	JMI	Added NoSakDir directory for files when there is no SAK
-//							to settings.
+//      02/03/97   JMI   Added NoSakDir directory for files when there is no SAK
+//                     to settings.
 //
-//		02/04/97	JMI	Added functions to get and set the gamma level.
+//      02/04/97   JMI   Added functions to get and set the gamma level.
 //
-//		02/13/97	JMI	Removed game level alpha XRay stuff (now setup in CHood).
+//      02/13/97   JMI   Removed game level alpha XRay stuff (now setup in CHood).
 //
-//		02/21/97	JMI	Now sets gamma level on Save().
-//							Also, added m_sUseCurrentDeviceDimensions to settings
-//							indicating, if TRUE, not to change the current display
-//							device mode.
+//      02/21/97   JMI   Now sets gamma level on Save().
+//                     Also, added m_sUseCurrentDeviceDimensions to settings
+//                     indicating, if TRUE, not to change the current display
+//                     device mode.
 //
-//		03/24/97	JMI	Added m_dDegreesPerSec and m_sUseMouse to CGameSettings.
+//      03/24/97   JMI   Added m_dDegreesPerSec and m_sUseMouse to CGameSettings.
 //
-//		03/31/97	JMI	Moved CGameSettings definition to GameSettings.h and the
-//							implementation to GameSettings.cpp.
+//      03/31/97   JMI   Moved CGameSettings definition to GameSettings.h and the
+//                     implementation to GameSettings.cpp.
 //
-//		04/11/97	JMI	Added Game_Menu_Demo() proto.
+//      04/11/97   JMI   Added Game_Menu_Demo() proto.
 //
-//		05/21/97	JMI	Added a resource manager for resources that are not SAKed.
+//      05/21/97   JMI   Added a resource manager for resources that are not SAKed.
 //
-//		06/12/97 MJR	Rewored the callbacks so that the game-specific code now
-//							resides in this module rather than the menu module.
+//      06/12/97 MJR   Rewored the callbacks so that the game-specific code now
+//                     resides in this module rather than the menu module.
 //
-//		06/16/97	JMI	Added g_fontSmall.
+//      06/16/97   JMI   Added g_fontSmall.
 //
-//		06/18/97 MJR	Added SeedRandom() and GetRandom().
+//      06/18/97 MJR   Added SeedRandom() and GetRandom().
 //
-//		06/24/97	JMI	Added SynchLog() and associated macros.
+//      06/24/97   JMI   Added SynchLog() and associated macros.
 //
-//		07/03/97	JMI	Added Game_ControlsMenu().
+//      07/03/97   JMI   Added Game_ControlsMenu().
 //
-//		07/11/97 BRH	Finished up the expiration date checking for the
-//							Registry.  Still need to add something for the Mac
-//							version.  Verified that it works with different times
-//							and dates.
+//      07/11/97 BRH   Finished up the expiration date checking for the
+//                     Registry.  Still need to add something for the Mac
+//                     version.  Verified that it works with different times
+//                     and dates.
 //
-//		07/13/97	JMI	Added Game_StartChallengeGame() proto.
+//      07/13/97   JMI   Added Game_StartChallengeGame() proto.
 //
-//		07/18/97 BRH	Added game load and save functions so that the player's
-//							game can be saved and loaded.  Also added a global
-//							stockpile object used to transfer loaded/saved info to/from
-//							the CDude's stockpile.
+//      07/18/97 BRH   Added game load and save functions so that the player's
+//                     game can be saved and loaded.  Also added a global
+//                     stockpile object used to transfer loaded/saved info to/from
+//                     the CDude's stockpile.
 //
-//		07/26/97	JMI	Added g_fontPostal to replace g_fontSmall.  Got rid of
-//							g_fontSmall.
+//      07/26/97   JMI   Added g_fontPostal to replace g_fontSmall.  Got rid of
+//                     g_fontSmall.
 //
-//		08/05/97	JMI	Added Game_AudioOptionsChoice().
+//      08/05/97   JMI   Added Game_AudioOptionsChoice().
 //
-//		08/12/97	JMI	Added SubPathOpenBox() (see proto for details) and
-//							FullPathCustom().
+//      08/12/97   JMI   Added SubPathOpenBox() (see proto for details) and
+//                     FullPathCustom().
 //
-//		08/14/97	JMI	Added psDifficulty parameter to Game_Save/LoadPlayersGame()
-//							so they can query/modify realm difficulty.
+//      08/14/97   JMI   Added psDifficulty parameter to Game_Save/LoadPlayersGame()
+//                     so they can query/modify realm difficulty.
 //
 //
-//		08/15/97	JRD	Added a function to control brightness/contrast in place
-//							of gamme.  This was because the gamma function could not
-//							recreate a "normal palette."
+//      08/15/97   JRD   Added a function to control brightness/contrast in place
+//                     of gamme.  This was because the gamma function could not
+//                     recreate a "normal palette."
 //
-//		08/15/97 JRD	Attempted to hook both brightness and contrast changes to
-//							the old gamma slider with a crude algorithm.
+//      08/15/97 JRD   Attempted to hook both brightness and contrast changes to
+//                     the old gamma slider with a crude algorithm.
 //
-//		08/20/97	JMI	Moved Game_LoadPlayersGame() proto into game.cpp b/c it
-//							now takes an ACTION* but ACTION is defined in game.cpp and
-//							since no one currently calls this function externally, what
-//							the hell.
+//      08/20/97   JMI   Moved Game_LoadPlayersGame() proto into game.cpp b/c it
+//                     now takes an ACTION* but ACTION is defined in game.cpp and
+//                     since no one currently calls this function externally, what
+//                     the hell.
 //
-//		08/21/97 MJR	Added Game_HostMultiGame() and Game_JoinMultiGame().
+//      08/21/97 MJR   Added Game_HostMultiGame() and Game_JoinMultiGame().
 //
-//		08/21/97	JMI	Added rspUpdateDisplay() macros to flag these calls (they
-//							should be calls to app level version -- UpdateDisplay() ).
+//      08/21/97   JMI   Added rspUpdateDisplay() macros to flag these calls (they
+//                     should be calls to app level version -- UpdateDisplay() ).
 //
-//		08/22/97	JMI	Removed rspUpdateDisplay() macro b/c we don't need it now that
-//							we're lock/unlocking correctly.
+//      08/22/97   JMI   Removed rspUpdateDisplay() macro b/c we don't need it now that
+//                     we're lock/unlocking correctly.
 //
-//		08/23/97	JMI	Added Game_InitMainMenu() so game.cpp can hook init/kill of
-//							main menu.
+//      08/23/97   JMI   Added Game_InitMainMenu() so game.cpp can hook init/kill of
+//                     main menu.
 //
-//		10/07/97	JMI	Now GetRandom() uses the logging call in any TRACENASSERT
-//							mode (used to be just in _DEBUG mode).
+//      10/07/97   JMI   Now GetRandom() uses the logging call in any TRACENASSERT
+//                     mode (used to be just in _DEBUG mode).
 //
-//		10/14/97	JMI	LOG() and if() no S32er automatically call GetInstanceID()
-//							(too many GetRand()s are called from non-CThings).  Now
-//							LOG() has an additional argument for specifying the user
-//							value which, of course, could be a call to GetInstanceID().
+//      10/14/97   JMI   LOG() and if() no S32er automatically call GetInstanceID()
+//                     (too many GetRand()s are called from non-CThings).  Now
+//                     LOG() has an additional argument for specifying the user
+//                     value which, of course, could be a call to GetInstanceID().
 //
-//		10/14/97	JMI	Made SynchLog()'s expr parameter a double instead of an int
-//							for more accuracy.
+//      10/14/97   JMI   Made SynchLog()'s expr parameter a double instead of an int
+//                     for more accuracy.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef GAME_H
@@ -160,14 +160,14 @@ extern bool g_bLastLevelDemo;
 // resources, g_fontBig, or anything not specific to the real game.
 // Note:  Realm specifc data, such as alpha effects, etc., should be loaded
 // through prealm->m_resmgr.
-extern RResMgr	g_resmgrGame;
+extern RResMgr g_resmgrGame;
 
 // Resource manager for shell resources.  Do not use this to load things like
 // the main dudes' sprites.
-extern RResMgr	g_resmgrShell;
+extern RResMgr g_resmgrShell;
 
 // Resource manager for non-SAK resources.
-extern RResMgr	g_resmgrRes;
+extern RResMgr g_resmgrRes;
 
 // Time codes for registry values and expiration date
 extern S32 g_lRegTime;
@@ -178,7 +178,7 @@ extern S32 g_lReleaseTime;
 
 // Loaded and saved games use this stockpile to transfer to/from the
 // dude's stockpile
-extern CStockPile	g_stockpile;
+extern CStockPile g_stockpile;
 extern bool g_bTransferStockpile;
 extern short g_sRealmNumToSave;
 
@@ -289,7 +289,7 @@ extern void Game_AudioOptionsChoice(   // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Save game settings of the current level so that play can continue on this
-//	level.
+//   level.
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -316,14 +316,14 @@ extern void SeedRandom(
 
 #if defined(_DEBUG) || defined(TRACENASSERT)
 
-   #define GetRandom()	GetRandomDebug(__FILE__, __LINE__)
+   #define GetRandom()   GetRandomDebug(__FILE__, __LINE__)
 extern S32 GetRandomDebug(char* FILE_MACRO, S32 LINE_MACRO);
 
 #else
 
 extern S32 GetRandom(void);
 
-#endif	// defined(_DEBUG) || defined(TRACENASSERT)
+#endif   // defined(_DEBUG) || defined(TRACENASSERT)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Synchronization logger -- Call this function to log an expression and a user
@@ -336,9 +336,9 @@ extern S32 GetRandom(void);
 ////////////////////////////////////////////////////////////////////////////////
 extern int SynchLog(    // Result of expr.
    double expr,         // In:  Expression to evaluate.
-   char*		pszFile,    // In:  Calling file.
+   char*      pszFile,    // In:  Calling file.
    S32 lLine,           // In:  Calling line.
-   char*		pszExpr,    // In:  Original C++ source expression.
+   char*      pszExpr,    // In:  Original C++ source expression.
    U32 u32User);        // In:  A user value that is intended to be consistent.
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -346,7 +346,7 @@ extern int SynchLog(    // Result of expr.
 // still perform its comparison but will also SynchLog() the expression.
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(LOG_IFS)
-   #define if(expr)		if (SynchLog(double(expr != 0), __FILE__, __LINE__, #expr, 0 ) )
+   #define if(expr)      if (SynchLog(double(expr != 0), __FILE__, __LINE__, #expr, 0 ) )
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -357,7 +357,7 @@ extern int SynchLog(    // Result of expr.
 // at all.
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(LOG_LOGS)
-   #define LOG(expr, user_val)		SynchLog(expr, __FILE__, __LINE__, #expr, user_val)
+   #define LOG(expr, user_val)      SynchLog(expr, __FILE__, __LINE__, #expr, user_val)
 #else
    #define LOG(expr, user_val)
 #endif
@@ -397,12 +397,12 @@ extern void PalTranOff(void);
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#define GAME_PATH_CD			0
-#define GAME_PATH_HD			1
-#define GAME_PATH_VD			2
-#define GAME_PATH_SOUND		3
-#define GAME_PATH_GAME		4
-#define GAME_PATH_HOODS		5
+#define GAME_PATH_CD         0
+#define GAME_PATH_HD         1
+#define GAME_PATH_VD         2
+#define GAME_PATH_SOUND      3
+#define GAME_PATH_GAME      4
+#define GAME_PATH_HOODS      5
 
 extern char* FullPath(                          // Returns full path in system format
    short sPathType,                             // In:  PATH_CD, PATH_HD, or PATH_VD
@@ -427,7 +427,7 @@ extern char* FullPathHoods(                     // Returns full path in system f
    char* pszPartialPath);                       // In:  Partial path in RSPiX format
 
 extern char* FullPathCustom(                    // Returns full path in system format
-   char*	pszFullPath,                           // In:  Full path in in RSPiX format.
+   char*   pszFullPath,                           // In:  Full path in in RSPiX format.
    char* pszPartialPath);                       // In:  Partial path in RSPiX format.
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -450,14 +450,14 @@ short CorrectifyBasePath(                       // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 if
                                  // not subpathable (i.e., returned path is full path).
-   char*	pszFullPath,            // In:  Full path to be relative to.
+   char*   pszFullPath,            // In:  Full path to be relative to.
    char* pszBoxTitle,            // In:  Title of box.
-   char*	pszDefFileName,         // In:  Default filename.
+   char*   pszDefFileName,         // In:  Default filename.
    char* pszChosenFileName,      // Out: User's choice.
    short sStrSize,               // In:  Amount of memory pointed to by pszChosenFileName.
-   char*	pszFilter = NULL);      // In:  If not NULL, '.' delimited extension based filename
-                                 //	filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
-                                 // Note: Cannot use '.' in filter.  Preceding '.' ignored.
+   char*   pszFilter = NULL);      // In:  If not NULL, '.' delimited extension based filename
+                                   //   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+                                   // Note: Cannot use '.' in filter.  Preceding '.' ignored.
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -469,7 +469,7 @@ extern void SetGammaLevel(
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//	Set Brightness and Contrast.  Zero (neutral) values yield and identity
+//   Set Brightness and Contrast.  Zero (neutral) values yield and identity
 // curve.  Valid input is from -1 to 1.
 //
 ////////////////////////////////////////////////////////////////////////////////

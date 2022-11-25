@@ -41,7 +41,7 @@ inline void _BLiTT(PIXSIZE ucTransparent, PIXSIZE* pSrc, PIXSIZE* pDst, S32 lSrc
    union
    {
       PIXSIZE *w;
-      UCHAR	*b;
+      UCHAR   *b;
    } pSrcLine, pDstLine;
 
    int i;
@@ -74,8 +74,8 @@ inline void _BLiTT(PIXSIZE ucTransparent, PIXSIZE* pSrc, PIXSIZE* pDst, S32 lSrc
 // if prSrc == NULL, no source clipping will occure
 // if prDst == NULL, it will clip to the CImage
 //
-short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sDstX,
-               short sDstY, short sW, short sH, const RRect* prDst, const RRect* prSrc)
+short   rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, short sSrcY, short sDstX,
+                 short sDstY, short sW, short sH, const RRect* prDst, const RRect* prSrc)
 {
    short sClip;
 
@@ -193,56 +193,56 @@ short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, s
    case (BUF_MEMORY << 3) + 0:  // system buffer to an image
       // need to lock / unlock this one:
 /*
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("rspBlitT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("rspBlitT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case (0 << 3) + BUF_MEMORY:  // image to system buffer
 /*
-			// need to lock / unlock this one:
-			if (rspLockBuffer()
-				!=0)
-				{
-				TRACE("rspBlitT: Unable to lock the system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the system buffer, remember to unlock it:
-			sNeedToUnlock = BUF_MEMORY;
+         // need to lock / unlock this one:
+         if (rspLockBuffer()
+            !=0)
+            {
+            TRACE("rspBlitT: Unable to lock the system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the system buffer, remember to unlock it:
+         sNeedToUnlock = BUF_MEMORY;
 */
       break;
 
    case (BUF_VRAM << 3) + 0:  // front screen to image
       // need to lock / unlock this one:
 /*
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("rspBlitT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("rspBlitT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
    case (0 << 3) + BUF_VRAM:  // image to front screen
 /*
-			// need to lock / unlock this one:
-			if (rspLockScreen()
-				!=0)
-				{
-				TRACE("rspBlitT: Unable to lock the OnScreen system buffer, failed!\n");
-				return -1;
-				}
-			// Locked the front VRAM, remember to unlock it:
-			sNeedToUnlock = BUF_VRAM;
+         // need to lock / unlock this one:
+         if (rspLockScreen()
+            !=0)
+            {
+            TRACE("rspBlitT: Unable to lock the OnScreen system buffer, failed!\n");
+            return -1;
+            }
+         // Locked the front VRAM, remember to unlock it:
+         sNeedToUnlock = BUF_VRAM;
 */
       break;
 
@@ -254,7 +254,7 @@ short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, s
       break;
 
    case (BUF_VRAM << 3) + BUF_MEMORY:  // front screen to system buffer
-//			sNeedToUnlock = (BUF_VRAM<<3) + BUF_MEMORY;
+//         sNeedToUnlock = (BUF_VRAM<<3) + BUF_MEMORY;
 
       break;
 
@@ -321,7 +321,7 @@ short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, s
    // IN RELEASE MODE, GIVE THE USER A CHANCE:
 #ifndef _DEBUG
 
-//	if (gsScreenLocked || gsBufferLocked) goto BLIT_DONTUNLOCK;
+//   if (gsScreenLocked || gsBufferLocked) goto BLIT_DONTUNLOCK;
 
 #endif
 
@@ -334,11 +334,11 @@ short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, s
       break;
 
    case BUF_MEMORY:
-      //		rspUnlockBuffer();
+      //      rspUnlockBuffer();
       break;
 
    case BUF_VRAM:
-      //		rspUnlockScreen();
+      //      rspUnlockScreen();
       break;
 
    case BUF_VRAM2:
@@ -346,8 +346,8 @@ short	rspBlitT(U32 ucTransparent, RImage* pimSrc, RImage* pimDst, short sSrcX, s
       break;
 
    case (BUF_VRAM << 3) + BUF_MEMORY:
-//			rspUnlockBuffer();
-//			rspUnlockScreen();
+//         rspUnlockBuffer();
+//         rspUnlockScreen();
       break;
 
    default:

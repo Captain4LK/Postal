@@ -36,8 +36,8 @@
 //////////////////////////////////////////////////////////////////////////////
 // Macros.
 //////////////////////////////////////////////////////////////////////////////
-#define RSP_SNDFX_MAX_BITSPERSAMPLE		32       // Maximum bits per sample.
-#define RSP_SNDFX_NUM_FADE_INTERVALS	10       // Size of fades table.
+#define RSP_SNDFX_MAX_BITSPERSAMPLE      32       // Maximum bits per sample.
+#define RSP_SNDFX_NUM_FADE_INTERVALS   10       // Size of fades table.
 
 //////////////////////////////////////////////////////////////////////////////
 // Types.
@@ -56,13 +56,13 @@ public:
 // GetCurrentFX() returns these combined by | for all active fx:
 typedef enum
 {
-   NoFX				= 0x0000,         // No current FX.
+   NoFX            = 0x0000,         // No current FX.
    // FX that affect all channels.
-   FadeIn			= 0x0001,         // Fade in all channels.
-   FadeOut			= 0x0002,         // Fade out all channels.
+   FadeIn         = 0x0001,         // Fade in all channels.
+   FadeOut         = 0x0002,         // Fade out all channels.
    // FX that affect individual channels.
-   DecimateLeft	= 0x0004,         // Decimate left channel.	NYI.
-   DecimateRight	= 0x0008          // Decimate right channel.	NYI.
+   DecimateLeft   = 0x0004,         // Decimate left channel.   NYI.
+   DecimateRight   = 0x0008          // Decimate right channel.   NYI.
 } FX;
 
 public:
@@ -74,7 +74,7 @@ RSndFx();
 ////////////////////////// Querries ///////////////////////////////////////
 public:
 // Returns the currently active fx as FX enums combined with |.
-FX GetCurrentFX(void)	{ return m_fx; }
+FX GetCurrentFX(void)   { return m_fx; }
 
 /////////////////////// Global Methods ////////////////////////////////////
 public:
@@ -122,7 +122,7 @@ short SetUpFadeIn(         // Returns 0 on success.
 
 // Activate/Deactivate fade in.
 void ActivateFadeIn(       // Returns nothing.
-   short	sActivate);       // TRUE to activate, FALSE to deactivate.
+   short sActivate);         // TRUE to activate, FALSE to deactivate.
 
 /////////////////////// Fade Out ////////////////////////////////////////
 
@@ -132,7 +132,7 @@ short SetUpFadeOut(        // Returns 0 on success.
 
 // Activate/Deactivate fade out.
 void ActivateFadeOut(         // Returns nothing.
-   short	sActivate);          // TRUE to activate, FALSE to deactivate.
+   short sActivate);            // TRUE to activate, FALSE to deactivate.
 
 ////////////////////////// Internal Methods ///////////////////////////////
 protected:
@@ -143,7 +143,7 @@ void Init(void);
 public:
 
 protected:
-FX	m_fx;                   // Currently active effects.
+FX m_fx;                     // Currently active effects.
 
 /////////////////////////////////////////////////////////////////////////
 // Various FX.
@@ -183,14 +183,14 @@ static S32 ms_lBitsPerSec;          // Number of bits per second.
                                     // and convert milliseconds into bytes.  See
                                     // macros BYTES2MS and MS2BYTES in SndFx.CPP.
 
-static PCMINFO	ms_apcminfo[RSP_SNDFX_MAX_BITSPERSAMPLE + 1];         // Stores info
+static PCMINFO ms_apcminfo[RSP_SNDFX_MAX_BITSPERSAMPLE + 1];           // Stores info
 // particular to each
 // PCM type.
 
-static U8*		ms_pu8Fade;             // Unsigned 8 bit output
-                                       // fade table.
-static S16*		ms_ps16Fade;            // Signed 16 bit output
-                                       // fade table.
+static U8*      ms_pu8Fade;             // Unsigned 8 bit output
+                                        // fade table.
+static S16*      ms_ps16Fade;            // Signed 16 bit output
+                                         // fade table.
 
 static short ms_sNumFadeSteps;            // Number of fade steps.
 };

@@ -29,9 +29,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Status flags.
-#define STATUS_WAITING		0x0001   // Waiting for user to advance a pane.
-#define ERROR_FILEACCESS	0x0002   // Error reading file.
-#define STATUS_EOF			0x0004   // EOF has been reached.
+#define STATUS_WAITING      0x0001   // Waiting for user to advance a pane.
+#define ERROR_FILEACCESS   0x0002   // Error reading file.
+#define STATUS_EOF         0x0004   // EOF has been reached.
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -40,7 +40,7 @@
 // Access into window.
 typedef struct
 {
-   UCHAR		*puc;    // Pane data.
+   UCHAR      *puc;    // Pane data.
    S32 lSize;        // Size of pane.
    S32 lPos;         // Pane's position in Window.
 } PANE, *PPANE;
@@ -146,7 +146,7 @@ FWFUNC m_call;                   // User callback (point wherever you want).
 
 protected:     // Members.
 CNFile m_file;                   // File object use to read data.
-UCHAR*	m_pucWindow;            // Window into file.
+UCHAR*   m_pucWindow;            // Window into file.
 S32 m_lWinSize;                  // Size of window.
 S32 m_lInputInterval;            // Time between pane input accesses.
 S32 m_lNextTime;                 // Time of next pane input.
@@ -155,10 +155,10 @@ PANE m_paneUser;                 // Window pane for user access.
 USHORT m_usStatus;               // Current status.
 FILEWIN_TIMEFUNC m_fnTime;       // Custom time handler.
 S32 m_lTimeUser;                 // User value for time handler.
-short	m_sActive;                 // TRUE if critical is active, FALSE
-                                 // otherwise.
-short	m_sSuspend;                // Number of calls to suspend w/o matching
-                                 // start.
+short m_sActive;                   // TRUE if critical is active, FALSE
+                                   // otherwise.
+short m_sSuspend;                  // Number of calls to suspend w/o matching
+                                   // start.
 };
 
 

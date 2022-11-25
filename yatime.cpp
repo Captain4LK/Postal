@@ -21,12 +21,12 @@
 // This module impliments the CTime class, which manages game time.
 //
 // History:
-//		01/22/97 MJR	Started.
+//      01/22/97 MJR   Started.
 //
-//		07/14/97 MJR	Renamed module to yatime.cpp/.h to avoid conflicts with
-//							<time.h>, which are only conflicts because the VC++
-//							compiler doesn't properly differentiate between #include's
-//							using <> and "".
+//      07/14/97 MJR   Renamed module to yatime.cpp/.h to avoid conflicts with
+//                     <time.h>, which are only conflicts because the VC++
+//                     compiler doesn't properly differentiate between #include's
+//                     using <> and "".
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define YATIME_CPP

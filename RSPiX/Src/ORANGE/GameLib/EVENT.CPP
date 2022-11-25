@@ -20,11 +20,11 @@
 // EVENT.CPP
 //
 // History:
-//		02/09/95 BH		Started this module
+//      02/09/95 BH      Started this module
 //
 //*****************************************************************************
 //
-//	FUNCTIONALITY
+//   FUNCTIONALITY
 //
 // The basic function of this module is to monitor the movement of the display
 // area in order to determine whether any events associated with the
@@ -109,23 +109,23 @@ CEvent::~CEvent()
 // Reset
 //
 // Description:
-//		Reset everything in this module.
+//      Reset everything in this module.
 //
-//		The ignore list is cleared, and the default range for triggerable
-//		event types is set.
+//      The ignore list is cleared, and the default range for triggerable
+//      event types is set.
 //
 // Input:
-//		none
+//      none
 //
 // Uses:
-//		m_sEventTriggerMin/Max m_sEventConstMin/Max
-//		m_IgnoreList
+//      m_sEventTriggerMin/Max m_sEventConstMin/Max
+//      m_IgnoreList
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -145,8 +145,8 @@ void CEvent::Reset()
 // SelectSet
 //
 // Description:
-//		Selects a set of event data as the current set and builds an index
-//		table which enables fast searching of events for the level.
+//      Selects a set of event data as the current set and builds an index
+//      table which enables fast searching of events for the level.
 //
 // Input:
 //
@@ -173,20 +173,20 @@ short CEvent::SelectSet(short sEventSet)
 // TriggerInit
 //
 // Description:
-//		This routine triggers all events within the trigger area.  This area
-//		is based around the display area.
+//      This routine triggers all events within the trigger area.  This area
+//      is based around the display area.
 //
 // Input:
-//		sDispX = x coordinate of display area's upper left corner
-//		sDispY = y coordinate of display area's upper left corner
+//      sDispX = x coordinate of display area's upper left corner
+//      sDispY = y coordinate of display area's upper left corner
 //
 // Uses:
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -216,36 +216,36 @@ void CEvent::TriggerInit(short sDispX, short sDispY)
 // Trigger
 //
 // Description:
-//		Trigger any events which are "unconvered" by virtue of the display
-//		area having moved.
+//      Trigger any events which are "unconvered" by virtue of the display
+//      area having moved.
 //
-//		First, we check the orientation and split the process into
-//		left/right movement and up/down movement.  Next, we determine which
-//		edge (left/right or top/bottom) is the leading edge.  Then we
-//		calculate the coordinates of the tirgger area by adding onto that
-//		edge's coordinates the appropriate trigger offset.  We do this for
-//		both the previous and new position of the edge, and any event which
-//		fall between those two values, inclusive, are triggered.
+//      First, we check the orientation and split the process into
+//      left/right movement and up/down movement.  Next, we determine which
+//      edge (left/right or top/bottom) is the leading edge.  Then we
+//      calculate the coordinates of the tirgger area by adding onto that
+//      edge's coordinates the appropriate trigger offset.  We do this for
+//      both the previous and new position of the edge, and any event which
+//      fall between those two values, inclusive, are triggered.
 //
-//		Note that in order to avoid multiple-triggers of the same event,
-//		we have to make sure that the new trigger area does not overlap the
-//		previous trigger area.  For example, when moving right, we don't
-//		really want to go from the old right edge to the new right edge,
-//		because if we do that same thing each time, then we'll be checking
-//		a particular coordinate again on the next move.  The solution for going
-//		right is to go from the old right edge PLUS 1 to the new right edge.
-//		This avoids the overlap.  A similar thing is done for each of the edges.
+//      Note that in order to avoid multiple-triggers of the same event,
+//      we have to make sure that the new trigger area does not overlap the
+//      previous trigger area.  For example, when moving right, we don't
+//      really want to go from the old right edge to the new right edge,
+//      because if we do that same thing each time, then we'll be checking
+//      a particular coordinate again on the next move.  The solution for going
+//      right is to go from the old right edge PLUS 1 to the new right edge.
+//      This avoids the overlap.  A similar thing is done for each of the edges.
 //
-//		This routine also calls DecrementTimers to go through the ignore list
+//      This routine also calls DecrementTimers to go through the ignore list
 //
 // Input:
-//		sDispX = x coordinate of the display area's upper left corner
-//		sDispY = y coordinate of the display area's upper left corner
+//      sDispX = x coordinate of the display area's upper left corner
+//      sDispY = y coordinate of the display area's upper left corner
 //
 // Uses:
 //
 // Output:
-//		none
+//      none
 //
 // Return:
 //
@@ -419,36 +419,36 @@ short CEvent::Trigger(short sDispX, short sDispY)
 // Ignore
 //
 // Description:
-//		Add the specified id into the "ignore" list.  As S32 as the id
-//		is left in the ignore list, the event associated with it will not
-//		be triggered.
+//      Add the specified id into the "ignore" list.  As S32 as the id
+//      is left in the ignore list, the event associated with it will not
+//      be triggered.
 //
-//		A "handle" is returned by this routine, and the application must use
-//		this "handle" when calling Unignore().
+//      A "handle" is returned by this routine, and the application must use
+//      this "handle" when calling Unignore().
 //
-//		As a special feature, an event id of $ffff will be ignored (meaning
-//		it won't be added to the list).  This may be helpful in those
-//		situations where the application is already calling this routine but
-//		sometimes doesn't ahve a valid event id to send to it.  It can
-//		basically create a "dummy" event id by using $ffff .
+//      As a special feature, an event id of $ffff will be ignored (meaning
+//      it won't be added to the list).  This may be helpful in those
+//      situations where the application is already calling this routine but
+//      sometimes doesn't ahve a valid event id to send to it.  It can
+//      basically create a "dummy" event id by using $ffff .
 //
-//		NOTE:  This routine does not check to see if the id being added to
-//		this list is already on the list.  Therefore, the application can
-//		add an id more than once if it so desires.  Of course, each of those
-//		id's would need to be removed from the list in order for the event
-//		to be triggered again.
+//      NOTE:  This routine does not check to see if the id being added to
+//      this list is already on the list.  Therefore, the application can
+//      add an id more than once if it so desires.  Of course, each of those
+//      id's would need to be removed from the list in order for the event
+//      to be triggered again.
 //
 // Input:
-//		sEventID = unique id (as passed to event handler by this module, or
-//					  $ffff if inserting a "dummy" value)
-//		sEventTimer = MUST BE $FFFF OR $FFFE (EVENT_PERMANENT OR EVENT_TEMPORARY)
+//      sEventID = unique id (as passed to event handler by this module, or
+//                 $ffff if inserting a "dummy" value)
+//      sEventTimer = MUST BE $FFFF OR $FFFE (EVENT_PERMANENT OR EVENT_TEMPORARY)
 //
 // Uses:
 //
 // Output:
 //
 // Return:
-//		CEvent* pointer to the event - "handle"
+//      CEvent* pointer to the event - "handle"
 //
 //*****************************************************************************
 
@@ -470,7 +470,7 @@ void CEvent::Ignore(EVENT* pEvent)
 // Output:
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -485,21 +485,21 @@ void CEvent::Unignore(EVENT* pEvent)
 // Search
 //
 // Description:
-//		Search for a particular event type in the current set's event list.
-//		If found, all of the relevant data about that event is returned
+//      Search for a particular event type in the current set's event list.
+//      If found, all of the relevant data about that event is returned
 //
 // Input:
-//		sEventType = type of event to search for.
+//      sEventType = type of event to search for.
 //
 // Uses:
-//		m_pEventData array
+//      m_pEventData array
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		EVENT* pEvent which serves as its ID.  In addition the structure
-//		contains x, y, type, status, and timer.
+//      EVENT* pEvent which serves as its ID.  In addition the structure
+//      contains x, y, type, status, and timer.
 //
 //*****************************************************************************
 
@@ -520,25 +520,25 @@ EVENT* CEvent::Search(short sEventNum)
 // SearchNext
 //
 // Description:
-//		Similar to Search, but finds the next event of the same type given
-//		a pointer to the event.  For example, if you wanted to find all of
-//		the events of type $02, you would call Search(2) to get a pointer to
-//		the first event of that type in the level.  If you wanted to find the
-//		next occurance of event type $02, you would call SearchNext(pEvent)
-//		where pEvent is the pointer to the event type $02 that was returned from
-//		the Search() function.
+//      Similar to Search, but finds the next event of the same type given
+//      a pointer to the event.  For example, if you wanted to find all of
+//      the events of type $02, you would call Search(2) to get a pointer to
+//      the first event of that type in the level.  If you wanted to find the
+//      next occurance of event type $02, you would call SearchNext(pEvent)
+//      where pEvent is the pointer to the event type $02 that was returned from
+//      the Search() function.
 //
 // Input:
-//		pEvent = pointer to
+//      pEvent = pointer to
 //
 // Uses:
-//		m_pEventData array
+//      m_pEventData array
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		EVENT* pEvent
+//      EVENT* pEvent
 //
 //*****************************************************************************
 
@@ -563,45 +563,45 @@ EVENT* CEvent::SearchNext(EVENT* pEvent)
 // CreateIndexes
 //
 // Description:
-//		Create table of index values for current set of event data.
+//      Create table of index values for current set of event data.
 //
-//		The index table contains indexes into the event data.  It's purpose
-//		is to speed up searches through the event data by giving us a
-//		starting position within the event data which is near (or at) the
-//		event data we are looking for.
+//      The index table contains indexes into the event data.  It's purpose
+//      is to speed up searches through the event data by giving us a
+//      starting position within the event data which is near (or at) the
+//      event data we are looking for.
 //
 //    The tables are indexed using the coordinate divided by 16 and return
-//		the index of the first event whose coordinate is equal to or greater
-//		than the coordinate AND'ed with $fff0.
+//      the index of the first event whose coordinate is equal to or greater
+//      than the coordinate AND'ed with $fff0.
 //
 //    Algorithm
 //
-//		coord = 0;
-//		event = 0;
-//		index = 0;
+//      coord = 0;
+//      event = 0;
+//      index = 0;
 //
-//		do
-//		{
-//			while (array[event] < coord)
-//				event = event + 1;
-//			event_index[index] = event;
-//			index = index + 1;
+//      do
+//      {
+//         while (array[event] < coord)
+//            event = event + 1;
+//         event_index[index] = event;
+//         index = index + 1;
 //
-//			coord = coord + EVENT_SPACING
-//		}
-//		while (coord < EVENT_INDEX_MAX);
+//         coord = coord + EVENT_SPACING
+//      }
+//      while (coord < EVENT_INDEX_MAX);
 //
 // Input:
-//		sOrientation = orientation of section, vertical or horizontal
+//      sOrientation = orientation of section, vertical or horizontal
 //
 // Uses:
-//		pEventData
+//      pEventData
 //
 // Output:
-//		m_pIndexList;
+//      m_pIndexList;
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -641,39 +641,39 @@ void CEvent::CreateIndexes(short sOrientation)
 // Scan
 //
 // Description:
-//		Scan for events in the specified range.
+//      Scan for events in the specified range.
 //
-//		This routine doesn't know whether it is searching for x or y
-//		coordinates.  The m_sEventScanFrom and m_sEventScanTo variables are
-//		simply set to the start and end of the range to scan through.
+//      This routine doesn't know whether it is searching for x or y
+//      coordinates.  The m_sEventScanFrom and m_sEventScanTo variables are
+//      simply set to the start and end of the range to scan through.
 //
-//		We need to find all events which are defined by the 4 corners,
-//		m_sScanXFrom, m_sScanXTo, m_sScanYFrom, m_sScanYTo inclusive.
+//      We need to find all events which are defined by the 4 corners,
+//      m_sScanXFrom, m_sScanXTo, m_sScanYFrom, m_sScanYTo inclusive.
 //
-//		To find out where in the list to start, we look into a table of indexes
-//		which has been conveniently constructed ahead of time.  We index this
-//		table with m_sScanFrom divided by 16, and the result is the index to the
-//		first event whose coordinate is equal to or greater than m_sEventScanFrom
-//		AND'ed with $fff0.
+//      To find out where in the list to start, we look into a table of indexes
+//      which has been conveniently constructed ahead of time.  We index this
+//      table with m_sScanFrom divided by 16, and the result is the index to the
+//      first event whose coordinate is equal to or greater than m_sEventScanFrom
+//      AND'ed with $fff0.
 //
-//		Starting with that index, we go through the events looking for coordinates
-//		that are between m_sScanFrom and m_sScanTo, inclusive.  Note that
-//		we don't have to do a separate check for the end of the event array because
-//		the end is marked by an $ffff, which will always be greater than the range
-//		we're looking for, and will thus end the scan.
+//      Starting with that index, we go through the events looking for coordinates
+//      that are between m_sScanFrom and m_sScanTo, inclusive.  Note that
+//      we don't have to do a separate check for the end of the event array because
+//      the end is marked by an $ffff, which will always be greater than the range
+//      we're looking for, and will thus end the scan.
 //
-//		For every event in the range, we call its event handler (see CallHandler
-//		for more information.)
+//      For every event in the range, we call its event handler (see CallHandler
+//      for more information.)
 //
 // Input:
-//		sOrientation = HORIZONTAL or VERTICAL
+//      sOrientation = HORIZONTAL or VERTICAL
 //
 // Uses:
-//		m_sScanXFrom
-//		m_sScanXTo
-//		m_sScanYFrom
-//		m_sScanYTo
-//		m_pEventData
+//      m_sScanXFrom
+//      m_sScanXTo
+//      m_sScanYFrom
+//      m_sScanYTo
+//      m_pEventData
 //
 // Output:
 //
@@ -710,7 +710,7 @@ short CEvent::Scan()
          if (m_pEventData[sEventIndex].sX > m_sScanXFrom)
          {
             if (m_pEventData[sEventIndex].sY >  m_sScanYFrom &&
-                m_pEventData[sEventIndex].sY <=	m_sScanYTo)
+                m_pEventData[sEventIndex].sY <=   m_sScanYTo)
                CallHandler(sEventIndex);  // Trigger event
          }
          sEventIndex++;
@@ -724,28 +724,28 @@ short CEvent::Scan()
 // CallHandler
 //
 // Description:
-//		Call an event's handler, but only if:
-//		1.	The event type is within the application-definable
-//			"triggerable range"
-//		2.	The event's unique id is not on the "ignore" list
-//		3.	The display has moved in a direction which agrees with that
-//			defined by the event status.
+//      Call an event's handler, but only if:
+//      1.   The event type is within the application-definable
+//         "triggerable range"
+//      2.   The event's unique id is not on the "ignore" list
+//      3.   The display has moved in a direction which agrees with that
+//         defined by the event status.
 //
-//		We are passed only the index into the event data.  We must first
-//		get all of the events data and put it into the member variables
-//		which are then used by the event handler.  AS32 the way, we
-//		generate the event's unique id.
+//      We are passed only the index into the event data.  We must first
+//      get all of the events data and put it into the member variables
+//      which are then used by the event handler.  AS32 the way, we
+//      generate the event's unique id.
 //
 //    We check the unique id against the list of id's to be ignored, and
-//		if we find the id, then we ignore it.
+//      if we find the id, then we ignore it.
 //
-//		If we don't find the id, then we call the event's handler by getting
-//		its address from the list in which the application has inserted all
-//		of the event handler addresses.  We do a simulated indirect call to
-//		the routine, and it returns to us here when it's done.
+//      If we don't find the id, then we call the event's handler by getting
+//      its address from the list in which the application has inserted all
+//      of the event handler addresses.  We do a simulated indirect call to
+//      the routine, and it returns to us here when it's done.
 //
 // Input:
-//		sEventIndex = index into event array
+//      sEventIndex = index into event array
 //
 // Uses:
 //
@@ -761,7 +761,7 @@ short CEvent::CallHandler(short sEventIndex)
 // Get event's data
 //
 // Check if event's type is within "triggerable" range.  The minimum is
-//	the lowset triggerable event type and the maximum is the highest event
+//   the lowset triggerable event type and the maximum is the highest event
 // type PLUS 1!
 //-----------------------------------------------------------------------------
 
@@ -773,7 +773,7 @@ short CEvent::CallHandler(short sEventIndex)
 
 //-----------------------------------------------------------------------------
 // Check if event's id appears in ignore list.  If it does, check the timer.
-//	If the timer is negative, the event is still active, so ignore it.
+//   If the timer is negative, the event is still active, so ignore it.
 // If the timer is zero, unignore the event and retrigger it.
 // If the timer is positive, ignore the event.  (Event_Trigger does the
 // decrementing).
@@ -802,7 +802,7 @@ short CEvent::CallHandler(short sEventIndex)
 // m_sEventDir has EVENT_RIGHT bit set and the display has moved diagonally
 // right and up, the event should be triggered.
 //
-//	If there are no directional flags set for this event then assume it can
+//   If there are no directional flags set for this event then assume it can
 // be triggered by any direction.  If directional flags are set, then see if
 // any of those directions match the scroll direction.  If either of these
 // is true, then trigger this event.
@@ -812,8 +812,8 @@ short CEvent::CallHandler(short sEventIndex)
 //------------------------------------------------------------------------------
 
 
-//	if ((pEvent->sFlags & m_sEventDir) || !(pEvent->sFlags & EVENT_DIR_MASK))
-//		(event_handlers[pEvent->sType])();
+//   if ((pEvent->sFlags & m_sEventDir) || !(pEvent->sFlags & EVENT_DIR_MASK))
+//      (event_handlers[pEvent->sType])();
 
    return SUCCESS;
 }
@@ -823,22 +823,22 @@ short CEvent::CallHandler(short sEventIndex)
 // DecrementTimers
 //
 // Description:
-//		Decrement all timers in the Ignore list.  The "real" timers are those
-//		with positive values.  -1 (EVENT_PERMANENT) or -2 (EVENT_TEMPORARY)
-//		are flags only.
+//      Decrement all timers in the Ignore list.  The "real" timers are those
+//      with positive values.  -1 (EVENT_PERMANENT) or -2 (EVENT_TEMPORARY)
+//      are flags only.
 //
 // Input:
-//		none
+//      none
 //
-//	Uses:
-//		m_IgnoreList and the list of EVENTS that it contains as nodes
-//		Decrements m_IgnoreList->pEvent->sTimer
+//   Uses:
+//      m_IgnoreList and the list of EVENTS that it contains as nodes
+//      Decrements m_IgnoreList->pEvent->sTimer
 //
 // Output:
-//		none
+//      none
 //
 // Return:
-//		none
+//      none
 //
 //*****************************************************************************
 
@@ -859,8 +859,8 @@ void CEvent::DecrementTimers()
 // event_undefined
 //
 // Description:
-//		Place holder function that is placed in the event handler table for
-//		event numbers which have no assigned function.
+//      Place holder function that is placed in the event handler table for
+//      event numbers which have no assigned function.
 //
 //*****************************************************************************
 

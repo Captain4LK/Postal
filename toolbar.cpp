@@ -25,40 +25,40 @@
 //
 // History:
 //
-//		08/06/97 JRD	Started.  Set bars to load in the realm
+//      08/06/97 JRD   Started.  Set bars to load in the realm
 //
-//		08/08/97 JRD	Changed methodology to a proprietary data format and abandoning
-//							attempts of a one to one interface with postal.  Tollbar will
-//							update an internal map of the weapon states based on events
-//							passed.
+//      08/08/97 JRD   Changed methodology to a proprietary data format and abandoning
+//                     attempts of a one to one interface with postal.  Tollbar will
+//                     update an internal map of the weapon states based on events
+//                     passed.
 //
-//		08/08/97	JRD	Completely revamped and finalized the class structure.
-//							Added the first hook to draw the entire bar.
-//							Added aliased functions to reduce header dependencies.
-//		08/09/97	JRD	Added all functionality except a hook to refresh on event.
+//      08/08/97   JRD   Completely revamped and finalized the class structure.
+//                     Added the first hook to draw the entire bar.
+//                     Added aliased functions to reduce header dependencies.
+//      08/09/97   JRD   Added all functionality except a hook to refresh on event.
 //
-//		08/10/97	JRD	Added two deferred update modes.  One limits updates to a
-//							given time interval, and the other only updates when a
-//							change of value or state has occurred.  All this occurs
-//							without any interaction with the app.
+//      08/10/97   JRD   Added two deferred update modes.  One limits updates to a
+//                     given time interval, and the other only updates when a
+//                     change of value or state has occurred.  All this occurs
+//                     without any interaction with the app.
 //
-//		08/10/97	JRD	Added hook so powerup values resetting due to time would
-//							be a valid draw event.
+//      08/10/97   JRD   Added hook so powerup values resetting due to time would
+//                     be a valid draw event.
 //
-//		08/10/97	JRD	Based on Steve Wik's opinion, I set health and vest to
-//							show well over 100%.  Since people liked it, it was actually
-//							my opinion and I shall keep it.
+//      08/10/97   JRD   Based on Steve Wik's opinion, I set health and vest to
+//                     show well over 100%.  Since people liked it, it was actually
+//                     my opinion and I shall keep it.
 //
-//		08/10/97	JRD	Added a dangerous cross file help to poor old score in order
-//							to easily color map the top toolbar.  Poor score.  Set to Steve
-//							colors.  If you think their cool, then I too agreed with Steve.
-//							If not, then Steve forced me to use them.
+//      08/10/97   JRD   Added a dangerous cross file help to poor old score in order
+//                     to easily color map the top toolbar.  Poor score.  Set to Steve
+//                     colors.  If you think their cool, then I too agreed with Steve.
+//                     If not, then Steve forced me to use them.
 //
-//		08/12/97	JRD	Changed the class o the Mac can deal with it.
+//      08/12/97   JRD   Changed the class o the Mac can deal with it.
 //
-//		08/29/97	JRD	Patched Render to not display amount of bullets.
+//      08/29/97   JRD   Patched Render to not display amount of bullets.
 //
-//		09/27/99	JMI	Eliminated boolean performance warnings.
+//      09/27/99   JMI   Eliminated boolean performance warnings.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #include "RSPiX.h"
@@ -75,23 +75,23 @@
 //=================== toolbar templates (loaded each level) ====================
 
 //=====================  General Toolbar Parameters  ===========================
-#define	TB_BAR_X	0           // where to draw the entire bar
-#define	TB_BAR_Y	440
+#define   TB_BAR_X   0           // where to draw the entire bar
+#define   TB_BAR_Y   440
 
-#define	TB_TWEAK_FONT_Y		-5
-#define	TB_TWEAK_FONT_X		-3
+#define   TB_TWEAK_FONT_Y      -5
+#define   TB_TWEAK_FONT_X      -3
 
-#define  TB_SMALL_FONT			11    // pixel height for ammo font
-#define	TB_LARGE_FONT			15    // for health and armour
+#define  TB_SMALL_FONT         11    // pixel height for ammo font
+#define   TB_LARGE_FONT         15    // for health and armour
 
-#define	TB_AMMOW_LOW	3        // ammo changes color as warning
-#define	TB_MILLI_TO_LITE	3000  // after you get a powerup.
+#define   TB_AMMOW_LOW   3        // ammo changes color as warning
+#define   TB_MILLI_TO_LITE   3000  // after you get a powerup.
 
 //#ifdef MOBILE
 #if 1
-#define TB_MILLI_INTERVAL_TIME	100 //500ms lag is pretty annoying!
+#define TB_MILLI_INTERVAL_TIME   100 //500ms lag is pretty annoying!
 #else
-#define	TB_MILLI_INTERVAL_TIME	500   // maximum update rate, unless forced
+#define   TB_MILLI_INTERVAL_TIME   500   // maximum update rate, unless forced
 #endif
 
 extern int wideScreenWidth;
@@ -99,7 +99,7 @@ extern int wideScreenWidth;
 
 extern RFont g_fontBig; // I hope this one is OK....
 
-typedef	struct
+typedef   struct
 {
    UCHAR r; UCHAR g; UCHAR b;
 } MatchColor;
@@ -113,14 +113,14 @@ MatchColor gmcAttentionFont = { 255, 255, 128 }; // saturated yellow
 //------------------ Top Bar:
 MatchColor gmcSolidScore = { 40, 34, 13 }; // saturated yellow
 MatchColor gmcShadowScore = { 138, 123, 65 }; // saturated yellow
-//MatchColor	gmcShadowScore = { 119,102,60 };	// saturated yellow
-//MatchColor	gmcSolidScore = { 0,0,255 };	// saturated yellow
-//MatchColor	gmcShadowScore = { 255,0,0 };	// saturated yellow
+//MatchColor   gmcShadowScore = { 119,102,60 };   // saturated yellow
+//MatchColor   gmcSolidScore = { 0,0,255 };   // saturated yellow
+//MatchColor   gmcShadowScore = { 255,0,0 };   // saturated yellow
 
 //------------------ So Score can access these:
-short gsStatusFontForeIndex	=	251;
-short gsStatusFontBackIndex	=	0;
-short gsStatusFontShadowIndex	=	0;
+short gsStatusFontForeIndex   =   251;
+short gsStatusFontBackIndex   =   0;
+short gsStatusFontShadowIndex   =   0;
 short gsStatusFontForeDeadIndex = 252;
 
 //=====================================================================
@@ -132,10 +132,10 @@ short gsStatusFontForeDeadIndex = 252;
 // for a direct interface.  I am therefor switching to a proprietary one.
 
 // Local definition of a "WEAPON":  Does NOT have an associated number
-// Local definition of an "AMMO":	Has a number amount.
+// Local definition of an "AMMO":   Has a number amount.
 
 // Proprietary formats:
-typedef	enum
+typedef   enum
 {
    NotWeapon = 0,
    MachineGun,
@@ -145,10 +145,10 @@ typedef	enum
    NapalmLauncher,
    FlameThrower,
    NumberOfWeapons
-}	ToolWeaponType;
+}   ToolWeaponType;
 
 
-typedef	enum
+typedef   enum
 {
    NotAmmo = 0,
    Health,
@@ -166,12 +166,12 @@ typedef	enum
    TimedMine,
    BouncingBettyMine,
    NumberOfAmmos
-}	ToolAmmoType;
+}   ToolAmmoType;
 
 // NOTE: The concept is that, in general, you select an AMMO, and the weapon
 // highlights dependently.
 //
-class	CToolItem
+class CToolItem
 {
 public:
 //----------------------------------------------------------------------
@@ -184,22 +184,22 @@ bool m_bExists;         // bar or full?
 bool m_bSelected;       // selected or not?
 bool m_bTreasure;       // found in a power up
 S32 m_lMilli;           // relative time in milliseconds for timing stuff
-State	m_eState;         // short cut for applying state
-State	m_ePrevState;     // Stored for event triggering
+State m_eState;           // short cut for applying state
+State m_ePrevState;       // Stored for event triggering
 double m_dValue;        // if ammo
 double m_dPrevValue;       // if ammo
 double m_dLow;          // value change
 Size m_eFontType;       // for color and display
-RRect	m_rImage;         // location of icon, if applicable
+RRect m_rImage;           // location of icon, if applicable
 RRect m_rText;          // location of text, if applicable
 //----------------------------------------------------------------------
-CToolItem*	m_pWeapon;     // Links to associated weapon
-CToolItem*	m_pAmmo1;      // Links to associated ammo for drawing order
-CToolItem*	m_pAmmo2;      // Links to associated ammo for drawing order
+CToolItem*   m_pWeapon;     // Links to associated weapon
+CToolItem*   m_pAmmo1;      // Links to associated ammo for drawing order
+CToolItem*   m_pAmmo2;      // Links to associated ammo for drawing order
 //----------------------------------------------------------------------
-ToolWeaponType	m_eWeaponType;
+ToolWeaponType m_eWeaponType;
 ToolAmmoType m_eAmmoType;
-CDude::WeaponType	m_eStockPile;        // Postal app equivalent from Dude.h
+CDude::WeaponType m_eStockPile;          // Postal app equivalent from Dude.h
 //----------------------------------------------------------------------
 static CToolItem* ms_aWeapons;    // [NumberOfWeapons];
 static CToolItem* ms_aAmmo;    //[NumberOfAmmos];
@@ -237,13 +237,13 @@ CToolItem()
 
 // This sets most members in a generic way for a weapon
 // It can add members if more differentiation is needed
-void	ArrangeWeapon(
+void   ArrangeWeapon(
    ToolWeaponType eType,
    CDude::WeaponType eStock,
    const RRect &prImage,
-   CToolItem*	pAmmo1,
-   CToolItem*	pAmmo2 = NULL,
-   CToolItem*	pAmmo3 = NULL)
+   CToolItem*   pAmmo1,
+   CToolItem*   pAmmo2 = NULL,
+   CToolItem*   pAmmo3 = NULL)
 {
    m_eWeaponType = eType;
    m_eStockPile = eStock;
@@ -255,13 +255,13 @@ void	ArrangeWeapon(
    m_eType = Weapon;
 }
 
-void	ArrangeAmmo(
+void   ArrangeAmmo(
    ToolAmmoType eType,
    CDude::WeaponType eStock,
    const RRect &prImage,
    short sTextX,
    short sTextY,
-   CToolItem*	pWeapon,
+   CToolItem*   pWeapon,
    Size eSize = Small)
 {
    m_eAmmoType = eType;
@@ -277,7 +277,7 @@ void	ArrangeAmmo(
 }
 
 //=======================================================================
-static short	Init(CHood* pHood)      // do color matching & asset loading
+static short   Init(CHood* pHood)      // do color matching & asset loading
 {
    // Use the current hood palette to color match the text indicies
    ms_sSmallFontColor = rspMatchColorRGB(
@@ -378,11 +378,11 @@ static short	Init(CHood* pHood)      // do color matching & asset loading
 }
 
 // Assume the entire bar needs to be redrawn.
-static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
+static void   RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
 {
    // First Draw all the weapons...
    short i;
-   RImage*	pimPlane = NULL;
+   RImage*   pimPlane = NULL;
 
    // Set up the bar to a neutral background:
    rspBlit(pHood->m_pimEmptyBar, ms_pimCompositeBuffer, 0, 0, 0, 0,
@@ -391,7 +391,7 @@ static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
 
    for (i = NotWeapon + 1; i < NumberOfWeapons; i++)
    {
-      switch	(ms_aWeapons[i].m_eState)
+      switch   (ms_aWeapons[i].m_eState)
       {
       case Bar: pimPlane = pHood->m_pimEmptyBar; break;
       case BarSel: pimPlane = pHood->m_pimEmptyBarSelected; break;
@@ -412,7 +412,7 @@ static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
    // Then, draw all the ammo...
    for (i = NotAmmo + 1; i < NumberOfAmmos; i++)
    {
-      switch	(ms_aAmmo[i].m_eState)
+      switch   (ms_aAmmo[i].m_eState)
       {
       case Bar: pimPlane = pHood->m_pimEmptyBar; break;
       case BarSel: pimPlane = pHood->m_pimEmptyBarSelected; break;
@@ -435,7 +435,7 @@ static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
    for (i = NotAmmo + 1; i < NumberOfAmmos; i++)
    {
       short sFontSize;
-      short	sFontColor;
+      short sFontColor;
 
       // choose the correct font.
       if (ms_aAmmo[i].m_eFontType == Small)
@@ -491,7 +491,7 @@ static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
             *dest = *src;
          }
          //memcpy(ms_pimCompositeBufferScaled->m_pData + n * ms_pimCompositeBufferScaled->m_lPitch,
-         //		ms_pimCompositeBuffer->m_pData + n * ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
+         //      ms_pimCompositeBuffer->m_pData + n * ms_pimCompositeBuffer->m_lPitch,ms_pimCompositeBuffer->m_sWidth);
       }
       rspBlit(ms_pimCompositeBufferScaled, pimDst, 0, 0, sDstX, sDstY,
               ms_pimCompositeBufferScaled->m_sWidth,
@@ -509,7 +509,7 @@ static void	RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
 
 // Handle dude events, including graphical updates
 // Wil return true if a change of state has occurred
-static bool	UpdateStatus(CDude* pDude)
+static bool   UpdateStatus(CDude* pDude)
 {
    // Fist, try to get all the status possible from the CDude:
    // Use the stockpile for most:
@@ -747,20 +747,20 @@ static bool	UpdateStatus(CDude* pDude)
 // exists, that the staic members must also exist.
 CToolItem* CToolItem::ms_aWeapons = NULL;
 CToolItem* CToolItem::ms_aAmmo = NULL;
-RFont*	CToolItem::ms_pfntTool = NULL;      // General font and print
+RFont*   CToolItem::ms_pfntTool = NULL;      // General font and print
 RPrint CToolItem::ms_pntTool;
-short	CToolItem::ms_sSmallFontColor	=	255;     // color index
-short	CToolItem::ms_sLargeFontColor =	255;
-short	CToolItem::ms_sWarningColor	=	255;
-short	CToolItem::ms_sAmmoGoneColor	=	255;
-short	CToolItem::ms_sAttentionColor	=	255;
+short CToolItem::ms_sSmallFontColor   =   255;       // color index
+short CToolItem::ms_sLargeFontColor =   255;
+short CToolItem::ms_sWarningColor   =   255;
+short CToolItem::ms_sAmmoGoneColor   =   255;
+short CToolItem::ms_sAttentionColor   =   255;
 RImage*      CToolItem::ms_pimCompositeBuffer  = NULL;
 RImage*      CToolItem::ms_pimCompositeBufferScaled  = NULL;
 S32 CToolItem::ms_lLastTime = 0;
 
 
 // Time to arrange the basic bar relationhips:
-class	CInitToolBar
+class CInitToolBar
 {
 public:
 CInitToolBar()
@@ -947,13 +947,13 @@ CInitToolBar()
 /////////////////////////////////////////
 // aliased functions "for her pleasure."
 /////////////////////////////////////////
-short	ToolBarInit(CHood* pHood)
+short   ToolBarInit(CHood* pHood)
 {
    return CToolItem::Init(pHood);
 }
 
-bool	ToolBarRender(CHood* pHood, RImage* pimDst, short sDstX, short sDstY,
-                    CDude* pDude, bool bForceRender)
+bool   ToolBarRender(CHood* pHood, RImage* pimDst, short sDstX, short sDstY,
+                     CDude* pDude, bool bForceRender)
 {
    bool bRender = true;
 

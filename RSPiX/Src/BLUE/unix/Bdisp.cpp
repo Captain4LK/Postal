@@ -17,10 +17,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-//	bdisp.cpp
+//   bdisp.cpp
 //
 // History:
-//		06/04/04 RCG	Started.
+//      06/04/04 RCG   Started.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -46,13 +46,13 @@ static Uint8 *PalettedTexturePointer = NULL;
 
 typedef struct    // Stores information on usable video modes.
 {
-   short	sWidth;
-   short	sHeight;
-   short	sColorDepth;
-   short	sPages;
+   short sWidth;
+   short sHeight;
+   short sColorDepth;
+   short sPages;
 } VIDEO_MODE, *PVIDEO_MODE;
 
-static RSList<VIDEO_MODE, short>	slvmModes;  // List of available video modes.
+static RSList<VIDEO_MODE, short>   slvmModes;  // List of available video modes.
 
 typedef union
 {
@@ -94,7 +94,7 @@ extern bool mouse_grabbed;
 //////////////////////////////////////////////////////////////////////////////
 
 // Only set value if not NULL.
-#define SET(ptr, val)		( ((ptr) != NULL) ? *(ptr) = (val) : 0)
+#define SET(ptr, val)      ( ((ptr) != NULL) ? *(ptr) = (val) : 0)
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -103,14 +103,14 @@ extern bool mouse_grabbed;
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short Clip(   // Returns non-zero if image entirely clipped out.
-   short*	px,      // Rectangle to be clipped.
-   short*	py,
-   short*	pw,
-   short*	ph,
-   short	sx,         // Bounding rectangle.
-   short	sy,
-   short	sw,
-   short	sh)
+   short*   px,      // Rectangle to be clipped.
+   short*   py,
+   short*   pw,
+   short*   ph,
+   short sx,           // Bounding rectangle.
+   short sy,
+   short sw,
+   short sh)
 {
    if (*px < sx)
    {
@@ -154,14 +154,14 @@ extern short Clip(   // Returns non-zero if image entirely clipped out.
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short ClipQuiet( // Returns non-zero if image entirely clipped out.
-   short*	px,         // Rectangle to be clipped.
-   short*	py,
-   short*	pw,
-   short*	ph,
-   short	sx,            // Bounding rectangle.
-   short	sy,
-   short	sw,
-   short	sh)
+   short*   px,         // Rectangle to be clipped.
+   short*   py,
+   short*   pw,
+   short*   ph,
+   short sx,              // Bounding rectangle.
+   short sy,
+   short sw,
+   short sh)
 {
    if (*px < sx)
    {
@@ -204,25 +204,25 @@ extern short ClipQuiet( // Returns non-zero if image entirely clipped out.
 extern short ClipQuiet( // Returns non-zero if image entirely clipped out.
    S32* px,          // Rectangle to be clipped.
    S32* py,
-   S32*	pw,
-   S32*	ph,
+   S32*   pw,
+   S32*   ph,
    S32 sx,           // Bounding rectangle.
    S32 sy,
    S32 sw,
    S32 sh)
 {
-   short	sX	= (short)(*px);
-   short sY	= (short)(*py);
-   short	sW	= (short)(*pw);
-   short	sH	= (short)(*ph);
+   short sX   = (short)(*px);
+   short sY   = (short)(*py);
+   short sW   = (short)(*pw);
+   short sH   = (short)(*ph);
 
-   short	sRes	= ClipQuiet(&sX, &sY, &sW, &sH,
-                           (short)sx, (short)sy, (short)sw, (short)sh);
+   short sRes   = ClipQuiet(&sX, &sY, &sW, &sH,
+                            (short)sx, (short)sy, (short)sw, (short)sh);
 
-   *px	= sX;
-   *py	= sY;
-   *pw	= sW;
-   *ph	= sH;
+   *px   = sX;
+   *py   = sY;
+   *pw   = sW;
+   *ph   = sH;
 
    return sRes;
 }
@@ -258,14 +258,14 @@ extern void Disp_Init(void)   // Returns nothing.
    short i;
    for (i = 0; i < 256; i++)
    {
-      au8MapRed[i]	= i;
-      au8MapGreen[i]	= i;
-      au8MapBlue[i]	= i;
+      au8MapRed[i]   = i;
+      au8MapGreen[i]   = i;
+      au8MapBlue[i]   = i;
    }
 
    // Never ever ever unlock these.
-   asPalEntryLocks[0]	= TRUE;
-   asPalEntryLocks[255]	= TRUE;
+   asPalEntryLocks[0]   = TRUE;
+   asPalEntryLocks[255]   = TRUE;
 
    slvmModes.SetCompareFunc(CompareModes);
 }
@@ -284,16 +284,16 @@ extern void rspSetApplicationName(
 //
 // Compares two video modes in order of sColorDepth, sWidth, sHeight,
 // sPageFlippage.
-// Returns 0			if *pvm1 == *pvm2.
-// Returns negative	if *pvm1 < *pvm2.
-// Returns positive	if *pvm1 > *pvm2.
+// Returns 0         if *pvm1 == *pvm2.
+// Returns negative   if *pvm1 < *pvm2.
+// Returns positive   if *pvm1 > *pvm2.
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short CompareModes( // Returns as described above.
-   PVIDEO_MODE	pvm1,       // First video mode to compare.
-   PVIDEO_MODE	pvm2)       // Second video mode to compare.
+   PVIDEO_MODE pvm1,         // First video mode to compare.
+   PVIDEO_MODE pvm2)         // Second video mode to compare.
 {
-   short	sRes	= 1;  // Assume *pvm1 > *pvm2.
+   short sRes   = 1;    // Assume *pvm1 > *pvm2.
 
    if (pvm1->sColorDepth == pvm2->sColorDepth)
    {
@@ -359,32 +359,32 @@ extern short CompareModes( // Returns as described above.
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero otherwise
-   short	sDepth,                       // In:  Required depth
-   short	sWidth,                       // In:  Requested width
-   short	sHeight,                      // In:  Requested height
-   short	sPages,                       // In:  Required pages
-   short	sScaling,                     // In:  Requested scaling
-   short*	psDeviceWidth /*= NULL*/,  // Out: Suggested device width (unless NULL)
-   short*	psDeviceHeight /*= NULL*/, // Out: Suggested device height (unless NULL)
-   short*	psScaling /*= NULL*/)      // Out: Suggested scaling (unless NULL)
+   short sDepth,                         // In:  Required depth
+   short sWidth,                         // In:  Requested width
+   short sHeight,                        // In:  Requested height
+   short sPages,                         // In:  Required pages
+   short sScaling,                       // In:  Requested scaling
+   short*   psDeviceWidth /*= NULL*/,  // Out: Suggested device width (unless NULL)
+   short*   psDeviceHeight /*= NULL*/, // Out: Suggested device height (unless NULL)
+   short*   psScaling /*= NULL*/)      // Out: Suggested scaling (unless NULL)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Store video mode that the app is currently iterating.
-   PVIDEO_MODE	pvmOldModeQuery	= slvmModes.GetCurrent();
+   PVIDEO_MODE pvmOldModeQuery   = slvmModes.GetCurrent();
 
    rspQueryVideoModeReset();
 
    // Query results.
-   short	sModeWidth;
-   short	sModeHeight;
+   short sModeWidth;
+   short sModeHeight;
    short sModeColorDepth;
-   short	sModePages;
+   short sModePages;
 
    // Best results.
-   short sBestModeWidth		= 16380;
-   short	sBestModeHeight	= 16380;
-   short	sModeFound			= FALSE;
+   short sBestModeWidth      = 16380;
+   short sBestModeHeight   = 16380;
+   short sModeFound         = FALSE;
 
    while (rspQueryVideoMode(&sModeColorDepth, &sModeWidth, &sModeHeight, &sModePages) == 0)
    {
@@ -395,15 +395,15 @@ extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero oth
          if (sWidth <= sModeWidth && sHeight <= sModeHeight)
          {
             // If this mode is closer than a previous one . . .
-            float	fFactorOld	= ((float)sBestModeWidth	* (float)sBestModeHeight)
-                                / ((float)sWidth           * (float)sHeight);
-            float	fFactorNew	= ((float)sModeWidth			* (float)sModeHeight)
-                                / ((float)sWidth           * (float)sHeight);
+            float fFactorOld   = ((float)sBestModeWidth   * (float)sBestModeHeight)
+                                 / ((float)sWidth           * (float)sHeight);
+            float fFactorNew   = ((float)sModeWidth         * (float)sModeHeight)
+                                 / ((float)sWidth           * (float)sHeight);
             if (fFactorNew < fFactorOld)
             {
-               sBestModeWidth		= sModeWidth;
-               sBestModeHeight	= sModeHeight;
-               sModeFound			= TRUE;
+               sBestModeWidth      = sModeWidth;
+               sBestModeHeight   = sModeHeight;
+               sModeFound         = TRUE;
             }
          }
       }
@@ -425,24 +425,24 @@ extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero oth
             {
                // Okay to pixel double.  Leave *psPixelDoubling as TRUE.
                // Reduce best width and height appropriately.
-               sBestModeWidth		/= 2;
-               sBestModeHeight	/= 2;
+               sBestModeWidth      /= 2;
+               sBestModeHeight   /= 2;
             }
             else
             {
                // No pixel doubling possible for this mode.
-               *psScaling	= FALSE;
+               *psScaling   = FALSE;
             }
          }
       }
 
-      *psDeviceWidth		= sBestModeWidth;
-      *psDeviceHeight	= sBestModeHeight;
+      *psDeviceWidth      = sBestModeWidth;
+      *psDeviceHeight   = sBestModeHeight;
    }
    else
    {
       // Failed to find an acceptable mode.
-      sRes	= 1;
+      sRes   = 1;
    }
 
    return sRes;
@@ -458,22 +458,22 @@ extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero oth
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short rspGetVideoMode(
-   short*	psDeviceDepth,          // Hardware display color depth returned here
+   short*   psDeviceDepth,          // Hardware display color depth returned here
                                     // (unless NULL).
-   short*	psDeviceWidth,          // Hardware display width returned here
+   short*   psDeviceWidth,          // Hardware display width returned here
                                     // (unless NULL).
-   short*	psDeviceHeight,         // Hardware display height returned here
+   short*   psDeviceHeight,         // Hardware display height returned here
                                     // (unless NULL).
-   short*	psDevicePages,          // Hardware display back buffers returned here
+   short*   psDevicePages,          // Hardware display back buffers returned here
                                     // (unless NULL).
-   short*	psWidth,                // Display area width returned here
+   short*   psWidth,                // Display area width returned here
                                     // (unless NULL).
-   short*	psHeight,               // Display area height returned here
+   short*   psHeight,               // Display area height returned here
                                     // (unless NULL).
-   short*	psPages /*= NULL*/,         // Number of pages (1 to n) returned here
+   short*   psPages /*= NULL*/,         // Number of pages (1 to n) returned here
                                         // (unless NULL).  More than 1 indicates a
                                         // page flipping scenario.
-   short*	psPixelScaling /*= NULL*/)  // Pixel scaling in effect (1) or not (0)
+   short*   psPixelScaling /*= NULL*/)  // Pixel scaling in effect (1) or not (0)
                                         // (unless NULL).
 {
    // lie about everything.
@@ -574,17 +574,17 @@ extern short rspQueryVideoMode(        // Returns 0 for each valid mode, then no
                                        // Unless NULL.
    short* psPages /*= NULL*/)          // Number of video pages possible.
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
-   PVIDEO_MODE	pvm	= slvmModes.GetCurrent();
+   PVIDEO_MODE pvm   = slvmModes.GetCurrent();
 
    if (pvm != NULL)
    {
-      SET(psColorDepth,	pvm->sColorDepth);
-      SET(psWidth,			pvm->sWidth);
-      SET(psHeight,			pvm->sHeight);
+      SET(psColorDepth,   pvm->sColorDepth);
+      SET(psWidth,         pvm->sWidth);
+      SET(psHeight,         pvm->sHeight);
 
-      SET(psPages,			pvm->sPages);
+      SET(psPages,         pvm->sPages);
 
       // Goto next video mode.
       slvmModes.GetNext();
@@ -647,14 +647,14 @@ static SDL_Renderer *createRendererByName(SDL_Window *window, const char *name)
 //
 //////////////////////////////////////////////////////////////////////////////
 extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
-   short	sDeviceDepth,        // Specify required device video depth here.
-   short	sDeviceWidth,        // Specify required device resolution width here.
-   short	sDeviceHeight,       // Specify required device resolution height here.
+   short sDeviceDepth,          // Specify required device video depth here.
+   short sDeviceWidth,          // Specify required device resolution width here.
+   short sDeviceHeight,         // Specify required device resolution height here.
    short sWidth,              // Specify width of display area on screen.
    short sHeight,             // Specify height of display area on screen.
-   short	sPages /*= 1*/,      // Specify number of video pages.  More than 1
-                              // indicates a page flipping scenario.
-   short	sPixelDoubling /*= FALSE*/)
+   short sPages /*= 1*/,        // Specify number of video pages.  More than 1
+                                // indicates a page flipping scenario.
+   short sPixelDoubling /*= FALSE*/)
 // TRUE indicates to set the video mode
 // to twice that indicated by sDeviceWidth,
 // sDeviceHeight and double the coordinate
@@ -895,9 +895,9 @@ extern void rspUpdateDisplay(
 ///////////////////////////////////////////////////////////////////////////////
 extern short rspLockVideoPage(   // Returns 0 if screen memory could be locked.
                                  // Returns non-zero otherwise.
-   void**	ppvMemory,           // Pointer to display memory returned here.
+   void**   ppvMemory,           // Pointer to display memory returned here.
                                  // NULL returned if not supported.
-   S32*		plPitch)             // Pitch of display memory returned here.
+   S32*      plPitch)             // Pitch of display memory returned here.
 {
    /* no-op. */
    return 1;
@@ -922,9 +922,9 @@ extern void rspUnlockVideoPage(void)   // Returns nothing.
 ///////////////////////////////////////////////////////////////////////////////
 extern short rspLockVideoFlipPage(  // Returns 0 if flip screen memory could be
                                     // locked.  Returns non-zero otherwise.
-   void**	ppvMemory,           // Pointer to flip screen memory returned here.
+   void**   ppvMemory,           // Pointer to flip screen memory returned here.
                                  // NULL returned on failure.
-   S32*		plPitch)             // Pitch of flip screen memory returned here.
+   S32*      plPitch)             // Pitch of flip screen memory returned here.
 {
    return -1;
 }
@@ -946,9 +946,9 @@ extern void rspUnlockVideoFlipPage(void)  // Returns nothing.
 ///////////////////////////////////////////////////////////////////////////////
 extern short rspLockVideoBuffer( // Returns 0 if system buffer could be locked.
                                  // Returns non-zero otherwise.
-   void**	ppvBuffer,              // Pointer to system buffer returned here.
+   void**   ppvBuffer,              // Pointer to system buffer returned here.
                                     // NULL returned on failure.
-   S32*		plPitch)                // Pitch of system buffer returned here.
+   S32*      plPitch)                // Pitch of system buffer returned here.
 {
    if (!sdlWindow)
       return -1;
@@ -980,7 +980,7 @@ extern short rspAllowPageFlip(void) // Returns 0 on success.
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//	External Palette module functions.
+//   External Palette module functions.
 //////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1000,31 +1000,31 @@ extern void rspSetPaletteEntries(
    S32 lIncBytes)          // Number of bytes by which to increment pointers after each copy
 {
    // Set up destination pointers.
-   UCHAR*	pucDstRed	= &(apeApp[sStartIndex].r);
-   UCHAR*	pucDstGreen	= &(apeApp[sStartIndex].g);
-   UCHAR*	pucDstBlue	= &(apeApp[sStartIndex].b);
+   UCHAR*   pucDstRed   = &(apeApp[sStartIndex].r);
+   UCHAR*   pucDstGreen   = &(apeApp[sStartIndex].g);
+   UCHAR*   pucDstBlue   = &(apeApp[sStartIndex].b);
 
    // Set up lock pointer.
-   short*	psLock		= &(asPalEntryLocks[sStartIndex]);
+   short*   psLock      = &(asPalEntryLocks[sStartIndex]);
 
    while (sCount-- > 0)
    {
       if (*psLock++ == 0)
       {
-         *pucDstRed		= *pucRed;
-         *pucDstGreen	= *pucGreen;
-         *pucDstBlue		= *pucBlue;
+         *pucDstRed      = *pucRed;
+         *pucDstGreen   = *pucGreen;
+         *pucDstBlue      = *pucBlue;
       }
 
       // Increment source.
-      pucRed			+= lIncBytes;
-      pucGreen		+= lIncBytes;
-      pucBlue			+= lIncBytes;
+      pucRed         += lIncBytes;
+      pucGreen      += lIncBytes;
+      pucBlue         += lIncBytes;
 
       // Increment destination.
-      pucDstRed		+= sizeof(apeApp[0]);
-      pucDstGreen		+= sizeof(apeApp[0]);
-      pucDstBlue		+= sizeof(apeApp[0]);
+      pucDstRed      += sizeof(apeApp[0]);
+      pucDstGreen      += sizeof(apeApp[0]);
+      pucDstBlue      += sizeof(apeApp[0]);
    }
 }
 
@@ -1044,9 +1044,9 @@ void rspSetPaletteEntry(
 
    if (asPalEntryLocks[sEntry] == 0)
    {
-      apeApp[sEntry].r	= ucRed;
-      apeApp[sEntry].g	= ucGreen;
-      apeApp[sEntry].b	= ucBlue;
+      apeApp[sEntry].r   = ucRed;
+      apeApp[sEntry].g   = ucGreen;
+      apeApp[sEntry].b   = ucBlue;
    }
 }
 
@@ -1064,9 +1064,9 @@ void rspGetPaletteEntry(
 {
    ASSERT(sEntry >= 0 && sEntry < 256);
 
-   SET(psRed,		apeApp[sEntry].r);
-   SET(psGreen,	apeApp[sEntry].g);
-   SET(psBlue,		apeApp[sEntry].b);
+   SET(psRed,      apeApp[sEntry].r);
+   SET(psGreen,   apeApp[sEntry].g);
+   SET(psBlue,      apeApp[sEntry].b);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1087,24 +1087,24 @@ extern void rspGetPaletteEntries(
    S32 lIncBytes)          // Number of bytes by which to increment pointers after each copy
 {
    // Set up source pointers.
-   UCHAR*	pucSrcRed	= &(apeApp[sStartIndex].r);
-   UCHAR*	pucSrcGreen	= &(apeApp[sStartIndex].g);
-   UCHAR*	pucSrcBlue	= &(apeApp[sStartIndex].b);
+   UCHAR*   pucSrcRed   = &(apeApp[sStartIndex].r);
+   UCHAR*   pucSrcGreen   = &(apeApp[sStartIndex].g);
+   UCHAR*   pucSrcBlue   = &(apeApp[sStartIndex].b);
 
    while (sCount-- > 0)
    {
-      *pucRed		= *pucSrcRed;
-      *pucGreen	= *pucSrcGreen;
-      *pucBlue		= *pucSrcBlue;
+      *pucRed      = *pucSrcRed;
+      *pucGreen   = *pucSrcGreen;
+      *pucBlue      = *pucSrcBlue;
       // Increment destination.
-      pucRed			+= lIncBytes;
-      pucGreen			+= lIncBytes;
-      pucBlue			+= lIncBytes;
+      pucRed         += lIncBytes;
+      pucGreen         += lIncBytes;
+      pucBlue         += lIncBytes;
 
       // Increment source.
-      pucSrcRed		+= sizeof(apeApp[0]);
-      pucSrcGreen		+= sizeof(apeApp[0]);
-      pucSrcBlue		+= sizeof(apeApp[0]);
+      pucSrcRed      += sizeof(apeApp[0]);
+      pucSrcGreen      += sizeof(apeApp[0]);
+      pucSrcBlue      += sizeof(apeApp[0]);
    }
 }
 
@@ -1136,19 +1136,19 @@ extern void rspSetPaletteMaps(
    S32 lIncBytes)          // Number of bytes by which to increment pointers after each copy
 {
    // Set up destination pointers.
-   UCHAR*	pucDstRed	= &(au8MapRed[sStartIndex]);
-   UCHAR*	pucDstGreen	= &(au8MapGreen[sStartIndex]);
-   UCHAR*	pucDstBlue	= &(au8MapBlue[sStartIndex]);
+   UCHAR*   pucDstRed   = &(au8MapRed[sStartIndex]);
+   UCHAR*   pucDstGreen   = &(au8MapGreen[sStartIndex]);
+   UCHAR*   pucDstBlue   = &(au8MapBlue[sStartIndex]);
 
    while (sCount-- > 0)
    {
-      *pucDstRed++		= *pucRed;
-      *pucDstGreen++		= *pucGreen;
-      *pucDstBlue++		= *pucBlue;
+      *pucDstRed++      = *pucRed;
+      *pucDstGreen++      = *pucGreen;
+      *pucDstBlue++      = *pucBlue;
       // Increment source.
-      pucRed				+= lIncBytes;
-      pucGreen				+= lIncBytes;
-      pucBlue				+= lIncBytes;
+      pucRed            += lIncBytes;
+      pucGreen            += lIncBytes;
+      pucBlue            += lIncBytes;
    }
 }
 
@@ -1171,19 +1171,19 @@ extern void rspGetPaletteMaps(
    S32 lIncBytes)          // Number of bytes by which to increment pointers after each copy
 {
    // Set up source pointers.
-   UCHAR*	pucSrcRed	= &(au8MapRed[sStartIndex]);
-   UCHAR*	pucSrcGreen	= &(au8MapGreen[sStartIndex]);
-   UCHAR*	pucSrcBlue	= &(au8MapBlue[sStartIndex]);
+   UCHAR*   pucSrcRed   = &(au8MapRed[sStartIndex]);
+   UCHAR*   pucSrcGreen   = &(au8MapGreen[sStartIndex]);
+   UCHAR*   pucSrcBlue   = &(au8MapBlue[sStartIndex]);
 
    while (sCount-- > 0)
    {
-      *pucRed		= *pucSrcRed++;
-      *pucGreen	= *pucSrcGreen++;
-      *pucBlue		= *pucSrcBlue++;
+      *pucRed      = *pucSrcRed++;
+      *pucGreen   = *pucSrcGreen++;
+      *pucBlue      = *pucSrcBlue++;
       // Increment destination.
-      pucRed				+= lIncBytes;
-      pucGreen				+= lIncBytes;
-      pucBlue				+= lIncBytes;
+      pucRed            += lIncBytes;
+      pucGreen            += lIncBytes;
+      pucBlue            += lIncBytes;
    }
 }
 
@@ -1193,15 +1193,15 @@ extern void rspGetPaletteMaps(
 // with rspUnlockPaletteEntries() ).
 ///////////////////////////////////////////////////////////////////////////////
 extern void rspLockPaletteEntries(
-   short	sStartIndex,         // Palette entry at which to start locking.
-   short	sCount)              // Number of palette entries to lock.
+   short sStartIndex,           // Palette entry at which to start locking.
+   short sCount)                // Number of palette entries to lock.
 {
    // Set up iterator pointer.
-   short*	psLock	= &(asPalEntryLocks[sStartIndex]);
+   short*   psLock   = &(asPalEntryLocks[sStartIndex]);
 
    while (sCount-- > 0)
    {
-      *psLock	= TRUE;
+      *psLock   = TRUE;
    }
 }
 
@@ -1209,20 +1209,20 @@ extern void rspLockPaletteEntries(
 // Unlock several palette entries previously locked by rspLockPaletteEntries().
 ///////////////////////////////////////////////////////////////////////////////
 extern void rspUnlockPaletteEntries(
-   short	sStartIndex,         // Palette entry at which to start locking.
-   short	sCount)              // Number of palette entries to lock.
+   short sStartIndex,           // Palette entry at which to start locking.
+   short sCount)                // Number of palette entries to lock.
 {
    // Set up iterator pointer.
-   short*	psLock	= &(asPalEntryLocks[sStartIndex]);
+   short*   psLock   = &(asPalEntryLocks[sStartIndex]);
 
    while (sCount-- > 0)
    {
-      *psLock	= FALSE;
+      *psLock   = FALSE;
    }
 
    // Never ever ever unlock these.
-   asPalEntryLocks[0]	= TRUE;
-   asPalEntryLocks[255]	= TRUE;
+   asPalEntryLocks[0]   = TRUE;
+   asPalEntryLocks[255]   = TRUE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1231,7 +1231,7 @@ extern void rspUnlockPaletteEntries(
 
 
 //////////////////////////////////////////////////////////////////////////////
-//	External Background module functions.
+//   External Background module functions.
 //////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////

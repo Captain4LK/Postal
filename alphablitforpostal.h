@@ -21,10 +21,10 @@
 // This module deals with the high-level aspects alpha blitting or something.
 //
 // History:
-//		01/??/97 JRD	Started.
+//      01/??/97 JRD   Started.
 //
-//		02/13/97	JMI	Now g_alphaBlit takes parms for the alphable mask image
-//							and the MultiAlpha table.
+//      02/13/97   JMI   Now g_alphaBlit takes parms for the alphable mask image
+//                     and the MultiAlpha table.
 //
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -20,13 +20,13 @@
 // advqueue.h
 //
 // History:
-//		01/08/96	JMI	Started.
+//      01/08/96   JMI   Started.
 //
-//		10/30/96	JMI	Changed:
-//							Old label:		New label:
-//							=========		=========
-//							CAdvQueue		RAdvQueue
-//							CQueue			RQueue
+//      10/30/96   JMI   Changed:
+//                     Old label:      New label:
+//                     =========      =========
+//                     CAdvQueue      RAdvQueue
+//                     CQueue         RQueue
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -39,7 +39,7 @@
 
 #include "queue.h"
 
-template <class T, short sSize> class RAdvQueue	: public RQueue<T, sSize>
+template <class T, short sSize> class RAdvQueue : public RQueue<T, sSize>
 {
 public:
 // Default constructor.
@@ -49,9 +49,9 @@ RAdvQueue() { }
 
 public:     // Querries.
 // Gets the nth element in the queue from the head.
-T*	Get(short n)
+T*   Get(short n)
 {
-   n	= (n > m_sHead) ? (sSize + (m_sHead - n)) : (m_sHead - n);
+   n   = (n > m_sHead) ? (sSize + (m_sHead - n)) : (m_sHead - n);
    return m_aptQ + n;
 }
 
@@ -63,4 +63,4 @@ T* operator [](short n)
 
 };
 
-#endif	// ADVQUEUE_H
+#endif   // ADVQUEUE_H

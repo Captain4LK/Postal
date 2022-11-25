@@ -19,174 +19,174 @@
 // Project: Postal
 //
 // History:
-//		01/13/97 BRH	Started this file from CDude and modified it
-//							to do some enemy logic using the same assets
-//							as the sample 2D guy.
+//      01/13/97 BRH   Started this file from CDude and modified it
+//                     to do some enemy logic using the same assets
+//                     as the sample 2D guy.
 //
-//		03/13/97	JMI	Load now takes a version number.
+//      03/13/97   JMI   Load now takes a version number.
 //
-//		04/22/97 BRH	Moved common variables like the animations and previous
-//							state and animation variables to the base class since
-//							all of the enemies had their own versions.  Added logic
-//							functions that can be called from a derrived class.
+//      04/22/97 BRH   Moved common variables like the animations and previous
+//                     state and animation variables to the base class since
+//                     all of the enemies had their own versions.  Added logic
+//                     functions that can be called from a derrived class.
 //
-//		04/24/97 BRH	Added TryClearDirection function that uses the
-//							IsPathClear() funciton to try 3 directions to see if they
-//							are clear.
+//      04/24/97 BRH   Added TryClearDirection function that uses the
+//                     IsPathClear() funciton to try 3 directions to see if they
+//                     are clear.
 //
-//		04/25/97	JMI	Added m_animWrithing.
+//      04/25/97   JMI   Added m_animWrithing.
 //
-//		05/06/97 BRH	Added a detection smash that is much larger than the
-//							normal collision smash.  This one is use to detect pylons
-//							in the area.
+//      05/06/97 BRH   Added a detection smash that is much larger than the
+//                     normal collision smash.  This one is use to detect pylons
+//                     in the area.
 //
-//		05/07/97 BRH	Added pylon pointers for Popout and Run/Shoot logic to make
-//							it eaiser to know where to go.
+//      05/07/97 BRH   Added pylon pointers for Popout and Run/Shoot logic to make
+//                     it eaiser to know where to go.
 //
-//		05/09/97 BRH	Incorporated some more logic from CPerson into CDoofus.
+//      05/09/97 BRH   Incorporated some more logic from CPerson into CDoofus.
 //
-//		05/11/97 BRH	Made the logic routines virtual functions so that the
-//							derived classes can make their own for special case
-//							purposes.
+//      05/11/97 BRH   Made the logic routines virtual functions so that the
+//                     derived classes can make their own for special case
+//                     purposes.
 //
-//		05/12/97 BRH	Added destination state so that an overall goal state
-//							could be set and held on to even when interrupted by
-//							intermediate states like Popout or moving.
+//      05/12/97 BRH   Added destination state so that an overall goal state
+//                     could be set and held on to even when interrupted by
+//                     intermediate states like Popout or moving.
 //
-//		05/18/97 BRH	Added some logic routines for the victims to use.
+//      05/18/97 BRH   Added some logic routines for the victims to use.
 //
-//		05/20/97 BRH	Changed logic tables to use Suggested actions rather
-//							than changing the states directly.  Added an Action
-//							enum to Doofus for the logic variables to use.  Also
-//							Added current and suggested action values to the doofus,
-//							and an logic table evaluation timer.
+//      05/20/97 BRH   Changed logic tables to use Suggested actions rather
+//                     than changing the states directly.  Added an Action
+//                     enum to Doofus for the logic variables to use.  Also
+//                     Added current and suggested action values to the doofus,
+//                     and an logic table evaluation timer.
 //
-//		05/23/97 BRH	Added TryClearShot function to check for clear shooting
-//							angle.
+//      05/23/97 BRH   Added TryClearShot function to check for clear shooting
+//                     angle.
 //
-//		05/25/97 BRH	Added the m_ShootAngle variable and an override for
-//							ShootWeapon that uses this angle to aim the weapon.
+//      05/25/97 BRH   Added the m_ShootAngle variable and an override for
+//                     ShootWeapon that uses this angle to aim the weapon.
 //
-//		05/26/97 BRH	Added an overload to ShootWeapon that uses the
-//							m_dShootAngle for aiming.  Also it sets the CSmash bits
-//							so that enemy bullets don't hit other enemies.
+//      05/26/97 BRH   Added an overload to ShootWeapon that uses the
+//                     m_dShootAngle for aiming.  Also it sets the CSmash bits
+//                     so that enemy bullets don't hit other enemies.
 //
-//		05/31/97	JMI	Replaced m_pDude with m_idDude.  The problem was that, by
-//							just using a pointer to the dude, we never found out when
-//							the dude was gone (deleted).  Although this is rare for
-//							CDudes, it does happen.  For example, in the beginning of
-//							a level all CDudes that do not have an associated player
-//							are sent a Delete msg.  They do not process this message
-//							until their respective Update() calls.  If a CDoofus
-//							derived guy happened to be placed in the level before a
-//							CDude (that is, the CDoofus' Update() got called before the
-//							CDude's), and the CDoofus happened to point its m_pDude at
-//							this CDude (that was destined to soon be deleted), later
-//							when referencing the pointer to the freed and/or reallocated
-//							memory, the CDoofus could cause a protection	fault or	math
-//							overflow (due to invalid values returned by
-//							m_pDude->GetX, Y, Z() with the non-CDude 'this' pointer).
+//      05/31/97   JMI   Replaced m_pDude with m_idDude.  The problem was that, by
+//                     just using a pointer to the dude, we never found out when
+//                     the dude was gone (deleted).  Although this is rare for
+//                     CDudes, it does happen.  For example, in the beginning of
+//                     a level all CDudes that do not have an associated player
+//                     are sent a Delete msg.  They do not process this message
+//                     until their respective Update() calls.  If a CDoofus
+//                     derived guy happened to be placed in the level before a
+//                     CDude (that is, the CDoofus' Update() got called before the
+//                     CDude's), and the CDoofus happened to point its m_pDude at
+//                     this CDude (that was destined to soon be deleted), later
+//                     when referencing the pointer to the freed and/or reallocated
+//                     memory, the CDoofus could cause a protection   fault or   math
+//                     overflow (due to invalid values returned by
+//                     m_pDude->GetX, Y, Z() with the non-CDude 'this' pointer).
 //
-//		06/02/97 BRH	Added AdvanceHold action and state so that once he reaches
-//							the end of the advancement, he goes into this hold state
-//							rather than Engage automatically.  This way the logic
-//							table can have more control over the next state.
+//      06/02/97 BRH   Added AdvanceHold action and state so that once he reaches
+//                     the end of the advancement, he goes into this hold state
+//                     rather than Engage automatically.  This way the logic
+//                     table can have more control over the next state.
 //
-//		06/10/97 BRH	Added Crouch and Search animations for idle animation.
+//      06/10/97 BRH   Added Crouch and Search animations for idle animation.
 //
-//		06/14/97 BRH	Added virtual sound effect functions that can be defined
-//							also at the Person level to choose the sound effect
-//							from the personatorium.  Also added comment timer and
-//							comment counter to regulate the number of comments made
-//							so they don't get too repetative.
+//      06/14/97 BRH   Added virtual sound effect functions that can be defined
+//                     also at the Person level to choose the sound effect
+//                     from the personatorium.  Also added comment timer and
+//                     comment counter to regulate the number of comments made
+//                     so they don't get too repetative.
 //
-//		06/17/97 BRH	Added a timer value for the sounds playing to store
-//							the estimated finish time of the current sample, rather
-//							than using the IsSamplePlaying() which screws up the
-//							network mode.
+//      06/17/97 BRH   Added a timer value for the sounds playing to store
+//                     the estimated finish time of the current sample, rather
+//                     than using the IsSamplePlaying() which screws up the
+//                     network mode.
 //
-//		06/18/97 BRH	Added an override function for PrepareWeapon so that the
-//							Shooting sounds can be played.
+//      06/18/97 BRH   Added an override function for PrepareWeapon so that the
+//                     Shooting sounds can be played.
 //
-//		06/18/97	JMI	Changed PlaySoundWrithing() to return the duration of the
-//							played sample.
+//      06/18/97   JMI   Changed PlaySoundWrithing() to return the duration of the
+//                     played sample.
 //
-//		07/06/97 BRH	Added static panic flag to the doofus for the victims to
-//							use.  It will be cleared at the beginning of the level
-//							and will be set by the first victim to get shot so that
-//							all of the other victims will know to run around scared.
-//							Also added a few logic routines for victims.
+//      07/06/97 BRH   Added static panic flag to the doofus for the victims to
+//                     use.  It will be cleared at the beginning of the level
+//                     and will be set by the first victim to get shot so that
+//                     all of the other victims will know to run around scared.
+//                     Also added a few logic routines for victims.
 //
-//		07/09/97 BRH	Added walk and panic actions for victim logic tables.
+//      07/09/97 BRH   Added walk and panic actions for victim logic tables.
 //
-//		07/10/97 BRH	Added madness and march actions for victim and protestor
-//							logic.
+//      07/10/97 BRH   Added madness and march actions for victim and protestor
+//                     logic.
 //
-//		07/11/97 BRH	Added call to inline Cheater() to disable game if necessary
+//      07/11/97 BRH   Added call to inline Cheater() to disable game if necessary
 //
-//		07/17/97 BRH	Added Logic_DelayShoot so that you can choose to put
-//							the guy into a shooting state but wait for a timer to
-//							expire.
+//      07/17/97 BRH   Added Logic_DelayShoot so that you can choose to put
+//                     the guy into a shooting state but wait for a timer to
+//                     expire.
 //
-//		07/17/97	JMI	Commented out m_prsndIsPlaying and m_psmidIsPlaying since
-//							they are not used.  If they are needed in the future,
-//							m_prsndIsPlaying should be a SampleMaster::SoundInstance
-//							instead of an RSnd*.
-//							Changed RSnd*'s to SampleMaster::SoundInstances.
+//      07/17/97   JMI   Commented out m_prsndIsPlaying and m_psmidIsPlaying since
+//                     they are not used.  If they are needed in the future,
+//                     m_prsndIsPlaying should be a SampleMaster::SoundInstance
+//                     instead of an RSnd*.
+//                     Changed RSnd*'s to SampleMaster::SoundInstances.
 //
-//		07/23/97 BRH	Added tunable values for three different timeouts.
+//      07/23/97 BRH   Added tunable values for three different timeouts.
 //
-//		07/25/97 BRH	Integrated the cookie check into Cheater.
+//      07/25/97 BRH   Integrated the cookie check into Cheater.
 //
-//		08/02/97 BRH	Added a few functions for avoiding fire.
+//      08/02/97 BRH   Added a few functions for avoiding fire.
 //
-//		08/02/97 BRH	Added YellForHelp function which will alert others within
-//							line of sight that you have been shot, then they can
-//							decide to take action.  Added OnHelpMsg function to handle
-//							the call for help.
+//      08/02/97 BRH   Added YellForHelp function which will alert others within
+//                     line of sight that you have been shot, then they can
+//                     decide to take action.  Added OnHelpMsg function to handle
+//                     the call for help.
 //
-//		08/06/97	JMI	Added m_ptransExecutionTarget link point for execution
-//							sphere.  Also, added PositionSmash() to provide overridable
-//							method for updating the collision sphere.
+//      08/06/97   JMI   Added m_ptransExecutionTarget link point for execution
+//                     sphere.  Also, added PositionSmash() to provide overridable
+//                     method for updating the collision sphere.
 //
-//		08/07/97	JMI	Added ms_awdWeapons[], ms_apszWeaponResNames[], and
-//							GetResources() and FreeResources() for loading these anims.
-//							Also, added ms_lWeaponResRefCount so we could know when the
-//							weapons were no S32er needed.
+//      08/07/97   JMI   Added ms_awdWeapons[], ms_apszWeaponResNames[], and
+//                     GetResources() and FreeResources() for loading these anims.
+//                     Also, added ms_lWeaponResRefCount so we could know when the
+//                     weapons were no S32er needed.
 //
-//		08/08/97	JMI	Added more weapons:  UZI, AutoRifle, SmallPistol, Dynamite.
+//      08/08/97   JMI   Added more weapons:  UZI, AutoRifle, SmallPistol, Dynamite.
 //
-//		08/08/97 BRH	Added Logic_MarchBegin function for the marching.
+//      08/08/97 BRH   Added Logic_MarchBegin function for the marching.
 //
-//		08/10/97	JMI	Moved CDoofus() and ~CDoofus() into doofus.cpp.
-//							Added m_bRegisteredBirth which is true once we have
-//							registered our birth with the realm.
+//      08/10/97   JMI   Moved CDoofus() and ~CDoofus() into doofus.cpp.
+//                     Added m_bRegisteredBirth which is true once we have
+//                     registered our birth with the realm.
 //
-//		08/10/97	JMI	Moved NoWeapon up to enum value 0 and created a new one
-//							to take its -1 place as an invalid weapon (InvalidWeapon).
-//							Also, added block in PrepareWeapon() for the NoWeapon case.
-//							Also, moved prepare weapon from the .H to the .CPP.
+//      08/10/97   JMI   Moved NoWeapon up to enum value 0 and created a new one
+//                     to take its -1 place as an invalid weapon (InvalidWeapon).
+//                     Also, added block in PrepareWeapon() for the NoWeapon case.
+//                     Also, moved prepare weapon from the .H to the .CPP.
 //
-//		08/11/97	JMI	Added fallback weapon type, m_eFallbackWeaponType, which
-//							can signify a weapon to use when there is no weapon anim
-//							for the current weapon type.  Whew.
-//							Also, changed incorrectly name ms_awtType2Id to
-//							ms_awtId2Type mapping.
+//      08/11/97   JMI   Added fallback weapon type, m_eFallbackWeaponType, which
+//                     can signify a weapon to use when there is no weapon anim
+//                     for the current weapon type.  Whew.
+//                     Also, changed incorrectly name ms_awtType2Id to
+//                     ms_awtId2Type mapping.
 //
-//		08/17/97 BRH	Added m_sStuckCounter to detect situations where the
-//							enemy is trying to move in engage mode, but has got
-//							stuck in some narrow terrain and should go back to the
-//							bouys.
+//      08/17/97 BRH   Added m_sStuckCounter to detect situations where the
+//                     enemy is trying to move in engage mode, but has got
+//                     stuck in some narrow terrain and should go back to the
+//                     bouys.
 //
-//		08/18/97 BRH	Added virtual WhileHoldingWeapon override for Doofus so
-//							that for the higher difficulty settings where the guys
-//							aim after preparing weapon, they can do it every frame
-//							in between so that they don't end up flipping around
-//							quick when they shoot the weapon, especially the rocket
-//							man which has a S32 shoot-prepare animation.
+//      08/18/97 BRH   Added virtual WhileHoldingWeapon override for Doofus so
+//                     that for the higher difficulty settings where the guys
+//                     aim after preparing weapon, they can do it every frame
+//                     in between so that they don't end up flipping around
+//                     quick when they shoot the weapon, especially the rocket
+//                     man which has a S32 shoot-prepare animation.
 //
-//		08/21/97 BRH	Added a blood pool counter so that the blood could be cut
-//							down a little bit.
+//      08/21/97 BRH   Added a blood pool counter so that the blood could be cut
+//                     down a little bit.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef DOOFUS_H
@@ -232,7 +232,7 @@ typedef enum                           // Suggested logic actions basec on
 // into ms_awdWeapons[].
 typedef enum
 {
-   InvalidWeapon	= -1,
+   InvalidWeapon   = -1,
    NoWeapon,
    Rocket,
    Grenade,
@@ -260,9 +260,9 @@ typedef enum
 
 typedef struct
 {
-   char*			pszName;
-   char*			pszResName;
-   ClassIDType	id;
+   char*         pszName;
+   char*         pszResName;
+   ClassIDType id;
 } WeaponDetails;
 
 
@@ -310,7 +310,7 @@ S32 m_lShotTimeout;                    // Only do Shot animation every so often
 S32 m_lStuckTimeout;                   // time given to recovery from stuck state
 S32 m_lShootTimer;                     // Limit number of shots from a gun.
 S32 m_lCommentTimer;                   // Time between random comments
-short	m_usCommentCounter;              // Number of comments
+short m_usCommentCounter;                // Number of comments
 CDoofus::Action m_eSuggestedAction;       // Suggested logic action
 CDoofus::Action m_eCurrentAction;         // Currently running action
 CCharacter::State m_eDestinationState;       // Final state you wish to achieve
@@ -319,17 +319,17 @@ CCharacter::State m_eNextState;        // This can be used to make states like S
                                        // reusable.  Several states can go to State Shoot and
                                        // then when it is done, it can go to this next state
                                        // so that it can be part of several different state loops
-CAnim3D*			m_panimPrev;            // Previous state's animation
+CAnim3D*         m_panimPrev;            // Previous state's animation
 
 // Channel of execution points for 'writhing' anim/state.
-ChanTransform*	m_ptransExecutionTarget;
+ChanTransform*   m_ptransExecutionTarget;
 
 
 CSmash m_smashDetect;                  // Smash used to detect pylons - has large radius
 CSmash m_smashAvoid;                   // Smash used to avoid fire
-CPylon*			m_pPylonStart;          // Starting pylon for popout or run/shoot
-CPylon*			m_pPylonEnd;            // Ending pylon for popout or run/shoot
-short	m_sDistRemaining;                // Distance to new position for fighting.
+CPylon*         m_pPylonStart;          // Starting pylon for popout or run/shoot
+CPylon*         m_pPylonEnd;            // Ending pylon for popout or run/shoot
+short m_sDistRemaining;                  // Distance to new position for fighting.
 bool m_bPylonSafeAvailable;
 bool m_bPylonPopoutAvailable;
 bool m_bPylonRunShootAvailable;
@@ -352,9 +352,9 @@ S32 m_lRunShootInterval;                     // Tunable personatorium value with
 S32 m_lShotReactionTimeout;                  // Tunable personatorium value with doofus default
 S32 m_lLastHelpCallTime;                  // Last time someone called for help
 
-CSprite3	m_spriteWeapon;                     // Sprite for weapon.
-ClassIDType	m_eFallbackWeaponType;           // Fallback weapon type or TotalIDs for none.
-short	m_sStuckCounter;                       // Number of times he tried to move in the current state
+CSprite3 m_spriteWeapon;                       // Sprite for weapon.
+ClassIDType m_eFallbackWeaponType;             // Fallback weapon type or TotalIDs for none.
+short m_sStuckCounter;                         // Number of times he tried to move in the current state
 USHORT m_usBloodCounter;                     // Counter to limit the blood pools.
 SampleMaster::SoundInstance m_siPlaying;        // Sound instance that is playing - in case it needs to be stopped
 
@@ -403,11 +403,11 @@ static U32 ms_u32CollideBitsExclude;         // Default weapon collision bits
 
 static short ms_sStuckLimit;                 // Number of retrys before changing states to get unstuck
 
-static CAnim3D	ms_aanimWeapons[NumWeaponTypes];             // Weapon animations.
+static CAnim3D ms_aanimWeapons[NumWeaponTypes];               // Weapon animations.
 static S32 ms_lWeaponResRefCount;                           // Current ref count on ms_aanimWeapons[].
-static WeaponDetails	ms_awdWeapons[NumWeaponTypes];         // Weapon details (descriptions,
-                                                            // res names, etc.).
-static WeaponType	ms_awtId2Type[TotalIDs];                  // Maps a CThing ID to a WeaponType enum.
+static WeaponDetails ms_awdWeapons[NumWeaponTypes];           // Weapon details (descriptions,
+                                                              // res names, etc.).
+static WeaponType ms_awtId2Type[TotalIDs];                    // Maps a CThing ID to a WeaponType enum.
 
 public:
 static char* ms_apszActionNames[];      // Names of the logic actions
@@ -603,7 +603,7 @@ virtual SampleMaster::SoundInstance PlaySoundWrithing(
 {
    if (plDuration != NULL)
    {
-      *plDuration	= 0;
+      *plDuration   = 0;
    }
 
    return 0;
@@ -756,23 +756,23 @@ inline void Cheater(void)
 
 // Look up a WeaponDetails by CThing class ID.
 inline WeaponDetails* GetWeaponDetails(         // Returns ptr to details or NULL, if none.
-   ClassIDType	id)                              // In:  ID to look up.
+   ClassIDType id)                                // In:  ID to look up.
 {
    ASSERT(id <= TotalIDs);
 
-   WeaponDetails*	pwd	= NULL;
+   WeaponDetails*   pwd   = NULL;
 
    if (id < TotalIDs)
    {
       WeaponType wt = ms_awtId2Type[id];
       if (wt != InvalidWeapon)
       {
-         pwd	= &(ms_awdWeapons[wt]);
+         pwd   = &(ms_awdWeapons[wt]);
       }
    }
    else
    {
-      pwd	= &(ms_awdWeapons[NoWeapon]);
+      pwd   = &(ms_awdWeapons[NoWeapon]);
    }
 
    return pwd;
@@ -780,23 +780,23 @@ inline WeaponDetails* GetWeaponDetails(         // Returns ptr to details or NUL
 
 // Look up a weapon animation by CThing class ID.
 inline CAnim3D* GetWeaponAnim(            // Returns ptr to anim or NULL, if none.
-   ClassIDType	id)                        // In:  ID to look up.
+   ClassIDType id)                          // In:  ID to look up.
 {
    ASSERT(id <= TotalIDs);
 
-   CAnim3D*	panim	= NULL;
+   CAnim3D*   panim   = NULL;
 
    if (id < TotalIDs)
    {
       WeaponType wt = ms_awtId2Type[id];
       if (wt != InvalidWeapon)
       {
-         panim	= &(ms_aanimWeapons[wt]);
+         panim   = &(ms_aanimWeapons[wt]);
       }
    }
    else
    {
-      panim	= &(ms_aanimWeapons[NoWeapon]);
+      panim   = &(ms_aanimWeapons[NoWeapon]);
    }
 
    return panim;

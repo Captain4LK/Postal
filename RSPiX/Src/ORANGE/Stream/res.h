@@ -32,7 +32,7 @@
 // HASH_SIZE * sizeof(CList <CResItem>) (currently 20 bytes for an empty list).
 // Currently the hash function is dependent on the HASH_SIZE being 256.  To
 // change this value, YOU MUST REDEFINE THE HASH FUNCTION.
-#define HASH_SIZE		256
+#define HASH_SIZE      256
 
 //////////////////////////////////////////////////////////////////////////////
 // Typedefs.
@@ -56,7 +56,7 @@ void FreeAll(void);
 // If sFreeOnClose is TRUE, resources opened by the open hook
 // will be freed by the close hook if they are not additionally locked.
 void SetFreeOnClose(short sFreeOnClose)
-{ m_sFreeOnClose	= sFreeOnClose; }
+{ m_sFreeOnClose   = sFreeOnClose; }
 
 public:        // Querries.
 // Retrieves the resource identified by pszName.
@@ -74,11 +74,11 @@ void Set(void);
 void Reset(void);
 
 // Returns a resource item based on it's hash value.
-PRESITEM	GetResItem(char* pszName);
+PRESITEM   GetResItem(char* pszName);
 
 // Handles data callbacks from dispatch.
-short UseCall(	UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
-               S32 lTime);
+short UseCall(   UCHAR* puc, S32 lSize, USHORT usType, UCHAR ucFlags,
+                 S32 lTime);
 // Callback dispatcher (calls the implied this version).
 static short UseCallStatic(UCHAR* puc, S32 lSize, USHORT usType,
                            UCHAR ucFlags,
@@ -99,8 +99,8 @@ static void FreeCallStatic(UCHAR* puc, USHORT usType, UCHAR ucFlags,
 
 // Hooks calls to CNFile's file Open (NOT memory opens).
 // Returns 0 if file found.
-static short FileOpenHook(	CNFile* pfile, char* pszFileName,
-                           char* pszFlags, short sEndian, S32 lUser);
+static short FileOpenHook(   CNFile* pfile, char* pszFileName,
+                             char* pszFlags, short sEndian, S32 lUser);
 // Hooks calls to CNFile's Close.
 // Returns 0 if close was taken care of by this hook.
 static short FileCloseHook(CNFile* pfile, S32 lUser);
@@ -108,14 +108,14 @@ static short FileCloseHook(CNFile* pfile, S32 lUser);
 public:        // Members.
 
 protected:     // Members.
-CDispatch*				m_pDispatch;                  // CDispatch.
-CList	<CResItem>		m_alistRes[HASH_SIZE];        // Uh..De ja vus.
-short	m_sFreeOnClose;                              // If TRUE, the close hook
-                                                   // will free the resource
-                                                   // if it's not locked.
+CDispatch*            m_pDispatch;                  // CDispatch.
+CList   <CResItem>      m_alistRes[HASH_SIZE];        // Uh..De ja vus.
+short m_sFreeOnClose;                                // If TRUE, the close hook
+                                                     // will free the resource
+                                                     // if it's not locked.
 
 // Static members.
-static CList<CRes>	ms_listRes;                   // List of all CRes objects.
+static CList<CRes>   ms_listRes;                   // List of all CRes objects.
 
 };
 

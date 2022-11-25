@@ -477,8 +477,8 @@ inline short rspClipMirrorDst(RImage* pimDst, // input:
                               short &sClipR,
                               short &sClipT,
                               short &sClipB,
-                              S32	&lDstP,  // Including mirroring
-                              S32	&lDstPX  // Incl. Mirroring & pixDepth
+                              S32   &lDstP,  // Including mirroring
+                              S32   &lDstPX  // Incl. Mirroring & pixDepth
                               )
 {
    short sMirrorX = 1, sMirrorY = 1; // direction flags...
@@ -656,7 +656,7 @@ short rspRemovePadding(RImage* pimSrc)
            pimSrc->m_sWinWidth, pimSrc->m_sWinHeight);
 
    // tricky part: Swap buffers...
-   UCHAR	*pSrcMem, *pSrcBuf;
+   UCHAR   *pSrcMem, *pSrcBuf;
    pimSrc->DetachData((void**)&pSrcMem, (void**)&pSrcBuf);
    // Move the new buffer back to the original
    imDst.DetachData((void**)&(pimSrc->m_pMem), (void**)&(pimSrc->m_pData));
@@ -733,7 +733,7 @@ short rspBlitRot(short sDeg, RImage* pimSrc, RImage* pimDst,
    // Only source clipping would effect this...
    //
    short sDstClipX = 0, sDstClipY = 0;
-   short	sDstClipW = pimDst->m_sWidth, sDstClipH = pimDst->m_sHeight;
+   short sDstClipW = pimDst->m_sWidth, sDstClipH = pimDst->m_sHeight;
 
    // Suck it out!
    if (prDstClip)
@@ -800,9 +800,9 @@ short rspBlitRot(short sDeg, RImage* pimSrc, RImage* pimDst,
    // set up IC
    //------------------------------------------------------------------------------
    // Use the old pitch because the coordinates have been changed
-   UCHAR*	pDst = pimDst->m_pData + pimDst->m_lPitch * sDstY + sDstX;
+   UCHAR*   pDst = pimDst->m_pData + pimDst->m_lPitch * sDstY + sDstX;
    // There is NO source position or source clipping here!
-   UCHAR*	pSrc = pimSrc->m_pData;
+   UCHAR*   pSrc = pimSrc->m_pData;
 
    // pass the mirrored pitches....
    _BlitRot(sDeg, pimSrc->m_sHeight, pSrc, pimSrc->m_sDepth >> 3, pimSrc->m_lPitch,

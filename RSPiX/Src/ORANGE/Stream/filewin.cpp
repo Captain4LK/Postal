@@ -20,9 +20,9 @@
 // FILEWIN.CPP
 //
 // History:
-//		09/19/95 JMI	Started.
+//      09/19/95 JMI   Started.
 //
-//		09/20/95	JMI	Made read only.
+//      09/20/95   JMI   Made read only.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -59,7 +59,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module specific macros.
 //////////////////////////////////////////////////////////////////////////////
-#define WINDOWINDEX(l)	(l % m_lWinSize)
+#define WINDOWINDEX(l)   (l % m_lWinSize)
 
 //////////////////////////////////////////////////////////////////////////////
 // Module specific typedefs.
@@ -104,16 +104,16 @@ CFileWin::~CFileWin()
 //////////////////////////////////////////////////////////////////////////////
 void CFileWin::Set(void)
 {
-   m_pucWindow		= NULL;
-   m_paneUser.puc	= NULL;
-   m_paneIn.puc	= NULL;
+   m_pucWindow      = NULL;
+   m_paneUser.puc   = NULL;
+   m_paneIn.puc   = NULL;
 
-   m_usStatus		= 0;
-   m_call			= NULL;
-   m_fnTime			= NULL;
+   m_usStatus      = 0;
+   m_call         = NULL;
+   m_fnTime         = NULL;
 
-   m_sActive		= FALSE;
-   m_sSuspend		= 1;     // Start out suspended.
+   m_sActive      = FALSE;
+   m_sSuspend      = 1;     // Start out suspended.
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -140,18 +140,18 @@ void CFileWin::Reset(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::Alloc(S32 lSize)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Allocate new window . . .
-   m_pucWindow	= (UCHAR*)malloc(lSize);
+   m_pucWindow   = (UCHAR*)malloc(lSize);
    if (m_pucWindow != NULL)
    {
-      m_paneUser.puc		= m_pucWindow;
-      m_paneIn.puc		= m_pucWindow;
-      m_lWinSize			= lSize;
+      m_paneUser.puc      = m_pucWindow;
+      m_paneIn.puc      = m_pucWindow;
+      m_lWinSize         = lSize;
 
-      m_paneUser.lPos	= 0L;
-      m_paneIn.lPos		= 0L;
+      m_paneUser.lPos   = 0L;
+      m_paneIn.lPos      = 0L;
    }
    else
    {
@@ -173,9 +173,9 @@ void CFileWin::Free(void)
    {
       free(m_pucWindow);
 
-      m_pucWindow		= NULL;
-      m_paneUser.puc	= NULL;
-      m_paneIn.puc	= NULL;
+      m_pucWindow      = NULL;
+      m_paneUser.puc   = NULL;
+      m_paneIn.puc   = NULL;
    }
 }
 
@@ -187,15 +187,15 @@ void CFileWin::Free(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::NextIOPane(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If next pane complete . . .
    if (IsNextInputPaneReady() == TRUE)
    {
       // Get position of next pane.
-      m_paneIn.lPos	+= m_paneIn.lSize;
+      m_paneIn.lPos   += m_paneIn.lSize;
       // Move ptr to position.
-      m_paneIn.puc	= m_pucWindow + WINDOWINDEX(m_paneIn.lPos);
+      m_paneIn.puc   = m_pucWindow + WINDOWINDEX(m_paneIn.lPos);
    }
    else
    {
@@ -227,7 +227,7 @@ void CFileWin::Critical(void)
       {
          TRACE("Critical(): Waiting for application to free up current "
                "pane!\n");
-         m_usStatus	|= STATUS_WAITING;
+         m_usStatus   |= STATUS_WAITING;
       }
    }
 
@@ -245,7 +245,7 @@ void CFileWin::Critical(void)
          // If EOF . . .
          if (m_file.IsEOF() == TRUE)
          {
-            m_usStatus	|= STATUS_EOF;
+            m_usStatus   |= STATUS_EOF;
          }
          else
          {
@@ -253,7 +253,7 @@ void CFileWin::Critical(void)
             if (m_file.Error() == TRUE)
             {
                TRACE("Critical(): A read error stopped reading before complete.\n");
-               m_usStatus	|= ERROR_FILEACCESS;
+               m_usStatus   |= ERROR_FILEACCESS;
             }
          }
 
@@ -264,10 +264,10 @@ void CFileWin::Critical(void)
             if (m_paneUser.lPos + m_paneUser.lSize * 2 > m_paneIn.lPos + m_paneIn.lSize)
             {
                // Advance.
-               m_paneUser.lPos	+= m_paneUser.lSize;
-               m_paneUser.puc		= m_pucWindow + WINDOWINDEX(m_paneUser.lPos);
+               m_paneUser.lPos   += m_paneUser.lSize;
+               m_paneUser.puc      = m_pucWindow + WINDOWINDEX(m_paneUser.lPos);
                // Adjust pane size.
-               m_paneUser.lSize	= (m_paneIn.lPos + m_paneIn.lSize) - m_paneUser.lPos;
+               m_paneUser.lSize   = (m_paneIn.lPos + m_paneIn.lSize) - m_paneUser.lPos;
                // Call user.
                (*m_call)(&m_paneUser, m_lUser);
             }
@@ -308,7 +308,7 @@ void CFileWin::CriticalStatic(CFileWin* pfw)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::Open(char* pszFile)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // Attempt to open file . . .
    // Endianness doesn't matter (only UCHAR reads).
@@ -331,7 +331,7 @@ short CFileWin::Open(char* pszFile)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::Close(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If file is open . . .
    if (m_file.IsOpen() == TRUE)
@@ -367,7 +367,7 @@ short CFileWin::Close(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::SetSize(S32 lWinSize, S32 lIOPaneSize, S32 lUserPaneSize)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    ASSERT(m_file.IsOpen() == TRUE);
    ASSERT(lWinSize % lIOPaneSize == 0);
@@ -379,7 +379,7 @@ short CFileWin::SetSize(S32 lWinSize, S32 lIOPaneSize, S32 lUserPaneSize)
    // Allocate new window . . .
    if (Alloc(lWinSize) == 0)
    {
-      m_paneUser.lSize	= lUserPaneSize;
+      m_paneUser.lSize   = lUserPaneSize;
 
       // Store current file position.  Changing the buffer size of a stream
       // requires a seek.
@@ -388,7 +388,7 @@ short CFileWin::SetSize(S32 lWinSize, S32 lIOPaneSize, S32 lUserPaneSize)
       // Attempt to set file buffer size . . .
       if (m_file.SetBufferSize(lIOPaneSize) == 0)
       {
-         m_paneIn.lSize	= lIOPaneSize;
+         m_paneIn.lSize   = lIOPaneSize;
 
          // Attempt to seek back to current position . . .
          if (m_file.Seek(lPos, SEEK_SET) == 0)
@@ -430,15 +430,15 @@ short CFileWin::SetSize(S32 lWinSize, S32 lIOPaneSize, S32 lUserPaneSize)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::NextPane(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    // If next pane complete . . .
    if (IsNextPaneReady() == TRUE)
    {
       // Get position of next pane.
-      m_paneUser.lPos	+= m_paneUser.lSize;
+      m_paneUser.lPos   += m_paneUser.lSize;
       // Move ptr to position.
-      m_paneUser.puc		= m_pucWindow + WINDOWINDEX(m_paneUser.lPos);
+      m_paneUser.puc      = m_pucWindow + WINDOWINDEX(m_paneUser.lPos);
    }
    else
    {
@@ -456,7 +456,7 @@ short CFileWin::NextPane(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::Start(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    if (--m_sSuspend == 0)
    {
@@ -465,8 +465,8 @@ short CFileWin::Start(void)
          if (Blu_AddCritical((CRITICALL)CriticalStatic, (U32)this) == 0)
          {
             // Pick up where we left off.
-            m_lNextTime	= GetTime() + m_lNextTime;
-            m_sActive	= TRUE;
+            m_lNextTime   = GetTime() + m_lNextTime;
+            m_sActive   = TRUE;
          }
          else
          {
@@ -487,7 +487,7 @@ short CFileWin::Start(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::Suspend(void)
 {
-   short	sRes	= 0;  // Assume success.
+   short sRes   = 0;    // Assume success.
 
    m_sSuspend++;
 
@@ -495,9 +495,9 @@ short CFileWin::Suspend(void)
    {
       if (Blu_RemoveCritical((CRITICALL)CriticalStatic) == 0)
       {
-         m_sActive	= FALSE;
+         m_sActive   = FALSE;
          // Remember how S32 from suspension until next.
-         m_lNextTime	= m_lNextTime - GetTime();
+         m_lNextTime   = m_lNextTime - GetTime();
       }
       else
       {
@@ -516,7 +516,7 @@ short CFileWin::Suspend(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::IsNextPaneReady(void)
 {
-   short	sRes	= TRUE;  // Assume ready.
+   short sRes   = TRUE;    // Assume ready.
 
    // If next pane is where the next read is going to occur . . .
    if (m_paneUser.lPos + m_paneUser.lSize * 2L > m_paneIn.lPos + m_paneIn.lSize)
@@ -534,7 +534,7 @@ short CFileWin::IsNextPaneReady(void)
 //////////////////////////////////////////////////////////////////////////////
 short CFileWin::IsNextInputPaneReady(void)
 {
-   short	sRes	= TRUE;  // Assume ready.
+   short sRes   = TRUE;    // Assume ready.
 
    S32 lNextInputPaneStart  = WINDOWINDEX(m_paneIn.lPos + m_paneIn.lSize);
    S32 lNextInputPaneEnd    = WINDOWINDEX(m_paneIn.lPos + m_paneIn.lSize * 2L);
@@ -543,8 +543,8 @@ short CFileWin::IsNextInputPaneReady(void)
    S32 lCurUserPaneEnd      = WINDOWINDEX(m_paneUser.lPos + m_paneUser.lSize);
 
    // If the next input pane intersects the current user pane . . .
-   if (	lNextInputPaneStart	< lCurUserPaneEnd
-         &&	lNextInputPaneEnd		> lCurUserPaneStart)
+   if (   lNextInputPaneStart   < lCurUserPaneEnd
+          &&   lNextInputPaneEnd      > lCurUserPaneStart)
    {
       // You can't fight the seither.
       sRes = FALSE;

@@ -20,15 +20,15 @@
 // MsgBox.H
 //
 // History:
-//		01/19/97 JMI	Started tracking history of this file.
+//      01/19/97 JMI   Started tracking history of this file.
 //
-//		01/19/97	JMI	Converted Do*() to taking an RInputEvent* instead of a
-//							S32*.
+//      01/19/97   JMI   Converted Do*() to taking an RInputEvent* instead of a
+//                     S32*.
 //
-//		01/23/97	JMI	Removed sDeactivateHotBoxes parm from DoModal().
+//      01/23/97   JMI   Removed sDeactivateHotBoxes parm from DoModal().
 //
-//		04/24/97	JMI	Add additional parms to Add*() to add extra size to a
-//							GUI.
+//      04/24/97   JMI   Add additional parms to Add*() to add extra size to a
+//                     GUI.
 //
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -101,44 +101,44 @@ RBtn* AddButton(           // Returns allocated GUI item on success.
                            // Do NOT delete this item; it will be deleted
                            // by a RemoveAll() call.
    char* pszText,          // Text for btn item.
-   short	sX,               // X position in RMsgBox dlg.
-   short	sY,               // Y position in RMsgBox dlg.
+   short sX,                 // X position in RMsgBox dlg.
+   short sY,                 // Y position in RMsgBox dlg.
    U32 ulId,               // ID to return if this item is chosen.
                            // There will be no response to this item
                            // if lId is 0.
-   short	sAddW = 0,        // Additional width for guis that require more.
-   short	sAddH = 0);       // Additional height for guis that require more.
+   short sAddW = 0,          // Additional width for guis that require more.
+   short sAddH = 0);         // Additional height for guis that require more.
 
 // Add a txt item with provided text at sX, sY in RMsgBox dlg.
 RTxt* AddText(             // Returns allocated GUI item on success.
                            // Do NOT delete this item; it will be deleted
                            // by a RemoveAll() call.
    char* pszText,          // Text for txt item.
-   short	sX,               // X position in RMsgBox dlg.
-   short	sY,               // Y position in RMsgBox dlg.
+   short sX,                 // X position in RMsgBox dlg.
+   short sY,                 // Y position in RMsgBox dlg.
    U32 ulId,               // ID to return if this item is chosen.
                            // There will be no response to this item
                            // if lId is 0.
-   short	sAddW = 0,        // Additional width for guis that require more.
-   short	sAddH = 0);       // Additional height for guis that require more.
+   short sAddW = 0,          // Additional width for guis that require more.
+   short sAddH = 0);         // Additional height for guis that require more.
 
 // Add an edit field with provided text at sX, sY in RMsgBox dlg.
 REdit* AddEdit(         // Returns allocated GUI item on success.
                         // Do NOT delete this item; it will be deleted
                         // by a RemoveAll() call.
    char* pszText,       // Text for edit item.
-   short	sX,            // X position in RMsgBox dlg.
-   short	sY,            // Y position in RMsgBox dlg.
+   short sX,              // X position in RMsgBox dlg.
+   short sY,              // Y position in RMsgBox dlg.
    U32 ulId,               // ID to return if this item is chosen.
                            // There will be no response to this item
                            // if lId is 0.
-   short	sAddW = 0,        // Additional width for guis that require more.
-   short	sAddH = 0);       // Additional height for guis that require more.
+   short sAddW = 0,          // Additional width for guis that require more.
+   short sAddH = 0);         // Additional height for guis that require more.
 
 // Add the RGuiItem of your choice.  pgui->m_ulUserData will be returned
 // by DoModal() if this item is chosen.
 RGuiItem* AddItem(            // Returns pgui on success.
-   RGuiItem*	pgui);         // The RGuiItem to add (its m_sX/Y should already
+   RGuiItem*   pgui);         // The RGuiItem to add (its m_sX/Y should already
                               // have been set).
 
 // Activates this RMsgBox and waits for input until m_mbcUser returns
@@ -149,12 +149,12 @@ U32 DoModal(                              // Returns chosen ID on success,
                                           // 0 on failure.
    RInputEvent* pie,                      // In:  Most recent user input event.
                                           // Out: pie->sUsed = TRUE, if used.
-   RImage*	pimDst			= NULL);       // Where to draw dialog and rspBlit from.
-                                          // If this is NULL, the system buffer is
-                                          // used.
-                                          // rspBlit is used to update this to the
-                                          // screen image unless pimDst is the screen
-                                          // image.
+   RImage*   pimDst         = NULL);       // Where to draw dialog and rspBlit from.
+                                           // If this is NULL, the system buffer is
+                                           // used.
+                                           // rspBlit is used to update this to the
+                                           // screen image unless pimDst is the screen
+                                           // image.
 
 // Operates RMsgBox for one iteration.  Does NOT Draw().
 // Check m_pguiFocus to determine RGuiItem with focus.
@@ -192,13 +192,13 @@ protected:     // Internal functions.
 short AddItem(             // Returns 0 on success.
    RGuiItem* pgui,         // Item to add.
    char* pszText,          // Text for item.
-   short	sX,               // X position in RMsgBox dlg.
-   short	sY,               // Y position in RMsgBox dlg.
+   short sX,                 // X position in RMsgBox dlg.
+   short sY,                 // Y position in RMsgBox dlg.
    U32 ulId,               // ID to return if this item is chosen.
                            // There will be no response to this item
                            // if lId is 0.
-   short	sAddW = 0,        // Additional width for guis that require more.
-   short	sAddH = 0);       // Additional height for guis that require more.
+   short sAddW = 0,          // Additional width for guis that require more.
+   short sAddH = 0);         // Additional height for guis that require more.
 
 // Copies parameters from RMsgBox into *pgui.
 void CopyParms(RGuiItem* pgui);
@@ -215,11 +215,11 @@ U32 m_ulId;                   // ID of control that caused DoModal to end.
 protected:     // Internal typedefs.
 
 protected:     // Protected member variables.
-RList<RGuiItem>	m_listGuis;       // List of RGuiItems allocated by this
+RList<RGuiItem>   m_listGuis;       // List of RGuiItems allocated by this
                                     // RMsgBox.
 };
 
 #endif // MSGBOX_H
 //////////////////////////////////////////////////////////////////////////////
-//	EOF
+//   EOF
 //////////////////////////////////////////////////////////////////////////////

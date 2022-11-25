@@ -22,23 +22,23 @@
 // method of working with all the various game settings.
 //
 // History:
-//		11/26/96 MJR	Started.
-//		12/04/96 MJR	Implimented all the static stuff.
-//		04/16/97 MJR	Added test for read-only file when writing prefs, and
-//							returned special error code to indicate such a thing.
+//      11/26/96 MJR   Started.
+//      12/04/96 MJR   Implimented all the static stuff.
+//      04/16/97 MJR   Added test for read-only file when writing prefs, and
+//                     returned special error code to indicate such a thing.
 //
-//		05/08/97	JMI	Added conditions for compiler versions' STL
-//							differences.
+//      05/08/97   JMI   Added conditions for compiler versions' STL
+//                     differences.
 //
-//		06/09/97 MJR	Fixed memory leak -- forgot to free the memory that was
-//							allocated by PreDemo().
+//      06/09/97 MJR   Fixed memory leak -- forgot to free the memory that was
+//                     allocated by PreDemo().
 //
-//		06/29/97 MJR	Replaced STL vector with an RSP list.  STL is an evil
-//							entity that should be banished from the face of the earth.
-//							Whoever suggested we use it should be shot.  (Good thing
-//							I'm the president -- it's against the rules to shoot me.)
+//      06/29/97 MJR   Replaced STL vector with an RSP list.  STL is an evil
+//                     entity that should be banished from the face of the earth.
+//                     Whoever suggested we use it should be shot.  (Good thing
+//                     I'm the president -- it's against the rules to shoot me.)
 //
-//		07/10/97 MJR	Removed use of non-ANSI "t" in mode string for file open.
+//      07/10/97 MJR   Removed use of non-ANSI "t" in mode string for file open.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define SETTINGS_CPP
@@ -198,9 +198,9 @@ short CSettings::LoadPrefs(               // Returns 0 if successfull, non-zero 
 // Save all settings to preference file
 //
 // Return values:
-//		0 = successfull
-//		1 = read-only file (couldn't save)
-//		<0 = some other error
+//      0 = successfull
+//      1 = read-only file (couldn't save)
+//      <0 = some other error
 //
 ////////////////////////////////////////////////////////////////////////////////
 short CSettings::SavePrefs(               // Returns 0 if successfull, non-zero otherwise
