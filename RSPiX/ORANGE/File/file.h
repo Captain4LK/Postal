@@ -336,11 +336,13 @@ S32 Read(RPixel32* ppix32Data, S32 lNum = 1L)
 
 // Reads lNum U64 values from currently open file.
 // Returns number of U64 values successfully read.
-S32 Read(U64* pu64Data, S32 lNum = 1L);
+//S32 Read(U64* pu64Data, S32 lNum = 1L);
+
+//S32 Read_u64(U64* pu64Data, S32 lNum = 1L);
 
 // Reads lNum S64 values from currently open file.
 // Returns number of S64 values successfully read.
-S32 Read(S64* ps64Data, S32 lNum = 1L);
+//S32 Read(S64* ps64Data, S32 lNum = 1L);
 
 // Reads lNum float values from currently open file.
 // Returns number of float values successfully read.
@@ -913,10 +915,10 @@ RFILE_INSTANTIATE_ANYLOAD(RPixel32)
 RFILE_INSTANTIATE_ANYSAVE(RPixel32)
 RFILE_INSTANTIATE_ANYLOAD(float)
 RFILE_INSTANTIATE_ANYSAVE(float)
-RFILE_INSTANTIATE_ANYLOAD(U64)
-RFILE_INSTANTIATE_ANYSAVE(U64)
-RFILE_INSTANTIATE_ANYLOAD(S64)
-RFILE_INSTANTIATE_ANYSAVE(S64)
+//RFILE_INSTANTIATE_ANYLOAD(U64)
+//RFILE_INSTANTIATE_ANYSAVE(U64)
+//RFILE_INSTANTIATE_ANYLOAD(S64)
+//RFILE_INSTANTIATE_ANYSAVE(S64)
 RFILE_INSTANTIATE_ANYLOAD(double)
 RFILE_INSTANTIATE_ANYSAVE(double)
 

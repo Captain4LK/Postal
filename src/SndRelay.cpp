@@ -512,6 +512,7 @@ short CSndRelay::Init(void)                     // Returns 0 if successfull, non
 
    if (m_sprite.m_pImage == 0)
    {
+      puts(m_pRealm->Make2dResPath(IMAGE_FILE));
       sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_sprite.m_pImage);
       if (sResult == 0)
       {

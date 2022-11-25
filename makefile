@@ -5,7 +5,7 @@
 #ifeq ($(PANDORA),1)
   #macosx := false
   #CPUARCH := arm
-  #CC := g++
+  #CC := g++ 
   #LINKER := g++
   #steamworks := false
   #CFLAGS += -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp -ftree-vectorize -ffast-math -DPANDORA
@@ -33,8 +33,8 @@ debug := false
 #ifeq ($(strip $(target)),linux_x86)
   macosx := false
   CPUARCH := x86
-  CC := g++
-  LINKER := g++
+  CC := g++ -Wall -Wextra -Wconversion
+  LINKER := g++ -Wall -Wextra -Wconversion
 #endif
 #ifeq ($(strip $(target)),macosx_x86)
 #  macosx := true

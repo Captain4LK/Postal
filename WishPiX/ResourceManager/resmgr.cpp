@@ -178,6 +178,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "RSPiX.h"
 #include "resmgr.h"
 
 
@@ -313,6 +314,13 @@ short RResMgr::Get(                          // Returns 0 on success.
       // In this case, m_vpRes is also NULL, so we don't have to worry about a
       // double delete.
       m_map.erase(strFilename);
+   }
+
+   volatile int var_resmgr_break = strcmp("2d/side/soundsatellite.bmp",strFilename)==0;
+   if(strcmp("2d/side/soundsatellite.bmp",strFilename)==0)
+   {
+      static volatile RImage *img = (RImage *)*hRes;
+      printf("%p\n",img->m_pData);
    }
 
    // Delete the create and load function objects, and POSSIBLY the destroy function,

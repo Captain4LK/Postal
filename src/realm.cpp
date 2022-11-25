@@ -951,6 +951,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                   short sCount;
                   if (pFile->Read(&sCount) == 1)
                   {
+                     //printf("count %d\n",sCount);
 
                      CThing::ClassIDType idLastThingLoaded = CThing::TotalIDs;
 
@@ -1010,6 +1011,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                               }
                               else
                               {
+                                 sResult = 0;
                                  TRACE("CRealm::Load(): Load() failed for thing of type %s; ",
                                        CThing::ms_aClassInfo[id].pszClassName);
                                  if (idLastThingLoaded != CThing::TotalIDs)

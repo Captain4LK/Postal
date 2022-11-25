@@ -1253,13 +1253,13 @@ S32 RFile::Read(S32* ps32Data, S32 lNum /*= 1L*/)
 
    return lRes;
 }
-
 //////////////////////////////////////////////////////////////////////////////
 //
 // Reads lNum U64 values from currently open file.
 // Returns number of U64 values successfully read.
 //
 //////////////////////////////////////////////////////////////////////////////
+#if 0
 S32 RFile::Read(U64* pu64Data, S32 lNum /*= 1L*/)
 {
    S32 lRes  = 0L;   // Assume success.
@@ -1275,6 +1275,11 @@ S32 RFile::Read(U64* pu64Data, S32 lNum /*= 1L*/)
    }
 
    return lRes;
+}
+
+S32 Read_u64(U64* pu64Data, S32 lNum = 1L)
+{
+   return Read(pu64Data,lNum);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1299,6 +1304,7 @@ S32 RFile::Read(S64* ps64Data, S32 lNum /*= 1L*/)
 
    return lRes;
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 //

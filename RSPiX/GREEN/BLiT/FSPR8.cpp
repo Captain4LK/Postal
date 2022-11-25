@@ -272,6 +272,9 @@ NextCode3:
 
       goto NextCode3;
    }
+   //for(int i = 0;i<pImage->m_sWidth*pImage->m_sHeight;i++)
+      //printf("%d,",pImage->m_pData[i]);
+   //puts("");
    //==============================================================
    // Now finish your job:
    //
@@ -405,7 +408,7 @@ short   ConvertToFSPR8(RImage*  pImage)
    }
 
    // The alignment will shift when the realloc blindly copied the memory.  So, realloc is
-   // noS32er feasible. I will take memory management into my own hands!
+   // nolonger feasible. I will take memory management into my own hands!
    //
    pucOldMem = pHeader->m_pCompMem;
    pucOldBuf = pHeader->m_pCompBuf;
@@ -414,10 +417,11 @@ short   ConvertToFSPR8(RImage*  pImage)
    //pHeader->m_pCompMem = (UCHAR*)calloc(1,(size_t)(pucCPos - pHeader->m_pCompBuf + 15));
    pHeader->m_pCompMem = (UCHAR*)aligned_alloc(16, (size_t)(pucCPos - pHeader->m_pCompBuf + 15));
    memset(pHeader->m_pCompMem, 0, (size_t)(pucCPos - pHeader->m_pCompBuf + 15));
+   pHeader->m_pCompBuf = pHeader->m_pCompMem;
    // And align it:
    //pHeader->m_pCompBuf = (UCHAR*)(( (S32)(pHeader->m_pCompMem) +15)&~15);
    // Store the size of the Compressed Buffer:
-   pHeader->m_pBufArry[sH] = (UCHAR*)(size_t)(pucCPos - pHeader->m_pCompBuf);
+   pHeader->m_pBufArry[sH] = (UCHAR*)(intptr_t)(pucCPos - pHeader->m_pCompBuf);
 
 
    // Now copy the old into the new aligned and free it:

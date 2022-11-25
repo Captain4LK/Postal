@@ -769,7 +769,7 @@ short RSample::Save(    // Returns 0 on success.
             iff.Write(m_sNumChannels);
             iff.Write(m_lSamplesPerSec);
             // Average bytes per second.
-            iff.Write((m_lSamplesPerSec * (S32)m_sBitsPerSample * (S32)m_sNumChannels) / 8L);
+            iff.Write((m_lSamplesPerSec * (S32)m_sBitsPerSample * (S32)m_sNumChannels) / 8);
             // Block align.
             iff.Write((short)(m_sBitsPerSample * m_sNumChannels / 8) );
             iff.Write(m_sBitsPerSample);
