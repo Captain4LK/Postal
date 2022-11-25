@@ -49,169 +49,169 @@ CLEANUP := $(wildcard *.exe) $(wildcard *.obj) \
           $(wildcard .\#*) core
 
 SRCS := \
-	AnimThing.cpp \
-	ball.cpp \
-	barrel.cpp \
-	bouy.cpp \
-	character.cpp \
-	chunk.cpp \
-	deathWad.cpp \
-	demon.cpp \
-	dispenser.cpp \
-	doofus.cpp \
-	dude.cpp \
-	explode.cpp \
-	fire.cpp \
-	fireball.cpp \
-	firebomb.cpp \
-	flag.cpp \
-	flagbase.cpp \
-	grenade.cpp \
-	heatseeker.cpp \
-	hood.cpp \
-	item3d.cpp \
-	mine.cpp \
-	napalm.cpp \
-	navnet.cpp \
-	ostrich.cpp \
-	person.cpp \
-	PowerUp.cpp \
-	pylon.cpp \
-	rocket.cpp \
-	sentry.cpp \
-	SndRelay.cpp \
-	SoundThing.cpp \
-	thing.cpp \
-	Thing3d.cpp \
-	trigger.cpp \
-	warp.cpp \
-	weapon.cpp \
-	alphablitforpostal.cpp \
-	Anim3D.cpp \
-	BufQ.cpp \
-	bulletFest.cpp \
-	camera.cpp \
-	crawler.cpp \
-	cutscene.cpp \
-	encrypt.cpp \
-	gameedit.cpp \
-	GameSettings.cpp \
-	grip.cpp \
-	IdBank.cpp \
-	InputSettings.cpp \
-	InputSettingsDlg.cpp \
-	keys.cpp \
-	Log.cpp \
-	logtab.cpp \
-	MemFileFest.cpp \
-	MenuSettings.cpp \
-	MenuTrans.cpp \
-	net.cpp \
-	NetBrowse.cpp \
-	NetClient.cpp \
-	NetDlg.cpp \
-	netmsgr.cpp \
-	NetServer.cpp \
-	organ.cpp \
-	Personatorium.cpp \
-	ProtoBSDIP.cpp \
-	realm.cpp \
-	scene.cpp \
-	score.cpp \
-	settings.cpp \
-	smash.cpp \
-	socket.cpp \
-	StockPile.cpp \
-	TexEdit.cpp \
-	toolbar.cpp \
-	TriggerRegions.cpp \
-	update.cpp \
-	yatime.cpp \
-	aivars.cpp \
-	band.cpp \
-	credits.cpp \
-	game.cpp \
-	input.cpp \
-	localize.cpp \
-	main.cpp \
-	menus.cpp \
-	play.cpp \
-	SampleMaster.cpp \
-	title.cpp \
-	RSPiX/Src/BLUE/unix/Bdebug.cpp \
-	RSPiX/Src/BLUE/unix/Bjoy.cpp \
-	RSPiX/Src/BLUE/unix/Bkey.cpp \
-	RSPiX/Src/BLUE/unix/Bmain.cpp \
-	RSPiX/Src/BLUE/unix/Bmouse.cpp \
-	RSPiX/Src/BLUE/unix/Btime.cpp \
-	RSPiX/Src/BLUE/unix/Bdisp.cpp \
-	RSPiX/Src/BLUE/unix/Bsound.cpp \
-	RSPiX/Src/GREEN/Hot/hot.cpp \
-	RSPiX/Src/GREEN/Image/Image.cpp \
-	RSPiX/Src/GREEN/Image/Imagecon.cpp \
-	RSPiX/Src/GREEN/Image/ImageFile.cpp \
-	RSPiX/Src/GREEN/InputEvent/InputEvent.cpp \
-	RSPiX/Src/GREEN/Mix/mix.cpp \
-	RSPiX/Src/GREEN/Mix/MixBuf.cpp \
-	RSPiX/Src/GREEN/Image/pal.cpp \
-	RSPiX/Src/GREEN/Image/PalFile.cpp \
-	RSPiX/Src/GREEN/Sample/sample.cpp \
-	RSPiX/Src/GREEN/Snd/snd.cpp \
-	RSPiX/Src/GREEN/SndFx/SndFx.cpp \
-	RSPiX/Src/GREEN/Task/task.cpp \
-	RSPiX/Src/GREEN/3D/pipeline.cpp \
-	RSPiX/Src/GREEN/3D/render.cpp \
-	RSPiX/Src/GREEN/3D/types3d.cpp \
-	RSPiX/Src/GREEN/3D/zbuffer.cpp \
-	RSPiX/Src/GREEN/BLiT/alphablit.cpp \
-	RSPiX/Src/GREEN/BLiT/BLIT.cpp \
-	RSPiX/Src/GREEN/BLiT/BLITINIT.cpp \
-	RSPiX/Src/GREEN/BLiT/BLiTT.cpp \
-	RSPiX/Src/GREEN/BLiT/CFNT.cpp \
-	RSPiX/Src/GREEN/BLiT/Fspr1.cpp \
-	RSPiX/Src/GREEN/BLiT/FSPR8.cpp \
-	RSPiX/Src/GREEN/BLiT/line.cpp \
-	RSPiX/Src/GREEN/BLiT/mono.cpp \
-	RSPiX/Src/GREEN/BLiT/Rotate96.cpp \
-	RSPiX/Src/GREEN/BLiT/RPrint.cpp \
-	RSPiX/Src/GREEN/BLiT/ScaleFlat.cpp \
-	RSPiX/Src/ORANGE/GameLib/ANIMSPRT.cpp \
-	RSPiX/Src/ORANGE/Attribute/attribute.cpp \
-	RSPiX/Src/ORANGE/GUI/btn.cpp \
-	RSPiX/Src/ORANGE/Channel/channel.cpp \
-	RSPiX/Src/ORANGE/color/colormatch.cpp \
-	RSPiX/Src/ORANGE/DirtRect/DirtRect.cpp \
-	RSPiX/Src/ORANGE/color/dithermatch.cpp \
-	RSPiX/Src/ORANGE/GUI/dlg.cpp \
-	RSPiX/Src/ORANGE/GUI/edit.cpp \
-	RSPiX/Src/ORANGE/File/file.cpp \
-	RSPiX/Src/ORANGE/QuickMath/FixedPoint.cpp \
-	RSPiX/Src/ORANGE/GUI/guiItem.cpp \
-	RSPiX/Src/ORANGE/IFF/iff.cpp \
-	RSPiX/Src/ORANGE/ImageTools/lasso.cpp \
-	RSPiX/Src/ORANGE/Laymage/laymage.cpp \
-	RSPiX/Src/ORANGE/GUI/ListBox.cpp \
-	RSPiX/Src/ORANGE/GUI/ListContents.cpp \
-	RSPiX/Src/ORANGE/Meter/meter.cpp \
-	RSPiX/Src/ORANGE/MsgBox/MsgBox.cpp \
-	RSPiX/Src/ORANGE/GUI/MultiBtn.cpp \
-	RSPiX/Src/ORANGE/MultiGrid/MultiGrid.cpp \
-	RSPiX/Src/ORANGE/MultiGrid/MultiGridIndirect.cpp \
-	RSPiX/Src/ORANGE/GUI/ProcessGui.cpp \
-	RSPiX/Src/ORANGE/Debug/profile.cpp \
-	RSPiX/Src/ORANGE/GUI/PushBtn.cpp \
-	RSPiX/Src/ORANGE/QuickMath/QuickMath.cpp \
-	RSPiX/Src/ORANGE/GameLib/Region.cpp \
-	RSPiX/Src/ORANGE/RString/rstring.cpp \
-	RSPiX/Src/ORANGE/GUI/scrollbar.cpp \
-	RSPiX/Src/ORANGE/GameLib/SHAPES.cpp \
-	RSPiX/Src/ORANGE/Parse/SimpleBatch.cpp \
-	RSPiX/Src/ORANGE/GameLib/SPRITE.cpp \
-	RSPiX/Src/ORANGE/str/str.cpp \
-	RSPiX/Src/ORANGE/GUI/txt.cpp \
-	RSPiX/Src/CYAN/Unix/uDialog.cpp \
-	RSPiX/Src/CYAN/Unix/uColors.cpp \
-	RSPiX/Src/CYAN/Unix/uPath.cpp \
+	src/AnimThing.cpp \
+	src/ball.cpp \
+	src/barrel.cpp \
+	src/bouy.cpp \
+	src/character.cpp \
+	src/chunk.cpp \
+	src/deathWad.cpp \
+	src/demon.cpp \
+	src/dispenser.cpp \
+	src/doofus.cpp \
+	src/dude.cpp \
+	src/explode.cpp \
+	src/fire.cpp \
+	src/fireball.cpp \
+	src/firebomb.cpp \
+	src/flag.cpp \
+	src/flagbase.cpp \
+	src/grenade.cpp \
+	src/heatseeker.cpp \
+	src/hood.cpp \
+	src/item3d.cpp \
+	src/mine.cpp \
+	src/napalm.cpp \
+	src/navnet.cpp \
+	src/ostrich.cpp \
+	src/person.cpp \
+	src/PowerUp.cpp \
+	src/pylon.cpp \
+	src/rocket.cpp \
+	src/sentry.cpp \
+	src/SndRelay.cpp \
+	src/SoundThing.cpp \
+	src/thing.cpp \
+	src/Thing3d.cpp \
+	src/trigger.cpp \
+	src/warp.cpp \
+	src/weapon.cpp \
+	src/alphablitforpostal.cpp \
+	src/Anim3D.cpp \
+	src/BufQ.cpp \
+	src/bulletFest.cpp \
+	src/camera.cpp \
+	src/crawler.cpp \
+	src/cutscene.cpp \
+	src/encrypt.cpp \
+	src/gameedit.cpp \
+	src/GameSettings.cpp \
+	src/grip.cpp \
+	src/IdBank.cpp \
+	src/InputSettings.cpp \
+	src/InputSettingsDlg.cpp \
+	src/keys.cpp \
+	src/Log.cpp \
+	src/logtab.cpp \
+	src/MemFileFest.cpp \
+	src/MenuSettings.cpp \
+	src/MenuTrans.cpp \
+	src/net.cpp \
+	src/NetBrowse.cpp \
+	src/NetClient.cpp \
+	src/NetDlg.cpp \
+	src/netmsgr.cpp \
+	src/NetServer.cpp \
+	src/organ.cpp \
+	src/Personatorium.cpp \
+	src/ProtoBSDIP.cpp \
+	src/realm.cpp \
+	src/scene.cpp \
+	src/score.cpp \
+	src/settings.cpp \
+	src/smash.cpp \
+	src/socket.cpp \
+	src/StockPile.cpp \
+	src/TexEdit.cpp \
+	src/toolbar.cpp \
+	src/TriggerRegions.cpp \
+	src/update.cpp \
+	src/yatime.cpp \
+	src/aivars.cpp \
+	src/band.cpp \
+	src/credits.cpp \
+	src/game.cpp \
+	src/input.cpp \
+	src/localize.cpp \
+	src/main.cpp \
+	src/menus.cpp \
+	src/play.cpp \
+	src/SampleMaster.cpp \
+	src/title.cpp \
+	RSPiX/BLUE/unix/Bdebug.cpp \
+	RSPiX/BLUE/unix/Bjoy.cpp \
+	RSPiX/BLUE/unix/Bkey.cpp \
+	RSPiX/BLUE/unix/Bmain.cpp \
+	RSPiX/BLUE/unix/Bmouse.cpp \
+	RSPiX/BLUE/unix/Btime.cpp \
+	RSPiX/BLUE/unix/Bdisp.cpp \
+	RSPiX/BLUE/unix/Bsound.cpp \
+	RSPiX/GREEN/Hot/hot.cpp \
+	RSPiX/GREEN/Image/Image.cpp \
+	RSPiX/GREEN/Image/Imagecon.cpp \
+	RSPiX/GREEN/Image/ImageFile.cpp \
+	RSPiX/GREEN/InputEvent/InputEvent.cpp \
+	RSPiX/GREEN/Mix/mix.cpp \
+	RSPiX/GREEN/Mix/MixBuf.cpp \
+	RSPiX/GREEN/Image/pal.cpp \
+	RSPiX/GREEN/Image/PalFile.cpp \
+	RSPiX/GREEN/Sample/sample.cpp \
+	RSPiX/GREEN/Snd/snd.cpp \
+	RSPiX/GREEN/SndFx/SndFx.cpp \
+	RSPiX/GREEN/Task/task.cpp \
+	RSPiX/GREEN/3D/pipeline.cpp \
+	RSPiX/GREEN/3D/render.cpp \
+	RSPiX/GREEN/3D/types3d.cpp \
+	RSPiX/GREEN/3D/zbuffer.cpp \
+	RSPiX/GREEN/BLiT/alphablit.cpp \
+	RSPiX/GREEN/BLiT/BLIT.cpp \
+	RSPiX/GREEN/BLiT/BLITINIT.cpp \
+	RSPiX/GREEN/BLiT/BLiTT.cpp \
+	RSPiX/GREEN/BLiT/CFNT.cpp \
+	RSPiX/GREEN/BLiT/Fspr1.cpp \
+	RSPiX/GREEN/BLiT/FSPR8.cpp \
+	RSPiX/GREEN/BLiT/line.cpp \
+	RSPiX/GREEN/BLiT/mono.cpp \
+	RSPiX/GREEN/BLiT/Rotate96.cpp \
+	RSPiX/GREEN/BLiT/RPrint.cpp \
+	RSPiX/GREEN/BLiT/ScaleFlat.cpp \
+	RSPiX/ORANGE/GameLib/ANIMSPRT.cpp \
+	RSPiX/ORANGE/Attribute/attribute.cpp \
+	RSPiX/ORANGE/GUI/btn.cpp \
+	RSPiX/ORANGE/Channel/channel.cpp \
+	RSPiX/ORANGE/color/colormatch.cpp \
+	RSPiX/ORANGE/DirtRect/DirtRect.cpp \
+	RSPiX/ORANGE/color/dithermatch.cpp \
+	RSPiX/ORANGE/GUI/dlg.cpp \
+	RSPiX/ORANGE/GUI/edit.cpp \
+	RSPiX/ORANGE/File/file.cpp \
+	RSPiX/ORANGE/QuickMath/FixedPoint.cpp \
+	RSPiX/ORANGE/GUI/guiItem.cpp \
+	RSPiX/ORANGE/IFF/iff.cpp \
+	RSPiX/ORANGE/ImageTools/lasso.cpp \
+	RSPiX/ORANGE/Laymage/laymage.cpp \
+	RSPiX/ORANGE/GUI/ListBox.cpp \
+	RSPiX/ORANGE/GUI/ListContents.cpp \
+	RSPiX/ORANGE/Meter/meter.cpp \
+	RSPiX/ORANGE/MsgBox/MsgBox.cpp \
+	RSPiX/ORANGE/GUI/MultiBtn.cpp \
+	RSPiX/ORANGE/MultiGrid/MultiGrid.cpp \
+	RSPiX/ORANGE/MultiGrid/MultiGridIndirect.cpp \
+	RSPiX/ORANGE/GUI/ProcessGui.cpp \
+	RSPiX/ORANGE/Debug/profile.cpp \
+	RSPiX/ORANGE/GUI/PushBtn.cpp \
+	RSPiX/ORANGE/QuickMath/QuickMath.cpp \
+	RSPiX/ORANGE/GameLib/Region.cpp \
+	RSPiX/ORANGE/RString/rstring.cpp \
+	RSPiX/ORANGE/GUI/scrollbar.cpp \
+	RSPiX/ORANGE/GameLib/SHAPES.cpp \
+	RSPiX/ORANGE/Parse/SimpleBatch.cpp \
+	RSPiX/ORANGE/GameLib/SPRITE.cpp \
+	RSPiX/ORANGE/str/str.cpp \
+	RSPiX/ORANGE/GUI/txt.cpp \
+	RSPiX/CYAN/Unix/uDialog.cpp \
+	RSPiX/CYAN/Unix/uColors.cpp \
+	RSPiX/CYAN/Unix/uPath.cpp \
 	WishPiX/Menu/menu.cpp \
 	WishPiX/Prefs/prefline.cpp \
 	WishPiX/Prefs/prefs.cpp \
@@ -242,21 +242,19 @@ CFLAGS += -DLOCALE=US -DTARGET=POSTAL_2015
 
 # includes ...
 CFLAGS += -I$(SRCDIR)
-#CFLAGS += -I$(SRCDIR)/SDL2/include
+CFLAGS += -I$(SRCDIR)/src
 CFLAGS += -I/usr/include/SDL2
 CFLAGS += -I$(SRCDIR)/RSPiX
-CFLAGS += -I$(SRCDIR)/RSPiX/Inc
-CFLAGS += -I$(SRCDIR)/RSPiX/Src
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/BLUE
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/BLUE/unix
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/CYAN
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/CYAN/Unix
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/ORANGE
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/ORANGE/CDT
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/ORANGE/GameLib
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/ORANGE/File
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/ORANGE/Multigrid
-CFLAGS += -I$(SRCDIR)/RSPiX/Src/GREEN/Image
+CFLAGS += -I$(SRCDIR)/RSPiX/BLUE
+CFLAGS += -I$(SRCDIR)/RSPiX/BLUE/unix
+CFLAGS += -I$(SRCDIR)/RSPiX/CYAN
+CFLAGS += -I$(SRCDIR)/RSPiX/CYAN/Unix
+CFLAGS += -I$(SRCDIR)/RSPiX/ORANGE
+CFLAGS += -I$(SRCDIR)/RSPiX/ORANGE/CDT
+CFLAGS += -I$(SRCDIR)/RSPiX/ORANGE/GameLib
+CFLAGS += -I$(SRCDIR)/RSPiX/ORANGE/File
+CFLAGS += -I$(SRCDIR)/RSPiX/ORANGE/Multigrid
+CFLAGS += -I$(SRCDIR)/RSPiX/GREEN/Image
 CFLAGS += -I$(SRCDIR)/WishPiX
 CFLAGS += -I$(SRCDIR)/WishPiX/Spry
 
@@ -321,37 +319,38 @@ $(BINDIR) :
 
 bindir :
 	mkdir -p $(BINDIR)
-	mkdir -p $(BINDIR)/RSPiX/Src/BLUE/unix
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Hot
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Image
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/InputEvent
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Mix
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Sample
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Snd
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/SndFx
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/Task
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/3D
-	mkdir -p $(BINDIR)/RSPiX/Src/GREEN/BLiT
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/GameLib
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Attribute
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/GUI
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Channel
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/color
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/DirtRect
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/File
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/QuickMath
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/IFF
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/ImageTools
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Laymage
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Meter
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/MsgBox
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/MTask
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/MultiGrid
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Debug
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/RString
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/Parse
-	mkdir -p $(BINDIR)/RSPiX/Src/ORANGE/str
-	mkdir -p $(BINDIR)/RSPiX/Src/CYAN/Unix
+	mkdir -p $(BINDIR)/src
+	mkdir -p $(BINDIR)/RSPiX/BLUE/unix
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Hot
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Image
+	mkdir -p $(BINDIR)/RSPiX/GREEN/InputEvent
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Mix
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Sample
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Snd
+	mkdir -p $(BINDIR)/RSPiX/GREEN/SndFx
+	mkdir -p $(BINDIR)/RSPiX/GREEN/Task
+	mkdir -p $(BINDIR)/RSPiX/GREEN/3D
+	mkdir -p $(BINDIR)/RSPiX/GREEN/BLiT
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/GameLib
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Attribute
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/GUI
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Channel
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/color
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/DirtRect
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/File
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/QuickMath
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/IFF
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/ImageTools
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Laymage
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Meter
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/MsgBox
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/MTask
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/MultiGrid
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Debug
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/RString
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/Parse
+	mkdir -p $(BINDIR)/RSPiX/ORANGE/str
+	mkdir -p $(BINDIR)/RSPiX/CYAN/Unix
 	mkdir -p $(BINDIR)/WishPiX/Menu
 	mkdir -p $(BINDIR)/WishPiX/Prefs
 	mkdir -p $(BINDIR)/WishPiX/ResourceManager
