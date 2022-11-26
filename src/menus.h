@@ -80,6 +80,7 @@
 #define JOIN_MULTI_MENU_ID            25
 #define HOST_MULTI_MENU_ID            26
 #define PICK_FILE_MENU_ID            27
+#define PLAYEROPTIONS_MENU_ID         28
 
 ////////////////////////////////////////////////////////////////////////////////
 // Externs.
@@ -104,6 +105,7 @@ extern Menu menuVolumes;
 extern Menu menuVideoOptions;
 extern Menu menuAudioOptions;
 extern Menu menuPlayOptions;
+extern Menu menuPlayerOptions;
 extern Menu menuRotation;
 extern Menu menuJoinMulti;
 extern Menu menuHostMulti;

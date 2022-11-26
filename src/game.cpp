@@ -2782,9 +2782,9 @@ extern void Game_StartSinglePlayerGame(
       m_action   = ACTION_LOAD_GAME;
       break;
 #if (TARGET == POSTAL_2015)
-   case 3 + START_MENU_ID_OFFSET:
-      Game_StartChallengeGame(0);
-      break;
+   //case 3 + START_MENU_ID_OFFSET:
+      //Game_StartChallengeGame(0);
+      //break;
 #endif
    }
 

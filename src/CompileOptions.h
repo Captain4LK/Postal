@@ -481,19 +481,19 @@
 //#define START_MENU_ADDON_ITEM
       #endif
    #elif TARGET == POSTAL_2015
-      #define MULTIPLAYER_REMOVED
+      //#define MULTIPLAYER_REMOVED
       #define EDITOR_REMOVED
-      #define LOADLEVEL_REMOVED
-      #define START_MENU_ADDON_ITEM
+      //#define LOADLEVEL_REMOVED
+      //#define START_MENU_ADDON_ITEM
    #endif
 #endif
 
 // Turn off multiplayer on MacOSX/Linux...not worth it.  --ryan.
 //  This just takes it out of the menus...code is still compiled in.
 #if 1 //PLATFORM_UNIX
-    #define MULTIPLAYER_REMOVED
+    //#define MULTIPLAYER_REMOVED
    #define EDITOR_REMOVED
-    #define LOADLEVEL_REMOVED  // bleh, no file dialog thingey.  :/
+    //#define LOADLEVEL_REMOVED  // bleh, no file dialog thingey.  :/
 #endif
 
 

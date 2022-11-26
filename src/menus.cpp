@@ -584,6 +584,14 @@ static bool PlayOptionsChoice(   // Returns true to accept, false to deny choice
    Menu*   pmenuCurrent,           // Current menu.
    short sMenuItem);               // Item chosen.
 
+static short PlayerOptionsInit( // Returns 0 on success, non-zero to cancel menu.
+   Menu*   pmenuCur,            // Current menu.
+   short sInit);                // TRUE, if initializing; FALSE, if killing.
+
+static bool PlayerOptionsChoice(   // Returns true to accept, false to deny choice.
+   Menu*   pmenuCurrent,           // Current menu.
+   short sMenuItem);               // Item chosen.
+
 static short VideoOptionsInit(   // Returns 0 on success, non-zero to cancel menu.
    Menu*   pmenuCur,               // Current menu.
    short sInit);                   // TRUE, if initializing; FALSE, if killing.
@@ -824,7 +832,7 @@ extern Menu menuMain =
    },
 #else
    {     // pszText,                  sEnabled,   pmenu,            pgui
-      { g_pszMainMenu_Start,      TRUE,         &menuStartSingle /*menuStart*/,         NULL,       },
+      { g_pszMainMenu_Start,      TRUE,         &menuStart/*menuStart*/,         NULL,       },
       { g_pszMainMenu_Options,   TRUE,         &menuOptions,      NULL,         },
 
          #ifndef EDITOR_REMOVED
@@ -1268,6 +1276,7 @@ extern Menu menuOptions =
          g_pszOptionsMenu_Performance,  TRUE,       &menuFeatures,       NULL,
       },
       { g_pszOptionsMenu_Difficulty,   TRUE,         &menuPlayOptions,      NULL,   },
+      { "Player",   TRUE,         &menuPlayerOptions,      NULL,   },
       { g_pszOptionsMenu_Crosshair,   TRUE,         NULL,      NULL,   },
       { "",                              FALSE,      NULL,                  NULL,   },
       NULL                       // Terminates list.
@@ -1352,6 +1361,90 @@ extern Menu menuPlayOptions =
    {     // pszText,                              sEnabled,   pmenu,               pgui
       { g_pszDifficultyMenu_SetDifficulty,   TRUE,         NULL,                  NULL,            },
       { "",                                    FALSE,      NULL,                  NULL,            },
+      NULL                       // Terminates list.
+   },
+};
+
+// Multiplayer options menu.
+extern Menu menuPlayerOptions =
+{
+   PLAYEROPTIONS_MENU_ID,
+
+   // Position info.
+   {     // x, y, w, h, sPosX, sPosY, sItemSpacingY, sIndicatorSpacingX,
+      MENU_RECT_MD,              // menu x, y, w, h
+      -60,                       // menu header x offset
+      MENU_HEAD_Y_MD,            // menu header y offset
+      MENU_ITEM_X_MD,            // menu items x offset
+      MENU_ITEM_Y_MD,            // menu items y offset
+      MENU_ITEM_SPACE_Y_MD,      // vertical space between menu items
+      MENU_ITEM_IND_SPACE_X_MD,  // horizontal space between indicator and menu items
+   },
+
+   // Background info.
+   {     // pszFile, u32BackColor
+      MENU_BG_MD,
+      MENU_BG_COLOR,    // Background color.
+      PAL_SET_START,    // Starting palette index to set.
+      PAL_SET_NUM,      // Number of entries to set.
+      PAL_MAP_START,    // Starting index of palette entries that can be mapped to.
+      PAL_MAP_NUM,      // Number of palette entries that can be mapped to.
+   },
+
+   // GUI settings.
+   {     // sTransparent.
+      TRUE,    // TRUE if GUI is to be BLiT with transparency.
+   },
+
+   // Flags.
+   (MenuFlags)(MenuPosCenter | MenuBackTiled | MenuItemTextShadow | MenuHeaderTextShadow | MenuHeaderTextCenter | MenuColumnizeGuis),
+
+   // Header and its font info.
+   {     // pszHeaderText, pszFontFile, sHeight, u32ForeColor, u32BackColor, u32ShadowColor.
+      "Player",
+      SMASH_FONT,
+      HEAD_FONT_HEIGHT, // Height of font.
+      HEAD_COLOR,       // Text RGBA.
+      HEAD_SHADOW_COLOR // Text Shadow RGBA.
+   },
+
+   // Font info.
+   {     // pszFile, sHeight, u32ForeColor, u32BackColor, u32ShadowColor
+      SMASH_FONT,
+      ITEM_FONT_HEIGHT, // Height of font.
+      ITEM_COLOR,       // Text RGBA.
+      ITEM_SHADOW_COLOR // Text Shadow RGBA.
+   },
+
+   // Menu indicator.
+   {     // pszFile, type
+      MENU_INDICATOR,
+      RImage::FSPR8,
+   },
+
+   // Menu callbacks.
+   {     // fnInit, fnChoice,
+      PlayerOptionsInit,    // Called before menu is initialized.
+      PlayerOptionsChoice,  // Called when item is chosen.
+   },
+
+   // Menu auto items.
+   {     // sDefaultItem, sCancelItem,
+      0,    // Menu item (index in ami[]) selected initially.
+            // Negative indicates distance from number of items
+            // (e.g., -1 is the last item).
+      -1,   // Menu item (index in ami[]) chosen on cancel.
+            // Negative indicates distance from number of items
+            // (e.g., -1 is the last item).
+   },
+
+   // Menu items.
+   {     // pszText,            sEnabled,   pmenu,         pgui
+      { g_pszMultiplayerSetupMenu_Name,         TRUE,         NULL,            NULL,   },
+      { g_pszMultiplayerSetupMenu_Color,         TRUE,         NULL,            NULL, },
+      //{ g_pszMultiplayerSetupMenu_Protocol,      TRUE,         NULL,            NULL,   },
+      //{ g_pszMultiplayerSetupMenu_Connection,   TRUE,         NULL,            NULL,   },
+      { "",                                       FALSE,      NULL,            NULL,   },
       NULL                       // Terminates list.
    },
 };
@@ -3043,8 +3136,8 @@ extern Menu menuMultiOptions =
 
    // Menu items.
    {     // pszText,            sEnabled,   pmenu,         pgui
-      { g_pszMultiplayerSetupMenu_Name,         TRUE,         NULL,            NULL,   },
-      { g_pszMultiplayerSetupMenu_Color,         TRUE,         NULL,            NULL, },
+      //{ g_pszMultiplayerSetupMenu_Name,         TRUE,         NULL,            NULL,   },
+      //{ g_pszMultiplayerSetupMenu_Color,         TRUE,         NULL,            NULL, },
       { g_pszMultiplayerSetupMenu_Protocol,      TRUE,         NULL,            NULL,   },
       { g_pszMultiplayerSetupMenu_Connection,   TRUE,         NULL,            NULL,   },
       { "",                                       FALSE,      NULL,            NULL,   },
@@ -3543,9 +3636,9 @@ static short OptionsInit(     // Returns 0 on success, non-zero to cancel menu.
    if (sInit != FALSE)
    {
 #ifndef MULTIPLAYER_REMOVED
-      short sMenuItem = 5;
+      short sMenuItem = 6;
 #else
-      short sMenuItem   = 4;
+      short sMenuItem   = 5;
 #endif
 
       RMultiBtn**   ppmb   = (RMultiBtn**)&(pmenuCur->ami[sMenuItem++].pgui);
@@ -3598,9 +3691,9 @@ static bool OptionsChoice(    // Returns true to accept, false to deny choice.
    switch (sMenuItem)
    {
 #ifndef MULTIPLAYER_REMOVED
-   case 5:
+   case 6:
 #else
-   case 4:
+   case 5:
 #endif
    {
       // Toggle 'Use Joystick'.
@@ -3684,6 +3777,139 @@ static bool PlayOptionsChoice(   // Returns true to accept, false to deny choice
    short sMenuItem)                // Item chosen or -1 for change of focus.
 {
    bool bAcceptChoice  = true;   // Assume accepting.
+
+   // Audible Feedback.
+   if (sMenuItem == -1)
+      PlaySample(g_smidMenuItemChange, SampleMaster::UserFeedBack);
+   else
+      PlaySample(g_smidMenuItemSelect, SampleMaster::UserFeedBack);
+
+   return bAcceptChoice;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Called to init or kill the player options menu.
+//
+////////////////////////////////////////////////////////////////////////////////
+static short PlayerOptionsInit(   // Returns 0 on success, non-zero to cancel menu.
+   Menu*   pmenuCur,               // Current menu.
+   short sInit)                    // TRUE, if initializing; FALSE, if killing.
+{
+   short sRes   = 0;    // Assume success.
+
+   if (sInit != FALSE)
+   {
+      RGuiItem::ms_print.SetFont(DEFAULT_GUI_FONT_HEIGHT, &g_fontPostal);
+
+      if (rspGetResource(&g_resmgrShell, PLAYER_NAME_GUI_FILE, &ms_peditName) == 0)
+      {
+         // Set the text from the INI setting.  Note that we are changing a resource!
+         ms_peditName->m_sMaxText = Net::MaxPlayerNameSize - 1;
+         ms_peditName->SetText("%s", g_GameSettings.m_szPlayerName);
+         ms_peditName->Compose();
+
+         // Let menu know about it.
+         pmenuCur->ami[0].pgui   = ms_peditName;
+
+         // If any errors occurred after getting resource, this function will be
+         // called with sInit == FALSE.
+      }
+      else
+      {
+         TRACE("PlayerOptionsInit(): rspGetResource() failed.\n");
+         sRes   = 1;
+      }
+
+      if (rspGetResource(&g_resmgrShell, PLAYER_COLOR_GUI_FILE, &ms_ptxtColor) == 0)
+      {
+         // Keep in bounds just in case (anyone could type any number into the INI) . . .
+         if (   g_GameSettings.m_sPlayerColorIndex >= CGameSettings::ms_sNumPlayerColorDescriptions
+                ||   g_GameSettings.m_sPlayerColorIndex >= CDude::MaxTextures
+                || g_GameSettings.m_sPlayerColorIndex < 0)
+         {
+            g_GameSettings.m_sPlayerColorIndex   = 0;
+         }
+
+         // Set the text from the INI setting. Note that we are changing a
+         // resource!
+         ms_ptxtColor->SetText("%s", CGameSettings::ms_apszPlayerColorDescriptions[g_GameSettings.m_sPlayerColorIndex]);
+         ms_ptxtColor->Compose();
+
+         pmenuCur->ami[1].pgui   = ms_ptxtColor;
+      }
+      else
+      {
+         TRACE("PlayerOptionsInit(): rspGetResource() failed.\n");
+         sRes   = 2;
+      }
+   }
+   else
+   {
+      if (ms_peditName != NULL)
+      {
+         // Get the player name for storage purposes.
+         ms_peditName->GetText(g_GameSettings.m_szPlayerName, sizeof(g_GameSettings.m_szPlayerName) );
+
+         // Release resource.
+         rspReleaseResource(&g_resmgrShell, &ms_peditName);
+
+         // Clear menu's pointer.
+         pmenuCur->ami[0].pgui   = NULL;
+      }
+
+      if (ms_ptxtColor != NULL)
+      {
+         // Release resource.
+         rspReleaseResource(&g_resmgrShell, &ms_ptxtColor);
+
+         // Clear menu's pointer.
+         pmenuCur->ami[1].pgui   = NULL;
+      }
+   }
+
+   return sRes;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Called when a choice is made or changed on the multiplayer options menu.
+//
+////////////////////////////////////////////////////////////////////////////////
+static bool PlayerOptionsChoice(  // Returns true to accept, false to deny choice.
+   Menu*   pmenuCur,               // Current menu.
+   short sMenuItem)                // Item chosen.
+{
+   bool bAcceptChoice  = true;   // Assume accepting.
+
+   // Toggle the protocol to the next one in the list
+   switch (sMenuItem)
+   {
+   case 1:
+      // Increment and check to make sure we have a description and we have such a color . . .
+      g_GameSettings.m_sPlayerColorIndex++;
+      if (   g_GameSettings.m_sPlayerColorIndex >= CGameSettings::ms_sNumPlayerColorDescriptions
+             ||   g_GameSettings.m_sPlayerColorIndex >= CDude::MaxTextures)
+      {
+         g_GameSettings.m_sPlayerColorIndex   = 0;
+      }
+
+      // Set the text from the INI setting. Note that we are changing a
+      // resource!
+      ms_ptxtColor->SetText("%s", CGameSettings::ms_apszPlayerColorDescriptions[g_GameSettings.m_sPlayerColorIndex]);
+      ms_ptxtColor->Compose();
+      break;
+   case 2:
+      if (ms_ptxtProto != NULL)
+      {
+         g_GameSettings.m_usProtocol++;
+         if (g_GameSettings.m_usProtocol >= RSocket::NumProtocols)
+            g_GameSettings.m_usProtocol = RSocket::FirstProtocol;
+         ms_ptxtProto->SetText("%s", RSocket::GetProtoName((RSocket::ProtoType)g_GameSettings.m_usProtocol));
+         ms_ptxtProto->Compose();
+      }
+      break;
+   }
 
    // Audible Feedback.
    if (sMenuItem == -1)
@@ -4304,48 +4530,6 @@ static short MultiOptionsInit(   // Returns 0 on success, non-zero to cancel men
    {
       RGuiItem::ms_print.SetFont(DEFAULT_GUI_FONT_HEIGHT, &g_fontPostal);
 
-      if (rspGetResource(&g_resmgrShell, PLAYER_NAME_GUI_FILE, &ms_peditName) == 0)
-      {
-         // Set the text from the INI setting.  Note that we are changing a resource!
-         ms_peditName->m_sMaxText = Net::MaxPlayerNameSize - 1;
-         ms_peditName->SetText("%s", g_GameSettings.m_szPlayerName);
-         ms_peditName->Compose();
-
-         // Let menu know about it.
-         pmenuCur->ami[0].pgui   = ms_peditName;
-
-         // If any errors occurred after getting resource, this function will be
-         // called with sInit == FALSE.
-      }
-      else
-      {
-         TRACE("MultiOptionsInit(): rspGetResource() failed.\n");
-         sRes   = 1;
-      }
-
-      if (rspGetResource(&g_resmgrShell, PLAYER_COLOR_GUI_FILE, &ms_ptxtColor) == 0)
-      {
-         // Keep in bounds just in case (anyone could type any number into the INI) . . .
-         if (   g_GameSettings.m_sPlayerColorIndex >= CGameSettings::ms_sNumPlayerColorDescriptions
-                ||   g_GameSettings.m_sPlayerColorIndex >= CDude::MaxTextures
-                || g_GameSettings.m_sPlayerColorIndex < 0)
-         {
-            g_GameSettings.m_sPlayerColorIndex   = 0;
-         }
-
-         // Set the text from the INI setting. Note that we are changing a
-         // resource!
-         ms_ptxtColor->SetText("%s", CGameSettings::ms_apszPlayerColorDescriptions[g_GameSettings.m_sPlayerColorIndex]);
-         ms_ptxtColor->Compose();
-
-         pmenuCur->ami[1].pgui   = ms_ptxtColor;
-      }
-      else
-      {
-         TRACE("MultiOptionsInit(): rspGetResource() failed.\n");
-         sRes   = 2;
-      }
-
       if (rspGetResource(&g_resmgrShell, NET_PROTO_GUI_FILE, &ms_ptxtProto) == 0)
       {
          // Set the text from the INI setting.  Note that we are changing a
@@ -4353,7 +4537,7 @@ static short MultiOptionsInit(   // Returns 0 on success, non-zero to cancel men
          ms_ptxtProto->SetText("%s", RSocket::GetProtoName((RSocket::ProtoType)g_GameSettings.m_usProtocol));
          ms_ptxtProto->Compose();
 
-         pmenuCur->ami[2].pgui   = ms_ptxtProto;
+         pmenuCur->ami[0].pgui   = ms_ptxtProto;
       }
       else
       {
@@ -4371,7 +4555,7 @@ static short MultiOptionsInit(   // Returns 0 on success, non-zero to cancel men
          ms_ptxtBandwidth->SetText("%s", Net::BandwidthText[g_GameSettings.m_sNetBandwidth]);
          ms_ptxtBandwidth->Compose();
 
-         pmenuCur->ami[3].pgui   = ms_ptxtBandwidth;
+         pmenuCur->ami[1].pgui   = ms_ptxtBandwidth;
       }
       else
       {
@@ -4381,34 +4565,13 @@ static short MultiOptionsInit(   // Returns 0 on success, non-zero to cancel men
    }
    else
    {
-      if (ms_peditName != NULL)
-      {
-         // Get the player name for storage purposes.
-         ms_peditName->GetText(g_GameSettings.m_szPlayerName, sizeof(g_GameSettings.m_szPlayerName) );
-
-         // Release resource.
-         rspReleaseResource(&g_resmgrShell, &ms_peditName);
-
-         // Clear menu's pointer.
-         pmenuCur->ami[0].pgui   = NULL;
-      }
-
-      if (ms_ptxtColor != NULL)
-      {
-         // Release resource.
-         rspReleaseResource(&g_resmgrShell, &ms_ptxtColor);
-
-         // Clear menu's pointer.
-         pmenuCur->ami[1].pgui   = NULL;
-      }
-
       if (ms_ptxtProto)
       {
          // Release resource.
          rspReleaseResource(&g_resmgrShell, &ms_ptxtProto);
 
          // Clear menu's pointer.
-         pmenuCur->ami[2].pgui   = NULL;
+         pmenuCur->ami[0].pgui   = NULL;
       }
 
       if (ms_ptxtBandwidth)
@@ -4417,7 +4580,7 @@ static short MultiOptionsInit(   // Returns 0 on success, non-zero to cancel men
          rspReleaseResource(&g_resmgrShell, &ms_ptxtBandwidth);
 
          // Clear menu's pointer.
-         pmenuCur->ami[3].pgui   = NULL;
+         pmenuCur->ami[1].pgui   = NULL;
       }
    }
 
@@ -4438,21 +4601,7 @@ static bool MultiOptionsChoice(  // Returns true to accept, false to deny choice
    // Toggle the protocol to the next one in the list
    switch (sMenuItem)
    {
-   case 1:
-      // Increment and check to make sure we have a description and we have such a color . . .
-      g_GameSettings.m_sPlayerColorIndex++;
-      if (   g_GameSettings.m_sPlayerColorIndex >= CGameSettings::ms_sNumPlayerColorDescriptions
-             ||   g_GameSettings.m_sPlayerColorIndex >= CDude::MaxTextures)
-      {
-         g_GameSettings.m_sPlayerColorIndex   = 0;
-      }
-
-      // Set the text from the INI setting. Note that we are changing a
-      // resource!
-      ms_ptxtColor->SetText("%s", CGameSettings::ms_apszPlayerColorDescriptions[g_GameSettings.m_sPlayerColorIndex]);
-      ms_ptxtColor->Compose();
-      break;
-   case 2:
+   case 0:
       if (ms_ptxtProto != NULL)
       {
          g_GameSettings.m_usProtocol++;
@@ -4462,7 +4611,7 @@ static bool MultiOptionsChoice(  // Returns true to accept, false to deny choice
          ms_ptxtProto->Compose();
       }
       break;
-   case 3:
+   case 1:
       if (ms_ptxtBandwidth)
       {
          g_GameSettings.m_sNetBandwidth = (Net::Bandwidth)(g_GameSettings.m_sNetBandwidth + 1);
