@@ -671,7 +671,7 @@ extern short rspSetVideoMode( // Returns 0 if successfull, non-zero otherwise
    for (size_t i = 0; i < 256; i++)
       apeApp[i].a = 0xFF;
 
-   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
    if (sPixelDoubling)
    {
