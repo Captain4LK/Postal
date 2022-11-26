@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -421,7 +421,7 @@ short RPal::SetData(void* pUserData)
 //      the detached palette buffer.  Then the original RPal can
 //      create a new buffer to accept the converted data.  When the
 //      conversion function is finished it can delete the RPal it
-//      created and aS32 with it, the data.
+//      created and along with it, the data.
 //
 // Parameters:
 //      none
@@ -675,7 +675,7 @@ short RPal::Load(RFile* pcf)
 //      then this will fail for unsupported types.
 //
 //      At some point, if alpha info becomes more prevalent, an overloaded
-//      version of this function should be created to supply alpha info aS32
+//      version of this function should be created to supply alpha info along
 //      with red/green/blue info.  This functionality was momentarily built into
 //    this function, but was quickly removed when it became obvious that it
 //      would slow things down in cases where there was no alpha info, or more
@@ -830,7 +830,7 @@ short RPal::GetEntries(
 //      then this will fail for unsupported types.
 //
 //      At some point, if alpha info becomes more prevalent, an overloaded
-//      version of this function should be created to supply alpha info aS32
+//      version of this function should be created to supply alpha info along
 //      with red/green/blue info.  This functionality was momentarily built into
 //    this function, but was quickly removed when it became obvious that it
 //      would slow things down in cases where there was no alpha info, or more

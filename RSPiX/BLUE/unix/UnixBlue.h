@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -177,7 +177,7 @@ extern void rspSetMouseCursorShowLevel(
    short sLevel);                                  // In:  New cursor level
 
 // Global variables for setting maximum mouse movement between two events,
-// beyond which they would no S32er be considered double-clicks.  These are
+// beyond which they would no longer be considered double-clicks.  These are
 // set by this module to reasonable values, but an application CAN change
 // them.  This is, however, a MAC-SPECIFIC EXTENSION, so user beware!
 extern short mMouseDoubleClickX;
@@ -310,7 +310,7 @@ typedef struct
 extern void rspUpdateJoy(
    short sJoy);      // In:  Joystick to query.
 
-// Puts the coordinates of joystick sJoy's position in your S32s.
+// Puts the coordinates of joystick sJoy's position in your longs.
 // This function returns directions in an analog format (0..0xFFFF).
 extern void rspGetJoyPos(
    short sJoy,             // In:  Joystick to query.
@@ -325,7 +325,7 @@ extern void rspGetJoyPos(
    short sJoy,             // In:  Joystick to query.
    RJoyPos* pjoypos);      // In:  Joystick positions for all axes.
 
-// Puts the coordinates of the previous joystick sJoy's position in your S32s.
+// Puts the coordinates of the previous joystick sJoy's position in your longs.
 // This function returns directions in an analog format (0..0xFFFF).
 extern void rspGetJoyPrevPos(
    short sJoy,             // In:  Joystick to query.

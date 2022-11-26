@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -30,7 +30,7 @@
 //                     GUI could still use a little cleaning up.
 //
 //      05/26/97   JMI   Removed case for NetMsg::DuplicateName in reason
-//                     for JoinDeny message (it no S32er exists).
+//                     for JoinDeny message (it no longer exists).
 //
 //      05/26/97   JMI   Added sending and receiving of START_REALM.
 //                     Removed psNumPlayers and psMyPlayerNum parameters.
@@ -375,7 +375,7 @@
 // Client-specific messages displayed in client dialog's status area
 char* g_pszClientStat_NameTooLongForChat      = "Name too S32, can't chat";
 char* g_pszClientStat_YouWereDropped         = "Connection was lost";
-char* g_pszClientStat_SomeoneDropped_s         = "\"%s\" is no S32er connected";
+char* g_pszClientStat_SomeoneDropped_s         = "\"%s\" is no longer connected";
 char* g_pszClientStat_ServerAborted            = "Game aborted";
 char* g_pszClientStat_ServerStarted            = "Starting game";
 char* g_pszClientStat_Opened                  = "Opened connection";

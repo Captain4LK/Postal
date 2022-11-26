@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -41,7 +41,7 @@
 //      liquid fire) )
 //  - at least 1 canister fluid fuel (e.g., from flame thrower) (more provides
 //      greater distance).
-//  - at least 1 grenade (more provides greater explosive power over S32er
+//  - at least 1 grenade (more provides greater explosive power over longer
 //      distances).
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    short sResult = 0;

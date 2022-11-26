@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -157,7 +157,7 @@ public:
 public:
 // Construct mine object.
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew,                                    // Out: Pointer to new object
    ClassIDType id)                                    // In:  ID of mine to construct.
 {
@@ -173,7 +173,7 @@ static short Construct(                               // Returns 0 if successful
 
 // Construct proximity mine object.
 static short ConstructProximity(                      // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    return Construct(pRealm, ppNew, CProximityMineID);
@@ -181,7 +181,7 @@ static short ConstructProximity(                      // Returns 0 if successful
 
 // Construct timed mine object.
 static short ConstructTimed(                          // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    return Construct(pRealm, ppNew, CTimedMineID);
@@ -189,7 +189,7 @@ static short ConstructTimed(                          // Returns 0 if successful
 
 // Construct bouncing betty mine object.
 static short ConstructBouncingBetty(                  // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    return Construct(pRealm, ppNew, CBouncingBettyMineID);
@@ -197,7 +197,7 @@ static short ConstructBouncingBetty(                  // Returns 0 if successful
 
 // Construct remote control mine object.
 static short ConstructRemoteControl(                  // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    return Construct(pRealm, ppNew, CRemoteControlMineID);

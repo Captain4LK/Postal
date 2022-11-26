@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -35,7 +35,7 @@
 //                     collide with anything (I guess it might've collided with
 //                     things hovering around the upper, left corner of the realm).
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/11/97 BRH   Passed on shooter ID to the message it sends when it burns

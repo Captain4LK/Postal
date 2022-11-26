@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -64,7 +64,7 @@
 //                     SoundInstance ptr to specify a volume.
 //
 //      07/21/97 BRH   Changed the burning state so that the ostrich will burn
-//                     S32er.
+//                     longer.
 //
 //      08/06/97 BRH   Changed smash bits to zero when dying starts so that things
 //                     won't hit him as he falls slowly, and so you can shoot

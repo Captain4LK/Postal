@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -134,9 +134,9 @@
 // the socket becomes unusable.  It would be good if this could be done in some
 // way as to be transparent to the app.  Then again, that might not make sense,
 // because if certain operations are cancelled, it might make sense that the
-// socket is unusable.  I'm no S32er sure this is really necessary.  I think
+// socket is unusable.  I'm no longer sure this is really necessary.  I think
 // the general implication should be that any time a function fails, you can
-// no S32er use that socket, whether it failed because it was aborted or for
+// no longer use that socket, whether it failed because it was aborted or for
 // some other reason.
 //
 // Check into how connections are currently being terminated.  Simply calling

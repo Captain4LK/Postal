@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -39,7 +39,7 @@
 // data compression, but around the sheer speed of assembly blitting.
 // In short, the compression op codes are designed to have the fastest
 // decoding possible.  In emprical testing, this FSP8 format outperformed
-// five other more "advanced" algorithms which took S32er to read their
+// five other more "advanced" algorithms which took longer to read their
 // OP-CODES.  It provides semi-random access by compressing scan lines as
 // autonomous units, which makes things like clipping much, much faster.
 //***************************************************************************
@@ -272,9 +272,6 @@ NextCode3:
 
       goto NextCode3;
    }
-   //for(int i = 0;i<pImage->m_sWidth*pImage->m_sHeight;i++)
-      //printf("%d,",pImage->m_pData[i]);
-   //puts("");
    //==============================================================
    // Now finish your job:
    //

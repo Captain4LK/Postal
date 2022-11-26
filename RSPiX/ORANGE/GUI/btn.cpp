@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -45,7 +45,7 @@
 //
 //      01/01/96   JMI   HotCall() now calls the base class to do what it used
 //                     to with the exception of the one thing it still does --
-//                     Compose().  Also, Compose() no S32er sets hot area
+//                     Compose().  Also, Compose() no longer sets hot area
 //                     (now done by base class).
 //
 //      01/04/96   JMI   Upgraded HotCall() to new CursorEvent().  This upgrade

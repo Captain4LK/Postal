@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -629,7 +629,7 @@ short RLaymage::SetChannelPointer(short sNumLayers, RFile* pcfChannel)
 
       for (sLayer = 0; sLayer < sNumLayers; sLayer++)
       {
-         // Skip over 4 S32s of layer bounding rectangle
+         // Skip over 4 longs of layer bounding rectangle
          pcfChannel->Seek(16, SEEK_CUR);
 
          pcfChannel->Read(&usNumChannels);
@@ -1506,7 +1506,7 @@ short RLaymage::GetLayerName(short sLayer, char* pszNameBuffer)
 // FreeLayerArrays
 //
 // Description:
-//      Frees the array of pointers to RImage and layer names aS32
+//      Frees the array of pointers to RImage and layer names along
 //      with the things they were pointing to.  This is called to
 //      clean up the memory either by the destructor or if a new
 //      file is set or loaded.

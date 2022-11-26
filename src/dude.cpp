@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -148,7 +148,7 @@
 //
 //      02/24/97   JMI   Better blood splat and added blood pool.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      02/24/97   JMI   Now State_Damage cannot interrupt State_Damage which looks
@@ -165,7 +165,7 @@
 //      02/24/97   JMI   Changed reference to CAnimThing's m_pthingSendMsg member to
 //                     m_u16IdSendMsg.
 //
-//      02/24/97   JMI   No S32er bleeds due to fire.
+//      02/24/97   JMI   No longer bleeds due to fire.
 //
 //      02/25/97   JMI   Added new burning yell sound.
 //
@@ -219,19 +219,19 @@
 //
 //      03/05/97   JMI   Removed ReleaseWeapon() now uses CCharacter::ShootWeapon().
 //
-//      03/05/97   JMI   m_pWeapon no S32er referenced.
+//      03/05/97   JMI   m_pWeapon no longer referenced.
 //                     Uses new multishot animation for when he's been shot.
 //
 //      03/05/97   JMI   Removed ms_apt3dAttribCheck (these points are now stored
 //                     and checked in CCharacer).
 //                     Added Suicide.
 //
-//      03/06/97   JMI   Drag no S32er gets set to zero when velocity reaches zero
+//      03/06/97   JMI   Drag no longer gets set to zero when velocity reaches zero
 //                     by this class (now handled by base class).
 //                     Added override to OnSuicideMsg().
 //                     Added a little fudge to BrainSplat location.
 //
-//      03/06/97   JMI   No S32er does hack to get ID from m_pWeapon since the base
+//      03/06/97   JMI   No longer does hack to get ID from m_pWeapon since the base
 //                     class now stores the ID in m_u16IdWeapon (and does not
 //                     rely on m_pWeapon to reference the weapon).
 //
@@ -240,7 +240,7 @@
 //      03/06/97   JMI   Changed fudge factor delay for suicide brain splat to
 //                     1400 ms (was 700 ms).
 //
-//      03/06/97   JMI   User can no S32er influence velocity when dude is being
+//      03/06/97   JMI   User can no longer influence velocity when dude is being
 //                     shot.
 //
 //      03/13/97   JMI   Added EditModify() member function.
@@ -289,7 +289,7 @@
 //      03/27/97   JMI   Timing for blown up animation was being done through the
 //                     rigid body transform for some unknown reason.  Fixed.
 //
-//      03/27/97   JMI   Can no S32er move forward when ducking, exploding,
+//      03/27/97   JMI   Can no longer move forward when ducking, exploding,
 //                     or getting up from explosion.
 //
 //      03/28/97   JMI   Now dude will enter the blown up animation, even if he is
@@ -367,7 +367,7 @@
 //                     currently cached scale for the g_fontBig.
 //                     Also, disabled jump for current demo for GT.
 //
-//      04/22/97   JMI   Dude can no S32er get up after dying.
+//      04/22/97   JMI   Dude can no longer get up after dying.
 //
 //      04/23/97   JMI   Now just uses a test version of IsPathClear().
 //
@@ -384,7 +384,7 @@
 //
 //      04/25/97   JMI   Added a state for executing dudes.
 //
-//      04/25/97   JMI   Can no S32er move forward or back or turn while executing.
+//      04/25/97   JMI   Can no longer move forward or back or turn while executing.
 //
 //      04/25/97   JMI   Added flame thrower weapon support.  Required fuel ammo
 //                     info and special case on release of flamage.
@@ -550,7 +550,7 @@
 //                     him responding to things that happened in his old location
 //                     (i.e., his location before he warped in).
 //                     Removed m_inputLast and m_lLastWeaponChangeTime which are
-//                     no S32er necessary now that we can use the auto-repeat
+//                     no longer necessary now that we can use the auto-repeat
 //                     feature with the new event driven rspGetKeyStatusArray()
 //                     used by input.cpp.
 //                     Added idle animation components.
@@ -612,7 +612,7 @@
 //      06/14/97   JMI   Now picks up powerups when you run over them.
 //
 //      06/15/97   JMI   Now minimizes total stockpile after adding in powerups.
-//                     Now initializes stockpiles since CStockPile no S32er has
+//                     Now initializes stockpiles since CStockPile no longer has
 //                     a constructor (I wanted it to be aggregatable).
 //
 //      06/16/97   JMI   Now plays a sound when his torso hits the ground when dying.
@@ -672,7 +672,7 @@
 //                     ms_apszAmmoNames[] now contain the sprintf format
 //                     specifiers to provide greater to control to each type over
 //                     whether to display a number and/or where to display it.
-//                     The machine gun no S32er uses up bullets.  So, once you
+//                     The machine gun no longer uses up bullets.  So, once you
 //                     have bullets, you never run out.
 //                     Now hitting the rocket key while the rocket is selected
 //                     switches to heatseekers and vice-versa.
@@ -686,7 +686,7 @@
 //
 //      06/26/97   JMI   Now handles throw weapons the same way launch weapons are
 //                     handled when leaving the animation early.  That is, they
-//                     no S32er drop, but, instead, just get deleted via a
+//                     no longer drop, but, instead, just get deleted via a
 //                     message.
 //
 //      06/26/97   JMI   Re-activated foot step sound.
@@ -771,7 +771,7 @@
 //                     ArmWeapon() and ShootWeapon().
 //
 //      07/15/97   JMI   Moved CDude() and ~CDude() from dude.h to dude.cpp.
-//                     Also, ShootWeapon() no S32er checks for out of fuel con-
+//                     Also, ShootWeapon() no longer checks for out of fuel con-
 //                     dition as this is done in ArmWeapon().
 //
 //      07/15/97   JMI   Now dude will leave portions of powerups that he doesn't
@@ -936,7 +936,7 @@
 //                     Added release of backpack anim in FreeResources().
 //
 //      08/08/97   JMI   Now that CCharacter handles flamer noise, this class now
-//                     S32er has to (and doesn't).
+//                     longer has to (and doesn't).
 //
 //      08/08/97   JMI   Added TossPowerUp().
 //                     Also, changed TakePowerup() to TakePowerUp().
@@ -1034,7 +1034,7 @@
 //      08/18/97   JMI   Changed Revive() to call DeadRender3D() (which used to be
 //                     known/called as just another Render() overload).
 //
-//      08/19/97   JMI   No S32er shoots CSmash::Misc items.
+//      08/19/97   JMI   No longer shoots CSmash::Misc items.
 //
 //      08/24/97 BRH   Forwards the burn message to the child flag so that it
 //                     can react.  Before he was dropping the flag when blown up
@@ -4394,7 +4394,7 @@ void CDude::Update(void)
             if (stateOld != State_Jump)
             {
 //               m_panimCur   = &m_animJump;
-               ASSERT(0);  // No S32er a valid state.
+               ASSERT(0);  // No longer a valid state.
                m_lAnimTime   = 0;
                m_lAnimPrevUpdateTime   = m_pRealm->m_time.GetGameTime();
                // Clear trigger.
@@ -4405,7 +4405,7 @@ void CDude::Update(void)
             if (stateOld != State_JumpForward)
             {
 //               m_panimCur   = &m_animJumpForward;
-               ASSERT(0);  // No S32er a valid state.
+               ASSERT(0);  // No longer a valid state.
                m_lAnimTime   = 0;
                m_lAnimPrevUpdateTime   = m_pRealm->m_time.GetGameTime();
                // Clear trigger.
@@ -5304,7 +5304,7 @@ void CDude::Update(void)
 ////////////////////////////////////////////////////////////////////////////////
 // Implements one-time functionality for when a weapon is destroyed while
 // we were moving it (i.e., before we let go or ShootWeapon()'ed it).
-// This can occur when a weapon, while traveling aS32 our rigid body,
+// This can occur when a weapon, while traveling along our rigid body,
 // enters terrain.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual (overridden here).

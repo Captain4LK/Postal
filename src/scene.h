@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -32,7 +32,7 @@
 //                     contained, to the base class.
 //
 //      02/07/97   JMI   Now the scene has its own pipeline and CSprite3 does not.
-//                     B/c of this we no S32er needed the m_transWorld, b/c we
+//                     B/c of this we no longer needed the m_transWorld, b/c we
 //                     could incorporate it right into the view.
 //                     Also, removed m_ppipe from CSprite3 and added m_sRadius
 //                     so the X Ray logic could do correct collision between
@@ -183,7 +183,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // HERE ARE GLOBAL LIGHTING MACROS FOR YOUR ENJOYMENT!
-// They are noS32er constant, as the user may adjust them.
+// They are nolonger constant, as the user may adjust them.
 //
 // NOTE: ONLY THE MENU MAY ADJUST THESE VALUES
 // 3d objects may need to use gsGlobalBrightnessPerLightAttribute for calculation

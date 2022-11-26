@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -36,7 +36,7 @@
 //      03/14/97   JMI   Now, under Win32, gets value from INI indicating whether to
 //                     manage Windows' GUI components when the screen is resized.
 //
-//      03/24/97   JMI   No S32er exits if SetMode() fails.  This allows the game
+//      03/24/97   JMI   No longer exits if SetMode() fails.  This allows the game
 //                     to be played on systems without sound cards.
 //
 //      04/14/97   JMI   Now uses zeroinit flag to SmartHeap.
@@ -113,7 +113,7 @@
 //
 //      01/05/98   JMI   Now the MixBits var defaults to 16.
 //
-//      01/21/98   JMI   No S32er plays movie regardless of OS or INI setting.
+//      01/21/98   JMI   No longer plays movie regardless of OS or INI setting.
 //
 ////////////////////////////////////////////////////////////////////////////////
 #define MAIN_CPP

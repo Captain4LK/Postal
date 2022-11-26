@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -46,7 +46,7 @@
 //                     functionality to EditRender so that the Bouys are not
 //                     drawn during game play but only in the editor.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      03/06/97 BRH   Changed to the new calling of Ping which doesn't have the
@@ -94,7 +94,7 @@
 //      05/01/97 BRH   Removed messages for logic suggestions and put those
 //                     into the CPylon class instead.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/06/97 BRH   Freed three arrays used in BuildRouteTable that had
@@ -810,7 +810,7 @@ short CBouy::BuildRoutingTable(void)
                else
                {
                   // Else, its a child of a directly connected node, so find out which
-                  // one by tracing back aS32 the parent tree.
+                  // one by tracing back along the parent tree.
                   curr = j;
 
                   while (aParent[curr] != m_ucID)

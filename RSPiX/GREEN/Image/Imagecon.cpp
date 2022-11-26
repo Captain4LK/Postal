@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -140,7 +140,7 @@
 //
 //   11/06/96 MJR   Added "RImage::: before many instances of BMP8, BMP24, etc.
 //                  This was suddenly required because the IMAGELINKLATE macro
-//                  no S32er used the "using" syntax which had, as a side-effect,
+//                  no longer used the "using" syntax which had, as a side-effect,
 //                  allowed the use of the enums without a preceeding "RImage::".
 //
 //   11/08/96   JMI   Added more "RImage::"s where necessary in the #ifdef WIN32

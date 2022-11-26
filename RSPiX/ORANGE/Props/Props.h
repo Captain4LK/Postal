@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -25,7 +25,7 @@
 //      01/09/97   JMI   Removed #include <utility>.
 //
 //      01/14/97   JMI   Changed order of ItemType and KeyType in calls that
-//                     take both.  Also, RemoveProp() no S32er complains
+//                     take both.  Also, RemoveProp() no longer complains
 //                     about removing props that didn't exist.  Who really
 //                     wants to check if a prop exists before removing it?
 //

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -92,7 +92,7 @@
 //                     version number to increase will have more, less, or
 //                     different data to load that it cannot possibly know about.
 //
-//      03/25/97   JMI   Load() no S32er opens a SAK with the same title as the
+//      03/25/97   JMI   Load() no longer opens a SAK with the same title as the
 //                     .rlm file (This is now opened by the CHood).
 //
 //      04/09/97 BRH   Added RMultiGrid for the multi layer attribute maps, but
@@ -972,7 +972,7 @@ short CRealm::Load(                             // Returns 0 if successfull, non
 
                      // Load each object that was written to the file (could be 0!)
                      //Captain4LK: TODO fix the loading error here!
-                     for (short s = 0; (s < sCount) /*&& !sResult*/; s++)
+                     for (short s = 0; (s < sCount) && !sResult; s++)
                      {
 
                         // Read class ID of next object in file
@@ -1011,7 +1011,6 @@ short CRealm::Load(                             // Returns 0 if successfull, non
                               }
                               else
                               {
-                                 sResult = 0;
                                  TRACE("CRealm::Load(): Load() failed for thing of type %s; ",
                                        CThing::ms_aClassInfo[id].pszClassName);
                                  if (idLastThingLoaded != CThing::TotalIDs)
@@ -1251,7 +1250,7 @@ short CRealm::Startup(void)                     // Returns 0 if successfull, non
    // The idea is to only call Startup() for those objects that were Load()'ed,
    // and NOT for any other objects in the realm.  The m_sCallStartup flags are
    // set during the CRealm::Load() process to ensure that only those objects
-   // are called here.  I'm no S32er sure I like this idea, so perhaps we
+   // are called here.  I'm no longer sure I like this idea, so perhaps we
    // should do what Shutdown() does, which is to call Startup() for every
    // object.  The original reasoning was that once the game gets going, any
    // newly created objects will NOT have their Startup() called, so Startup()

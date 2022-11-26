@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -24,7 +24,7 @@
 //
 //      09/24/96   JMI   Changed all BLU_MB?_* macros to RSP_MB?_* macros.
 //
-//      10/02/96   JMI   No S32er checks ms_szText for NULL before calling
+//      10/02/96   JMI   No longer checks ms_szText for NULL before calling
 //                     m_print stuff and updating m_aptTextPos.
 //
 //      10/27/96 MJR   Fixed "unused variable" warnings.
@@ -57,7 +57,7 @@
 //      11/27/96   JMI   Added initialization of m_type to identify this type
 //                     of GUI item.
 //
-//      12/04/96   JMI   Do() can no S32er optionally poll for input, does not
+//      12/04/96   JMI   Do() can no longer optionally poll for input, does not
 //                     call rspGetKey(), and does not return that key.  Instead,
 //                     you pass the a pointer to the rspGetKeys() formatted key
 //                     you want Do() to process.  The key will be zeroed if it

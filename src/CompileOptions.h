@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -142,13 +142,13 @@
 // These macros should be set via the compiler preprocessor options.
 // They are described in detail in separate sections below.
 //
-// In general, any code that uses the TARGET and LOCALE macros should beS32
+// In general, any code that uses the TARGET and LOCALE macros should belong
 // to a project that defines those macros.  In that case, the code can
 // assume the macros are defined and set to valid values (there are tests
 // below to validate the macros).
 //
 // However, it is possible that a header file that uses TARGET or LOCALE
-// might be included by files beS32ing to a project that does NOT define
+// might be included by files belonging to a project that does NOT define
 // those macros.  In that case, the header should properly handle the case
 // where the macros are not defined. (For example: SampleMaster.h)
 //
@@ -552,7 +552,7 @@
 //
 // When CHECK_EXPIRATION_DATE is defined, the game will check to see whether
 // it has expired (according to the dates defined below) and if so, it will
-// no S32er play properly (all the characters will burst into flames shortly
+// no longer play properly (all the characters will burst into flames shortly
 // after the start of a level).
 //
 // If this feature is used, then you need to set the release and expiration

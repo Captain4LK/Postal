@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -512,7 +512,6 @@ short CSndRelay::Init(void)                     // Returns 0 if successfull, non
 
    if (m_sprite.m_pImage == 0)
    {
-      puts(m_pRealm->Make2dResPath(IMAGE_FILE));
       sResult = rspGetResource(&g_resmgrGame, m_pRealm->Make2dResPath(IMAGE_FILE), &m_sprite.m_pImage);
       if (sResult == 0)
       {

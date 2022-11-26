@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -56,7 +56,7 @@
 //
 //      03/14/97   JMI   SelectDude() now chooses the closest dude on the X/Z plane.
 //
-//      04/04/97   JMI   SelectDude() no S32er chooses dead dudes.
+//      04/04/97   JMI   SelectDude() no longer chooses dead dudes.
 //                     Also, last update to make SelectDude() find the closest
 //                     CDude was not comparing the distance to the CDude from this
 //                     guy, but instead was comparing the distance to the CDude from
@@ -267,7 +267,7 @@
 //      08/07/97   JMI   Added ms_awdWeapons[], ms_apszWeaponResNames[], and
 //                     GetResources() and FreeResources() for loading these anims.
 //                     Also, added ms_lWeaponResRefCount so we could know when the
-//                     weapons were no S32er needed.
+//                     weapons were no longer needed.
 //
 //      08/08/97   JMI   Now Logic_Shoot() handles flamer.
 //
@@ -373,7 +373,7 @@
 //
 //      08/19/97   JMI   Now sends doofuses who are dying to the back as well.
 //
-//      08/19/97   JMI   No S32er shoots CSmash::Misc items.
+//      08/19/97   JMI   No longer shoots CSmash::Misc items.
 //
 //      08/20/97   JMI   Now Logic_Shot() does not wait to the end of the animation
 //                     to check for death.  This way they don't seem to kick back
@@ -1782,7 +1782,7 @@ void CDoofus::Logic_Die(void)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logic_Writhing - Rolling around on the ground in pain, waiting to be
-//                    executed or until the pain is no S32er tolerable.
+//                    executed or until the pain is no longer tolerable.
 ////////////////////////////////////////////////////////////////////////////////
 
 void CDoofus::Logic_Writhing(void)

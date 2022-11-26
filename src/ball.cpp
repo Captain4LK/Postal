@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -57,7 +57,7 @@
 //
 //      02/24/97   JMI   AdjustPosVel() now uses default param (gravity).
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      03/06/97   JMI   Upgraded to current rspMod360 usage.

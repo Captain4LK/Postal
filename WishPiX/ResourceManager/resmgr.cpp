@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -106,7 +106,7 @@
 //                     To make this generic resource interface
 //                     possible, CResourceBlock had to be modified to
 //                     include pointers to Create, Destroy, Load, and
-//                     Save (aslo, m_usType was no S32er necessary).
+//                     Save (aslo, m_usType was no longer necessary).
 //                     Dropped support for particular types and got rid
 //                     of the void resource.
 //
@@ -316,16 +316,9 @@ short RResMgr::Get(                          // Returns 0 on success.
       m_map.erase(strFilename);
    }
 
-   volatile int var_resmgr_break = strcmp("2d/side/soundsatellite.bmp",strFilename)==0;
-   if(strcmp("2d/side/soundsatellite.bmp",strFilename)==0)
-   {
-      static volatile RImage *img = (RImage *)*hRes;
-      printf("%p\n",img->m_pData);
-   }
-
    // Delete the create and load function objects, and POSSIBLY the destroy function,
    // if its pointer hasn't been cleared to 0 (which indicates that responsibility for
-   // deleting it no S32er lies with this function, but with a newly created ResourceBlock.
+   // deleting it no longer lies with this function, but with a newly created ResourceBlock.
    delete pfnCreate;
    delete pfnDestroy;   // Might be 0 (which is safe for delete)!  See comments above!
    delete pfnLoad;

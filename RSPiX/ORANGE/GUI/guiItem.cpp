@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -57,7 +57,7 @@
 //
 //      10/01/96   JMI   Added GetVal().
 //
-//      10/01/96   JMI   ~CGuiItem() no S32er calls ms_listguiChildren.Remove()
+//      10/01/96   JMI   ~CGuiItem() no longer calls ms_listguiChildren.Remove()
 //                     since SetParent(NULL) does such.
 //
 //      10/01/96   JMI   Create() now calls Destroy().
@@ -450,7 +450,7 @@ RGuiItem*   RGuiItem::ms_pguiFocus   = NULL;  // Higher level APIs can use this
                                               // as their current point of
                                               // input focus.
 char*         RGuiItem::ms_apszTypes[NumGuiTypes]   =  // Array of strings
-                                                      // indexed by type.
+                                                       // indexed by type.
 {
    "GuiItem",
    "Txt",
@@ -515,8 +515,8 @@ RGuiItem::RGuiItem()
 
    m_sTextEffects         = 0;  // Flags for text effects.
 
-   m_sTextShadowOffsetX   = 1;  // Offset aS32 X axis for text shadow.
-   m_sTextShadowOffsetY   = 1;  // Offset aS32 Y axis for text shadow.
+   m_sTextShadowOffsetX   = 1;  // Offset along X axis for text shadow.
+   m_sTextShadowOffsetY   = 1;  // Offset along Y axis for text shadow.
 
    m_szText[0]            = '\0';
 

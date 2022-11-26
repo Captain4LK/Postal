@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -48,7 +48,7 @@
 //      12/31/96   JMI   Do() now calls base implementation in RGuiItem.
 //
 //      01/01/96   JMI   Now overrides GetHot() to restrict hot area to the title
-//                     bar, when present.  Also, Compose() no S32er sets hot
+//                     bar, when present.  Also, Compose() no longer sets hot
 //                     area (now done by base class).
 //
 //      01/04/96   JMI   Upgraded HotCall() to new CursorEvent().  This upgrade

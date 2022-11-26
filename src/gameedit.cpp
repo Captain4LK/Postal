@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -71,7 +71,7 @@
 //                     External effects:  g_pimScreenBuf.
 //
 //      01/24/97   JMI   Now PlayRealm() also supports the adjustment of the display
-//                     area.  Also, cursor no S32er does height cursor's drag
+//                     area.  Also, cursor no longer does height cursor's drag
 //                     logic unless in drop dude mode.
 //
 //      01/25/97   JMI   Added scrollbars to edit mode.
@@ -295,7 +295,7 @@
 //                     PICK_OBJECT_FILE to 8.3 compliant names.
 //
 //      03/27/97   JMI   ThingHotCall now makes sure the event it processes has not
-//                     yet been used.  Also, you may no S32er drag the hood.
+//                     yet been used.  Also, you may no longer drag the hood.
 //
 //      03/28/97   JMI   Now the scrollbar tray and button clicks will advance more
 //                     than just a few pixels.
@@ -337,7 +337,7 @@
 //                     bouy lines.  Double click on a bouy now brings up
 //                     its EditModify dialog box.
 //
-//      04/22/97   JMI   No S32er uses chdir() to get the open dialog into the
+//      04/22/97   JMI   No longer uses chdir() to get the open dialog into the
 //                     correct directory.  Now we simply default ms_szFileName
 //                     to the path of the dir we want to save under.
 //
@@ -389,7 +389,7 @@
 //                     delete all objects of the type of the currently selected
 //                     objects.
 //
-//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/07/97   JMI   Now, in PlayRealm(), if no dude exists, we attempt to use
@@ -582,11 +582,11 @@
 //
 //      08/10/97   JMI   Removed unreferenced local var u32ColorIndex.
 //
-//      08/12/97   JMI   No S32er sets the realm's progress callback.
+//      08/12/97   JMI   No longer sets the realm's progress callback.
 //                     Also, now passes input events to GetLocalInput() which
 //                     GetLocalInput() now uses for finding cheat key combos.
 //
-//      08/13/97   JMI   No S32er attempts to show the attribute map when there
+//      08/13/97   JMI   No longer attempts to show the attribute map when there
 //                     is no hood.
 //
 //      08/14/97   JMI   Now you can select a thing from the realm stats list to
@@ -2111,7 +2111,7 @@ static bool DoInput(    // Returns true when done.
       // Menu on top (even of cursor).
       DoMenuInput(&ie, 0);
 
-      // If there is no S32er a menu . . .
+      // If there is no longer a menu . . .
       if (GetCurrentMenu() == NULL)
       {
          // Show the mouse.
@@ -7304,7 +7304,7 @@ static void AttribMaskBtnPressed(   // Returns nothing.
       // If no more attribute masks . . .
       if (ms_u16TerrainMask == 0 && ms_u16LayerMask == 0)
       {
-         // If there is an image, delete it.  No S32er needed.
+         // If there is an image, delete it.  No longer needed.
          delete ms_spriteAttributes.m_pImage;
          ms_spriteAttributes.m_pImage   = NULL;
       }

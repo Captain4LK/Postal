@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -354,7 +354,7 @@ short   ConvertToFSPR8(RImage*  pImage)
    }
 
    // The alignment will shift when the realloc blindly copied the memory.  So, realloc is
-   // noS32er feasible. I will take memory management into my own hands!
+   // nolonger feasible. I will take memory management into my own hands!
    //
    pucOldMem = pHeader->pCMem;
    pucOldBuf = pHeader->pCBuf;

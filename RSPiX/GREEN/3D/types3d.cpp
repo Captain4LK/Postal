@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -25,7 +25,7 @@
 //
 //      02/05/97 MJR   Filled in.
 //
-//      02/10/97 MJR   Removed the no-S32er-necessary "S32" casts for loading
+//      02/10/97 MJR   Removed the no-longer-necessary "S32" casts for loading
 //                     and saving of RPixel32's.
 //                     Renamed RForm3d to RSop (Sea-Of-Points) since that's what
 //                     we all think of it as, so it may as well be called that.

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -21,7 +21,7 @@
 // History:
 //      09/01/97 MJR   Nearing the end of a major overhaul.
 //
-//      09/06/97 MJR   No S32er responds to browse attempts once game starts.
+//      09/06/97 MJR   No longer responds to browse attempts once game starts.
 //
 //      09/07/97 MJR   Added support for PROCEED and PROGRESS_REALM messages.
 //
@@ -585,7 +585,7 @@ void CNetServer::GetMsg(
                // Make sure it's for the correct ID
                ASSERT(m_qDropIDs.PeekAtFront() == pmsg->msg.inputData.id);
 
-               // No S32er waiting for input data
+               // No longer waiting for input data
                m_bWaitingForInputData = false;
 
                // Go through all the clients and feed inputs to those that need it.  Note that

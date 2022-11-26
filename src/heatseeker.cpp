@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -54,7 +54,7 @@
 //                     had been checking for NOT_WALKABLE which caused it to
 //                     blow up in the wrong places.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/10/97 BRH   Increased the rocket arming time from 200ms to 500ms to
@@ -140,7 +140,7 @@
 //      08/26/97 BRH   Fixed problem with brackets that always set the missile
 //                     back a position.
 //
-//      08/27/97   JMI   No S32er sets the smash radius to m_sCurRadius during
+//      08/27/97   JMI   No longer sets the smash radius to m_sCurRadius during
 //                     Render().
 //
 ////////////////////////////////////////////////////////////////////////////////

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -64,7 +64,7 @@
 //                     accommodate new m_stockpile in base class, CThing3d (which
 //                     used to contain the m_sHitPoints).
 //
-//      06/11/97 BRH   Passes aS32 the shooter information from who set off
+//      06/11/97 BRH   Passes along the shooter information from who set off
 //                     this barrel to who it hit.
 //
 //      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.

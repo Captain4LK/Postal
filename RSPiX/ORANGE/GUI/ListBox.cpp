@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -46,7 +46,7 @@
 //
 //      01/21/97   JMI   RemoveItem() was not considering the possibly that the
 //                     item being removed might be the selected item.
-//                     No S32er sizes an encapsulator/string item to
+//                     No longer sizes an encapsulator/string item to
 //                     m_sLargestWidth until the AdjustContents() call.
 //
 //      01/21/97   JMI   Changed m_frmContents (RFrame) to m_lcContents

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -25,7 +25,7 @@
 //      11/19/96 MJR   Started.
 //
 //      A huge number of changes occurred, and then the entire module was
-//      reorganized, to the point where the previous history was no S32er
+//      reorganized, to the point where the previous history was no longer
 //      relevant.  This history was was purged on 8/3/97 -- if you need to
 //      refer back to it, simply go back before this date in SourceSafe.
 //
@@ -143,7 +143,7 @@
 //                     of rspUpdateDisplay() to UpdateDisplay().
 //
 //      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//                     since we no S32er need UpdateDisplay() now that we are
+//                     since we no longer need UpdateDisplay() now that we are
 //                     using rspLock/Unlock* functions properly.
 //                     Also, now locks the composite buffer before accessing it
 //                     and unlocks it before updating the screen.  This required
@@ -225,7 +225,7 @@
 //      09/03/97   JMI   Now checks to make sure we're in SP mode before pausing
 //                     while in the background.
 //
-//      09/04/97 BRH   Play no S32er sets the full path to the realm file to
+//      09/04/97 BRH   Play no longer sets the full path to the realm file to
 //                     load.  It is done in Realm::Load instead so that we can
 //                     try several paths.  This way the realms can be loaded
 //                     from the HD path, or if not there, loaded from the CD
@@ -1845,7 +1845,7 @@ void CoreLoopUserInput(
       }
 
       // Once the time bomb goes off, we display a message telling the user that something
-      // has gone very wrong, and they can either wait a little S32er or hit a key to abort.
+      // has gone very wrong, and they can either wait a little longer or hit a key to abort.
       // Once that message is displayed, we check if the user has hit the abort key, and if
       // so, we set the ultimate abort flag.
       if (m_bCheckForAbortKey)
@@ -4886,7 +4886,7 @@ extern short Play(                              // Returns 0 if successfull, non
    // 09/12/97 MJR - Here exists yet another error in the release version, but thankfully,
    // it works out okay.  Note how completely ignore the value in sResult and simply
    // overwrite it with the return value from PrepareGame().  This should, in general,
-   // fail further aS32 the way when we try to load this realm.
+   // fail further along the way when we try to load this realm.
 
    // Open the realm prefs file
    RPrefs prefsRealm;
@@ -5042,7 +5042,7 @@ extern short Play(                              // Returns 0 if successfull, non
                                  true);
                            }
 
-                           StatsAreAllowed = !info.IsMP();  // !!! FIXME: we currently only track for single-player (because we don't check that kills beS32 to the local player, etc).
+                           StatsAreAllowed = !info.IsMP();  // !!! FIXME: we currently only track for single-player (because we don't check that kills belong to the local player, etc).
                            startRealmMS = rspGetMilliseconds();
 
 #ifdef MOBILE

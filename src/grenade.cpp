@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -59,7 +59,7 @@
 //                     grenade delete itself it is fired in an invalid position
 //                     i.e. stuck in a wall.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      02/24/97 BRH   Tuned the distance it travels on the ground by increasing
@@ -96,7 +96,7 @@
 //      05/20/97 BRH   Bumped up the ground drag to make the SetRange more
 //                     accurate.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/03/97 BRH   Capped the ground velocity and decreased the drag back

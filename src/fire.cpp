@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -80,7 +80,7 @@
 //      02/23/97 BRH   Added static Preload() funciton which will be called
 //                     before play begins to cache a resource for this object.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      02/24/97 BRH   Set the default state in ProcessMessages
@@ -127,10 +127,10 @@
 //      05/09/97   JMI   Update() now moves the smashatorium object when the CFire
 //                     is not Smoke.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
-//      06/11/97 BRH   Pass aS32 the m_u16ShooterID value in the Burn message.
+//      06/11/97 BRH   Pass along the m_u16ShooterID value in the Burn message.
 //
 //      06/15/97 BRH   Fixed Smoke going past animation by 1 frame.
 //

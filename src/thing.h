@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -61,7 +61,7 @@
 //
 //      02/14/97   JMI   Changed ChanBounds to RP3d (was REAL).
 //
-//      02/16/97 BRH   Added message.h and the message queue aS32 with the
+//      02/16/97 BRH   Added message.h and the message queue along with the
 //                     SendThingMessage function to allow CThings to communicate.
 //                     Also set the thing base class version of Update to
 //                     empty the queue each time.  If you aren't dealing with
@@ -485,14 +485,14 @@ public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
    ClassIDType id,                                    // In:  Class ID
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew);                                   // Out: Pointer to new object
 
 // Construct object and assign it an ID from the Realm's ID bank,
 // if it does not already have one.
 static short ConstructWithID(                         // Returns 0 if successfull, non-zero otherwise
    ClassIDType id,                                    // In:  Class ID
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew);                                   // Out: Pointer to new object
 
 //---------------------------------------------------------------------------
@@ -502,7 +502,7 @@ public:
 // Prioritized Message queue for Things to use to communicate with each other
 RPQueue <GameMessage, short> m_MessageQueue;
 
-// Pointer to the realm this object beS32s to
+// Pointer to the realm this object belongs to
 CRealm* m_pRealm;
 
 // This is intended for the editor.  It would probably be a bad idea to use

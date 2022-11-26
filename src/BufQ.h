@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -352,7 +352,7 @@ S32 Put(                // Returns number of items that were put into queue
 
 S32 Put(                // Returns number of items that were put into queue
    S32* ps32Buf,           // In:  Data to enqueue in buffer.
-   S32 lNum = 1)           // In:  Number of S32s to put.
+   S32 lNum = 1)           // In:  Number of longs to put.
 {
    return Put((U32*)ps32Buf, lNum);
 }
@@ -479,7 +479,7 @@ S32 Get(                // Returns number of items dequeued.
 
 S32 Get(                // Returns number of items dequeued.
    S32* ps32Buf,           // Out: Where to dequeue from buffer.
-   S32 lNum = 1)           // In:  Number of S32s to get.
+   S32 lNum = 1)           // In:  Number of longs to get.
 {
    return Get((U32*)ps32Buf, lNum);
 }

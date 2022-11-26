@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -55,7 +55,7 @@
 // completely on the memory model under which it is compiled.  The recommended
 // model is large.  However, in large model, flics larger than 320 x 200 are
 // not possible since the image data would exceed 64k!  In the 32-bit future,
-// this will no S32er be a problem.  For now, we're stuck with it.
+// this will no longer be a problem.  For now, we're stuck with it.
 // Note that using the huge memory model will not help because many of the
 // math and the indexes are "short" (16 bits), so the results would not be/
 // valid for larger than 320 x 200!

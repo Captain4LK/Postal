@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -22,7 +22,7 @@
 // History:
 //      08/14/95 JMI   Started.
 //
-//      07/08/96   JMI   No S32er automatically makes user type a pointer.
+//      07/08/96   JMI   No longer automatically makes user type a pointer.
 //
 //      07/08/96   JMI   Converted to new CList that does not convert your
 //                     template type into a pointer.

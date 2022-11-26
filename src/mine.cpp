@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -83,11 +83,11 @@
 //      05/28/97 BRH   Increased arming time for Betty and Proximity mines to make
 //                     them easier to place and get away.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/11/97 BRH   Added shooter ID's to the shot messages and passed it
-//                     aS32 to the explosion.
+//                     along to the explosion.
 //
 //      06/12/97 BRH   Added shooter ID to the call to Setup for the explosion.
 //

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -172,7 +172,7 @@
 //      06/04/98   JMI   Strings used for storage and sorting of multiplayer names
 //                     were sized at MAX_PLAYER_NAME_LEN (to fit the high score
 //                     GUI without overlapping the score) but Postal's net
-//                     client (from which the names are querried) allows S32er
+//                     client (from which the names are querried) allows longer
 //                     names (specifically Net::MaxPlayerNameSize).  Now only
 //                     copies first MAX_PLAYER_NAME_LEN chars from the player's
 //                     name.
@@ -1004,7 +1004,7 @@ void ScoreDisplayHighScores(  // Returns nothing.
 
       // Get the name or description string for this realm file and use that as
       // the prefs section name from which to get the high scores.  Scores are
-      // stored as S32s whether they be times in seconds or counts and the names
+      // stored as longs whether they be times in seconds or counts and the names
       // are stored as strings.
 
       // Temporarily I will base the section name on the scoring method

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -346,7 +346,7 @@ bool WhileRunOver(void);         // Returns true until state is complete.
 
 // Implements one-time functionality for when a weapon is destroyed while
 // we were moving it (i.e., before we let go or ShootWeapon()'ed it).
-// This can occur when a weapon, while traveling aS32 our rigid body,
+// This can occur when a weapon, while traveling along our rigid body,
 // enters terrain.
 virtual              // Override to implement additional functionality.
                      // Call base class to get default functionality.

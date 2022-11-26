@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -54,7 +54,7 @@
 //
 //      05/25/97 MJR   Added ability to set callback via Open().
 //
-//      05/26/97 MJR   Changed IsError() so it no S32er considers a closed
+//      05/26/97 MJR   Changed IsError() so it no longer considers a closed
 //                     socket to be an error.
 //
 //      08/03/97 BRH   Added IPX network support.

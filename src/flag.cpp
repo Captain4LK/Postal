@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -35,7 +35,7 @@
 //                     the flag captured count in the realm.
 //
 //      08/03/97   JMI   Init() was setting the looping parms on a phot which no
-//                     S32er exists.  Now the looping parms are passed via the
+//                     longer exists.  Now the looping parms are passed via the
 //                     Get() call in GetResources() instead so they will get set
 //                     via the CAnim3D which should know which ones are okay to
 //                     use.
@@ -72,8 +72,8 @@
 //      08/28/97 BRH   Set the correct bits to detect the flag base.   Finished
 //                     the code for capturing the flagbase.
 //
-//      08/30/97   JMI   Since CDude no S32er contains an m_idFlagItem, this object
-//                     no S32er sets it.  Simply adding a CFlag's sprite to the
+//      08/30/97   JMI   Since CDude no longer contains an m_idFlagItem, this object
+//                     no longer sets it.  Simply adding a CFlag's sprite to the
 //                     dude's sprite children is sufficient for him to handle the
 //                     flag.
 //

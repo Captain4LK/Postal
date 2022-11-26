@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -32,7 +32,7 @@
 //                     Fixed.  Now it's beauteous if you place a dude just a
 //                     bit in front of a looping explosion.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      02/24/97   JMI   Changed m_pthingSendMsg to m_u16IdSendMsg.
@@ -49,7 +49,7 @@
 //      04/10/97 BRH   Updated this to work with the new multi layer attribute
 //                     maps.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/29/97   JMI   Converted EditRect(), EditRender(), and/or Render() to

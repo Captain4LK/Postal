@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -52,7 +52,7 @@
 //
 //      07/21/97   JMI   Was not setting the default GUIs' font.  This implied
 //                     it was relying on other things to set this.  Since this
-//                     can feasibly no S32er happen before this menu/dlg comes
+//                     can feasibly no longer happen before this menu/dlg comes
 //                     up, it now has to set the the font itself.
 //
 //      08/10/97   JMI   Now sets sEnabled in each dynamically created menu item.
@@ -67,7 +67,7 @@
 //                     of rspUpdateDisplay() to UpdateDisplay().
 //
 //      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//                     since we no S32er need UpdateDisplay() now that we are
+//                     since we no longer need UpdateDisplay() now that we are
 //                     using rspLock/Unlock* functions properly.
 //
 //      08/27/97   JMI   Now uses g_fontPostal instead of g_fontBig.
@@ -77,7 +77,7 @@
 //      08/27/97   JMI   Now does not actually create a back item but sets the
 //                     cancel item to just beyond the last item.
 //
-//      08/27/97   JMI   The program no S32er sets the text fore and shadow
+//      08/27/97   JMI   The program no longer sets the text fore and shadow
 //                     colors (also does not set the shadow effect).  Instead
 //                     uses all Artie's settings.
 //

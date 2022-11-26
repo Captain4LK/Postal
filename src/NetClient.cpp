@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -23,7 +23,7 @@
 //
 //      09/07/97 MJR   Fixed problem with DROPPED message, whereby the caller
 //                     couldn't recognize when he himself was dropped because
-//                     the ID was no S32er valid.
+//                     the ID was no longer valid.
 //
 //                     Added support for PROCEED and PROGRESS_REALM messages.
 //
@@ -495,7 +495,7 @@ void CNetClient::Update(void)
                m_id = msg.msg.loginAccept.idAssigned;
 
                // Send join request and set state to wait for response.  After this point, we no
-               // S32er care about the data we temporarily stashed in peer #0 because if our join
+               // longer care about the data we temporarily stashed in peer #0 because if our join
                // request is accepted, the server will send us info about ALL the clients, including
                // ourself.  If our request is denied, then nothing matters.
                msg.msg.joinReq.ucType   = NetMsg::JOIN_REQ;
@@ -762,7 +762,7 @@ void CNetClient::GetMsg(
                // Reset state
                m_state = Nothing;
 
-               // Since we cleared our own ID, the caller will no S32er be able to
+               // Since we cleared our own ID, the caller will no longer be able to
                // recognize himself, because the ID in the message will not match
                // our own ID.  Instead, we change the ID in the message to Net::InvalidID
                // as a flag that indicates "you yourself have been dropped".
@@ -1029,7 +1029,7 @@ void CNetClient::SendChat(
       msg.msg.chatReq.ucType = NetMsg::CHAT_REQ;
       msg.msg.chatReq.u16Mask = 0xffff;
 
-      // We're assuming the chat field is S32er than the maximum name
+      // We're assuming the chat field is longer than the maximum name
       ASSERT(sizeof(msg.msg.chatReq.acText) > sizeof(m_aPeers[m_id].m_acName));
 
       // Calculate number of chars required to display name, including the brackets

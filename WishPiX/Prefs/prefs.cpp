@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -57,7 +57,7 @@
 //      07/05/97 MJR   Fixed bug in printf() specifications.  Apparently, "%lf"
 //                     is not a valid spec.  "%f" works fine by itself.
 //
-//      07/09/97 MJR   Changed so Close() no S32er calls Write().
+//      07/09/97 MJR   Changed so Close() no longer calls Write().
 //                     Added full support for CR or CR/LF files.
 //
 //      07/09/97 MJR   Performed an overall cleanup regarding how the error flag
@@ -255,7 +255,7 @@ short RPrefs::Read()    // Returns 0 if successfull, non-zero otherwise
                // functions convert CR/LF into a single CR, but this is NOT done by
                // the Mac versions of these libraries.  On the Mac, fgets() will return
                // a line terminated by a "\n".  The next fgets() will return the "\r"
-               // from the previous line aS32 with whatever follows, up to the next
+               // from the previous line along with whatever follows, up to the next
                // "\n".  Therefore, on the Mac, we check if the line begins with a "\r",
                // and if so, we set a flag and then skip over the "\r".  The flag tells
                // us that when we write the file back out, we should use CR/LF pairs to

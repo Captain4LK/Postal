@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -71,7 +71,7 @@
 // have received from this player, but that we haven't yet used.
 //
 // Inputs may arrive out of order, which means we might get a few values,
-// then get a few more values further aS32 in the window but leaving a "hole"
+// then get a few more values further along in the window but leaving a "hole"
 // of unknown values in between.  We assume that we'll eventually get those
 // values, too, but in the meantime, we can't move our frame number past that
 // hole.
@@ -107,7 +107,7 @@
 // order to arrive at the index into our buffer, we simply take the sequence
 // number and mark out all the bits but the bottom 2, which yields a number
 // between 0 and 3, and happens to be the correct index into our buffer.  The
-// diagram shows how our buffer "slides aS32" without moving the actual
+// diagram shows how our buffer "slides along" without moving the actual
 // contents -- instead, it's all just a matter of how you think of it.
 //
 //       0 1 2 3 4 5 6 7 8 9 A B C D E F

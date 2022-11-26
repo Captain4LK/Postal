@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -38,7 +38,7 @@
 //                     of locking the composite buffer).
 //
 //      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//                     since we no S32er need UpdateDisplay() now that we are
+//                     since we no longer need UpdateDisplay() now that we are
 //                     using rspLock/Unlock* functions properly.
 //                     Also, put locks around accesses (Blits, Rects, etc.) to the
 //                     composite buffer.
@@ -85,7 +85,7 @@
 // Macros/types/etc.
 ////////////////////////////////////////////////////////////////////////////////
 
-// Define number of shades aS32 with mask that will create that many shades
+// Define number of shades along with mask that will create that many shades
 //#define NUM_SHADES            32
 //#define SHADE_MASK            0xf8
 #define NUM_SHADES            16
@@ -458,7 +458,7 @@ extern bool DoPostMenuTrans(void)
    //---------------------------------------------------------------------------
    else if (m_sStep == 7)
       {
-      // Set the remainder of the palette now that the pixels are no S32er using that part
+      // Set the remainder of the palette now that the pixels are no longer using that part
       rspSetPaletteEntries(SHADE_BEG, SHADE_LEN, &(m_pWork[SHADE_BEG].r), &(m_pWork[SHADE_BEG].g), &(m_pWork[SHADE_BEG].b), sizeof(rgb));
       rspUpdatePalette();
 

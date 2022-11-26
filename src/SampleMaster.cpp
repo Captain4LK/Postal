@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -40,7 +40,7 @@
 //                     complain.  RSnd::Play() will complain anyways.
 //
 //      04/22/97   JMI   AbortSample() was causing the RSnd ptr passed to the done
-//                     callback to no S32er contain a sample.  This means the
+//                     callback to no longer contain a sample.  This means the
 //                     resource had to released immediately after the call to
 //                     the abort.
 //
@@ -95,7 +95,7 @@
 //
 //      07/17/97   JMI   Changed VolumeCode to SampleMaster::SoundInstance.  Trying
 //                     to make it a generic playing sample identifier.
-//                     Also, PlaySample() no S32er returns a ptr to the RSnd
+//                     Also, PlaySample() no longer returns a ptr to the RSnd
 //                     reducing the chances we rely on sound for synch.
 //
 //      07/17/97   JRD   Added functionality to calculate volume based on 3d

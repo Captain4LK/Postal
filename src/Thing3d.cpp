@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -83,7 +83,7 @@
 //                     m_pRealm->GetFloorMapValue() and
 //                     m_pRealm->m_pAttrMap->GetVal() calls to
 //                     m_pRealm->GetEffectAttribute().
-//                     Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//                     Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //                     Also, added a GetLayer().
 //
@@ -248,7 +248,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-double CThing3d::ms_dDefaultSurfaceDrag = 220.0;   // Default drag aS32 surfaces.
+double CThing3d::ms_dDefaultSurfaceDrag = 220.0;   // Default drag along surfaces.
 double CThing3d::ms_dDefaultAirDrag     = 30.0;    // Default drag due to air friction.
 short CThing3d::ms_sBurntBrightness      = -40;        // Brightness level after being burnt
 
@@ -875,7 +875,7 @@ bool CThing3d::WhileBlownUp(void)   // Returns true until state is complete.
       if (m_lAnimTime > m_panimCur->m_psops->TotalTime())
          bStatePersists = false;
 
-      // No S32er above the terrain.
+      // No longer above the terrain.
       m_bAboveTerrain   = false;
    }
    else
@@ -1642,7 +1642,7 @@ CThing3d* CThing3d::DetachChild( // Returns ptr to the child or NULL, if none.
    }
    else
    {
-      // No S32er exists.
+      // No longer exists.
       *pu16InstanceId   = CIdBank::IdNil;
       pthing3d            = NULL;
    }

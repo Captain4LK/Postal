@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -365,7 +365,7 @@ const Point2D*   m_pap2dAttribCheckPoints;        // Points to the ms_apt3dAttri
 // Static Variables
 //---------------------------------------------------------------------------
 public:
-static double ms_dDefaultSurfaceDrag;        // Default drag aS32 surfaces.
+static double ms_dDefaultSurfaceDrag;        // Default drag along surfaces.
 static double ms_dDefaultAirDrag;            // Default drag due to air friction.
 static short ms_sBurntBrightness;            // Brightness level after being burnt
 static char*   ms_apszStateNames[];          // Strings describing states, indexed by

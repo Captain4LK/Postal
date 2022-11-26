@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -55,7 +55,7 @@
 //
 //      02/10/97 BRH   Added CNapalm and CFire as things to construct
 //
-//      02/16/97 BRH   Added message.h and the message queue aS32 with the
+//      02/16/97 BRH   Added message.h and the message queue along with the
 //                     SendThingMessage function to allow CThings to communicate.
 //                     Also set the thing base class version of Update to
 //                     empty the queue each time.  If you aren't dealing with
@@ -109,7 +109,7 @@
 //
 //      03/19/97   JMI   Added CDispenser stuff.
 //
-//      03/20/97   JMI   SetInstanceID() no S32er whines about already having an
+//      03/20/97   JMI   SetInstanceID() no longer whines about already having an
 //                     ID before releasing it.
 //
 //      04/04/97   JMI   Load() now checks to make sure no one else has claimed the
@@ -610,7 +610,7 @@ void CThing::Map3Dto2D( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 short CThing::Construct(                        // Returns 0 if successfull, non-zero otherwise
    ClassIDType id,                              // In:  Class ID
-   CRealm* pRealm,                              // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                              // In:  Pointer to realm this object belongs to
    CThing** ppNew)                              // Out: Pointer to new object
 {
    // If in bounds (note ClassIDType is unsigned) . . .
@@ -636,7 +636,7 @@ short CThing::Construct(                        // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 short CThing::ConstructWithID(                  // Returns 0 if successfull, non-zero otherwise
    ClassIDType id,                              // In:  Class ID
-   CRealm* pRealm,                              // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                              // In:  Pointer to realm this object belongs to
    CThing** ppNew)                              // Out: Pointer to new object
 {
    short sResult   = Construct(id, pRealm, ppNew);

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -281,7 +281,7 @@ short RPalFile::Load(         // Returns SUCCESS on success or FAILURE on failur
          TRACE("RPal::Load - Error: Wrong filetype, RPal files should start with"
                "\"CPAL\"\n");
          TRACE("RPal::Load - Note that some older RPal formats had no filetype, and,\n");
-         TRACE("therefore, can no S32er be loaded unless in an RImage file.\n");
+         TRACE("therefore, can no longer be loaded unless in an RImage file.\n");
          sRes   = FAILURE;
       }
    }

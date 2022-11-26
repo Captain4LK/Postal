@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -42,7 +42,7 @@
 //                     people can be tuned differently.  This came from a
 //                     request to have some people react more/less to bullet
 //                     shots, and having Rocketmen react quicker in guard mode
-//                     since it takes them S32er to shoot.
+//                     since it takes them longer to shoot.
 //
 //      07/25/97 BRH   Added initial hit points so that victims can have
 //                     different amount of hit points, swat can have more,

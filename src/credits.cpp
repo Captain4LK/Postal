@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -58,7 +58,7 @@
 //      08/22/97   JRD   Attempted to make the credits locking safe.
 //
 //      08/22/97   JMI   Changed calls to UpdateDisplay() back to rspUpdateDisplay()
-//                     since we no S32er need UpdateDisplay() now that we are
+//                     since we no longer need UpdateDisplay() now that we are
 //                     using rspLock/Unlock* functions properly.
 //
 //      08/26/97   JRD   Moved the credit music into the credits function from the

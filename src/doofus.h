@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -152,7 +152,7 @@
 //      08/07/97   JMI   Added ms_awdWeapons[], ms_apszWeaponResNames[], and
 //                     GetResources() and FreeResources() for loading these anims.
 //                     Also, added ms_lWeaponResRefCount so we could know when the
-//                     weapons were no S32er needed.
+//                     weapons were no longer needed.
 //
 //      08/08/97   JMI   Added more weapons:  UZI, AutoRifle, SmallPistol, Dynamite.
 //
@@ -219,7 +219,7 @@ typedef enum                           // Suggested logic actions basec on
    Action_AdvanceHold,                 // You are as close as you can get on the bouy network
    Action_Walk,                        // Walk around - victims
    Action_Panic,                       // Panic - victims
-   Action_March,                       // March aS32 a bouy network nearby.
+   Action_March,                       // March along a bouy network nearby.
    Action_Madness,                     // Run all over - not on bouy network.
    Action_Help,                        // Help when you hear a call for help
 
@@ -429,7 +429,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    return 0;

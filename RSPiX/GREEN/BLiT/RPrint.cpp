@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -154,7 +154,7 @@ char* RPrint::ScanLine(char* pszInput)
    }
 
    // Do I need Back up a word and eat whitespace?
-   if (sBreakedLine) // my line is flowing aS32:
+   if (sBreakedLine) // my line is flowing along:
    {
       if (m_eModes & WORD_WRAP) // choose white space eatin':
       {

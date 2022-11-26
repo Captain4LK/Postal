@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -44,7 +44,7 @@
 // utility functions that are used to create SAK files.  Statistics()
 // or CreateSakBatch() will create a text script file that can be used
 // to create SAK files.  The file it generates has a list of the
-// resources in the order they were accessed aS32 with
+// resources in the order they were accessed along with
 // their resource type.  It then also includes a comment block
 // on the total number of accessed for each resource.  The
 // CreateSak(scriptfile, sakfile) takes the name of the text
@@ -78,7 +78,7 @@
 // should call Release, just as you would normally call Close.
 // When you call Release, the resource is still in memory for the
 // next time it is requested.  If you wish to free memory for
-// resources that are no S32er being used, you can call Purge()
+// resources that are no longer being used, you can call Purge()
 // which will free all resources with a zero reference count.
 // Resources that still haven't been Released() will not be purged.
 // If a resource was Purged and is then requested again, it will
@@ -141,7 +141,7 @@
 //                     To make this generic resource interface
 //                     possible, CResourceBlock had to be modified to
 //                     include pointers to Create, Destroy, Load, and
-//                     Save (aslo, m_usType was no S32er necessary).
+//                     Save (aslo, m_usType was no longer necessary).
 //                     Dropped support for particular types and got rid
 //                     of the void resource.
 //
@@ -656,7 +656,7 @@ short rspGetResource(                           // Returns 0 on success
    // Create function objects for the specified type.  We have to allocate
    // them using new because if they're just on the stack, they won't exist
    // beyond this function.  Instead, we leave it up to the Get() function
-   // to dispose of them when they are no S32er needed.  This is very
+   // to dispose of them when they are no longer needed.  This is very
    // cheesy, and I hope to figure out a better method soon.
    GenericCreateResFunc* pcreate = new CreateResFunc<T>;
    GenericDestroyResFunc* pdestroy = new DestroyResFunc<T>;

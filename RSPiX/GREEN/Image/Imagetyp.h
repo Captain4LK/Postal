@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-// This header is no S32er used.
+// This header is no longer used.
 #pragma message ( __FILE__ "(" __LINE__ ") : Do not include this header." )
 
 #ifndef IMAGETYP_H

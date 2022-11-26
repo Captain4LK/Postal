@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -34,7 +34,7 @@
 //
 //      03/25/97   JMI   Changed EDIT_GUI_FILE to 8.3 name.
 //
-//      04/04/97   JMI   No S32er uses construct with ID in InstantiateDispensee().
+//      04/04/97   JMI   No longer uses construct with ID in InstantiateDispensee().
 //
 //      04/08/97   JMI   Although I was checking to make sure I did not mod by 0
 //                     when determining the next time for dispensage, if it was
@@ -49,7 +49,7 @@
 //      04/23/97   JMI   Added new logic type Exists and added a max for the number
 //                     of dispensees and a current number of dispensees dispensed.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/14/97   JMI   Upgraded to use new DoGui() method for sub dialogs
@@ -597,7 +597,7 @@ void CDispenser::Update(void)
             }
             else
             {
-               // If the last one no S32er exists . . .
+               // If the last one no longer exists . . .
                CThing* pthing;
                if (m_pRealm->m_idbank.GetThingByID(&pthing, m_u16IdDispensee) != 0)
                {

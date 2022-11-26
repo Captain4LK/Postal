@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -195,7 +195,7 @@
 //                     what he is aiming at.
 //
 //      06/09/97   JMI   Removed m_inputLast and m_lLastWeaponChangeTime which are
-//                     no S32er necessary now that we can use the auto-repeat
+//                     no longer necessary now that we can use the auto-repeat
 //                     feature with the new event driven rspGetKeyStatusArray()
 //                     used by input.cpp.
 //                     Also, added m_animIdle and m_lNextIdleTime.
@@ -557,7 +557,7 @@ WeaponType m_weaponShooting;                    // The weapon type the dude is c
                                                 // shooting (or about to shoot).
 
 CCrawler m_crawler;                               // The device that allows us to slide
-                                                  // aS32 edges and stuff.
+                                                  // along edges and stuff.
 
 U16 m_u16IdChild;                               // ID of generic child item.
                                                 // Used by State_PickUp currently.
@@ -628,7 +628,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    short sResult = 0;
@@ -795,7 +795,7 @@ void OnExecute(void);            // Returns nothing.
 
 // Implements one-time functionality for when a weapon is destroyed while
 // we were moving it (i.e., before we let go or ShootWeapon()'ed it).
-// This can occur when a weapon, while traveling aS32 our rigid body,
+// This can occur when a weapon, while traveling along our rigid body,
 // enters terrain.
 virtual              // Overriden here.
 void OnWeaponDestroyed(void);

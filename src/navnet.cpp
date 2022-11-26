@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -67,7 +67,7 @@
 //      02/23/97 BRH   Moved Render() functionality to EditRender and made
 //                     Render do nothing so that it isn't drawing during gameplay.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      03/04/97 BRH   Added a string name to the NavNet so it can be displayed
@@ -103,7 +103,7 @@
 //                     which would be off if some bouys were deleted from the
 //                     network.  Changed it to save the size of the m_NodeMap.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/27/97 BRH   Changed FindNearestBouy to use the new bouy tree nodes

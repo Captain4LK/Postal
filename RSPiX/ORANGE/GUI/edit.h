@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -223,7 +223,7 @@ short m_sCaretState;               // Current state the caret is in until
 short m_sFirstVisibleCharIndex;          // Index of the first visible character.
 
 Point m_aptTextPos[GUI_MAX_STR];         // Positions for characters in m_szText.
-                                         // This is no S32er dynamically allocated
+                                         // This is no longer dynamically allocated
                                          // do to the amount of overhead that added
                                          // when adding characters.
 

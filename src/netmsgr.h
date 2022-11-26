@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -270,7 +270,7 @@ typedef enum
 //------------------------------------------------------------------------------
 // Typedefs for each of the message structs.
 //
-// Aside from some no-S32er-valid historical reasons why these started out as
+// Aside from some no-longer-valid historical reasons why these started out as
 // structs instead of classes, there are still some reasons why they remain
 // structs instead of classes.  With a union of classes, we can declare the
 // "container" struct (NetMsg) and change it into any message we like by simply
@@ -645,9 +645,9 @@ typedef struct Dropped
 // When clients receive a Dropped message with a valid drop
 // context (not -1), they pause their game and respond with this
 // message, including the drop context within the message so the
-// server knows which context the message beS32s to.  This message
+// server knows which context the message belongs to.  This message
 // tells the server what the client's client's last known
-// input sequence from the dropped player is, aS32 with what
+// input sequence from the dropped player is, along with what
 // the client's current frame number is.
 //
 // The server uses these responses to determine which client knows

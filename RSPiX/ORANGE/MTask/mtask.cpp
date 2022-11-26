@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -154,7 +154,7 @@ void MTaskManager(void)
 //      must periodically call MTaskWait to give up time to other
 //      tasks, otherwise they will end up being the only task ever to
 //      run.  Also, they must never return.  Once they are added
-//      with MTaskAdd, they should run until they are no S32er
+//      with MTaskAdd, they should run until they are no longer
 //      needed at which time they should call MTaskKill to take them
 //      off of the task list.  If a task ever issues a return,
 //      this module will catch it and ASSERT the failure.

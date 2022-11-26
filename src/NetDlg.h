@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -52,7 +52,7 @@
 
 // More than one module needs to know the "standard" abort key for the "NetProb"
 // gui that this module defines.  This gives both types of rspix codes for the
-// key aS32 with the descriptive text for that key.
+// key along with the descriptive text for that key.
 #define NET_PROB_GUI_ABORT_GK_KEY      RSP_GK_F9
 #define NET_PROB_GUI_ABORT_SK_KEY      RSP_SK_F9
 #define NET_PROB_GUI_ABORT_KEY_TEXT      "F9"

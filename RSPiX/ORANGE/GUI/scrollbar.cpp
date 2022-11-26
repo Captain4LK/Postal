@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -85,7 +85,7 @@
 //      01/15/97   JMI   Added overrides of base class's Save/LoadChildren() to
 //                     implement special cases for m_btnThumb, Up, & Down.
 //
-//      01/20/97   JMI   No S32er ASSERTs on odd sizes.  Just does the best it
+//      01/20/97   JMI   No longer ASSERTs on odd sizes.  Just does the best it
 //                     can with what you give it.  You choose a screwy size, you
 //                     get it.
 //

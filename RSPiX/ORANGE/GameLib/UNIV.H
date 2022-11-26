@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -59,7 +59,7 @@ typedef short ORIENT;
 // of the other levels are indirection only and are used mainly for logical
 // grouping of the levels.  This structure contains pointers to the other
 // pieces of data including palettes, animations, backgrounds, and events
-// aS32 with some size information.
+// along with some size information.
 
 // Here is a sample of the section data in the file
 //stage0sect0

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -1279,7 +1279,7 @@ S32 RFile::Read(U64* pu64Data, S32 lNum /*= 1L*/)
 
 S32 Read_u64(U64* pu64Data, S32 lNum = 1L)
 {
-   return Read(pu64Data,lNum);
+   return Read(pu64Data, lNum);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2620,7 +2620,7 @@ short RFile::MakeStreamAvailable(void)
    RFile*   pfile      = ms_listOpen.GetNext();
    while (pfile != NULL)
    {
-      // If current was accessed S32er ago than pfileOld . . .
+      // If current was accessed longer ago than pfileOld . . .
       if (pfile->m_lLastAccess < pfileOld->m_lLastAccess)
       {
          pfileOld = pfile;

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -26,7 +26,7 @@
 // 05/08/95   JMI   Took out CDib dependency and added internal method
 //                  for loading BMPs.
 //
-//   05/09/95   JMI   No S32er converting from RGBQUAD type palette to
+//   05/09/95   JMI   No longer converting from RGBQUAD type palette to
 //                  555 when loading DIBs since RGBQUAD is the DIB
 //                  palette.
 //

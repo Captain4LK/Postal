@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -455,7 +455,7 @@ static void   RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
          if ( (rspGetMilliseconds() - ms_aAmmo[i].m_lMilli) >
               TB_MILLI_TO_LITE)
          {
-            // no S32er highlighted:
+            // no longer highlighted:
             ms_aAmmo[i].m_bTreasure = false;
          }
       }
@@ -470,7 +470,7 @@ static void   RenderBar(CHood* pHood, RImage* pimDst, short sDstX, short sDstY)
       ms_pntTool.SetFont(sFontSize, ms_pfntTool);
       ms_pntTool.SetColor(sFontColor);
 
-      if (i != Bullets)    // noS32er print the amount of bullets...
+      if (i != Bullets)    // nolonger print the amount of bullets...
       {
          ms_pntTool.print(ms_aAmmo[i].m_rText.sX, ms_aAmmo[i].m_rText.sY,
                           "%3ld", S32(ms_aAmmo[i].m_dValue));
@@ -718,7 +718,7 @@ static bool   UpdateStatus(CDude* pDude)
          if ( (rspGetMilliseconds() - ms_aAmmo[i].m_lMilli) >
               TB_MILLI_TO_LITE)
          {
-            // no S32er highlighted:
+            // no longer highlighted:
             bChange = true;
          }
       }

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -120,7 +120,7 @@ short   ConvertToROTBUF(RImage* pImage)
    //****************** APPROXIMATE THE RADIUS *********************
    // Use the Sprite's dimensions as a simple way to calculate
    // it's radius about the cor...
-   // NOTE: sqruared values of shorts must be S32s!
+   // NOTE: sqruared values of shorts must be longs!
    S32 d1 = (SQR(cx) + SQR(cy)); // Distance from (0,0)
    S32 d2 = (SQR(cx) + SQR(pImage->m_sHeight - cy - 1));
    S32 d3 = (SQR(pImage->m_sWidth - cx - 1) + SQR(cy));
@@ -286,7 +286,7 @@ inline void initLine(Line2*   pLine, UCHAR*   pBase, S32 lPitch,
    pLine->lIncY = lDelY % d;
 }
 
-// Increments aS32 the line
+// Increments along the line
 // Overload the init function for each type of line:
 inline void  incLine(Line1& Line)
 {

@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -39,7 +39,7 @@
 //                     the alpha X Ray.
 //
 //      02/07/97   JMI   Now the scene has its own pipeline and CSprite3 does not.
-//                     B/c of this we no S32er needed the m_transWorld, b/c we
+//                     B/c of this we no longer needed the m_transWorld, b/c we
 //                     could incorporate it right into the view.
 //                     Also, removed m_ppipe from CSprite3 and added m_sRadius
 //                     so the X Ray logic could do correct collision between
@@ -55,8 +55,8 @@
 //                     depths can be supported.
 //
 //      02/11/97   JMI   Fixed bug in SetupPipeline() that was incorrectly trans-
-//                     lating the view transform aS32 Z a distance of
-//                     dModelRadius.  Now it transforms 0 aS32 Z.
+//                     lating the view transform along Z a distance of
+//                     dModelRadius.  Now it transforms 0 along Z.
 //                     Also, changed MODEL_DIAMETER to the actual units used in
 //                     SoftImage and, consequently, set SCREEN_DIAMETER_FOR_3D
 //                     to the actual pixel size we want to use.  I imagine we'll

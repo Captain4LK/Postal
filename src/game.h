@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -107,7 +107,7 @@
 //      10/07/97   JMI   Now GetRandom() uses the logging call in any TRACENASSERT
 //                     mode (used to be just in _DEBUG mode).
 //
-//      10/14/97   JMI   LOG() and if() no S32er automatically call GetInstanceID()
+//      10/14/97   JMI   LOG() and if() no longer automatically call GetInstanceID()
 //                     (too many GetRand()s are called from non-CThings).  Now
 //                     LOG() has an additional argument for specifying the user
 //                     value which, of course, could be a call to GetInstanceID().

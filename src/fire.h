@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -36,7 +36,7 @@
 //                     out.
 //
 //      06/11/97 BRH   Added m_u16ShooterID to store the shooter ID which
-//                     will get passed aS32 in the Burn Message.
+//                     will get passed along in the Burn Message.
 //
 //      06/17/97   JMI   Converted all occurrences of rand() to GetRand() and
 //                     srand() to SeedRand().
@@ -121,7 +121,7 @@ bool m_bTurnRight;                     // A Random number will determine if the
                                        // obstacle.
 bool m_bIsBurningDude;
 
-U16 m_u16ShooterID;                    // Store the shooter ID to pass aS32 in the burn message
+U16 m_u16ShooterID;                    // Store the shooter ID to pass along in the burn message
 U16 m_u16FireStarterID;                // Fire's creator.  The ID of the thing that
                                        // caused this fire to be created.  Generally
                                        // used by a thing3d when creating an internal
@@ -213,7 +213,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    short sResult = 0;

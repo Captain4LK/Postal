@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -70,7 +70,7 @@ short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize = 1024);
 // Only call this function from within the task's process
 // since it kills the currently running task and removes
 // it from the list.
-// This is what should be called when you no S32er wish
+// This is what should be called when you no longer wish
 // to run a task.  For example if the task is character
 // logic, it would normally loop until the guy got killed.
 // When he is killed, call MTaskKill to remove it from

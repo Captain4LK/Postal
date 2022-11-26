@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -464,7 +464,7 @@ short RSnd::Abort(void)
       {
          // Destroy sample.
          delete m_psample;
-         // We no S32er own the sample.
+         // We no longer own the sample.
          m_sOwnSample = FALSE;
       }
 
@@ -602,7 +602,7 @@ void* RSnd::StreamCall(RMix::Msg msg,
          {
             // Delete it.
             delete m_psample;
-            // No S32er own it.
+            // No longer own it.
             m_sOwnSample = FALSE;
          }
 
@@ -762,7 +762,7 @@ void* RSnd::PlayCall(RMix::Msg msg,
       // Set state to stopped.
       m_sState   = Stopped;
 
-      // Clear sample.  No S32er needed.
+      // Clear sample.  No longer needed.
       m_psample = NULL;
 
       break;

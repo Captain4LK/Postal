@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -174,7 +174,7 @@ extern short Joy_Update(short sJoy)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Puts the coordinates of joystick sJoy's position in your S32s.
+// Puts the coordinates of joystick sJoy's position in your longs.
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ extern void Joy_GetPos(short sJoy, S32 *px, S32 *py, S32 *pz)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Puts the coordinates of the previous joystick sJoy's position in your S32s.
+// Puts the coordinates of the previous joystick sJoy's position in your longs.
 // Returns nothing.
 //
 //////////////////////////////////////////////////////////////////////////////

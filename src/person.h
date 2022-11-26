@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -32,7 +32,7 @@
 //                     since it is not being used in the Writhing state.
 //
 //      05/11/97 BRH   Added an override to Logic_Writhing so that I can
-//                     do a special case for the cop since he crawls aS32
+//                     do a special case for the cop since he crawls along
 //                     the ground.
 //
 //      05/19/97   JMI   Added ms_u16IdLogAI.
@@ -199,7 +199,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    short sResult = 0;

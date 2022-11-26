@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -146,7 +146,7 @@ short Add(
 
       // Make sure it isn't older than our oldest value.  This can happen if
       // we receive an older data packet.  If it does happen, we quietly
-      // ignore the value since it is apparently no S32er needed.
+      // ignore the value since it is apparently no longer needed.
       if (lIndex >= 0)
       {
          // Make sure it will fit in the buffer

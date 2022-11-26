@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -84,7 +84,7 @@
 //
 //      04/17/97 MJR   Put the test for the CD path back in.
 //
-//      04/22/97   JMI   No S32er uses chdir().
+//      04/22/97   JMI   No longer uses chdir().
 //
 //      04/22/97   JMI   Now sets g_GameSettings.m_sServer and
 //                     g_GameSettings.m_sClient to 0 before running the demo.
@@ -138,7 +138,7 @@
 //
 //      06/15/97 MJR   Made use of new-and-improved input demo interface.
 //                     (But demo mode is still not working right...had to check
-//                     it in though to go aS32 with changes in other files).
+//                     it in though to go along with changes in other files).
 //
 //      06/16/97 MJR   Fixed stupid error that caused demo record not to work.
 //
@@ -271,7 +271,7 @@
 //
 //      08/13/97 MJR   We now pass difficulty level to Play().
 //
-//      08/13/97   JMI   No S32er remembers the previous demo file you recorded as
+//      08/13/97   JMI   No longer remembers the previous demo file you recorded as
 //                     a patch to either improper usage or problem in
 //                     SubPathOpenBox().
 //
@@ -412,7 +412,7 @@
 //                     COMP_USA_VERSION only.
 //
 //      09/11/97   JMI   Removed old code for PLAY_SPECIFIC_LEVEL_ONLY macro which
-//                     no S32er exists.
+//                     no longer exists.
 //
 //      09/12/97 MJR   Now more code doesn't compile when the editor is disabled,
 //                     in an attempt to make it harder to hack.
@@ -1413,7 +1413,7 @@ static short GameCore(void)      // Returns 0 on success.
 //////////////////////////////////////
 
    // Keep looping until user quits or error occurs.  Maybe even play
-   // a game or two aS32 the way.  If there's no user input for a
+   // a game or two along the way.  If there's no user input for a
    // certain amount of time, automatically run the self-playing demo.
    RInputEvent ie;
    memset(&ie, '\0', sizeof (ie));  // fix valgrind complaining... --ryan.
@@ -2708,7 +2708,7 @@ extern void Game_StartSinglePlayerGame(
    short sMenuItem)
 {
 
-   // we reset these as we go aS32.
+   // we reset these as we go along.
    const bool usedCheats = ((Flag_Achievements & FLAG_USED_CHEATS) != 0);
    Flag_Achievements = FLAG_USED_M16 | FLAG_KILLED_EVERYTHING | FLAG_KILLED_ONLY_HOSTILES | FLAG_HIGHEST_DIFFICULTY;
    if (usedCheats)
@@ -4574,7 +4574,7 @@ short CorrectifyBasePath(                       // Returns 0 if successfull, non
       else
       {
          sResult = -1;
-         TRACE("CorrectifyBasePath(): Specified path is already S32er than the specified maximum length!\n");
+         TRACE("CorrectifyBasePath(): Specified path is already longer than the specified maximum length!\n");
       }
    }
 
@@ -4632,7 +4632,7 @@ static void ForegroundCall(void)
       // Reset the input.
       ClearLocalInput();
 
-      // Flag that we're no S32er storing the show level.
+      // Flag that we're no longer storing the show level.
       ms_sForegroundCursorShowLevel = INVALID_CURSOR_SHOW_LEVEL;
    }
 }

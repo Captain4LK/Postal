@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -31,11 +31,11 @@
 //      04/04/97   JMI   Added barrel spin animation which has the origin at the
 //                     barrel's center of gravity for better spinning.
 //
-//      06/11/97 BRH   Added m_u16ShooterID so it can pass aS32 the information
+//      06/11/97 BRH   Added m_u16ShooterID so it can pass along the information
 //                     for scoring purposes.
 //
 //      06/25/97 BRH   Added shadow sprite and alpha animation for the shadow
-//                     aS32 the ground to see how it looks.  If it looks good,
+//                     along the ground to see how it looks.  If it looks good,
 //                     then it will probably be moved further up into CThing3D.
 //
 //      08/15/97 BRH   Added a special barrel flag so that this type of
@@ -70,7 +70,7 @@ typedef RChannel<CAlphaAnim> ChannelAA;
 //---------------------------------------------------------------------------
 public:
 U16 m_u16ShooterID;                       // Variable for storing the shooter ID
-                                          // to pass aS32 in the messages.
+                                          // to pass along in the messages.
 
 protected:
 
@@ -132,7 +132,7 @@ public:
 public:
 // Construct object
 static short Construct(                               // Returns 0 if successfull, non-zero otherwise
-   CRealm* pRealm,                                    // In:  Pointer to realm this object beS32s to
+   CRealm* pRealm,                                    // In:  Pointer to realm this object belongs to
    CThing** ppNew)                                    // Out: Pointer to new object
 {
    short sResult = 0;

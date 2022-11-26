@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -49,7 +49,7 @@
 //      02/23/97 BRH   Added State_Hide so that the rocket can be created but
 //                     is not shown.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      03/03/97 BRH   Derived this from the CWeapon base class
@@ -71,7 +71,7 @@
 //      04/15/97 BRH   Took out old State_Find code that was used to seek the
 //                     CDude.  The rocket is now aimed by the shooter and
 //                     this old code was using the CDude list which will soon
-//                     be changed and since it is no S32er needed, it was
+//                     be changed and since it is no longer needed, it was
 //                     best to take it out.
 //
 //      04/23/97   JMI   Now collides with Characters, Miscs, and Barrels.
@@ -91,7 +91,7 @@
 //                     NOT_WALKABLE attribute which caused it to blow up in
 //                     the wrong places.  Now only the height is checked.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/10/97 BRH   Increased the rocket arming time from 200ms to 500ms to
@@ -171,7 +171,7 @@
 //      08/26/97 BRH   Fixed bug with brackets where rocket always went back to
 //                     its previous position when fired by a sentry gun.
 //
-//      08/27/97   JMI   No S32er sets the smash radius to m_sCurRadius during
+//      08/27/97   JMI   No longer sets the smash radius to m_sCurRadius during
 //                     Render().
 //
 ////////////////////////////////////////////////////////////////////////////////

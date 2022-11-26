@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -65,7 +65,7 @@
 //                     coordinate also, before they were assuming they were on the
 //                     ground so explosions in the air weren't working correctly.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
 //      03/05/97 BRH   Added center of and velocity of explosion to the explosion
@@ -88,11 +88,11 @@
 //      04/21/97 BRH   Added second animation file and changed filename of second
 //                     asset to match.
 //
-//      04/23/97   JMI   CExplode no S32er puts it's m_smash in the smashatorium.
+//      04/23/97   JMI   CExplode no longer puts it's m_smash in the smashatorium.
 //                     Now sends messages to Characters, Miscs, Barrels, and
 //                     Mines.
 //
-//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed ASSERT on m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/07/97 BRH   Added smoke to the end of all explosions.

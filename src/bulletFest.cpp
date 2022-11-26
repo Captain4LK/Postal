@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -73,7 +73,7 @@
 //                     so that, if the bullet is exceptionally high, it will
 //                     go, hopefully, entirely off screen).
 //
-//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      06/11/97   JMI   Added Preload() for loading assets used during play.
@@ -102,7 +102,7 @@
 //                     MUST specify a category and you don't have to specify a
 //                     SoundInstance ptr to specify a volume.
 //
-//      07/27/97   JMI   No S32er calls CRealm::Make2dResPath() on res names
+//      07/27/97   JMI   No longer calls CRealm::Make2dResPath() on res names
 //                     given to CAnimThing as it already does that 
 //                     automatically.
 //
@@ -275,7 +275,7 @@ short GetMaxHeight(
 //////////////////////////////////////////////////////////////////////////////
 // 
 // Take a point inside terrain and find our way out via X/Z plane.
-// Once out, scan aS32 terrain to determine the angle of the terrain that
+// Once out, scan along terrain to determine the angle of the terrain that
 // exceeds sY in height.
 // ASSUMPTION: sX, sY, sZ is a point inside terrain.
 //
@@ -455,7 +455,7 @@ bool CBulletFest::FireDeluxe(   // Returns what and as Fire() would.
    short* psY,                  // Out: Hit position.
    short* psZ,                  // Out: Hit position.
    CThing** ppthing,            // Out: Ptr to thing hit or NULL.
-   bool   bTracer /*= true*/,   // In:  Draw a tracer at random point aS32 path.
+   bool   bTracer /*= true*/,   // In:  Draw a tracer at random point along path.
    SampleMasterID   smid   /*= g_smidBulletFire*/)   // In:  Use ammo sample.
    {
    bool bHit   = false;   // Assume no collision with CThing within u32ThingMask.
@@ -486,7 +486,7 @@ bool CBulletFest::FireDeluxe(   // Returns what and as Fire() would.
          psY,            // Out: Hit position.
          psZ,            // Out: Hit position.
          ppthing,         // Out: Ptr to thing hit or NULL.
-         bTracer);      // In:  Draw a tracer at random point aS32 path.
+         bTracer);      // In:  Draw a tracer at random point along path.
 
       // If no hit . . .
       if (bHit == false)
@@ -700,7 +700,7 @@ bool CBulletFest::Fire(         // Returns true if a hit, false otherwise.
    short* psY,                  // Out: Hit position.
    short* psZ,                  // Out: Hit position.
    CThing** ppthing,            // Out: Ptr to thing hit or NULL.
-   bool   bTracer /*= true*/)   // In:  Draw a tracer at random point aS32 path.
+   bool   bTracer /*= true*/)   // In:  Draw a tracer at random point along path.
    {
    bool bHit   = false;   // Assume no collision with CThing within u32ThingMask.
 

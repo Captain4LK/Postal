@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -157,7 +157,7 @@ typedef struct tag_ANIMSET
 // address to each of the offsets.  This has no memory/file overhead,
 // but requires specific code for this purpose.  A general purpose
 // alternative would be to have relocation data at the start of the
-// file (I saw this on the Atari ST).  If all S32s are S32-aligned,
+// file (I saw this on the Atari ST).  If all longs are S32-aligned,
 // then each bit could correspond to a S32.  If the bit is 0 then
 // we skip that S32, if it is 1 we relocate it.  The size of the
 // reloc data would be 1/32nd of the actual data.  A similar method

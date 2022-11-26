@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -38,7 +38,7 @@
 //      07/14/97 BRH   Added challenge mode parameter to CutSceneStart so that
 //                     the proper text can be displayed for the Gauntlet.
 //
-//      08/27/97   JRD   Adding a compact stand aS32 Martini effect for us with the
+//      08/27/97   JRD   Adding a compact stand along Martini effect for us with the
 //                     end of the game called MartiniDo
 //
 //      08/27/97   JRD   Made MartiniDo WAY to easy for Bill to use, by putting up
@@ -92,7 +92,7 @@ short   MartiniDo(   RImage*   pimBackground, // actually, this is the ONLY grap
 // If a special effect is desired, CutSceneConfig() must be called, followed
 // by repeated calls to CutSceneUpdate().
 //
-// CutSceneEnd() must be called when the cutscene is no S32er needed.
+// CutSceneEnd() must be called when the cutscene is no longer needed.
 //
 ////////////////////////////////////////////////////////////////////////////////
 extern void CutSceneStart(

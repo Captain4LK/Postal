@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -72,7 +72,7 @@
 //      03/06/97   JMI   Increased horizontal surface drag.
 //                     Now Render() uses the combined attributes for the layer.
 //
-//      03/06/97   JMI   No S32er relies on m_pWeapon to store weapon ptr.  But,
+//      03/06/97   JMI   No longer relies on m_pWeapon to store weapon ptr.  But,
 //                     if a derived class sets m_pWeapon to point to a weapon,
 //                     Render() will still update its transform.
 //                     This should be removed as soon as no one uses m_pWeapon.
@@ -115,14 +115,14 @@
 //
 //      04/02/97   JMI   OnDead() now destroys any weapon the character still has.
 //                     The idea is that, if the weapon was just rendered as a
-//                     child object onto the background, it should no S32er exist
+//                     child object onto the background, it should no longer exist
 //                     in CThing form.  Also, undeleted child weapons will clutter
 //                     memory until the realm they're in is destroyed.
 //                     Removed m_pCurrentAnim.
 //
 //      04/02/97   JMI   PrepareWeapon() now, also, returns a ptr to the weapon.
 //
-//      04/15/97 BRH   We were noticing that the guys no S32er turned dark after
+//      04/15/97 BRH   We were noticing that the guys no longer turned dark after
 //                     being burnt.  I added the change to m_sBrightness in
 //                     WhileBurning() so that he turns dark when dead.
 //
@@ -178,7 +178,7 @@
 //      05/26/97 BRH   Added CAssaultWeapon which is just the shot gun allowed
 //                     to rapid fire.
 //
-//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no S32er
+//      05/29/97   JMI   Removed references to m_pRealm->m_pAttribMap which no longer
 //                     exists.
 //
 //      05/30/97   JMI   Changed FireBullets() to only play the sample once (through
@@ -244,7 +244,7 @@
 //      07/21/97   JMI   Now ValidateWeaponPosition() checks to make sure the weapon
 //                     state is not State_Hide before checking the position.
 //
-//      07/27/97   JMI   No S32er calls CRealm::Make2dResPath() on res names
+//      07/27/97   JMI   No longer calls CRealm::Make2dResPath() on res names
 //                     given to CAnimThing as it already does that
 //                     automatically.
 //                     Also, now appropriately places blood splats on outside of
@@ -714,7 +714,7 @@ void CCharacter::OnDead(void)
    if (m_pRealm->m_idbank.GetThingByID(&pthing, m_u16IdWeapon) == 0)
    {
       // It has a permanent place in the background and, therefore, is no
-      // S32er needed.
+      // longer needed.
 
       // "Shoot" it (release it).
       ShootWeapon();
@@ -741,7 +741,7 @@ bool CCharacter::WhileRunOver(void) // Returns true until state is complete.
 ////////////////////////////////////////////////////////////////////////////////
 // Implements one-time functionality for when a weapon is destroyed while
 // we were moving it (i.e., before we let go or ShootWeapon()'ed it).
-// This can occur when a weapon, while traveling aS32 our rigid body,
+// This can occur when a weapon, while traveling along our rigid body,
 // enters terrain.
 ////////////////////////////////////////////////////////////////////////////////
 // virtual.
@@ -1231,7 +1231,7 @@ CWeapon* CCharacter::ShootWeapon(   // Returns the weapon ptr or NULL
    }
    }
 
-   // No S32er exists.
+   // No longer exists.
    m_u16IdWeapon   = CIdBank::IdNil;
 
    return pweapon;
@@ -1366,7 +1366,7 @@ bool CCharacter::FireBullets(          // Returns true, if we hit someone/thing.
          &sZ,                 // Out: Terrain hit position (i.e., where the bullet
                               // would stop if no CThing collisions occurred).
          &pthingTarget,       // Out: Ptr to thing hit or NULL.
-         true,                // In:  Draw a tracer at random point aS32 path.
+         true,                // In:  Draw a tracer at random point along path.
          (i == 0) ? smidAmmo : g_smidNil) // In:  Use ammo sample.
 
       ;
@@ -1621,7 +1621,7 @@ bool CCharacter::IsPathClear( // Returns true, if the entire path is clear.
    }
 
    CSmash*   psmashClosest   = NULL;
-   // Determine if anything with specified smash description was hit on aS32 each edge . . .
+   // Determine if anything with specified smash description was hit on along each edge . . .
    CSmash*   psmash1;
    if (m_pRealm->m_smashatorium.QuickCheckClosest(
           &line1,
@@ -1809,7 +1809,7 @@ bool CCharacter::IlluminateTarget(        // Returns true if there is a target
    }
 
    CSmash*   psmashClosest   = NULL;
-   // Determine if anything with specified smash description was hit on aS32 each edge . . .
+   // Determine if anything with specified smash description was hit on along each edge . . .
    CSmash*   psmash1;
    if (m_pRealm->m_smashatorium.QuickCheckClosest(
           &line1,

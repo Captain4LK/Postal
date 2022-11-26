@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -376,7 +376,7 @@ void* CRtSnd::MixCall(   USHORT usMsg, void* pData, U32* pulBufSize,
             // Success.
             // Remove close me flag, opened flag, and done flag.
             psndhdr->usStatus &= ~(STATUS_OPENED | STATUS_DONE);
-            // No S32er need the callback.
+            // No longer need the callback.
             ms_listSndhdrs.Remove(psndhdr);
             // If the reference count hits zero . . .
             if (ms_listSndhdrs.IsEmpty() == TRUE)

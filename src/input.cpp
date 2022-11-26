@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -129,7 +129,7 @@
 //                     Also, changed Jump to Revive and INPUT_JUMP to INPUT_REVIVE.
 //
 //      08/12/97   JMI   Now requires an input event for cheats for GetLocalInput().
-//                     Anagrams will no S32er work and it will not be liberal
+//                     Anagrams will no longer work and it will not be liberal
 //                     about additional keys mixed in (e.g., HONC would not work
 //                     for HOC).
 //

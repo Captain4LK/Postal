@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -32,7 +32,7 @@
 //
 //      04/08/97   JMI   Changed defualt for m_usServerPort from 9999 to 61663.
 //
-//      04/11/97   JMI   No S32er sets m_sClient and m_sServer in PreDemo().
+//      04/11/97   JMI   No longer sets m_sClient and m_sServer in PreDemo().
 //
 //      04/14/97   JMI   Added TEMP flag m_bDontBlit to allow us to speed up the
 //                     Snap() call by not blitting.

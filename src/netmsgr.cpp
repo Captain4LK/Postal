@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -42,7 +42,7 @@
 //                     Also fixed bug where the message byte would be ungotten
 //                     twice if the message hadn't been fully received yet.
 //
-//      08/15/97 MJR   Cleaned up usage of CBufQ aS32 with some other potential
+//      08/15/97 MJR   Cleaned up usage of CBufQ along with some other potential
 //                     (actual???) bugs.
 //
 //      08/18/97 MJR   Added "ChangeReq" and "Changed" messages.

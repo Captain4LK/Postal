@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -30,7 +30,7 @@
 //
 //      10/01/96   JMI   DrawDirty() now uses rsp[Un]ShieldCursor().  DoModal()
 //                     was always overwriting m_ulId by when callbacks were
-//                     used..fixed.  DoModal() no S32er calls GetNext(phot).
+//                     used..fixed.  DoModal() no longer calls GetNext(phot).
 //                     It now calls GetNext() with no args.
 //
 //      10/03/96   JMI   Added DoModeless() to handle simple non-modal dirty
@@ -566,7 +566,7 @@ U32 RMsgBox::DoModal(               // Returns chosen ID on success,
    // Erase.
    DrawDirty(pimDst, pimScr, &drl);
 
-   // Free up any memory no S32er needed.
+   // Free up any memory no longer needed.
    imEraser.DestroyData();
 
    // Deactivate this and all children.

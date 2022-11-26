@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -107,7 +107,7 @@
 //
 //      04/22/97   JMI   Updated menuClient to work as the in game menu for Play.cpp.
 //
-//      04/22/97   JMI   No S32er uses chdir() to get the open dialog into the
+//      04/22/97   JMI   No longer uses chdir() to get the open dialog into the
 //                     correct directory.  Now we simply default szRealmName
 //                     to the path of the dir we want to save under.
 //
@@ -265,7 +265,7 @@
 //
 //      08/24/97 MJR   Lots of tuning for consistancy, wording, etc.
 //                     More and more tuning.
-//                     Removed grip-zone-radius stuff -- no S32er needed.
+//                     Removed grip-zone-radius stuff -- no longer needed.
 //
 //      08/25/97 MJR   Made the color stuff into macros so they could easily be
 //                     changed for all menus.  Changed the RGB values, but the
@@ -314,7 +314,7 @@
 //
 //      09/04/97   JMI   Removed browse option from menuStartDemo.
 //
-//      09/06/97   JMI   No S32er displays the Demo menu even for an instant if
+//      09/06/97   JMI   No longer displays the Demo menu even for an instant if
 //                     g_GameSettings.m_sCanRecordDemos is FALSE.
 //
 //      09/17/97   JMI   Menus now use localizable string variables from localize.*.

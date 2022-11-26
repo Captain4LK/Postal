@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -54,7 +54,7 @@
 // interrupt-driven code is removing them.  Now let's say that the normal code
 // calls NumItems() to see how many items are in the queue.  If an interrupt
 // were to occur right after that call, then the number that it returned
-// would no S32er be valid.  This is, of course, a typical problem in an
+// would no longer be valid.  This is, of course, a typical problem in an
 // interrupt-driven environment.  On the other hand, NumItems() really does
 // have a specific problem!  If an interrupt were to occur while NumItems()
 // was calculating the number of items in the queue, and the queue happened

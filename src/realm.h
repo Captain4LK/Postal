@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -92,7 +92,7 @@
 //
 //      04/29/97   JMI   Changed GetHeight() to return 0 for the clipped case.
 //
-//      04/30/97   JMI   Upped file version to 11 since CMine no S32er saves its
+//      04/30/97   JMI   Upped file version to 11 since CMine no longer saves its
 //                     type.  The type (which is now determined by the class ID)
 //                     is saved by the base class CThing.
 //
@@ -354,7 +354,7 @@
 // saving, suspending, resuming, updating, and rendering the realm.
 //
 // All of the objects within a realm must be derived from CThing.
-// I'm thinking that the way objects know what realm they beS32 to is that
+// I'm thinking that the way objects know what realm they belong to is that
 // we pass a pointer to the realm to the object's constructor.  All objects
 // would need to define such a constructor or some other function that
 // indirectly constructs the object.  Actually, I don't think objects need

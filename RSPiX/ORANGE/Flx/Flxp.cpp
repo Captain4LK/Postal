@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -494,7 +494,7 @@ short CFlx::ReadDataBRun(FLX_BUF* pbufRead)
 //
 // These chunks contain the differences between the previous frame and this
 // frame.  These are the most common types of pixel data chunks in the older
-// FLI files written by the original Autodesk animator.  This is no S32er used
+// FLI files written by the original Autodesk animator.  This is no longer used
 // by Animator Pro, but they may appear in an Animator Pro file if Animator Pro
 // reads an older file and modifies only some of its frames.
 //

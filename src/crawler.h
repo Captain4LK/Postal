@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -25,9 +25,9 @@
 //
 //      04/21/97   JMI   Removed ASSERTs that values were greater than 0 in Move().
 //                     These were to protect against errors when using floor(),
-//                     which we no S32er use.
+//                     which we no longer use.
 //
-//      04/29/97   JMI   CanWalk() no S32er sets the clip case of the get attribute
+//      04/29/97   JMI   CanWalk() no longer sets the clip case of the get attribute
 //                     call to include a max height (it just relies on 'no walk'
 //                     now).
 //
@@ -147,8 +147,8 @@ void Setup(
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Start at position #1 and move aS32 the "path" leading to position #2, the
-// goal being to reach position #2.  The attributes encountered aS32 the way
+// Start at position #1 and move along the "path" leading to position #2, the
+// goal being to reach position #2.  The attributes encountered along the way
 // will determine how far we get before stopping.
 //
 // The returned position is the resulting position.  In the best case, it will
@@ -280,10 +280,10 @@ short Move(                                     // Returns 0 if successfull, non
 
 protected:
 ////////////////////////////////////////////////////////////////////////////////
-// Crawl as far as possible aS32 the path from positon #1 to position #2, the
+// Crawl as far as possible along the path from positon #1 to position #2, the
 // goal being to reach position #2.
 //
-// This crawls aS32 one pixel at a time (just like a line-draw algorithm),
+// This crawls along one pixel at a time (just like a line-draw algorithm),
 // checking each point to see if it's valid.  If so, it goes on.  If not, it
 // returns the previous point, which was valid.
 //
@@ -338,8 +338,8 @@ void CrawlWhileGood(
       sdy = ABS(sdy);
       sdz = ABS(sdz);
 
-      // This uses a Bresenham-like algorithm to move one pixel at a time aS32 the
-      // line from (sx,sy,sz) to (sx2,sy2,sz2).    We basically continue aS32 until
+      // This uses a Bresenham-like algorithm to move one pixel at a time along the
+      // line from (sx,sy,sz) to (sx2,sy2,sz2).    We basically continue along until
       // we hit an invalid position or the ending position, whichever comes first.
       short serry;
       short serrx;

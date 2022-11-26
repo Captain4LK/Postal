@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -72,10 +72,10 @@
 //
 //      02/13/97   JMI   In previous update, forgot to release alpha related res's.
 //
-//      02/24/97   JMI   No S32er sets the m_type member of the m_sprite b/c it
+//      02/24/97   JMI   No longer sets the m_type member of the m_sprite b/c it
 //                     is set by m_sprite's constructor.
 //
-//      02/26/97   JMI   No S32er skips map load if no layers loaded.
+//      02/26/97   JMI   No longer skips map load if no layers loaded.
 //
 //      03/13/97   JMI   Load now takes a version number.
 //
@@ -367,7 +367,7 @@ short CHood::Load(                        // Returns 0 if successfull, non-zero 
 
       case 29:
       case 28:
-         short sDummy2dResPathIndex;        // This is no S32er stored here.
+         short sDummy2dResPathIndex;        // This is no longer stored here.
          pFile->Read(&sDummy2dResPathIndex);
 
       case 27:
@@ -1308,7 +1308,7 @@ short CHood::FreeResources(void)                // Returns 0 if successfull, non
    if (m_pimTopBar)
       rspReleaseResource(&(m_pRealm->m_resmgr), &m_pimTopBar);
 
-   // Resources no S32er exist for sure.
+   // Resources no longer exist for sure.
    m_bResourcesExist = false;
 
    // Let's get these out of memory right away.

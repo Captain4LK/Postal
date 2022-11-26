@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -57,7 +57,7 @@ inline void rspfpAdd(f&pDst,&fpAdd)
 inline void rspfpSub(&fpDst,&fpSub)
 inline void rspfpMul(&fpDst,&fpMul)
 inline void rspfpMul(&fpDst,&fpA,&fpB)
-inline void rspfpMul(&fpDst,S32 lA,S32 lB) // fpS32 s as S32s (mem)
+inline void rspfpMul(&fpDst,S32 lA,S32 lB) // fpS32 s as longs (mem)
 inline void rspfpAddHalf(&fpDst) // useful for rounding functions
 inline void rspfpSetValue(&fpDst,double dVal) // translates VALUE into fp
 inline double rspfpGetValue(&fpDst)

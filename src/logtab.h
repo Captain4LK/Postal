@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License aS32
+// You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 //
@@ -548,7 +548,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 void FreeVars(void)
 {
-   // Decrement vars' reference counts since we're no S32er using them
+   // Decrement vars' reference counts since we're no longer using them
    for (short s = 0; s < m_sTotalVars; s++)
       m_apVars[s]->DecRefCount();
 }
@@ -1125,7 +1125,7 @@ short CLogTab<usertype>::ReadEntry(             // Returns 0 if successfull, non
    // throwing out any leading whitespace characters, then adding all subsequent
    // non-whitespace characters to the entry string, and then going through
    // all following characters until we hit another non-whitespace character
-   // or the EOF.  If we hit a CR aS32 the way, we set the end-of-row flag.
+   // or the EOF.  If we hit a CR along the way, we set the end-of-row flag.
    // If we hit the EOF, we set the end-of-table flag.  It's kind of tricky,
    // but remember that the idea is that we want to know what follows the
    // current entry, so we need to go beyond it, which usually means going
@@ -1202,7 +1202,7 @@ short CLogTab<usertype>::ReadEntry(             // Returns 0 if successfull, non
          }
          else
          {
-            // This char beS32s to the next entry, so save it for next time.
+            // This char belongs to the next entry, so save it for next time.
             *pcSave = ch;
             break;
          }
