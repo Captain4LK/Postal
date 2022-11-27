@@ -39,7 +39,7 @@
    short   GetWidth(char* pszString); // see m_sNumChar,ms_szLineText,ms_sCharPosX
    RFont* GetFont() { return m_pfnCurFont; }
    short SetColumn(short sX,short sY,short sW,short sH);
-//****************************************************** QUICK CHECK */
+****************************************************** QUICK CHECK */
 
 #include "BLIT.H"
 //====================
@@ -79,9 +79,9 @@ typedef enum
    NUM_OF_EFFECTS
 }   Effect;       // binary
 //-------------------------- Higher Level
-char* print(char* pszFormat, ...);
-char* print(short sX, short sY, char* pszFormat, ...);
-char* print(RImage* pimDst, short sX, short sY, char* pszFormat, ...);
+char* print(const char* pszFormat, ...);
+char* print(short sX, short sY, const char* pszFormat, ...);
+char* print(RImage* pimDst, short sX, short sY, const char* pszFormat, ...);
 short SetEffectAbs(Effect eEffect, short sVal);   // absolute:
 short SetEffect(Effect eEffect, double dVal);   // relative:
 short SetColor(U32 ulForeColor, U32 ulBackColor = 0, U32 ulShadowColor = 0);
@@ -97,7 +97,7 @@ void ResetMode();    // all zero
 void SetMode(Mode eMode, short sVal);   // 0 = off
 short SetFont(short sCellH, RFont* pFont = NULL);
 void   GetPos(short *psX, short *psY = NULL, short *psW = NULL, short *psH = NULL);
-short   GetWidth(char* pszString);
+short   GetWidth(const char* pszString);
 RFont* GetFont() { return m_pfnCurFont; }
 //-------------------------- Lower Level
 //void OffsetShadow();

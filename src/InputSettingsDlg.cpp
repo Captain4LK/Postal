@@ -207,7 +207,7 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
    short sRes            = 0;          // Assume success.
    short sInputIndex      = 0;          // Safety.
    U32*   pasPlayInputs   = NULL;  // Input value array.
-   char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
+   const char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
    bool bIsJoystick = false;
 
    switch (pmenu->u32Id)
@@ -245,7 +245,7 @@ extern short InputSettingsDlg_InitMenu(   // Returns 0 on success.
    for (sInputIndex = 0; sInputIndex < CInputSettings::NumInputFunctions && sRes == 0; sInputIndex++)
    {
       // Set text describing input function for this menu item.
-      pmenu->ami[sInputIndex].pszText   = CInputSettings::ms_ainputinfo[sInputIndex].pszDescription;
+      pmenu->ami[sInputIndex].pszText   = (char *)CInputSettings::ms_ainputinfo[sInputIndex].pszDescription; //Captain4LK: TODO fix this
       // Enable item.
       pmenu->ami[sInputIndex].sEnabled   = TRUE;
       // Load GUI for input method description.
@@ -383,7 +383,7 @@ void InputSettingsDlg_Choice( // Returns nothing.
              || sMenuItem == ms_sResetItemOld)
          {
             U32*   pasPlayInputs   = NULL;           // Input value array.
-            char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
+            const char**   papszInputDescriptions   = NULL;  // Descriptions of input values.
 
             switch (pmenu->u32Id)
             {

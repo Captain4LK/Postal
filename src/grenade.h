@@ -134,7 +134,7 @@ static double ms_dBounceTransferFract;                // Amount of velocity tran
 static double ms_adGroundDimisher[NumStyles];         // Dimishes velocities once it hits the ground.
 static double ms_adBounceDimisher[NumStyles];         // Dimishes velocities when bouncing.
 
-static char*   ms_apszResNames[NumStyles];            // Res names indexed Style.
+static const char*   ms_apszResNames[NumStyles];            // Res names indexed Style.
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor

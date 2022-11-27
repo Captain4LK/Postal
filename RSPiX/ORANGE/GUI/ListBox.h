@@ -163,7 +163,7 @@ void Compose(              // Returns nothing.
 // Add a string into the list box.
 // Note that adding a string at the end is by far the fastest.
 RGuiItem* AddString(                   // Returns new GUI item on success.
-   char*   pszString,                    // String to add.
+   const char*   pszString,                    // String to add.
    RGuiItem* pguiAfter   = NULL);       // Gui to add after or NULL to add at
                                         // end.
 
@@ -368,7 +368,7 @@ protected:     // Internal functions.
 // a child of this listbox.
 RGuiItem* CreateStringItem(         // Returns new item on success; NULL,
                                     // otherwise.
-   char* pszString);                // Text for new item.
+   const char* pszString);                // Text for new item.
 
 // Creates an encapsulator object for the specified GUI.
 RGuiItem* CreateEncapsulator(       // Returns new item on success; NULL,

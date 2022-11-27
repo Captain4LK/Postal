@@ -227,7 +227,7 @@ S32 RFile::ms_lCloseUser    = 0L;
 U8 RFile::ms_au8SwapBuf[RFILE_SWAP_SIZE];
 
 // String description of endian (index by Endian enum).
-static char*   ms_apszEndian[]   =
+static const char*   ms_apszEndian[]   =
 {
    "BigEndian",
    "NeutralEndian",
@@ -1600,7 +1600,7 @@ S32 WriteASCII(      // Returns number of complete TYPE items successfully
    TYPE*      ptData,  // In:  Pointer to array of TYPE items for write data.
    S32 lNum,         // In:  Number of TYPE items to read.
    FILE*      pfsOut,  // In:  File stream to use for output.
-   char*      pszFrmt) // In:  Output printf style format specifier.
+   const char*      pszFrmt) // In:  Output printf style format specifier.
 {
    S32 lRes  = 0;    // Assume success.
 

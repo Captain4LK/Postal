@@ -72,7 +72,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Array of key descriptors.
-extern char* g_apszKeyDescriptions[128]   =
+const char* g_apszKeyDescriptions[128]   =
 {
    "None",
    "End",
@@ -205,7 +205,7 @@ extern char* g_apszKeyDescriptions[128]   =
 };
 
 // Array of mouse button descriptors.
-extern char* g_apszMouseButtonDescriptions[8]   =
+const char* g_apszMouseButtonDescriptions[8]   =
 {
    "None",
    "Left",
@@ -218,7 +218,7 @@ extern char* g_apszMouseButtonDescriptions[8]   =
 };
 
 // Array of joy button descriptors.
-extern char* g_apszJoyButtonDescriptions[18] =
+const char* g_apszJoyButtonDescriptions[18] =
 {
    "None",
    "A",

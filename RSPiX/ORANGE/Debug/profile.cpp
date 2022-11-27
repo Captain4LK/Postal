@@ -62,7 +62,7 @@ RProfile rspProfileInstance;
 //   Start Profile => Begin a range!
 //
 //////////////////////////////////////////////////////////////////////////////
-void RProfile::StartProfile(char* pszFieldName)
+void RProfile::StartProfile(const char* pszFieldName)
 {
    short sKey;
 
@@ -175,7 +175,7 @@ void RProfile::StartProfile(char* pszFieldName)
 //////////////////////////////////////////////////////////////////////////////
 // Very inefficient for now!
 //
-void RProfile::EndProfile(char* pszFieldName)
+void RProfile::EndProfile(const char* pszFieldName)
 {
    short sKey;
    //*****************************************************************************

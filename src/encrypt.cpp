@@ -70,16 +70,16 @@
 //////////////////////////////////////////////////////////////////////////////////////
 // Module specific (static) globals.
 //////////////////////////////////////////////////////////////////////////////////////
-static char *ms_aszSeed[NUM_KEYS] =           {  "S3D5Lf6klfdsjiureLJKHLKmnblkjshgwieourLKHLKJHSDA0432175094SJAKLFK7348LSDLKJDHFOIUhjgdskgfeiurytowelxcmnvbdfhgeoriyfdslkhgfdgyuie",
-                                                 "KlkjILKJ879IHKJ8kj67kjh7IUKJHjkh98769872vYUTui6JHG87jhg78JHg787JHGUYuytuyjg876RHCVBnvbAIUT678787igJGFHGFTy67uhHJKJHUYTjhg6HGHG76",
-                                                 "4LKJH5Euhysdiouyfjlkw45879345kjshfdgcvxJSDHFR8734hdskmfv7y8KJLSDGFAVBMZXBV789kMNADFYUYjhkgkjhdsgfowe787243KJHGDSAGJKkjgdfuye3sd7",
-                                                 "l45kjhdfuihlIUYSLKHi87ylKJHYOIUmsagKJLHgY9802734KJHLKiuoymNJHTmnb4iU7687nkmbojyTD64654HJG765KHKJhg87jKHKJ76dcbnmbDBDSJFDHJ6IHGHJ",
-                                                 "fdlkhgljslfkdfhvcxzb 902374jklhfdgoIUOYLSKFDJH98798ysdlk9870OLHL987sdxmncosidHGKJ876kjhtdg786JHG87kj76Kjhgkjhi8K8HG98kgdnb mvzms",
-                                                 "lsdhflkasjhLKJHSLKHAFD987435LRKJHL34UY5L34J64MNB7IU4Yiuoyt87sdfjshg87ahjkjhgds87JHGKJHT8kjhgdfsvbmyt4eu678JHGkjyt6jKH78k0kjt02KJ",
-                                                 "lkjhUIYkljhlUYOI6yt9876HJMNBVuyt97JKHfMvhjytrfiyIUHGKVBMNBuyi9872548JKN76kj9fsd8KHG8JKg7872732jK8JgkjhKJHGKJHgkjhg7jkhgkjhgkjhgk",
-                                                 "dsdfLKJH;LKjKJFLdJGmhpi657oU6Y76fhgf5dyfh879346nmzmbvc56erter654gvcbmzwsdfdsmxcngfvRDFrEDfg76bDewdfvdfgwqsdfdgfcrRDfhgfderfdfteP",
-                                                 "lkhfdsRE546457djh6g65l67KJHLkhmnbvxcbDF09KLJliuyfdsgxcvbFDGERsdasdfgTEdhFDtYrt8765DFRrfgfhvhghretwRF67654DFhDGFDVctTRTtrytrRyiTY",
-                                                 "28734jsdfhg873jksgUIYTIUkhgiuT7YIGVBKjg8796KHG8o76HJG876tKJHG8976GFd6584H6G67RT987kJHG65978JKHG8JHGKJHGkhjgkjhgidsytf87439649283"};
+static const char *ms_aszSeed[NUM_KEYS] =           {  "S3D5Lf6klfdsjiureLJKHLKmnblkjshgwieourLKHLKJHSDA0432175094SJAKLFK7348LSDLKJDHFOIUhjgdskgfeiurytowelxcmnvbdfhgeoriyfdslkhgfdgyuie",
+                                                       "KlkjILKJ879IHKJ8kj67kjh7IUKJHjkh98769872vYUTui6JHG87jhg78JHg787JHGUYuytuyjg876RHCVBnvbAIUT678787igJGFHGFTy67uhHJKJHUYTjhg6HGHG76",
+                                                       "4LKJH5Euhysdiouyfjlkw45879345kjshfdgcvxJSDHFR8734hdskmfv7y8KJLSDGFAVBMZXBV789kMNADFYUYjhkgkjhdsgfowe787243KJHGDSAGJKkjgdfuye3sd7",
+                                                       "l45kjhdfuihlIUYSLKHi87ylKJHYOIUmsagKJLHgY9802734KJHLKiuoymNJHTmnb4iU7687nkmbojyTD64654HJG765KHKJhg87jKHKJ76dcbnmbDBDSJFDHJ6IHGHJ",
+                                                       "fdlkhgljslfkdfhvcxzb 902374jklhfdgoIUOYLSKFDJH98798ysdlk9870OLHL987sdxmncosidHGKJ876kjhtdg786JHG87kj76Kjhgkjhi8K8HG98kgdnb mvzms",
+                                                       "lsdhflkasjhLKJHSLKHAFD987435LRKJHL34UY5L34J64MNB7IU4Yiuoyt87sdfjshg87ahjkjhgds87JHGKJHT8kjhgdfsvbmyt4eu678JHGkjyt6jKH78k0kjt02KJ",
+                                                       "lkjhUIYkljhlUYOI6yt9876HJMNBVuyt97JKHfMvhjytrfiyIUHGKVBMNBuyi9872548JKN76kj9fsd8KHG8JKg7872732jK8JgkjhKJHGKJHgkjhg7jkhgkjhgkjhgk",
+                                                       "dsdfLKJH;LKjKJFLdJGmhpi657oU6Y76fhgf5dyfh879346nmzmbvc56erter654gvcbmzwsdfdsmxcngfvRDFrEDfg76bDewdfvdfgwqsdfdgfcrRDfhgfderfdfteP",
+                                                       "lkhfdsRE546457djh6g65l67KJHLkhmnbvxcbDF09KLJliuyfdsgxcvbFDGERsdasdfgTEdhFDtYrt8765DFRrfgfhvhghretwRF67654DFhDGFDVctTRTtrytrRyiTY",
+                                                       "28734jsdfhg873jksgUIYTIUkhgiuT7YIGVBKjg8796KHG8o76HJG876tKJHG8976GFd6584H6G67RT987kJHG65978JKHG8JHGKJHGkhjgkjhgidsytf87439649283"};
 
 
 

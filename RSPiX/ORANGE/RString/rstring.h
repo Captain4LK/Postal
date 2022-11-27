@@ -71,7 +71,7 @@ S32 m_lStrLen;             // Length of string (up to but not including the term
 // there is no buffer, a string's buffer pointer is set equal to this
 // value.  This makes it a bit faster to cast an RStrng as a char*.  Lots
 // of work to go through for a small gain, but I liked the idea!
-static char* ms_pszEmpty;
+static char ms_pszEmpty[];
 
 //---------------------------------------------------------------------------
 // Private helpers

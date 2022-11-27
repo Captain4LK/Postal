@@ -449,8 +449,8 @@ RPrint RGuiItem::ms_print;             // This is the main RPrint that all
 RGuiItem*   RGuiItem::ms_pguiFocus   = NULL;  // Higher level APIs can use this
                                               // as their current point of
                                               // input focus.
-char*         RGuiItem::ms_apszTypes[NumGuiTypes]   =  // Array of strings
-                                                       // indexed by type.
+const char*         RGuiItem::ms_apszTypes[NumGuiTypes]   =  // Array of strings
+                                                            // indexed by type.
 {
    "GuiItem",
    "Txt",
@@ -499,7 +499,7 @@ RGuiItem::RGuiItem()
 
    m_fnInputEvent         = NULL;
 
-   m_ulUserInstance      = NULL;
+   m_ulUserInstance      = (uintptr_t)NULL;
    m_ulUserData         = 0;
 
    m_sBorderThickness   = DEF_BORDER_THICKNESS;
@@ -972,7 +972,7 @@ void RGuiItem::Erase(   // Returns nothing.
 //
 ////////////////////////////////////////////////////////////////////////
 void RGuiItem::SetText(
-   char* pszFrmt, // sprintf formatted format string.
+   const char* pszFrmt, // sprintf formatted format string.
    ...)           // Corresponding good stuff.
 {
    va_list val;
@@ -986,7 +986,7 @@ void RGuiItem::SetText(
 ////////////////////////////////////////////////////////////////////////
 short RGuiItem::SetText(   // Returns 0 if item found, non-zero otherwise.
    S32 lId,                // Child item ID (can identify this item).
-   char* pszFrmt,          // sprintf formatted format string.
+   const char* pszFrmt,          // sprintf formatted format string.
    ...)                    // Corresponding good stuff.
 {
    short sRes   = 0;    // Assume success.
@@ -1946,7 +1946,7 @@ short RGuiItem::Load(   // Returns 0 on success.
 ////////////////////////////////////////////////////////////////////////
 RGuiItem* RGuiItem::LoadInstantiate(   // Returns newly allocated GUI item
                                        // on success or NULL on failure.
-   char*   pszFileName)                  // Name of file to instantiate from.
+   const char*   pszFileName)                  // Name of file to instantiate from.
 {
    RGuiItem*   pgui   = NULL;  // Assume nothing.
 

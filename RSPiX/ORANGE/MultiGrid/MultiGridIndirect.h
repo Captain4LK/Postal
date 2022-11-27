@@ -137,7 +137,7 @@ short   GetVal(UCHAR*   pszResult, short sX, short sY, char ucClipVal = -1)
    }
 
    *pszResult = 0;
-   return NULL;
+   return 0;
 }
 
 // Load a compressed data set from disk

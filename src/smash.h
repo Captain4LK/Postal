@@ -606,12 +606,12 @@ CSmashatorium(short sWorldW, short sWorldH, short sTileW, short sTileH)
       m_link4.m_pLast = pCurrent; // NOT YET INSTALLED THOUGH!
       //-------------------------------------------------------------
 
-      //**************************************************
+      **************************************************
       // there is an error here! There could have been a
       // quadrant which did not CHANGE (so was not removed),
       // but is now REDUNDANT.  Think about combining these
       // sections!
-      //**************************************************
+      **************************************************
 
       // (4) Check for redundancies before installing:
       // USE a NULL pointer to signify redundancy

@@ -81,7 +81,7 @@ void   DrawTri_ZColorFog(UCHAR* pDstOffset, S32 lDstP,
          if (pt2.z.mod > pt1.z.mod) pt1.z.mod = pt2.z.mod;
          if (pt3.z.mod > pt1.z.mod) pt1.z.mod = pt3.z.mod;
 
-         //***** PLOT THE SINGLE POINT!
+         ***** PLOT THE SINGLE POINT!
          short* pBufZ = pZB -> GetZPtr
             (pt1.x.mod + sOffsetX, pt1.y.mod + sOffsetY);
 

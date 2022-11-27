@@ -1590,8 +1590,8 @@ static short ShowRealmStatistics(   // Returns 0 on success.
 // Init load/save counter.  You should call KillFileCounter() after
 // done with the file access.
 static void InitFileCounter(        // Returns nothing.
-   char*   pszDescriptionFrmt);       // In:  sprintf format for description of
-                                      // operation.
+   const char*   pszDescriptionFrmt);       // In:  sprintf format for description of
+// operation.
 
 // Kill load/save counter.  Can be called multiple times w/o corresponding
 // Init().
@@ -6922,7 +6922,7 @@ static void DelClass(   // Returns nothing.
 
 ////////////////////////////////////////////////////////////////////////////////
 // Delete all but the pylons, bouys, soundthings and soundrelays.
-// This is useful for making a template of a level that is already fully \
+// This is useful for making a template of a level that is already fully
 // populated.
 ////////////////////////////////////////////////////////////////////////////////
 static void DelMost( // Returns nothing.
@@ -7404,8 +7404,8 @@ static void MyRFileCallback(S32 lBytes)
 // done with the file access.
 ////////////////////////////////////////////////////////////////////////////////
 static void InitFileCounter(        // Returns nothing.
-   char*   pszDescriptionFrmt)        // In:  sprintf format for description of
-                                      // operation.
+   const char*   pszDescriptionFrmt)        // In:  sprintf format for description of
+// operation.
 {
    // Make sure string (with some digits) will fit . . .
    if (strlen(pszDescriptionFrmt) < sizeof(ms_szFileOpDescriptionFrmt) - 10 )

@@ -675,7 +675,7 @@ short CDispenser::EditNew(                         // Returns 0 if successfull, 
 inline void SetLogicText(  // Returns nothing.
    RGuiItem*   pguiRoot,   // In:  Root item.
    S32 lId,                // In:  ID of item to update text.
-   char*         pszText,    // In:  New text or NULL for none and to disable lIdEdit.
+   const char*         pszText,    // In:  New text or NULL for none and to disable lIdEdit.
    S32 lIdEdit)            // In:  Item to enable or disable.
 {
    RGuiItem*   pguiEdit   = pguiRoot->GetItemFromId(lIdEdit);
@@ -739,7 +739,7 @@ inline void SetupLogicParms(  // Returns nothing.
 void LogicItemCall(
    RGuiItem*   pguiLogicItem) // In:  Logic item that was pressed.
 {
-   ASSERT(pguiLogicItem->m_ulUserInstance != NULL);
+   ASSERT(pguiLogicItem->m_ulUserInstance != (uintptr_t)NULL);
    RListBox*   plb   = (RListBox*)pguiLogicItem->m_ulUserInstance;
    ASSERT(plb->m_type == RGuiItem::ListBox);
 

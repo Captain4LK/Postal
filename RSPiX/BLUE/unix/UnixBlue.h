@@ -92,9 +92,6 @@ extern S32 macReserveMemBytes;
    #define TRACE         STRACE("%s(%d):", __FILE__, __LINE__), STRACE
 
 // ASSERT macro, the preferred method of asserting that expressions are true.
-//#define ASSERT(a)      while (!(a))  \
-//                        if (rspAssert(__FILE__, __LINE__, #a) == 0)  \
-//                           break
     #define ASSERT SDL_assert
 #else
 // This causes the compiler to "optimize" out the data and the function call.
@@ -110,7 +107,7 @@ extern S32 macReserveMemBytes;
 // Trace works like printf, but sends output to debug window.  This is rarely
 // called directly.  Instead, use the TRACE() macro so that the TRACE is
 // automatically removed in "release" versions of the program.
-extern void rspTrace(char* szFrmt, ...);
+extern void rspTrace(const char* szFrmt, ...);
 
 // Assert checks the expression and, if it is zero, displays an alert box
 // and waits for the user to select ABORT, RETRY or IGNORE.  This is rarely

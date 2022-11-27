@@ -86,7 +86,7 @@ public:
 // The primary reason for moving these into their own file was to get around
 // some inter-dependancies that came up when they were part of other files.
 //------------------------------------------------------------------------------
-typedef enum
+enum
 {
    // Maximum number of ID's.  Can't be more than 16 right now because
    // some bit masks are hardwired to 16-bits, which is 1 bit per player.
@@ -284,7 +284,7 @@ typedef enum
 
 // Lookup tables associated with the NetBandwidth enums.
 NETCRAPTHING S32 lBandwidthValues[Net::NumBandwidths];
-NETCRAPTHING char* BandwidthText[Net::NumBandwidths];
+NETCRAPTHING const char* BandwidthText[Net::NumBandwidths];
 };
 
 

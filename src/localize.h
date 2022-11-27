@@ -187,6 +187,7 @@ extern char g_pszPlayOneRealmOnlyMessage[];
 extern char g_pszEditorDisabled[];
 extern char g_pszMultiplayerDisabled[];
 extern char g_pszBuy[];
+extern char g_pszEmpty[];
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// Menus ///////////////////////////////////////
@@ -225,6 +226,7 @@ extern char g_pszOptionsMenu_Controls[];
 extern char g_pszOptionsMenu_Multiplayer[];
 extern char g_pszOptionsMenu_Performance[];
 extern char g_pszOptionsMenu_Difficulty[];
+extern char g_pszOptionsMenu_Player[];
 extern char g_pszOptionsMenu_Crosshair[];
 
 extern char g_pszDifficultyMenu_Title[];
@@ -320,10 +322,10 @@ extern char g_pszMultiplayerSetupMenu_Color[];
 extern char g_pszMultiplayerSetupMenu_Protocol[];
 extern char g_pszMultiplayerSetupMenu_Connection[];
 
-extern char* g_apszScoreDisplayText[];
-extern char* g_apszScoreGoalText[];
-extern char* g_apszScoreUnits[];
-extern char* g_apszScoreExplanations[];
+extern const char* g_apszScoreDisplayText[];
+extern const char* g_apszScoreGoalText[];
+extern const char* g_apszScoreUnits[];
+extern const char* g_apszScoreExplanations[];
 
 // Keep at end -- was not in original localizable text.
 extern char g_pszControlsMenu_UseJoystick[];
@@ -332,7 +334,7 @@ extern char g_pszControlsMenu_UseJoystick[];
 ///////////////////////////// Sample Master ////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-extern char* g_apszSoundCategories[];
+extern const char* g_apszSoundCategories[];
 
 
 #endif // LOCALIZE_H

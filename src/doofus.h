@@ -260,8 +260,8 @@ typedef enum
 
 typedef struct
 {
-   char*         pszName;
-   char*         pszResName;
+   const char*         pszName;
+   const char*         pszResName;
    ClassIDType id;
 } WeaponDetails;
 
@@ -410,7 +410,7 @@ static WeaponDetails ms_awdWeapons[NumWeaponTypes];           // Weapon details 
 static WeaponType ms_awtId2Type[TotalIDs];                    // Maps a CThing ID to a WeaponType enum.
 
 public:
-static char* ms_apszActionNames[];      // Names of the logic actions
+static const char* ms_apszActionNames[];      // Names of the logic actions
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor

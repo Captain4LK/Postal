@@ -231,7 +231,8 @@ short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize)
 //
 //////////////////////////////////////////////////////////////////////
 
-__declspec(naked) S32* TaskKill(void)
+// Captain4LK: seems to be unused --> remove to get rid of asm
+/*__declspec(naked) S32* TaskKill(void)
 {
    __asm
    {
@@ -241,7 +242,7 @@ __declspec(naked) S32* TaskKill(void)
              mov dx, 0h; ready to delete
              ret
    }
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -264,7 +265,8 @@ __declspec(naked) S32* TaskKill(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-__declspec(naked) S32* MTaskWait(void)
+// Captain4LK: seems to be unused --> remove to get rid of asm
+/*__declspec(naked) S32* MTaskWait(void)
 {
    __asm
    {
@@ -277,7 +279,7 @@ __declspec(naked) S32* MTaskWait(void)
       shr edx, 16; move high word to low word of register
       ret
    }
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -298,7 +300,8 @@ __declspec(naked) S32* MTaskWait(void)
 //
 //////////////////////////////////////////////////////////////////////
 
-__declspec(naked) S32* MTaskRun(void)
+// Captain4LK: seems to be unused --> remove to get rid of asm
+/*__declspec(naked) S32* MTaskRun(void)
 {
    __asm
    {
@@ -308,7 +311,7 @@ __declspec(naked) S32* MTaskRun(void)
       pop ebp; restore task 's frame pointer
       ret
    }
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -316,7 +319,7 @@ __declspec(naked) S32* MTaskRun(void)
 //
 // Description:
 //      Catches tasks that have returned when they were not
-//      supposed to.  Because we are switching tasks and stacks, 
+//      supposed to.  Because we are switching tasks and stacks,
 //      if a task returns, it would not clean up its stack and
 //      free its task.  Therefore tasks should never return.  They
 //      should call MTaskKill when they are done to clean up

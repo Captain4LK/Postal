@@ -440,10 +440,10 @@ typedef enum
 
 typedef struct
 {
-   char*   pszWeaponName;
-   char*   pszAmmoName;
-   char*   pszStatusFormat;
-   char*   pszWeaponResName;
+   const char*   pszWeaponName;
+   const char*   pszAmmoName;
+   const char*   pszStatusFormat;
+   const char*   pszWeaponResName;
    short sMinAmmoRequired;
 } WeaponDetails;
 
@@ -460,11 +460,11 @@ ChanTransform* m_ptransBack;              // Rigid body transforms for his backp
 // specified in the provided array of pointers to strings.
 virtual                                   // Overridden here.
 short Get(                                // Returns 0 on success.
-   char*      pszBaseFileName,              // In:  Base string for resource filenames.
-   char*      pszRigidName,                 // In:  String to add for rigid transform channel
-                                            // or NULL for none.
-   char*      pszEventName,                 // In:  String to add for event states channel
-                                            // or NULL for none.
+   const char*      pszBaseFileName,              // In:  Base string for resource filenames.
+   const char*      pszRigidName,                 // In:  String to add for rigid transform channel
+   // or NULL for none.
+   const char*      pszEventName,                 // In:  String to add for event states channel
+   // or NULL for none.
    short sLoopFlags);                       // In:  Looping flags to apply to all channels
                                             // in this anim.
 

@@ -386,7 +386,7 @@ static short sDestroyMem(void **hMem);
 // corresponding place in this array.
 // Note that this uses END_OF_TYPES enum item to size the array.
 
-char* RImage::ms_astrTypeNames[END_OF_TYPES] =
+const char* RImage::ms_astrTypeNames[END_OF_TYPES] =
 {
    "Same Type",
    "BMP8",

@@ -75,14 +75,16 @@ short MTaskAddFunc(void* pFunction, char* pszFuncName, short sStackSize = 1024);
 // logic, it would normally loop until the guy got killed.
 // When he is killed, call MTaskKill to remove it from
 // the task processing list.
-void MTaskKill(void);
+// Captain4LK: seems to be unused --> remove to get rid of asm
+//void MTaskKill(void);
 
 // This funciton is to be called from within the task's
 // process.  It is used to allow other tasks to be run.
 // This funciton must be called periodically to allow the
 // other tasks to run.  Your code will resume immediately
 // after this call.
-S32* MTaskWait(void);
+// Captain4LK: seems to be unused --> remove to get rid of asm
+//S32* MTaskWait(void);
 
 #endif // MTASK_H
 

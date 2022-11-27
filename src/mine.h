@@ -78,7 +78,7 @@ public:
 
 typedef unsigned char MineType;
 
-typedef enum
+enum
 {
    ProximityMine = 3,
    TimedMine,

@@ -291,10 +291,10 @@ short m_sInError;      // parenthesis mismatch!
 class RProfile
 {
 public:
-void   StartProfile(char* pszFieldName);
-void   EndProfile(char* pszFieldName);
+void   StartProfile(const char* pszFieldName);
+void   EndProfile(const char* pszFieldName);
 //----------------------------
-void   SetOutput(char *pszOutput)
+void   SetOutput(const char *pszOutput)
 {
    if (pszOutput) strcpy(m_szOutputFile, pszOutput);
 }
@@ -396,7 +396,7 @@ RProfileNode m_aList[PF_MAX_FIELDS];
 
 extern RProfile rspProfileInstance;   // The one global instance
 
-inline void rspProfileOptimizeOut(char* a) {} // used to trick the compiler
+inline void rspProfileOptimizeOut(const char* a) {} // used to trick the compiler
 inline void rspProfileOptimizeOut() {} // used to trick the compiler
 
 #ifdef   RSP_PROFILE_ON

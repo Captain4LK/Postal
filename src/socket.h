@@ -279,7 +279,7 @@ static bool ms_bDidStartup;                             // Whether Startup() was
 static bool ms_bAutoShutdown;                           // Whether to call Shutdown() automatically
 static short ms_sNumSockets;                          // Number of sockets in existance
 static RSocket::ProtoType ms_prototype;               // Current protocol (can only be one "current" protocol)
-static char*               ms_apszProtoNames[];       // String names corresponding to RSocket::ProtoType values
+static const char*               ms_apszProtoNames[];       // String names corresponding to RSocket::ProtoType values
 
 //------------------------------------------------------------------------------
 // Functions

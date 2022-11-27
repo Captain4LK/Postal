@@ -99,8 +99,8 @@ public:
 // "Constant" values that we want to be able to tune using the editor
 
 // Array of known animation base names.
-static char*   ms_apszKnownAnimBaseNames[NumTypes];
-static char*   ms_apszKnownAnimDescriptions[NumTypes];
+static const char*   ms_apszKnownAnimBaseNames[NumTypes];
+static const char*   ms_apszKnownAnimDescriptions[NumTypes];
 
 //---------------------------------------------------------------------------
 // Constructor(s) / destructor

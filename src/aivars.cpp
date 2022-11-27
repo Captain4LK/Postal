@@ -132,7 +132,7 @@ CLogTabVar_TargetDist()
    // IMPORTANT:  these enums all represent distance RANGES!
    // Each one means "between myself and the next highest value"
    //
-   static char* ms_sz[] = {"VeryClose", "Close", "Medium", "Far", "OffScreen"};
+   static const char* ms_sz[] = {"VeryClose", "Close", "Medium", "Far", "OffScreen"};
    m_sNumStrings = 5;
    m_papszStrings = ms_sz;
 }
@@ -182,7 +182,7 @@ CLogTabVar_PopoutAvailable()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -209,7 +209,7 @@ CLogTabVar_RunShootAvailable()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -237,7 +237,7 @@ CLogTabVar_SafetyAvailable()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -265,7 +265,7 @@ CLogTabVar_PylonAvailable()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"none", "popout", "runshoot", "safety"};
+   static const char* ms_sz[] = {"none", "popout", "runshoot", "safety"};
    m_sNumStrings = 4;
    m_papszStrings = ms_sz;
 }
@@ -310,7 +310,7 @@ CLogTabVar_MyHealth()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"low", "med", "high"};
+   static const char* ms_sz[] = {"low", "med", "high"};
    m_sNumStrings = 3;
    m_papszStrings = ms_sz;
 }
@@ -337,7 +337,7 @@ CLogTabVar_DudeHealth()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"dead", "low", "med", "high"};
+   static const char* ms_sz[] = {"dead", "low", "med", "high"};
    m_sNumStrings = 4;
    m_papszStrings = ms_sz;
 }
@@ -386,7 +386,7 @@ CLogTabVar_IsTriggered()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -413,7 +413,7 @@ CLogTabVar_UserState1()
 
    // Feel free to add as many states as you need, but remember that the
    // WHOLE table assumes only ONE of these varables right now
-   static char* ms_sz[] = {"default", "active"};
+   static const char* ms_sz[] = {"default", "active"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -441,7 +441,7 @@ CLogTabVar_RecentlyShot()
    m_sOutputWidth = 13;
 
    // This var is number-based, so turn off string stuff
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -467,7 +467,7 @@ CLogTabVar_RecentlyStuck()
    m_sOutputWidth = 14;
 
    // This var is a bool
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -501,7 +501,7 @@ CLogTabVar_IsPanic()
    m_sOutputWidth = 8;
 
    // This var is true/false
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -527,7 +527,7 @@ CLogTabVar_HelpCall()
    m_sOutputWidth = 8;
 
    // This var is true/false
-   static char* ms_sz[] = {"false", "true"};
+   static const char* ms_sz[] = {"false", "true"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }
@@ -558,7 +558,7 @@ CLogTabVar_UserGlobal()
 
    // Feel free to add as many states as you need, but remember that the
    // WHOLE table assumes only ONE of these varables right now
-   static char* ms_sz[] = {"normal", "attack"};
+   static const char* ms_sz[] = {"normal", "attack"};
    m_sNumStrings = 2;
    m_papszStrings = ms_sz;
 }

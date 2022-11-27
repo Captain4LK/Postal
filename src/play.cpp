@@ -3197,7 +3197,7 @@ void CoreLoopRenderOnTop(
 ////////////////////////////////////////////////////////////////////////////////
 void PauseGame(
    CRealm*   prealm,              // In:  Realm to pause or NULL.
-   char*      pszMsg,              // In:  Message to be displayed.
+   const char*      pszMsg,              // In:  Message to be displayed.
    S32 lKey)                     // In:  Key to continue or 0 to wait for foreground status
 {
    // Suspend realm.

@@ -112,14 +112,14 @@ public:
 protected:
 static CLogTabVar* ms_pHead;                          // Head of linked list of variables
 
-char* m_pszName;                                      // Variable name
+const char* m_pszName;                                      // Variable name
 
 short m_sMaxVal;                                      // Maximum value
 
 bool m_bSettable;                                     // Whether val is settable (true) or not (false)
 
 short m_sNumStrings;                                  // Number of strings (0 if number based)
-char** m_papszStrings;                                // Pointer to array of pointers to strings
+const char** m_papszStrings;                                // Pointer to array of pointers to strings
 
 short m_sOutputWidth;                                 // Width of output in characters
 
@@ -241,7 +241,7 @@ short GetMax(void)                                    // Returns maximum value
 ////////////////////////////////////////////////////////////////////////////////
 // Get name
 ////////////////////////////////////////////////////////////////////////////////
-char* GetName(void)                                   // Returns name
+const char* GetName(void)                                   // Returns name
 {
    return m_pszName;
 }
@@ -448,7 +448,7 @@ class CLogTab
 // Types, enums, etc.
 //------------------------------------------------------------------------------
 public:
-typedef enum
+enum
 {
    MaxVars = 32,              // Limited only by memory considerations
    MaxRows = 100,             // Limited only by memory considerations

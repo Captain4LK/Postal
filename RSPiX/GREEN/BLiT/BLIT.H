@@ -101,7 +101,7 @@ pntBuf.GetCell(sASCII,sW,sH); // Sets (sW,sH) to size of character
 pntBuf.SetColumn(sX,sY,sW,sH,pimDst); // Autowrap is crude right now
 pntBuf.Clear(); // Clear the print buffer early
 
-//******************************************************************/
+******************************************************************/
 
 // Depends only on image
 #ifndef BLIT_H
@@ -370,105 +370,6 @@ const short TXT_ITALIC = 2;
 const short TXT_WIDE = 4;
 const short cgsMAX_FONT_SIZE = 256; // may need to adjust!
 
-/*
-class   RPrint
-   {
-public:
-
-   RPrint();
-   ~RPrint();
-   //===========================================
-   void   Clear();
-   void   SetColumn(short sX,short sY,short sW=0,short sH=0,RImage* pimDst = NULL);
-   void  SetFont(RFontOld* pFnt,short   sHeight);
-   void   SetStretch(float fWide); // 1.0 = normal
-   void   SetItalic(float fItalic); // 0.0 = normal
-   void   SetItalic(short sItalic); // 0 = normal, absolute pixel offset.
-   void  SetBold(short sBold); // actual pixel effect, fine control, 0 = normal
-   void  SetBold(float fBold); // 1.0 = normal, length in Cell Heights
-   void   SetColor(short sLetter,short sBkd = 0);
-   void   SetTab(short sPixNum);
-   void   SetTab(float fPixNum);
-   void   SetSpace(short sPix); // additional
-   void   SetSpace(float fSpace); // in Cell heights
-
-   void  set(RFontOld* pFnt,short   sHeight){SetFont(pFnt,sHeight);} // backwards
-
-   short   GetWidth();   // returns width in pixels of current buffer...
-   void   GetCell(short sASCII,short &w,short &h); // does NOT include AddW
-   //===========================================
-   //=========  Let's Print!!!   ===============
-   //===========================================
-   void   print(short sX,short sY,RImage* pimDst = NULL);
-   void   printC(short sX,short sY,short sW,RImage* pimDst = NULL);
-   RFontOld*   GetFont(){return m_fnCurrent;}
-
-   RPrint& print();
-
-   RPrint&   operator|(char* psz);
-   RPrint&   operator<<(char* psz);
-   RPrint& operator|(short   in);
-   RPrint& operator|(S32   in);
-   RPrint& operator|(float   in);
-   RPrint& operator|(double   in);
-   RPrint& operator|(char   in);
-   RPrint&   debug();
-   short   m_sCellH;   // Current font cell height
-   short   m_sCurX;
-   short   m_sCurY;
-
-public:
-
-   short LineFeed();
-   short   GetChar();
-   void   GetCell(RImage* pimLetter,short* psCellH = NULL,
-      short* psCellW = NULL,short* psStretchW = NULL); // does NOT include AddW!
-
-   //***************************************
-   //******  The curent state of the font!
-   //***************************************
-private:
-   short m_sTabW;
-   float m_fTabW;
-
-   float   m_fBold;   // state of bold, relative to cell Height
-   short   m_sBold;   // bold pixels added per run
-
-   float   m_fItalic;   // state of italic, relative to cell height
-   short   m_sItalic;   // Number pixels slant
-
-   float   m_fWide; // 1.0 = true aspect ratio
-                // No absolute width because it varies by character
-   float m_fSpace; // Extra space between pixels based on chosen height.
-   short m_sSpace; // Extra kerning space in pixels
-
-   UCHAR   m_clrBKD;   // current color
-   UCHAR   m_clrFGD;
-
-   RFontOld*   m_fnCurrent;   // Current font
-   FontNode* m_pFontSize;   // Base font template
-
-   u16Frac*   m_pCurFracX;   // to aid in the scaling process!
-   u16Frac*   m_pCurFracY;   // to aid in the scaling process!
-
-   char   m_buffer[4096];
-   char   m_temp[256];
-   char*   m_pBuf; // open stack
-   char* m_pCurBuf;
-
-   RImage*   m_pimTarget; // Destination
-   short   m_sL,m_sT,m_sW,m_sH;   // Column Rectangle...
-   // if (sW < 0) then rect is disabled!
-   short   m_sFORMAT;   // formatting flags
-   short   m_sATTRIB;   // letter attributes
-   short m_psItalic[cgsMAX_FONT_SIZE]; // store by line...
-
-public: // for development ONLY
-   void   PrintLine(short sNumChar,short sJustDelta = 0,short sJustFraction = 0,
-         short sDen = 1);
-
-   };
-*/
 
 typedef class CStrafe
 {
@@ -476,7 +377,7 @@ public:
 
    CStrafe()
    {
-      sHotX = sHotY = NULL;
+      sHotX = sHotY = 0;
       psLinkX = psLinkY = NULL;
       pImage = NULL;
    }

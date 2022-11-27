@@ -73,7 +73,7 @@ void   clear()    // NOT A RESET! Will hose memory!
    m_sCurToken = -2;    // for user convenience!
 }
 
-void init(char* pszFileName, char* pszSeparators = " \t,", char* pszSpecialCharacters = NULL,
+void init(const char* pszFileName, const char* pszSeparators = " \t,", const char* pszSpecialCharacters = NULL,
           char cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
 {
    clear();
@@ -93,7 +93,7 @@ void init(char* pszFileName, char* pszSeparators = " \t,", char* pszSpecialChara
    if (pszSeparators) strcpy(m_pszSeparators, pszSeparators);
 }
 
-void configure(char* pszSeparators = " \t,", char* pszSpecialCharacters = NULL,
+void configure(const char* pszSeparators = " \t,", const char* pszSpecialCharacters = NULL,
                char cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
 {
    m_sCharEOL = sCharEOL;
@@ -112,7 +112,7 @@ RBatch()    // default, no file
    configure();
 }
 
-RBatch(char* pszFileName, char* pszSeparators = " \t,", char* pszSpecialCharacters = NULL,
+RBatch(const char* pszFileName, const char* pszSeparators = " \t,", const char* pszSpecialCharacters = NULL,
        char cString = '"', char cComment = '*', short sCharEOL = 1, short sLowFilter = 32, short sHighFilter = 128)
 {
    init(pszFileName, pszSeparators, pszSpecialCharacters, cString, cComment, sCharEOL, sLowFilter, sHighFilter);

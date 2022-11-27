@@ -368,8 +368,8 @@ public:
 static double ms_dDefaultSurfaceDrag;        // Default drag along surfaces.
 static double ms_dDefaultAirDrag;            // Default drag due to air friction.
 static short ms_sBurntBrightness;            // Brightness level after being burnt
-static char*   ms_apszStateNames[];          // Strings describing states, indexed by
-                                             // the state enum.
+static const char*   ms_apszStateNames[];          // Strings describing states, indexed by
+// the state enum.
 
 // These are arrays of pts to be checked on the attribute map for various
 // size of CThing3d derived things.
@@ -757,7 +757,7 @@ void PlaySample(                                   // Returns nothing.
 
 // Start a CAnimThing.
 CAnimThing* StartAnim(                    // Returns ptr to CAnimThing on success; NULL otherwise.
-   char* pszAnimResName,                  // In:  Animation's resource name.
+   const char* pszAnimResName,                  // In:  Animation's resource name.
    short sX,                                // In:  Position.
    short sY,                                // In:  Position.
    short sZ,                                // In:  Position.

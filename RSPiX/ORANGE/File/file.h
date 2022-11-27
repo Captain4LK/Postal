@@ -720,14 +720,14 @@ char m_szFileName[MAX_NAME_LEN + 1];               // Filename for reopening.
 template <class ClassType>
 #ifdef _DEBUG
 short RFileEZLoadDebug(
-   char* FILE_MACRO,
+   const char* FILE_MACRO,
    S32 LINE_MACRO,
 #else
 short RFileEZLoad(
 #endif
    ClassType* pObject,
-   char* pszName,
-   char* pszMode,
+   const char* pszName,
+   const char* pszMode,
    RFile::Endian endian)
 {
    short sResult = 0;
@@ -796,7 +796,7 @@ short RFileEZLoad(
 template <class ClassType>
 #ifdef _DEBUG
 short RFileEZSaveDebug(
-   char* FILE_MACRO,
+   const char* FILE_MACRO,
    S32 LINE_MACRO,
 #else
 short RFileEZSave(

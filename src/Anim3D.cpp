@@ -91,10 +91,10 @@ CAnim3D::CAnim3D()
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(           // Returns 0 on success.
-   char**   ppszFileNames)    // Pointer to array of pointers to filenames.
-                              // These filenames should be in the order
-                              // the members are listed in this class's
-                              // definition.
+   const char**   ppszFileNames)    // Pointer to array of pointers to filenames.
+// These filenames should be in the order
+// the members are listed in this class's
+// definition.
 {
    short sRes;
    short sComplainIndex;     // If sRes is non-zero, this is the index of the
@@ -153,10 +153,10 @@ short CAnim3D::Get(           // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(           // Returns 0 on success.
-   char**   ppszFileNames,    // Pointer to array of pointers to filenames.
-                              // These filenames should be in the order
-                              // the members are listed in this class's
-                              // definition.
+   const char**   ppszFileNames,    // Pointer to array of pointers to filenames.
+   // These filenames should be in the order
+   // the members are listed in this class's
+   // definition.
    short sLoopFlags)            // Looping flags to apply to all channels in this anim
 {
    short sRes   = Get(ppszFileNames);
@@ -175,13 +175,13 @@ short CAnim3D::Get(           // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*      pszBaseFileName,     // In:  Base string for resource filenames.
-   char*      pszRigidName,        // In:  String to add for rigid transform channel,
-                                   // "", or NULL for none.
-   char*      pszEventName,        // In:  String to add for event states channel,
-                                   // "", or NULL for none.
-   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                   // "", or NULL for none.
+   const char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   const char*      pszRigidName,        // In:  String to add for rigid transform channel,
+   // "", or NULL for none.
+   const char*      pszEventName,        // In:  String to add for event states channel,
+   // "", or NULL for none.
+   const char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+   // "", or NULL for none.
    short sLoopFlags)               // In:  Looping flags to apply to all channels
                                    // in this anim.
 {
@@ -263,14 +263,14 @@ short CAnim3D::Get(              // Returns 0 on success.
 // (virtual)
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*      pszBaseFileName,     // In:  Base string for resource filenames.
-   char*      pszVerb,             // In:  Action name to be appended to the base
-   char*      pszRigidName,        // In:  String to add for rigid transform channel,
-                                   // "", or NULL for none.
-   char*      pszEventName,        // In:  String to add for event states channel,
-                                   // "", or NULL for none.
-   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                   // "", or NULL for none.
+   const char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   const char*      pszVerb,             // In:  Action name to be appended to the base
+   const char*      pszRigidName,        // In:  String to add for rigid transform channel,
+   // "", or NULL for none.
+   const char*      pszEventName,        // In:  String to add for event states channel,
+   // "", or NULL for none.
+   const char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+   // "", or NULL for none.
    short sLoopFlags)               // In:  Looping flags to apply to all channels
                                    // in this anim.
 {
@@ -285,15 +285,15 @@ short CAnim3D::Get(              // Returns 0 on success.
 // but load only 1 .tex file based on the color scheme number passed in.
 ////////////////////////////////////////////////////////////////////////////////
 short CAnim3D::Get(              // Returns 0 on success.
-   char*      pszBaseFileName,     // In:  Base string for resource filenames.
+   const char*      pszBaseFileName,     // In:  Base string for resource filenames.
    short sTextureScheme,           // In:  Number to append after name for texture file
-   char*      pszVerb,             // In:  Action name to be appended to the base
-   char*      pszRigidName,        // In:  String to add for rigid transform channel,
-                                   // "", or NULL for none.
-   char*      pszEventName,        // In:  String to add for event states channel,
-                                   // "", or NULL for none.
-   char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
-                                   // "", or NULL for none.
+   const char*      pszVerb,             // In:  Action name to be appended to the base
+   const char*      pszRigidName,        // In:  String to add for rigid transform channel,
+   // "", or NULL for none.
+   const char*      pszEventName,        // In:  String to add for event states channel,
+   // "", or NULL for none.
+   const char*      pszWeaponTransName,  // In:  String to add for weapon transforms channel,
+   // "", or NULL for none.
    short sLoopFlags)               // In:  Looping flags to apply to all channels
                                    // in this anim.
 {

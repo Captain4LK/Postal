@@ -97,7 +97,7 @@ typedef enum
 
 typedef unsigned char FireAnim;
 
-typedef enum
+enum
 {
    LargeFire,
    SmallFire,

@@ -278,13 +278,13 @@ void SetFont(RFont* pfnt, short sHeight)
 
 // Set the text that represents this item.
 void SetText(
-   char* pszFrmt,       // sprintf formatted format string.
+   const char* pszFrmt,       // sprintf formatted format string.
    ...);                // Corresponding good stuff.
 
 // Set the text that represents the specified child item.
 short SetText(          // Returns 0 if item found, non-zero otherwise.
    S32 lId,             // Child item ID (can identify this item).
-   char* pszFrmt,       // sprintf formatted format string.
+   const char* pszFrmt,       // sprintf formatted format string.
    ...);                // Corresponding good stuff.
 
 // Set the justification of m_pprint to the current RGuiItem member
@@ -594,7 +594,7 @@ static void DestroyGuiItem(            // Returns nothing.
 // file.
 static RGuiItem* LoadInstantiate(         // Returns newly allocated GUI item
                                           // on success or NULL on failure.
-   char*   pszFileName);                    // Name of file to instantiate from.
+   const char*   pszFileName);                    // Name of file to instantiate from.
 
 // Instantiate a GUI tree from a file.  Allocates a GUI item of the
 // proper (specified in the file) type and loads it using the specified
@@ -1010,8 +1010,8 @@ static RPrint ms_print;                   // This is the main RPrint that all
 static RGuiItem*   ms_pguiFocus;           // Higher level APIs can use this as
                                            // their current point of input
                                            // focus.
-static char*      ms_apszTypes[NumGuiTypes];       // Array of strings
-                                                   // indexed by type.
+static const char*      ms_apszTypes[NumGuiTypes];       // Array of strings
+// indexed by type.
 };
 
 #endif // GUIITEM_H

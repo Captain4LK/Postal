@@ -39,13 +39,13 @@
 #define KEYS_H
 
 // Array of key descriptors.
-extern char* g_apszKeyDescriptions[128];
+extern const char* g_apszKeyDescriptions[128];
 
 // Array of button descriptors.
-extern char* g_apszMouseButtonDescriptions[8];
+extern const char* g_apszMouseButtonDescriptions[8];
 
 // Array of joy button descriptors.
-extern char* g_apszJoyButtonDescriptions[18];
+extern const char* g_apszJoyButtonDescriptions[18];
 
 // Given a string, returns the appropriate key code.
 extern short KeyDescriptionToValue( // Returns 0 on success.  Returns non-zero, if

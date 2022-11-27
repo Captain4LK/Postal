@@ -2254,14 +2254,14 @@ static short GetRealmToRecord(   // Returns 0 on success, negative on error, 1 i
 ////////////////////////////////////////////////////////////////////////////////
 extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 if
                                  // not subpathable (i.e., returned path is full path).
-   char*   pszFullPath,            // In:  Full path to be relative to (system format).
-   char* pszBoxTitle,            // In:  Title of box.
-   char*   pszDefFileName,         // In:  Default filename (system format).
+   const char*   pszFullPath,            // In:  Full path to be relative to (system format).
+   const char* pszBoxTitle,            // In:  Title of box.
+   const char*   pszDefFileName,         // In:  Default filename (system format).
    char* pszChosenFileName,      // Out: User's choice (system format).
    short sStrSize,               // In:  Amount of memory pointed to by pszChosenFileName.
-   char*   pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
-                                   //   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
-                                   // Note: Cannot use '.' in filter.  Preceding '.' ignored.
+   const char*   pszFilter /*= NULL*/)   // In:  If not NULL, '.' delimited extension based filename
+//   filter specification.  Ex: ".cpp.h.exe.lib" or "cpp.h.exe.lib"
+// Note: Cannot use '.' in filter.  Preceding '.' ignored.
 {
    short sResult;
 
@@ -2323,7 +2323,7 @@ extern short SubPathOpenBox(     // Returns 0 on success, negative on error, 1 i
    else
    {
       sResult   = -2;
-      TRACE("SubPathOpenBox(): pszFullPath string too S32.\n");
+      TRACE("SubPathOpenBox(): pszFullPath string too long.\n");
    }
 
    return sResult;
@@ -2782,7 +2782,7 @@ extern void Game_StartSinglePlayerGame(
       m_action   = ACTION_LOAD_GAME;
       break;
 #if (TARGET == POSTAL_2015)
-   //case 3 + START_MENU_ID_OFFSET:
+      //case 3 + START_MENU_ID_OFFSET:
       //Game_StartChallengeGame(0);
       //break;
 #endif
@@ -3409,11 +3409,11 @@ void GameEndingSequence(void)
 // Returns a ptr to just the portion of the file path that specifies the file
 // name (excluding the path).
 ////////////////////////////////////////////////////////////////////////////////
-static char* GetFileNameFromPath(   // Returns file name.
-   char*   pszFullPath)               // In:  File's full path.
+static const char* GetFileNameFromPath(   // Returns file name.
+   const char*   pszFullPath)               // In:  File's full path.
 {
    // Scan back for the separator or the beginning.
-   char*   pszIndex   = pszFullPath + (strlen(pszFullPath) - 1);
+   const char*   pszIndex   = pszFullPath + (strlen(pszFullPath) - 1);
 
    while (pszIndex >= pszFullPath && *pszIndex != RSP_SYSTEM_PATH_SEPARATOR)
    {
@@ -3978,7 +3978,7 @@ extern void SeedRand(
 //
 ////////////////////////////////////////////////////////////////////////////////
 #if defined(_DEBUG) || defined(TRACENASSERT)
-extern S32 GetRandomDebug(char* FILE_MACRO, S32 LINE_MACRO)
+extern S32 GetRandomDebug(const char* FILE_MACRO, S32 LINE_MACRO)
 {
    // Get next random number
    S32 lNewVal = (((m_lRandom = m_lRandom * 214013L + 2531011L) >> 16) & 0x7fff);
@@ -4254,7 +4254,7 @@ static char m_acFullPath[RSP_MAX_PATH + RSP_MAX_PATH];
 
 extern char* FullPath(                          // Returns full path in system format
    short sPathType,                             // In:  PATH_CD, PATH_HD, or PATH_VD
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with the specified base path (copy the string from the game settings)
    if (sPathType == GAME_PATH_CD)
@@ -4282,7 +4282,7 @@ extern char* FullPath(                          // Returns full path in system f
 
 
 extern char* FullPathCD(                        // Returns full path in system format
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with proper base path
    ASSERT(strlen(g_GameSettings.m_pszCDPath) < RSP_MAX_PATH);
@@ -4334,7 +4334,7 @@ extern char* FullPathHD(                        // Returns full path in system f
 
 
 extern char* FullPathVD(                        // Returns full path in system format
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with proper base path
    ASSERT(strlen(g_GameSettings.m_pszVDPath) < RSP_MAX_PATH);
@@ -4360,7 +4360,7 @@ extern char* FullPathVD(                        // Returns full path in system f
 
 
 extern char* FullPathSound(                        // Returns full path in system format
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with proper base path
    ASSERT(strlen(g_GameSettings.m_pszSoundPath) < RSP_MAX_PATH);
@@ -4386,7 +4386,7 @@ extern char* FullPathSound(                        // Returns full path in syste
 
 
 extern char* FullPathGame(                      // Returns full path in system format
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with proper base path
    ASSERT(strlen(g_GameSettings.m_pszGamePath) < RSP_MAX_PATH);
@@ -4411,7 +4411,7 @@ extern char* FullPathGame(                      // Returns full path in system f
 }
 
 extern char* FullPathHoods(                        // Returns full path in system format
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format
 {
    // Start with proper base path
    ASSERT(strlen(g_GameSettings.m_pszHoodsPath) < RSP_MAX_PATH);
@@ -4437,8 +4437,8 @@ extern char* FullPathHoods(                        // Returns full path in syste
 
 
 extern char* FullPathCustom(                    // Returns full path in system format
-   char*   pszFullPath,                           // In:  Full path in in RSPiX format.
-   char* pszPartialPath)                        // In:  Partial path in RSPiX format.
+   const char*   pszFullPath,                           // In:  Full path in in RSPiX format.
+   const char* pszPartialPath)                        // In:  Partial path in RSPiX format.
 {
    char*   pszFullSystemPath   = rspPathToSystem(pszFullPath);
    // Start with proper base path

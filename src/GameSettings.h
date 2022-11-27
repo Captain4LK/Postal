@@ -220,7 +220,7 @@ short m_asCategoryVolumes[SampleMaster::MAX_NUM_SOUND_CATEGORIES];              
 public:     // Statics.
 
 // Player color descriptions.
-static char*   ms_apszPlayerColorDescriptions[];
+static const char*   ms_apszPlayerColorDescriptions[];
 // Number of color descriptions.
 static const short ms_sNumPlayerColorDescriptions;
 

@@ -33,8 +33,8 @@ debug := false
 #ifeq ($(strip $(target)),linux_x86)
   macosx := false
   CPUARCH := x86
-  CC := g++ -Wall -Wextra -Wconversion
-  LINKER := g++ -Wall -Wextra -Wconversion
+  CC := g++
+  LINKER := g++
 #endif
 #ifeq ($(strip $(target)),macosx_x86)
 #  macosx := true
@@ -231,7 +231,7 @@ OBJS := $(foreach f,$(OBJS4),$(BINDIR)/$(f))
 SRCS := $(foreach f,$(SRCS),$(SRCDIR)/$(f))
 
 # !!! FIXME: Get -Wall in here, some day.
-CFLAGS += -fsigned-char -g -DPLATFORM_UNIX -w -Wall
+CFLAGS += -fsigned-char -g -DPLATFORM_UNIX -Wcomment
 
 ifeq ($(strip $(macosx)),true)
   CFLAGS += -DPLATFORM_MACOSX

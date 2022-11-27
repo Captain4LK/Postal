@@ -614,7 +614,7 @@ void RMsgBox::RemoveAll(void) // Returns nothing.
 ////////////////////////////////////////////////////////////////////////
 void RMsgBox::ItemBtnUpCall(RGuiItem* pgui)
 {
-   ASSERT(pgui->m_ulUserInstance != NULL);
+   ASSERT(pgui->m_ulUserInstance != (uintptr_t)NULL);
 
    RMsgBox*   pmb   = (RMsgBox*)(pgui->m_ulUserInstance);
 
