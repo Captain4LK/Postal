@@ -803,7 +803,7 @@ short RFileEZSave(
 #endif
    ClassType* pObject,
    char* pszName,
-   char* pszMode,
+   const char* pszMode,
    RFile::Endian endian)
 {
    short sResult = 0;

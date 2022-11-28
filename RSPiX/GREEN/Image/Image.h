@@ -432,7 +432,7 @@ short Save(RFile* pcf) const;
 
 // Load the standard image formats, ie. those that do not
 // include m_pSpecial data
-short Load(char* pszFilename);
+short Load(const char* pszFilename);
 
 // This version takes an open RFile pointer and reads the
 // standard image from the file.  This may be useful if you

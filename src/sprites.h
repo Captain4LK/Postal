@@ -75,9 +75,14 @@ class CThing;  // Another handy forward.
 // making it a template causes it to be "evaluated" by the compiler
 // AFTER the CSprite class is fully defined!  In other words, it's a
 // trick!
+
 template <class T>
-struct SpriteLess : binary_function<T*, T*, bool>
+struct SpriteLess
 {
+   using result_type = bool;
+   using first_argument_type = T;
+   using second_argument_type = T;
+
    bool operator()(const T* a, const T* b) const
    {
       return a->m_sPriority < b->m_sPriority;

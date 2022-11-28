@@ -2297,7 +2297,7 @@ short RImage::WritePixelData(RFile* pcf) const
 //
 //////////////////////////////////////////////////////////////////////
 
-short RImage::Load(char* pszFilename)
+short RImage::Load(const char* pszFilename)
 {
    RFile cf;
    short sReturn = SUCCESS;
