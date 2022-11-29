@@ -745,6 +745,9 @@ short CHood::EditNew(                           // Returns 0 if successfull, non
                }
                break;
             }
+            //Captain4LK: default to shut up compiler
+            default:
+               break;
             }
 
             if (pguiKillsPercentGoal != NULL)

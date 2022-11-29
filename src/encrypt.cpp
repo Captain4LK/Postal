@@ -113,8 +113,9 @@ void MakeCRCTable();
 //////////////////////////////////////////////////////////////////////////////////////
 short Encrypt(char* szInputString, char* szOutputString, short sSourceLength)
 {
-   short rc = 0,             // assume success
-         sIndex = 0,
+   //Captain4LK: removed since unused
+   //short rc = 0;
+   short sIndex = 0,
          sStartIndex = GetRandom() % KEY_LENGTH,
          sCurrentKey = GetRandom() % NUM_KEYS,
          sSeedIndex = sStartIndex;

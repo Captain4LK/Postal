@@ -642,6 +642,9 @@ void CDispenser::Update(void)
             }
             break;
          }
+         //Captain4LK: default to make the compiler shut up
+         default:
+            break;
          }
       }
       else

@@ -179,9 +179,11 @@ inline void rspDivModA(T num, T den, T &div, T &mod) // does NOT check if (den =
    div = num / den;
    mod = num - div * den;
    if (mod)
+   {
       if (div < 0)  { div--; mod += den;}
       else if (!div)
          if (mod < 0) { div--; mod += den;}
+   }
 }
 
 // This is MACHINE specific and handles temporary overflows:
@@ -190,9 +192,11 @@ inline void rspDivModA64(S64 num, S32 den, S32 &div, S32 &mod) // does NOT check
    div = num / den;
    mod = num - div * den;
    if (mod)
+   {
       if (div < 0)  { div--; mod += den;}
       else if (!div)
          if (mod < 0) { div--; mod += den;}
+   }
 }
 
 

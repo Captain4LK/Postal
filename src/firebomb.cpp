@@ -273,7 +273,8 @@ short CFirebomb::Save(                             // Returns 0 if successfull, 
 ////////////////////////////////////////////////////////////////////////////////
 void CFirebomb::Update(void)
 {
-   USHORT usAttrib;
+   //Captain4LK: removed since unused
+   //USHORT usAttrib;
    short sHeight = m_sPrevHeight;
    double dNewX;
    double dNewY;
@@ -305,7 +306,7 @@ void CFirebomb::Update(void)
       case CFirebomb::State_Fire:
          // Make sure we start in a valid position.  If we are staring
          // inside a wall, just delete this object now.
-         usAttrib = m_pRealm->GetFloorAttribute((short) m_dX, (short) m_dZ);
+         //usAttrib = m_pRealm->GetFloorAttribute((short) m_dX, (short) m_dZ);
          sHeight = m_pRealm->GetHeight((short) m_dX, (short) m_dZ);
          if (m_dY < sHeight)
          {

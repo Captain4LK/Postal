@@ -353,7 +353,8 @@ short CFlag::Shutdown(void)                     // Returns 0 if successfull, non
 ////////////////////////////////////////////////////////////////////////////////
 void CFlag::Update(void)
 {
-   short sHeight = m_sPrevHeight;
+   //Captain4LK: remove since unused
+   //short sHeight = m_sPrevHeight;
    S32 lThisTime;
    S32 lTimeDifference;
    CSmash* pSmashed = NULL;
@@ -367,7 +368,8 @@ void CFlag::Update(void)
       m_lAnimTime += lTimeDifference;
 
       // Calculate elapsed time in seconds
-      double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
+      //Captain4LK: remove since unused
+      //double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
       // Check for new messages that may change the state
       ProcessMessages();
@@ -519,6 +521,7 @@ void CFlag::Update(void)
 //-----------------------------------------------------------------------
 
       case CFlag::State_Dead:
+      {
          CHood*   phood   = m_pRealm->m_phood;
          // Render current dead frame into background to stay.
          m_pRealm->m_scene.DeadRender3D(
@@ -529,8 +532,11 @@ void CFlag::Update(void)
          delete this;
          return;
          break;
+      }
 
-
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
 
@@ -635,7 +641,8 @@ short CFlag::EditModify(void)
    short sResult = 0;
    U16 u16OrigColor = m_u16FlagColor;
 
-   RGuiItem* pGuiItem = NULL;
+   //Captain4LK: remove since unused
+   //RGuiItem* pGuiItem = NULL;
    RGuiItem* pguiRoot = RGuiItem::LoadInstantiate(FullPathVD("res/editor/flag.gui"));
    if (pguiRoot != NULL)
    {

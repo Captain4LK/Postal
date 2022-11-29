@@ -213,7 +213,8 @@ static const char* ms_apszBaseDieResNames[] =
 
 
 // These are the points that are checked on the attribute map relative to his origin
-static RP3d ms_apt3dAttribCheck[] =
+//Captain4LK: remove since unused
+/*static RP3d ms_apt3dAttribCheck[] =
 {
    {-6, 0, -6},
    { 0, 0, -6},
@@ -221,7 +222,7 @@ static RP3d ms_apt3dAttribCheck[] =
    {-6, 0,  6},
    { 0, 0,  6},
    { 6, 0,  6},
-};
+};*/
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -564,7 +565,8 @@ void CSentry::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 void CSentry::Update(void)
 {
-   short sHeight = m_sPrevHeight;
+   //Captain4LK: remove since unused
+   //short sHeight = m_sPrevHeight;
    S32 lThisTime;
    S32 lTimeDifference;
    S32 lSqDistanceToDude = 0;
@@ -701,6 +703,7 @@ void CSentry::Update(void)
 //-----------------------------------------------------------------------
 
       case CSentry::State_Dead:
+      {
          CHood*   phood   = m_pRealm->m_phood;
          // Render current dead frame into background to stay.
          m_pRealm->m_scene.DeadRender3D(
@@ -712,8 +715,11 @@ void CSentry::Update(void)
          delete this;
          return;
          break;
+      }
 
-
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
 

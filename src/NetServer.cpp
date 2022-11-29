@@ -125,7 +125,8 @@ void CNetServer::Shutdown(void)
 ////////////////////////////////////////////////////////////////////////////////
 void CNetServer::Update(void)
 {
-   short sResult = 0;
+   //Captain4LK: remove since unused
+   //short sResult = 0;
 
    //------------------------------------------------------------------------------
    // Accept new clients

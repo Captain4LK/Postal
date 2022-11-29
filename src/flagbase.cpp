@@ -104,7 +104,8 @@ static const char* ms_apszBlueResNames[] =
 
 
 // These are the points that are checked on the attribute map relative to his origin
-static RP3d ms_apt3dAttribCheck[] =
+//Captain4LK: remove since unused
+/*static RP3d ms_apt3dAttribCheck[] =
 {
    {-6, 0, -6},
    { 0, 0, -6},
@@ -112,7 +113,7 @@ static RP3d ms_apt3dAttribCheck[] =
    {-6, 0,  6},
    { 0, 0,  6},
    { 6, 0,  6},
-};
+};*/
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,10 +328,12 @@ short CFlagbase::Shutdown(void)                    // Returns 0 if successfull, 
 ////////////////////////////////////////////////////////////////////////////////
 void CFlagbase::Update(void)
 {
-   short sHeight = m_sPrevHeight;
+   //Captain4LK: remove since unused
+   //short sHeight = m_sPrevHeight;
    S32 lThisTime;
    S32 lTimeDifference;
-   S32 lSqDistanceToDude = 0;
+   //Captain4LK: remove since unused
+   //S32 lSqDistanceToDude = 0;
    CSmash* pSmashed = NULL;
 
    if (!m_sSuspend)
@@ -340,7 +343,8 @@ void CFlagbase::Update(void)
       lTimeDifference = lThisTime - m_lPrevTime;
 
       // Calculate elapsed time in seconds
-      double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
+      //Captain4LK: remove since unused
+      //double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
       // Check for new messages that may change the state
       ProcessMessages();
@@ -406,6 +410,7 @@ void CFlagbase::Update(void)
 //-----------------------------------------------------------------------
 
       case CFlagbase::State_Dead:
+      {
          CHood*   phood   = m_pRealm->m_phood;
          // Render current dead frame into background to stay.
          m_pRealm->m_scene.DeadRender3D(
@@ -416,8 +421,11 @@ void CFlagbase::Update(void)
          delete this;
          return;
          break;
+      }
 
-
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
 
@@ -522,7 +530,8 @@ short CFlagbase::EditModify(void)
 {
    short sResult = 0;
    U16 u16OrigColor = m_u16Color;
-   RGuiItem* pGuiItem = NULL;
+   //Captain4LK: remove since unused
+   //RGuiItem* pGuiItem = NULL;
    RGuiItem* pguiRoot = RGuiItem::LoadInstantiate(FullPathVD("res/editor/flagbase.gui"));
    if (pguiRoot != NULL)
    {

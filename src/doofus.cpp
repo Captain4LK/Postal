@@ -892,7 +892,7 @@ short CDoofus::Load(                            // Returns 0 if successfull, non
       case 1:
          // Get the instance ID for the NavNet
          U16 u16Data;
-         short sres = pFile->Read(&u16Data);
+         pFile->Read(&u16Data);
          m_u16NavNetID = u16Data;
          break;
       }
@@ -1441,7 +1441,8 @@ bool CDoofus::TryClearShot(double dRot, short sVariance)
    {
       short sTries = 0;
       short sX, sY, sZ;
-      CThing* pthing = NULL;
+      //Captain4LK: removed since unused
+      //CThing* pthing = NULL;
       double dRotAttempt = dRot;
 
       // Do a translation to the weapon position so that it is at the correct
@@ -1601,7 +1602,9 @@ void CDoofus::Update(void)
          delete this;
          return;
          break;
-
+      //Captain4lK: default to shut up compiler
+      default:
+         break;
       }
 
       // Determine appropriate position for main smash.
@@ -1855,16 +1858,17 @@ void CDoofus::Logic_Writhing(void)
 void CDoofus::Logic_Guard(void)
 {
    S32 lThisTime;
-   S32 lTimeDifference;
-   double dSeconds;
+   //Captain4lK: removed since unused
+   //S32 lTimeDifference;
+   //double dSeconds;
 
    // Get new time
    lThisTime = m_pRealm->m_time.GetGameTime();
-   lTimeDifference = lThisTime - m_lPrevTime;
+   //lTimeDifference = lThisTime - m_lPrevTime;
    m_eCurrentAction = Action_Guard;
 
    // Calculate the elapsed time in seconds
-   dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
+   //dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
 //   if (m_panimCur != &m_animStand)
 //   {
@@ -2109,6 +2113,9 @@ void CDoofus::Logic_MoveNext(void)
             case State_Walk:
                m_eCurrentAction = Action_Walk;
                break;
+            //Captain4lK: default to shut up the compiler
+            default:
+               break;
             }
          }
          else
@@ -2148,7 +2155,7 @@ void CDoofus::Logic_PositionSet(void)
       short sVarRot = GetRandom() % 40;
       double dTargetDist = SQDistanceToDude();
       double dTestAngle;
-      double dAngleTurn;
+      double dAngleTurn = 0.0;
 
       // If he is out of range now, reset desired range to the middle value.
       if (dTargetDist < ms_dMinFightDistanceSQ || dTargetDist > ms_dMaxFightDistanceSQ)
@@ -3476,6 +3483,9 @@ bool CDoofus::ReevaluateState(void)
             m_eCurrentAction = Action_Hide;
             bChanged = true;
          }
+         break;
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
    }

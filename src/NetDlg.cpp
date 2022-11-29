@@ -564,7 +564,8 @@ static S32 ms_lNumConsoleEntries      = 0;               // Track number of chat
 static bool ms_bGotSetupMsg = false;
 static short ms_sSetupRealmNum = 0;
 static char ms_szSetupRealmFile[Net::MaxRealmNameSize];
-static S32 ms_lSetupLastChatComplaint = 0;
+//Captain4LK: remove since unused
+//static S32 ms_lSetupLastChatComplaint = 0;
 
 static S32 ms_lNextOptionsUpdateTime;           // Next time to send an options update.
 
@@ -2009,7 +2010,8 @@ static short OnJoinedMsg(  // Returns 0 on success.
 // Player has changed info
 //
 //////////////////////////////////////////////////////////////////////////////
-static short OnChangedMsg( // Returns 0 on success.
+//Captain4LK: remove since unused
+/*static short OnChangedMsg( // Returns 0 on success.
    CNetClient*   pnet,       // In:  Network interface.
    NetMsg*      pmsg)       // In:  Changed msg
 {
@@ -2020,7 +2022,7 @@ static short OnChangedMsg( // Returns 0 on success.
    TRACE("OnChangedMsg(): Changes are not yet refelected in the gui's!\n");
 
    return sRes;
-}
+}*/
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2446,7 +2448,7 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
                         bool bServerDone = pserver ? false : true;
                         bool bClientDone = false;
                         bool bUserAbortNow = false;
-                        S32 lCancelDelay;
+                        S32 lCancelDelay = 0;
                         DLG_ACTION action;
                         NetMsg msg;
                         while (!(bClientDone && bServerDone && (bAbort || bStart || bRetry)) && !bUserAbortNow)
@@ -2781,7 +2783,8 @@ extern short DoNetGameDialog(                   // Returns 0 if successfull, non
                               else
                               {
                                  // Assume no problems
-                                 short sProblem = 0;
+                                 //Captain4LK: remove since unused
+                                 //short sProblem = 0;
 
                                  // Process messages from server
                                  pclient->GetMsg(&msg);

@@ -450,7 +450,7 @@ RGuiItem*   RGuiItem::ms_pguiFocus   = NULL;  // Higher level APIs can use this
                                               // as their current point of
                                               // input focus.
 const char*         RGuiItem::ms_apszTypes[NumGuiTypes]   =  // Array of strings
-                                                            // indexed by type.
+                                                             // indexed by type.
 {
    "GuiItem",
    "Txt",

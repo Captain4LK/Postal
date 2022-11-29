@@ -465,7 +465,8 @@ bool CBulletFest::FireDeluxe(   // Returns what and as Fire() would.
 
    short   sRicochets      = 0;
    bool   bImpact         = false;
-   short   sTerrainAngle   = 0;
+   //Captain4LK: remove since unused
+   //short   sTerrainAngle   = 0;
    // While no hits and not out of ricochets . . .
    while (bHit == false && sRicochets <= sMaxRicochets && bImpact == false)
       {

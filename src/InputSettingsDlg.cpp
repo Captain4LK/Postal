@@ -493,6 +493,10 @@ inline void ListenForInput(   // Returns nothing.
       pie->sUsed   = TRUE;
 
       break;
+
+   //Captain4LK: default to shut up compiler
+   default:
+      break;
    }
 
    // If still listening . . .
@@ -570,6 +574,10 @@ inline void ListenForInput(   // Returns nothing.
 
             pgui->SetText("%s", g_apszMouseButtonDescriptions[MouseBitfieldToIndex(ms_sMouseButtons)]);
             pgui->Compose();
+            break;
+
+         //Captain4LK: default to shut up compiler
+         default:
             break;
          }
          break;
@@ -666,6 +674,9 @@ inline void ListenForInput(   // Returns nothing.
 #endif   // defined(ALLOW_JOYSTICK)
             break;
          }
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
          break;
       }
@@ -797,6 +808,10 @@ extern short EditInputSettings(void)   // Returns nothing.
 #endif
          }
 #endif   // defined(ALLOW_JOYSTICK)
+         break;
+
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
 

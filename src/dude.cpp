@@ -1917,6 +1917,9 @@ void CDude::Update(void)
             case State_Shooting:
                SetState(State_RunAndShoot);
                break;
+            //Captain4LK: default to shut up compiler
+            default:
+               break;
             }
          }
          else
@@ -1935,6 +1938,9 @@ void CDude::Update(void)
                case State_Strafe:
                case State_StrafeAndShoot:
                   break;
+               //Captain4lK: default to shut up compiler
+               default:
+                  break;
                }
             }
             else
@@ -1949,6 +1955,9 @@ void CDude::Update(void)
                   break;
                case State_StrafeAndShoot:
                   SetState(State_Shooting);
+                  break;
+               //Captain4lK: default to shut up compiler
+               default:
                   break;
                }
             }
@@ -1981,6 +1990,9 @@ void CDude::Update(void)
                   break;
                case State_Burning:
                   break;
+               //Captain4LK: default to shut up compiler
+               default:
+                  break;
                }
             }
             else     // We are strafing in some way.
@@ -1995,6 +2007,9 @@ void CDude::Update(void)
                   SetState(State_StrafeAndShoot);
                   break;
                case State_Burning:
+                  break;
+               //Captain4LK: default to shut up compiler
+               default:
                   break;
                }
             }
@@ -2530,6 +2545,9 @@ void CDude::Update(void)
                }
                break;
             }
+            //Captain4LK: default to shut up compiler
+            default:
+               break;
          }
 
          // Update sphere.
@@ -2660,6 +2678,9 @@ void CDude::Update(void)
          input &= ~(INPUT_LEFT | INPUT_RIGHT | INPUT_REVIVE | INPUT_ROT_MASK | INPUT_FORWARD | INPUT_BACKWARD | INPUT_MOVE_UP | INPUT_MOVE_DOWN | INPUT_MOVE_LEFT | INPUT_MOVE_RIGHT);
          bCanMove = false;
          bCanFire = false;
+         break;
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
 
@@ -2992,6 +3013,9 @@ void CDude::Update(void)
 
          break;
       }
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
       // "Twinstick" style inputs.
@@ -3174,6 +3198,9 @@ void CDude::Update(void)
             break;
          case State_StrafeAndShoot:
             SetState(State_Strafe);
+            break;
+         //Captain4LK: default to shut up compiler
+         default:
             break;
          }
       }
@@ -3933,6 +3960,9 @@ void CDude::Update(void)
          case State_Duck:
             bRealizeNewState   = false;
             break;
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
          break;
       case State_RunAndShoot:
@@ -4040,6 +4070,9 @@ void CDude::Update(void)
       case State_ObjectReleased:
          break;
       case State_PickUp:
+         break;
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
 
@@ -4153,6 +4186,9 @@ void CDude::Update(void)
             break;
          case State_Execute:
             m_idVictim   = CIdBank::IdNil;
+            break;
+         //Captain4lK: default to shut up compiler
+         default:
             break;
          }
 
@@ -4442,6 +4478,9 @@ void CDude::Update(void)
                m_bGenericEvent1         = false;
             }
             break;
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
       }
 
@@ -4457,7 +4496,8 @@ void CDude::Update(void)
       short**         ppsNum)  // Out: Ptr to the weapon's counter.
    {
       static short sSafetyNum   = 0;
-      short   *psNumLeft   = &sSafetyNum;
+      //Captain4LK: removed since unused
+      //short   *psNumLeft   = &sSafetyNum;
       // Switch on weapon type . . .
       switch (weapon)
       {
@@ -4568,6 +4608,9 @@ void CDude::Update(void)
          case SprayCannon: weaponFlag = FLAG_USED_SPRAY_CANNON; break;
          case DeathWad: weaponFlag = FLAG_USED_DEATHWAD; break;
          case DoubleBarrel: weaponFlag = FLAG_USED_DBL_SHOTGUN; break;
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
 
          State stateShoot   = State_Throw;
@@ -4616,6 +4659,9 @@ void CDude::Update(void)
          case RemoteMine:
          case BouncingBettyMine:
             stateShoot   = State_PutDown;
+            break;
+         //Captain4LK: default to shut up compiler
+         default:
             break;
          }
 
@@ -5422,16 +5468,19 @@ void CDude::Update(void)
          // sAngle must be between 0 and 359.
          short sRotY = rspMod360((short) m_dRot);
          short sRangeXZ = 100;
-         short sRadius = 20;
+         //Captain4LK: removed since unused
+         //short sRadius = 20;
 
          float fRateX = COSQ[sRotY] * sRangeXZ;
          float fRateZ = -SINQ[sRotY] * sRangeXZ;
-         float fRateY = 0.0;   // If we ever want vertical movement . . .
+         //Captain4LK: removed since unused
+         //float fRateY = 0.0;   // If we ever want vertical movement . . .
 
          // Set initial position to first point to check (NEVER checks original position).
-         float fPosX = m_dX + fRateX;
-         float fPosY = m_dY + fRateY;
-         float fPosZ = m_dZ + fRateZ;
+         //Captain4LK: removed since unused
+         //float fPosX = m_dX + fRateX;
+         //float fPosY = m_dY + fRateY;
+         //float fPosZ = m_dZ + fRateZ;
 
          if (m_TargetSprite.m_psprParent)
             m_TargetSprite.m_psprParent->RemoveChild(&m_TargetSprite);

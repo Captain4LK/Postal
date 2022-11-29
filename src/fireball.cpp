@@ -277,11 +277,12 @@ void CFirestream::Resume(void)
 ////////////////////////////////////////////////////////////////////////////////
 void CFirestream::Update(void)
 {
-   S32 lThisTime;
+   //Captain4LK: removed since unused
+   //S32 lThisTime;
 
    if (!m_sSuspend)
    {
-      lThisTime = m_pRealm->m_time.GetGameTime();
+      //lThisTime = m_pRealm->m_time.GetGameTime();
 
       // See if we killed ourselves
       if (ProcessFireballMessages() == State_Deleted)
@@ -936,7 +937,8 @@ short CFireball::Setup(                         // Returns 0 if successfull, non
 short CFireball::Init(void)
 {
    short sResult = SUCCESS;
-   CAlphaAnim* pAnim = NULL;
+   //Captain4LK: removed since unused
+   //CAlphaAnim* pAnim = NULL;
 
 
    // Update sphere

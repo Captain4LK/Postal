@@ -552,7 +552,8 @@ void CThing::SetInstanceID(   // Returns nothing.
 
 short CThing::SendThingMessage(pGameMessage pMessage, short sPriority, U16 u16ID)
 {
-   short sResult = SUCCESS;
+   //Captain4LK: remove since unused
+   //short sResult = SUCCESS;
    CThing* pThing = NULL;
 
    m_pRealm->m_idbank.GetThingByID(&pThing, u16ID);

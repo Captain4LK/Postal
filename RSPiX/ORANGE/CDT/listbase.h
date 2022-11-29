@@ -577,13 +577,15 @@ short IsEmpty(void)        // Returns TRUE if empty, FALSE otherwise.
 // Find the node with the value LISTDATA.
 PNODE Find(LISTDATA ldFind)
 {
-   PNODE pn, pnTemp;
+   PNODE pn;
+   //Captain4LK: removed since unused
+   //PNODE pnTemp;
 
    // Start at head.
    pn = m_pnHead;
    while (pn && pn->ldData != ldFind)
    {
-      pnTemp = pn;
+      //pnTemp = pn;
       pn = pn->pNext;
    }
 

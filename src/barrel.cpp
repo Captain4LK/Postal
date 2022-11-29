@@ -432,7 +432,8 @@ void CBarrel::Update(void)
       lTimeDifference = lThisTime - m_lPrevTime;
 
       // Calculate elapsed time in seconds
-      double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
+      //Captain4LK: unused
+      //double dSeconds = (double)(lThisTime - m_lPrevTime) / 1000.0;
 
       // Check for new messages that may change the state
       ProcessMessages();
@@ -516,6 +517,9 @@ void CBarrel::Update(void)
 
          break;
 
+      //Captain4LK: unused states to shut up compiler
+      default:
+         break;
       }
 
       // Update sphere.
@@ -573,7 +577,8 @@ short CBarrel::EditNew(                         // Returns 0 if successfull, non
 short CBarrel::EditModify(void)
 {
    short sResult = 0;
-   RGuiItem* pGuiItem = NULL;
+   //Captain4LK: unused
+   //RGuiItem* pGuiItem = NULL;
    RGuiItem* pGui = RGuiItem::LoadInstantiate(FullPathVD("res/editor/barrel.gui"));
    if (pGui)
    {

@@ -225,7 +225,8 @@ static const char* ms_apszDieResNames[] =
 };
 
 // These are the points that are checked on the attribute map relative to his origin
-static RP3d ms_apt3dAttribCheck[] =
+//Captain4LK: remove since unused
+/*static RP3d ms_apt3dAttribCheck[] =
 {
    {-6, 0, -6},
    { 0, 0, -6},
@@ -233,7 +234,7 @@ static RP3d ms_apt3dAttribCheck[] =
    {-6, 0,  6},
    { 0, 0,  6},
    { 6, 0,  6},
-};
+};*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -621,6 +622,9 @@ void COstrich::Update(void)
 
          break;
 
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
       m_smash.m_sphere.sphere.X         = m_dX;

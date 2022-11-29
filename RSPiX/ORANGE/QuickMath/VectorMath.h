@@ -105,9 +105,11 @@ typedef union
 
 inline int operator==(const RP3d& lhs, const RP3d& rhs)
 {
-   if (lhs.v == rhs.v)
-      return 1;
-   return 0;
+   return lhs.v[0]==rhs.v[0]&&lhs.v[1]==rhs.v[1]&&lhs.v[2]==rhs.v[2]&&lhs.v[3]==rhs.v[3];
+   //if(lhs.v[0]==rhs.v[0]
+   //if (lhs.v == rhs.v)
+   //return 1;
+   //return 0;
 }
 
 
@@ -231,9 +233,13 @@ RTransform(REAL* M)    // init to a copy of another transform
 
 int operator==(const RTransform& rhs) const
 {
-   if (T == rhs.T)
-      return 1;
-   return 0;
+   for(int i = 0; i<16; i++)
+      if(T[i]!=rhs.T[i])
+         return 0;
+   return 1;
+   //if (T == rhs.T)
+   //return 1;
+   //return 0;
 }
 
 void Make1()    // identity matrix

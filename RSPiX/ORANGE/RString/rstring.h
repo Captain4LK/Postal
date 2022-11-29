@@ -421,7 +421,7 @@ const RString& operator=(unsigned short rhs)
 const RString& operator=(S32 rhs)
 {
    Grow(MaxLongLen + 1);       // size is always > 0, so this will always return with a valid buffer
-   m_lStrLen = sprintf(m_pBuf, "%ld", (S32)rhs);
+   m_lStrLen = sprintf(m_pBuf, "%" PRId32, (S32)rhs);
    return *this;
 }
 
@@ -429,7 +429,7 @@ const RString& operator=(S32 rhs)
 const RString& operator=(U32 rhs)
 {
    Grow(MaxULongLen + 1);       // size is always > 0, so this will always return with a valid buffer
-   m_lStrLen = sprintf(m_pBuf, "%lu", (U32)rhs);
+   m_lStrLen = sprintf(m_pBuf, "%" PRIu32, (U32)rhs);
    return *this;
 }
 
@@ -512,7 +512,7 @@ const RString& operator+=(unsigned short rhs)
 const RString& operator+=(S32 rhs)
 {
    Grow(m_lStrLen + MaxLongLen + 1);       // size is always > 0, so this will always return with a valid buffer
-   m_lStrLen += sprintf(m_pBuf + m_lStrLen, "%ld", (S32)rhs);
+   m_lStrLen += sprintf(m_pBuf + m_lStrLen, "%" PRId32, (S32)rhs);
    return *this;
 }
 
@@ -520,7 +520,7 @@ const RString& operator+=(S32 rhs)
 const RString& operator+=(U32 rhs)
 {
    Grow(m_lStrLen + MaxULongLen + 1);       // size is always > 0, so this will always return with a valid buffer
-   m_lStrLen += sprintf(m_pBuf + m_lStrLen, "%lu", (U32)rhs);
+   m_lStrLen += sprintf(m_pBuf + m_lStrLen, "%" PRIu32, (U32)rhs);
    return *this;
 }
 

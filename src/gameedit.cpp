@@ -1391,7 +1391,8 @@ static void DrawBouyLink(     // Returns nothing.
 static void AddNewLine(short sX0, short sY0, short sX1, short sY1);
 
 // Writes out a log of connected bouys.  This is for debugging only
-static void NetLog(CNavigationNet* pNavNet);
+//Captain4LK: remove since unused
+//static void NetLog(CNavigationNet* pNavNet);
 
 // UpdateNetLines - build the full list of link lines from the
 // navigation net.  This function can be used after the bouys have
@@ -1598,11 +1599,12 @@ static void InitFileCounter(        // Returns nothing.
 static void KillFileCounter(void);  // Returns nothing.
 
 // Callback from realm during time intensive operations.
-static bool RealmOpProgress(        // Returns true to continue; false to
+//Captain4LK: remove since unused
+/*static bool RealmOpProgress(        // Returns true to continue; false to
                                     // abort operation.
    short sLastItemProcessed,          // In:  Number of items processed so far.
    short sTotalItemsToProcess);       // In:  Total items to process.
-
+*/
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Set some basic stuff for specified item.
@@ -1953,11 +1955,13 @@ extern void GameEdit(
          rspSetMouseCursorShowLevel(1);
 
          // User must load an existing realm or start a new one to go any further
-         bool bGoEdit = false;
+         //Captain4LK: remove since unused
+         //bool bGoEdit = false;
          bool bExit = false;
 
          // Set currently select thing to default value
-         CThing::ClassIDType idCurrent = DEFAULT_THING_ID;
+         //Captain4LK: remove since unused
+         //CThing::ClassIDType idCurrent = DEFAULT_THING_ID;
          // Clear mouse and keyboard events
          rspClearAllInputEvents();
 
@@ -4343,10 +4347,11 @@ static void PlayRealm(
                   INFO_STATUS_RECT_W,
                   INFO_STATUS_RECT_H);
 
-               S32 lLastDispTime        = 0;
-               S32 lFramesTime          = 0;
-               S32 lUpdateDisplayTime   = 0;
-               S32 lNumFrames           = 0;
+               //Captain4LK: remove since unused
+               //S32 lLastDispTime        = 0;
+               //S32 lFramesTime          = 0;
+               //S32 lUpdateDisplayTime   = 0;
+               //S32 lNumFrames           = 0;
 
                RPrint printDisp;
                printDisp.SetFont(DISP_INFO_FONT_H, &g_fontBig);
@@ -5785,6 +5790,8 @@ static void AddNewLine(short sX0, short sY0, short sX1, short sY1)
    m_NetLines.insert(newLine);
 }
 
+//Captain4LK: remove since unused
+#if 0
 ////////////////////////////////////////////////////////////////////////////////
 // Write a NavNet log file to display the connections.- for debugging purposes
 ////////////////////////////////////////////////////////////////////////////////
@@ -5849,7 +5856,7 @@ static void NetLog(CNavigationNet* pNavNet)
    }
 */
 }
-
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // UpdateNetLines
@@ -7642,7 +7649,7 @@ static short ShowRealmStatistics(   // Returns 0 on success.
 
             sprintf(
                szThingDescription,
-               "%ld) \"%s\" ID: %u X: %s Y: %s Z: %s",
+               "%" PRId32 ") \"%s\" ID: %" PRIu32 " X: %s Y: %s Z: %s",
                lNum,
                CThing::ms_aClassInfo[pthing->GetClassID()].pszClassName,
                pthing->GetInstanceID(),
@@ -7712,6 +7719,8 @@ static short ShowRealmStatistics(   // Returns 0 on success.
    return sRes;
 }
 
+//Captain4LK: remove since unused
+#if 0
 ////////////////////////////////////////////////////////////////////////////////
 // Callback from realm during time intensive operations.
 ////////////////////////////////////////////////////////////////////////////////
@@ -7824,6 +7833,7 @@ static bool RealmOpProgress(        // Returns true to continue; false to
 
    return bContinue;
 }
+#endif
 
 
 #endif // !defined(EDITOR_DISABLED)

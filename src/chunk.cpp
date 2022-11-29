@@ -180,6 +180,9 @@ void CChunk::Update(void)
             NULL);
 #endif
          break;
+      //Captain4LK: default to make the compiler shut up
+      default:
+         break;
       }
 
       // We're done.

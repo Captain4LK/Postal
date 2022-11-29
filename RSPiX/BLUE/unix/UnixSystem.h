@@ -293,7 +293,7 @@ inline bool rspObjCmp(const T* p1, const T* p2, size_t count)
 
 inline char *ltoa(S32 l, char *buf, size_t bufsize)
 {
-   snprintf(buf, bufsize, "%ld", l);
+   snprintf(buf, bufsize, "%" PRId32, l);
    return(buf);
 }
 
