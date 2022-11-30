@@ -296,6 +296,8 @@ struct GenericDestroyResFunc
 {
    virtual void operator()(void* /*pT*/)
    {  }
+
+   virtual ~GenericDestroyResFunc() { }
 };
 
 template<class T>
