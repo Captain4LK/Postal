@@ -379,7 +379,7 @@ short RPrefs::Write()
                pTmp = (pTmp != NULL) ? pTmp + 1 : acTmpFileName;
                for (S32 lCount = 0; !bGotTmp && (lCount < 9999999L); lCount++)
                {
-                  sprintf(pTmp, "t%0.7ld.tmp", (S32)lCount);
+                  sprintf(pTmp, "t%07" PRId32 ".tmp", (S32)lCount);
                   FILE* fpTmp = fopen(FindCorrectFile(acTmpFileName, "r"), "r");
                   if (fpTmp != NULL)
                      fclose(fpTmp);
@@ -741,7 +741,7 @@ short RPrefs::SetVal(            // Returns 0 if successfull, non-zero otherwise
 
    ASSERT(pszSection);
    ASSERT(pszVariable);
-   sprintf(pszValue, "%ld", (S32) s32Value);
+   sprintf(pszValue, "%" PRId32 "", (S32) s32Value);
    SetVal(pszSection, pszVariable, pszValue);
 
    return m_sErrorStatus;
@@ -757,7 +757,7 @@ short RPrefs::SetVal(            // Returns 0 if successfull, non-zero otherwise
 
    ASSERT(pszSection);
    ASSERT(pszVariable);
-   sprintf(pszValue, "%lu", (U32) u32Value);
+   sprintf(pszValue, "%" PRIu32 "", (U32) u32Value);
    SetVal(pszSection, pszVariable, pszValue);
 
    return m_sErrorStatus;
@@ -1108,7 +1108,7 @@ short RPrefs::GetVal(                     // Returns 0 if successfull, non-zero 
    ASSERT(pszVariable);
    ASSERT(s32Value);
 
-   sprintf(pszDefault, "%ld", (int)s32Default);
+   sprintf(pszDefault, "%d", (int)s32Default);
    m_sErrorStatus = GetVal(pszSection, pszVariable, pszDefault, pszValue);
    if (m_sErrorStatus == 0)
    {
@@ -1139,7 +1139,7 @@ short RPrefs::GetVal(                     // Returns 0 if successfull, non-zero 
    ASSERT(pszVariable);
    ASSERT(u32Value);
 
-   sprintf(pszDefault, "%lu", (unsigned)u32Default);
+   sprintf(pszDefault, "%u", (unsigned)u32Default);
    m_sErrorStatus = GetVal(pszSection, pszVariable, pszDefault, pszValue);
    if (m_sErrorStatus == 0)
    {

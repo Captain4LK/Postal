@@ -330,9 +330,10 @@ static void locateCorrectCase(char *buf)
 {
 #if PLATFORM_UNIX
    char *ptr = buf;
-   char *prevptr = buf;
+   //Captain4LK: remove since unused
+   //char *prevptr = buf;
 
-   while (ptr = strchr(ptr + 1, '/'))
+   while ((ptr = strchr(ptr + 1, '/')))
    {
       *ptr = '\0';  /* block this path section off */
       if (!locateOneElement(buf))
@@ -430,7 +431,8 @@ extern const char *FindCorrectFile(const char *_pszName, const char *pszMode)
             if (access(oldpath, F_OK) == 0)
             {
                TRACE("using oldschool prefpath at \"%s\"\n", oldpath);
-               snprintf(prefpath, sizeof (prefpath), "%s/", oldpath);
+               if(snprintf(prefpath, sizeof (prefpath), "%s/", oldpath)<0)
+                  TRACE("FindCorrectFIle() - snprintf truncated.\n");
             }
          }
 

@@ -597,8 +597,9 @@ short rspAddRotationPadding(RImage* pimSrc, short sHotX, short sHotY)
    // Calculate new position of image within the buffer:
    short sX = short (lR - sHotX); // new offset...
    short sY = short (lR - sHotY);
-   short sOldW = pimSrc->m_sWidth;
-   short sOldH = pimSrc->m_sHeight;
+   //Captain4LK: remove since unused
+   //short sOldW = pimSrc->m_sWidth;
+   //short sOldH = pimSrc->m_sHeight;
 
    rspPad(pimSrc, sX, sY, sSize, sSize, 1); // go to 8-bit alignment since offset may not align
 

@@ -151,7 +151,8 @@ const char*   CItem3d::ms_apszKnownAnimDescriptions[CItem3d::NumTypes]   =
    "Sax",
 };
 
-static const char* ms_apszResExtensions[NUM_RES_NAMES]   =
+//Captain4LK: remove since unused
+/*static const char* ms_apszResExtensions[NUM_RES_NAMES]   =
 {
    "sop",
    "mesh",
@@ -159,7 +160,7 @@ static const char* ms_apszResExtensions[NUM_RES_NAMES]   =
    "hot",
    "bounds",
    "floor",
-};
+};*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)

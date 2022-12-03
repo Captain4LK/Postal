@@ -467,7 +467,8 @@ short      ConvertFromFSPR1(RImage* pImage)
 //
 short      LoadFSPR1(RImage* pImage, RFile* pcf)
 {
-   S32 lBogus1  = pcf->Tell();
+   //Captain4LK: remove since unused
+   //S32 lBogus1  = pcf->Tell();
 
    //------------------
    // Initial Security:
@@ -1440,8 +1441,9 @@ short rspBlit(
    // transfer colors:
    UCHAR ucForeColor = (UCHAR) ulForeColor;
 
-   short sW = sDstW; // clippng parameters...
-   short sH = sDstH; // clippng parameters...
+   //Captain4LK: remove since unused
+   //short sW = sDstW; // clippng parameters...
+   //short sH = sDstH; // clippng parameters...
    S32 lDstP = pimDst->m_lPitch;
 
    //**************  INSERT BUFFER HOOKS HERE!  ************************

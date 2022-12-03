@@ -230,7 +230,6 @@ OBJS4 := $(OBJS3:.s=.o)
 OBJS := $(foreach f,$(OBJS4),$(BINDIR)/$(f))
 SRCS := $(foreach f,$(SRCS),$(SRCDIR)/$(f))
 
-# !!! FIXME: Get -Wall in here, some day.
 CFLAGS += -fsigned-char -g -DPLATFORM_UNIX -Wall -Wno-sign-compare
 
 ifeq ($(strip $(macosx)),true)

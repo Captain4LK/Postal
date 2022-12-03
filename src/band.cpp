@@ -302,7 +302,7 @@ static const char* ms_apszOnFireResNames[] =
 };
 
 // These are the points that are checked on the attribute map relative to his origin
-static RP3d ms_apt3dAttribCheck[] =
+/*static RP3d ms_apt3dAttribCheck[] =
 {
    {-6, 0, -6},
    { 0, 0, -6},
@@ -310,7 +310,7 @@ static RP3d ms_apt3dAttribCheck[] =
    {-6, 0,  6},
    { 0, 0,  6},
    { 6, 0,  6},
-};
+};*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load object (should call base class version!)
@@ -996,6 +996,7 @@ void CBand::Update(void)
 //-----------------------------------------------------------------------
 
       case State_Dead:
+      {
          GameMessage msg;
          msg.msg_Death.eType = typeDeath;
          msg.msg_Death.sPriority = 0;
@@ -1007,7 +1008,11 @@ void CBand::Update(void)
          return;
 
          break;
+      }
 
+      //Captain4LK: default to shut up compiler
+      default:
+         break;
       }
 
       m_smash.m_sphere.sphere.X         = m_dX;
@@ -1570,10 +1575,11 @@ void CBand::AlertBand(void)
 {
    CThing* pThing;
    GameMessage msg;
-   GameMessage msgStopSound;
+   //Captain4LK: remove since unused
+   //GameMessage msgStopSound;
 
-   msgStopSound.msg_ObjectDelete.eType = typeObjectDelete;
-   msgStopSound.msg_ObjectDelete.sPriority = 0;
+   //msgStopSound.msg_ObjectDelete.eType = typeObjectDelete;
+   //msgStopSound.msg_ObjectDelete.sPriority = 0;
 
    msg.msg_Panic.eType = typePanic;
    msg.msg_Panic.sPriority = 0;

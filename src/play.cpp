@@ -3439,7 +3439,6 @@ void DoMenu(
    // User save choice.
    case MenuActionSaveGame:
    {
-      short sResult;
       // Static so dialog will "remember" the previously-used name
       static char szFile[RSP_MAX_PATH]   = "";
 
@@ -3493,8 +3492,7 @@ void DoMenu(
                   #if WITH_STEAMWORKS
                   #error You need to switch over from this code to the in-game file UI first.
                   #endif
-      sResult = rspSaveBox(g_pszSaveGameTitle, szFile, szFile, sizeof(szFile), SAVEGAME_EXT);
-      if (sResult == 0)
+      if (rspSaveBox(g_pszSaveGameTitle, szFile, szFile, sizeof(szFile), SAVEGAME_EXT))
       {
          if (Game_SavePlayersGame(szFile, pinfo->Realm()->m_flags.sDifficulty) != SUCCESS)
          {
@@ -5340,7 +5338,7 @@ extern void Play_SnapPicture(void)
 
       // Save picture to file
       char szFileName[RSP_MAX_PATH];
-      sprintf(szFileName, "PostalShot%03ld.bmp", ms_lCurPicture++);
+      sprintf(szFileName, "PostalShot%03" PRId32 ".bmp", ms_lCurPicture++);
 
       // This will require direct access to the composite buffer.
       rspLockBuffer();

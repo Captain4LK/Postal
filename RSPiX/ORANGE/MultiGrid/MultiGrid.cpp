@@ -220,7 +220,7 @@ short RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
    // Set the parameters:
    //--------------------------------------------- Convert Input to log 2
    short sValue = 16384, sDigit = 14;
-   short sLogW, sLogH;
+   short sLogW = 0, sLogH = 0;
    short i, j;
 
    while (sScaleW > 0)
@@ -278,7 +278,8 @@ short RMultiGrid::AllocGrid(short sScaleW, short sScaleH)
    //--------------------------------------------- Allocate the Tile Lists:
    S32 lShortTileSize = S32(sScaleW) * sScaleH;
    S32 lByteTileSize = lShortTileSize << 1;
-   S32 lLongTileSize = lShortTileSize >> 1;
+   //Captain4LK: remove since unused
+   //S32 lLongTileSize = lShortTileSize >> 1;
    // Initial Max
    short sMaxNumTiles = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
 
@@ -383,7 +384,8 @@ short RMultiGrid::Compress(
    short sExtraW = m_sWidth - (sWholeGridW << m_sShiftX);
    short sExtraH = m_sHeight - (sWholeGridH << m_sShiftY);
 
-   short sMaxTile = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
+   //Captain4LK: remove since unused
+   //short sMaxTile = MIN((S32)32767, (S32)1 + S32(sGridW) * (S32)sGridH);
    short sShortSize = (m_sMaskX + 1) * (m_sMaskY + 1);
    short sNumMatches = 0;
 

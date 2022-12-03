@@ -277,6 +277,8 @@ struct GenericCreateResFunc
       *ppT = 0;
       return -1;  // generic version should never be called!
    }
+
+   virtual ~GenericCreateResFunc() { }
 };
 
 template<class T>
@@ -314,6 +316,8 @@ struct GenericLoadResFunc
 {
    virtual short operator()(void* /*pT*/, RFile* /*pfile*/)
    { return -1; }    // generic version should never be called!
+
+   virtual ~GenericLoadResFunc() { }
 };
 
 template<class T>

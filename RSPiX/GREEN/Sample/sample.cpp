@@ -199,6 +199,8 @@ void RSample::Reset(void)
 // Returns size of chunk on success.
 //
 ///////////////////////////////////////////////////////////////////////////////
+//Captain4LK: remove since unused
+#if 0
 static S32 IffReadUntil(char* pcForm, FILE* fsIn)
 {
    S32 lRes = 0;
@@ -241,6 +243,7 @@ static S32 IffReadUntil(char* pcForm, FILE* fsIn)
 
    return lRes;
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //

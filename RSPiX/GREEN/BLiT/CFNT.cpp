@@ -139,7 +139,8 @@ short RFont::Add(RFile* pcf)
          pcf->Read(&ucASCII);
          pim->Load(pcf);
          AddLetter(pim, (short)ucASCII);
-         S32 lBogus = pcf->Tell();
+         //Captain4LK: remove since unused
+         //S32 lBogus = pcf->Tell();
       }
    }
 

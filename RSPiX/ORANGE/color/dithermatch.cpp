@@ -94,7 +94,8 @@ short   rspDither(
 #endif
 
    short sRet = 0;
-   S32 lPalOffset = lInc * sStartMap;
+   //Captain4LK: remove since unused
+   //S32 lPalOffset = lInc * sStartMap;
    S32 lLastTime = rspGetMilliseconds();
 
    //--------- Set up receiving vessel:
@@ -117,7 +118,8 @@ short   rspDither(
    }
 
    //--------- Begin:
-   S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
+   //Captain4LK: remove since unused
+   //S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
 
    short i, j;
    S32 lSrcP = pimSrc->m_lPitch;
@@ -360,8 +362,9 @@ short   rspSimpleMap(
 #ifdef _DEBUG
 #endif
 
-   short sRet = 0;
-   S32 lPalOffset = lInc * sStartMap;
+   //Captain4LK: remove since unused
+   //short sRet = 0;
+   //S32 lPalOffset = lInc * sStartMap;
    S32 lLastTime = rspGetMilliseconds();
 
    //--------- Set up receiving vessel:
@@ -384,7 +387,8 @@ short   rspSimpleMap(
    }
 
    //--------- Begin:
-   S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
+   //Captain4LK: remove since unused
+   //S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
 
    short i, j;
    S32 lSrcP = pimSrc->m_lPitch;
@@ -420,7 +424,7 @@ short   rspSimpleMap(
             if ((*func)(1.0 - double(j) / dH) == -1) // user abort
             {
                j = 0; // premature exit!
-               sRet = 1;
+               //sRet = 1;
             }
          }
       }
@@ -477,7 +481,8 @@ short   rspDither(
 #endif
 
    short sRet = 0;
-   S32 lPalOffset = lInc * sStartMap;
+   //Captain4LK: remove since unused
+   //S32 lPalOffset = lInc * sStartMap;
    S32 lLastTime = rspGetMilliseconds();
 
    //--------- Set up receiving vessel:
@@ -499,7 +504,8 @@ short   rspDither(
       (*func)(double(0.0));
    }
 
-   S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
+   //Captain4LK: remove since unused
+   //S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
 
    short i, j;
    S32 lSrcP = pimSrc->m_lPitch;
@@ -774,7 +780,8 @@ short   rspDither(
 #endif
 
    short sRet = 0;
-   S32 lPalOffset = lInc * sStartMap;
+   //Captain4LK: remove since unused
+   //S32 lPalOffset = lInc * sStartMap;
    S32 lLastTime = rspGetMilliseconds();
 
    //--------- Set up receiving vessel:
@@ -797,7 +804,8 @@ short   rspDither(
    }
 
    //--------- Begin:
-   S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
+   //Captain4LK: remove since unused
+   //S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
 
    short i, j;
    S32 lSrcP = pimSrc->m_lPitch;
@@ -1054,8 +1062,9 @@ short   rspSimpleMap(
 #ifdef _DEBUG
 #endif
 
-   short sRet = 0;
-   S32 lPalOffset = lInc * sStartMap;
+   //Captain4LK: remove since unused
+   //short sRet = 0;
+   //S32 lPalOffset = lInc * sStartMap;
    S32 lLastTime = rspGetMilliseconds();
 
    //--------- Set up receiving vessel:
@@ -1078,7 +1087,8 @@ short   rspSimpleMap(
    }
 
    //--------- Begin:
-   S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
+   //Captian4LK: remove since unused
+   //S32 lErrorRed = 0, lErrorGreen = 0, lErrorBlue = 0;
 
    short i, j;
    S32 lSrcP = pimSrc->m_lPitch;
@@ -1121,7 +1131,7 @@ short   rspSimpleMap(
             if ((*func)(1.0 - double(j) / dH) == -1) // user abort
             {
                j = 0; // premature exit!
-               sRet = 1;
+               //sRet = 1;
             }
          }
       }

@@ -637,9 +637,10 @@ short RPal::Load(char* pszFilename)
 short RPal::Load(RFile* pcf)
 {
    short sReturn = SUCCESS;
-   U32 ulFileType = 0;
-   U32 ulFileVersion = 0;
-   USHORT usFlag = 2;
+   //Captain4LK: remove since unused
+   //U32 ulFileType = 0;
+   //U32 ulFileVersion = 0;
+   //USHORT usFlag = 2;
 
    if (pcf && pcf->IsOpen())
    {

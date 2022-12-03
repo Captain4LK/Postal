@@ -1029,10 +1029,12 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
       char szBasePath[RSP_MAX_PATH];         // Temp storage of file path.
 
       // Create the real base file path.
-      sprintf(szBasePath, "hoods/%s/%s", m_acBaseName, m_acBaseName);
+      if(snprintf(szBasePath, RSP_MAX_PATH, "hoods/%s/%s", m_acBaseName, m_acBaseName)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
 
       // Add .ext for SAKs.
-      sprintf(szFileName, "res/hoods/%s.sak", m_acBaseName);
+      if(snprintf(szFileName, RSP_MAX_PATH, "res/hoods/%s.sak", m_acBaseName)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
 
       // Open SAK, if available . . .
       if (m_pRealm->m_resmgr.OpenSak(FullPathHD(szFileName)) == 0)
@@ -1053,7 +1055,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
       }
 
       // Background filename.
-      sprintf(szFileName, "%s.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
 
       // Load background
       if (rspGetResource(
@@ -1073,7 +1076,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
       for (lIndex   = 0; lIndex < MaxLayers; lIndex++)
       {
          // Make alpha layer name.
-         sprintf(szFileName, "%s%02da.say", szBasePath, lIndex);
+         if(snprintf(szFileName, RSP_MAX_PATH, "%s%02da.say", szBasePath, lIndex)<0)
+            TRACE("CHood::GetResources() - snprintf truncated.\n");
          // Load & convert . . .
          if (SpryLoadConv(&(m_pRealm->m_resmgr), m_apspryAlphas + lIndex, szFileName, RImage::FSPR8) == 0)
          {
@@ -1081,7 +1085,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          }
 
          // Make opaque layer name.
-         sprintf(szFileName, "%s%02do.say", szBasePath, lIndex);
+         if(snprintf(szFileName, RSP_MAX_PATH, "%s%02do.say", szBasePath, lIndex)<0)
+            TRACE("CHood::GetResources() - snprintf truncated.\n");
          // Load & convert . . .
          if (SpryLoadConv(&(m_pRealm->m_resmgr), m_apspryOpaques + lIndex, szFileName, RImage::FSPR8) == 0)
          {
@@ -1101,7 +1106,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
                sNumOpaqueLayersLoaded, (sNumOpaqueLayersLoaded == 1 ? "" : "s"));
       }
 
-      sprintf(szFileName, "%s.mp1", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.mp1", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
 
       // Load new multi layer attribute maps
       if (rspGetResource(
@@ -1114,7 +1120,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          goto Error;
       }
 
-      sprintf(szFileName, "%s.mp2", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.mp2", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
 
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
@@ -1128,7 +1135,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
 
 
       // Make XRay mask name.
-      sprintf(szFileName, "%s.XRayMask.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.XRayMask.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1138,7 +1146,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
 
-      sprintf(szFileName, "%s.Transparency.MultiAlpha", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.Transparency.MultiAlpha", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1148,7 +1157,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
 
-      sprintf(szFileName, "%s.Ambient.alpha", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.Ambient.alpha", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1158,7 +1168,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
 
-      sprintf(szFileName, "%s.Spot.alpha", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.Spot.alpha", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1169,7 +1180,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
       }
 
       // Load all the assets for the toolbar
-      sprintf(szFileName, "%s.emptybar.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.emptybar.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1178,7 +1190,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          sResult   = -1;
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
-      sprintf(szFileName, "%s.emptybarselected.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.emptybarselected.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1187,7 +1200,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          sResult   = -1;
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
-      sprintf(szFileName, "%s.fullbar.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.fullbar.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1196,7 +1210,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          sResult   = -1;
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
-      sprintf(szFileName, "%s.fullbarselected.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.fullbarselected.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,
@@ -1205,7 +1220,8 @@ short CHood::GetResources(void)                 // Returns 0 if successfull, non
          sResult   = -1;
          TRACE("GetResources(): Failed to load: %s.\n", szFileName);
       }
-      sprintf(szFileName, "%s.topbar.bmp", szBasePath);
+      if(snprintf(szFileName, RSP_MAX_PATH, "%s.topbar.bmp", szBasePath)<0)
+         TRACE("CHood::GetResources() - snprintf truncated.\n");
       if (rspGetResource(
              &(m_pRealm->m_resmgr),
              szFileName,

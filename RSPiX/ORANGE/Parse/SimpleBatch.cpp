@@ -92,26 +92,27 @@ BEGIN_LOOP:
       if (!sInString)
       {
          // 2) Check for special characters:
-         if (m_pszSpecialCharacters)
-            for (i = 0; i < strlen(m_pszSpecialCharacters); i++)
+         // Captain4LK: remove useless NULL check
+         //if (m_pszSpecialCharacters)
+         for (i = 0; i < strlen(m_pszSpecialCharacters); i++)
+         {
+            if (c == m_pszSpecialCharacters[i]) // found it!
             {
-               if (c == m_pszSpecialCharacters[i]) // found it!
+               // insert a special character
+               if (sMidToken)
                {
-                  // insert a special character
-                  if (sMidToken)
-                  {
-                     m_pszTokenList[m_sNumTokens][sTokenChar] = '\0';
-                     m_sNumTokens++;
-                     sTokenChar = 0;
-                     sMidToken = FALSE;
-                  }
-                  m_sLinePos[m_sNumTokens] = sLinePos;
-                  m_pszTokenList[m_sNumTokens][0] = c;
-                  m_pszTokenList[m_sNumTokens][1] = '\0';
+                  m_pszTokenList[m_sNumTokens][sTokenChar] = '\0';
                   m_sNumTokens++;
-                  goto BEGIN_LOOP;
+                  sTokenChar = 0;
+                  sMidToken = FALSE;
                }
+               m_sLinePos[m_sNumTokens] = sLinePos;
+               m_pszTokenList[m_sNumTokens][0] = c;
+               m_pszTokenList[m_sNumTokens][1] = '\0';
+               m_sNumTokens++;
+               goto BEGIN_LOOP;
             }
+         }
 
          // 3) Check for a filtered character
          if (((short)c < m_sLowFilter) || ( (short)c > m_sHighFilter))
@@ -146,6 +147,7 @@ BEGIN_LOOP:
 
       // Check for string changes....
       if (c == m_cStringContext)
+      {
          if (sInString)  // end the string
          {
             m_pszTokenList[m_sNumTokens][sTokenChar] = '\0';
@@ -162,6 +164,7 @@ BEGIN_LOOP:
             m_sLinePos[m_sNumTokens] = sLinePos;
             continue; // KEEP SCANNING!
          }
+      }
 
       // 5) Add to token
       if (sMidToken) // continue to add onto existing token
@@ -199,13 +202,15 @@ char* RBatch::CreateError(short sToken)
 
    if ((sToken != -1) && (sToken < m_sNumTokens))
    {
-      sprintf(temp,
-              "Unexpected token \"%s\" found at column %hd\n",
-              m_pszTokenList[sToken], m_sLinePos[sToken]);
+      if(snprintf(temp, 256,
+                  "Unexpected token \"%s\" found at column %hd\n",
+                  m_pszTokenList[sToken], m_sLinePos[sToken])<0)
+         TRACE("RBatch::CreateError() - snprintf truncated.\n");
    }
 
-   sprintf(ms_Error, "RBatch(%s):\n*   Parse error at line %ld\n*   %s", m_pszFileName,
-           m_lCurrentLine, temp);
+   if(snprintf(ms_Error, sizeof(ms_Error), "RBatch(%s):\n*   Parse error at line %" PRId32 "\n*   %s", m_pszFileName,
+               m_lCurrentLine, temp)<0)
+      TRACE("RBatch::CreateError() - snprintf truncated.\n");
 
    return ms_Error;
 }

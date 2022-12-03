@@ -302,11 +302,13 @@ short CAnim3D::Get(              // Returns 0 on success.
 
    short sRes;
    char szResName[RSP_MAX_PATH];
-   sprintf(szResName, "%s.sop", szVerbedBaseName);
+   if(snprintf(szResName, RSP_MAX_PATH, "%s.sop", szVerbedBaseName)<0)
+      TRACE("CAnim3D::Get() - snprintf truncated.\n");
    sRes   =  rspGetResource(&g_resmgrGame, szResName, &m_psops);
    if (sRes == 0)
    {
-      sprintf(szResName, "%s.mesh", szVerbedBaseName);
+      if(snprintf(szResName, RSP_MAX_PATH, "%s.mesh", szVerbedBaseName)<0)
+         TRACE("CAnim3D::Get() - snprintf truncated.\n");
       sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pmeshes);
       if (sRes == 0)
       {
@@ -317,13 +319,15 @@ short CAnim3D::Get(              // Returns 0 on success.
          }
          else
          {
-            sprintf(szResName, "%s.tex", szVerbedBaseName);
+            if(snprintf(szResName, RSP_MAX_PATH, "%s.tex", szVerbedBaseName)<0)
+               TRACE("CAnim3D::Get() - snprintf truncated.\n");
          }
 
          sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptextures);
          if (sRes == 0)
          {
-            sprintf(szResName, "%s.bounds", szVerbedBaseName);
+            if(snprintf(szResName, RSP_MAX_PATH, "%s.bounds", szVerbedBaseName)<0)
+               TRACE("CAnim3D::Get() - snprintf truncated.\n");
             sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pbounds);
             if (sRes == 0)
             {
@@ -331,7 +335,8 @@ short CAnim3D::Get(              // Returns 0 on success.
                {
                   if (*pszRigidName != '\0')
                   {
-                     sprintf(szResName, "%s_%s.trans", szVerbedBaseName, pszRigidName);
+                     if(snprintf(szResName, RSP_MAX_PATH, "%s_%s.trans", szVerbedBaseName, pszRigidName)<0)
+                        TRACE("CAnim3D::Get() - snprintf truncated.\n");
                      sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransRigid);
                   }
                }
@@ -342,7 +347,8 @@ short CAnim3D::Get(              // Returns 0 on success.
                   {
                      if (*pszEventName != '\0')
                      {
-                        sprintf(szResName, "%s_%s.event", szVerbedBaseName, pszEventName);
+                        if(snprintf(szResName, RSP_MAX_PATH, "%s_%s.event", szVerbedBaseName, pszEventName)<0)
+                           TRACE("CAnim3D::Get() - snprintf truncated.\n");
                         sRes   = rspGetResource(&g_resmgrGame, szResName, &m_pevent);
                      }
                   }
@@ -353,7 +359,8 @@ short CAnim3D::Get(              // Returns 0 on success.
                      {
                         if (*pszWeaponTransName != '\0')
                         {
-                           sprintf(szResName, "%s_%s.trans", szVerbedBaseName, pszWeaponTransName);
+                           if(snprintf(szResName, RSP_MAX_PATH, "%s_%s.trans", szVerbedBaseName, pszWeaponTransName)<0)
+                              TRACE("CAnim3D::Get() - snprintf truncated.\n");
                            sRes   = rspGetResource(&g_resmgrGame, szResName, &m_ptransWeapon);
                         }
                      }

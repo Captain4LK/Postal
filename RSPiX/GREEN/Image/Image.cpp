@@ -371,9 +371,9 @@
 
 
 // Local function prototypes
-static short sCreateMem(void **hMem, U32 ulSize);
-static short sCreateAlignedMem(void **hMem, void **hData, U32 ulSize);
-static short sDestroyMem(void **hMem);
+//static short sCreateMem(void **hMem, U32 ulSize);
+//static short sCreateAlignedMem(void **hMem, void **hData, U32 ulSize);
+//static short sDestroyMem(void **hMem);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1693,6 +1693,10 @@ short RImage::LoadDib(RFile* pcf)
             TRACE("RImage::LoadDib(): Failed to convert BMP8RLE to BMP8.\n");
             sRes = 2;
          }
+         break;
+
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
    }

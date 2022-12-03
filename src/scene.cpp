@@ -1008,10 +1008,13 @@ CScene::Render3D(
             {
                if (psprParent->m_pthing)
                {
-                  sprintf(szMsg, "%s, child of %s with ID %d,",
-                          szMsg,
-                          CThing::ms_aClassInfo[psprParent->m_pthing->GetClassID()].pszClassName,
-                          psprParent->m_pthing->GetInstanceID());
+                  char szMsg2[1024];
+                  strncpy(szMsg2, szMsg, 1024);
+                  if(snprintf(szMsg, RSP_MAX_PATH, "%s, child of %s with ID %d,",
+                              szMsg2,
+                              CThing::ms_aClassInfo[psprParent->m_pthing->GetClassID()].pszClassName,
+                              psprParent->m_pthing->GetInstanceID())<0)
+                     TRACE("CScende::Render3D() - snprintf truncated.\n");
                }
             }
 
@@ -1409,6 +1412,9 @@ void CScene::Render2D(     // Returns nothing.
                   sXRayeeY   = ps3XRayee->m_sCenY - sXRayeeH / 2;
                   break;
                }
+               //Captain4LK: default to shut up compiler
+               default:
+                  break;
                }
 
                // Do an exteremely cheesy collision detecting by clipping the two rects!!!!

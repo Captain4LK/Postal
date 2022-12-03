@@ -326,7 +326,7 @@ void RProfile::Report()
               double(m_lFastTimeOut - m_lBeginTime) / 1000000.0);
 
       if (m_lCount) // safety
-         fprintf(fp, "Profiler overhead: Tot(ms) = %g, # of calls = %ld, Avg(ms) = %g\n\n",
+         fprintf(fp, "Profiler overhead: Tot(ms) = %g, # of calls = %" PRId32 ", Avg(ms) = %g\n\n",
                  double(m_lTotTime) / 1000.0, S32(m_lCount), double(m_lTotTime) / double(m_lCount * S64(1000)));
 
       fprintf(fp, "Number of profile ranges was %hd.\n", m_sNumTracked);
@@ -391,7 +391,7 @@ void RProfile::Report()
          {
             fprintf(fp, "-------------------------------------------------------\n%s:\n",
                     m_aList[i].m_szFieldName);
-            fprintf(fp, "            # of passes = %ld, Tot(ms) = %g, Avg(ms) = %g",
+            fprintf(fp, "            # of passes = %" PRId32 ", Tot(ms) = %g, Avg(ms) = %g",
                     S32(m_aList[i].m_lNumCalls),
                     double(m_aList[i].m_lTotTime) / 1000.0,
                     double(m_aList[i].m_lTotTime) / double(m_aList[i].m_lNumCalls * S64(1000)));

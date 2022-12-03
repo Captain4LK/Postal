@@ -244,7 +244,8 @@ void CheckMultiBtn(        // Returns nothing.
    S32 lId,                // In:  ID of GUI to set text.
    short sChecked)           // In:  1 to check, 0 to uncheck.
 {
-   short sRes   = 0;    // Assume nothing;
+   //Captain4LK: remove since unused
+   //short sRes   = 0;    // Assume nothing;
 
    RMultiBtn*   pmb   = (RMultiBtn*)pguiRoot->GetItemFromId(lId);
    if (pmb != NULL)

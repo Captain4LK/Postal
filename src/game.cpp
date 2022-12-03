@@ -1323,8 +1323,10 @@ static short GameCore(void)      // Returns 0 on success.
 {
    short sResult = 0;
    USHORT usDemoCount = 0;
-   bool bMPath = false,
-        bMPathServer = false;
+
+   //Captain4LK: remove since unused
+   //bool bMPath = false,
+   //bMPathServer = false;
 
 #ifdef CHECK_EXPIRATION_DATE
    #ifdef WIN32
@@ -2093,7 +2095,8 @@ static short GameCore(void)      // Returns 0 on success.
 
             // Display option dialog to let user choose a realm file
                #if 1 //PLATFORM_UNIX
-            char tmp[RSP_MAX_PATH];
+            //Captain4LK: remove since unused
+            //char tmp[RSP_MAX_PATH];
             if (PickFile("Choose Game Slot", EnumExistingSaveGames, szFileSaved, sizeof(szFileSaved)) == 0)
             {
 #ifdef MOBILE
@@ -2385,7 +2388,7 @@ inline void GetSoundPaths(    // Returns nothing.
    char szAudioResDescriptor[256];
    sprintf(
       szAudioResDescriptor,
-      "%ld%c%ld",
+      "%" PRId32 "%c%" PRId32,
       lSamplesPerSec,
       AUDIO_SAK_SEPARATOR_CHAR,
       lBitsPerSample);
@@ -2531,7 +2534,7 @@ static short OpenSaks(void)
       if (sInSoundMode)
       {
          char szSoundQuality[256];
-         sprintf(szSoundQuality, "%.3f kHz, %hd Bit",
+         sprintf(szSoundQuality, "%.3f kHz, %hd Bit %s",
                  (float)lSamplesPerSec / (float)1000,
                  (short)lSrcBitsPerSample,
                  (MAIN_AUDIO_CHANNELS == 1) ? "Mono" : "Stereo");
@@ -3513,7 +3516,7 @@ extern int SynchLog( // Result of expr.
       {
          fprintf(
             ms_fileSynchLog.m_fs,
-            "[Seq: %ld] %s : %ld  <$%s$> == %0.8f; User == %lu\n",
+            "[Seq: %" PRId32 "] %s : %" PRId32 "  <$%s$> == %0.8f; User == %" PRIu32 "\n",
             ms_lSynchLogSeq++,
             GetFileNameFromPath(pszFile),
             lLine,
@@ -3532,7 +3535,7 @@ extern int SynchLog( // Result of expr.
 
          if (fscanf(
                 ms_fileSynchLog.m_fs,
-                "[Seq: %ld] %s : %ld  <$%1024[^$]$> == %g; User == %lu\n",
+                "[Seq: %" SCNd32 "] %s : %" SCNd32 "  <$%1024[^$]$> == %lg; User == %" SCNu32 "\n",
                 &lSeqIn,
                 szFileIn,
                 &lLineIn,
@@ -3547,22 +3550,23 @@ extern int SynchLog( // Result of expr.
                    || (u32UserIn != u32User) )
             {
                char szOut[2048];
-               sprintf(
-                  szOut,
-                  "'If' sequence (%ld) mismatch!\n\n"
-                  "   Was <<%s>> at %s(%ld) which got %g; User == %lu\n\n"
-                  "   Now <<%s>> at %s(%ld) which got %g; User == %lu",
-                  ms_lSynchLogSeq,
-                  szExprIn,
-                  szFileIn,
-                  lLineIn,
-                  exprIn,
-                  u32UserIn,
-                  pszExpr,
-                  GetFileNameFromPath(pszFile),
-                  lLine,
-                  expr,
-                  u32User);
+               if(snprintf(
+                     szOut, RSP_MAX_PATH,
+                     "'If' sequence (%" PRId32 ") mismatch!\n\n"
+                     "   Was <<%s>> at %s(%" PRId32 ") which got %g; User == %" PRIu32 "\n\n"
+                     "   Now <<%s>> at %s(%" PRId32 ") which got %g; User == %" PRIu32 "",
+                     ms_lSynchLogSeq,
+                     szExprIn,
+                     szFileIn,
+                     lLineIn,
+                     exprIn,
+                     u32UserIn,
+                     pszExpr,
+                     GetFileNameFromPath(pszFile),
+                     lLine,
+                     expr,
+                     u32User)<0)
+                  TRACE("SynchLog() - snprintf truncated.\n");
 
                TRACE("%s\n\n", szOut);
 
@@ -3989,7 +3993,7 @@ extern S32 GetRandomDebug(const char* FILE_MACRO, S32 LINE_MACRO)
       {
          fprintf(
             m_pfileRandom->m_fs,
-            "%s : %ld rand = %ld\n",
+            "%s : %" PRId32 " rand = %" PRId32 "\n",
             GetFileNameFromPath(FILE_MACRO),
             LINE_MACRO,
             lNewVal);
@@ -4004,7 +4008,7 @@ extern S32 GetRandomDebug(const char* FILE_MACRO, S32 LINE_MACRO)
          char szSavedFile[1024];
          fscanf(
             m_pfileRandom->m_fs,
-            "%s : %ld rand = %ld\n",
+            "%s : %" SCNd32 " rand = %" SCNd32 "\n",
             szSavedFile,
             &lSavedLine,
             &lSavedVal);

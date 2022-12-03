@@ -636,7 +636,8 @@ short CFileTextInput::ParseTextInput(FILE* fp)
 
    short sCurFontSize = 0;
    short sCurTabX = 0;
-   CTextPhrase::Justify eCurJust = CTextPhrase::Left;
+   //Captain4LK: remove since unused
+   //CTextPhrase::Justify eCurJust = CTextPhrase::Left;
    short sCurColor = 255;
 
    CTextChunk*   pChunk = new CTextChunk;
@@ -699,9 +700,9 @@ short CFileTextInput::ParseTextInput(FILE* fp)
 
          switch   (*pszToken)
          {
-         case 'l': eCurJust = pCurPhrase->m_eJust = CTextPhrase::Left; break;
-         case 'r': eCurJust = pCurPhrase->m_eJust = CTextPhrase::Right; break;
-         case 'c': eCurJust = pCurPhrase->m_eJust = CTextPhrase::Center; break;
+         case 'l': /*eCurJust = */ pCurPhrase->m_eJust = CTextPhrase::Left; break;
+         case 'r': /*eCurJust = */ pCurPhrase->m_eJust = CTextPhrase::Right; break;
+         case 'c': /*eCurJust = */ pCurPhrase->m_eJust = CTextPhrase::Center; break;
          }
          continue;
       }
@@ -1046,10 +1047,9 @@ short Credits(SampleMasterID* pMusic,
               char* pszBackground,
               char* pszCredits)
 {
-   short sResult = 0;
-
 #ifdef SHOW_EXIT_SCREEN
 
+   short sResult = 0;
    RImage*   pimBackground;
    sResult = rspGetResource(&g_resmgrShell, EXIT_BG, &pimBackground);
    if (sResult == 0)

@@ -329,12 +329,15 @@ static short GuiGetRes(    // Returns 0 on success; non-zero on failure.
 // disgruntlement.
 //////////////////////////////////////////////////////////////////////////////
 
+//Captain4LK: remove since unused
+#if 0
 static void EditInputUserFeedback(  // Called when a user input notification
                                     // should occur.
    REdit*   pedit)                  // In:  Edit field.
 {
    PlaySample(g_smidEmptyWeapon, SampleMaster::UserFeedBack);
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 //

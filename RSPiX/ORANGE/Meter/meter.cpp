@@ -189,8 +189,6 @@ void RMeter::Compose(            // Returns nothing.
    RImage*   pimDst /*= NULL*/)   // In: Destination.  NULL == use
                                   // internal m_im.
 {
-   short sRes   = 0;    // Assume success.
-
    if (pimDst == NULL)
    {
       pimDst   = &m_im;
@@ -205,10 +203,10 @@ void RMeter::Compose(            // Returns nothing.
    short sCellH;
    m_pprint->GetPos(NULL, NULL, NULL, &sCellH);
 
-   short sMeterX;
-   short sMeterY;
-   short sMeterW;
-   short sMeterH;
+   short sMeterX = 0;
+   short sMeterY = 0;
+   short sMeterW = 0;
+   short sMeterH = 0;
 
    // Behave by type.
    switch (m_dtType)
@@ -489,6 +487,10 @@ short RMeter::Draw(              // Returns 0 on success.
                sBarWidth, sMeterMin);
             break;
          }
+
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
 
          // Reset counter, accumulator, max, min.

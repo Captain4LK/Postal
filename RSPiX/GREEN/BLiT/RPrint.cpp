@@ -200,7 +200,8 @@ char* RPrint::ScanLine(char* pszInput)
    m_sNumChar = i;
 
    // Store the final width based on the last characters full extent:
-   short sExt = 0;
+   //Captain4LK: remove since unused
+   //short sExt = 0;
    GetPropCellX(ms_szLineText[i - 1], NULL, &m_sExtX);
    m_sExtX += ms_sCharPosX[i - 1];
 
@@ -365,6 +366,10 @@ void RPrint::DrawText()
             {
             case RImage::FSPR1:
                rspBlit(m_ShadowColor, pim, m_pimDst, sX + sShadowX, sY + sShadowY, sW, m_sCellH);
+
+            //Captain4LK: default to shut up compiler
+            default:
+               break;
             }
       }
    }
@@ -720,6 +725,9 @@ short RPrint::SetEffectAbs(Effect eEffect, short sVal) // absolute:
    case ITALIC:    // reset the italic slant
       break;
 
+   //Captain4LK: default to shut up compiler
+   default:
+      break;
    }
 
    SetCellW(); // updates the cellW based on the latest effects
@@ -743,6 +751,9 @@ short RPrint::SetEffect(Effect eEffect, double dVal) // relative:
    case ITALIC:    // reset the italic slant
       break;
 
+   //Captain4LK: default to shut up compiler
+   default:
+      break;
    }
 
    SetCellW(); // updates the cellW based on the latest effects

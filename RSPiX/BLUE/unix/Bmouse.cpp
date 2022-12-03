@@ -86,7 +86,8 @@ extern void rspGetMouse(
 
    if (!mouse_grabbed)
    {
-      int w, h;
+      //Captain4LK: remove since unused
+      //int w, h;
       SET(psX, 0);
       SET(psY, 0);
       SET(psButton, 0);

@@ -147,9 +147,9 @@ inline void _Blit_HS_VS_C(
          while (i--)
          {
             if (i < sShowW)
-               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-               INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW)
-               pDst += sMirrorH;
+               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW);
+            pDst += sMirrorH;
          }
 
          INC_FRAC_V(pSrcLine, lDelMemY, sIncY, sNumY, lSrcP, sDstH)
@@ -167,8 +167,8 @@ inline void _Blit_HS_VS_C(
 
          while (i--)
          {
-            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW)
+            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW);
             pDst += sMirrorH;
          }
 
@@ -237,9 +237,9 @@ inline void _Blit_HM_VM_C(
          while (i--)
          {
             if (i < sShowW)
-               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-               INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW)
-               pDst += sMirrorH;
+               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW)
+            pDst += sMirrorH;
          }
 
          INC_PFRAC_V(pSrcLine, sSrcH, sNumY, sDstH, lSrcP)
@@ -257,7 +257,7 @@ inline void _Blit_HM_VM_C(
 
          while (i--)
          {
-            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
+            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
             INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW)
             pDst += sMirrorH;
          }
@@ -326,9 +326,9 @@ inline void _Blit_HS_VM_C(
          while (i--)
          {
             if (i < sShowW)
-               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-               INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW)
-               pDst += sMirrorH;
+               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW);
+            pDst += sMirrorH;
          }
 
          INC_PFRAC_V(pSrcLine, sSrcH, sNumY, sDstH, lSrcP)
@@ -346,8 +346,8 @@ inline void _Blit_HS_VM_C(
 
          while (i--)
          {
-            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW)
+            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_FRAC_H(pSrc, sDelX, sIncX, sNumX, sDstW);
             pDst += sMirrorH;
          }
 
@@ -415,9 +415,9 @@ inline void _Blit_HM_VS_C(
          while (i--)
          {
             if (i < sShowW)
-               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-               INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW)
-               pDst += sMirrorH;
+               SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW);
+            pDst += sMirrorH;
          }
 
          INC_FRAC_V(pSrcLine, lDelMemY, sIncY, sNumY, lSrcP, sDstH)
@@ -435,8 +435,8 @@ inline void _Blit_HM_VS_C(
 
          while (i--)
          {
-            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix)
-            INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW)
+            SET_PIX_CLEAR(pSrc, pDst, UCHAR(0), ucPix);
+            INC_PFRAC_H(pSrc, sSrcW, sNumX, sDstW);
             pDst += sMirrorH;
          }
 

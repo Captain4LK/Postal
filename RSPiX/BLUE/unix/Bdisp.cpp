@@ -63,14 +63,14 @@ typedef union
 } ArgbColor;
 static ArgbColor apeApp[256];             // App's palette.  The palette
                                           // entries the App actually set.
-
-static ArgbColor apeMapped[256];          // Tweaked palette.
-                                          // This is the palette updated to
-                                          // the hardware.  apeApp is trans-
-                                          // lated through au8MapRed, Green,
-                                          // and Blue and stored here for
-                                          // updating to the hardware on
-                                          // rspUpdatePalette().
+//Captain4LK: remove since unused
+//static ArgbColor apeMapped[256];          // Tweaked palette.
+// This is the palette updated to
+// the hardware.  apeApp is trans-
+// lated through au8MapRed, Green,
+// and Blue and stored here for
+// updating to the hardware on
+// rspUpdatePalette().
 
 static U8 au8MapRed[256];                       // Map of red intensities to hardware
 // values.  Initially an identity
@@ -371,7 +371,8 @@ extern short rspSuggestVideoMode(      // Returns 0 if successfull, non-zero oth
    short sRes   = 0;    // Assume success.
 
    // Store video mode that the app is currently iterating.
-   PVIDEO_MODE pvmOldModeQuery   = slvmModes.GetCurrent();
+   //Captain4LK: remove since unused
+   //PVIDEO_MODE pvmOldModeQuery   = slvmModes.GetCurrent();
 
    rspQueryVideoModeReset();
 

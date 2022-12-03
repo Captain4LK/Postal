@@ -666,6 +666,10 @@ static bool   UpdateStatus(CDude* pDude)
       ms_aWeapons[ShotGun].m_bSelected = true;
       ms_aAmmo[Shells].m_bSelected = true;
       break;
+
+   //Captain4LK: default to shut up compiler
+   default:
+      break;
    }
 
 

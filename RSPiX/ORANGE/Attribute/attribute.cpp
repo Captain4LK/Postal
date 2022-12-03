@@ -235,8 +235,6 @@ void RAttributeMap::FreeMap()
 
 short RAttributeMap::AllocateMap(U32 ulSize, U32 ulDetailMapSize)
 {
-   short sReturn = SUCCESS;
-
    if (m_pusMap == NULL)
       m_pusMap = new USHORT[ulSize];
 

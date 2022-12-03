@@ -246,7 +246,7 @@ short ConvertNoSupport(RImage* /*pImage*/)
 
 short   ConvertToBMP8(RImage* pImage)
 {
-   short sReturn;
+   short sReturn = RImage::NOT_SUPPORTED;
 
    switch (pImage->m_type)
    {

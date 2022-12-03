@@ -787,6 +787,9 @@ void RScrollBar::Do( // Returns nothing.
 
             break;      // on case RInputEvent::Key.
          }
+         //Captain4LK: default to shut up compiler
+         default:
+            break;
          }
       }
 
@@ -901,14 +904,14 @@ inline void DrawArrow(  // Returns nothing.
       short sCurY   = sY;
       short sCurW   = 1;
       short sCurH   = 1;
-      short* psCurLine;
-      short* psCurLinePos;
-      short* psCurLineLen;
-      short sLineLenInc;
-      short sLinePosDec;
-      short sMaxLineLen;
-      short sMaxLine;
-      short sMinLinePos;
+      short* psCurLine = NULL;
+      short* psCurLinePos = NULL;
+      short* psCurLineLen = NULL;
+      short sLineLenInc = 0;
+      short sLinePosDec = 0;
+      short sMaxLineLen = 0;
+      short sMaxLine = 0;
+      short sMinLinePos = 0;
 
       switch (sDirection)
       {

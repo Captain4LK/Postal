@@ -567,7 +567,8 @@ short   rspBlit(RImage* pimSrc, RImage* pimDst, short sDstX, short sDstY, const 
    }
 
    // 2) Destination Clipping is hard here:
-   short sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
+   //Captain4LK: remove since unused
+   //short sClipL = 0, sClipR = 0, sClipT = 0, sClipB = 0;
    short sSrcX = 0, sSrcY = 0; // clippng parameters...
    short sW = pimSrc->m_sWidth; // clippng parameters...
    short sH = pimSrc->m_sHeight; // clippng parameters...

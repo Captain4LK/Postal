@@ -504,9 +504,10 @@ static bool VerifyExitMenuChoice(   // Returns true to accept, false to deny cho
    Menu*   pmenuCurrent,        // Current menu.
    short sMenuItem);            // Item chosen.
 
-static bool ClientGameMenuChoice(   // Returns true to accept, false to deny choice.
+/*static bool ClientGameMenuChoice(   // Returns true to accept, false to deny choice.
    Menu*   pmenuCurrent,        // Current menu.
    short sMenuItem);            // Item chosen.
+*/
 
 static bool EditorMenuChoice( // Returns true to accept, false to deny choice.
    Menu*   pmenuCurrent,        // Current menu.
@@ -3232,6 +3233,8 @@ static bool VerifyExitMenuChoice(   // Returns true to accept, false to deny cho
    return bAcceptChoice;
 }
 
+//Captain4LK: remove since unused
+#if 0
 static bool ClientGameMenuChoice(   // Returns true to accept, false to deny choice.
    Menu* /*pmenuCurrent*/,    // Current menu.
    short sMenuItem)             // Item chosen.
@@ -3257,6 +3260,7 @@ static bool ClientGameMenuChoice(   // Returns true to accept, false to deny cho
 
    return bAcceptChoice;
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -3600,7 +3604,8 @@ static bool StartDemoMenu( // Returns true to accept, false to deny choice.
 {
    bool bAcceptChoice  = true;   // Assume accepting.
 
-   bool bPlay = false;
+   //Captain4LK: remove since unused
+   //bool bPlay = false;
 
    // Audible Feedback.
    if (sMenuItem == -1)

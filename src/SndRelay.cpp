@@ -312,6 +312,8 @@ inline void SetGuiItemVal( // Returns nothing.
 ////////////////////////////////////////////////////////////////////////////////
 // Callback from multibtn checkbox.
 ////////////////////////////////////////////////////////////////////////////////
+//Captain4LK: remove since unused
+#if 0
 static void CheckEnableGuiCall(  // Returns nothing.
    RGuiItem*   pgui_pmb)         // In:  GUI pointer to the multi button that was
                                  // pressed.
@@ -335,6 +337,7 @@ static void CheckEnableGuiCall(  // Returns nothing.
       pguiLoopSettingsContainer->SetVisible(sVisible);
    }
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called by editor to modify object

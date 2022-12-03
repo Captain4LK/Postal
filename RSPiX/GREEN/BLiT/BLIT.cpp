@@ -1296,10 +1296,11 @@ short   rspCrop(RImage* pimSrc, short sX, short sY, short sW, short sH,
    // 2) Create a new buffer with 128-bit alignment and pitch:
 
    // Determine pixel size:
-   short sPixSize = pimSrc->m_sDepth >> 3;
-   short sShift[] = {-1, 0, 1, -1, 2};
    short sAlignMask = sAlign - 1; // sAlign is in BYTES
-   short sPixShift = sShift[sPixSize];
+   //Captain4LK: remove since unused
+   //short sPixSize = pimSrc->m_sDepth >> 3;
+   //short sShift[] = {-1, 0, 1, -1, 2};
+   //short sPixShift = sShift[sPixSize];
 
    // Determine Optimum Pitch...
    lNewPitch = (sW + sAlignMask) & (~sAlignMask);
@@ -1388,10 +1389,11 @@ short   rspPad(RImage* pimSrc, short sX, short sY, // where to move the old imag
    // 2) Create a new buffer with 128-bit alignment and pitch:
 
    // Determine pixel size:
-   short sPixSize = pimSrc->m_sDepth >> 3;
-   short sShift[] = {-1, 0, 1, -1, 2};
    short sAlignMask = sAlign - 1; // sAlign is in BYTES
-   short sPixShift = sShift[sPixSize];
+   //Captain4LK: remove since unused
+   //short sPixSize = pimSrc->m_sDepth >> 3;
+   //short sShift[] = {-1, 0, 1, -1, 2};
+   //short sPixShift = sShift[sPixSize];
 
    // Determine Optimum Pitch...
    lNewPitch = (sW + sAlignMask) & (~sAlignMask);

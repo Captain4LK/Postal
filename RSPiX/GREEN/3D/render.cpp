@@ -890,7 +890,8 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
 
    // Draw the upper triangle! (Assuming fx2inc < fx3inc.....)
    short x, y;
-   short xdel;
+   //Captain4LK: remove since unused
+   //short xdel;
 
 //////////////////////////////////////////////////////////////////
 //****************************************************************
@@ -934,7 +935,7 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
          x2.val += fx2inc;
          x1.val += fx1inc;
 
-         xdel = x2.mod - x1.mod;
+         //xdel = x2.mod - x1.mod;
          //***************8 flipped the inc value:!
 
          // Assume 2 to 3:
@@ -956,7 +957,7 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
          x3.val += fx3inc;
 
          // Assume 2 to 3:
-         xdel = x3.mod - x2.mod;
+         //xdel = x3.mod - x2.mod;
          // Assume 2 to 3:
          for (x = x2.mod; x<= x3.mod; x++) *(pDst + x) = ucFlatColor;
       }
@@ -980,7 +981,7 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
             x2.val += fx2inc;
             x3.val += fx3inc;
 
-            xdel = x3.mod - x2.mod;
+            //xdel = x3.mod - x2.mod;
 
             // Assume 2 to 3:
             for (x = x2.mod; x<= x3.mod; x++) *(pDst + x) = ucFlatColor;
@@ -1004,7 +1005,7 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
          x3.val += fx3inc;
          // Assume 2 to 3:
 
-         xdel = x2.mod - x3.mod; //+ x to z
+         //xdel = x2.mod - x3.mod; //+ x to z
 
          // Assume 2 to 3:
          for (x = x3.mod; x<= x2.mod; x++) *(pDst + x) = ucFlatColor;
@@ -1029,7 +1030,7 @@ void   DrawTri(UCHAR* pDstOffset, S32 lDstP,
             x2.val += fx2inc;
             x3.val += fx3inc;
 
-            xdel = x2.mod - x3.mod;
+            //xdel = x2.mod - x3.mod;
             // Full accuracy fxMul!
             // Assume 2 to 3:
             for (x = x3.mod; x<= x2.mod; x++) *(pDst + x) = ucFlatColor;

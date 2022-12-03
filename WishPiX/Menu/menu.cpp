@@ -253,8 +253,9 @@ static RResMgr*   ms_presmgr         = NULL;
 static RImage ms_imPreMenu;               // Contents of composite buffer
                                           // before the menu was drawn.
 
-static short ms_sPreMenuX;                // Location of ms_imPreMenu on screen.
-static short ms_sPreMenuY;                // Location of ms_imPreMenu on screen.
+//Captain4LK: remove since unused
+//static short ms_sPreMenuX;                // Location of ms_imPreMenu on screen.
+//static short ms_sPreMenuY;                // Location of ms_imPreMenu on screen.
 
 static RImage*      ms_pimComposite   = NULL;  // Composite buffer.
 

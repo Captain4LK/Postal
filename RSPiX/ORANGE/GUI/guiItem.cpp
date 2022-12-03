@@ -1235,8 +1235,9 @@ void RGuiItem::SetVisible(    // Returns nothing.
 ////////////////////////////////////////////////////////////////////////
 void RGuiItem::SetParent(RGuiItem* pguiParent)
 {
-   short sDifX   = 0;    // Difference in top level x positioning.
-   short sDifY   = 0;    // Difference in top level y positioning.
+   //Captain4LK: remove since unused
+   //short sDifX   = 0;    // Difference in top level x positioning.
+   //short sDifY   = 0;    // Difference in top level y positioning.
 
    // If there is an old . . .
    if (m_pguiParent != NULL)
@@ -1660,6 +1661,10 @@ void RGuiItem::OnGainFocus(void)
       break;
    case Child:
       SetFocus(m_listguiChildren.GetHead() );
+      break;
+
+   //Captain4LK: default to shut up compiler
+   default:
       break;
    }
 }

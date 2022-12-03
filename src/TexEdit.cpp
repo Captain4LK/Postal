@@ -573,7 +573,7 @@ ValidateTextures(
             ptex->m_pIndices[sColor]   = 250;      // Part of static Postal palette.
          }
 
-         delete pau8;
+         delete [] pau8;
          pau8   = 0;
 
          break;
@@ -961,6 +961,10 @@ CTexEdit::ProcessManip(
       case Rot:
          m_transRot.Ry(rspMod360(sDeltaX * c_fRotRate) );
          m_transRot.Rx(rspMod360(-sDeltaY * c_fRotRate) );
+         break;
+
+      //Captain4LK: default to shut up compiler
+      default:
          break;
       }
    }

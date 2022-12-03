@@ -361,7 +361,8 @@ RAlpha::RAlpha()
 
 void RAlpha::Erase()
 {
-   if (m_pAlphas)
+   //Captain4LK: remove useless NULL check
+   //if (m_pAlphas)
    {
       for (short i = 0; i<256 /*m_sAlphaDepth*/; i++)
       {

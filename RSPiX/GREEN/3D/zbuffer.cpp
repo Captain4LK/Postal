@@ -125,7 +125,9 @@ void RZBuffer::TestHeight(RImage* pimDst, short sDepth,
    {
       pDst = pDstLine;
       pZB = pZLine;
-      for (i = 0; i<sW; i++, pDst++, *pZB++)
+      //Captain4LK: TODO is this intended or should it increment the pointer instead?
+      //for (i = 0; i<sW; i++, pDst++, *pZB++)
+      for (i = 0; i<sW; i++, pDst++, pZB++)
       {
          if (*pZB < sDepth)
             *pDst = 255; // draw it!
